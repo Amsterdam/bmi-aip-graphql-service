@@ -1,0 +1,49 @@
+{
+  "name": "bmi-aip-graphql-service",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "description": "A GraphQL service developed on in service of the frontend of the \"Amsterdam Inspectie Portaal\" app",
+  "main": ".eslintrc.js",
+  "author": "",
+  "scripts": {
+    "lint": "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint ./src --ignore-path .eslintignore --max-warnings 0 --ext ts,tsx",
+    "lint:ci": "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint ./src --ignore-path .eslintignore --quiet --ext ts,tsx"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --verbose --write",
+      "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint --fix",
+      "git add"
+    ],
+    "*.{css,scss,json,md,yml}": [
+      "prettier --verbose --write",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amsterdam/bmi-aip-graphql-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Amsterdam/bmi-aip-graphql-service/issues"
+  },
+  "homepage": "https://github.com/Amsterdam/bmi-aip-graphql-service#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-cypress": "^2.11.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsdoc": "^30.7.9",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "typescript": "^4.6.3"
+  }
+}

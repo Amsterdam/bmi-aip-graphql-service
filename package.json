@@ -86,7 +86,7 @@
 		"testEnvironment": "node"
 	},
 	"lint-staged": {
-		"*.ts": [
+		"*.{ts}": [
 			"prettier --verbose --write",
 			"lint"
 		],

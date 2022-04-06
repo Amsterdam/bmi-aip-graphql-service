@@ -1,12 +1,15 @@
 # Mac issue
 .DS_Store
+
 # Logs
 logs
 *.log
 npm-debug.log*
+
 # IDEA
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -19,6 +22,7 @@ npm-debug.log*
 .idea/inspectionProfiles/
 .idea/scopes/
 .idea/misc.xml
+
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -28,31 +32,43 @@ npm-debug.log*
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/copyright/
+
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+
 # Visual Studio code specific project files
 .vscode
+
 # CMake
 cmake-build-debug/
 cmake-build-release/
+
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
+
 ## File-based project format:
 *.iws
+
 ## Plugin-specific files:
+
 # IntelliJ
 out/
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
 # JIRA plugin
 atlassian-ide-plugin.xml
+
 # Cursive Clojure plugin
 .idea/replstate.xml
+
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
 junit.xml
 node_modules/

@@ -86,17 +86,6 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --verbose --write",
-      "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint",
-      "git add"
-    ],
-    "*.{css,scss,json,md,yml}": [
-      "prettier --verbose --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "bin/npm run eslint:fix",

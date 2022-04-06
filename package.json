@@ -1,105 +1,100 @@
 {
-  "name": "bmi-aip-graphql-service",
-  "version": "0.0.1",
-  "description": "A GraphQL service developed with NestJS in service of the frontend of the \"Amsterdam Inspectie Portaal\" app",
-  "author": "Gemeente Amsterdam",
-  "license": "MPL-2.0",
-  "scripts": {
-    "type-check": "tsc -p tsconfig.json",
-    "prebuild": "rimraf dist",
-    "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
-  },
-  "dependencies": {
-    "@nestjs/apollo": "^10.0.8",
-    "@nestjs/common": "^8.0.0",
-    "@nestjs/core": "^8.0.0",
-    "@nestjs/graphql": "^10.0.8",
-    "@nestjs/platform-express": "^8.0.0",
-    "apollo-server-express": "^3.6.7",
-    "graphql": "^16.3.0",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
-  },
-  "devDependencies": {
-    "@nestjs/cli": "^8.0.0",
-    "@nestjs/schematics": "^8.0.0",
-    "@nestjs/testing": "^8.0.0",
-    "@types/express": "^4.17.13",
-    "@types/jest": "27.4.1",
-    "@types/node": "^16.0.0",
-    "@types/supertest": "^2.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.0.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-import-resolver-typescript": "^2.7.1",
-    "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^38.1.6",
-    "eslint-plugin-no-null": "^1.0.2",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.4",
-    "jest": "^27.2.5",
-    "lint-staged": "^12.3.7",
-    "prettier": "^2.3.2",
-    "run-script-webpack-plugin": "^0.0.11",
-    "source-map-support": "^0.5.20",
-    "supertest": "^6.1.3",
-    "ts-jest": "^27.0.3",
-    "ts-loader": "^9.2.3",
-    "ts-node": "^10.0.0",
-    "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.3.5",
-    "webpack": "^5.71.0",
-    "webpack-node-externals": "^3.0.0"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "prettier --verbose --write",
-      "lint",
-      "git add"
-    ],
-    "*.{css,scss,json,md,yml}": [
-      "prettier --verbose --write",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run test"
-    }
-  }
+	"name": "bmi-aip-graphql-service",
+	"version": "0.0.1",
+	"description": "A GraphQL service developed with NestJS in service of the frontend of the \"Amsterdam Inspectie Portaal\" app",
+	"author": "Gemeente Amsterdam",
+	"license": "MPL-2.0",
+	"scripts": {
+		"type-check": "tsc -p tsconfig.json",
+		"prebuild": "rimraf dist",
+		"build": "nest build",
+		"format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+		"start": "nest start",
+		"start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
+		"start:debug": "nest start --debug --watch",
+		"start:prod": "node dist/main",
+		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"test:cov": "jest --coverage",
+		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+		"test:e2e": "jest --config ./test/jest-e2e.json",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"@nestjs/apollo": "^10.0.8",
+		"@nestjs/common": "^8.0.0",
+		"@nestjs/core": "^8.0.0",
+		"@nestjs/graphql": "^10.0.8",
+		"@nestjs/platform-express": "^8.0.0",
+		"apollo-server-express": "^3.6.7",
+		"graphql": "^16.3.0",
+		"reflect-metadata": "^0.1.13",
+		"rimraf": "^3.0.2",
+		"rxjs": "^7.2.0"
+	},
+	"devDependencies": {
+		"@nestjs/cli": "^8.0.0",
+		"@nestjs/schematics": "^8.0.0",
+		"@nestjs/testing": "^8.0.0",
+		"@types/express": "^4.17.13",
+		"@types/jest": "27.4.1",
+		"@types/node": "^16.0.0",
+		"@types/supertest": "^2.0.11",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.0.0",
+		"eslint": "^8.0.1",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-airbnb-typescript": "^17.0.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-import-resolver-typescript": "^2.7.1",
+		"eslint-plugin-cypress": "^2.12.1",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-jsdoc": "^38.1.6",
+		"eslint-plugin-no-null": "^1.0.2",
+		"eslint-plugin-prettier": "^4.0.0",
+		"husky": "^7.0.4",
+		"jest": "^27.2.5",
+		"lint-staged": "^12.3.7",
+		"prettier": "^2.3.2",
+		"run-script-webpack-plugin": "^0.0.11",
+		"source-map-support": "^0.5.20",
+		"supertest": "^6.1.3",
+		"ts-jest": "^27.0.3",
+		"ts-loader": "^9.2.3",
+		"ts-node": "^10.0.0",
+		"tsconfig-paths": "^3.10.1",
+		"typescript": "^4.3.5",
+		"webpack": "^5.71.0",
+		"webpack-node-externals": "^3.0.0"
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"js",
+			"json",
+			"ts"
+		],
+		"rootDir": "src",
+		"testRegex": ".*\\.spec\\.ts$",
+		"transform": {
+			"^.+\\.(t|j)s$": "ts-jest"
+		},
+		"collectCoverageFrom": [
+			"**/*.(t|j)s"
+		],
+		"coverageDirectory": "../coverage",
+		"testEnvironment": "node"
+	},
+	"lint-staged": {
+		"*.ts": [
+			"prettier --verbose --write",
+			"lint",
+			"git add"
+		],
+		"*.{css,scss,json,md,yml}": [
+			"prettier --verbose --write",
+			"git add"
+		],
+		"*.js": "eslint --cache --fix"
+	}
 }

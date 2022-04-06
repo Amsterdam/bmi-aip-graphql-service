@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Element } from './models/element.model';
 
 import type { DecompositionElement } from '../../types';
+
+import { Element } from './models/element.model';
+
 
 /**
  * This is all temporary bogus code and is just for illustrative purposes. Once Prisma is configured this service

@@ -15,6 +15,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
+    "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
     "test:watch": "jest --watch",
     "eslint:fix": "eslint --fix --ignore-path .eslintignore -c .eslintrc.js \"src/**/*.{ts,tsx,js,jsx}\" \"tests/**/*.{ts,tsx,js,jsx}\"",
     "eslint": "eslint --fix --ignore-path .eslintignore -c .eslintrc.js \"src/**/*.{ts,tsx,js,jsx}\" \"tests/**/*.{ts,tsx,js,jsx}\"",
@@ -99,8 +100,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "bin/npm run eslint:fix",
-      "pre-push": "bin/npm run test"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run type-check -- --incremental false"
     }
   }
 }

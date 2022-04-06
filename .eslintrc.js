@@ -1,5 +1,4 @@
 module.exports = {
-	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		ecmaVersion: 2018,
 		sourceType: 'module',
@@ -19,6 +18,7 @@ module.exports = {
 		'plugin:prettier/recommended',
 		'prettier',
 	],
+	parser: '@typescript-eslint/parser',
 	rules: {
 		'react/jsx-filename-extension': ['off'], // Because of our non default prettier config.
 		indent: ['off'], // Because of our non default prettier config.

@@ -100,5 +100,5 @@
       "pre-commit": "lint-staged",
       "pre-push": "npm run type-check -- --incremental false"
     }
-  },
+  }
 }

@@ -8,6 +8,7 @@ declare const module: any;
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	await app.listen(3000);
+	const test = '';
 
 	if (module.hot) {
 		module.hot.accept();

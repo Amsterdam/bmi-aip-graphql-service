@@ -5,6 +5,7 @@
   "author": "Gemeente Amsterdam",
   "license": "MPL-2.0",
   "scripts": {
+    "type-check": "tsc -p tsconfig.json",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

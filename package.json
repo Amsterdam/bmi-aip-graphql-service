@@ -86,13 +86,12 @@
 		"testEnvironment": "node"
 	},
 	"lint-staged": {
-		"*.{ts}": [
+		"*.ts": [
 			"prettier --verbose --write",
 			"lint"
 		],
 		"*.{css,scss,json,md,yml}": [
-			"prettier --verbose --write",
-			"git add"
+			"prettier --verbose --write"
 		],
 		"*.js": "eslint --cache --fix"
 	}

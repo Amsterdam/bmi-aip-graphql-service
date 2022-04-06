@@ -18,6 +18,7 @@ module.exports = {
 		'airbnb-typescript',
 		'plugin:prettier/recommended',
 		'prettier',
+		'eslint:recommended',
 	],
 	rules: {
 		'react/jsx-filename-extension': ['off'], // Because of our non default prettier config.

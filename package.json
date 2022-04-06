@@ -89,7 +89,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --verbose --write",
-      "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint .",
+      "cross-env NODE_OPTIONS='--max-old-space-size=8192' eslint:fix",
       "git add"
     ],
     "*.{css,scss,json,md,yml}": [

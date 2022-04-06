@@ -18,9 +18,7 @@ module.exports = {
 		'airbnb-typescript',
 		'plugin:prettier/recommended',
 		'prettier',
-		'eslint:recommended',
 	],
-	plugins: ['react', '@typescript-eslint'],
 	rules: {
 		'react/jsx-filename-extension': ['off'], // Because of our non default prettier config.
 		indent: ['off'], // Because of our non default prettier config.
@@ -31,14 +29,5 @@ module.exports = {
 		'import/order': ['warn', { 'newlines-between': 'always' }],
 		'import/no-extraneous-dependencies': ['off'],
 		'@typescript-eslint/ban-ts-comment': 'warn',
-		'@typescript-eslint/ban-ts-ignore': 'off',
-		'@typescript-eslint/no-explicit-any': 'off',
-		'@typescript-eslint/no-unused-vars': [
-			2,
-			{
-				args: 'none',
-			},
-		],
-		'react/prop-types': 0,
 	},
 };

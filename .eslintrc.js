@@ -29,5 +29,11 @@ module.exports = {
 		'import/order': ['warn', { 'newlines-between': 'always' }],
 		'import/no-extraneous-dependencies': ['off'],
 		'@typescript-eslint/ban-ts-comment': 'warn',
+		'@typescript-eslint/no-unused-vars': [
+			2,
+			{
+				args: 'none',
+			},
+		],
 	},
 };

@@ -99,8 +99,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run type-check -- --incremental false"
+      "pre-commit": "bin/npm run eslint:fix",
+      "pre-push": "bin/npm run test"
     }
   }
 }

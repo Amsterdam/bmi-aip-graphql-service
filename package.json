@@ -93,6 +93,6 @@
 		"*.{css,scss,json,md,yml}": [
 			"prettier --verbose --write"
 		],
-		"*.js": "eslint --cache --fix"
+		"*.js": "lint --cache --fix"
 	}
 }

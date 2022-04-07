@@ -5,7 +5,6 @@
 	"author": "Gemeente Amsterdam",
 	"license": "MPL-2.0",
 	"scripts": {
-		"type-check": "tsc -p tsconfig.json",
 		"prebuild": "rimraf dist",
 		"build": "nest build",
 		"format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -19,6 +18,8 @@
 		"test:cov": "jest --coverage",
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
 		"test:e2e": "jest --config ./test/jest-e2e.json",
+		"ci:test": "jest --ci --reporters=default",
+		"ci:lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
 		"prepare": "husky install"
 	},
 	"dependencies": {

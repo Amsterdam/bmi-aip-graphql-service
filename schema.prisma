@@ -1,0 +1,1544 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model assetRemarks {
+  id         String    @id @unique(map: "assetremarks_id_unique") @db.Uuid
+  text       String
+  remarkedOn DateTime  @db.Timestamptz(6)
+  assetId    String    @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  remarkedBy String    @db.VarChar(255)
+  assets     assets    @relation(fields: [assetId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assetremarks_assetid_foreign")
+
+  @@index([assetId])
+}
+
+model assets {
+  id                                                             String              @id @unique(map: "assets_id_unique") @db.Uuid
+  name                                                           String              @db.VarChar(255)
+  filename                                                       String              @db.VarChar(255)
+  filenameThumbnail                                              String?             @db.VarChar(255)
+  date                                                           DateTime            @db.Timestamptz(6)
+  size                                                           BigInt
+  type                                                           String              @db.VarChar(255)
+  isInConditionReport                                            Boolean
+  pixelDistance                                                  BigInt
+  elementId                                                      String?             @db.Uuid
+  unitId                                                         String?             @db.Uuid
+  defectId                                                       String?             @db.Uuid
+  surveyId                                                       String?             @db.Uuid
+  imageMeasurementId                                             String?             @db.Uuid
+  created_at                                                     DateTime?           @db.Timestamptz(6)
+  updated_at                                                     DateTime?           @db.Timestamptz(6)
+  objectId                                                       String              @db.Uuid
+  fileExtension                                                  String              @db.VarChar(255)
+  order                                                          BigInt              @default(0)
+  derivedFromAssetId                                             String?             @db.Uuid
+  downscaleStatus                                                String?
+  downscaleJobId                                                 String?             @db.VarChar(255)
+  derivedStartTimestamp                                          Decimal?            @db.Decimal(12, 3)
+  derivedEndTimestamp                                            Decimal?            @db.Decimal(12, 3)
+  description                                                    String?             @db.VarChar(255)
+  downscaleStatusLow                                             String?
+  downscaleJobLowId                                              String?             @db.VarChar(255)
+  downscaleStatusHigh                                            String?
+  downscaleJobHighId                                             String?             @db.VarChar(255)
+  manifestationId                                                String?             @db.Uuid
+  isInMSWordReport                                               Boolean?            @default(false)
+  is2dSource                                                     Boolean?            @default(false)
+  failureModeId                                                  String?             @db.Uuid
+  isOnReportStartPage                                            Boolean?            @default(false)
+  uid                                                            String?             @db.Uuid
+  defects                                                        defects?            @relation(fields: [defectId], references: [id], onUpdate: NoAction, map: "assets_defectid_foreign")
+  assets                                                         assets?             @relation("assetsToassets_derivedFromAssetId", fields: [derivedFromAssetId], references: [id], onUpdate: NoAction, map: "assets_derivedfromassetid_foreign")
+  elements                                                       elements?           @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assets_elementid_foreign")
+  failureModes                                                   failureModes?       @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assets_failuremodeid_foreign")
+  imageMeasurements_assets_imageMeasurementIdToimageMeasurements imageMeasurements?  @relation("assets_imageMeasurementIdToimageMeasurements", fields: [imageMeasurementId], references: [id], onUpdate: NoAction, map: "assets_imagemeasurementid_foreign")
+  manifestations                                                 manifestations?     @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assets_manifestationid_foreign")
+  objects                                                        objects             @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "assets_objectid_foreign")
+  surveys                                                        surveys?            @relation(fields: [surveyId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "assets_surveyid_foreign")
+  users                                                          users?              @relation(fields: [uid], references: [id], onUpdate: NoAction, map: "assets_uid_foreign")
+  units                                                          units?              @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assets_unitid_foreign")
+  assetRemarks                                                   assetRemarks[]
+  other_assets                                                   assets[]            @relation("assetsToassets_derivedFromAssetId")
+  imageMeasurements_assetsToimageMeasurements_assetId            imageMeasurements[] @relation("assetsToimageMeasurements_assetId")
+  observationPoints_assetsToobservationPoints_2dSourceAssetId    observationPoints[] @relation("assetsToobservationPoints_2dSourceAssetId")
+  observationPoints_assetsToobservationPoints_assetId            observationPoints[] @relation("assetsToobservationPoints_assetId")
+
+  @@index([defectId])
+  @@index([derivedFromAssetId])
+  @@index([elementId])
+  @@index([failureModeId])
+  @@index([imageMeasurementId])
+  @@index([manifestationId])
+  @@index([objectId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model auditEvents {
+  id                String    @id @unique(map: "auditevents_id_unique") @db.Uuid
+  userId            String    @db.Uuid
+  companyId         String    @db.Uuid
+  objectId          String?   @db.Uuid
+  surveyId          String?   @db.Uuid
+  action            String    @db.VarChar(255)
+  createdOnDateTime DateTime  @db.Timestamptz(6)
+  ipAddress         String    @db.VarChar(255)
+  created_at        DateTime? @db.Timestamptz(6)
+  updated_at        DateTime? @db.Timestamptz(6)
+  externalUserId    String?   @db.VarChar(255)
+  companies         companies @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_companyid_foreign")
+  objects           objects?  @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_objectid_foreign")
+  surveys           surveys?  @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_surveyid_foreign")
+}
+
+model batchDocuments {
+  id         String    @id @unique(map: "batchdocuments_id_unique") @db.Uuid
+  batchId    String?   @db.Uuid
+  filename   String    @db.VarChar(255)
+  filesize   Int
+  filetype   String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+}
+
+model batches {
+  id                      String                   @id @unique(map: "batches_id_unique") @db.Uuid
+  name                    String                   @db.VarChar(255)
+  status                  String?                  @default("open") @db.VarChar(255)
+  startDate               DateTime?                @db.Timestamptz(6)
+  endDate                 DateTime?                @db.Timestamptz(6)
+  clientCompanyId         String?                  @db.Uuid
+  created_at              DateTime?                @db.Timestamptz(6)
+  updated_at              DateTime?                @db.Timestamptz(6)
+  plannedStartDate        DateTime?                @db.Date
+  plannedEndDate          DateTime?                @db.Date
+  contractId              String?                  @db.Uuid
+  tranchId                String?                  @db.Uuid
+  remarks                 String?
+  legacyFailureMode       Boolean?
+  inspectionStandardTypes Json?                    @db.Json
+  companies               companies?               @relation(fields: [clientCompanyId], references: [id], onUpdate: NoAction, map: "batches_clientcompanyid_foreign")
+  contracts               contracts?               @relation(fields: [contractId], references: [id], onUpdate: NoAction, map: "batches_contractid_foreign")
+  tranches                tranches?                @relation(fields: [tranchId], references: [id], onUpdate: NoAction, map: "batches_tranchid_foreign")
+  batchExecutorCompanies  batchExecutorCompanies[]
+  batchObjects            batchObjects[]
+  surveys                 surveys[]
+
+  @@index([clientCompanyId])
+  @@index([name])
+  @@index([updated_at])
+}
+
+model batchExecutorCompanies {
+  id         String    @id @unique(map: "batchexecutorcompanies_id_unique") @db.Uuid
+  companyId  String    @db.Uuid
+  batchId    String    @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  batches    batches   @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "batchexecutorcompanies_batchid_foreign")
+  companies  companies @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "batchexecutorcompanies_companyid_foreign")
+
+  @@unique([companyId, batchId], map: "batchexecutorcompanies_companyid_batchid_unique")
+  @@index([batchId])
+}
+
+model batchObjects {
+  id         String    @id @unique(map: "batchobjects_id_unique") @db.Uuid
+  objectId   String?   @db.Uuid
+  batchId    String?   @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  batches    batches?  @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "batchobjects_batchid_foreign")
+  objects    objects?  @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "batchobjects_objectid_foreign")
+
+  @@index([batchId])
+  @@index([objectId])
+}
+
+model companies {
+  id                                                       String                   @id @unique(map: "companies_id_unique") @db.Uuid
+  role                                                     String
+  name                                                     String                   @db.VarChar(255)
+  street                                                   String?                  @db.VarChar(255)
+  state                                                    String?                  @db.VarChar(255)
+  city                                                     String?                  @db.VarChar(255)
+  zip                                                      String?                  @db.VarChar(255)
+  country                                                  String?                  @db.VarChar(255)
+  storageLimit                                             BigInt                   @default(0)
+  storageUsed                                              BigInt                   @default(0)
+  registeredOn                                             DateTime                 @db.Timestamptz(6)
+  status                                                   String?
+  created_at                                               DateTime?                @db.Timestamptz(6)
+  updated_at                                               DateTime?                @db.Timestamptz(6)
+  isClient                                                 Boolean                  @default(false)
+  customerVersion                                          String?                  @default("all") @db.VarChar(255)
+  supportEmail                                             String?                  @db.VarChar(255)
+  isDemoAccount                                            Boolean?                 @default(false)
+  wfsKey                                                   String?                  @db.VarChar(255)
+  authenticationToken                                      String?                  @db.VarChar(255)
+  auditEvents                                              auditEvents[]
+  batches                                                  batches[]
+  batchExecutorCompanies                                   batchExecutorCompanies[]
+  companyRelations_companiesTocompanyRelations_managedById companyRelations[]       @relation("companiesTocompanyRelations_managedById") @ignore
+  companyRelations_companiesTocompanyRelations_managesId   companyRelations[]       @relation("companiesTocompanyRelations_managesId") @ignore
+  companyUsages                                            companyUsages[]
+  licences                                                 licences[]
+  objects_companiesToobjects_clientCompanyId               objects[]                @relation("companiesToobjects_clientCompanyId")
+  objects_companiesToobjects_operatorCompanyId             objects[]                @relation("companiesToobjects_operatorCompanyId")
+  objects_companiesToobjects_ownerCompanyId                objects[]                @relation("companiesToobjects_ownerCompanyId")
+  objects_companiesToobjects_surveyorCompanyId             objects[]                @relation("companiesToobjects_surveyorCompanyId")
+  sites                                                    sites[]
+  surveys_companiesTosurveys_operatorCompanyId             surveys[]                @relation("companiesTosurveys_operatorCompanyId")
+  surveys_companiesTosurveys_surveyorCompanyId             surveys[]                @relation("companiesTosurveys_surveyorCompanyId")
+  users                                                    users[]
+  utProjects                                               utProjects[]
+
+  @@index([name])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model companyRelations {
+  managedById                                       String    @db.Uuid
+  managesId                                         String    @db.Uuid
+  created_at                                        DateTime? @db.Timestamptz(6)
+  updated_at                                        DateTime? @db.Timestamptz(6)
+  companies_companiesTocompanyRelations_managedById companies @relation("companiesTocompanyRelations_managedById", fields: [managedById], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "companyrelations_managedbyid_foreign")
+  companies_companiesTocompanyRelations_managesId   companies @relation("companiesTocompanyRelations_managesId", fields: [managesId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "companyrelations_managesid_foreign")
+
+  @@index([managedById])
+  @@index([managesId])
+  @@ignore
+}
+
+model companyUsages {
+  id           String    @id @unique(map: "companyusages_id_unique") @db.Uuid
+  storageUsed  BigInt    @default(0)
+  objectsCount BigInt    @default(0)
+  createdOn    DateTime  @db.Date
+  companyId    String    @db.Uuid
+  created_at   DateTime? @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+  companies    companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "companyusages_companyid_foreign")
+
+  @@unique([companyId, createdOn], map: "companyusages_companyid_createdon_unique")
+}
+
+model conditions {
+  id                                                        String           @id @unique(map: "conditions_id_unique") @db.Uuid
+  advice                                                    String
+  cost                                                      Float?
+  costYear                                                  Int?
+  surveyId                                                  String           @db.Uuid
+  created_at                                                DateTime?        @db.Timestamptz(6)
+  updated_at                                                DateTime?        @db.Timestamptz(6)
+  elementId                                                 String?          @db.Uuid
+  unitId                                                    String?          @db.Uuid
+  score                                                     String?          @db.VarChar(1)
+  manifestationId                                           String?          @db.Uuid
+  careScore                                                 String?          @db.VarChar(1)
+  investigationPriority                                     String?          @db.VarChar(1)
+  craInspectionRemarks                                      String?
+  craInitialScore                                           Int?
+  craHistoryScore                                           Int?
+  craInspectionScore                                        Int?
+  craInitialRemarks                                         String?
+  craHistoryRemarks                                         String?
+  craInitialUnityCheck                                      Decimal?         @db.Decimal(15, 6)
+  craHistoryUnityCheck                                      Decimal?         @db.Decimal(15, 6)
+  ramsMaxTotalPriority                                      String?          @db.VarChar(2)
+  ramsMaxWeightedPriority                                   String?          @db.VarChar(1)
+  isFurtherInvestigation                                    Boolean?
+  elements_conditions_elementIdToelements                   elements?        @relation("conditions_elementIdToelements", fields: [elementId], references: [id], onUpdate: NoAction, map: "conditions_elementid_foreign")
+  manifestations_conditions_manifestationIdTomanifestations manifestations?  @relation("conditions_manifestationIdTomanifestations", fields: [manifestationId], references: [id], onUpdate: NoAction, map: "conditions_manifestationid_foreign")
+  surveys                                                   surveys          @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "conditions_surveyid_foreign")
+  units_conditions_unitIdTounits                            units?           @relation("conditions_unitIdTounits", fields: [unitId], references: [id], onUpdate: NoAction, map: "conditions_unitid_foreign")
+  defects                                                   defects[]
+  elements_conditionsToelements_conditionId                 elements[]       @relation("conditionsToelements_conditionId")
+  manifestations_conditionsTomanifestations_conditionId     manifestations[] @relation("conditionsTomanifestations_conditionId")
+  units_conditionsTounits_conditionId                       units[]          @relation("conditionsTounits_conditionId")
+
+  @@unique([surveyId, elementId], map: "conditions_surveyid_elementid_unique")
+  @@unique([surveyId, manifestationId], map: "conditions_surveyid_manifestationid_unique")
+  @@unique([surveyId, unitId], map: "conditions_surveyid_unitid_unique")
+  @@unique([surveyId, elementId], map: "conditions_unique_element")
+  @@unique([surveyId, manifestationId], map: "conditions_unique_manifestation")
+  @@unique([surveyId, unitId], map: "conditions_unique_unit")
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([unitId])
+}
+
+model contracts {
+  id                     String     @id @unique(map: "contracts_id_unique") @db.Uuid
+  name                   String     @db.VarChar(255)
+  batchPrefix            String?    @db.VarChar(255)
+  status                 String?    @default("open") @db.VarChar(255)
+  inspectionStandardType String?    @db.VarChar(255)
+  startDate              DateTime?  @db.Timestamptz(6)
+  endDate                DateTime?  @db.Timestamptz(6)
+  created_at             DateTime?  @db.Timestamptz(6)
+  updated_at             DateTime?  @db.Timestamptz(6)
+  batches                batches[]
+  tranches               tranches[]
+}
+
+model dataSets {
+  id                                                  String         @id @unique(map: "datasets_id_unique") @db.Uuid
+  dataType                                            String?        @db.VarChar(32)
+  value                                               String?        @db.VarChar(255)
+  failureModes_dataSetsTofailureModes_causeOfFailure  failureModes[] @relation("dataSetsTofailureModes_causeOfFailure")
+  failureModes_dataSetsTofailureModes_failureMode     failureModes[] @relation("dataSetsTofailureModes_failureMode")
+  failureModes_dataSetsTofailureModes_function        failureModes[] @relation("dataSetsTofailureModes_function")
+  failureModes_dataSetsTofailureModes_guideword       failureModes[] @relation("dataSetsTofailureModes_guideword")
+  failureModes_dataSetsTofailureModes_sourceOfFailure failureModes[] @relation("dataSetsTofailureModes_sourceOfFailure")
+}
+
+model defaultFailureModes {
+  id                   String               @id @unique(map: "defaultfailuremodes_id_unique") @db.Uuid
+  objectTypeUnitCodeId String?              @db.Uuid
+  name                 String?              @db.VarChar(255)
+  isActive             Boolean?
+  created_at           DateTime?            @db.Timestamptz(6)
+  updated_at           DateTime?            @db.Timestamptz(6)
+  objectTypeUnitCodes  objectTypeUnitCodes? @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultfailuremodes_objecttypeunitcodeid_foreign")
+  failureModes         failureModes[]
+
+  @@index([objectTypeUnitCodeId])
+}
+
+model defaultMaintenanceMeasures {
+  id                        String                @id @unique(map: "defaultmaintenancemeasures_id_unique") @db.Uuid
+  objectTypeUnitCodeId      String?               @db.Uuid
+  material                  String?               @db.VarChar(255)
+  description               String?               @db.VarChar(255)
+  cycle                     Float?
+  maintenanceType           String?               @db.VarChar(255)
+  quantityUnitOfMeasurement String?               @db.VarChar(255)
+  unitPrice                 Float?
+  created_at                DateTime?             @db.Timestamptz(6)
+  updated_at                DateTime?             @db.Timestamptz(6)
+  objectTypeUnitCodes       objectTypeUnitCodes?  @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultmaintenancemeasures_objecttypeunitcodeid_foreign")
+  maintenanceMeasures       maintenanceMeasures[]
+
+  @@index([objectTypeUnitCodeId])
+}
+
+model defects {
+  id                        String                @id @unique(map: "defects_id_unique") @db.Uuid
+  name                      String?               @db.VarChar(255)
+  code                      String?               @db.VarChar(255)
+  description               String?
+  seriousness               Int?
+  intensity                 Int?
+  extend                    Int?
+  conditionId               String                @db.Uuid
+  created_at                DateTime?             @db.Timestamptz(6)
+  updated_at                DateTime?             @db.Timestamptz(6)
+  repairAdviceCategory      String?
+  repairDate                DateTime?             @db.Timestamptz(6)
+  material                  String?               @db.VarChar(255)
+  cause                     String?               @db.VarChar(255)
+  aspect                    String?               @db.VarChar(255)
+  repairAdvice              String?               @db.VarChar(255)
+  amount                    Int?
+  amountTotal               Int?
+  measuringUnit             String?               @db.VarChar(255)
+  measuringUnitAbbreviation String?               @db.VarChar(255)
+  score                     Int?
+  defectType                String?               @db.VarChar(255)
+  locationDescription       String?               @db.VarChar(255)
+  details                   String?
+  riscLevel                 String?               @db.VarChar(255)
+  ramsR                     String?               @db.VarChar(1)
+  ramsA                     String?               @db.VarChar(1)
+  ramsM                     String?               @db.VarChar(1)
+  ramsS                     String?               @db.VarChar(1)
+  careScore                 Int?
+  ramsEc                    String?               @db.VarChar(1)
+  ramsEnv                   String?               @db.VarChar(1)
+  ramsTotalPriority         String?               @db.VarChar(2)
+  ramsWeightedPriority      String?               @db.VarChar(1)
+  conditions                conditions            @relation(fields: [conditionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defects_conditionid_foreign")
+  assets                    assets[]
+  maintenanceMeasures       maintenanceMeasures[]
+
+  @@index([conditionId])
+}
+
+model derivedConditionScores {
+  id               String          @id @unique(map: "derivedconditionscores_id_unique") @db.Uuid
+  elementId        String?         @db.Uuid
+  unitId           String?         @db.Uuid
+  manifestationId  String?         @db.Uuid
+  surveyId         String?         @db.Uuid
+  score            String?         @db.VarChar(1)
+  derivedScore     String?         @db.VarChar(1)
+  replacementIndex Int?
+  created_at       DateTime?       @db.Timestamptz(6)
+  updated_at       DateTime?       @db.Timestamptz(6)
+  careScore        String?         @db.VarChar(1)
+  derivedCareScore String?         @db.VarChar(1)
+  elements         elements?       @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_elementid_foreign")
+  manifestations   manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_manifestationid_foreign")
+  surveys          surveys?        @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_surveyid_foreign")
+  units            units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_unitid_foreign")
+
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model elementCategories {
+  id                   String               @id @unique(map: "elementcategories_id_unique") @db.Uuid
+  name                 String               @db.VarChar(255)
+  languageId           String               @db.Uuid
+  inspectionStandardId String               @db.Uuid
+  created_at           DateTime?            @db.Timestamptz(6)
+  updated_at           DateTime?            @db.Timestamptz(6)
+  isActive             Boolean?             @default(true)
+  inspectionStandards  inspectionStandards  @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "elementcategories_inspectionstandardid_foreign")
+  languages            languages            @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "elementcategories_languageid_foreign")
+  elements             elements[]
+  objectTypeElements   objectTypeElements[]
+
+  @@index([inspectionStandardId])
+  @@index([languageId])
+}
+
+model elementRemarks {
+  id         String    @id @unique(map: "elementremarks_id_unique") @db.Uuid
+  text       String
+  remarkedOn DateTime  @db.Timestamptz(6)
+  elementId  String    @db.Uuid
+  surveyId   String    @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  remarkedBy String    @db.VarChar(255)
+  elements   elements  @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elementremarks_elementid_foreign")
+  surveys    surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elementremarks_surveyid_foreign")
+
+  @@index([elementId])
+  @@index([surveyId])
+}
+
+model elements {
+  id                                                               String                   @id @unique(map: "elements_id_unique") @db.Uuid
+  name                                                             String                   @db.VarChar(255)
+  code                                                             String?                  @db.VarChar(255)
+  location                                                         String?                  @db.VarChar(255)
+  objectId                                                         String                   @db.Uuid
+  conditionId                                                      String?                  @db.Uuid
+  observationPointId                                               String?                  @db.Uuid
+  created_at                                                       DateTime?                @db.Timestamptz(6)
+  updated_at                                                       DateTime?                @db.Timestamptz(6)
+  categoryId                                                       String?                  @db.Uuid
+  isUtResultPlaceholder                                            Boolean                  @default(false)
+  isStructural                                                     Boolean                  @default(false)
+  constructionYear                                                 Int?
+  constructionType                                                 String?                  @db.VarChar(255)
+  elementGroupName                                                 String?                  @db.VarChar(255)
+  isArchived                                                       Boolean                  @default(false)
+  isElectrical                                                     Boolean                  @default(false)
+  isStructuralObjectSpecific                                       Boolean                  @default(false)
+  isElectricalObjectSpecific                                       Boolean                  @default(false)
+  isElementGroupNameObjectSpecific                                 Boolean                  @default(false)
+  isRelevant                                                       Boolean                  @default(false)
+  elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
+  conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
+  objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
+  observationPoints_elements_observationPointIdToobservationPoints observationPoints?       @relation("elements_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "elements_observationpointid_foreign")
+  assets                                                           assets[]
+  conditions_conditions_elementIdToelements                        conditions[]             @relation("conditions_elementIdToelements")
+  derivedConditionScores                                           derivedConditionScores[]
+  elementRemarks                                                   elementRemarks[]
+  failureModes                                                     failureModes[]
+  manifestations                                                   manifestations[]
+  observationPoints_elementsToobservationPoints_elementId          observationPoints[]      @relation("elementsToobservationPoints_elementId")
+  surveyElements                                                   surveyElements[]
+  units                                                            units[]
+  utProjects                                                       utProjects[]
+
+  @@index([categoryId])
+  @@index([code])
+  @@index([conditionId])
+  @@index([name])
+  @@index([objectId])
+  @@index([observationPointId])
+}
+
+model failureModeDocuments {
+  documentId    String @db.Uuid
+  failureModeId String @db.Uuid
+
+  @@id([documentId, failureModeId])
+}
+
+model failureModes {
+  id                                              String                       @id @unique(map: "failuremodes_id_unique") @db.Uuid
+  surveyId                                        String                       @db.Uuid
+  elementId                                       String                       @db.Uuid
+  unitId                                          String?                      @db.Uuid
+  manifestationId                                 String?                      @db.Uuid
+  customName                                      String?                      @db.VarChar(255)
+  metaData                                        Json?
+  analysisRemarks                                 String?
+  verificationRemarks                             String?
+  maintenanceRemarks                              String?
+  created_at                                      DateTime?                    @db.Timestamptz(6)
+  updated_at                                      DateTime?                    @db.Timestamptz(6)
+  defaultFailureModeId                            String?                      @db.Uuid
+  analysisRamsR                                   String?                      @db.VarChar(1)
+  analysisRamsA                                   String?                      @db.VarChar(1)
+  analysisRamsS                                   String?                      @db.VarChar(1)
+  analysisRamsC                                   String?                      @db.VarChar(1)
+  analysisRamsEc                                  String?                      @db.VarChar(1)
+  analysisRamsEnv                                 String?                      @db.VarChar(1)
+  analysisRamsP                                   String?                      @db.VarChar(1)
+  verificationRamsR                               String?                      @db.VarChar(1)
+  verificationRamsA                               String?                      @db.VarChar(1)
+  verificationRamsS                               String?                      @db.VarChar(1)
+  verificationRamsC                               String?                      @db.VarChar(1)
+  verificationRamsEc                              String?                      @db.VarChar(1)
+  verificationRamsEnv                             String?                      @db.VarChar(1)
+  verificationRamsP                               String?                      @db.VarChar(1)
+  maintenanceRamsR                                String?                      @db.VarChar(1)
+  maintenanceRamsA                                String?                      @db.VarChar(1)
+  maintenanceRamsS                                String?                      @db.VarChar(1)
+  maintenanceRamsC                                String?                      @db.VarChar(1)
+  maintenanceRamsEc                               String?                      @db.VarChar(1)
+  maintenanceRamsEnv                              String?                      @db.VarChar(1)
+  maintenanceRamsP                                String?                      @db.VarChar(1)
+  analysisRamsTotalPriority                       String?                      @db.VarChar(2)
+  verificationRamsTotalPriority                   String?                      @db.VarChar(2)
+  maintenanceRamsTotalPriority                    String?                      @db.VarChar(2)
+  analysisRamsWeightedPriority                    String?                      @db.VarChar(1)
+  verificationRamsWeightedPriority                String?                      @db.VarChar(1)
+  maintenanceRamsWeightedPriority                 String?                      @db.VarChar(1)
+  copyOfFailureModeId                             String?                      @db.Uuid
+  surveyScopeId                                   Int?
+  failureModeType                                 String?                      @default("Constante faalfrequentie") @db.VarChar(255)
+  function                                        String?                      @db.Uuid
+  guideword                                       String?                      @db.Uuid
+  failureMode                                     String?                      @db.Uuid
+  causeOfFailure                                  String?                      @db.Uuid
+  sourceOfFailure                                 String?                      @db.Uuid
+  consequenceOfFailure                            String?                      @db.VarChar(255)
+  noticableFailure                                String?                      @db.VarChar(4)
+  dataSets_dataSetsTofailureModes_causeOfFailure  dataSets?                    @relation("dataSetsTofailureModes_causeOfFailure", fields: [causeOfFailure], references: [id], onUpdate: NoAction, map: "failuremodes_causeoffailure_foreign")
+  failureModes                                    failureModes?                @relation("failureModesTofailureModes_copyOfFailureModeId", fields: [copyOfFailureModeId], references: [id], onUpdate: NoAction, map: "failuremodes _copyoffailuremodeid_foreign")
+  defaultFailureModes                             defaultFailureModes?         @relation(fields: [defaultFailureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_defaultfailuremodeid_foreign")
+  elements                                        elements                     @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_elementid_foreign")
+  dataSets_dataSetsTofailureModes_failureMode     dataSets?                    @relation("dataSetsTofailureModes_failureMode", fields: [failureMode], references: [id], onUpdate: NoAction, map: "failuremodes_failuremode_foreign")
+  dataSets_dataSetsTofailureModes_function        dataSets?                    @relation("dataSetsTofailureModes_function", fields: [function], references: [id], onUpdate: NoAction, map: "failuremodes_function_foreign")
+  dataSets_dataSetsTofailureModes_guideword       dataSets?                    @relation("dataSetsTofailureModes_guideword", fields: [guideword], references: [id], onUpdate: NoAction, map: "failuremodes_guideword_foreign")
+  manifestations                                  manifestations?              @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_manifestationid_foreign")
+  dataSets_dataSetsTofailureModes_sourceOfFailure dataSets?                    @relation("dataSetsTofailureModes_sourceOfFailure", fields: [sourceOfFailure], references: [id], onUpdate: NoAction, map: "failuremodes_sourceoffailure_foreign")
+  surveys                                         surveys                      @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_surveyid_foreign")
+  units                                           units?                       @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_unitid_foreign")
+  assets                                          assets[]
+  other_failureModes                              failureModes[]               @relation("failureModesTofailureModes_copyOfFailureModeId")
+  findings                                        findings[]
+  fmecaFurtherInvestigations                      fmecaFurtherInvestigations[]
+  maintenanceMeasures                             maintenanceMeasures[]
+  observationPoints                               observationPoints[]
+
+  @@unique([surveyId, surveyScopeId], map: "failuremodes_surveyid_surveyscopeid_unique")
+  @@index([defaultFailureModeId])
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model findings {
+  id            String       @id @unique(map: "findings_id_unique") @db.Uuid
+  failureModeId String       @db.Uuid
+  description   String?
+  created_at    DateTime?    @db.Timestamptz(6)
+  updated_at    DateTime?    @db.Timestamptz(6)
+  surveyScopeId Int?
+  surveyId      String?      @db.Uuid
+  failureModes  failureModes @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "findings_failuremodeid_foreign")
+  surveys       surveys?     @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "findings_surveyid_foreign")
+
+  @@unique([surveyId, surveyScopeId], map: "findings_surveyid_surveyscopeid_unique")
+  @@index([failureModeId])
+}
+
+model finishedJobs {
+  id                String    @id @unique(map: "finishedjobs_id_unique") @db.Uuid
+  surveyId          String    @db.Uuid
+  jobType           String    @db.VarChar(255)
+  payload           Json
+  startedOnDateTime DateTime? @db.Timestamptz(6)
+  wasSuccessful     Boolean?
+  errorLog          String?
+  log               String?
+  workerId          String?   @db.VarChar(255)
+  created_at        DateTime? @db.Timestamptz(6)
+  updated_at        DateTime? @db.Timestamptz(6)
+}
+
+model flights {
+  id                    String                  @id @unique(map: "flights_id_unique") @db.Uuid
+  projectId             String                  @db.Uuid
+  startedOnDateTime     DateTime?               @db.Timestamptz(6)
+  takenOffDateTime      DateTime?               @db.Timestamptz(6)
+  updatedOnDateTime     DateTime                @db.Timestamptz(6)
+  createdOnDateTime     DateTime                @db.Timestamptz(6)
+  indexNumber           Int                     @default(1)
+  utProjects            utProjects              @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flights_projectid_foreign")
+  measurementCandidates measurementCandidates[]
+  measurements          measurements[]
+
+  @@index([projectId])
+}
+
+model fmecaFurtherInvestigations {
+  id              String          @id @unique(map: "fmecafurtherinvestigations_id_unique") @db.Uuid
+  description     String          @db.VarChar(255)
+  priority        Int
+  failureModeId   String?         @db.Uuid
+  surveyId        String          @db.Uuid
+  unitId          String          @db.Uuid
+  manifestationId String?         @db.Uuid
+  created_at      DateTime?       @db.Timestamptz(6)
+  updated_at      DateTime?       @db.Timestamptz(6)
+  surveyScopeId   Int?
+  failureModes    failureModes?   @relation(fields: [failureModeId], references: [id], onUpdate: NoAction, map: "fmecafurtherinvestigations_failuremodeid_foreign")
+  manifestations  manifestations? @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fmecafurtherinvestigations_manifestationid_foreign")
+  surveys         surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fmecafurtherinvestigations_surveyid_foreign")
+  units           units           @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fmecafurtherinvestigations_unitid_foreign")
+
+  @@unique([surveyId, surveyScopeId], map: "fmecafurtherinvestigations_surveyid_surveyscopeid_unique")
+}
+
+model imageMeasurements {
+  id                                                  String    @id @unique(map: "imagemeasurements_id_unique") @db.Uuid
+  distanceToObject                                    BigInt
+  zoomLevel                                           Int?
+  imagePositionX                                      Int?
+  imagePositionY                                      Int?
+  isRulerVisible                                      Boolean
+  rulerX                                              Int?
+  rulerY                                              Int?
+  isCrackRulerVisible                                 Boolean
+  crackRulerX                                         Int?
+  crackRulerY                                         Int?
+  creackRulerOrientation                              String?   @db.VarChar(255)
+  assetId                                             String    @db.Uuid
+  created_at                                          DateTime? @db.Timestamptz(6)
+  updated_at                                          DateTime? @db.Timestamptz(6)
+  assets_assetsToimageMeasurements_assetId            assets    @relation("assetsToimageMeasurements_assetId", fields: [assetId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "imagemeasurements_assetid_foreign")
+  assets_assets_imageMeasurementIdToimageMeasurements assets[]  @relation("assets_imageMeasurementIdToimageMeasurements")
+
+  @@index([assetId])
+}
+
+model inspectionFindings {
+  id          String    @id @unique(map: "inspectionfindings_id_unique") @db.Uuid
+  surveyId    String    @db.Uuid
+  description String?
+  unitId      String    @db.Uuid
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  surveys     surveys   @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionfindings_surveyid_foreign")
+  units       units     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionfindings_unitid_foreign")
+
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model inspectionPlans {
+  id              String          @id @unique(map: "inspectionplans_id_unique") @db.Uuid
+  surveyId        String          @db.Uuid
+  description     String?
+  created_at      DateTime?       @db.Timestamptz(6)
+  updated_at      DateTime?       @db.Timestamptz(6)
+  unitId          String?         @db.Uuid
+  manifestationId String?         @db.Uuid
+  surveyScopeId   Int?
+  manifestations  manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionplans_manifestationid_foreign")
+  surveys         surveys         @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionplans_surveyid_foreign")
+  units           units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionplans_unitid_foreign")
+
+  @@unique([surveyId, surveyScopeId], map: "inspectionplans_surveyid_surveyscopeid_unique")
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model inspectionStandards {
+  id                 String               @id @unique(map: "inspectionstandards_id_unique") @db.Uuid
+  name               String               @db.VarChar(255)
+  isCheckList        Boolean
+  languageId         String               @db.Uuid
+  objectTypeId       String               @db.Uuid
+  created_at         DateTime?            @db.Timestamptz(6)
+  updated_at         DateTime?            @db.Timestamptz(6)
+  type               String?              @default("free") @db.VarChar(255)
+  isActive           Boolean?             @default(true)
+  languages          languages            @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionstandards_languageid_foreign")
+  objectTypes        objectTypes          @relation(fields: [objectTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionstandards_objecttypeid_foreign")
+  elementCategories  elementCategories[]
+  objects            objects[]
+  objectTypeElements objectTypeElements[]
+
+  @@index([languageId])
+  @@index([objectTypeId])
+}
+
+model jobs {
+  id                String    @id @unique(map: "jobs_id_unique") @db.Uuid
+  surveyId          String    @db.Uuid
+  jobType           String    @db.VarChar(255)
+  payload           Json
+  startedOnDateTime DateTime? @db.Timestamptz(6)
+  updatedOnDateTime DateTime? @db.Timestamptz(6)
+  workerId          String?   @db.VarChar(255)
+  created_at        DateTime? @db.Timestamptz(6)
+  updated_at        DateTime? @db.Timestamptz(6)
+  surveys           surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_surveyid_foreign")
+}
+
+model knex_migrations {
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar(255)
+  batch          Int?
+  migration_time DateTime? @db.Timestamptz(6)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model knex_migrations_lock {
+  is_locked Int?
+
+  @@ignore
+}
+
+model languages {
+  id                  String                @id @unique(map: "languages_id_unique") @db.Uuid
+  name                String                @unique(map: "languages_name_unique") @db.VarChar(255)
+  code                String?               @db.VarChar(255)
+  created_at          DateTime?             @db.Timestamptz(6)
+  updated_at          DateTime?             @db.Timestamptz(6)
+  elementCategories   elementCategories[]
+  inspectionStandards inspectionStandards[]
+  objectTypes         objectTypes[]
+}
+
+model licences {
+  id                  String    @id @unique(map: "licences_id_unique") @db.Uuid
+  companyId           String    @db.Uuid
+  activatedOnDate     DateTime? @db.Date
+  expiresOnDate       DateTime? @db.Date
+  name                String    @db.VarChar(255)
+  isInUseByDeviceName String?   @db.VarChar(255)
+  activatedBy         String?   @db.VarChar(255)
+  companies           companies @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "licences_companyid_foreign")
+
+  @@index([companyId])
+}
+
+model maintenanceMeasures {
+  id                           String                      @id @unique(map: "maintenancemeasures_id_unique") @db.Uuid
+  failureModeId                String?                     @db.Uuid
+  description                  String?
+  cost                         Float?
+  planYear                     Int?
+  created_at                   DateTime?                   @db.Timestamptz(6)
+  updated_at                   DateTime?                   @db.Timestamptz(6)
+  unitId                       String?                     @db.Uuid
+  manifestationId              String?                     @db.Uuid
+  surveyId                     String?                     @db.Uuid
+  workType                     String?                     @db.VarChar(255)
+  maintenanceType              String?                     @db.VarChar(255)
+  urgency                      String?                     @db.VarChar(255)
+  finalPlanYear                Int?
+  defaultMaintenanceMeasureId  String?                     @db.Uuid
+  cycle                        Float?
+  unitPrice                    Float?
+  costSurcharge                Float?
+  objectId                     String                      @db.Uuid
+  scheduledYear                Int?
+  implementationYear           Int?
+  planYearRemarks              String?
+  scheduledYearRemarks         String?
+  isCurrent                    Boolean                     @default(true)
+  previousMaintenanceMeasureId String?                     @db.Uuid
+  defectId                     String?                     @db.Uuid
+  location                     String?                     @db.VarChar(255)
+  quantity                     String?                     @db.VarChar(255)
+  surveyScopeId                Int?
+  remarks                      String?
+  quantityUnitOfMeasurement    String?                     @db.VarChar(4)
+  netCost                      Float?
+  defaultMaintenanceMeasures   defaultMaintenanceMeasures? @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_defaultmaintenancemeasureid_foreign")
+  defects                      defects?                    @relation(fields: [defectId], references: [id], onUpdate: NoAction, map: "maintenancemeasures_defectid_foreign")
+  failureModes                 failureModes?               @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_failuremodeid_foreign")
+  manifestations               manifestations?             @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_manifestationid_foreign")
+  objects                      objects                     @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _objectid_foreign")
+  maintenanceMeasures          maintenanceMeasures?        @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId", fields: [previousMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _previousmaintenancemeasureid_foreign")
+  surveys                      surveys?                    @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_surveyid_foreign")
+  units                        units?                      @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_unitid_foreign")
+  other_maintenanceMeasures    maintenanceMeasures[]       @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId")
+
+  @@unique([surveyId, surveyScopeId], map: "maintenancemeasures_surveyid_surveyscopeid_unique")
+  @@index([defaultMaintenanceMeasureId])
+  @@index([defectId])
+  @@index([failureModeId])
+  @@index([manifestationId])
+  @@index([objectId])
+  @@index([previousMaintenanceMeasureId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model manifestationRemarks {
+  id              String         @id @unique(map: "manifestationremarks_id_unique") @db.Uuid
+  text            String
+  remarkedOn      DateTime       @db.Timestamptz(6)
+  remarkedBy      String         @db.VarChar(255)
+  manifestationId String         @db.Uuid
+  surveyId        String         @db.Uuid
+  created_at      DateTime?      @db.Timestamptz(6)
+  updated_at      DateTime?      @db.Timestamptz(6)
+  manifestations  manifestations @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestationremarks_manifestationid_foreign")
+  surveys         surveys        @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestationremarks_surveyid_foreign")
+
+  @@index([manifestationId])
+  @@index([surveyId])
+}
+
+model manifestations {
+  id                                                                     String                       @id @unique(map: "manifestations_id_unique") @db.Uuid
+  name                                                                   String                       @db.VarChar(255)
+  code                                                                   String?                      @db.VarChar(255)
+  location                                                               String?                      @db.VarChar(255)
+  elementId                                                              String                       @db.Uuid
+  unitId                                                                 String                       @db.Uuid
+  conditionId                                                            String?                      @db.Uuid
+  observationPointId                                                     String?                      @db.Uuid
+  created_at                                                             DateTime?                    @db.Timestamptz(6)
+  updated_at                                                             DateTime?                    @db.Timestamptz(6)
+  objectId                                                               String                       @db.Uuid
+  material                                                               String?                      @db.VarChar(128)
+  quantity                                                               Int?
+  quantityUnitOfMeasurement                                              String?                      @db.VarChar(4)
+  constructionYear                                                       Int?
+  conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
+  elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
+  objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
+  observationPoints_manifestations_observationPointIdToobservationPoints observationPoints?           @relation("manifestations_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "manifestations_observationpointid_foreign")
+  units                                                                  units                        @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_unitid_foreign")
+  assets                                                                 assets[]
+  conditions_conditions_manifestationIdTomanifestations                  conditions[]                 @relation("conditions_manifestationIdTomanifestations")
+  derivedConditionScores                                                 derivedConditionScores[]
+  failureModes                                                           failureModes[]
+  fmecaFurtherInvestigations                                             fmecaFurtherInvestigations[]
+  inspectionPlans                                                        inspectionPlans[]
+  maintenanceMeasures                                                    maintenanceMeasures[]
+  manifestationRemarks                                                   manifestationRemarks[]
+  observationPoints_manifestationsToobservationPoints_manifestationId    observationPoints[]          @relation("manifestationsToobservationPoints_manifestationId")
+  surveyManifestations                                                   surveyManifestations[]
+  utProjects                                                             utProjects[]
+
+  @@index([conditionId])
+  @@index([elementId])
+  @@index([observationPointId])
+  @@index([unitId])
+}
+
+model measurementCandidates {
+  id                String       @id @unique(map: "measurementcandidates_id_unique") @db.Uuid
+  flightId          String       @db.Uuid
+  measurementId     String       @db.Uuid
+  value             Float        @db.Real
+  altitude          Float?       @db.Real
+  updatedOnDateTime DateTime     @db.Timestamptz(6)
+  createdOnDateTime DateTime     @db.Timestamptz(6)
+  flights           flights      @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_flightid_foreign")
+  measurements      measurements @relation(fields: [measurementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_measurementid_foreign")
+
+  @@index([flightId])
+  @@index([measurementId])
+}
+
+model measurements {
+  id                    String                  @id @unique(map: "measurements_id_unique") @db.Uuid
+  flightId              String                  @db.Uuid
+  indexNumber           Int
+  positionNumber        Int
+  scanLineNumber        Int
+  value                 Float                   @db.Real
+  altitude              Float?                  @db.Real
+  updatedOnDateTime     DateTime                @db.Timestamptz(6)
+  createdOnDateTime     DateTime                @db.Timestamptz(6)
+  pointNumber           Int                     @default(1)
+  flights               flights                 @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurements_flightid_foreign")
+  measurementCandidates measurementCandidates[]
+
+  @@index([flightId])
+}
+
+model mutationQueue {
+  id         String   @id @unique(map: "mutationqueue_id_unique") @db.Uuid
+  objectId   String   @unique(map: "mutationqueue_objectid_unique") @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  status     String   @default("QUEUED")
+  objects    objects  @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "mutationqueue_objectid_foreign")
+}
+
+model nenDefects {
+  id               String    @id @unique(map: "nendefects_id_unique") @db.Uuid
+  name             String?   @db.VarChar(255)
+  code             String?   @unique(map: "nendefects_code_unique") @db.VarChar(255)
+  description      String?   @db.VarChar(255)
+  seriousness      String?   @db.VarChar(255)
+  intensity        String?   @db.VarChar(255)
+  unit             String?   @db.VarChar(255)
+  unitAbbreviation String?   @db.VarChar(255)
+  defectKind       String?   @db.VarChar(255)
+  defectGroup      String?   @db.VarChar(255)
+  defectType       String?   @db.VarChar(255)
+  created_at       DateTime? @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+
+  @@index([code])
+}
+
+model objects {
+  id                                             String                   @id @unique(map: "objects_id_unique") @db.Uuid
+  name                                           String                   @db.VarChar(255)
+  code                                           String?                  @db.VarChar(255)
+  location                                       String?                  @db.VarChar(255)
+  latitude                                       Decimal?                 @db.Decimal(11, 8)
+  longitude                                      Decimal?                 @db.Decimal(11, 8)
+  updatedOn                                      DateTime                 @db.Timestamptz(6)
+  compositionIsVisible                           Boolean
+  clientCompanyId                                String?                  @db.Uuid
+  operatorCompanyId                              String?                  @db.Uuid
+  surveyorCompanyId                              String?                  @db.Uuid
+  objectTypeId                                   String                   @db.Uuid
+  created_at                                     DateTime?                @db.Timestamptz(6)
+  updated_at                                     DateTime?                @db.Timestamptz(6)
+  inspectionStandardId                           String?                  @db.Uuid
+  ownerCompanyId                                 String?                  @db.Uuid
+  customerVersion                                String?                  @default("all") @db.VarChar(255)
+  isPublic                                       Boolean?                 @default(false)
+  isDemo                                         Boolean?                 @default(false)
+  siteId                                         String?                  @db.Uuid
+  constructionYear                               Int?
+  externalRefId                                  String?                  @db.VarChar(255)
+  useage                                         String?                  @db.VarChar(255)
+  managementOrganization                         String?                  @db.VarChar(255)
+  shape                                          Unsupported("geometry")?
+  shapeSrid                                      Int?
+  status                                         String?                  @default("inUse") @db.VarChar(255)
+  effortCategory                                 String?                  @db.VarChar(255)
+  effortCalculation                              Int?
+  trafficType                                    String?                  @db.VarChar(255)
+  mainMaterial                                   String?                  @db.VarChar(255)
+  marineInfrastrutureType                        String?                  @db.VarChar(255)
+  length                                         Decimal?                 @db.Decimal(15, 2)
+  width                                          Decimal?                 @db.Decimal(15, 2)
+  squareMeters                                   Decimal?                 @db.Decimal(15, 2)
+  attributes                                     Json                     @default("{}")
+  companies_companiesToobjects_clientCompanyId   companies?               @relation("companiesToobjects_clientCompanyId", fields: [clientCompanyId], references: [id], onUpdate: NoAction, map: "objects_clientcompanyid_foreign")
+  inspectionStandards                            inspectionStandards?     @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_inspectionstandardid_foreign")
+  objectTypes                                    objectTypes              @relation(fields: [objectTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_objecttypeid_foreign")
+  companies_companiesToobjects_operatorCompanyId companies?               @relation("companiesToobjects_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "objects_operatorcompanyid_foreign")
+  companies_companiesToobjects_ownerCompanyId    companies?               @relation("companiesToobjects_ownerCompanyId", fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "objects_ownercompanyid_foreign")
+  sites                                          sites?                   @relation(fields: [siteId], references: [id], onUpdate: NoAction, map: "objects_siteid_foreign")
+  companies_companiesToobjects_surveyorCompanyId companies?               @relation("companiesToobjects_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "objects_surveyorcompanyid_foreign")
+  assets                                         assets[]
+  auditEvents                                    auditEvents[]
+  batchObjects                                   batchObjects[]
+  elements                                       elements[]
+  maintenanceMeasures                            maintenanceMeasures[]
+  manifestations                                 manifestations[]
+  mutationQueue                                  mutationQueue?
+  surveyModifications                            surveyModifications[]
+  surveys                                        surveys[]
+  units                                          units[]
+  utProjects                                     utProjects[]
+
+  @@index([clientCompanyId])
+  @@index([code])
+  @@index([inspectionStandardId])
+  @@index([name])
+  @@index([objectTypeId])
+  @@index([operatorCompanyId])
+  @@index([ownerCompanyId])
+  @@index([siteId])
+  @@index([surveyorCompanyId])
+  @@index([updatedOn])
+}
+
+model objectTypeDefects {
+  id                  String              @id @unique(map: "objecttypedefects_id_unique") @db.Uuid
+  name                String              @db.VarChar(255)
+  code                String?             @db.VarChar(255)
+  description         String
+  useSeriousness      Boolean
+  useIntensity        Boolean
+  useExtend           Boolean
+  objectTypeUnitId    String?             @db.Uuid
+  objectTypeElementId String?             @db.Uuid
+  created_at          DateTime?           @db.Timestamptz(6)
+  updated_at          DateTime?           @db.Timestamptz(6)
+  seriousness         String?             @db.VarChar(255)
+  intensity           String?             @db.VarChar(255)
+  unit                String?             @db.VarChar(255)
+  unitAbbreviation    String?             @db.VarChar(255)
+  defectType          String?             @db.VarChar(255)
+  material            String?             @db.VarChar(255)
+  objectTypeElements  objectTypeElements? @relation(fields: [objectTypeElementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "objecttypedefects_objecttypeelementid_foreign")
+  objectTypeUnits     objectTypeUnits?    @relation(fields: [objectTypeUnitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "objecttypedefects_objecttypeunitid_foreign")
+
+  @@index([objectTypeElementId])
+  @@index([objectTypeUnitId])
+}
+
+model objectTypeElementCodes {
+  id               String    @id @unique(map: "objecttypeelementcodes_id_unique") @db.Uuid
+  code             String    @unique(map: "objecttypeelementcodes_code_unique") @db.VarChar(255)
+  name             String?   @db.VarChar(255)
+  replacementIndex Int?
+  created_at       DateTime? @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+  elementGroupName String?   @db.VarChar(255)
+  isStructural     Boolean   @default(false)
+  isElectrical     Boolean   @default(false)
+}
+
+model objectTypeElements {
+  id                    String              @id @unique(map: "objecttypeelements_id_unique") @db.Uuid
+  name                  String              @db.VarChar(255)
+  code                  String?             @db.VarChar(255)
+  isDefault             Boolean
+  inspectionStandardId  String              @db.Uuid
+  created_at            DateTime?           @db.Timestamptz(6)
+  updated_at            DateTime?           @db.Timestamptz(6)
+  categoryId            String?             @db.Uuid
+  isActive              Boolean?            @default(true)
+  isUtResultPlaceholder Boolean             @default(false)
+  elementCategories     elementCategories?  @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "objecttypeelements_categoryid_foreign")
+  inspectionStandards   inspectionStandards @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypeelements_inspectionstandardid_foreign")
+  objectTypeDefects     objectTypeDefects[]
+  objectTypeUnits       objectTypeUnits[]
+
+  @@index([categoryId])
+  @@index([code])
+  @@index([inspectionStandardId])
+  @@index([name])
+}
+
+model objectTypes {
+  id                  String                @id @unique(map: "objecttypes_id_unique") @db.Uuid
+  name                String                @unique(map: "objecttypes_name_unique") @db.VarChar(255)
+  languageId          String                @db.Uuid
+  created_at          DateTime?             @db.Timestamptz(6)
+  updated_at          DateTime?             @db.Timestamptz(6)
+  customerVersion     String?               @default("all") @db.VarChar(255)
+  isActive            Boolean?              @default(true)
+  dmsCategory         String                @default("Bruggen") @db.VarChar(255)
+  languages           languages             @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypes_languageid_foreign")
+  inspectionStandards inspectionStandards[]
+  objects             objects[]
+
+  @@index([languageId])
+}
+
+model objectTypeUnitCodes {
+  id                         String                       @id @unique(map: "objecttypeunitcodes_id_unique") @db.Uuid
+  code                       String                       @unique(map: "objecttypeunitcodes_code_unique") @db.VarChar(255)
+  name                       String?                      @db.VarChar(255)
+  replacementIndex           Int?
+  created_at                 DateTime?                    @db.Timestamptz(6)
+  updated_at                 DateTime?                    @db.Timestamptz(6)
+  isStructural               Boolean                      @default(false)
+  isElectrical               Boolean                      @default(false)
+  defaultFailureModes        defaultFailureModes[]
+  defaultMaintenanceMeasures defaultMaintenanceMeasures[]
+}
+
+model objectTypeUnits {
+  id                  String              @id @unique(map: "objecttypeunits_id_unique") @db.Uuid
+  name                String              @db.VarChar(255)
+  code                String?             @db.VarChar(255)
+  isDefault           Boolean
+  objectTypeElementId String?             @db.Uuid
+  created_at          DateTime?           @db.Timestamptz(6)
+  updated_at          DateTime?           @db.Timestamptz(6)
+  isActive            Boolean?            @default(true)
+  objectTypeElements  objectTypeElements? @relation(fields: [objectTypeElementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypeunits_objecttypeelementid_foreign")
+  objectTypeDefects   objectTypeDefects[]
+
+  @@index([code])
+  @@index([name])
+  @@index([objectTypeElementId])
+}
+
+model observationPoints {
+  id                                                                  String           @id @unique(map: "observationpoints_id_unique") @db.Uuid
+  dModelX                                                             String?          @map("3dModelX") @db.VarChar(255)
+  dModelY                                                             String?          @map("3dModelY") @db.VarChar(255)
+  dModelZ                                                             String?          @map("3dModelZ") @db.VarChar(255)
+  dModelCameraX                                                       String?          @map("3dModelCameraX") @db.VarChar(255)
+  dModelCameraY                                                       String?          @map("3dModelCameraY") @db.VarChar(255)
+  dModelCameraZ                                                       String?          @map("3dModelCameraZ") @db.VarChar(255)
+  elementId                                                           String?          @db.Uuid
+  unitId                                                              String?          @db.Uuid
+  created_at                                                          DateTime?        @db.Timestamptz(6)
+  updated_at                                                          DateTime?        @db.Timestamptz(6)
+  title                                                               String?          @db.VarChar(255)
+  assetId                                                             String?          @db.Uuid
+  surveyId                                                            String           @db.Uuid
+  manifestationId                                                     String?          @db.Uuid
+  is2dSourcePoint                                                     Boolean?         @default(false)
+  dSourceAssetId                                                      String?          @map("2dSourceAssetId") @db.Uuid
+  dGeometry                                                           Json?            @map("2dGeometry")
+  failureModeId                                                       String?          @db.Uuid
+  assets_assetsToobservationPoints_2dSourceAssetId                    assets?          @relation("assetsToobservationPoints_2dSourceAssetId", fields: [dSourceAssetId], references: [id], onUpdate: NoAction, map: "observationpoints_2dsourceassetid_foreign")
+  assets_assetsToobservationPoints_assetId                            assets?          @relation("assetsToobservationPoints_assetId", fields: [assetId], references: [id], onUpdate: NoAction, map: "observationpoints_assetid_foreign")
+  elements_elementsToobservationPoints_elementId                      elements?        @relation("elementsToobservationPoints_elementId", fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_elementid_foreign")
+  failureModes                                                        failureModes?    @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_failuremodeid_foreign")
+  manifestations_manifestationsToobservationPoints_manifestationId    manifestations?  @relation("manifestationsToobservationPoints_manifestationId", fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_manifestationid_foreign")
+  surveys                                                             surveys          @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_surveyid_foreign")
+  units_observationPoints_unitIdTounits                               units?           @relation("observationPoints_unitIdTounits", fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_unitid_foreign")
+  elements_elements_observationPointIdToobservationPoints             elements[]       @relation("elements_observationPointIdToobservationPoints")
+  manifestations_manifestations_observationPointIdToobservationPoints manifestations[] @relation("manifestations_observationPointIdToobservationPoints")
+  units_observationPointsTounits_observationPointId                   units[]          @relation("observationPointsTounits_observationPointId")
+
+  @@index([dSourceAssetId])
+  @@index([assetId])
+  @@index([elementId])
+  @@index([failureModeId])
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model poleLabResults {
+  id                         String          @id @unique(map: "polelabresults_id_unique") @db.Uuid
+  surveyId                   String          @db.Uuid
+  code                       String          @db.VarChar(32)
+  satisfies                  Boolean?
+  woodtype                   String?         @db.VarChar(32)
+  polediameter               Int?
+  lengthToHeartPole          Int?
+  thicknessOfHeartwood       Int?
+  thicknessOfSapwood         Int?
+  erosionBacteria            Boolean?
+  tunnelingBacteria          Boolean?
+  moldThreads                Boolean?
+  blueMold                   Boolean?
+  softrot                    Boolean?
+  brownRot                   Boolean?
+  whiteRot                   Boolean?
+  findings                   String?
+  lengthSubsample1           Int?
+  lengthSubsample2           Int?
+  lengthSubsample3           Int?
+  lengthSubsample4           Int?
+  lengthSubsample5           Int?
+  lengthSubsample6           Int?
+  lengthSubsample7           Int?
+  lengthSubsample8           Int?
+  degreeOfDamageToSubsample1 degreeOfDamage?
+  degreeOfDamageToSubsample2 degreeOfDamage?
+  degreeOfDamageToSubsample3 degreeOfDamage?
+  degreeOfDamageToSubsample4 degreeOfDamage?
+  degreeOfDamageToSubsample5 degreeOfDamage?
+  degreeOfDamageToSubsample6 degreeOfDamage?
+  degreeOfDamageToSubsample7 degreeOfDamage?
+  degreeOfDamageToSubsample8 degreeOfDamage?
+  volumeSubsample1           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample2           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample3           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample4           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample5           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample6           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample7           Decimal?        @db.Decimal(5, 2)
+  volumeSubsample8           Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample1        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample2        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample3        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample4        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample5        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample6        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample7        Decimal?        @db.Decimal(5, 2)
+  wetWeightSubsample8        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample1        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample2        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample3        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample4        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample5        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample6        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample7        Decimal?        @db.Decimal(5, 2)
+  dryWeightSubsample8        Decimal?        @db.Decimal(5, 2)
+  created_at                 DateTime?       @db.Timestamptz(6)
+  updated_at                 DateTime?       @db.Timestamptz(6)
+  surveys                    surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "polelabresults_surveyid_foreign")
+}
+
+model registrations {
+  emailAddress String    @id @unique(map: "registrations_emailaddress_unique")
+  firstName    String?
+  lastName     String?
+  phoneNumber  String?
+  created_at   DateTime? @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+}
+
+model sites {
+  id              String     @id @unique(map: "sites_id_unique") @db.Uuid
+  name            String     @db.VarChar(255)
+  ownerCompanyId  String?    @db.Uuid
+  image           String?    @db.VarChar(255)
+  imageMap        String?
+  customerVersion String?    @default("all") @db.VarChar(255)
+  created_at      DateTime?  @db.Timestamptz(6)
+  updated_at      DateTime?  @db.Timestamptz(6)
+  companies       companies? @relation(fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "sites_ownercompanyid_foreign")
+  objects         objects[]
+
+  @@index([ownerCompanyId])
+}
+
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model surveyElementGroups {
+  id                     String    @id @unique(map: "surveyelementgroups_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  name                   String    @db.VarChar(255)
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  initialRemarks         String?
+  inspectionRemarks      String?
+  craMaxInitialScore     Int?
+  craMaxHistoryScore     Int?
+  craMaxInspectionScore  Int?
+  inspectionStandardData Json      @default("{}")
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveyelementgroups_surveyid_foreign")
+
+  @@unique([surveyId, name], map: "surveyelementgroups _surveyid_name_unique")
+}
+
+model surveyElements {
+  id                     String    @id @unique(map: "surveyelements_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  elementId              String    @db.Uuid
+  inspectionStandardData Json      @default("{}")
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  elements               elements  @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_elementid_foreign")
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_surveyid_foreign")
+}
+
+model surveyManifestations {
+  id                     String         @id @unique(map: "surveymanifestations_id_unique") @db.Uuid
+  surveyId               String         @db.Uuid
+  manifestationId        String         @db.Uuid
+  inspectionStandardData Json           @default("{}")
+  created_at             DateTime?      @db.Timestamptz(6)
+  updated_at             DateTime?      @db.Timestamptz(6)
+  manifestations         manifestations @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_manifestationid_foreign")
+  surveys                surveys        @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_surveyid_foreign")
+}
+
+model surveyModifications {
+  id          String    @id @unique(map: "surveymodifications_id_unique") @db.Uuid
+  version     Int
+  description String
+  surveryedOn DateTime  @db.Timestamptz(6)
+  surveyId    String    @db.Uuid
+  objectId    String    @db.Uuid
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  objects     objects   @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_objectid_foreign")
+  surveys     surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_surveyid_foreign")
+}
+
+model surveys {
+  id                                                   String                       @id @unique(map: "surveys_id_unique") @db.Uuid
+  surveryedOn                                          DateTime                     @db.Timestamptz(6)
+  updatedOn                                            DateTime                     @db.Timestamptz(6)
+  status                                               String?
+  description                                          String?
+  dUri                                                 String?                      @map("3dUri") @db.VarChar(255)
+  summaryAndAdvice                                     String?
+  operatorCompanyId                                    String?                      @db.Uuid
+  surveyorCompanyId                                    String?                      @db.Uuid
+  objectId                                             String                       @db.Uuid
+  created_at                                           DateTime?                    @db.Timestamptz(6)
+  updated_at                                           DateTime?                    @db.Timestamptz(6)
+  condition                                            String?                      @db.VarChar(1)
+  storageUsed                                          BigInt?
+  material                                             String?                      @db.VarChar(255)
+  isDOMLight                                           Boolean?
+  pointCloudStorageUsed                                BigInt                       @default(0)
+  isAssetDescriptionVisible                            Boolean?
+  isAnnotationsDefaultVisible                          Boolean?                     @default(true)
+  isVideoDownloadVisible                               Boolean?                     @default(true)
+  projectNumber                                        String?                      @db.VarChar(255)
+  inspectionStandardType                               String?                      @db.VarChar(255)
+  dUriGeo                                              String?                      @map("3dUriGeo") @db.VarChar(255)
+  dUriMultiBeam                                        String?                      @map("3dUriMultiBeam") @db.VarChar(255)
+  careCondition                                        String?                      @db.VarChar(1)
+  scanLineCoordinates                                  Json?
+  shapesInModel                                        Json?
+  isFmecaAvailable                                     Boolean                      @default(false)
+  isCraAvailable                                       Boolean                      @default(false)
+  craInitialHistoryIsBuildBetween4074                  Boolean                      @default(false)
+  craInitialHistoryIsStaticallyIndeterminate           Boolean                      @default(false)
+  craInitialHistoryBuildBetween4074Remarks             String?
+  craInitialHistoryStaticallyIndeterminateRemarks      String?
+  craInspectionIsBuildBetween4074                      Boolean                      @default(false)
+  craInspectionIsStaticallyIndeterminate               Boolean                      @default(false)
+  craInspectionBuildBetween4074Remarks                 String?
+  craInspectionStaticallyIndeterminateRemarks          String?
+  craInitialHistoryRemarks                             String?
+  craInspectionRemarks                                 String?
+  craInitialHistoryScore                               Decimal?                     @db.Decimal(15, 6)
+  craInspectionScore                                   Decimal?                     @db.Decimal(15, 6)
+  craInitialHistoryCondition                           Int                          @default(0)
+  craInspectionCondition                               Int                          @default(0)
+  craInitialHistoryConditionWithoutFactor              Int                          @default(0)
+  craInspectionConditionWithoutFactor                  Int                          @default(0)
+  preparedAuthor                                       String?                      @db.VarChar(255)
+  preparedDate                                         DateTime?                    @db.Timestamptz(6)
+  verifiedAuthor                                       String?                      @db.VarChar(255)
+  verifiedDate                                         DateTime?                    @db.Timestamptz(6)
+  craInitialHistoryConditionScoreWithoutFactor         Int?
+  craInspectionConditionScoreWithoutFactor             Int?
+  craInitialHistoryConditionScore                      Int?
+  craInspectionConditionScore                          Int?
+  batchId                                              String?                      @db.Uuid
+  inspectionStandardData                               Json                         @default("{}")
+  craInitialHistoryIsBuildBetween4074IsRelevant        Boolean                      @default(false)
+  craInitialHistoryIsStaticallyIndeterminateIsRelevant Boolean                      @default(false)
+  craInspectionIsBuildBetween4074IsRelevant            Boolean                      @default(false)
+  craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                      @default(false)
+  legacyFailureMode                                    Boolean?
+  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
+  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
+  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
+  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
+  assets                                               assets[]
+  auditEvents                                          auditEvents[]
+  conditions                                           conditions[]
+  derivedConditionScores                               derivedConditionScores[]
+  elementRemarks                                       elementRemarks[]
+  failureModes                                         failureModes[]
+  findings                                             findings[]
+  fmecaFurtherInvestigations                           fmecaFurtherInvestigations[]
+  inspectionFindings                                   inspectionFindings[]
+  inspectionPlans                                      inspectionPlans[]
+  jobs                                                 jobs[]
+  maintenanceMeasures                                  maintenanceMeasures[]
+  manifestationRemarks                                 manifestationRemarks[]
+  observationPoints                                    observationPoints[]
+  poleLabResults                                       poleLabResults[]
+  surveyElementGroups                                  surveyElementGroups[]
+  surveyElements                                       surveyElements[]
+  surveyManifestations                                 surveyManifestations[]
+  surveyModifications                                  surveyModifications[]
+  surveyUnits                                          surveyUnits[]
+  unitRemarks                                          unitRemarks[]
+  utProjects                                           utProjects[]
+
+  @@index([batchId])
+  @@index([objectId])
+  @@index([operatorCompanyId])
+  @@index([surveryedOn])
+  @@index([surveyorCompanyId])
+}
+
+model surveyUnits {
+  id                     String    @id @unique(map: "surveyunits_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  unitId                 String    @db.Uuid
+  inspectionStandardData Json      @default("{}")
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_surveyid_foreign")
+  units                  units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_unitid_foreign")
+}
+
+model tranches {
+  id               String    @id @unique(map: "tranches_id_unique") @db.Uuid
+  contractId       String    @db.Uuid
+  name             String    @db.VarChar(255)
+  status           String?   @default("open") @db.VarChar(255)
+  plannedStartDate DateTime? @db.Timestamptz(6)
+  plannedEndDate   DateTime? @db.Timestamptz(6)
+  startDate        DateTime? @db.Timestamptz(6)
+  endDate          DateTime? @db.Timestamptz(6)
+  created_at       DateTime? @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+  contracts        contracts @relation(fields: [contractId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tranches_contractid_foreign")
+  batches          batches[]
+}
+
+model unitRemarks {
+  id         String    @id @unique(map: "unitremarks_id_unique") @db.Uuid
+  text       String
+  remarkedOn DateTime  @db.Timestamptz(6)
+  unitId     String    @db.Uuid
+  surveyId   String    @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  remarkedBy String    @db.VarChar(255)
+  surveys    surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_surveyid_foreign")
+  units      units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_unitid_foreign")
+
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model units {
+  id                                                            String                       @id @unique(map: "units_id_unique") @db.Uuid
+  name                                                          String                       @db.VarChar(255)
+  code                                                          String?                      @db.VarChar(255)
+  location                                                      String?                      @db.VarChar(255)
+  elementId                                                     String                       @db.Uuid
+  conditionId                                                   String?                      @db.Uuid
+  observationPointId                                            String?                      @db.Uuid
+  created_at                                                    DateTime?                    @db.Timestamptz(6)
+  updated_at                                                    DateTime?                    @db.Timestamptz(6)
+  material                                                      String?                      @db.VarChar(255)
+  quantity                                                      Int?
+  quantityUnitOfMeasurement                                     String?                      @db.VarChar(255)
+  isArchived                                                    Boolean                      @default(false)
+  constructionYear                                              Int?
+  objectId                                                      String                       @db.Uuid
+  isStructural                                                  Boolean                      @default(false)
+  isElectrical                                                  Boolean                      @default(false)
+  isStructuralObjectSpecific                                    Boolean                      @default(false)
+  isElectricalObjectSpecific                                    Boolean                      @default(false)
+  isRelevant                                                    Boolean                      @default(false)
+  conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
+  elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
+  objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
+  observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
+  assets                                                        assets[]
+  conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
+  derivedConditionScores                                        derivedConditionScores[]
+  failureModes                                                  failureModes[]
+  fmecaFurtherInvestigations                                    fmecaFurtherInvestigations[]
+  inspectionFindings                                            inspectionFindings[]
+  inspectionPlans                                               inspectionPlans[]
+  maintenanceMeasures                                           maintenanceMeasures[]
+  manifestations                                                manifestations[]
+  observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
+  surveyUnits                                                   surveyUnits[]
+  unitRemarks                                                   unitRemarks[]
+  utProjects                                                    utProjects[]
+
+  @@index([code])
+  @@index([conditionId])
+  @@index([elementId])
+  @@index([name])
+  @@index([observationPointId])
+}
+
+model userContracts {
+  userId     String @db.Uuid
+  contractId String @db.Uuid
+
+  @@id([userId, contractId])
+}
+
+model users {
+  id                     String    @id @unique(map: "users_id_unique") @db.Uuid
+  firstName              String?   @db.VarChar(255)
+  lastName               String    @db.VarChar(255)
+  emailAddress           String    @db.VarChar(255)
+  mobileNumber           String?   @db.VarChar(255)
+  officeNumber           String?   @db.VarChar(255)
+  password               String    @db.VarChar(255)
+  salt                   String    @db.VarChar(255)
+  lastLoginOn            DateTime? @db.Timestamptz(6)
+  status                 String?
+  language               String    @db.VarChar(255)
+  companyId              String    @db.Uuid
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  loginAttempts          Int?      @default(0)
+  isReadOnly             Boolean?  @default(false)
+  isAccountManager       Boolean?  @default(true)
+  isConfigurationManager Boolean?  @default(false)
+  isWebGL1User           Boolean?  @default(false)
+  passwordChangeDate     DateTime? @db.Date
+  isDeleted              Boolean   @default(false)
+  usePointCloud          Boolean   @default(true)
+  isContractManager      Boolean?  @default(false)
+  source                 String    @default("local")
+  companies              companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_companyid_foreign")
+  assets                 assets[]
+
+  @@index([companyId])
+  @@index([emailAddress])
+  @@index([updated_at])
+}
+
+model utProjects {
+  id                      String          @id(map: "projects_pkey") @unique(map: "projects_id_unique") @db.Uuid
+  name                    String          @db.VarChar(255)
+  clientName              String          @db.VarChar(255)
+  description             String?         @db.VarChar(255)
+  maxScanLines            Int?
+  maxScanLinePositions    Int?
+  startedOnDate           DateTime?       @db.Date
+  endedOnDate             DateTime?       @db.Date
+  updatedOnDateTime       DateTime        @db.Timestamptz(6)
+  createdOnDateTime       DateTime        @db.Timestamptz(6)
+  useScanLines            Boolean         @default(false)
+  isSavedInTheCloud       Boolean         @default(false)
+  maxPositionMeasurements Int             @default(1)
+  clientCompanyId         String          @db.Uuid
+  elementId               String?         @db.Uuid
+  unitId                  String?         @db.Uuid
+  manifestationId         String?         @db.Uuid
+  objectId                String?         @db.Uuid
+  surveyId                String?         @db.Uuid
+  companies               companies       @relation(fields: [clientCompanyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "projects_companyid_foreign")
+  elements                elements?       @relation(fields: [elementId], references: [id], onUpdate: NoAction, map: "projects_elementid_foreign")
+  manifestations          manifestations? @relation(fields: [manifestationId], references: [id], onUpdate: NoAction, map: "projects_manifestationid_foreign")
+  objects                 objects?        @relation(fields: [objectId], references: [id], onUpdate: NoAction, map: "projects_objectid_foreign")
+  surveys                 surveys?        @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "projects_surveyid_foreign")
+  units                   units?          @relation(fields: [unitId], references: [id], onUpdate: NoAction, map: "projects_unitid_foreign")
+  flights                 flights[]
+
+  @@index([clientCompanyId])
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([objectId])
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+enum degreeOfDamage {
+  Matig_aangetast @map("Matig aangetast")
+  Licht_aangetast @map("Licht aangetast")
+}

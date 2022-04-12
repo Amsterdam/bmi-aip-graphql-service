@@ -10,7 +10,7 @@ export type Batch = {
 	id: string;
 	clientCompanyId: string;
 	contractId: string;
-	tranchId: string;
+	trancheId: string;
 	remarks: string;
 	created_at: string;
 	updated_at: string;

@@ -8,6 +8,8 @@ import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
+import { PrismaService } from './prisma.service';
+import { BatchesModule } from './schema/batch/models/batches.module';
 // import { KeycloakConfigService } from './authentication/keycloak-config.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { KeycloakConfigService } from './authentication/keycloak-config.service';
@@ -25,6 +27,7 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 			inject: [ConfigService, Reflector],
 		}),
 		DecompositionModule,
+		BatchesModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,
@@ -49,6 +52,7 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 		},
 		// KeycloakConfigService,
 		AppService,
+		PrismaService
 	],
 })
 export class AppModule {}

@@ -37,6 +37,9 @@ npm-debug.log*
 .idea/**/gradle.xml
 .idea/**/libraries
 
+# environment variables
+.env
+
 # Visual Studio code specific project files
 .vscode
 
@@ -72,3 +75,5 @@ fabric.properties
 
 junit.xml
 node_modules/
+
+dist/

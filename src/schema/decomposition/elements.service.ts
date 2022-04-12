@@ -4,7 +4,6 @@ import type { DecompositionElement } from '../../types';
 
 import { Element } from './models/element.model';
 
-
 /**
  * This is all temporary bogus code and is just for illustrative purposes. Once Prisma is configured this service
  * should fetch elements from a repository. The repository will return either Prisma model instances or instances of

@@ -12,7 +12,7 @@ export class BatchesResolver {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	@Query((returns) => BatchModel, { name: 'batches' })
 	public async GetBatchById(@Args('id') id: string): Promise<BatchModel> {
-		const batch = this.prismaService.batch.findOne({
+		const batch = this.prismaService.batches.findUnique({
 			where: { id: id },
 		});
 		if (!batch) {

@@ -4,7 +4,7 @@ let prismaServiceMock;
 
 beforeEach(() => {
 	const PrismaServiceJest = jest.fn(() => ({
-		batch: {
+		batches: {
 			delete: jest.fn(() => {
 				return;
 			}),
@@ -14,17 +14,12 @@ beforeEach(() => {
 			create: jest.fn(() => {
 				return;
 			}),
-			findUnique: jest.fn(() => {
-				return;
-			}),
+			findUnique: jest.fn(() => ({ id: undefined, name: undefined })),
 			findFirst: jest.fn(() => {
 				return;
 			}),
 			findMany: jest.fn(() => {
 				return [];
-			}),
-			findOne: jest.fn(() => {
-				return { id: undefined, name: undefined };
 			}),
 		},
 	}));

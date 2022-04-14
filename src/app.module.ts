@@ -23,8 +23,7 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 		KeycloakConnectModule.registerAsync({
 			useExisting: KeycloakConfigService,
 			imports: [AuthenticationModule],
-			// imports: [ConfigService],
-			inject: [ConfigService, Reflector],
+			// inject: [ConfigService, Reflector],
 		}),
 		DecompositionModule,
 		BatchesModule,
@@ -50,9 +49,8 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 			provide: APP_GUARD,
 			useClass: RoleGuard,
 		},
-		// KeycloakConfigService,
 		AppService,
-		PrismaService
+		PrismaService,
 	],
 })
 export class AppModule {}

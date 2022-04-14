@@ -22,7 +22,6 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 		KeycloakConnectModule.registerAsync({
 			useExisting: KeycloakConfigService,
 			imports: [AuthenticationModule],
-			// inject: [ConfigService, Reflector],
 		}),
 		DecompositionModule,
 		BatchModule,

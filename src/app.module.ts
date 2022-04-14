@@ -6,12 +6,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
-import { BatchesModule } from './schema/batch/models/batches.module';
+import { Batch as BatchModule } from './schema/batch/batch.module';
 
 @Module({
 	imports: [
 		DecompositionModule,
-		BatchesModule,
+		BatchModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,

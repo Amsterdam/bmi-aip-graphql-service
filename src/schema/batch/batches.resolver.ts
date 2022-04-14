@@ -1,10 +1,13 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { PrismaService } from '../../prisma.service';
+import { Batch } from '../../models/batch.model';
 
-import { Batch } from './models/batch.model';
+/*
+	This resolver is just for illustrating
+	that the prisma implementation is working, Maybe can removed in future
+*/
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 @Resolver((of) => Batch)
 export class BatchesResolver {
 	public constructor(private readonly prismaService: PrismaService) {}

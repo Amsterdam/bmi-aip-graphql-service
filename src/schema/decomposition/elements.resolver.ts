@@ -1,8 +1,8 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { AuthenticatedUser, Resource, Roles } from 'nest-keycloak-connect';
 
 import { Element } from './models/element.model';
 import { ElementsService } from './elements.service';
-import { AuthenticatedUser, Resource, Roles } from 'nest-keycloak-connect';
 
 @Resolver((of) => Element)
 @Resource(Element.name)

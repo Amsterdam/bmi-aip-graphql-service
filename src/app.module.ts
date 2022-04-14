@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD, Reflector } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 
 import { AppController } from './app.controller';
@@ -10,7 +10,6 @@ import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
 import { BatchesModule } from './schema/batch/models/batches.module';
-// import { KeycloakConfigService } from './authentication/keycloak-config.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { KeycloakConfigService } from './authentication/keycloak-config.service';
 

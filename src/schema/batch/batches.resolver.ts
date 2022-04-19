@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { PrismaService } from '../../prisma.service';
-import { Batch } from '../../models/batch.model';
+import { Batch } from '../../authorization/batch.model';
 
 /*
 	This resolver is just for illustrating

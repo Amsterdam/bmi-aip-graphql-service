@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
-import { BatchesModule } from './schema/batch/models/batches.module';
+import { Batch as BatchModule } from './schema/batch/batch.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { KeycloakConfigService } from './authentication/keycloak-config.service';
 
@@ -22,10 +22,9 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 		KeycloakConnectModule.registerAsync({
 			useExisting: KeycloakConfigService,
 			imports: [AuthenticationModule],
-			// inject: [ConfigService, Reflector],
 		}),
 		DecompositionModule,
-		BatchesModule,
+		BatchModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,

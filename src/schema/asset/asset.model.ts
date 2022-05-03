@@ -6,6 +6,9 @@ export class Asset {
 	public id: string;
 
 	@Field()
+	public code: string;
+
+	@Field()
 	public status: string;
 
 	@Field()

@@ -1,8 +1,12 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { AuthenticatedUser, Resource, Roles } from 'nest-keycloak-connect';
+import { Resource, Roles } from 'nest-keycloak-connect';
+import { UseGuards } from '@nestjs/common';
 
+import { PoliciesGuard } from '../../authorization/policies.guard';
+import { WriteAssetPolicyHandler } from '../../authorization/policies/write-asset.policy-handler';
 import { Element } from './models/element.model';
 import { ElementsService } from './elements.service';
+import { CheckPolicies } from '../../authorization/check-policies.decorator';
 
 @Resolver((of) => Element)
 @Resource(Element.name)
@@ -24,8 +28,21 @@ export class ElementsResolver {
 	}
 
 	@Query((returns) => [Element], { name: 'tester' })
-	async tester(@AuthenticatedUser() user: any) {
-		console.log(':: user', user);
+	@UseGuards(PoliciesGuard)
+	@CheckPolicies(new WriteAssetPolicyHandler())
+	async tester(@Args('code', { type: () => String }) code: string) {
+		// const ability = this.caslAbilityFactory.createForUser(user);
+		// console.log(':: tester1 user', user);
+		return [];
+	}
+
+	@Query((returns) => [Element], { name: 'tester2' })
+	@UseGuards(PoliciesGuard)
+	@CheckPolicies(new WriteAssetPolicyHandler())
+	async tester2(@Args('code', { type: () => String }) code: string) {
+		// const ability = this.caslAbilityFactory.createForUser(user);
+		// console.log(':: tester2 user', user);
+		console.log('asset code', code);
 		return [];
 	}
 }

@@ -24,6 +24,8 @@
 		"prisma": "prisma"
 	},
 	"dependencies": {
+		"@casl/ability": "^5.4.3",
+		"@casl/prisma": "^1.0.1",
 		"@nestjs/apollo": "^10.0.8",
 		"@nestjs/common": "^8.0.0",
 		"@nestjs/config": "^2.0.0",

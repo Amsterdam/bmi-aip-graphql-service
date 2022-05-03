@@ -1,7 +1,14 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
+import { CaslAbilityFactory } from './casl-ability.factory';
+import { AssetModule } from '../schema/asset/asset.module';
+import { UserModule } from '../schema/user/user.module';
+import { UserRepository } from '../schema/user/user.repository';
+import { AssetRepository } from '../schema/asset/asset.repository';
+import { PrismaService } from '../prisma.service';
 
 @Module({
-	// Todo: add here reslovers/services
-	providers: [],
+	providers: [CaslAbilityFactory, UserRepository, AssetRepository, PrismaService],
+	exports: [CaslAbilityFactory],
+	imports: [forwardRef(() => UserModule), forwardRef(() => AssetModule)],
 })
-export class Authorization {}
+export class AuthorizationModule {}

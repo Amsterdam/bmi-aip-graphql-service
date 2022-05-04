@@ -41,8 +41,3 @@ export type UserFromToken = {
 		roles: Roles[];
 	};
 };
-
-// export type CaslUser = {
-// 	roles: Roles[];
-// 	id: string; // Email
-// };

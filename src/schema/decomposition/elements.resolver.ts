@@ -32,8 +32,6 @@ export class ElementsResolver {
 	@UseGuards(PoliciesGuard)
 	@CheckPolicies(new WriteAssetPolicyHandler())
 	async tester(@Args('code', { type: () => String }) code: string) {
-		// const ability = this.caslAbilityFactory.createForUser(user);
-		// console.log(':: tester1 user', user);
 		return [];
 	}
 
@@ -41,9 +39,6 @@ export class ElementsResolver {
 	@UseGuards(PoliciesGuard)
 	@CheckPolicies(new WriteAssetPolicyHandler())
 	async tester2(@Args('code', { type: () => String }) code: string) {
-		// const ability = this.caslAbilityFactory.createForUser(user);
-		// console.log(':: tester2 user', user);
-		console.log('asset code', code);
 		return [];
 	}
 }

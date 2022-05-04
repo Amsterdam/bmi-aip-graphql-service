@@ -19,7 +19,6 @@ export type Subjects = AssetCode | InferSubjects<typeof Asset> | 'all';
 export type AppAbility = Ability<[Action, Subjects]>;
 
 export const buildOptions: AbilityOptionsOf<Ability<[Action, Subjects]>> = {
-	// Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details
 	detectSubjectType: (item) => item.constructor as ExtractSubjectType<Subjects>,
 };
 
@@ -32,7 +31,6 @@ export class CaslAbilityFactory {
 
 	async createForUser(user: UserFromToken) {
 		const { can, build } = constructAppAbility();
-		// const { can, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(Ability as AbilityClass<AppAbility>);
 
 		can(Action.Read, 'all');
 
@@ -42,7 +40,6 @@ export class CaslAbilityFactory {
 			const { companyId } = await this.userRepo.getUserByEmail(user.email);
 			const writableAssetCodes = await this.assetRepo.getWritableAssetCodesForCompanyId(companyId);
 			writableAssetCodes.forEach((code) => can(Action.Write, Asset, { code }));
-			// can(Action.Write, Asset, { code: 'BRU001' });
 		}
 
 		return build(buildOptions);

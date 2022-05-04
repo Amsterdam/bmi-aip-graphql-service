@@ -1,4 +1,5 @@
 {
+	"root": false,
 	"extends": ["../../.eslintrc.js"],
 	"overrides": [
 		{

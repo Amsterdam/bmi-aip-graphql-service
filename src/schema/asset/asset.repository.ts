@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { PrismaService } from '../../prisma.service';
 
 import type { IAssetRepository } from './types/asset.repository.interface';
@@ -45,10 +46,10 @@ export class AssetRepository implements IAssetRepository {
 	}
 
 	public async getAssetByCode(code: string): Promise<DBAsset> {
-		const asset = await this.prisma.objects.findFirst({ where: { code } });
-		if (!asset) {
+		const dbAsset = await this.prisma.objects.findFirst({ where: { code } });
+		if (!dbAsset) {
 			throw new NotFoundException(`Unable to find asset with code: ${code}`);
 		}
-		return asset;
+		return dbAsset;
 	}
 }

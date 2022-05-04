@@ -4,9 +4,10 @@ import { UseGuards } from '@nestjs/common';
 
 import { PoliciesGuard } from '../../authorization/policies.guard';
 import { WriteAssetPolicyHandler } from '../../authorization/policies/write-asset.policy-handler';
+import { CheckPolicies } from '../../authorization/check-policies.decorator';
+
 import { Element } from './models/element.model';
 import { ElementsService } from './elements.service';
-import { CheckPolicies } from '../../authorization/check-policies.decorator';
 
 @Resolver((of) => Element)
 @Resource(Element.name)

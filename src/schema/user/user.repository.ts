@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { PrismaService } from '../../prisma.service';
 
 import type { IUserRepository, DBUser } from './types/user.repository.interface';

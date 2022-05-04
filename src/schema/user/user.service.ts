@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+
+import { UserFromToken } from '../../authorization/types';
+
 import { User } from './models/user.model';
 import { UserFactory } from './user.factory';
 import { UserRepository } from './user.repository';
-import { UserFromToken } from '../../authorization/types';
 
 @Injectable()
 export class UserService {

@@ -1,12 +1,13 @@
 import { MockedObjectDeep } from 'ts-jest';
+
 import { UserRepository } from '../schema/user/user.repository';
 import { AssetRepository } from '../schema/asset/asset.repository';
-import { CaslAbilityFactory } from './casl-ability.factory';
-import { Action, UserFromToken, Roles } from './types';
-
 import { user } from '../schema/user/__stubs__/user';
-import { loggedInUser } from '../authentication/__stubs__/loggedInUser';
-import { Asset } from '../schema/asset/asset.model';
+import { userFromToken } from '../authentication/__stubs__/userFromToken';
+import { Asset } from '../schema/asset/models/asset.model';
+
+import { Action, UserFromToken, Roles } from './types';
+import { CaslAbilityFactory } from './casl-ability.factory';
 
 const userRepositoryMock: MockedObjectDeep<UserRepository> = {
 	getUserByEmail: jest.fn().mockResolvedValue(user),
@@ -17,7 +18,7 @@ const assetRepositoryMock: MockedObjectDeep<AssetRepository> = {
 	...(<any>{}),
 };
 
-const constructAbility = async (kcUser: UserFromToken = loggedInUser) => {
+const constructAbility = async (kcUser: UserFromToken = userFromToken) => {
 	const factory = new CaslAbilityFactory(userRepositoryMock, assetRepositoryMock);
 	return factory.createForUser(kcUser);
 };
@@ -34,7 +35,7 @@ describe('CaslAbilityFactory', () => {
 	describe('Other users can (regardless of role)', () => {
 		let ability;
 		beforeAll(async () => {
-			ability = await constructAbility({ ...loggedInUser, realm_access: { roles: [Roles.aip_survey] } });
+			ability = await constructAbility({ ...userFromToken, realm_access: { roles: [Roles.aip_survey] } });
 		});
 
 		test('read all assets', async () => {

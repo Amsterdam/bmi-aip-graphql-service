@@ -1,0 +1,43 @@
+import { Decimal } from '@prisma/client/runtime';
+
+import { DBAsset } from '../asset.repository';
+
+export const dbAsset: DBAsset = {
+	id: 'dd456392-9c75-40c6-a861-48d393f78559',
+	name: '__NAME__',
+	code: 'BRU0670',
+	location: 'Zuid Naaldwijkstraat-Afrit Einsteinweg (A10)',
+	latitude: new Decimal(52.34561457),
+	longitude: new Decimal(4.84204465),
+	updatedOn: new Date('2019-12-18T11:35:19.410Z'),
+	compositionIsVisible: true,
+	clientCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
+	operatorCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
+	surveyorCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
+	objectTypeId: '50088ab8-907b-4bba-b6d3-1bcf02c7c036',
+	created_at: new Date('2018-09-14T22:00:00.000Z'),
+	updated_at: new Date('2019-12-18T11:35:19.410Z'),
+	inspectionStandardId: '8705d660-0af9-11e6-a837-000000010210',
+	ownerCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
+	customerVersion: 'amsterdam',
+	isPublic: false,
+	isDemo: false,
+	siteId: null,
+	constructionYear: 1976,
+	externalRefId: '66D46616-1E54-4EEF-BE41-5E2A755D03FE',
+	useage: 'Normaal verkeer',
+	managementOrganization: 'Stadsdeel Zuid',
+	// shape: null,
+	shapeSrid: null,
+	status: 'inUse',
+	effortCategory: null,
+	effortCalculation: null,
+	trafficType: ',3',
+	mainMaterial: null,
+	marineInfrastrutureType: null,
+	length: new Decimal(33.0),
+	width: new Decimal(10.0),
+	squareMeters: new Decimal(330.0),
+	attributes:
+		'{"id": "670285", "fase": "bureaustudie", "batch": "1", "palen": "Beton", "dragers": "Vgs prefabbeton - gewapend beton", "functie": "Normaal verkeer", "gebruik": "Normaal verkeer", "subsoort": "Viaduct", "materiaal": "Vaste brug beton", "stadsdeel": "Zuid", "brugruimte": "2", "ligging-in": "Naaldwijkstraat", "beheer-type": "Verkeer & Openbare Ruimte", "constructie": "Vgs prefabbeton, gew.beton", "guid-intern": "G0363.4eaad02a09e64fb7bb9dacc4b10875cd", "object-type": "Viaduct", "gebruik-auto": "1", "ligging-over": "Naaldwijkstraat", "object-nummer": "BRU670", "batch-voorstel": "9", "damwandplanken": "Beton", "aspect-bouwjaar": "3", "belastingklasse": "BK-A-1938", "object-conditie": "2", "belastingklasse-2": "Klasse 60", "belastingklasse-3": "Klasse 60", "oppervlakte-in-m2": "236", "overspanning-land": "1", "afdeling-in-beheer": "Verkeer & Openbare Ruimte", "aspect-belasting-klasse": "1"}',
+};

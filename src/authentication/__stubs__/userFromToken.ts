@@ -1,6 +1,6 @@
 import { UserFromToken, Roles } from '../../authorization/types';
 
-export const loggedInUser: UserFromToken = {
+export const userFromToken: UserFromToken = {
 	email: 'foo.bar@amsterdam.nl',
 	realm_access: {
 		roles: [Roles.aip_owner],

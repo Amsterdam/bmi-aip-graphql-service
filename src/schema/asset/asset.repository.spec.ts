@@ -1,5 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
+
 import { PrismaService } from '../../prisma.service';
+
 import { AssetRepository } from './asset.repository';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {

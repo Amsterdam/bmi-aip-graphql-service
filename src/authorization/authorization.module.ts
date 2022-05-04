@@ -1,10 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { CaslAbilityFactory } from './casl-ability.factory';
+
 import { AssetModule } from '../schema/asset/asset.module';
 import { UserModule } from '../schema/user/user.module';
 import { UserRepository } from '../schema/user/user.repository';
 import { AssetRepository } from '../schema/asset/asset.repository';
 import { PrismaService } from '../prisma.service';
+
+import { CaslAbilityFactory } from './casl-ability.factory';
 
 @Module({
 	providers: [CaslAbilityFactory, UserRepository, AssetRepository, PrismaService],

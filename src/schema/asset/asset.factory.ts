@@ -1,4 +1,4 @@
-import { Asset } from './asset.model';
+import { Asset } from './models/asset.model';
 import type { DBAsset } from './asset.repository';
 
 export class AssetFactory {

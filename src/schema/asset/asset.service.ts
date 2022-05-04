@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Asset } from './asset.model';
+
+import { Asset } from './models/asset.model';
 import { AssetRepository } from './asset.repository';
 import { AssetFactory } from './asset.factory';
 

@@ -1,4 +1,5 @@
 import { UserFromToken } from '../../authorization/types';
+
 import { User } from './models/user.model';
 import { DBUser } from './types/user.repository.interface';
 

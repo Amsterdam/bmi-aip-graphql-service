@@ -1,8 +1,8 @@
-import { subject } from '@casl/ability';
 import { BadRequestException } from '@nestjs/common';
+import { Request } from 'express';
+
 import { Action, IPolicyHandler } from '../types';
 import { AppAbility } from '../casl-ability.factory';
-import { Request } from 'express';
 import { AssetFactory } from '../../schema/asset/asset.factory';
 
 export class WriteAssetPolicyHandler implements IPolicyHandler {

@@ -1,5 +1,6 @@
-import { User } from './user.model';
 import { Roles } from '../../../authorization/types';
+
+import { User } from './user.model';
 
 describe('User / Model', () => {
 	test('constructs a User instance object', () => {

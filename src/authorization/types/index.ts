@@ -1,4 +1,5 @@
 import { Request } from 'express';
+
 import { AppAbility } from '../casl-ability.factory';
 
 export interface IPolicyHandler {

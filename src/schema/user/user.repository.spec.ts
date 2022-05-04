@@ -1,8 +1,10 @@
 import { MockedObjectDeep } from 'ts-jest';
+import { NotFoundException } from '@nestjs/common';
+
 import { PrismaService } from '../../prisma.service';
+
 import { UserRepository } from './user.repository';
 import { user } from './__stubs__/user';
-import { NotFoundException } from '@nestjs/common';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	users: {

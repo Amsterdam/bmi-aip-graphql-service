@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
+
 // import { CaslModule } from 'nest-casl';
 // import { permissions } from './casl/asset.permissions';
+import { PrismaService } from '../../prisma.service';
+
 import { AssetService } from './asset.service';
 import { AssetRepository } from './asset.repository';
-import { PrismaService } from '../../prisma.service';
 
 @Module({
 	providers: [AssetService, AssetRepository, PrismaService],

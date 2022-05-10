@@ -12,17 +12,22 @@ import { PrismaService } from './prisma.service';
 import { Batch as BatchModule } from './schema/batch/batch.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { KeycloakConfigService } from './authentication/keycloak-config.service';
+import { AuthorizationModule } from './authorization/authorization.module';
+import { UserModule } from './schema/user/user.module';
+import { AssetModule } from './schema/asset/asset.module';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
 		}),
-		// AuthenticationModule,
+		UserModule,
+		AssetModule,
 		KeycloakConnectModule.registerAsync({
 			useExisting: KeycloakConfigService,
 			imports: [AuthenticationModule],
 		}),
+		AuthorizationModule,
 		DecompositionModule,
 		BatchModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({

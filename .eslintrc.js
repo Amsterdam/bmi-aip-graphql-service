@@ -38,4 +38,12 @@ module.exports = {
 			},
 		],
 	},
+	overrides: [
+		{
+			files: ['*.spec.ts'],
+			rules: {
+				'@typescript-eslint/ban-ts-comment': 'off',
+			},
+		},
+	],
 };

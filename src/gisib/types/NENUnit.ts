@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type unit = {
+export type NENUnit = {
 	Versie: string;
 	Weging: number;
 	Code: string;

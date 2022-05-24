@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type element = {
+export type NENElement = {
 	Versie: string;
 	Weging: number;
 	Code: string;

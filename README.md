@@ -34,6 +34,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Prisma
+
+### Re-generating the schema.prisma file
+
+Database migrations are still managed by Knex. Therefore we do not rely on Prisma migrations here.
+Instead `schema.prisma` and the prisma client should be regenerated after the knex migrations have been rolled out:
+
+```shell
+npx prisma db pull
+node_modules/.bin/prisma generate
+```
+
+You might have to restart the TypeScript service in IntelliJ after this to re-index the regenerated prisma client.
+
 ## License
 
 MPL-2.0. See `./LICENSE`

@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateElementInput } from '../dto/create-element.input';
+import { UpdateElementInput } from '../dto/update-element.input';
 
 const elements = Prisma.validator<Prisma.elementsArgs>()({
 	select: {
@@ -29,4 +30,5 @@ export type Element = Prisma.elementsGetPayload<typeof elements>;
 
 export interface IElementRepository {
 	createElement(input: CreateElementInput): Promise<Element>;
+	updateElement(input: UpdateElementInput): Promise<Element>;
 }

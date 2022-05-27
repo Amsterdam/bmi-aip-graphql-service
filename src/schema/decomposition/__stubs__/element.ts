@@ -2,6 +2,7 @@ import { Element } from '../models/element.model';
 import { CreateElementInput } from '../dto/create-element.input';
 import { Element as DomainElement } from '../types/element.repository.interface';
 import { ElementFactory } from '../element.factory';
+import { UpdateElementInput } from '../dto/update-element.input';
 
 const element1 = new Element();
 element1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -43,6 +44,13 @@ export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
 	input[key] = elementRaw[key];
 	return input;
 }, new CreateElementInput());
+
+const updateElement = new UpdateElementInput();
+updateElement.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateElementInput = Object.keys(elementRaw).reduce((input, key) => {
+	input[key] = elementRaw[key];
+	return input;
+}, updateElement);
 
 export const domainElement: DomainElement = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',

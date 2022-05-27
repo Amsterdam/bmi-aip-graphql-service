@@ -4,7 +4,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { Manifestation as DomainManifestation } from './types/manifestation.repository.interface';
 import { ManifestationService } from './manifestation.service';
 import { CreateManifestationInput } from './dto/create-manifestation.input';
-import { Manifestation } from './models/graphql/manifestation.model';
+import { Manifestation } from './models/manifestation.model';
 import { CreateManifestationCommand } from './commands/create-manifestation.command';
 import { ManifestationFactory } from './manifestation.factory';
 

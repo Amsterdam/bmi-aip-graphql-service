@@ -1,6 +1,6 @@
 import { ManifestationFactory } from './manifestation.factory';
 import { domainManifestation } from './__stubs__/manifestation';
-import { Manifestation } from './models/graphql/manifestation.model';
+import { Manifestation } from './models/manifestation.model';
 
 describe('ManifestationFactory', () => {
 	test('CreateManifestation() constructs an instance of a Manifestation GraphQL model', () => {

@@ -5,7 +5,7 @@ import { ManifestationResolver } from './manifestation.resolver';
 import { ManifestationService } from './manifestation.service';
 import { manifestationInput, domainManifestation } from './__stubs__/manifestation';
 import { CreateManifestationCommand } from './commands/create-manifestation.command';
-import { Manifestation } from './models/graphql/manifestation.model';
+import { Manifestation } from './models/manifestation.model';
 
 jest.mock('./manifestation.service');
 

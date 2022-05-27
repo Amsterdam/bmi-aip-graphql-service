@@ -1,4 +1,4 @@
-import { Manifestation } from './models/graphql/manifestation.model';
+import { Manifestation } from './models/manifestation.model';
 import { Manifestation as DomainManifestation } from './types/manifestation.repository.interface';
 
 export class ManifestationFactory {

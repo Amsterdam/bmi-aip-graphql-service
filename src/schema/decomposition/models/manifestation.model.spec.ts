@@ -1,4 +1,4 @@
-import { domainManifestation } from '../../__stubs__/manifestation';
+import { domainManifestation } from '../__stubs__/manifestation';
 
 import { Manifestation } from './manifestation.model';
 

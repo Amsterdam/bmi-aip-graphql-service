@@ -1,9 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
-import { BaseManifestationInput } from './base-manifestation.input';
+import { IsUUID, MaxLength } from 'class-validator';
+
+import { BaseUnitInput } from './base-unit.input';
 
 @InputType()
-export class CreateManifestationInput extends BaseManifestationInput {
+export class CreateUnitInput extends BaseUnitInput {
 	@Field()
 	@MaxLength(255)
 	public name: string;
@@ -19,8 +20,4 @@ export class CreateManifestationInput extends BaseManifestationInput {
 	@Field()
 	@IsUUID()
 	public elementId: string;
-
-	@Field()
-	@IsUUID()
-	public unitId: string;
 }

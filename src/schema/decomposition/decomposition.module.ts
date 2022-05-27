@@ -6,8 +6,8 @@ import { AuthenticationModule } from '../../authentication/authentication.module
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
 
-import { ElementsService } from './elements.service';
-import { ElementsResolver } from './elements.resolver';
+import { ElementService } from './element.service';
+import { ElementResolver } from './element.resolver';
 import { ManifestationResolver } from './manifestation.resolver';
 import { CreateManifestationHandler } from './commands/create-manifestation.handler';
 import { ManifestationRepository } from './manifestation.repository';
@@ -16,17 +16,21 @@ import { UnitResolver } from './unit.resolver';
 import { CreateUnitHandler } from './commands/create-unit.handler';
 import { UnitRepository } from './unit.repository';
 import { UnitService } from './unit.service';
+import { CreateElementHandler } from './commands/create-element.handler';
+import { ElementRepository } from './element.repository';
 
 @Module({
 	providers: [
-		ElementsResolver,
-		ElementsService,
+		ElementResolver,
+		ElementService,
+		ElementRepository,
 		UnitResolver,
 		UnitRepository,
 		UnitService,
 		ManifestationResolver,
 		ManifestationRepository,
 		ManifestationService,
+		CreateElementHandler,
 		CreateUnitHandler,
 		CreateManifestationHandler,
 		PrismaService,

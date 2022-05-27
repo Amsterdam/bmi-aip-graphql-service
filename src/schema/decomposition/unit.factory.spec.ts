@@ -1,5 +1,5 @@
 import { UnitFactory } from './unit.factory';
-import { domainUnit } from './__stubs__/unit';
+import { domainUnit } from './__stubs__';
 import { Unit } from './models/unit.model';
 
 describe('UnitFactory', () => {

@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsUUID, MaxLength } from 'class-validator';
+
 import { BaseManifestationInput } from './base-manifestation.input';
 
 @InputType()

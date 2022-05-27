@@ -8,9 +8,6 @@ import { Unit } from './models/unit.model';
 import { CreateUnitCommand } from './commands/create-unit.command';
 import { UnitFactory } from './unit.factory';
 
-const test = new CreateUnitInput();
-console.log(test.isArchived);
-
 @Resolver(() => Unit)
 export class UnitResolver {
 	constructor(private unitService: UnitService, private commandBus: CommandBus) {}
@@ -18,7 +15,6 @@ export class UnitResolver {
 	@Mutation(() => Unit)
 	public async createUnit(@Args('createUnit') input: CreateUnitInput): Promise<Unit> {
 		const domainUnit: DomainUnit = await this.commandBus.execute<CreateUnitCommand>(new CreateUnitCommand(input));
-
 		return UnitFactory.CreateUnit(domainUnit);
 	}
 }

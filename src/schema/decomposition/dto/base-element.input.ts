@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 @InputType()
-export class BaseUnitInput {
+export class BaseElementInput {
 	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
@@ -14,19 +14,14 @@ export class BaseUnitInput {
 	public location?: string;
 
 	@IsOptional()
-	@MaxLength(128)
+	@IsUUID()
 	@Field({ nullable: true })
-	public material?: string;
+	public categoryId?: string;
 
 	@IsOptional()
-	@IsInt()
+	@IsBoolean()
 	@Field({ nullable: true })
-	public quantity?: number;
-
-	@IsOptional()
-	@MaxLength(4)
-	@Field({ nullable: true })
-	public quantityUnitOfMeasurement?: string;
+	public isStructural?: boolean;
 
 	@IsOptional()
 	@IsInt()
@@ -34,14 +29,19 @@ export class BaseUnitInput {
 	public constructionYear?: number;
 
 	@IsOptional()
-	@IsBoolean()
+	@MaxLength(255)
 	@Field({ nullable: true })
-	public isArchived?: boolean;
+	public constructionType?: string;
+
+	@IsOptional()
+	@MaxLength(255)
+	@Field({ nullable: true })
+	public elementGroupName?: string;
 
 	@IsOptional()
 	@IsBoolean()
 	@Field({ nullable: true })
-	public isStructural?: boolean;
+	public isArchived?: boolean;
 
 	@IsOptional()
 	@IsBoolean()
@@ -63,18 +63,21 @@ export class BaseUnitInput {
 	@Field({ nullable: true })
 	public isRelevant?: boolean;
 
-	@Field({ nullable: true })
 	@IsOptional()
 	@IsUUID()
+	@Field({ nullable: true })
 	public gisibId?: string;
 
-	@Field({ nullable: true })
 	@IsOptional()
 	@IsUUID()
+	@Field({ nullable: true })
 	public conditionId?: string;
 
-	@Field({ nullable: true })
 	@IsOptional()
 	@IsUUID()
+	@Field({ nullable: true })
 	public observationPointId?: string;
+
+	// Columns that can be removed:
+	// - isUtResultPlaceholder
 }

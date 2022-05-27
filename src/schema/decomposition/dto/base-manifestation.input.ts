@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsInt, IsOptional, MaxLength } from 'class-validator';
+import { IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 @InputType()
 export class BaseManifestationInput {
@@ -32,4 +32,19 @@ export class BaseManifestationInput {
 	@IsInt()
 	@IsOptional()
 	public constructionYear?: number;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsUUID()
+	public gisibId?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsUUID()
+	public conditionId?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsUUID()
+	public observationPointId?: string;
 }

@@ -3,7 +3,7 @@ import { CommandBus } from '@nestjs/cqrs';
 
 import { ManifestationResolver } from './manifestation.resolver';
 import { ManifestationService } from './manifestation.service';
-import { manifestationInput, domainManifestation } from './__stubs__/manifestation';
+import { manifestationInput, domainManifestation } from './__stubs__';
 import { CreateManifestationCommand } from './commands/create-manifestation.command';
 import { Manifestation } from './models/manifestation.model';
 

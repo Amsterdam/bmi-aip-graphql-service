@@ -11,11 +11,18 @@ export class ManifestationRepository implements IManifestationRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async createManifestation({
+		name,
 		objectId,
 		surveyId,
 		elementId,
 		unitId,
-		...props
+		code,
+		location,
+		material,
+		quantity,
+		quantityUnitOfMeasurement,
+		constructionYear,
+		gisibId,
 	}: CreateManifestationInput): Promise<Manifestation> {
 		return this.prisma.manifestations.create({
 			data: {
@@ -24,7 +31,14 @@ export class ManifestationRepository implements IManifestationRepository {
 				surveys: { connect: { id: surveyId } },
 				elements: { connect: { id: elementId } },
 				units: { connect: { id: unitId } },
-				...props,
+				name,
+				code,
+				location,
+				material,
+				quantity,
+				quantityUnitOfMeasurement,
+				constructionYear,
+				gisibId,
 			},
 		});
 	}

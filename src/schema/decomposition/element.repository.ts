@@ -4,24 +4,23 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
-import { Unit, IUnitRepository } from './types/unit.repository.interface';
-import { CreateUnitInput } from './dto/create-unit.input';
+import { Element, IElementRepository } from './types/element.repository.interface';
+import { CreateElementInput } from './dto/create-element.input';
 
 @Injectable()
-export class UnitRepository implements IUnitRepository {
+export class ElementRepository implements IElementRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async createUnit({
+	async createElement({
 		objectId,
 		surveyId,
-		elementId,
 		name,
 		code,
 		location,
-		material,
-		quantity,
-		quantityUnitOfMeasurement,
 		constructionYear,
+		constructionType,
+		elementGroupName,
+		categoryId,
 		isArchived,
 		isStructural,
 		isStructuralObjectSpecific,
@@ -29,27 +28,30 @@ export class UnitRepository implements IUnitRepository {
 		isElectricalObjectSpecific,
 		isRelevant,
 		gisibId,
-	}: CreateUnitInput): Promise<Unit> {
-		const data: Prisma.unitsCreateInput = {
+	}: CreateElementInput): Promise<Element> {
+		const data: Prisma.elementsCreateInput = {
 			id: newId(),
 			objects: { connect: { id: objectId } },
 			surveys: { connect: { id: surveyId } },
-			elements: { connect: { id: elementId } },
 			name,
 			code,
 			location,
-			material,
-			quantity,
-			quantityUnitOfMeasurement,
 			constructionYear,
+			constructionType,
+			elementGroupName,
 			isArchived,
 			isStructural,
 			isStructuralObjectSpecific,
 			isElectrical,
 			isElectricalObjectSpecific,
 			isRelevant,
+			gisibId,
 		};
 
-		return this.prisma.units.create({ data });
+		if (categoryId) {
+			data.elementCategories = { connect: { id: categoryId } };
+		}
+
+		return this.prisma.elements.create({ data });
 	}
 }

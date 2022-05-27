@@ -42,7 +42,7 @@ export class Unit {
 	constructionYear?: number;
 
 	@Field((type) => String, { nullable: true })
-	gisibId: string;
+	gisibId?: string;
 
 	@Field((type) => Boolean)
 	isElectrical: boolean;

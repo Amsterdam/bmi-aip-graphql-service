@@ -1,5 +1,5 @@
 import { ManifestationFactory } from './manifestation.factory';
-import { domainManifestation } from './__stubs__/manifestation';
+import { domainManifestation } from './__stubs__';
 import { Manifestation } from './models/manifestation.model';
 
 describe('ManifestationFactory', () => {

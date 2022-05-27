@@ -3,7 +3,7 @@ import { CommandBus } from '@nestjs/cqrs';
 
 import { UnitResolver } from './unit.resolver';
 import { UnitService } from './unit.service';
-import { unitInput, domainUnit } from './__stubs__/unit';
+import { unitInput, domainUnit } from './__stubs__';
 import { CreateUnitCommand } from './commands/create-unit.command';
 import { Unit } from './models/unit.model';
 

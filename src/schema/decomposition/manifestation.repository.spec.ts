@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ManifestationRepository } from './manifestation.repository';
-import { domainManifestation, manifestationInput } from './__stubs__/manifestation';
+import { domainManifestation, manifestationInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	manifestations: {

@@ -2,21 +2,21 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
-import { UnitRepository } from './unit.repository';
-import { domainUnit, unitInput } from './__stubs__';
+import { ElementRepository } from './element.repository';
+import { domainElement, elementInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-	units: {
-		create: jest.fn().mockResolvedValue(domainUnit),
+	elements: {
+		create: jest.fn().mockResolvedValue(domainElement),
 	},
 	...(<any>{}),
 };
 
-describe('UnitRepository', () => {
+describe('ElementRepository', () => {
 	test('create()', async () => {
-		const repo = new UnitRepository(prismaServiceMock);
-		await repo.createUnit(unitInput);
-		expect(prismaServiceMock.units.create).toHaveBeenCalledWith({
+		const repo = new ElementRepository(prismaServiceMock);
+		await repo.createElement(elementInput);
+		expect(prismaServiceMock.elements.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
 				objects: {
 					connect: {
@@ -28,7 +28,7 @@ describe('UnitRepository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
-				elements: {
+				elementCategories: {
 					connect: {
 						id: 'a13d3055-9447-6178-91d7-386ebbc418f4',
 					},
@@ -36,15 +36,16 @@ describe('UnitRepository', () => {
 				code: '__CODE__',
 				name: '__NAME__',
 				location: '__LOCATION__',
-				material: '__MATERIAL__',
-				quantity: 3,
-				quantityUnitOfMeasurement: 'm2',
-				isRelevant: true,
 				constructionYear: 2010,
+				isRelevant: true,
 				isStructural: true,
 				isElectrical: false,
 				isStructuralObjectSpecific: false,
 				isElectricalObjectSpecific: false,
+				constructionType: '',
+				elementGroupName: '',
+				isArchived: false,
+				gisibId: '',
 			}),
 		});
 	});

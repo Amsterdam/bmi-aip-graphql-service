@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model assetRemarks {
@@ -453,10 +453,13 @@ model elements {
   isElectricalObjectSpecific                                       Boolean                  @default(false)
   isElementGroupNameObjectSpecific                                 Boolean                  @default(false)
   isRelevant                                                       Boolean                  @default(false)
+  surveyId                                                         String?                  @db.Uuid
+  gisibId                                                          String?                  @db.Uuid
   elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
   conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
   objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
   observationPoints_elements_observationPointIdToobservationPoints observationPoints?       @relation("elements_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "elements_observationpointid_foreign")
+  surveys                                                          surveys?                 @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_surveyid_foreign")
   assets                                                           assets[]
   conditions_conditions_elementIdToelements                        conditions[]             @relation("conditions_elementIdToelements")
   derivedConditionScores                                           derivedConditionScores[]
@@ -474,6 +477,8 @@ model elements {
   @@index([name])
   @@index([objectId])
   @@index([observationPointId])
+  @@index([surveyId])
+  @@index([surveyId, objectId])
 }
 
 model failureModeDocuments {
@@ -782,6 +787,7 @@ model maintenanceMeasures {
   remarks                      String?
   quantityUnitOfMeasurement    String?                     @db.VarChar(4)
   netCost                      Float?
+  deleted_at                   DateTime?                   @db.Timestamptz(6)
   defaultMaintenanceMeasures   defaultMaintenanceMeasures? @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_defaultmaintenancemeasureid_foreign")
   defects                      defects?                    @relation(fields: [defectId], references: [id], onUpdate: NoAction, map: "maintenancemeasures_defectid_foreign")
   failureModes                 failureModes?               @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_failuremodeid_foreign")
@@ -801,6 +807,7 @@ model maintenanceMeasures {
   @@index([previousMaintenanceMeasureId])
   @@index([surveyId])
   @@index([unitId])
+  @@index([deleted_at], map: "maintenancemeasures_deleted_at_index")
 }
 
 model manifestationRemarks {
@@ -835,10 +842,13 @@ model manifestations {
   quantity                                                               Int?
   quantityUnitOfMeasurement                                              String?                      @db.VarChar(4)
   constructionYear                                                       Int?
+  surveyId                                                               String?                      @db.Uuid
+  gisibId                                                                String?                      @db.Uuid
   conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
   elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
   objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
   observationPoints_manifestations_observationPointIdToobservationPoints observationPoints?           @relation("manifestations_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "manifestations_observationpointid_foreign")
+  surveys                                                                surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_surveyid_foreign")
   units                                                                  units                        @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_unitid_foreign")
   assets                                                                 assets[]
   conditions_conditions_manifestationIdTomanifestations                  conditions[]                 @relation("conditions_manifestationIdTomanifestations")
@@ -855,6 +865,7 @@ model manifestations {
   @@index([conditionId])
   @@index([elementId])
   @@index([observationPointId])
+  @@index([surveyId, unitId])
   @@index([unitId])
 }
 
@@ -1138,8 +1149,8 @@ model poleLabResults {
   woodtype                   String?         @db.VarChar(32)
   polediameter               Int?
   lengthToHeartPole          Int?
-  thicknessOfHeartwood       Int?
-  thicknessOfSapwood         Int?
+  thicknessOfHeartwood       String?         @db.VarChar(255)
+  thicknessOfSapwood         String?         @db.VarChar(255)
   erosionBacteria            Boolean?
   tunnelingBacteria          Boolean?
   moldThreads                Boolean?
@@ -1353,6 +1364,7 @@ model surveys {
   conditions                                           conditions[]
   derivedConditionScores                               derivedConditionScores[]
   elementRemarks                                       elementRemarks[]
+  elements                                             elements[]
   failureModes                                         failureModes[]
   findings                                             findings[]
   fmecaFurtherInvestigations                           fmecaFurtherInvestigations[]
@@ -1361,6 +1373,7 @@ model surveys {
   jobs                                                 jobs[]
   maintenanceMeasures                                  maintenanceMeasures[]
   manifestationRemarks                                 manifestationRemarks[]
+  manifestations                                       manifestations[]
   observationPoints                                    observationPoints[]
   poleLabResults                                       poleLabResults[]
   surveyElementGroups                                  surveyElementGroups[]
@@ -1369,6 +1382,7 @@ model surveys {
   surveyModifications                                  surveyModifications[]
   surveyUnits                                          surveyUnits[]
   unitRemarks                                          unitRemarks[]
+  units                                                units[]
   utProjects                                           utProjects[]
 
   @@index([batchId])
@@ -1441,10 +1455,13 @@ model units {
   isStructuralObjectSpecific                                    Boolean                      @default(false)
   isElectricalObjectSpecific                                    Boolean                      @default(false)
   isRelevant                                                    Boolean                      @default(false)
+  surveyId                                                      String?                      @db.Uuid
+  gisibId                                                       String?                      @db.Uuid
   conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
   elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
   objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
   observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
+  surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
   assets                                                        assets[]
   conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
   derivedConditionScores                                        derivedConditionScores[]
@@ -1464,6 +1481,7 @@ model units {
   @@index([elementId])
   @@index([name])
   @@index([observationPointId])
+  @@index([surveyId, elementId])
 }
 
 model userContracts {
@@ -1490,7 +1508,7 @@ model users {
   updated_at             DateTime? @db.Timestamptz(6)
   loginAttempts          Int?      @default(0)
   isReadOnly             Boolean?  @default(false)
-  isAccountManager       Boolean?  @default(true)
+  isAccountManager       Boolean?  @default(false)
   isConfigurationManager Boolean?  @default(false)
   isWebGL1User           Boolean?  @default(false)
   passwordChangeDate     DateTime? @db.Date

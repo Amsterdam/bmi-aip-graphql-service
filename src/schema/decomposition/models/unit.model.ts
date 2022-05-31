@@ -1,12 +1,18 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-@ObjectType({ description: 'element' })
-export class Element {
+@ObjectType({ description: 'unit' })
+export class Unit {
 	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String)
 	name: string;
+
+	@Field((type) => String, { nullable: true })
+	code?: string;
+
+	@Field((type) => String, { nullable: true })
+	location?: string;
 
 	@Field((type) => String)
 	objectId: string;
@@ -14,8 +20,8 @@ export class Element {
 	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => String, { nullable: true })
-	gisibId?: string;
+	@Field((type) => String)
+	elementId: string;
 
 	@Field((type) => String, { nullable: true })
 	conditionId?: string;
@@ -24,25 +30,19 @@ export class Element {
 	observationPointId?: string;
 
 	@Field((type) => String, { nullable: true })
-	code?: string;
+	material?: string;
+
+	@Field((type) => Number, { nullable: true })
+	quantity?: number;
 
 	@Field((type) => String, { nullable: true })
-	location?: string;
-
-	@Field((type) => String, { nullable: true })
-	categoryId?: string;
+	quantityUnitOfMeasurement?: string;
 
 	@Field((type) => Number, { nullable: true })
 	constructionYear?: number;
 
 	@Field((type) => String, { nullable: true })
-	constructionType?: string;
-
-	@Field((type) => String, { nullable: true })
-	elementGroupName?: string;
-
-	@Field((type) => Boolean)
-	isArchived: boolean;
+	gisibId?: string;
 
 	@Field((type) => Boolean)
 	isElectrical: boolean;

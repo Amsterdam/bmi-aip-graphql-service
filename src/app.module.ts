@@ -4,6 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
+import { HttpModule } from '@nestjs/axios';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -20,9 +21,11 @@ import { AssetModule } from './schema/asset/asset.module';
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
+			// expandVariables: true,
 		}),
 		UserModule,
 		AssetModule,
+		HttpModule,
 		KeycloakConnectModule.registerAsync({
 			useExisting: KeycloakConfigService,
 			imports: [AuthenticationModule],

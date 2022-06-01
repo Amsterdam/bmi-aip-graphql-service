@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { catchError, map } from 'rxjs';
+import { catchError, map, single } from 'rxjs';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
@@ -12,34 +12,55 @@ export class GisibRepository {
 
 	private apiUrl = this.configService.get<string>('GISIB_API_URL');
 
-	public async getNENStandardElements(token: string): Promise<NENElement[]> {
-		// @ts-ignore
-		const nenElements: NENElement[] = this.httpService
-			.get(`${this.apiUrl}/Collections/NEN Type element/items`, {
-				headers: { Authorization: `Bearer ${token}` },
-			})
-			.pipe(
-				map((res) => res.data),
-				catchError((e) => {
-					throw new HttpException(e.statusText, e.status);
-				}),
-			);
-		return nenElements;
+	private apiUsername = this.configService.get<string>('GISIB_API_USERNAME');
+
+	private apiPassword = this.configService.get<string>('GISIB_API_PASSWORD');
+
+	private apiKey = this.configService.get<string>('GISIB_API_KEY');
+
+	public login(): Promise<string> {
+		return new Promise((resolve) => {
+			this.httpService
+				.post<string>(`${this.apiUrl}/login`, {
+					Username: this.apiUsername,
+					Password: this.apiPassword,
+					ApiKey: this.apiKey,
+				})
+				.pipe(
+					map((res) => res.data),
+					single(),
+					catchError((e) => {
+						throw new HttpException(e.statusText, e.status);
+					}),
+				)
+				.subscribe((token) => resolve(token));
+		});
 	}
 
-	public async getNENStandardUnits(token: string): Promise<NENUnit[]> {
-		// @ts-ignore
-		const nenUnits: NENUnits[] = await this.httpService
-			.get(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`, {
-				headers: { Authorization: `Bearer ${token}` },
-			})
-			.pipe(
-				map((res) => res.data),
-				catchError((e) => {
-					throw new HttpException(e.statusText, e.status);
-				}),
-			);
+	private async request<T = any>(url: string): Promise<T[]> {
+		const token = await this.login();
 
-		return nenUnits;
+		return new Promise((resolve) => {
+			this.httpService
+				.get<T[]>(url, {
+					headers: { Authorization: `Bearer ${token}` },
+				})
+				.pipe(
+					map((res) => res.data),
+					single(),
+					catchError((e) => {
+						throw new HttpException(e.statusText, e.status);
+					}),
+				)
+				.subscribe((elements) => resolve(elements));
+		});
+	}
+
+	public getNENStandardElements(): Promise<NENElement[]> {
+		return this.request<NENElement>(`${this.apiUrl}/Collections/NEN Type element/items`);
+	}
+
+	public async getNENStandardUnits(): Promise<NENUnit[]> {
+		return this.request<NENUnit>(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`);
 	}
 }

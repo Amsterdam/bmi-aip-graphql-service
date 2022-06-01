@@ -1,8 +1,9 @@
 import { MockedObjectDeep } from 'ts-jest';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { from, Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpException } from '@nestjs/common';
+import { AxiosResponse } from 'axios';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
@@ -10,34 +11,60 @@ import { GisibRepository } from './gisib.repository';
 import { elements } from './__stubs__/elements';
 import { units } from './__stubs__/units';
 
+const mockApiUrl = 'https://test.nl/api/api';
+
 const configService: MockedObjectDeep<ConfigService> = {
 	get(key: string): string {
 		switch (key) {
 			case 'GISIB_API_URL':
-				return 'https://test.nl/api/api';
+				return mockApiUrl;
+			case 'GISIB_API_USERNAME':
+				return '__USERNAME__';
+			case 'GISIB_API_PASSWORD':
+				return '__PASSWORD__';
+			case 'GISIB_API_KEY':
+				return '__KEY__';
 		}
 	},
 	...(<any>{}),
 };
 
+const httpService: MockedObjectDeep<HttpService> = {
+	get: jest.fn(),
+	post: jest.fn(),
+	...(<any>{}),
+};
+
 describe('GisibRepository', () => {
+	test('login() retrieves a token for authentication', async () => {
+		httpService.post.mockReturnValue(
+			of({
+				data: '__TOKEN__',
+			} as AxiosResponse<string>),
+		);
+		const repo = new GisibRepository(httpService, configService);
+		const token = await repo.login();
+		expect(httpService.post).toHaveBeenCalledWith(`${mockApiUrl}/login`, {
+			Username: '__USERNAME__',
+			Password: '__PASSWORD__',
+			ApiKey: '__KEY__',
+		});
+		expect(token).toBe('__TOKEN__');
+	});
+
 	describe('getNENStandardElements()', () => {
-		const httpService: MockedObjectDeep<HttpService> = {
-			get: jest.fn(() => ({
-				pipe: jest.fn(() => elements),
-			})),
-			...(<any>{}),
-		};
 		test('Should return elements', async () => {
-			const observable: Observable<NENElement> = from(elements);
-			// @ts-ignore
-			httpService.get.getMockImplementation(observable);
+			httpService.get.mockReturnValue(
+				of({
+					data: elements,
+				} as AxiosResponse<NENElement[]>),
+			);
 			const repo = new GisibRepository(httpService, configService);
-			const NENelements = await repo.getNENStandardElements('__TOKEN__');
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			expect(await repo.getNENStandardElements()).toMatchObject(elements);
 			expect(httpService.get).toHaveBeenCalledWith('https://test.nl/api/api/Collections/NEN Type element/items', {
 				headers: { Authorization: 'Bearer __TOKEN__' },
 			});
-			expect(NENelements).toMatchObject(elements);
 		});
 
 		test('Should throw unauthorised httpException', async () => {
@@ -46,28 +73,25 @@ describe('GisibRepository', () => {
 				throw new HttpException(errorMessage, 401);
 			});
 			const repo = new GisibRepository(httpService, configService);
-
-			await expect(repo.getNENStandardElements('__TOKEN__')).rejects.toThrow(HttpException);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			await expect(repo.getNENStandardElements()).rejects.toThrow(HttpException);
 		});
 	});
+
 	describe('getNENStandardUnits()', () => {
-		const httpService: MockedObjectDeep<HttpService> = {
-			get: jest.fn(() => ({
-				pipe: jest.fn(() => units),
-			})),
-			...(<any>{}),
-		};
 		test('Should return units', async () => {
-			const observable: Observable<NENUnit> = from(units);
-			// @ts-ignore
-			httpService.get.getMockImplementation(observable);
+			httpService.get.mockReturnValue(
+				of({
+					data: units,
+				} as AxiosResponse<NENUnit[]>),
+			);
 			const repo = new GisibRepository(httpService, configService);
-			const NENUnits = await repo.getNENStandardUnits('__TOKEN__');
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			expect(await repo.getNENStandardUnits()).toMatchObject(units);
 			expect(httpService.get).toHaveBeenCalledWith(
 				'https://test.nl/api/api/Collections/NEN Type bouwdeel/items',
 				{ headers: { Authorization: 'Bearer __TOKEN__' } },
 			);
-			expect(NENUnits).toMatchObject(units);
 		});
 
 		test('Should throw unauthorised httpException', async () => {
@@ -76,8 +100,8 @@ describe('GisibRepository', () => {
 				throw new HttpException(errorMessage, 401);
 			});
 			const repo = new GisibRepository(httpService, configService);
-
-			await expect(repo.getNENStandardElements('__TOKEN__')).rejects.toThrow(HttpException);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			await expect(repo.getNENStandardElements()).rejects.toThrow(HttpException);
 		});
 	});
 });

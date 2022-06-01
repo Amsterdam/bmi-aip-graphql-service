@@ -21,7 +21,6 @@ import { AssetModule } from './schema/asset/asset.module';
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			// expandVariables: true,
 		}),
 		UserModule,
 		AssetModule,

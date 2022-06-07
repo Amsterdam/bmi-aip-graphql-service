@@ -3,11 +3,12 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ManifestationRepository } from './manifestation.repository';
-import { domainManifestation, manifestationInput } from './__stubs__';
+import { domainManifestation, manifestationInput, updateManifestationInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	manifestations: {
 		create: jest.fn().mockResolvedValue(domainManifestation),
+		update: jest.fn().mockResolvedValue(domainManifestation),
 	},
 	...(<any>{}),
 };
@@ -43,6 +44,28 @@ describe('ManifestationRepository', () => {
 				location: '__LOCATION__',
 				quantity: 3,
 				quantityUnitOfMeasurement: 'm2',
+			}),
+		});
+	});
+	test('updateManifestation()', async () => {
+		const repo = new ManifestationRepository(prismaServiceMock);
+		await repo.updateManifestation(updateManifestationInput);
+		expect(prismaServiceMock.manifestations.update).toHaveBeenCalledWith({
+			where: { id: updateManifestationInput.id },
+			data: expect.objectContaining({
+				code: '__CODE__',
+				name: '__NAME__',
+				location: '__LOCATION__',
+				constructionYear: 2010,
+				isRelevant: true,
+				isStructural: true,
+				isElectrical: false,
+				isStructuralObjectSpecific: false,
+				isElectricalObjectSpecific: false,
+				constructionType: '',
+				elementGroupName: '',
+				isArchived: false,
+				gisibId: '',
 			}),
 		});
 	});

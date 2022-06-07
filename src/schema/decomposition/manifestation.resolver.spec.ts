@@ -6,6 +6,7 @@ import { ManifestationService } from './manifestation.service';
 import { manifestationInput, domainManifestation } from './__stubs__';
 import { CreateManifestationCommand } from './commands/create-manifestation.command';
 import { Manifestation } from './models/manifestation.model';
+import { UpdateManifestationCommand } from './commands/update-manifestation.command';
 
 jest.mock('./manifestation.service');
 
@@ -13,6 +14,7 @@ const commandBusMock: MockedObjectDeep<CommandBus> = {
 	execute: jest.fn((command: any) => {
 		switch (command.constructor.name) {
 			case CreateManifestationCommand.name:
+			case UpdateManifestationCommand.name:
 				return domainManifestation;
 		}
 	}),

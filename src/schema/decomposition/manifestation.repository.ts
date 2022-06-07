@@ -46,28 +46,24 @@ export class ManifestationRepository implements IManifestationRepository {
 	}
 
 	async updateManifestation({
+		id,
 		name,
-		elementId,
-		unitId,
 		code,
 		location,
 		material,
 		quantity,
 		quantityUnitOfMeasurement,
 		constructionYear,
-		gisibId,
 	}: UpdateManifestationInput): Promise<Manifestation> {
 		const data: Prisma.manifestationsUpdateInput = {
+			id,
 			name,
-			elementId,
-			unitId,
 			code,
 			location,
 			material,
 			quantity,
 			quantityUnitOfMeasurement,
 			constructionYear,
-			gisibId,
 		};
 
 		return this.prisma.manifestations.update({

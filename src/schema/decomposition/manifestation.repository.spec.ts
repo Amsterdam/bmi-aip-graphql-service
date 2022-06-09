@@ -53,19 +53,14 @@ describe('ManifestationRepository', () => {
 		expect(prismaServiceMock.manifestations.update).toHaveBeenCalledWith({
 			where: { id: updateManifestationInput.id },
 			data: expect.objectContaining({
+				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 				code: '__CODE__',
 				name: '__NAME__',
 				location: '__LOCATION__',
-				constructionYear: 2010,
-				isRelevant: true,
-				isStructural: true,
-				isElectrical: false,
-				isStructuralObjectSpecific: false,
-				isElectricalObjectSpecific: false,
-				constructionType: '',
-				elementGroupName: '',
-				isArchived: false,
-				gisibId: '',
+				material: undefined,
+				quantity: 3,
+				quantityUnitOfMeasurement: 'm2',
+				constructionYear: undefined,
 			}),
 		});
 	});

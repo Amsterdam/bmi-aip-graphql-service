@@ -5,6 +5,7 @@ import { catchError, map, single } from 'rxjs';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
+import { Asset } from './types/Asset';
 
 @Injectable()
 export class GisibRepository {
@@ -56,11 +57,19 @@ export class GisibRepository {
 		});
 	}
 
+	public getAssetByCode(): Promise<Asset> {
+		return this.request<Asset>(`${this.apiUrl}/Collections/NEN Type element/items`);
+	}
+
 	public getNENStandardElements(): Promise<NENElement[]> {
 		return this.request<NENElement>(`${this.apiUrl}/Collections/NEN Type element/items`);
 	}
 
 	public async getNENStandardUnits(): Promise<NENUnit[]> {
 		return this.request<NENUnit>(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`);
+	}
+
+	public async getUnitManifestations(): Promise<Manifestation[]> {
+		return this.request<Manifestation>(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`);
 	}
 }

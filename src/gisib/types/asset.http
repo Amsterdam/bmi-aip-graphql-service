@@ -1,0 +1,20 @@
+POST https://amsterdam-test.gisib.nl/api/api/login
+Content-Type: application/json
+
+{
+	"Username": "bmi_api_acc",
+	"Password": "testAp1!",
+	"ApiKey": "7613470c41b2490bbbfe3f01ea07f4f6"
+}
+### Bearer token returned should be valid for 8 hours
+
+
+GET https://amsterdam-test.gisib.nl/api/api/Collections/Civiele constructie/items?skip=0&take=500&crs=28992&limit=1000
+accept: */*
+Authorization: eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6ImJtaV9hcGlfYWNjIiwiQXBpa2V5IjoiNzYxMzQ3MGM0MWIyNDkwYmJiZmUzZjAxZWEwN2Y0ZjYiLCJleHAiOjE2NTQ3MTkxMjksImlzcyI6Imdpc2liIn0.GR1VbWb7U94rzJ-GWkj1HRgMehS0kMbinrTrpEpBNHQ
+
+###
+POST https://amsterdam-test.gisib.nl/api/api/Collections/Civiele constructie/WithFilter/items?crs=1181302
+accept: */*
+Authorization: eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6ImJtaV9hcGlfYWNjIiwiQXBpa2V5IjoiNzYxMzQ3MGM0MWIyNDkwYmJiZmUzZjAxZWEwN2Y0ZjYiLCJleHAiOjE2NTQ3MTkxMjksImlzcyI6Imdpc2liIn0.GR1VbWb7U94rzJ-GWkj1HRgMehS0kMbinrTrpEpBNHQ
+Content-Type: application/json

@@ -8,6 +8,7 @@ import { domainUnit, unitInput } from './__stubs__';
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	units: {
 		create: jest.fn().mockResolvedValue(domainUnit),
+		update: jest.fn().mockResolvedValue(domainUnit),
 	},
 	...(<any>{}),
 };

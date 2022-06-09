@@ -1,6 +1,7 @@
 import { CreateManifestationInput } from '../dto/create-manifestation.input';
 import { Manifestation as DomainManifestation } from '../types/manifestation.repository.interface';
 import { ManifestationFactory } from '../manifestation.factory';
+import { UpdateUnitInput } from '../dto/update-unit.input';
 
 const manifestationRaw = {
 	code: '__CODE__',
@@ -27,5 +28,12 @@ export const domainManifestation: DomainManifestation = {
 	constructionYear: null,
 	observationPointId: null,
 };
+
+const updateManifestation = new UpdateUnitInput();
+updateManifestation.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateManifestationInput = Object.keys(manifestationRaw).reduce((input, key) => {
+	input[key] = manifestationRaw[key];
+	return input;
+}, updateManifestation);
 
 export const manifestation = ManifestationFactory.CreateManifestation(domainManifestation);

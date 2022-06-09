@@ -19,6 +19,8 @@ import { UnitService } from './unit.service';
 import { CreateElementHandler } from './commands/create-element.handler';
 import { ElementRepository } from './element.repository';
 import { UpdateElementHandler } from './commands/update-element.handler';
+import { UpdateManifestationHandler } from './commands/update-manifestation.handler';
+import { UpdateUnitHandler } from './commands/update-unit.handler';
 
 @Module({
 	providers: [
@@ -35,6 +37,8 @@ import { UpdateElementHandler } from './commands/update-element.handler';
 		CreateUnitHandler,
 		CreateManifestationHandler,
 		UpdateElementHandler,
+		UpdateUnitHandler,
+		UpdateManifestationHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

@@ -3,10 +3,11 @@ import { CommandBus } from '@nestjs/cqrs';
 
 import { ElementResolver } from './element.resolver';
 import { ElementService } from './element.service';
-import { domainElement, element1, element2, elementInput, updateElementInput } from './__stubs__';
+import { domainElement, element1, element2, elementInput, updateElementInput, deletedElement } from './__stubs__';
 import { CreateElementCommand } from './commands/create-element.command';
 import { Element } from './models/element.model';
 import { UpdateElementCommand } from './commands/update-element.command';
+import { DeleteElementCommand } from './commands/delete-element.command';
 
 jest.mock('./element.service');
 
@@ -16,6 +17,8 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 			case CreateElementCommand.name:
 			case UpdateElementCommand.name:
 				return domainElement;
+			case DeleteElementCommand.name:
+				return deletedElement;
 		}
 	}),
 	...(<any>{}),
@@ -45,6 +48,20 @@ describe('Decomposition / Element / Resolver', () => {
 
 			expect(result).toBeInstanceOf(Element);
 			expect(result.id).toBe(updateElementInput.id);
+		});
+	});
+
+	describe('deleteElement', () => {
+		test('soft-deletes and returns an element', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new ElementResolver(new ElementService(), commandBusMock);
+			const result = await resolver.deleteElement(domainElement.id);
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteElementCommand(domainElement.id));
+
+			expect(result).toBeInstanceOf(Element);
+			expect(result.id).toBe(domainElement.id);
+			expect(result.deletedAt).toBe('Thu, 09 Jun 2022 15:03:22 GMT');
 		});
 	});
 

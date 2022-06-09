@@ -36,6 +36,7 @@ const elements: DomainElement[] = [
 		constructionYear: 2000,
 		constructionType: '7',
 		elementGroupName: null,
+		deleted_at: null,
 	},
 	{
 		id: '5291eb5d-9078-47e7-bc12-01928a353fe7',
@@ -57,6 +58,7 @@ const elements: DomainElement[] = [
 		constructionYear: 2000,
 		constructionType: '7',
 		elementGroupName: null,
+		deleted_at: null,
 	},
 	{
 		id: '39d3cc6a-8b2e-4b13-8c16-7347f2c243eb',
@@ -78,6 +80,7 @@ const elements: DomainElement[] = [
 		constructionYear: 2000,
 		constructionType: '7',
 		elementGroupName: null,
+		deleted_at: null,
 	},
 ];
 

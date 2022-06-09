@@ -15,6 +15,7 @@ import { UpdateElementInput } from './dto/update-element.input';
 import { CreateElementCommand } from './commands/create-element.command';
 import { UpdateElementCommand } from './commands/update-element.command';
 import { Element as DomainElement } from './types/element.repository.interface';
+import { DeleteElementCommand } from './commands/delete-element.command';
 
 @Resolver((of) => Element)
 @Resource(Element.name)
@@ -34,6 +35,15 @@ export class ElementResolver {
 	public async updateElement(@Args('updateElement') input: UpdateElementInput): Promise<Element> {
 		const domainElement: DomainElement = await this.commandBus.execute<UpdateElementCommand>(
 			new UpdateElementCommand(input),
+		);
+
+		return ElementFactory.CreateElement(domainElement);
+	}
+
+	@Mutation(() => Element)
+	public async deleteElement(@Args('identifier') identifier: string): Promise<Element> {
+		const domainElement: DomainElement = await this.commandBus.execute<DeleteElementCommand>(
+			new DeleteElementCommand(identifier),
 		);
 
 		return ElementFactory.CreateElement(domainElement);

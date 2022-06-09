@@ -24,6 +24,7 @@ const elements = Prisma.validator<Prisma.elementsArgs>()({
 		isStructuralObjectSpecific: true,
 		isElectricalObjectSpecific: true,
 		isRelevant: true,
+		deleted_at: true,
 	},
 });
 export type Element = Prisma.elementsGetPayload<typeof elements>;
@@ -31,4 +32,5 @@ export type Element = Prisma.elementsGetPayload<typeof elements>;
 export interface IElementRepository {
 	createElement(input: CreateElementInput): Promise<Element>;
 	updateElement(input: UpdateElementInput): Promise<Element>;
+	deleteElement(identifier: string): Promise<Element>;
 }

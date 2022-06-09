@@ -1,6 +1,7 @@
 import { CreateUnitInput } from '../dto/create-unit.input';
 import { Unit as DomainUnit } from '../types/unit.repository.interface';
 import { UnitFactory } from '../unit.factory';
+import { UpdateUnitInput } from '../dto/update-unit.input';
 
 const unitRaw = {
 	code: '__CODE__',
@@ -33,5 +34,12 @@ export const domainUnit: DomainUnit = {
 	constructionYear: null,
 	observationPointId: null,
 };
+
+const updateUnit = new UpdateUnitInput();
+updateUnit.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateUnitInput = Object.keys(unitRaw).reduce((input, key) => {
+	input[key] = unitRaw[key];
+	return input;
+}, updateUnit);
 
 export const unit = UnitFactory.CreateUnit(domainUnit);

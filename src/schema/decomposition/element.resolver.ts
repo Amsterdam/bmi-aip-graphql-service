@@ -8,11 +8,13 @@ import { WriteAssetPolicyHandler } from '../../authorization/policies/write-asse
 import { CheckPolicies } from '../../authorization/check-policies.decorator';
 
 import { Element } from './models/element.model';
-import { ElementService } from './element.service';
-import { Element as DomainElement } from './types/element.repository.interface';
-import { CreateElementCommand } from './commands/create-element.command';
 import { ElementFactory } from './element.factory';
+import { ElementService } from './element.service';
 import { CreateElementInput } from './dto/create-element.input';
+import { UpdateElementInput } from './dto/update-element.input';
+import { CreateElementCommand } from './commands/create-element.command';
+import { UpdateElementCommand } from './commands/update-element.command';
+import { Element as DomainElement } from './types/element.repository.interface';
 
 @Resolver((of) => Element)
 @Resource(Element.name)
@@ -23,6 +25,15 @@ export class ElementResolver {
 	public async createElement(@Args('createElement') input: CreateElementInput): Promise<Element> {
 		const domainElement: DomainElement = await this.commandBus.execute<CreateElementCommand>(
 			new CreateElementCommand(input),
+		);
+
+		return ElementFactory.CreateElement(domainElement);
+	}
+
+	@Mutation(() => Element)
+	public async updateElement(@Args('updateElement') input: UpdateElementInput): Promise<Element> {
+		const domainElement: DomainElement = await this.commandBus.execute<UpdateElementCommand>(
+			new UpdateElementCommand(input),
 		);
 
 		return ElementFactory.CreateElement(domainElement);

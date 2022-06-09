@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateManifestationInput } from '../dto/create-manifestation.input';
+import { UpdateManifestationInput } from '../dto/update-manifestation.input';
 
 const manifestations = Prisma.validator<Prisma.manifestationsArgs>()({
 	select: {
@@ -24,4 +25,5 @@ export type Manifestation = Prisma.manifestationsGetPayload<typeof manifestation
 
 export interface IManifestationRepository {
 	createManifestation(input: CreateManifestationInput): Promise<Manifestation>;
+	updateManifestation(input: UpdateManifestationInput): Promise<Manifestation>;
 }

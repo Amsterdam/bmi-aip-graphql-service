@@ -71,4 +71,15 @@ export class ManifestationRepository implements IManifestationRepository {
 			data,
 		});
 	}
+
+	async deleteManifestation(identifier: string): Promise<Manifestation> {
+		const data: Prisma.manifestationsUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.manifestations.update({
+			where: { id: identifier },
+			data,
+		});
+	}
 }

@@ -45,7 +45,7 @@ describe('Decomposition / Unit / Resolver', () => {
 			const resolver = new UnitResolver(new UnitService(), commandBusMock);
 			const result = await resolver.updateUnit(updateUnitInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateElementCommand(updateUnitInput));
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateUnitCommand(updateUnitInput));
 
 			expect(result).toBeInstanceOf(Unit);
 			expect(result.id).toBe(updateUnitInput.id);

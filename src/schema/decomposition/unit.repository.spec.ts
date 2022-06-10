@@ -72,7 +72,7 @@ describe('UnitRepository', () => {
 		});
 	});
 
-	test('deleteElement', async () => {
+	test('deleteUnit', async () => {
 		// @ts-ignore
 		prismaServiceMock.units.update.mockResolvedValue(deletedUnit);
 		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';

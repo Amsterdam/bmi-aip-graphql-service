@@ -56,7 +56,7 @@ describe('Decomposition / Unit / Resolver', () => {
 		test('soft-deletes and returns a unit', async () => {
 			const commandBusMock = getCommandBusMock();
 			const resolver = new UnitResolver(new UnitService(), commandBusMock);
-			const result = await resolver.deleteElement(domainUnit.id);
+			const result = await resolver.deleteUnit(domainUnit.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteUnitCommand(domainUnit.id));
 

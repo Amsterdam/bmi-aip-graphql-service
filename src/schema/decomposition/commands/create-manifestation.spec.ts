@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { ManifestationRepository } from '../manifestation.repository';
-import { manifestationInput, domainManifestation, manifestation } from '../__stubs__/manifestation';
+import { manifestationInput, domainManifestation } from '../__stubs__';
 
 import { CreateManifestationCommand } from './create-manifestation.command';
 import { CreateManifestationHandler } from './create-manifestation.handler';

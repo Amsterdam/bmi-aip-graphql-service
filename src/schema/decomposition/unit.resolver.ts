@@ -28,7 +28,7 @@ export class UnitResolver {
 	}
 
 	@Mutation(() => Unit)
-	public async deleteElement(@Args('identifier') identifier: string): Promise<Unit> {
+	public async deleteUnit(@Args('identifier') identifier: string): Promise<Unit> {
 		const domainUnit: DomainUnit = await this.commandBus.execute<DeleteUnitCommand>(
 			new DeleteUnitCommand(identifier),
 		);

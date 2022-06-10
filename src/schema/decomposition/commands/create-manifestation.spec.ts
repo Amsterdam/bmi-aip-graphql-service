@@ -19,6 +19,6 @@ describe('CreateManifestationHandler', () => {
 		expect(manifestationRepoMock.createManifestation).toHaveBeenCalledTimes(1);
 		expect(manifestationRepoMock.createManifestation).toHaveBeenCalledWith(manifestationInput);
 
-		expect(result).toEqual(manifestation);
+		expect(result).toEqual(domainManifestation);
 	});
 });

@@ -6,7 +6,6 @@ import { UnitService } from './unit.service';
 import { unitInput, domainUnit, deletedUnit, updateUnitInput } from './__stubs__';
 import { CreateUnitCommand } from './commands/create-unit.command';
 import { Unit } from './models/unit.model';
-import { UpdateElementCommand } from './commands/update-element.command';
 import { UpdateUnitCommand } from './commands/update-unit.command';
 import { DeleteUnitCommand } from './commands/delete-unit.command';
 

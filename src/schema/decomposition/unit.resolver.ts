@@ -24,6 +24,7 @@ export class UnitResolver {
 	@Mutation(() => Unit)
 	public async updateUnit(@Args('updateUnit') input: UpdateUnitInput): Promise<Unit> {
 		const domainUnit: DomainUnit = await this.commandBus.execute<UpdateUnitCommand>(new UpdateUnitCommand(input));
+
 		return UnitFactory.CreateUnit(domainUnit);
 	}
 

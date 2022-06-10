@@ -24,6 +24,7 @@ const units = Prisma.validator<Prisma.unitsArgs>()({
 		isStructuralObjectSpecific: true,
 		isElectricalObjectSpecific: true,
 		isRelevant: true,
+		deleted_at: true,
 	},
 });
 export type Unit = Prisma.unitsGetPayload<typeof units>;
@@ -31,4 +32,5 @@ export type Unit = Prisma.unitsGetPayload<typeof units>;
 export interface IUnitRepository {
 	createUnit(input: CreateUnitInput): Promise<Unit>;
 	updateUnit(input: UpdateUnitInput): Promise<Unit>;
+	deleteUnit(identifier: string): Promise<Unit>;
 }

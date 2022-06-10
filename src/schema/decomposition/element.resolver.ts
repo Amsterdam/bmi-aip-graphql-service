@@ -27,7 +27,6 @@ export class ElementResolver {
 		const domainElement: DomainElement = await this.commandBus.execute<CreateElementCommand>(
 			new CreateElementCommand(input),
 		);
-
 		return ElementFactory.CreateElement(domainElement);
 	}
 
@@ -36,7 +35,6 @@ export class ElementResolver {
 		const domainElement: DomainElement = await this.commandBus.execute<UpdateElementCommand>(
 			new UpdateElementCommand(input),
 		);
-
 		return ElementFactory.CreateElement(domainElement);
 	}
 
@@ -45,7 +43,6 @@ export class ElementResolver {
 		const domainElement: DomainElement = await this.commandBus.execute<DeleteElementCommand>(
 			new DeleteElementCommand(identifier),
 		);
-
 		return ElementFactory.CreateElement(domainElement);
 	}
 

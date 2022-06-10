@@ -1,13 +1,15 @@
-import { domainManifestation } from '../__stubs__/manifestation';
+import { domainUnit } from '../__stubs__';
 
-import { Manifestation } from './manifestation.model';
+import { Unit } from './unit.model';
 
-test('Manifestation Domain Model', () => {
-	const manifestation = Object.keys(domainManifestation).reduce((model, key) => {
-		model[key] = domainManifestation[key];
-		return model;
-	}, new Manifestation());
+describe('Decomposition / Model / Unit', () => {
+	test('constructs a Unit instance object', () => {
+		const unit = Object.keys(domainUnit).reduce((model, key) => {
+			model[key] = domainUnit[key];
+			return model;
+		}, new Unit());
 
-	expect(manifestation).toBeInstanceOf(Manifestation);
-	expect(manifestation).toEqual(domainManifestation);
+		expect(unit).toBeInstanceOf(Unit);
+		expect(unit).toEqual(domainUnit);
+	});
 });

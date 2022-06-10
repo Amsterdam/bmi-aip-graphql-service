@@ -22,6 +22,7 @@ export class UnitFactory {
 		isStructural,
 		isStructuralObjectSpecific,
 		isRelevant,
+		deleted_at: deletedAt,
 	}: DomainUnit): Unit {
 		const unit = new Unit();
 		unit.id = id;
@@ -43,6 +44,7 @@ export class UnitFactory {
 		unit.isStructural = !!isStructural;
 		unit.isStructuralObjectSpecific = !!isStructuralObjectSpecific;
 		unit.isRelevant = !!isRelevant;
+		unit.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return unit;
 	}
 }

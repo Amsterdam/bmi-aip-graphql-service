@@ -92,4 +92,15 @@ export class UnitRepository implements IUnitRepository {
 			data,
 		});
 	}
+
+	async deleteUnit(identifier: string): Promise<Unit> {
+		const data: Prisma.unitsUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.units.update({
+			where: { id: identifier },
+			data,
+		});
+	}
 }

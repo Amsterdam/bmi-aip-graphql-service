@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { UnitRepository } from '../unit.repository';
-import { unitInput, domainUnit } from '../__stubs__/unit';
+import { unitInput, domainUnit } from '../__stubs__';
 
 import { CreateUnitCommand } from './create-unit.command';
 import { CreateUnitHandler } from './create-unit.handler';

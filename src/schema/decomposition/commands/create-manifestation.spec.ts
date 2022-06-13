@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { ManifestationRepository } from '../manifestation.repository';
-import { manifestationInput, domainManifestation, manifestation } from '../__stubs__/manifestation';
+import { manifestationInput, domainManifestation } from '../__stubs__';
 
 import { CreateManifestationCommand } from './create-manifestation.command';
 import { CreateManifestationHandler } from './create-manifestation.handler';
@@ -19,6 +19,6 @@ describe('CreateManifestationHandler', () => {
 		expect(manifestationRepoMock.createManifestation).toHaveBeenCalledTimes(1);
 		expect(manifestationRepoMock.createManifestation).toHaveBeenCalledWith(manifestationInput);
 
-		expect(result).toEqual(manifestation);
+		expect(result).toEqual(domainManifestation);
 	});
 });

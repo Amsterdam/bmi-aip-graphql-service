@@ -5,7 +5,9 @@ import { Unit } from './models/unit.model';
 describe('UnitFactory', () => {
 	test('CreateUnit() constructs an instance of a Unit GraphQL model', () => {
 		const result = UnitFactory.CreateUnit(domainUnit);
-		expect(result).toEqual(expect.objectContaining(domainUnit));
+		const object = { ...domainUnit, deletedAt: domainUnit.deleted_at };
+		delete object.deleted_at;
+		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(Unit);
 	});
 });

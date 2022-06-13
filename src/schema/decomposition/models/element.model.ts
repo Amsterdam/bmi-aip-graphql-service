@@ -58,4 +58,7 @@ export class Element {
 
 	@Field((type) => Boolean)
 	isRelevant: boolean;
+
+	@Field((type) => String, { nullable: true })
+	deletedAt: string;
 }

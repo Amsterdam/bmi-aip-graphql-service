@@ -19,6 +19,8 @@ const unitRaw = {
 	isElectrical: false,
 	isStructuralObjectSpecific: false,
 	isElectricalObjectSpecific: false,
+	gisibId: '76ed692a-4ec3-49eb-b755-726b3cba42f2',
+	deleted_at: null,
 };
 
 export const unitInput = Object.keys(unitRaw).reduce((input, key) => {
@@ -37,9 +39,16 @@ export const domainUnit: DomainUnit = {
 
 const updateUnit = new UpdateUnitInput();
 updateUnit.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
-export const updateUnitInput = Object.keys(unitRaw).reduce((input, key) => {
-	input[key] = unitRaw[key];
-	return input;
-}, updateUnit);
+export const updateUnitInput = Object.keys(unitRaw)
+	.filter((key) => !['objectId', 'surveyId', 'elementId'].includes(key))
+	.reduce((input, key) => {
+		input[key] = unitRaw[key];
+		return input;
+	}, updateUnit);
 
 export const unit = UnitFactory.CreateUnit(domainUnit);
+
+export const deletedUnit: DomainUnit = {
+	...domainUnit,
+	deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
+};

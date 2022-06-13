@@ -98,4 +98,15 @@ export class ElementRepository implements IElementRepository {
 			data,
 		});
 	}
+
+	async deleteElement(identifier: string): Promise<Element> {
+		const data: Prisma.elementsUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.elements.update({
+			where: { id: identifier },
+			data,
+		});
+	}
 }

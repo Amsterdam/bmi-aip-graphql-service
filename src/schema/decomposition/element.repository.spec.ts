@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ElementRepository } from './element.repository';
-import { domainElement, elementInput, updateElementInput } from './__stubs__';
+import { deletedElement, domainElement, elementInput, updateElementInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
@@ -77,5 +77,18 @@ describe('ElementRepository', () => {
 				gisibId: '',
 			}),
 		});
+	});
+
+	test('deleteElement', async () => {
+		// @ts-ignore
+		prismaServiceMock.elements.update.mockResolvedValue(deletedElement);
+		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const repo = new ElementRepository(prismaServiceMock);
+		const element = await repo.deleteElement(identifier);
+		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
+			where: { id: identifier },
+			data: expect.objectContaining({}),
+		});
+		expect(element.deleted_at instanceof Date).toBe(true);
 	});
 });

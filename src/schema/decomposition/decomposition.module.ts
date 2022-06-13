@@ -21,6 +21,9 @@ import { ElementRepository } from './element.repository';
 import { UpdateElementHandler } from './commands/update-element.handler';
 import { UpdateManifestationHandler } from './commands/update-manifestation.handler';
 import { UpdateUnitHandler } from './commands/update-unit.handler';
+import { DeleteElementHandler } from './commands/delete-element.handler';
+import { DeleteUnitHandler } from './commands/delete-unit.handler';
+import { DeleteManifestationHandler } from './commands/delete-manifestation.handler';
 
 @Module({
 	providers: [
@@ -39,6 +42,9 @@ import { UpdateUnitHandler } from './commands/update-unit.handler';
 		UpdateElementHandler,
 		UpdateUnitHandler,
 		UpdateManifestationHandler,
+		DeleteElementHandler,
+		DeleteUnitHandler,
+		DeleteManifestationHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

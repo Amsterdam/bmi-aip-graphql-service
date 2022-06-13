@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ManifestationRepository } from './manifestation.repository';
-import { domainManifestation, manifestationInput, updateManifestationInput } from './__stubs__';
+import { deletedManifestation, domainManifestation, manifestationInput, updateManifestationInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	manifestations: {
@@ -47,6 +47,7 @@ describe('ManifestationRepository', () => {
 			}),
 		});
 	});
+
 	test('updateManifestation()', async () => {
 		const repo = new ManifestationRepository(prismaServiceMock);
 		await repo.updateManifestation(updateManifestationInput);
@@ -63,5 +64,18 @@ describe('ManifestationRepository', () => {
 				constructionYear: undefined,
 			}),
 		});
+	});
+
+	test('deleteManifestation', async () => {
+		// @ts-ignore
+		prismaServiceMock.manifestations.update.mockResolvedValue(deletedManifestation);
+		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const repo = new ManifestationRepository(prismaServiceMock);
+		const manifestation = await repo.deleteManifestation(identifier);
+		expect(prismaServiceMock.manifestations.update).toHaveBeenCalledWith({
+			where: { id: identifier },
+			data: expect.objectContaining({}),
+		});
+		expect(manifestation.deleted_at instanceof Date).toBe(true);
 	});
 });

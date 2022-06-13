@@ -38,6 +38,7 @@ const elementRaw: Omit<DomainElement, 'id'> = {
 	elementGroupName: '',
 	isArchived: false,
 	gisibId: '',
+	deleted_at: null,
 };
 
 export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
@@ -59,6 +60,12 @@ export const domainElement: DomainElement = {
 	conditionId: null,
 	constructionYear: null,
 	observationPointId: null,
+	deleted_at: null,
 };
 
 export const element = ElementFactory.CreateElement(domainElement);
+
+export const deletedElement: DomainElement = {
+	...domainElement,
+	deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
+};

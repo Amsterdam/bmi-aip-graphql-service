@@ -145,4 +145,84 @@ describe('GisibRepository', () => {
 			await expect(repo.getAssetByCode('__CODE__')).rejects.toThrow(HttpException);
 		});
 	});
+	describe('getAssetElements()', () => {
+		test('should return an asset elements', async () => {
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			const data = [
+				{
+					Criterias: [
+						{
+							Property: 'Objectnummer',
+							Value: '3399979',
+							Operator: 'Equal',
+						},
+					],
+					Operator: 'AND',
+				},
+			];
+			const response: AxiosResponse<any> = {
+				data: gisibAssetResponse,
+				headers: {},
+				config: { url: 'https://test.nl/api/api/Collections/NEN Element/WithFilter/items' },
+				status: 200,
+				statusText: 'OK',
+			};
+			jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(response));
+			expect(await repo.getAssetElements('3399979')).toMatchObject(gisibAssetResponse);
+			expect(httpService.post).toHaveBeenCalledWith(
+				'https://test.nl/api/api/Collections/NEN Element/WithFilter/items',
+				{ headers: { Authorization: 'Bearer __TOKEN__' }, data },
+			);
+		});
+		test('Should throw unauthorised httpException', async () => {
+			const errorMessage = 'Test error message';
+			httpService.post.mockImplementation(() => {
+				throw new HttpException(errorMessage, 401);
+			});
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			await expect(repo.getAssetElements('__CODE__')).rejects.toThrow(HttpException);
+		});
+	});
+	describe('getElementUnits()', () => {
+		test('should return element units', async () => {
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			const data = [
+				{
+					Criterias: [
+						{
+							Property: 'Objectnummer',
+							Value: '653079',
+							Operator: 'Equal',
+						},
+					],
+					Operator: 'AND',
+				},
+			];
+			const response: AxiosResponse<any> = {
+				data: gisibAssetResponse,
+				headers: {},
+				config: { url: 'https://test.nl/api/api/Collections/NEN Bouwdeel/WithFilter/items' },
+				status: 200,
+				statusText: 'OK',
+			};
+			jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(response));
+			expect(await repo.getElementUnits('653079')).toMatchObject(gisibAssetResponse);
+			expect(httpService.post).toHaveBeenCalledWith(
+				'https://test.nl/api/api/Collections/NEN Bouwdeel/WithFilter/items',
+				{ headers: { Authorization: 'Bearer __TOKEN__' }, data },
+			);
+		});
+		test('Should throw unauthorised httpException', async () => {
+			const errorMessage = 'Test error message';
+			httpService.post.mockImplementation(() => {
+				throw new HttpException(errorMessage, 401);
+			});
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			await expect(repo.getElementUnits('__CODE__')).rejects.toThrow(HttpException);
+		});
+	});
 });

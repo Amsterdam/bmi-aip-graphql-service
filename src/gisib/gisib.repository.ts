@@ -5,6 +5,7 @@ import { catchError, map, single } from 'rxjs';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
+import { GisibAssetResponse } from './types/GisibAssetResponse';
 
 @Injectable()
 export class GisibRepository {
@@ -56,19 +57,19 @@ export class GisibRepository {
 		});
 	}
 
-	public async getAssetByCode<T = any>(assetCode: string): Promise<T> {
+	public async getGisbDataWithFilter<T = any>(code: string, Property: string, url: string): Promise<T> {
 		const token = await this.login();
 
 		return new Promise((resolve) => {
 			this.httpService
-				.post<T>(`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`, {
+				.post<T>(url, {
 					headers: { Authorization: `Bearer ${token}` },
 					data: [
 						{
 							Criterias: [
 								{
 									Property: 'Objectnummer',
-									Value: assetCode,
+									Value: code,
 									Operator: 'Equal',
 								},
 							],
@@ -85,6 +86,30 @@ export class GisibRepository {
 				)
 				.subscribe((value) => resolve(value));
 		});
+	}
+
+	public getAssetByCode(code): Promise<GisibAssetResponse> {
+		return this.getGisbDataWithFilter(
+			code,
+			'Civiele constructie.Id',
+			`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`,
+		);
+	}
+
+	public getAssetElements(code): Promise<GisibAssetResponse> {
+		return this.getGisbDataWithFilter(
+			code,
+			'NEN Element.Id',
+			`${this.apiUrl}/Collections/NEN Element/WithFilter/items`,
+		);
+	}
+
+	public getElementUnits(code): Promise<GisibAssetResponse> {
+		return this.getGisbDataWithFilter(
+			code,
+			'NEN Bouwdeel.Id',
+			`${this.apiUrl}/Collections/NEN Bouwdeel/WithFilter/items`,
+		);
 	}
 
 	public getNENStandardElements(): Promise<NENElement[]> {

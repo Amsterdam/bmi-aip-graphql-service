@@ -57,7 +57,7 @@ export class GisibRepository {
 		});
 	}
 
-	public async getGisbDataWithFilter<T = any>(code: string, Property: string, url: string): Promise<T> {
+	public async getGisbDataWithFilter<T = any>(code: string, property: string, url: string): Promise<T> {
 		const token = await this.login();
 
 		return new Promise((resolve) => {
@@ -68,7 +68,7 @@ export class GisibRepository {
 						{
 							Criterias: [
 								{
-									Property: 'Objectnummer',
+									Property: property,
 									Value: code,
 									Operator: 'Equal',
 								},

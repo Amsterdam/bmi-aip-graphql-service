@@ -5,7 +5,6 @@ import { catchError, map, single } from 'rxjs';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
-import { Asset } from './types/Asset';
 
 @Injectable()
 export class GisibRepository {
@@ -53,12 +52,39 @@ export class GisibRepository {
 						throw new HttpException(e.statusText, e.status);
 					}),
 				)
-				.subscribe((elements) => resolve(elements));
+				.subscribe((values) => resolve(values));
 		});
 	}
 
-	public getAssetByCode(): Promise<Asset> {
-		return this.request<Asset>(`${this.apiUrl}/Collections/NEN Type element/items`);
+	public async getAssetByCode<T = any>(assetCode: string): Promise<T> {
+		const token = await this.login();
+
+		return new Promise((resolve) => {
+			this.httpService
+				.post<T>(`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`, {
+					headers: { Authorization: `Bearer ${token}` },
+					data: [
+						{
+							Criterias: [
+								{
+									Property: 'Objectnummer',
+									Value: assetCode,
+									Operator: 'Equal',
+								},
+							],
+							Operator: 'AND',
+						},
+					],
+				})
+				.pipe(
+					map((res) => res.data),
+					single(),
+					catchError((e) => {
+						throw new HttpException(e.statusText, e.status);
+					}),
+				)
+				.subscribe((value) => resolve(value));
+		});
 	}
 
 	public getNENStandardElements(): Promise<NENElement[]> {
@@ -67,9 +93,5 @@ export class GisibRepository {
 
 	public async getNENStandardUnits(): Promise<NENUnit[]> {
 		return this.request<NENUnit>(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`);
-	}
-
-	public async getUnitManifestations(): Promise<Manifestation[]> {
-		return this.request<Manifestation>(`${this.apiUrl}/Collections/NEN Type bouwdeel/items`);
 	}
 }

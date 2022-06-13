@@ -10,6 +10,7 @@ import { NENUnit } from './types/NENUnit';
 import { GisibRepository } from './gisib.repository';
 import { elements } from './__stubs__/elements';
 import { units } from './__stubs__/units';
+import { gisibAssetResponse } from './__stubs__/GisibAssetResponse';
 
 const mockApiUrl = 'https://test.nl/api/api';
 
@@ -102,6 +103,46 @@ describe('GisibRepository', () => {
 			const repo = new GisibRepository(httpService, configService);
 			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
 			await expect(repo.getNENStandardElements()).rejects.toThrow(HttpException);
+		});
+	});
+	describe('getAssetByCode()', () => {
+		test('should return an asset', async () => {
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			const data = [
+				{
+					Criterias: [
+						{
+							Property: 'Objectnummer',
+							Value: 'BRU5032',
+							Operator: 'Equal',
+						},
+					],
+					Operator: 'AND',
+				},
+			];
+			const response: AxiosResponse<any> = {
+				data: gisibAssetResponse,
+				headers: {},
+				config: { url: 'https://test.nl/api/api/Collections/Civiele constructie/WithFilter/items' },
+				status: 200,
+				statusText: 'OK',
+			};
+			jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(response));
+			expect(await repo.getAssetByCode('BRU5032')).toMatchObject(gisibAssetResponse);
+			expect(httpService.post).toHaveBeenCalledWith(
+				'https://test.nl/api/api/Collections/Civiele constructie/WithFilter/items',
+				{ headers: { Authorization: 'Bearer __TOKEN__' }, data },
+			);
+		});
+		test('Should throw unauthorised httpException', async () => {
+			const errorMessage = 'Test error message';
+			httpService.post.mockImplementation(() => {
+				throw new HttpException(errorMessage, 401);
+			});
+			const repo = new GisibRepository(httpService, configService);
+			jest.spyOn(repo, 'login').mockResolvedValue('__TOKEN__');
+			await expect(repo.getAssetByCode('__CODE__')).rejects.toThrow(HttpException);
 		});
 	});
 });

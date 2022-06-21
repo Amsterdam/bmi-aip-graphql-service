@@ -7,8 +7,8 @@ export type NENElement = {
 		GUID: string;
 		Id: number;
 		Description: string;
-		IMGeoId: string | null;
-		Valid_Till: string | null;
+		IMGeoId: undefined;
+		Valid_Till: undefined;
 		LastUpdate: string;
 		Revisie: number;
 	};

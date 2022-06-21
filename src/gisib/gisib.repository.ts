@@ -6,6 +6,7 @@ import { catchError, map, single } from 'rxjs';
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
 import { GisibAssetResponse } from './types/GisibAssetResponse';
+import { GisibAsset } from './types/GisibAsset';
 
 @Injectable()
 export class GisibRepository {
@@ -88,25 +89,25 @@ export class GisibRepository {
 		});
 	}
 
-	public getAssetByCode(code): Promise<GisibAssetResponse> {
+	public getAssetByCode(assetId): Promise<GisibAsset | undefined> {
 		return this.getGisbDataWithFilter(
-			code,
+			assetId,
 			'Civiele constructie.Id',
 			`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`,
 		);
 	}
 
-	public getAssetElements(code): Promise<GisibAssetResponse> {
+	public getAssetElements(elementId): Promise<GisibAssetResponse> {
 		return this.getGisbDataWithFilter(
-			code,
+			elementId,
 			'NEN Element.Id',
 			`${this.apiUrl}/Collections/NEN Element/WithFilter/items`,
 		);
 	}
 
-	public getElementUnits(code): Promise<GisibAssetResponse> {
+	public getElementUnits(unitId): Promise<GisibAssetResponse> {
 		return this.getGisbDataWithFilter(
-			code,
+			unitId,
 			'NEN Bouwdeel.Id',
 			`${this.apiUrl}/Collections/NEN Bouwdeel/WithFilter/items`,
 		);

@@ -1,6 +1,6 @@
-import { GisibAsset } from './GisibAsset';
+import { GisibUnit } from './GisibUnit';
 
-export type GisibAssetResponse = {
+export type GisibUnitResponse = {
 	type: string;
 	crs: {
 		type: string;
@@ -16,5 +16,5 @@ export type GisibAssetResponse = {
 			href: string;
 		},
 	];
-	features: GisibAsset[];
+	features: GisibUnit[];
 };

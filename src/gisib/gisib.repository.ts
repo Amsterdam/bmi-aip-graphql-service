@@ -5,8 +5,11 @@ import { catchError, map, single } from 'rxjs';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
-import { GisibAssetResponse } from './types/GisibAssetResponse';
+import { GisibResponse } from './types/GisibResponse';
+import { GisibFeature } from './types/GisibFeature';
 import { GisibAsset } from './types/GisibAsset';
+import { GisibElement } from './types/GisibElement';
+import { GisibUnit } from './types/GisibUnit';
 
 @Injectable()
 export class GisibRepository {
@@ -58,19 +61,23 @@ export class GisibRepository {
 		});
 	}
 
-	public async getGisbDataWithFilter<T = any>(code: string, property: string, url: string): Promise<T> {
+	public async getGisibDataWithFilter<T = any>(
+		value: string,
+		property: string,
+		url: string,
+	): Promise<GisibResponse<T>> {
 		const token = await this.login();
 
 		return new Promise((resolve) => {
 			this.httpService
-				.post<T>(url, {
+				.post<GisibResponse<T>>(url, {
 					headers: { Authorization: `Bearer ${token}` },
 					data: [
 						{
 							Criterias: [
 								{
 									Property: property,
-									Value: code,
+									Value: value,
 									Operator: 'Equal',
 								},
 							],
@@ -85,32 +92,35 @@ export class GisibRepository {
 						throw new HttpException(e.statusText, e.status);
 					}),
 				)
-				.subscribe((value) => resolve(value));
+				.subscribe((v) => resolve(v));
 		});
 	}
 
-	public getAssetByCode(assetId): Promise<GisibAsset | undefined> {
-		return this.getGisbDataWithFilter(
-			assetId,
-			'Civiele constructie.Id',
+	public async getAssetByCode(code): Promise<GisibFeature<GisibAsset> | undefined> {
+		const { features } = await this.getGisibDataWithFilter<GisibAsset>(
+			code,
+			'Objectnummer',
 			`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`,
 		);
+		return features?.[0].properties.Objectnummer === code ? features?.[0] : undefined;
 	}
 
-	public getAssetElements(elementId): Promise<GisibAssetResponse> {
-		return this.getGisbDataWithFilter(
-			elementId,
-			'NEN Element.Id',
+	public async getAssetElements(assetId): Promise<GisibFeature<GisibElement>[]> {
+		const { features } = await this.getGisibDataWithFilter<GisibElement>(
+			assetId,
+			'Civiele constructie.Id',
 			`${this.apiUrl}/Collections/NEN Element/WithFilter/items`,
 		);
+		return features;
 	}
 
-	public getElementUnits(unitId): Promise<GisibAssetResponse> {
-		return this.getGisbDataWithFilter(
-			unitId,
-			'NEN Bouwdeel.Id',
+	public async getElementUnits(elementId): Promise<GisibFeature<GisibUnit>[]> {
+		const { features } = await this.getGisibDataWithFilter<GisibUnit>(
+			elementId,
+			'NEN Element.Id',
 			`${this.apiUrl}/Collections/NEN Bouwdeel/WithFilter/items`,
 		);
+		return features;
 	}
 
 	public getNENStandardElements(): Promise<NENElement[]> {

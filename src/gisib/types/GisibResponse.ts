@@ -1,7 +1,7 @@
-import { GisibAsset } from './GisibAsset';
+import { GisibFeature } from './GisibFeature';
 
-export type GisibAssetResponse = {
-	type: string;
+export type GisibResponse<T> = {
+	type: 'FeatureCollection';
 	crs: {
 		type: string;
 		properties: {
@@ -16,5 +16,5 @@ export type GisibAssetResponse = {
 			href: string;
 		},
 	];
-	features: GisibAsset[];
+	features: GisibFeature<T>[];
 };

@@ -48,6 +48,18 @@ node_modules/.bin/prisma generate
 
 You might have to restart the TypeScript service in IntelliJ after this to re-index the regenerated prisma client.
 
+## GISIB API
+
+This project contains a [GISIB](https://www.gisib.nl/) API integration. At the time of writing the OpenAPI 
+specification that describes this API does not provide information on the shape of the various GISIB entities. For the 
+time being, while we can not generate TypeScript definitions from the OpenAPI specification 
+using a library, a quick 'n dirty generator was written to avoid having to construct and maintain these type 
+definitions manually. To generate these type definitions, ensure the GISIB_API_* environment variables are populated 
+and then run:
+```shell
+npm run generate:gisib-api-types
+```
+
 ## License
 
 MPL-2.0. See `./LICENSE`

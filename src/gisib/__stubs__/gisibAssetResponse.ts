@@ -1,8 +1,9 @@
-import { GisibAssetResponse } from '../types/GisibAssetResponse';
+import { GisibResponse } from '../types/GisibResponse';
+import { GisibAsset } from '../types/GisibAsset';
 
-import { gisibAsset } from './GisibAsset';
+import { gisibAsset } from './gisibAsset';
 
-export const gisibAssetResponse: GisibAssetResponse = {
+export const gisibAssetResponse: GisibResponse<GisibAsset> = {
 	type: 'FeatureCollection',
 	crs: {
 		type: 'name',
@@ -30,5 +31,15 @@ export const gisibAssetResponse: GisibAssetResponse = {
 		// 	href: "/api/OGCCollections/Civiele constructie/items?crs=28992&limit=20&offset=0"
 		// }
 	],
-	features: gisibAsset,
+	features: [
+		{
+			type: 'Feature',
+			geometry: {
+				type: '',
+				crs: null,
+				coordinates: [[[]]],
+			},
+			properties: gisibAsset,
+		},
+	],
 };

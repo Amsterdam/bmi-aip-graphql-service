@@ -22,7 +22,8 @@
 		"ci:test": "jest --ci --reporters=default",
 		"ci:lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
 		"prepare": "husky install",
-		"prisma": "prisma"
+		"prisma": "prisma",
+		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate:gisib-api-types/index.ts"
 	},
 	"dependencies": {
 		"@casl/ability": "^5.4.3",

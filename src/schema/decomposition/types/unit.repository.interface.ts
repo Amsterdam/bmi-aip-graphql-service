@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateUnitInput } from '../dto/create-unit.input';
+import { UpdateUnitInput } from '../dto/update-unit.input';
 
 const units = Prisma.validator<Prisma.unitsArgs>()({
 	select: {
@@ -23,10 +24,13 @@ const units = Prisma.validator<Prisma.unitsArgs>()({
 		isStructuralObjectSpecific: true,
 		isElectricalObjectSpecific: true,
 		isRelevant: true,
+		deleted_at: true,
 	},
 });
 export type Unit = Prisma.unitsGetPayload<typeof units>;
 
 export interface IUnitRepository {
 	createUnit(input: CreateUnitInput): Promise<Unit>;
+	updateUnit(input: UpdateUnitInput): Promise<Unit>;
+	deleteUnit(identifier: string): Promise<Unit>;
 }

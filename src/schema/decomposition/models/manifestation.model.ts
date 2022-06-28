@@ -44,4 +44,7 @@ export class Manifestation {
 
 	@Field((type) => Number, { nullable: true })
 	constructionYear?: number;
+
+	@Field((type) => String, { nullable: true })
+	deletedAt: string;
 }

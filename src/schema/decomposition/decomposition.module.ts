@@ -18,6 +18,12 @@ import { UnitRepository } from './unit.repository';
 import { UnitService } from './unit.service';
 import { CreateElementHandler } from './commands/create-element.handler';
 import { ElementRepository } from './element.repository';
+import { UpdateElementHandler } from './commands/update-element.handler';
+import { UpdateManifestationHandler } from './commands/update-manifestation.handler';
+import { UpdateUnitHandler } from './commands/update-unit.handler';
+import { DeleteElementHandler } from './commands/delete-element.handler';
+import { DeleteUnitHandler } from './commands/delete-unit.handler';
+import { DeleteManifestationHandler } from './commands/delete-manifestation.handler';
 import { DecompositionResolver } from './decomposition.resolver';
 import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
 import { FindElementUnitsHandler } from './commands/find-element-units.handler';
@@ -36,6 +42,12 @@ import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 		CreateElementHandler,
 		CreateUnitHandler,
 		CreateManifestationHandler,
+		UpdateElementHandler,
+		UpdateUnitHandler,
+		UpdateManifestationHandler,
+		DeleteElementHandler,
+		DeleteUnitHandler,
+		DeleteManifestationHandler,
 		PrismaService,
 		DecompositionResolver,
 		FindSurveyElementsHandler,

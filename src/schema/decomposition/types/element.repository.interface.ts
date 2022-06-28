@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateElementInput } from '../dto/create-element.input';
+import { UpdateElementInput } from '../dto/update-element.input';
 
 const elements = Prisma.validator<Prisma.elementsArgs>()({
 	select: {
@@ -23,10 +24,13 @@ const elements = Prisma.validator<Prisma.elementsArgs>()({
 		isStructuralObjectSpecific: true,
 		isElectricalObjectSpecific: true,
 		isRelevant: true,
+		deleted_at: true,
 	},
 });
 export type Element = Prisma.elementsGetPayload<typeof elements>;
 
 export interface IElementRepository {
 	createElement(input: CreateElementInput): Promise<Element>;
+	updateElement(input: UpdateElementInput): Promise<Element>;
+	deleteElement(identifier: string): Promise<Element>;
 }

@@ -17,6 +17,7 @@ export class ManifestationFactory {
 		quantity,
 		quantityUnitOfMeasurement,
 		constructionYear,
+		deleted_at: deletedAt,
 	}: DomainManifestation): Manifestation {
 		const manifestation = new Manifestation();
 		manifestation.id = id;
@@ -33,6 +34,7 @@ export class ManifestationFactory {
 		manifestation.quantity = quantity;
 		manifestation.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
 		manifestation.constructionYear = constructionYear;
+		manifestation.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return manifestation;
 	}
 }

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
 import { Manifestation, IManifestationRepository } from './types/manifestation.repository.interface';
 import { CreateManifestationInput } from './dto/create-manifestation.input';
+import { UpdateManifestationInput } from './dto/update-manifestation.input';
 
 @Injectable()
 export class ManifestationRepository implements IManifestationRepository {
@@ -40,6 +42,44 @@ export class ManifestationRepository implements IManifestationRepository {
 				constructionYear,
 				gisibId,
 			},
+		});
+	}
+
+	async updateManifestation({
+		id,
+		name,
+		code,
+		location,
+		material,
+		quantity,
+		quantityUnitOfMeasurement,
+		constructionYear,
+	}: UpdateManifestationInput): Promise<Manifestation> {
+		const data: Prisma.manifestationsUpdateInput = {
+			id,
+			name,
+			code,
+			location,
+			material,
+			quantity,
+			quantityUnitOfMeasurement,
+			constructionYear,
+		};
+
+		return this.prisma.manifestations.update({
+			where: { id },
+			data,
+		});
+	}
+
+	async deleteManifestation(identifier: string): Promise<Manifestation> {
+		const data: Prisma.manifestationsUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.manifestations.update({
+			where: { id: identifier },
+			data,
 		});
 	}
 }

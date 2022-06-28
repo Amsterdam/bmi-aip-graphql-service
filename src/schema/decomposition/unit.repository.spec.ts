@@ -3,12 +3,13 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { UnitRepository } from './unit.repository';
-import { domainUnit, unitInput } from './__stubs__';
+import { domainUnit, unitInput, updateUnitInput, deletedUnit } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	units: {
 		create: jest.fn().mockResolvedValue(domainUnit),
 		findMany: jest.fn().mockResolvedValue([domainUnit]),
+		update: jest.fn().mockResolvedValue(domainUnit),
 	},
 	...(<any>{}),
 };
@@ -59,5 +60,40 @@ describe('UnitRepository', () => {
 			},
 		});
 		expect(units).toEqual([domainUnit]);
+	});
+
+	test('updateUnit()', async () => {
+		const repo = new UnitRepository(prismaServiceMock);
+		await repo.updateUnit(updateUnitInput);
+		expect(prismaServiceMock.units.update).toHaveBeenCalledWith({
+			where: { id: updateUnitInput.id },
+			data: expect.objectContaining({
+				code: '__CODE__',
+				name: '__NAME__',
+				location: '__LOCATION__',
+				quantity: 3,
+				quantityUnitOfMeasurement: 'm2',
+				constructionYear: 2010,
+				material: '__MATERIAL__',
+				isRelevant: true,
+				isStructural: true,
+				isElectrical: false,
+				isStructuralObjectSpecific: false,
+				isElectricalObjectSpecific: false,
+			}),
+		});
+	});
+
+	test('deleteUnit', async () => {
+		// @ts-ignore
+		prismaServiceMock.units.update.mockResolvedValue(deletedUnit);
+		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const repo = new UnitRepository(prismaServiceMock);
+		const unit = await repo.deleteUnit(identifier);
+		expect(prismaServiceMock.units.update).toHaveBeenCalledWith({
+			where: { id: identifier },
+			data: expect.objectContaining({}),
+		});
+		expect(unit.deleted_at instanceof Date).toBe(true);
 	});
 });

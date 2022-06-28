@@ -63,4 +63,7 @@ export class Element {
 
 	@Field((type) => [Unit])
 	units: Unit[];
+
+	@Field((type) => String, { nullable: true })
+	deletedAt: string;
 }

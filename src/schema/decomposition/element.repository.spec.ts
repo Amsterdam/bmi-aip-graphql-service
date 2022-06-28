@@ -3,18 +3,19 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ElementRepository } from './element.repository';
-import { domainElement, elementInput } from './__stubs__';
+import { deletedElement, domainElement, elementInput, updateElementInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
 		create: jest.fn().mockResolvedValue(domainElement),
 		findMany: jest.fn().mockResolvedValue([domainElement]),
+		update: jest.fn().mockResolvedValue(domainElement),
 	},
 	...(<any>{}),
 };
 
 describe('ElementRepository', () => {
-	test('create()', async () => {
+	test('createElement()', async () => {
 		const repo = new ElementRepository(prismaServiceMock);
 		await repo.createElement(elementInput);
 		expect(prismaServiceMock.elements.create).toHaveBeenCalledWith({
@@ -58,5 +59,46 @@ describe('ElementRepository', () => {
 			where: { surveyId: '__SURVEY_ID__' },
 		});
 		expect(elements).toEqual([domainElement]);
+	});
+
+	test('updateElement()', async () => {
+		const repo = new ElementRepository(prismaServiceMock);
+		await repo.updateElement(updateElementInput);
+		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
+			where: { id: updateElementInput.id },
+			data: expect.objectContaining({
+				elementCategories: {
+					connect: {
+						id: 'a13d3055-9447-6178-91d7-386ebbc418f4',
+					},
+				},
+				code: '__CODE__',
+				name: '__NAME__',
+				location: '__LOCATION__',
+				constructionYear: 2010,
+				isRelevant: true,
+				isStructural: true,
+				isElectrical: false,
+				isStructuralObjectSpecific: false,
+				isElectricalObjectSpecific: false,
+				constructionType: '',
+				elementGroupName: '',
+				isArchived: false,
+				gisibId: null,
+			}),
+		});
+	});
+
+	test('deleteElement', async () => {
+		// @ts-ignore
+		prismaServiceMock.elements.update.mockResolvedValue(deletedElement);
+		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const repo = new ElementRepository(prismaServiceMock);
+		const element = await repo.deleteElement(identifier);
+		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
+			where: { id: identifier },
+			data: expect.objectContaining({}),
+		});
+		expect(element.deleted_at instanceof Date).toBe(true);
 	});
 });

@@ -6,6 +6,7 @@ import { newId } from '../../utils';
 
 import { Unit, IUnitRepository } from './types/unit.repository.interface';
 import { CreateUnitInput } from './dto/create-unit.input';
+import { UpdateUnitInput } from './dto/update-unit.input';
 
 @Injectable()
 export class UnitRepository implements IUnitRepository {
@@ -58,6 +59,56 @@ export class UnitRepository implements IUnitRepository {
 			where: {
 				elementId,
 			},
+		});
+	}
+
+	async updateUnit({
+		id,
+		name,
+		code,
+		location,
+		gisibId,
+		material,
+		quantity,
+		quantityUnitOfMeasurement,
+		constructionYear,
+		isStructural,
+		isElectrical,
+		isStructuralObjectSpecific,
+		isElectricalObjectSpecific,
+		isRelevant,
+	}: UpdateUnitInput): Promise<Unit> {
+		const data: Prisma.unitsUpdateInput = {
+			id,
+			name,
+			code,
+			location,
+			gisibId,
+			material,
+			quantity,
+			quantityUnitOfMeasurement,
+			constructionYear,
+			isStructural,
+			isElectrical,
+			isStructuralObjectSpecific,
+			isElectricalObjectSpecific,
+			isRelevant,
+		};
+
+		return this.prisma.units.update({
+			where: { id },
+			data,
+		});
+	}
+
+	async deleteUnit(identifier: string): Promise<Unit> {
+		const data: Prisma.unitsUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.units.update({
+			where: { id: identifier },
+			data,
 		});
 	}
 }

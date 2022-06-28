@@ -2,6 +2,7 @@ import { CreateUnitInput } from '../dto/create-unit.input';
 import { Unit as DomainUnit } from '../types/unit.repository.interface';
 import { UnitFactory } from '../unit.factory';
 import { Unit } from '../models/unit.model';
+import { UpdateUnitInput } from '../dto/update-unit.input';
 
 const unit1 = new Unit();
 unit1.id = '7fc02001-838b-40a9-967a-036ea5391eff';
@@ -36,6 +37,7 @@ const unitRaw = {
 	isElectrical: false,
 	isStructuralObjectSpecific: false,
 	isElectricalObjectSpecific: false,
+	deleted_at: null,
 };
 
 export const unitInput = Object.keys(unitRaw).reduce((input, key) => {
@@ -52,4 +54,18 @@ export const domainUnit: DomainUnit = {
 	observationPointId: null,
 };
 
+const updateUnit = new UpdateUnitInput();
+updateUnit.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateUnitInput = Object.keys(unitRaw)
+	.filter((key) => !['objectId', 'surveyId', 'elementId'].includes(key))
+	.reduce((input, key) => {
+		input[key] = unitRaw[key];
+		return input;
+	}, updateUnit);
+
 export const unit = UnitFactory.CreateUnit(domainUnit);
+
+export const deletedUnit: DomainUnit = {
+	...domainUnit,
+	deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
+};

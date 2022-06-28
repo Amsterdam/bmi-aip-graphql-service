@@ -5,7 +5,9 @@ import { Manifestation } from './models/manifestation.model';
 describe('ManifestationFactory', () => {
 	test('CreateManifestation() constructs an instance of a Manifestation GraphQL model', () => {
 		const result = ManifestationFactory.CreateManifestation(domainManifestation);
-		expect(result).toEqual(expect.objectContaining(domainManifestation));
+		const object = { ...domainManifestation, deletedAt: domainManifestation.deleted_at };
+		delete object.deleted_at;
+		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(Manifestation);
 	});
 });

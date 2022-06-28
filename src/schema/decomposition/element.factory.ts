@@ -26,6 +26,7 @@ export class ElementFactory {
 		categoryId,
 		elementGroupName,
 		isArchived,
+		deleted_at: deletedAt,
 	}: DomainElement): Element {
 		const element = new Element();
 		element.id = id;
@@ -47,6 +48,7 @@ export class ElementFactory {
 		element.isStructuralObjectSpecific = !!isStructuralObjectSpecific;
 		element.isRelevant = !!isRelevant;
 		element.isArchived = !!isArchived;
+		element.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return element;
 	}
 

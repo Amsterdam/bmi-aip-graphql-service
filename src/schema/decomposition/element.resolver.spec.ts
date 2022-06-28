@@ -5,23 +5,28 @@ import { PrismaService } from '../../prisma.service';
 
 import { ElementResolver } from './element.resolver';
 import { ElementService } from './element.service';
-import { domainElement, elementInput } from './__stubs__';
+import { ElementRepository } from './element.repository';
+import { domainElement, element1, element2, elementInput, updateElementInput, deletedElement } from './__stubs__';
 import { CreateElementCommand } from './commands/create-element.command';
 import { Element } from './models/element.model';
-import { ElementRepository } from './element.repository';
+import { UpdateElementCommand } from './commands/update-element.command';
+import { DeleteElementCommand } from './commands/delete-element.command';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
 
-const commandBusMock: MockedObjectDeep<CommandBus> = {
+const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
 		switch (command.constructor.name) {
 			case CreateElementCommand.name:
+			case UpdateElementCommand.name:
 				return domainElement;
+			case DeleteElementCommand.name:
+				return deletedElement;
 		}
 	}),
 	...(<any>{}),
-};
+});
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
@@ -30,6 +35,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 describe('Decomposition / Element / Resolver', () => {
 	describe('createElement', () => {
 		test('creates and returns an element', async () => {
+			const commandBusMock = getCommandBusMock();
 			const resolver = new ElementResolver(
 				new ElementService(new ElementRepository(prismaServiceMock)),
 				commandBusMock,
@@ -41,5 +47,48 @@ describe('Decomposition / Element / Resolver', () => {
 			expect(result).toBeInstanceOf(Element);
 			expect(typeof result.id).toBe('string');
 		});
+	});
+
+	describe('updateElement', () => {
+		test('updates and returns an element', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new ElementResolver(
+				new ElementService(new ElementRepository(prismaServiceMock)),
+				commandBusMock,
+			);
+			const result = await resolver.updateElement(updateElementInput);
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateElementCommand(updateElementInput));
+
+			expect(result).toBeInstanceOf(Element);
+			expect(result.id).toBe(updateElementInput.id);
+		});
+	});
+
+	describe('deleteElement', () => {
+		test('soft-deletes and returns an element', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new ElementResolver(
+				new ElementService(new ElementRepository(prismaServiceMock)),
+				commandBusMock,
+			);
+			const result = await resolver.deleteElement(domainElement.id);
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteElementCommand(domainElement.id));
+
+			expect(result).toBeInstanceOf(Element);
+			expect(result.id).toBe(domainElement.id);
+			expect(result.deletedAt).toBe('Thu, 09 Jun 2022 15:03:22 GMT');
+		});
+	});
+
+	test('getSurveyElements returns an array of element objects', async () => {
+		const commandBusMock = getCommandBusMock();
+		const resolver = new ElementResolver(
+			new ElementService(new ElementRepository(prismaServiceMock)),
+			commandBusMock,
+		);
+		const elements = await resolver.getSurveyElements('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		expect(elements).toEqual([element1, element2]);
 	});
 });

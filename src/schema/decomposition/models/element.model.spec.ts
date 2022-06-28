@@ -7,7 +7,7 @@ describe('Decomposition / Model / Element', () => {
 		element.code = '113';
 		element.objectId = '55bf8e88-6510-41f1-af52-e4f8c10573b9';
 		element.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
-		element.gisibId = '95af080a-5a72-4fbe-862a-e5c56088f137';
+		element.gisibId = 123;
 		element.location = 'Aan de zuidzijde';
 		element.name = 'Wegmarkering';
 		element.categoryId = 'c80f93ca-45e4-4147-bbab-28c16efc8168';
@@ -31,7 +31,7 @@ describe('Decomposition / Model / Element', () => {
 			constructionType: '7',
 			constructionYear: 2000,
 			elementGroupName: 'substructure',
-			gisibId: '95af080a-5a72-4fbe-862a-e5c56088f137',
+			gisibId: 123,
 			id: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 			isArchived: false,
 			isElectrical: true,

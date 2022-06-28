@@ -63,18 +63,18 @@ export class BaseUnitInput {
 	@Field({ nullable: true })
 	public isRelevant?: boolean;
 
-	@Field({ nullable: true })
 	@IsOptional()
-	@IsUUID()
-	public gisibId?: string;
+	@IsInt()
+	@Field({ nullable: true })
+	public gisibId?: number;
 
-	@Field({ nullable: true })
 	@IsOptional()
 	@IsUUID()
+	@Field({ nullable: true })
 	public conditionId?: string;
 
-	@Field({ nullable: true })
 	@IsOptional()
 	@IsUUID()
+	@Field({ nullable: true })
 	public observationPointId?: string;
 }

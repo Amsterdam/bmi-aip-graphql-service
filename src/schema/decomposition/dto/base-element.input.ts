@@ -64,9 +64,9 @@ export class BaseElementInput {
 	public isRelevant?: boolean;
 
 	@IsOptional()
-	@IsUUID()
+	@IsInt()
 	@Field({ nullable: true })
-	public gisibId?: string;
+	public gisibId?: number;
 
 	@IsOptional()
 	@IsUUID()

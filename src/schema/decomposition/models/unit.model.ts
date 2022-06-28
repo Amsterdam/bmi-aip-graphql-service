@@ -20,6 +20,9 @@ export class Unit {
 	@Field((type) => String)
 	surveyId: string;
 
+	@Field((type) => Number, { nullable: true })
+	gisibId?: number;
+
 	@Field((type) => String)
 	elementId: string;
 
@@ -40,9 +43,6 @@ export class Unit {
 
 	@Field((type) => Number, { nullable: true })
 	constructionYear?: number;
-
-	@Field((type) => String, { nullable: true })
-	gisibId?: string;
 
 	@Field((type) => Boolean)
 	isElectrical: boolean;

@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
+import { Unit } from './unit.model';
+
 @ObjectType({ description: 'element' })
 export class Element {
 	@Field((type) => String)
@@ -14,8 +16,8 @@ export class Element {
 	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => String, { nullable: true })
-	gisibId?: string;
+	@Field((type) => Number, { nullable: true })
+	gisibId?: number;
 
 	@Field((type) => String, { nullable: true })
 	conditionId?: string;
@@ -58,4 +60,7 @@ export class Element {
 
 	@Field((type) => Boolean)
 	isRelevant: boolean;
+
+	@Field((type) => [Unit])
+	units: Unit[];
 }

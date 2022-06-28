@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { catchError, map, single } from 'rxjs';
@@ -24,7 +24,7 @@ export class GisibRepository {
 	private apiKey = this.configService.get<string>('GISIB_API_KEY');
 
 	public login(): Promise<string> {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.httpService
 				.post<string>(`${this.apiUrl}/login`, {
 					Username: this.apiUsername,
@@ -38,7 +38,9 @@ export class GisibRepository {
 						throw new HttpException(e.statusText, e.status);
 					}),
 				)
-				.subscribe((token) => resolve(token));
+				.subscribe((token) => {
+					resolve(token);
+				});
 		});
 	}
 
@@ -96,27 +98,38 @@ export class GisibRepository {
 		});
 	}
 
-	public async getAssetByCode(code): Promise<GisibFeature<GisibAsset> | undefined> {
+	public async getAssetByCode(code): Promise<GisibFeature<GisibAsset>> {
 		const { features } = await this.getGisibDataWithFilter<GisibAsset>(
 			code,
 			'Objectnummer',
 			`${this.apiUrl}/Collections/Civiele constructie/WithFilter/items`,
 		);
-		return features?.[0].properties.Objectnummer === code ? features?.[0] : undefined;
+
+		if (features?.[0]?.properties?.Objectnummer !== code) {
+			throw new NotFoundException(`No GISIB asset found on code: ${code}`);
+		}
+
+		return features?.[0];
 	}
 
-	public async getAssetElements(assetId): Promise<GisibFeature<GisibElement>[]> {
+	/**
+	 * @param {number} gisibId From GisibAsset
+	 */
+	public async getAssetElements(gisibId: number): Promise<GisibFeature<GisibElement>[]> {
 		const { features } = await this.getGisibDataWithFilter<GisibElement>(
-			assetId,
+			String(gisibId),
 			'Civiele constructie.Id',
 			`${this.apiUrl}/Collections/NEN Element/WithFilter/items`,
 		);
 		return features;
 	}
 
-	public async getElementUnits(elementId): Promise<GisibFeature<GisibUnit>[]> {
+	/**
+	 * @param {number} gisibId From GisibElement
+	 */
+	public async getElementUnits(gisibId: number): Promise<GisibFeature<GisibUnit>[]> {
 		const { features } = await this.getGisibDataWithFilter<GisibUnit>(
-			elementId,
+			String(gisibId),
 			'NEN Element.Id',
 			`${this.apiUrl}/Collections/NEN Bouwdeel/WithFilter/items`,
 		);

@@ -8,6 +8,7 @@ import { domainUnit, unitInput } from './__stubs__';
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	units: {
 		create: jest.fn().mockResolvedValue(domainUnit),
+		findMany: jest.fn().mockResolvedValue([domainUnit]),
 	},
 	...(<any>{}),
 };
@@ -47,5 +48,16 @@ describe('UnitRepository', () => {
 				isElectricalObjectSpecific: false,
 			}),
 		});
+	});
+
+	test('getUnits()', async () => {
+		const repo = new UnitRepository(prismaServiceMock);
+		const units = await repo.getUnits('__ELEMENT_ID__');
+		expect(prismaServiceMock.units.findMany).toHaveBeenCalledWith({
+			where: {
+				elementId: '__ELEMENT_ID__',
+			},
+		});
+		expect(units).toEqual([domainUnit]);
 	});
 });

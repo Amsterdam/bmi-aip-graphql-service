@@ -52,4 +52,12 @@ export class UnitRepository implements IUnitRepository {
 
 		return this.prisma.units.create({ data });
 	}
+
+	public async getUnits(elementId: string): Promise<Unit[]> {
+		return this.prisma.units.findMany({
+			where: {
+				elementId,
+			},
+		});
+	}
 }

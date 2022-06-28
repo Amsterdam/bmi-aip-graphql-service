@@ -1,6 +1,24 @@
 import { CreateUnitInput } from '../dto/create-unit.input';
 import { Unit as DomainUnit } from '../types/unit.repository.interface';
 import { UnitFactory } from '../unit.factory';
+import { Unit } from '../models/unit.model';
+
+const unit1 = new Unit();
+unit1.id = '7fc02001-838b-40a9-967a-036ea5391eff';
+unit1.elementId = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
+unit1.code = '238';
+unit1.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
+unit1.location = 'Aan de zuidzijde';
+unit1.name = '__UNIT_1__';
+
+const unit2 = new Unit();
+unit2.id = 'fdda825d-386f-441a-aa09-fcd801f0bca5';
+unit2.elementId = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
+unit2.code = '113';
+unit2.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
+unit2.name = '__UNIT_2__';
+
+export { unit1, unit2 };
 
 const unitRaw = {
 	code: '__CODE__',

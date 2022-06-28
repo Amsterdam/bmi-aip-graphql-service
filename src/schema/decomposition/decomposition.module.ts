@@ -18,6 +18,9 @@ import { UnitRepository } from './unit.repository';
 import { UnitService } from './unit.service';
 import { CreateElementHandler } from './commands/create-element.handler';
 import { ElementRepository } from './element.repository';
+import { DecompositionResolver } from './decomposition.resolver';
+import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
+import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 
 @Module({
 	providers: [
@@ -34,6 +37,9 @@ import { ElementRepository } from './element.repository';
 		CreateUnitHandler,
 		CreateManifestationHandler,
 		PrismaService,
+		DecompositionResolver,
+		FindSurveyElementsHandler,
+		FindElementUnitsHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

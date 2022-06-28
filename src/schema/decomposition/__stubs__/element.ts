@@ -36,7 +36,7 @@ const elementRaw: Omit<DomainElement, 'id'> = {
 	constructionType: '',
 	elementGroupName: '',
 	isArchived: false,
-	gisibId: '',
+	gisibId: null,
 };
 
 export const elementInput = Object.keys(elementRaw).reduce((input, key) => {

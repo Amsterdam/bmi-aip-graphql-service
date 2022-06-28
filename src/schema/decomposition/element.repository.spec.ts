@@ -8,6 +8,7 @@ import { domainElement, elementInput } from './__stubs__';
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
 		create: jest.fn().mockResolvedValue(domainElement),
+		findMany: jest.fn().mockResolvedValue([domainElement]),
 	},
 	...(<any>{}),
 };
@@ -45,8 +46,17 @@ describe('ElementRepository', () => {
 				constructionType: '',
 				elementGroupName: '',
 				isArchived: false,
-				gisibId: '',
+				gisibId: null,
 			}),
 		});
+	});
+
+	test('getElements()', async () => {
+		const repo = new ElementRepository(prismaServiceMock);
+		const elements = await repo.getElements('__SURVEY_ID__');
+		expect(prismaServiceMock.elements.findMany).toHaveBeenCalledWith({
+			where: { surveyId: '__SURVEY_ID__' },
+		});
+		expect(elements).toEqual([domainElement]);
 	});
 });

@@ -454,8 +454,8 @@ model elements {
   isElementGroupNameObjectSpecific                                 Boolean                  @default(false)
   isRelevant                                                       Boolean                  @default(false)
   surveyId                                                         String?                  @db.Uuid
-  gisibId                                                          String?                  @db.Uuid
   deleted_at                                                       DateTime?                @db.Timestamptz(6)
+  gisibId                                                          Int?
   elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
   conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
   objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
@@ -475,12 +475,12 @@ model elements {
   @@index([categoryId])
   @@index([code])
   @@index([conditionId])
-  @@index([deleted_at], map: "elements_deleted_at_index")
   @@index([name])
   @@index([objectId])
   @@index([observationPointId])
   @@index([surveyId])
   @@index([surveyId, objectId])
+  @@index([deleted_at], map: "elements_deleted_at_index")
 }
 
 model failureModeDocuments {
@@ -845,8 +845,8 @@ model manifestations {
   quantityUnitOfMeasurement                                              String?                      @db.VarChar(4)
   constructionYear                                                       Int?
   surveyId                                                               String?                      @db.Uuid
-  gisibId                                                                String?                      @db.Uuid
   deleted_at                                                             DateTime?                    @db.Timestamptz(6)
+  gisibId                                                                Int?
   conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
   elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
   objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
@@ -866,11 +866,11 @@ model manifestations {
   utProjects                                                             utProjects[]
 
   @@index([conditionId])
-  @@index([deleted_at], map: "manifestations_deleted_at_index")
   @@index([elementId])
   @@index([observationPointId])
   @@index([surveyId, unitId])
   @@index([unitId])
+  @@index([deleted_at], map: "manifestations_deleted_at_index")
 }
 
 model measurementCandidates {
@@ -1460,8 +1460,8 @@ model units {
   isElectricalObjectSpecific                                    Boolean                      @default(false)
   isRelevant                                                    Boolean                      @default(false)
   surveyId                                                      String?                      @db.Uuid
-  gisibId                                                       String?                      @db.Uuid
   deleted_at                                                    DateTime?                    @db.Timestamptz(6)
+  gisibId                                                       Int?
   conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
   elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
   objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
@@ -1483,11 +1483,11 @@ model units {
 
   @@index([code])
   @@index([conditionId])
-  @@index([deleted_at], map: "units_deleted_at_index")
   @@index([elementId])
   @@index([name])
   @@index([observationPointId])
   @@index([surveyId, elementId])
+  @@index([deleted_at], map: "units_deleted_at_index")
 }
 
 model userContracts {

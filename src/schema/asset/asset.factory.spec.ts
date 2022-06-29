@@ -1,3 +1,6 @@
+import { gisibAsset } from '../../gisib/__stubs__/gisibAsset';
+import { AssetStatuses } from '../../types';
+
 import { AssetFactory } from './asset.factory';
 import { dbAsset } from './__stubs__/dbAsset';
 import { Asset } from './models/asset.model';
@@ -17,5 +20,14 @@ describe('AssetFactory', () => {
 		const asset = new Asset();
 		asset.code = 'BRU001';
 		expect(AssetFactory.FromCode('BRU001')).toEqual(asset);
+	});
+
+	test('FromGisibAsset() constructs an Asset instance from a GisibFeature<GisibAsset>', () => {
+		const { Id, Objectnaam, Status } = gisibAsset.properties;
+		const asset = new Asset();
+		asset.gisibId = Id;
+		asset.name = Objectnaam;
+		asset.status = (Status?.Description as keyof typeof AssetStatuses) || null;
+		expect(AssetFactory.FromGisibAsset(gisibAsset)).toEqual(asset);
 	});
 });

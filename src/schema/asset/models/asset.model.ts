@@ -1,11 +1,17 @@
+import { AssetStatuses } from '../../../types';
+
 export class Asset {
 	public id: string;
 
-	public code: string;
+	public gisibId: number;
 
-	public status: string;
+	public name: string;
 
-	public isDemo: boolean;
+	public code: string | null;
+
+	public location: string | null;
+
+	public status: keyof typeof AssetStatuses | null;
 
 	public ownerCompanyId: string;
 

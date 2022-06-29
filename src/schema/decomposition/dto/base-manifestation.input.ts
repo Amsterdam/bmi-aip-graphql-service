@@ -35,8 +35,8 @@ export class BaseManifestationInput {
 
 	@Field({ nullable: true })
 	@IsOptional()
-	@IsUUID()
-	public gisibId?: string;
+	@IsInt()
+	public gisibId?: number;
 
 	@Field({ nullable: true })
 	@IsOptional()

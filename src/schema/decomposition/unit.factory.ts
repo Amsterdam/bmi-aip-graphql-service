@@ -1,5 +1,9 @@
+import { GisibUnit } from '../../gisib/types/GisibUnit';
+import { GisibFeature } from '../../gisib/types/GisibFeature';
+
 import { Unit } from './models/unit.model';
 import { Unit as DomainUnit } from './types/unit.repository.interface';
+import { CreateUnitInput } from './dto/create-unit.input';
 
 export class UnitFactory {
 	static CreateUnit({
@@ -45,6 +49,26 @@ export class UnitFactory {
 		unit.isStructuralObjectSpecific = !!isStructuralObjectSpecific;
 		unit.isRelevant = !!isRelevant;
 		unit.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
+		return unit;
+	}
+
+	/**
+	 * TODO Once a decision is made on the role GISIB will play in relation to AIP this can be refined/completed
+	 * @see https://teambmi.atlassian.net/wiki/spaces/TB/pages/1413021697/AIP+Decomposition+-+GISIB+mapping
+	 */
+	static CreateUnitInput(
+		objectId: string,
+		surveyId: string,
+		elementId: string,
+		{ properties }: GisibFeature<GisibUnit>,
+	): CreateUnitInput {
+		const unit = new CreateUnitInput();
+		unit.objectId = objectId;
+		unit.surveyId = surveyId;
+		unit.gisibId = properties.Id;
+		unit.elementId = elementId;
+		unit.name = properties['NEN Type bouwdeel'].Description;
+		unit.code = properties.Code;
 		return unit;
 	}
 }

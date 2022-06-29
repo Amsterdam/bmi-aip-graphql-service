@@ -8,6 +8,7 @@ import { deletedElement, domainElement, elementInput, updateElementInput } from 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
 		create: jest.fn().mockResolvedValue(domainElement),
+		findMany: jest.fn().mockResolvedValue([domainElement]),
 		update: jest.fn().mockResolvedValue(domainElement),
 	},
 	...(<any>{}),
@@ -46,9 +47,18 @@ describe('ElementRepository', () => {
 				constructionType: '',
 				elementGroupName: '',
 				isArchived: false,
-				gisibId: '',
+				gisibId: null,
 			}),
 		});
+	});
+
+	test('getElements()', async () => {
+		const repo = new ElementRepository(prismaServiceMock);
+		const elements = await repo.getElements('__SURVEY_ID__');
+		expect(prismaServiceMock.elements.findMany).toHaveBeenCalledWith({
+			where: { surveyId: '__SURVEY_ID__' },
+		});
+		expect(elements).toEqual([domainElement]);
 	});
 
 	test('updateElement()', async () => {
@@ -74,7 +84,7 @@ describe('ElementRepository', () => {
 				constructionType: '',
 				elementGroupName: '',
 				isArchived: false,
-				gisibId: '',
+				gisibId: null,
 			}),
 		});
 	});

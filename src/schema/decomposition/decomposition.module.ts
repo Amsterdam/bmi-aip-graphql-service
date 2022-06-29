@@ -24,6 +24,9 @@ import { UpdateUnitHandler } from './commands/update-unit.handler';
 import { DeleteElementHandler } from './commands/delete-element.handler';
 import { DeleteUnitHandler } from './commands/delete-unit.handler';
 import { DeleteManifestationHandler } from './commands/delete-manifestation.handler';
+import { DecompositionResolver } from './decomposition.resolver';
+import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
+import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 
 @Module({
 	providers: [
@@ -46,6 +49,9 @@ import { DeleteManifestationHandler } from './commands/delete-manifestation.hand
 		DeleteUnitHandler,
 		DeleteManifestationHandler,
 		PrismaService,
+		DecompositionResolver,
+		FindSurveyElementsHandler,
+		FindElementUnitsHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

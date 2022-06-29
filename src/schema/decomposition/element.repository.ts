@@ -56,6 +56,14 @@ export class ElementRepository implements IElementRepository {
 		return this.prisma.elements.create({ data });
 	}
 
+	async getElements(surveyId: string): Promise<Element[]> {
+		return this.prisma.elements.findMany({
+			where: {
+				surveyId,
+			},
+		});
+	}
+
 	async updateElement({
 		id,
 		name,

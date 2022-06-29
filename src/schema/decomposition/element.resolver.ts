@@ -48,16 +48,8 @@ export class ElementResolver {
 
 	@Query((returns) => [Element], { name: 'decompositionElements' })
 	@Roles({ roles: ['realm:aip_owner'] })
-	async getSurveyElements(
-		@Args('surveyId', { type: () => String }) surveyId: string,
-		@Args('code', { type: () => String, nullable: true }) code?: string,
-	) {
-		return this.elementService.getElements(surveyId, code);
-	}
-
-	@Query((returns) => Element, { name: 'decompositionElement' })
-	async getElementById(@Args('id', { type: () => String }) elementId: string) {
-		return this.elementService.getElementById(elementId);
+	async getSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string) {
+		return this.elementService.getElements(surveyId);
 	}
 
 	@Query((returns) => [Element], { name: 'tester' })

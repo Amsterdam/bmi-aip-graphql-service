@@ -8,6 +8,8 @@ import { CreateManifestationCommand } from './commands/create-manifestation.comm
 import { Manifestation } from './models/manifestation.model';
 import { UpdateManifestationCommand } from './commands/update-manifestation.command';
 import { DeleteManifestationCommand } from './commands/delete-manifestation.command';
+import { PrismaService } from '../../prisma.service';
+import { ManifestationRepository } from './manifestation.repository';
 
 jest.mock('./manifestation.service');
 
@@ -24,11 +26,18 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	...(<any>{}),
 });
 
+const prismaServiceMock: MockedObjectDeep<PrismaService> = {
+	...(<any>{}),
+};
+
 describe('Decomposition / Manifestation / Resolver', () => {
 	describe('createManifestation', () => {
 		test('creates and returns a manifestation', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new ManifestationResolver(new ManifestationService(), commandBusMock);
+			const resolver = new ManifestationResolver(
+				new ManifestationService(new ManifestationRepository(prismaServiceMock)),
+				commandBusMock,
+			);
 			const result = await resolver.createManifestation(manifestationInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateManifestationCommand(manifestationInput));
@@ -41,7 +50,10 @@ describe('Decomposition / Manifestation / Resolver', () => {
 	describe('updateManifestation', () => {
 		test('updates and returns a manifestation', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new ManifestationResolver(new ManifestationService(), commandBusMock);
+			const resolver = new ManifestationResolver(
+				new ManifestationService(new ManifestationRepository(prismaServiceMock)),
+				commandBusMock,
+			);
 			const result = await resolver.updateManifestation(updateManifestationInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(
@@ -56,7 +68,10 @@ describe('Decomposition / Manifestation / Resolver', () => {
 	describe('deleteManifestation', () => {
 		test('soft-deletes and returns a manifestation', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new ManifestationResolver(new ManifestationService(), commandBusMock);
+			const resolver = new ManifestationResolver(
+				new ManifestationService(new ManifestationRepository(prismaServiceMock)),
+				commandBusMock,
+			);
 			const result = await resolver.deleteManifestation(domainManifestation.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteManifestationCommand(domainManifestation.id));

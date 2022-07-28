@@ -8,6 +8,7 @@ import { deletedManifestation, domainManifestation, manifestationInput, updateMa
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	manifestations: {
 		create: jest.fn().mockResolvedValue(domainManifestation),
+		findMany: jest.fn().mockResolvedValue([domainManifestation]),
 		update: jest.fn().mockResolvedValue(domainManifestation),
 	},
 	...(<any>{}),
@@ -46,6 +47,17 @@ describe('ManifestationRepository', () => {
 				quantityUnitOfMeasurement: 'm2',
 			}),
 		});
+	});
+
+	test('getManifestations()', async () => {
+		const repo = new ManifestationRepository(prismaServiceMock);
+		const manifestations = await repo.getManifestations('__UNIT_ID__');
+		expect(prismaServiceMock.manifestations.findMany).toHaveBeenCalledWith({
+			where: {
+				unitId: '__UNIT_ID__',
+			},
+		});
+		expect(manifestations).toEqual([domainManifestation]);
 	});
 
 	test('updateManifestation()', async () => {

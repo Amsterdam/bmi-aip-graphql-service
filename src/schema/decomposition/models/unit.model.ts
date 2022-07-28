@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
+import { Manifestation } from './manifestation.model';
+
 @ObjectType({ description: 'unit' })
 export class Unit {
 	@Field((type) => String)
@@ -58,6 +60,9 @@ export class Unit {
 
 	@Field((type) => Boolean)
 	isRelevant: boolean;
+
+	@Field((type) => [Manifestation])
+	manifestations: Manifestation[];
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;

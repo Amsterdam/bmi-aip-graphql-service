@@ -45,6 +45,14 @@ export class ManifestationRepository implements IManifestationRepository {
 		});
 	}
 
+	public async getManifestations(unitId: string): Promise<Manifestation[]> {
+		return this.prisma.manifestations.findMany({
+			where: {
+				unitId,
+			},
+		});
+	}
+
 	async updateManifestation({
 		id,
 		name,

@@ -27,6 +27,7 @@ import { DeleteManifestationHandler } from './commands/delete-manifestation.hand
 import { DecompositionResolver } from './decomposition.resolver';
 import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
 import { FindElementUnitsHandler } from './commands/find-element-units.handler';
+import { FindUnitManifestationsHandler } from './commands/find-unit-manifestations.handler';
 
 @Module({
 	providers: [
@@ -52,6 +53,7 @@ import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 		DecompositionResolver,
 		FindSurveyElementsHandler,
 		FindElementUnitsHandler,
+		FindUnitManifestationsHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

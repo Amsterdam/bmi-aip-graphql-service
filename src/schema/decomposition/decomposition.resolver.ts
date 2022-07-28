@@ -6,6 +6,7 @@ import { Element } from './models/element.model';
 import { ElementService } from './element.service';
 import { Unit } from './models/unit.model';
 import { UnitService } from './unit.service';
+import { ManifestationService } from './manifestation.service';
 import { CreateDecompositionCommand } from './commands/create-decomposition.command';
 import { FindSurveyElementsCommand } from './commands/find-survey-elements.command';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
@@ -16,6 +17,7 @@ export class DecompositionResolver {
 	constructor(
 		private elementService: ElementService,
 		private unitService: UnitService,
+		private manifestationService: ManifestationService,
 		private commandBus: CommandBus,
 	) {}
 

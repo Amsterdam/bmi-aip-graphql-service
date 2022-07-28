@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { Unit as DomainUnit } from './types/unit.repository.interface';
@@ -10,6 +10,8 @@ import { UnitFactory } from './unit.factory';
 import { UpdateUnitInput } from './dto/update-unit.input';
 import { UpdateUnitCommand } from './commands/update-unit.command';
 import { DeleteUnitCommand } from './commands/delete-unit.command';
+import { Manifestation } from './models/manifestation.model';
+import { FindUnitManifestationsCommand } from './commands/find-unit-manifestations.command';
 
 @Resolver(() => Unit)
 export class UnitResolver {
@@ -34,5 +36,10 @@ export class UnitResolver {
 			new DeleteUnitCommand(identifier),
 		);
 		return UnitFactory.CreateUnit(domainUnit);
+	}
+
+	@ResolveField()
+	async manifestations(@Parent() { id }: Unit): Promise<Manifestation[]> {
+		return this.commandBus.execute<FindUnitManifestationsCommand>(new FindUnitManifestationsCommand(id));
 	}
 }

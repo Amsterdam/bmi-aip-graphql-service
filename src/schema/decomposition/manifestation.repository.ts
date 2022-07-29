@@ -90,4 +90,16 @@ export class ManifestationRepository implements IManifestationRepository {
 			data,
 		});
 	}
+
+	async deleteManifestationsForUnit(unitId: string): Promise<void> {
+		const manifestations = await this.prisma.manifestations.findMany({
+			where: {
+				unitId,
+			},
+			select: {
+				id: true,
+			},
+		});
+		await Promise.all(manifestations.map(({ id }) => this.deleteManifestation(id)));
+	}
 }

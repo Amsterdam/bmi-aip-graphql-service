@@ -14,9 +14,10 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
+const repo = new ManifestationRepository(prismaServiceMock);
+
 describe('ManifestationRepository', () => {
 	test('create()', async () => {
-		const repo = new ManifestationRepository(prismaServiceMock);
 		await repo.createManifestation(manifestationInput);
 		expect(prismaServiceMock.manifestations.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
@@ -50,7 +51,6 @@ describe('ManifestationRepository', () => {
 	});
 
 	test('getManifestations()', async () => {
-		const repo = new ManifestationRepository(prismaServiceMock);
 		const manifestations = await repo.getManifestations('__UNIT_ID__');
 		expect(prismaServiceMock.manifestations.findMany).toHaveBeenCalledWith({
 			where: {
@@ -61,7 +61,6 @@ describe('ManifestationRepository', () => {
 	});
 
 	test('updateManifestation()', async () => {
-		const repo = new ManifestationRepository(prismaServiceMock);
 		await repo.updateManifestation(updateManifestationInput);
 		expect(prismaServiceMock.manifestations.update).toHaveBeenCalledWith({
 			where: { id: updateManifestationInput.id },
@@ -82,12 +81,27 @@ describe('ManifestationRepository', () => {
 		// @ts-ignore
 		prismaServiceMock.manifestations.update.mockResolvedValue(deletedManifestation);
 		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
-		const repo = new ManifestationRepository(prismaServiceMock);
 		const manifestation = await repo.deleteManifestation(identifier);
 		expect(prismaServiceMock.manifestations.update).toHaveBeenCalledWith({
 			where: { id: identifier },
 			data: expect.objectContaining({}),
 		});
 		expect(manifestation.deleted_at instanceof Date).toBe(true);
+	});
+
+	test('deleteManifestationsForUnit', async () => {
+		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const uuid1 = '0cd685ff-8566-4f62-9757-65a16b483c2e';
+		const uuid2 = '1e76227d-cc0c-469f-8359-dee4dc74adba';
+		const deleteManifestationSpy = jest.spyOn(repo, 'deleteManifestation');
+		// @ts-ignore
+		prismaServiceMock.manifestations.findMany.mockResolvedValue([{ id: uuid1 }, { id: uuid2 }]);
+		await repo.deleteManifestationsForUnit(identifier);
+		expect(prismaServiceMock.manifestations.findMany).toHaveBeenCalledWith({
+			where: { unitId: identifier },
+			select: { id: true },
+		});
+		expect(deleteManifestationSpy).toHaveBeenCalledWith(uuid1);
+		expect(deleteManifestationSpy).toHaveBeenCalledWith(uuid2);
 	});
 });

@@ -3,7 +3,12 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ElementRepository } from './element.repository';
+import { UnitRepository } from './unit.repository';
+import { ManifestationRepository } from './manifestation.repository';
 import { deletedElement, domainElement, elementInput, updateElementInput } from './__stubs__';
+
+jest.mock('./unit.repository');
+jest.mock('./manifestation.repository');
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
@@ -14,9 +19,11 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
+const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
+const repo = new ElementRepository(prismaServiceMock, unitRepo);
+
 describe('ElementRepository', () => {
 	test('createElement()', async () => {
-		const repo = new ElementRepository(prismaServiceMock);
 		await repo.createElement(elementInput);
 		expect(prismaServiceMock.elements.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
@@ -53,7 +60,7 @@ describe('ElementRepository', () => {
 	});
 
 	test('getElements()', async () => {
-		const repo = new ElementRepository(prismaServiceMock);
+		// const repo = new ElementRepository(prismaServiceMock);
 		const elements = await repo.getElements('__SURVEY_ID__');
 		expect(prismaServiceMock.elements.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
@@ -62,7 +69,7 @@ describe('ElementRepository', () => {
 	});
 
 	test('updateElement()', async () => {
-		const repo = new ElementRepository(prismaServiceMock);
+		// const repo = new ElementRepository(prismaServiceMock);
 		await repo.updateElement(updateElementInput);
 		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
 			where: { id: updateElementInput.id },
@@ -93,12 +100,13 @@ describe('ElementRepository', () => {
 		// @ts-ignore
 		prismaServiceMock.elements.update.mockResolvedValue(deletedElement);
 		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
-		const repo = new ElementRepository(prismaServiceMock);
+		// const repo = new ElementRepository(prismaServiceMock);
 		const element = await repo.deleteElement(identifier);
 		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
 			where: { id: identifier },
 			data: expect.objectContaining({}),
 		});
 		expect(element.deleted_at instanceof Date).toBe(true);
+		expect(unitRepo.deleteUnitsForElement).toHaveBeenCalledWith(identifier);
 	});
 });

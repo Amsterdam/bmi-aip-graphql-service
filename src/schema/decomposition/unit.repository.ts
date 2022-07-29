@@ -7,10 +7,14 @@ import { newId } from '../../utils';
 import { Unit, IUnitRepository } from './types/unit.repository.interface';
 import { CreateUnitInput } from './dto/create-unit.input';
 import { UpdateUnitInput } from './dto/update-unit.input';
+import { ManifestationRepository } from './manifestation.repository';
 
 @Injectable()
 export class UnitRepository implements IUnitRepository {
-	public constructor(private readonly prisma: PrismaService) {}
+	public constructor(
+		private readonly prisma: PrismaService,
+		private readonly manifestationRepo: ManifestationRepository,
+	) {}
 
 	async createUnit({
 		objectId,
@@ -110,5 +114,22 @@ export class UnitRepository implements IUnitRepository {
 			where: { id: identifier },
 			data,
 		});
+	}
+
+	async deleteUnitsForElement(elementId: string): Promise<void> {
+		const units = await this.prisma.units.findMany({
+			where: {
+				elementId,
+			},
+			select: {
+				id: true,
+			},
+		});
+		await Promise.all(
+			units.map(async ({ id }) => {
+				await this.manifestationRepo.deleteManifestationsForUnit(id);
+				await this.deleteUnit(id);
+			}),
+		);
 	}
 }

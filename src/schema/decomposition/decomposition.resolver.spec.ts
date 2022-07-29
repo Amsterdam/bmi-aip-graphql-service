@@ -12,6 +12,7 @@ import { FindSurveyElementsCommand } from './commands/find-survey-elements.comma
 import { CreateDecompositionCommand } from './commands/create-decomposition.command';
 import { ElementRepository } from './element.repository';
 import { UnitRepository } from './unit.repository';
+import { ManifestationRepository } from './manifestation.repository';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
 import { Unit } from './models/unit.model';
 
@@ -19,6 +20,7 @@ jest.mock('./element.service');
 jest.mock('./element.repository');
 jest.mock('./unit.service');
 jest.mock('./unit.repository');
+jest.mock('./manifestation.repository');
 
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
@@ -38,8 +40,13 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const constructResolver = (commandBusMock) => {
 	return new DecompositionResolver(
-		new ElementService(new ElementRepository(prismaServiceMock)),
-		new UnitService(new UnitRepository(prismaServiceMock)),
+		new ElementService(
+			new ElementRepository(
+				prismaServiceMock,
+				new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock)),
+			),
+		),
+		new UnitService(new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock))),
 		commandBusMock,
 	);
 };

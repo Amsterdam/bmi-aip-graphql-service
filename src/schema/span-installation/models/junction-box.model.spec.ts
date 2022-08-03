@@ -1,4 +1,4 @@
-import { JunctionBox } from './JunctionBox.model';
+import { JunctionBox } from './junction-box.model';
 
 describe('Span Installation / Model / JunctionBox', () => {
 	test('constructs a JunctionBox instance', () => {

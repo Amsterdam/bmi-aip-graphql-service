@@ -1,2 +1,2 @@
-export * from './supportSystem';
-export * from './spanLuminaire';
+export * from './support-system';
+export * from './span-luminaire';

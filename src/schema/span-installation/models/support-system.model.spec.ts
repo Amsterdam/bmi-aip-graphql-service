@@ -8,6 +8,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.id = '71c5450a-c0a3-48ea-adbb-ea435a8804d5';
 		supportSystem.objectId = 'cecc214d-1c44-4bcd-94e2-f2d661327db3';
 		supportSystem.surveyId = '388ecaaa-c6c2-4613-aa14-f206cf577ca7';
+		supportSystem.name = '__NAME__';
 		supportSystem.type = SupportSystemType.facade;
 		supportSystem.typeDetailed = SupportSystemTypeDetailed.two;
 		supportSystem.location = null;
@@ -27,6 +28,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 
 		expect(supportSystem).toBeInstanceOf(SupportSystem);
 		expect(supportSystem).toEqual({
+			name: '__NAME__',
 			a11yDetails: '__A11Y_DETAILS__',
 			constructionYear: 1979,
 			createdAt: '2022-08-02T15:51:54.044Z',

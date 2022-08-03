@@ -7,6 +7,7 @@ describe('Span Installation / Model / Luminaire', () => {
 		const luminaire = new Luminaire();
 		luminaire.id = '71c5450a-c0a3-48ea-adbb-ea435a8804d5';
 		luminaire.supportSystemId = 'cecc214d-1c44-4bcd-94e2-f2d661327db3';
+		luminaire.name = '__NAME__';
 		luminaire.location = null;
 		luminaire.constructionYear = 1979;
 		luminaire.supplierType = SupplierType.two;
@@ -31,6 +32,7 @@ describe('Span Installation / Model / Luminaire', () => {
 
 		expect(luminaire).toBeInstanceOf(Luminaire);
 		expect(luminaire).toEqual({
+			name: '__NAME__',
 			constructionYear: 1979,
 			createdAt: '2022-08-02T15:51:54.044Z',
 			deletedAt: '2022-08-02T15:53:07.441Z',

@@ -16,6 +16,9 @@ export class SupportSystem {
 	@Field((type) => String)
 	surveyId: string;
 
+	@Field((type) => String)
+	name: string;
+
 	// Maps to "Type"
 	@Field((type) => String)
 	type: SupportSystemType;

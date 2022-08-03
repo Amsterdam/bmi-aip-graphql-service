@@ -13,6 +13,9 @@ export class Luminaire {
 	@Field((type) => String)
 	supportSystemId: string;
 
+	@Field((type) => String)
+	name: string;
+
 	// Maps to "Straat"
 	@Field((type) => String, { nullable: true })
 	location?: string;

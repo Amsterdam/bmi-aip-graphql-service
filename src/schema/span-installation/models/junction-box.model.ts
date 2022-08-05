@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -18,7 +18,7 @@ export class JunctionBox {
 	name: string;
 
 	// Maps to "Mastgetal"
-	@Field((type) => Number, { nullable: true })
+	@Field((type) => Float, { nullable: true })
 	mastNumber?: number;
 
 	// Maps to "Straat"

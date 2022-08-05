@@ -16,6 +16,7 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
+import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
 
 @Module({
 	imports: [
@@ -31,6 +32,7 @@ import { AssetModule } from './schema/asset/asset.module';
 		}),
 		AuthorizationModule,
 		DecompositionModule,
+		SpanInstallationModule,
 		BatchModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,

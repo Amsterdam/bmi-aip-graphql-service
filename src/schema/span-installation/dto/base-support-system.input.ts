@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsJSON, IsOptional, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 
 import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
@@ -39,7 +39,6 @@ export class BaseSupportSystemInput {
 	public locationIndication?: string;
 
 	@IsOptional()
-	@IsJSON()
 	@Field({ nullable: true })
 	geography?: PointType;
 

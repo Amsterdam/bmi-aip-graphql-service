@@ -1,11 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsDecimal, IsInt, IsJSON, IsOptional, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
+import { Point } from 'graphql-geojson-scalar-types';
 
 @InputType()
 export class BaseJunctionBoxInput {
 	@IsOptional()
-	@IsDecimal()
+	@IsNumber()
 	@Field({ nullable: true })
 	public mastNumber?: number;
 
@@ -39,7 +40,6 @@ export class BaseJunctionBoxInput {
 	public remarks?: string;
 
 	@IsOptional()
-	@IsJSON()
-	@Field({ nullable: true })
+	@Field(() => Point, { nullable: true })
 	geography?: PointType;
 }

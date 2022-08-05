@@ -85,7 +85,7 @@ describe('Span Installation / JunctionBox / Resolver', () => {
 	test('getSurveyJunctionBoxes returns an array of junction box objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock);
-		const elements = await resolver.getSurveyJunctionBoxs('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const elements = await resolver.getSurveyJunctionBoxes('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([junctionBox1, junctionBox2]);
 	});
 });

@@ -6,7 +6,6 @@ WORKDIR /var/service
 COPY src src
 COPY node_modules node_modules
 COPY deploy deploy
-COPY docs docs
 COPY migrations migrations
 COPY schema.prisma schema.prisma
 COPY package.json package.json
@@ -23,7 +22,6 @@ ARG DATABASE_URL
 FROM ${SERVICE_DOMAIN}/${SERVICE_NAME}:base
 WORKDIR /var/service
 COPY --from=builder /var/service/dist dist
-COPY --from=builder /var/service/docs docs
 COPY --from=builder /var/service/deploy deploy
 COPY --from=builder /var/service/migrations migrations
 COPY --from=builder /var/service/schema.prisma schema.prisma

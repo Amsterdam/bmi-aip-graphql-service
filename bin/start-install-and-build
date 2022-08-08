@@ -3,4 +3,3 @@
 bin/npm install
 bin/npm run build
 bin/npm run prisma generate --schema schema.prisma
-bin/npm run prisma migrate deploy

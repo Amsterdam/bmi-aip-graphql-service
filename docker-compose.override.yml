@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    service:
+        build:
+            context: .
+            dockerfile: DockerfileLocal
+        environment:
+            ENV: 'development'
+            NODE_ENV: 'development'
+            DATABASE_URL:
+        ports:
+            - 3000:3000
+            - 3001:3001
+            - 9229:9229
+        command: npm run start:dev
+        volumes:
+            - .:/var/service/
+            - ./node_modules:/var/service/node_modules:cached

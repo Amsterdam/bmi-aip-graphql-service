@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+bin/start-install-and-build
+bin/start-application

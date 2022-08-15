@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { DbObject } from '../types/object.repository.interface';
 import { ObjectRepository } from '../object.repository';
-import { Object } from '../types/object.repository.interface';
 
 import { CreateObjectCommand } from './create-object.command';
 
@@ -9,8 +9,7 @@ import { CreateObjectCommand } from './create-object.command';
 export class CreateObjectHandler implements ICommandHandler<CreateObjectCommand> {
 	constructor(private repository: ObjectRepository) {}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	public async execute(command: CreateObjectCommand): Promise<Object> {
+	public async execute(command: CreateObjectCommand): Promise<DbObject> {
 		return this.repository.createObject(command.data);
 	}
 }

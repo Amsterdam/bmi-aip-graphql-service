@@ -1,19 +1,151 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsUUID, MaxLength } from 'class-validator';
-
-import { BaseElementInput } from './base-element.input';
+import { IsBoolean, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { Prisma } from '@prisma/client';
 
 @InputType()
-export class CreateElementInput extends BaseElementInput {
+export class CreateObjectInput {
+	@Field()
+	@IsUUID()
+	public id: string;
+
 	@Field()
 	@MaxLength(255)
-	public name: string;
+	name: string;
+
+	@MaxLength(255)
+	@Field()
+	public code?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	@MaxLength(255)
+	location?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public latitude?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public longitude?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public updatedOn?: string;
+
+	@IsBoolean()
+	@Field()
+	public compositionIsVisible: boolean;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public clientCompanyId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public operatorCompanyId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public surveyorCompanyId?: string;
+
+	@IsOptional()
+	@Field({ nullable: false })
+	public objectTypeId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public created_at?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public updated_at?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public inspectionStandardId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public ownerCompanyId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	@MaxLength(255)
+	public customerVersion?: string;
 
 	@Field()
-	@IsUUID()
-	public objectId: string;
+	@IsBoolean()
+	public isPublic: boolean;
 
 	@Field()
-	@IsUUID()
-	public surveyId: string;
+	@IsBoolean()
+	public isDemo: boolean;
+
+	@Field()
+	public siteId: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public constructionYear?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public externalRefId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public useage?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public managementOrganization?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public shape?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public shapeSrid?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public status?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public effortCategory?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public effortCalculation?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public trafficType?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public mainMaterial?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public marineInfrastrutureType?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public length?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public width?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public squareMeters?: number;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public attributes?: Prisma.JsonValue;
 }

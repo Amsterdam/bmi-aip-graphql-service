@@ -77,3 +77,5 @@ junit.xml
 node_modules/
 
 dist/
+
+docs/

@@ -6,6 +6,8 @@ import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 
+import { ObjectService } from '../schema/object/object.service';
+
 @Module({
 	imports: [
 		ConsoleModule,
@@ -24,6 +26,6 @@ import { HttpModule } from '@nestjs/axios';
 			inject: [ConfigService, Reflector],
 		}),
 	],
-	providers: [FileReaderService, Logger, ConfigService],
+	providers: [FileReaderService, Logger, ConfigService, ObjectService],
 })
 export class FileModule {}

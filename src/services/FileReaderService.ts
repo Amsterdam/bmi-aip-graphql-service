@@ -1,22 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
-import PQueue from 'p-queue';
 import * as xlsx from 'xlsx';
+import { uniq } from 'lodash';
+import { Sheet } from 'xlsx';
 
-import { EntityType } from '../XSLImport/types/EntityType';
-
-let importedCellCount = 0;
-type ProcessingError = {
-	entity?: EntityType;
-	rowNumber: number;
-	column?: string;
-	description: string;
-};
-
-const importedCellCountRegistry: { [Key in EntityType]?: number[] } = {
-	Asset: [],
-};
+import { IPassport } from '../schema/object/models/passport.model';
+import { ObjectService } from '../schema/object/object.service';
 
 @Injectable()
 export class FileReaderService {
@@ -26,7 +16,7 @@ export class FileReaderService {
 
 	private static DOC_DIR = FileReaderService.APP_DIR + 'docs/';
 
-	private static READ_FILE = 'Moederbestand_en_mapping_table_AIP_v54_22062022.xlsx';
+	private static READ_FILE = 'Moederbestand_en_mapping_table_AIP_v54_22062022_2.xlsx';
 
 	private static GRAPHQL_URL = 'http://172.18.0.10:3000/graphql';
 
@@ -35,7 +25,11 @@ export class FileReaderService {
 
 	private graphqlClient: GraphQLClient;
 
-	public constructor(private readonly consoleService: ConsoleService, private readonly logger: Logger) {
+	public constructor(
+		private readonly consoleService: ConsoleService,
+		private readonly logger: Logger,
+		private readonly objectService: ObjectService,
+	) {
 		const cli = this.consoleService.getCli();
 
 		this.consoleService.createCommand(
@@ -43,7 +37,7 @@ export class FileReaderService {
 				command: FileReaderService.CLI_COMMAND,
 				description: 'description',
 			},
-			this.process.bind(this),
+			this.migrateSpanInstallation.bind(this),
 			cli,
 		);
 
@@ -54,81 +48,62 @@ export class FileReaderService {
 		});
 	}
 
+	private sliceArrayIntoChunks(arr, chunkSize) {
+		const res = [];
+		for (let i = 0; i < arr.length; i += chunkSize) {
+			const chunk = arr.slice(i, i + chunkSize);
+			res.push(chunk);
+		}
+		return res;
+	}
+
 	private async getFile(): Promise<any> {
 		const filePath: string = FileReaderService.DOC_DIR + FileReaderService.READ_FILE;
-		console.log('filePath', filePath);
-		// const srcWorkbook: Workbook = new ExcelJS.Workbook();
-		//read from xlsx file
+		// read from xlsx file
 		const workbook = xlsx.readFile(`${filePath}`);
 		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
 		// get first sheet
-		// const first_sheet = workbook.SheetNames[0];
-		// console.log('workSheet', workSheet);
-		// const workBook = await srcWorkbook.xlsx.readFile(filePath);
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
-		// console.log('---workBook------', workbook);
 
 		return workSheet;
 	}
 
-	private async processRow(row: any, objectId: string): Promise<ProcessingError[]> {
-		const errors: ProcessingError[] = [];
-		try {
-			// failureModeId = await insertOrUpdateFailureMode(
-			// 	failureMode as FailureModeFlattened,
-			// 	{
-			// 		surveyId,
-			// 		elementId: validElementId,
-			// 		unitId: validUnitId,
-			// 		manifestationId: validManifestationId,
-			// 	},
-			// 	isLegacy,
-			// );
-			// if (!importedCellCountRegistry.FailureMode.includes(failureMode.surveyScopeId)) {
-			// 	importedCellCount += Object.keys(failureMode).length;
-			// 	importedCellCountRegistry.FailureMode.push(failureMode.surveyScopeId);
-			// }
-		} catch (err) {
-			errors.push({
-				entity: 'Asset',
-				rowNumber: row.number,
-				description: 'Het is niet gelukt om het "Passport info" record op te slaan',
-			});
+	public async migrateSpanInstallation() {
+		this.logger.verbose(`Starting file migration...`);
+		const migrationListChunks = this.sliceArrayIntoChunks([...(await this.importPassportInfo())], 200);
+		this.logger.debug(`Created ${migrationListChunks.length} migration chunks, each roughly 200 in size.`);
+
+		for (const migrationListChunk of migrationListChunks) {
+			await this.objectService.createMany(migrationListChunk);
 		}
-		return errors;
 	}
 
-	public async process(objectId: string): Promise<{ errors: ProcessingError[]; importedCellCount: number }> {
-		const errors: ProcessingError[] = [];
-		importedCellCount = 0;
-		importedCellCountRegistry.Asset = [];
+	private async importPassportInfo() {
+		const workSheet: Sheet = await this.getFile();
+		let rowCounter = [];
+		const passportInfo: IPassport[] = [];
 
-		const sheet: any = await this.getFile();
-		const queue = new PQueue({ concurrency: 1 });
-		// console.log('---sheetv------', sheet);
-		sheet.eachRow((row, rowNumber) => {
-			// Ignore header
-			if (rowNumber === 1) return;
-			queue.add(async () => {
-				try {
-					const rowErrors = await this.processRow(row, objectId);
-					errors.push(...rowErrors);
-				} catch (err) {
-					errors.push({
-						rowNumber: row.number,
-						description: `Er is een onbekende fout opgetreden bij het verwerken van rij ${row.number}`,
-					});
-					console.error(`[Excel Import] BUG: Failed to process row`, err);
-				}
-			});
-		});
+		for (const key of Object.keys(workSheet)) {
+			const rawKey = key.match(/[a-z]+|\d+/gi);
+			if (rawKey[1] !== undefined) rowCounter.push(rawKey[1]);
+		}
+		rowCounter = uniq(rowCounter);
 
-		// Wait for queue to finish
-		await queue.onIdle();
+		for (const row of rowCounter) {
+			if (row === '0' || row === '1') continue;
+			const passport: IPassport = {
+				identification: workSheet['A' + row]?.v,
+				cityArea: workSheet['F' + row]?.v,
+				street: workSheet['I' + row]?.v,
+				district: workSheet['G' + row]?.v,
+				neighborhood: workSheet['H' + row]?.v,
+			};
 
-		return {
-			errors,
-			importedCellCount,
-		};
+			const index: number = passportInfo.findIndex((x) => x.identification == workSheet['A' + row]?.v);
+
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+			index === -1 ? passportInfo.push(passport) : console.log('object already exists');
+		}
+		return passportInfo;
 	}
 }

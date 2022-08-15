@@ -1,6 +1,8 @@
 import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus } from '@nestjs/cqrs';
 
+import { PrismaService } from '../../prisma.service';
+
 import { ManifestationResolver } from './manifestation.resolver';
 import { ManifestationService } from './manifestation.service';
 import { manifestationInput, domainManifestation, deletedManifestation, updateManifestationInput } from './__stubs__';
@@ -8,7 +10,6 @@ import { CreateManifestationCommand } from './commands/create-manifestation.comm
 import { Manifestation } from './models/manifestation.model';
 import { UpdateManifestationCommand } from './commands/update-manifestation.command';
 import { DeleteManifestationCommand } from './commands/delete-manifestation.command';
-import { PrismaService } from '../../prisma.service';
 import { ManifestationRepository } from './manifestation.repository';
 
 jest.mock('./manifestation.service');

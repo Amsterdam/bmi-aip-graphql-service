@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+    service-base:
+        image: ${SERVICE_DOMAIN}/${SERVICE_NAME}:base
+        user: ${USER_ID}:${USER_GROUP_ID}
+        build:
+            context: docker/base
+            args:
+                SERVICE_NAME: ${SERVICE_NAME}
+                SERVICE_DOMAIN: ${SERVICE_DOMAIN}
+
+    service-build:
+        depends_on:
+            - service-base
+        image: ${SERVICE_DOMAIN}/${SERVICE_NAME}:build
+        user: ${USER_ID}:${USER_GROUP_ID}
+        container_name: ${SERVICE_NAME}-build
+        build:
+            context: docker/build
+            args:
+                SERVICE_NAME: ${SERVICE_NAME}
+                SERVICE_DOMAIN: ${SERVICE_DOMAIN}
+        volumes:
+            - .:/var/service
+            - ~/node_modules:/var/node_modules:cached
+        environment:
+            ENV: 'test'
+            NODE_ENV: 'test'
+            NODE_TLS_REJECT_UNAUTHORIZED: 0
+            NPM_TOKEN:
+            DATABASE_URL:
+
+    service:
+        depends_on:
+            - service-base
+        image: ${SERVICE_DOMAIN}/${SERVICE_NAME}:latest
+        user: ${USER_ID}:${USER_GROUP_ID}
+        container_name: ${SERVICE_NAME}
+        ports:
+            - 3000:3000
+            - 3001:3001
+        build:
+            context: ./DockerfileLocal
+            args:
+                SERVICE_NAME: ${SERVICE_NAME}
+                SERVICE_DOMAIN: ${SERVICE_DOMAIN}
+        environment:
+            ENV: 'prod'
+            NODE_ENV: 'prod'
+            NPM_TOKEN:
+            DATABASE_URL:
+        tty: true

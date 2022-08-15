@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+bin/npm install
+bin/npm run build
+bin/npm run prisma generate --schema schema.prisma

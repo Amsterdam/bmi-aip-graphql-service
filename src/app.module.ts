@@ -17,6 +17,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
 import { FileModule } from './modules/FileModule';
+import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
 
 @Module({
 	imports: [
@@ -32,6 +33,7 @@ import { FileModule } from './modules/FileModule';
 		}),
 		AuthorizationModule,
 		DecompositionModule,
+		SpanInstallationModule,
 		BatchModule,
 		FileModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({

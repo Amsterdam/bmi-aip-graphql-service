@@ -1,0 +1,6 @@
+ARG SERVICE_DOMAIN
+ARG SERVICE_NAME
+
+FROM ${SERVICE_DOMAIN}/${SERVICE_NAME}:base
+
+CMD ["node", "dist/main"]

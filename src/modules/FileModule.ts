@@ -1,5 +1,5 @@
 import { Module, CacheModule, Logger } from '@nestjs/common';
-import { FileReaderService } from 'src/services/FileReaderService';
+import { FileWriterService } from 'src/services/FileWriterService';
 import { ConsoleModule } from 'nestjs-console';
 import { ConfigService } from '@nestjs/config';
 import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
@@ -7,6 +7,8 @@ import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 
 import { ObjectService } from '../schema/object/object.service';
+import { ObjectRepository } from '../schema/object/object.repository';
+import { PrismaService } from '../prisma.service';
 
 @Module({
 	imports: [
@@ -26,6 +28,6 @@ import { ObjectService } from '../schema/object/object.service';
 			inject: [ConfigService, Reflector],
 		}),
 	],
-	providers: [FileReaderService, Logger, ConfigService, ObjectService],
+	providers: [FileWriterService, Logger, ConfigService, ObjectService, ObjectRepository, PrismaService],
 })
 export class FileModule {}

@@ -1155,8 +1155,8 @@ model poleLabResults {
   woodtype                   String?         @db.VarChar(32)
   polediameter               Int?
   lengthToHeartPole          Int?
-  thicknessOfHeartwood       String?         @db.VarChar(255)
-  thicknessOfSapwood         String?         @db.VarChar(255)
+  thicknessOfHeartwood       Int?
+  thicknessOfSapwood         Int?
   erosionBacteria            Boolean?
   tunnelingBacteria          Boolean?
   moldThreads                Boolean?

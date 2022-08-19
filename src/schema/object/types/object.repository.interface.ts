@@ -45,5 +45,5 @@ const objects = Prisma.validator<Prisma.objectsArgs>()({
 export type DbObject = Prisma.objectsGetPayload<typeof objects>;
 
 export interface IObjectRepository {
-	createManyObjects(input: CreateObjectInput): Promise<DbObject>;
+	createManyObjects(input: CreateObjectInput[]): Promise<number>;
 }

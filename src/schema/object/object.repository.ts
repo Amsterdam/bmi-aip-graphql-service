@@ -11,7 +11,7 @@ import { DbObject, IObjectRepository } from './types/object.repository.interface
 export class ObjectRepository implements IObjectRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async createObject({ id, attributes }: CreateObjectInput): Promise<DbObject> {
+	async createObject({ attributes }: CreateObjectInput): Promise<DbObject> {
 		const data: Prisma.objectsCreateInput = {
 			id: newId(),
 			attributes,
@@ -36,13 +36,23 @@ export class ObjectRepository implements IObjectRepository {
 		return this.prisma.objects.create({ data });
 	}
 
-	// @ts-ignore
-	async createManyObjects(input: CreateObjectInput[]): Promise<DbObject> {
-		// @ts-ignore
-		return this.prisma.objects.createMany(input);
-	}
+	async createManyObjects(inputs: CreateObjectInput[]): Promise<number> {
+		const graphqlObjects: Prisma.objectsCreateManyInput[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		for (const input of inputs) {
+			const graphqlObject: Prisma.objectsCreateManyInput = {
+				id: input.id || newId(),
+				code: input.code,
+				name: input.name,
+				updatedOn: input.updatedOn,
+				compositionIsVisible: input.compositionIsVisible,
+				objectTypeId: input.objectTypeId || 'c7def16c-5791-47b5-ba01-46b3703b3e5d', //Overspaning objecttypeId
+				attributes: input.attributes,
+			};
+			graphqlObjects.push(graphqlObject);
+		}
+		const dbObjects = await this.prisma.objects.createMany({ data: graphqlObjects });
 
-	// async createManyObjects(data: CreateObjectInput[]): Promise<DbObject> {
-	// 	return this.prisma.objects.createMany({ data });
-	// }
+		return dbObjects.count;
+	}
 }

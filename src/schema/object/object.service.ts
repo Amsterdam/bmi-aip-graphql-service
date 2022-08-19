@@ -2,21 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { ObjectFactory } from './object.factory';
 import { CreateObjectInput } from './dto/create-object.input';
+import { ObjectRepository } from './object.repository';
 
 @Injectable()
 export class ObjectService {
-	// public constructor() {}
-
-	// async createObject(object: AssetObject) {
-	// 	await ObjectFactory.CreateObject(object);
-	// }
+	public constructor(private readonly objectRepo: ObjectRepository) {}
 
 	async createMany(input: CreateObjectInput[]): Promise<CreateObjectInput[]> {
-		console.log('input', input[2]);
 		return ObjectFactory.createMany(input);
 	}
-
-	// async getObjects(): Promise<Object[]> {
-	// 	return (await this.objectRepo.getObjects()).map((object) => ObjectFactory.CreateObject(object));
-	// }
 }

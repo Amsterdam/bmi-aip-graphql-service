@@ -16,10 +16,10 @@ export class AssetObject {
 	location?: string;
 
 	@Field((type) => Decimal, { nullable: true })
-	public latitude: Decimal;
+	public latitude?: Decimal;
 
 	@Field((type) => Decimal, { nullable: true })
-	public longitude: Decimal;
+	public longitude?: Decimal;
 
 	@Field((type) => String, { nullable: true })
 	public updatedOn: string;
@@ -100,13 +100,13 @@ export class AssetObject {
 	public marineInfrastrutureType: string;
 
 	@Field((type) => Decimal, { nullable: true })
-	public length: Decimal;
+	public length?: Decimal;
 
 	@Field((type) => Decimal, { nullable: true })
-	public width: Decimal;
+	public width?: Decimal;
 
 	@Field((type) => Decimal, { nullable: true })
-	public squareMeters: Decimal;
+	public squareMeters?: Decimal;
 
 	@Field((type) => JSON, { nullable: true })
 	public attributes: Prisma.JsonValue;

@@ -1,21 +1,21 @@
 export class IPassport {
-	identification?: string;
+	passportIdentification?: string;
 
-	cityArea?: string;
+	passportCityArea?: string;
 
-	district?: string;
+	passportDistrict?: string;
 
-	neighborhood?: string;
+	passportNeighborhood?: string;
 
-	street?: string;
+	passportStreet?: string;
 
-	year?: number;
+	passportYear?: number;
 
-	powerSupplies?: number;
+	passportPowerSupplies?: number;
 
-	splits?: boolean;
+	passportSplits?: boolean;
 
-	doubleWired?: boolean;
+	passportDoubleWired?: boolean;
 
 	tramTracks?: boolean;
 

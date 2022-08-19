@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsUUID, MaxLength } from 'class-validator';
-import { Prisma } from '@prisma/client';
+import GraphQLJSON from 'graphql-type-json';
 
 @InputType()
 export class CreateObjectInput {
@@ -10,16 +10,16 @@ export class CreateObjectInput {
 
 	@Field()
 	@MaxLength(255)
-	name: string;
+	public name: string;
 
-	@MaxLength(255)
 	@Field()
+	@MaxLength(255)
 	public code?: string;
 
 	@IsOptional()
 	@Field({ nullable: true })
 	@MaxLength(255)
-	location?: string;
+	public location?: string;
 
 	@IsOptional()
 	@Field({ nullable: true })
@@ -146,6 +146,14 @@ export class CreateObjectInput {
 	public squareMeters?: number;
 
 	@IsOptional()
-	@Field({ nullable: true })
-	public attributes?: Prisma.JsonValue;
+	@Field(() => GraphQLJSON, { nullable: true })
+	public attributes?: JSONValue;
 }
+
+type JSONValue =
+	// | JSONValuestring
+	// | number
+	// | boolean
+	// | null
+	// | { [x: string]: JSONValue }
+	Array<JSONValue>;

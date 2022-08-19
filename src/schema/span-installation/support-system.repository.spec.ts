@@ -15,7 +15,7 @@ import {
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-	spanSupportSystemes: {
+	spanSupportSystems: {
 		create: jest.fn().mockResolvedValue(domainSupportSystem),
 		findMany: jest.fn().mockResolvedValue([domainSupportSystem]),
 		update: jest.fn().mockResolvedValue(domainSupportSystem),
@@ -114,7 +114,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		prismaServiceMock.spanSupportSystems.update.mockResolvedValue(deletedSupportSystem);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
 		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateSupportSystemInput.geography);
-		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
+		const identifier = '1f728e79-1b89-4333-a309-ea93bf17667c';
 		const supportSystem = await repo.deleteSupportSystem(identifier);
 		expect(prismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({
 			where: { id: identifier },
@@ -123,21 +123,25 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		expect(supportSystem.deleted_at instanceof Date).toBe(true);
 		expect(supportSystem).toEqual(
 			expect.objectContaining({
-				objectId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-				surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
+				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+				surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 				name: '__NAME__',
-				type: SupportSystemType.facade,
+				type: 'facade',
 				location: '__LOCATION__',
 				constructionYear: 1979,
-				locationIndication: '__LOCATION__INDICATION__',
+				locationIndication: '__LOCATION_INDICATION__',
 				a11yDetails: '__A11Y_DETAILS__',
 				installationHeight: 100,
 				remarks: '__REMARKS__',
-				houseNumber: '',
+				houseNumber: '33',
+				created_at: undefined,
+				updated_at: undefined,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',
 				},
+				typeDetailed: 'two',
 			}),
 		);
 		expect(spy).toHaveBeenCalledWith(identifier);

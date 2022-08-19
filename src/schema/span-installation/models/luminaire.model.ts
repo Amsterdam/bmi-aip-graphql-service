@@ -9,7 +9,7 @@ export class Luminaire {
 	@Field((type) => String)
 	id: string;
 
-	// Parent is scoped to surveyId, so on this level we don't need that verbosity
+	// Parent is scoped to supportSystemId, so on this level we don't need that verbosity
 	@Field((type) => String)
 	supportSystemId: string;
 

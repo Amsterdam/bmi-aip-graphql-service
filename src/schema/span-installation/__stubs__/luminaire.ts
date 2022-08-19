@@ -36,6 +36,13 @@ const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
+	constructionYear: 1979,
+	driverCommissioningDate: null,
+	lightCommissioningDate: null,
+	driverSupplierType: 'one',
+	lightSupplierType: 'two',
+	manufacturer: '__MANUFACTURER__',
+	supplierType: 'two',
 };
 
 export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {

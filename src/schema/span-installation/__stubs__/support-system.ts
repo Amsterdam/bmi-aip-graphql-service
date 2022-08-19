@@ -41,6 +41,10 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
+	constructionYear: 1979,
+	houseNumber: '33',
+	type: 'facade',
+	typeDetailed: 'two',
 };
 
 export const supportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {

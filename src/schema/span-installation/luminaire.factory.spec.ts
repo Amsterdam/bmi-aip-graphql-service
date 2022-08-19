@@ -10,7 +10,6 @@ describe('Span Installation / Luminaire / Factory', () => {
 			createdAt: domainLuminaire.created_at ?? null,
 			updatedAt: domainLuminaire.updated_at ?? null,
 			deletedAt: domainLuminaire.deleted_at ?? null,
-			mastNumber: Number(domainLuminaire.mastNumber),
 		};
 		delete object.created_at;
 		delete object.updated_at;

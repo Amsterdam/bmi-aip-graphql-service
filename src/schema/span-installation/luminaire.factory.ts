@@ -1,3 +1,5 @@
+import { getSupplierType } from '../../types';
+
 import { Luminaire } from './models/luminaire.model';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
 
@@ -22,17 +24,20 @@ export class LuminaireFactory {
 	}: DomainLuminaire): Luminaire {
 		const luminaire = new Luminaire();
 		luminaire.id = id;
-		luminaire.objectId = objectId;
+		luminaire.supportSystemId = supportSystemId;
 		luminaire.name = name;
 		luminaire.location = location;
 		luminaire.constructionYear = constructionYear;
-		luminaire.supplierType = supplierType;
+		luminaire.supplierType = getSupplierType(supplierType);
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
-		luminaire.driverSupplierType = driverSupplierType;
-		luminaire.driverCommissioningDate = driverCommissioningDate;
-		luminaire.lightSupplierType = lightSupplierType;
-		luminaire.lightCommissioningDate = lightCommissioningDate;
+		luminaire.remarks = remarks;
+		luminaire.driverSupplierType = getSupplierType(driverSupplierType);
+		luminaire.driverCommissioningDate =
+			driverCommissioningDate instanceof Date ? driverCommissioningDate.toUTCString() : null;
+		luminaire.lightSupplierType = getSupplierType(lightSupplierType);
+		luminaire.lightCommissioningDate =
+			lightCommissioningDate instanceof Date ? lightCommissioningDate.toUTCString() : null;
 		luminaire.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		luminaire.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		luminaire.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

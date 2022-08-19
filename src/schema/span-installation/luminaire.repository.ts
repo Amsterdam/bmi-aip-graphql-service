@@ -29,14 +29,13 @@ export class LuminaireRepository implements ILuminaireRepository {
 	}: CreateLuminaireInput): Promise<Luminaire> {
 		const data: Prisma.spanLuminairesCreateInput = {
 			id: newId(),
-			supportSystems: { connect: { id: objectId } },
+			spanSupportSystems: { connect: { id: supportSystemId } },
 			name,
 			location,
 			constructionYear,
 			supplierType,
 			manufacturer,
 			remarks,
-			geography,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,
@@ -58,7 +57,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		};
 	}
 
-	async getLuminaires(surveyId: string): Promise<Luminaire[]> {
+	async getLuminaires(supportSystemId: string): Promise<Luminaire[]> {
 		return this.prisma.spanLuminaires.findMany({
 			where: {
 				supportSystemId,
@@ -87,7 +86,6 @@ export class LuminaireRepository implements ILuminaireRepository {
 			supplierType,
 			manufacturer,
 			remarks,
-			geography,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,

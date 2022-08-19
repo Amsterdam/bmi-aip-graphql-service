@@ -10,7 +10,6 @@ describe('Span Installation / SupportSystem / Factory', () => {
 			createdAt: domainSupportSystem.created_at ?? null,
 			updatedAt: domainSupportSystem.updated_at ?? null,
 			deletedAt: domainSupportSystem.deleted_at ?? null,
-			mastNumber: Number(domainSupportSystem.mastNumber),
 		};
 		delete object.created_at;
 		delete object.updated_at;

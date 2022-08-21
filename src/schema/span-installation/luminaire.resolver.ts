@@ -43,7 +43,7 @@ export class LuminaireResolver {
 
 	@Query((returns) => [Luminaire], { name: 'spanInstallationLuminaires' })
 	@Roles({ roles: ['realm:aip_owner'] })
-	async getSurveyLuminaires(@Args('supportSystemId', { type: () => String }) supportSystemId: string) {
+	async getsupportSystemLuminaires(@Args('supportSystemId', { type: () => String }) supportSystemId: string) {
 		return this.luminaireService.getLuminaires(supportSystemId);
 	}
 }

@@ -29,8 +29,12 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
-	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+	surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 	remarks: '__REMARKS__',
+	constructionYear: 1979,
+	houseNumber: '33',
+	type: 'facade',
+	typeDetailed: 'two',
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: '__A11Y_DETAILS__',
 	installationHeight: 100,
@@ -41,10 +45,6 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
-	constructionYear: 1979,
-	houseNumber: '33',
-	type: 'facade',
-	typeDetailed: 'two',
 };
 
 export const supportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {

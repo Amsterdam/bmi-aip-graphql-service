@@ -7,7 +7,7 @@ import { deletedLuminaire, domainLuminaire, luminaire1, luminaireInput, updateLu
 import type { LuminaireWithoutGeography } from './types/luminaire.repository.interface';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-	spanLuminairees: {
+	spanLuminaires: {
 		create: jest.fn().mockResolvedValue(domainLuminaire),
 		findMany: jest.fn().mockResolvedValue([domainLuminaire]),
 		update: jest.fn().mockResolvedValue(domainLuminaire),
@@ -26,27 +26,21 @@ describe('Span Installation / Luminaire / Repository', () => {
 		expect(luminaire).toEqual(
 			expect.objectContaining({
 				id: luminaire.id,
-				supportSystems: {
+				spanSupportSystems: {
 					connect: {
-						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 					},
 				},
 				name: '__NAME__',
 				constructionYear: 1979,
-				driverCommissioningDate: null,
 				driverSupplierType: 'one',
-				geography: {
-					coordinates: [52.37593907780107, 4.894690444015065],
-					type: 'Point',
-				},
-				lightCommissioningDate: '',
+				driverCommissioningDate: null,
+				lightCommissioningDate: null,
+				location: '__LOCATION__',
 				lightSupplierType: 'two',
-				location: null,
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
-				supportSystemId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-				updatedAt: '2022-08-02T15:52:54.044Z',
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -58,9 +52,9 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('getLuminaires()', async () => {
-		const luminaires = await repo.getLuminaires('__SURVEY_ID__');
+		const luminaires = await repo.getLuminaires('__SUPPORTSYSTEM_ID__');
 		expect(prismaServiceMock.spanLuminaires.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { supportSystemId: '__SUPPORTSYSTEM_ID__' },
 		});
 		expect(luminaires).toEqual([domainLuminaire]);
 	});
@@ -76,44 +70,35 @@ describe('Span Installation / Luminaire / Repository', () => {
 			data: {
 				name: '__NAME__',
 				constructionYear: 1979,
-				driverCommissioningDate: null,
 				driverSupplierType: 'one',
-				geography: {
-					coordinates: [52.37593907780107, 4.894690444015065],
-					type: 'Point',
-				},
-				lightCommissioningDate: '',
+				driverCommissioningDate: null,
+				lightCommissioningDate: null,
+				location: '__LOCATION__',
 				lightSupplierType: 'two',
-				location: null,
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
-				supportSystemId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-				updatedAt: '2022-08-02T15:52:54.044Z',
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateLuminaireInput.id);
 		expect(returnValue).toEqual({
+			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			lightCommissioningDate: null,
 			deleted_at: null,
 			name: '__NAME__',
 			constructionYear: 1979,
-			createdAt: '2022-08-02T15:51:54.044Z',
-			deletedAt: '2022-08-02T15:53:07.441Z',
 			driverCommissioningDate: null,
 			driverSupplierType: 'one',
+			location: '__LOCATION__',
 			geography: {
-				coordinates: [52.37593907780107, 4.894690444015065],
+				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
-			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
-			lightCommissioningDate: '',
 			lightSupplierType: 'two',
-			location: null,
 			manufacturer: '__MANUFACTURER__',
 			remarks: '__REMARKS__',
 			supplierType: 'two',
-			supportSystemId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-			updatedAt: '2022-08-02T15:52:54.044Z',
+			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 		});
 	});
 
@@ -132,23 +117,21 @@ describe('Span Installation / Luminaire / Repository', () => {
 			expect.objectContaining({
 				name: '__NAME__',
 				constructionYear: 1979,
-				createdAt: '2022-08-02T15:51:54.044Z',
-				deletedAt: '2022-08-02T15:53:07.441Z',
+				created_at: undefined,
 				driverCommissioningDate: null,
 				driverSupplierType: 'one',
 				geography: {
-					coordinates: [52.37593907780107, 4.894690444015065],
+					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',
 				},
-				id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
-				lightCommissioningDate: '',
+				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 				lightSupplierType: 'two',
-				location: null,
+				location: '__LOCATION__',
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
-				supportSystemId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-				updatedAt: '2022-08-02T15:52:54.044Z',
+				supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+				updated_at: undefined,
 			}),
 		);
 		expect(spy).toHaveBeenCalledWith(identifier);

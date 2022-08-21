@@ -10,6 +10,10 @@ describe('Span Installation / SupportSystem / Factory', () => {
 			createdAt: domainSupportSystem.created_at ?? null,
 			updatedAt: domainSupportSystem.updated_at ?? null,
 			deletedAt: domainSupportSystem.deleted_at ?? null,
+			constructionYear: domainSupportSystem.constructionYear ?? null,
+			houseNumber: domainSupportSystem.houseNumber ?? null,
+			type: domainSupportSystem.type ?? null,
+			typeDetailed: domainSupportSystem.typeDetailed ?? null,
 		};
 		delete object.created_at;
 		delete object.updated_at;

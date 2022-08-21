@@ -1,3 +1,5 @@
+import { getSupportSystemType, getSupportSystemTypeDetailed } from '../../types';
+
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
 
@@ -12,6 +14,10 @@ export class SupportSystemFactory {
 		a11yDetails,
 		installationHeight,
 		remarks,
+		constructionYear,
+		houseNumber,
+		type,
+		typeDetailed,
 		geography,
 		created_at: createdAt,
 		updated_at: updatedAt,
@@ -27,6 +33,10 @@ export class SupportSystemFactory {
 		supportSystem.a11yDetails = a11yDetails;
 		supportSystem.installationHeight = installationHeight;
 		supportSystem.remarks = remarks;
+		supportSystem.constructionYear = constructionYear;
+		supportSystem.houseNumber = houseNumber;
+		supportSystem.type = getSupportSystemType(type);
+		supportSystem.typeDetailed = getSupportSystemTypeDetailed(typeDetailed);
 		supportSystem.geography = geography;
 		supportSystem.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		supportSystem.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

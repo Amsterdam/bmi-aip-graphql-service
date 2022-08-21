@@ -1,8 +1,6 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { Decimal } from '@prisma/client/runtime';
 
 import { PrismaService } from '../../prisma.service';
-import { SupportSystemType } from '../../types';
 
 import { SupportSystemRepository } from './support-system.repository';
 import {
@@ -42,7 +40,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				},
 				surveys: {
 					connect: {
-						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+						id: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 					},
 				},
 				a11yDetails: '__A11Y_DETAILS__',
@@ -51,7 +49,6 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
 				remarks: '__REMARKS__',
-				riserTubeVisible: true,
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -83,30 +80,35 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				installationHeight: 100,
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal('33.33'),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
-				riserTubeVisible: true,
+				constructionYear: 1979,
+				houseNumber: '33',
+				typeDetailed: 'two',
+				type: 'facade',
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateSupportSystemInput.id);
 		expect(returnValue).toEqual({
+			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			deleted_at: null,
-			objectId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
-			surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
+			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 			name: '__NAME__',
-			type: SupportSystemType.facade,
+			type: 'facade',
 			location: '__LOCATION__',
+			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
-			locationIndication: '__LOCATION__INDICATION__',
 			a11yDetails: '__A11Y_DETAILS__',
 			installationHeight: 100,
 			remarks: '__REMARKS__',
-			houseNumber: '',
+			houseNumber: '33',
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
+			typeDetailed: 'two',
+			updated_at: undefined,
 		});
 	});
 
@@ -125,7 +127,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			expect.objectContaining({
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
-				surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+				surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 				name: '__NAME__',
 				type: 'facade',
 				location: '__LOCATION__',

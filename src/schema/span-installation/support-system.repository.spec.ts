@@ -11,7 +11,6 @@ import {
 	updateSupportSystemInput,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
-import { LuminaireRepository } from './luminaire.repository';
 
 jest.mock('./luminaire.repository');
 
@@ -26,19 +25,20 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-// const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = {
-// 	...(<any>{}),
-// };
-// const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = jest.fn(() => ({
-// 	deleteLuminaireForSupportSystem: jest.fn(),
-// 	...(<any>{}),
-// }))
-const luminaireRepository = new LuminaireRepository(prismaServiceMock);
-const repo = new SupportSystemRepository(prismaServiceMock, luminaireRepository);
+let repository: SupportSystemRepository;
+let luminaireRepositoryMock;
+const LuminaireRepositoryJest = jest.fn(() => ({
+	deleteLuminairesForSupportSystem: jest.fn(),
+}));
 
 describe('Span Installation / SupportSystem / Repository', () => {
+	beforeEach(() => {
+		luminaireRepositoryMock = new LuminaireRepositoryJest();
+		repository = new SupportSystemRepository(prismaServiceMock, luminaireRepositoryMock);
+	});
+
 	test('createSupportSystem()', async () => {
-		const returnValue = await repo.createSupportSystem(supportSystemInput);
+		const returnValue = await repository.createSupportSystem(supportSystemInput);
 		const supportSystem = prismaServiceMock.spanSupportSystems.create.mock.calls[0][0]
 			.data as SupportSystemWithoutGeography;
 		expect(supportSystem).toEqual(
@@ -71,7 +71,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 	});
 
 	test('getSupportSystems()', async () => {
-		const supportSystems = await repo.getSupportSystems('__SURVEY_ID__');
+		const supportSystems = await repository.getSupportSystems('__SURVEY_ID__');
 		expect(prismaServiceMock.spanSupportSystems.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
 		});
@@ -81,8 +81,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 	test('updateSupportSystem()', async () => {
 		prismaServiceMock.spanSupportSystems.update.mockResolvedValue(domainSupportSystem);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
-		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateSupportSystemInput.geography);
-		const returnValue = await repo.updateSupportSystem(updateSupportSystemInput);
+		const spy = jest
+			.spyOn(repository, 'getGeographyAsGeoJSON')
+			.mockResolvedValue(updateSupportSystemInput.geography);
+		const returnValue = await repository.updateSupportSystem(updateSupportSystemInput);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(prismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({
 			where: { id: updateSupportSystemInput.id },
@@ -126,9 +128,11 @@ describe('Span Installation / SupportSystem / Repository', () => {
 	test('deleteSupportSystem', async () => {
 		prismaServiceMock.spanSupportSystems.update.mockResolvedValue(deletedSupportSystem);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
-		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateSupportSystemInput.geography);
+		const spy = jest
+			.spyOn(repository, 'getGeographyAsGeoJSON')
+			.mockResolvedValue(updateSupportSystemInput.geography);
 		const identifier = '1f728e79-1b89-4333-a309-ea93bf17667c';
-		const supportSystem = await repo.deleteSupportSystem(identifier);
+		const supportSystem = await repository.deleteSupportSystem(identifier);
 		expect(prismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({
 			where: { id: identifier },
 			data: expect.objectContaining({}),
@@ -162,7 +166,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 
 	test('getGeographyAsGeoJSON', async () => {
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
-		const geography = await repo.getGeographyAsGeoJSON(domainSupportSystem.id);
+		const geography = await repository.getGeographyAsGeoJSON(domainSupportSystem.id);
 		expect(geography).toEqual(supportSystem1.geography);
 	});
 });

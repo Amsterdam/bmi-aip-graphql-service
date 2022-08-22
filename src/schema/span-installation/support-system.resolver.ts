@@ -1,6 +1,6 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, Roles } from 'nest-keycloak-connect';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystemFactory } from './support-system.factory';
@@ -13,11 +13,16 @@ import { SupportSystem as DomainSupportSystem } from './types/support-system.rep
 import { DeleteSupportSystemCommand } from './commands/delete-support-system.command';
 import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
+import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
 export class SupportSystemResolver {
-	constructor(private supportSystemService: SupportSystemService, private commandBus: CommandBus) {}
+	constructor(
+		private supportSystemService: SupportSystemService,
+		private commandBus: CommandBus,
+		private queryBus: QueryBus,
+	) {}
 
 	@Mutation(() => SupportSystem)
 	public async createSupportSystem(
@@ -50,7 +55,7 @@ export class SupportSystemResolver {
 	@Query((returns) => [SupportSystem], { name: 'spanInstallationSupportSystems' })
 	@Roles({ roles: ['realm:aip_owner'] })
 	async getSurveySupportSystems(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.supportSystemService.getSupportSystems(surveyId);
+		return this.queryBus.execute<FindSupportSystemsQuery>(new FindSupportSystemsQuery(surveyId));
 	}
 
 	@ResolveField()

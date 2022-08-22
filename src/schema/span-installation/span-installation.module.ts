@@ -24,6 +24,7 @@ import { LuminaireResolver } from './luminaire.resolver';
 import { LuminaireRepository } from './luminaire.repository';
 import { LuminaireService } from './luminaire.service';
 import { DeleteLuminaireHandler } from './commands/delete-luminaire.handler';
+import { FindSupportSystemsHandler } from './queries/find-support-systems.handler';
 
 @Module({
 	providers: [
@@ -45,6 +46,7 @@ import { DeleteLuminaireHandler } from './commands/delete-luminaire.handler';
 		CreateLuminaireHandler,
 		UpdateLuminaireHandler,
 		DeleteLuminaireHandler,
+		FindSupportSystemsHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

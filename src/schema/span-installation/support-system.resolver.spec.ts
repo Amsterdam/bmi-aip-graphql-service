@@ -1,5 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -12,6 +12,7 @@ import { SupportSystem } from './models/support-system.model';
 import { UpdateSupportSystemCommand } from './commands/update-support-system.command';
 import { DeleteSupportSystemCommand } from './commands/delete-support-system.command';
 import { LuminaireRepository } from './luminaire.repository';
+import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 
 jest.mock('./support-system.service');
 jest.mock('./support-system.repository');
@@ -24,6 +25,16 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 				return domainSupportSystem;
 			case DeleteSupportSystemCommand.name:
 				return deletedSupportSystem;
+		}
+	}),
+	...(<any>{}),
+});
+
+const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
+	execute: jest.fn((query: any) => {
+		switch (query.constructor.name) {
+			case FindSupportSystemsQuery.name:
+				return [domainSupportSystem, domainSupportSystem];
 		}
 	}),
 	...(<any>{}),
@@ -43,7 +54,12 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 	describe('createSupportSystem', () => {
 		test('creates and returns an element', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new SupportSystemResolver(new SupportSystemService(supportSystemRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new SupportSystemResolver(
+				new SupportSystemService(supportSystemRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.createSupportSystem(supportSystemInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateSupportSystemCommand(supportSystemInput));
@@ -56,7 +72,12 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 	describe('updateSupportSystem', () => {
 		test('updates and returns a support system', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new SupportSystemResolver(new SupportSystemService(supportSystemRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new SupportSystemResolver(
+				new SupportSystemService(supportSystemRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.updateSupportSystem(updateSupportSystemInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(
@@ -71,7 +92,12 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 	describe('deleteSupportSystem', () => {
 		test('soft-deletes and returns a support system', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new SupportSystemResolver(new SupportSystemService(supportSystemRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new SupportSystemResolver(
+				new SupportSystemService(supportSystemRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.deleteSupportSystem(domainSupportSystem.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteSupportSystemCommand(domainSupportSystem.id));
@@ -82,10 +108,15 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 		});
 	});
 
-	// test('getSurveySupportSystems returns an array of support system objects', async () => {
-	// 	const commandBusMock = getCommandBusMock();
-	// 	const resolver = new SupportSystemResolver(new SupportSystemService(supportSystemRepo), commandBusMock);
-	// 	const elements = await resolver.getSurveySupportSystems('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-	// 	expect(elements).toEqual([supportSystem1, supportSystem2]);
-	// });
+	test('getSurveySupportSystems returns an array of support system objects', async () => {
+		const commandBusMock = getCommandBusMock();
+		const queryBusMock = getQueryBusMock();
+		const resolver = new SupportSystemResolver(
+			new SupportSystemService(supportSystemRepo),
+			commandBusMock,
+			queryBusMock,
+		);
+		const elements = await resolver.getSurveySupportSystems('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		expect(elements).toEqual([domainSupportSystem, domainSupportSystem]);
+	});
 });

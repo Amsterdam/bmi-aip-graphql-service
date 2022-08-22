@@ -1,3 +1,3 @@
 export * from './batch';
 export * from './asset';
-export * from './spanInstallation';
+export * from '../schema/span-installation/types';

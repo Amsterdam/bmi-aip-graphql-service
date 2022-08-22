@@ -3,6 +3,7 @@ import { CreateLuminaireInput } from '../dto/create-luminaire.input';
 import { Luminaire as DomainLuminaire } from '../types/luminaire.repository.interface';
 import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
+import { SupplierType } from '../../../types';
 
 const luminaire1 = new Luminaire();
 luminaire1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -39,8 +40,8 @@ const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
 	constructionYear: 1979,
 	driverCommissioningDate: null,
 	lightCommissioningDate: null,
-	driverSupplierType: 'one',
-	lightSupplierType: 'two',
+	driverSupplierType: SupplierType.one,
+	lightSupplierType: SupplierType.two,
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
 };

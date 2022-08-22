@@ -8,10 +8,11 @@ import { newId } from '../../utils';
 import { SupportSystem, ISupportSystemRepository } from './types/support-system.repository.interface';
 import { CreateSupportSystemInput } from './dto/create-support-system.input';
 import { UpdateSupportSystemInput } from './dto/update-support-system.input';
+import { LuminaireRepository } from './luminaire.repository';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {
-	public constructor(private readonly prisma: PrismaService) {}
+	public constructor(private readonly prisma: PrismaService, private readonly luminaireRepo: LuminaireRepository) {}
 
 	async createSupportSystem({
 		objectId,
@@ -116,6 +117,8 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			deleted_at: new Date(),
 		};
+
+		await this.luminaireRepo.deleteLuminairesForSupportSystem(identifier);
 
 		const supportSystem = await this.prisma.spanSupportSystems.update({
 			where: { id: identifier },

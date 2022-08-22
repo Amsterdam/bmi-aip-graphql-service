@@ -133,4 +133,16 @@ export class LuminaireRepository implements ILuminaireRepository {
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
 	}
+
+	async deleteLuminairesForSupportSystem(supportSystemId: string): Promise<void> {
+		const luminaires = await this.prisma.spanLuminaires.findMany({
+			where: {
+				supportSystemId,
+			},
+			select: {
+				id: true,
+			},
+		});
+		await Promise.all(luminaires.map(({ id }) => this.deleteLuminaire(id)));
+	}
 }

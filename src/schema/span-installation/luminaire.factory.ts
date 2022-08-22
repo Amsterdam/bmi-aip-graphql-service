@@ -1,4 +1,4 @@
-import { getSupplierType } from '../../types';
+import { SupplierType } from '../../types';
 
 import { Luminaire } from './models/luminaire.model';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
@@ -28,14 +28,14 @@ export class LuminaireFactory {
 		luminaire.name = name;
 		luminaire.location = location;
 		luminaire.constructionYear = constructionYear;
-		luminaire.supplierType = getSupplierType(supplierType);
+		luminaire.supplierType = SupplierType[supplierType];
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
 		luminaire.remarks = remarks;
-		luminaire.driverSupplierType = getSupplierType(driverSupplierType);
+		luminaire.driverSupplierType = SupplierType[driverSupplierType];
 		luminaire.driverCommissioningDate =
 			driverCommissioningDate instanceof Date ? driverCommissioningDate.toUTCString() : null;
-		luminaire.lightSupplierType = getSupplierType(lightSupplierType);
+		luminaire.lightSupplierType = SupplierType[lightSupplierType];
 		luminaire.lightCommissioningDate =
 			lightCommissioningDate instanceof Date ? lightCommissioningDate.toUTCString() : null;
 		luminaire.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;

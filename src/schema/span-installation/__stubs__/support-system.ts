@@ -3,6 +3,7 @@ import { CreateSupportSystemInput } from '../dto/create-support-system.input';
 import { SupportSystem as DomainSupportSystem } from '../types/support-system.repository.interface';
 import { SupportSystemFactory } from '../support-system.factory';
 import { UpdateSupportSystemInput } from '../dto/update-support-system.input';
+import { SupportSystemType } from '../../../types';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -33,7 +34,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	remarks: '__REMARKS__',
 	constructionYear: 1979,
 	houseNumber: '33',
-	type: 'facade',
+	type: SupportSystemType.facade,
 	typeDetailed: 'two',
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: '__A11Y_DETAILS__',

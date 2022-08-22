@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
@@ -11,6 +11,8 @@ import { CreateSupportSystemCommand } from './commands/create-support-system.com
 import { UpdateSupportSystemCommand } from './commands/update-support-system.command';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
 import { DeleteSupportSystemCommand } from './commands/delete-support-system.command';
+import { Luminaire } from './models/luminaire.model';
+import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -49,5 +51,12 @@ export class SupportSystemResolver {
 	@Roles({ roles: ['realm:aip_owner'] })
 	async getSurveySupportSystems(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.supportSystemService.getSupportSystems(surveyId);
+	}
+
+	@ResolveField()
+	async luminaires(@Parent() { type }: SupportSystem): Promise<Luminaire[]> {
+		return this.commandBus.execute<FindSupportSystemLuminairesCommand>(
+			new FindSupportSystemLuminairesCommand(type),
+		);
 	}
 }

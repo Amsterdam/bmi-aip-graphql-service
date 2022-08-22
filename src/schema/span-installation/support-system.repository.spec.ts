@@ -11,6 +11,7 @@ import {
 	updateSupportSystemInput,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
+import { LuminaireRepository } from './luminaire.repository';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanSupportSystems: {
@@ -23,7 +24,11 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const repo = new SupportSystemRepository(prismaServiceMock);
+const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = {
+	...(<any>{}),
+};
+
+const repo = new SupportSystemRepository(prismaServiceMock, luminaireRepositoryMock);
 
 describe('Span Installation / SupportSystem / Repository', () => {
 	test('createSupportSystem()', async () => {

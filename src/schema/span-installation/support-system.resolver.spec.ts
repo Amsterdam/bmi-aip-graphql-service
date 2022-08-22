@@ -11,6 +11,7 @@ import { CreateSupportSystemCommand } from './commands/create-support-system.com
 import { SupportSystem } from './models/support-system.model';
 import { UpdateSupportSystemCommand } from './commands/update-support-system.command';
 import { DeleteSupportSystemCommand } from './commands/delete-support-system.command';
+import { LuminaireRepository } from './luminaire.repository';
 
 jest.mock('./support-system.service');
 jest.mock('./support-system.repository');
@@ -32,7 +33,11 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const supportSystemRepo = new SupportSystemRepository(prismaServiceMock);
+const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = {
+	...(<any>{}),
+};
+
+const supportSystemRepo = new SupportSystemRepository(prismaServiceMock, luminaireRepositoryMock);
 
 describe('Span Installation / SupportSystem / Resolver', () => {
 	describe('createSupportSystem', () => {

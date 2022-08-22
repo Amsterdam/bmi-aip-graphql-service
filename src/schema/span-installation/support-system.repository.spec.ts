@@ -13,6 +13,8 @@ import {
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
 import { LuminaireRepository } from './luminaire.repository';
 
+jest.mock('./luminaire.repository');
+
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanSupportSystems: {
 		create: jest.fn().mockResolvedValue(domainSupportSystem),
@@ -24,11 +26,15 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = {
-	...(<any>{}),
-};
-
-const repo = new SupportSystemRepository(prismaServiceMock, luminaireRepositoryMock);
+// const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = {
+// 	...(<any>{}),
+// };
+// const luminaireRepositoryMock: MockedObjectDeep<LuminaireRepository> = jest.fn(() => ({
+// 	deleteLuminaireForSupportSystem: jest.fn(),
+// 	...(<any>{}),
+// }))
+const luminaireRepository = new LuminaireRepository(prismaServiceMock);
+const repo = new SupportSystemRepository(prismaServiceMock, luminaireRepository);
 
 describe('Span Installation / SupportSystem / Repository', () => {
 	test('createSupportSystem()', async () => {

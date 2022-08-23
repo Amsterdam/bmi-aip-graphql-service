@@ -74,8 +74,8 @@ pipeline {
           sh "bin/npm run ci:lint"
           sh "bin/npm run ci:test"
           // sh "bin/npm run test:e2e"
-          sh "bin/run-build-container chmod -R 777 coverage"
-          sh "bin/run-build-container chmod -R 777 reports"
+          // sh "bin/run-build-container chmod -R 777 coverage"
+          // sh "bin/run-build-container chmod -R 777 reports"
         }
 	  }
       post {

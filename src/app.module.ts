@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule, registerEnumType } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -17,6 +17,10 @@ import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
+import { SupportSystemType, SupportSystemTypeDetailed } from './schema/span-installation/types';
+
+registerEnumType(SupportSystemType, { name: 'SupportSystemType' });
+registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' });
 
 @Module({
 	imports: [

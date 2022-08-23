@@ -1,17 +1,18 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
+import { Point } from 'graphql-geojson-scalar-types';
 
 import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
 
 @InputType()
 export class BaseSupportSystemInput {
 	@IsEnum(SupportSystemType)
-	@Field()
+	@Field((type) => SupportSystemType)
 	public type: SupportSystemType;
 
 	@IsEnum(SupportSystemTypeDetailed)
-	@Field()
+	@Field((type) => SupportSystemTypeDetailed)
 	public typeDetailed: SupportSystemTypeDetailed;
 
 	@IsOptional()
@@ -39,7 +40,7 @@ export class BaseSupportSystemInput {
 	public locationIndication?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
+	@Field(() => Point, { nullable: true })
 	geography?: PointType;
 
 	@IsOptional()

@@ -58,7 +58,7 @@ export class SupportSystemResolver {
 		return this.queryBus.execute<FindSupportSystemsQuery>(new FindSupportSystemsQuery(surveyId));
 	}
 
-	@ResolveField()
+	@ResolveField((type) => [Luminaire])
 	async luminaires(@Parent() { type }: SupportSystem): Promise<Luminaire[]> {
 		return this.commandBus.execute<FindSupportSystemLuminairesCommand>(
 			new FindSupportSystemLuminairesCommand(type),

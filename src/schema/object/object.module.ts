@@ -8,8 +8,8 @@ import { PrismaService } from '../../prisma.service';
 import { ObjectRepository } from './object.repository';
 import { ObjectService } from './object.service';
 import { ObjectResolver } from './object.resolver';
-import { CreateObjectsCommand } from './commands/create-objects.command';
-import { CreateObjectsHandler } from './commands/create-objects.handler';
+import { CreateObjectCommand } from './commands/create-object.command';
+import { CreateObjectHandler } from './commands/create-object.handler';
 
 @Module({
 	providers: [
@@ -17,8 +17,8 @@ import { CreateObjectsHandler } from './commands/create-objects.handler';
 		ObjectRepository,
 		ObjectService,
 		PrismaService,
-		CreateObjectsCommand,
-		CreateObjectsHandler,
+		CreateObjectCommand,
+		CreateObjectHandler,
 	],
 	exports: [ObjectService],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => ObjectModule)],

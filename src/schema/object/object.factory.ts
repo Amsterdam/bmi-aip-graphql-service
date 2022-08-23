@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-import { AssetObject } from './models/object.model';
 import { DbObject as DomainObject } from './types/object.repository.interface';
 import { CreateObjectInput } from './dto/create-object.input';
 
@@ -38,18 +37,18 @@ export class ObjectFactory {
 		trafficType,
 		mainMaterial,
 		marineInfrastrutureType,
-		length,
-		width,
-		squareMeters,
+		// length,
+		// width,
+		// squareMeters,
 		attributes,
-	}: DomainObject): AssetObject {
-		const object = new AssetObject();
+	}: DomainObject): CreateObjectInput {
+		const object = new CreateObjectInput();
 		object.id = id;
 		object.name = name;
 		object.code = code;
 		object.location = location;
-		object.latitude = latitude;
-		object.longitude = longitude;
+		object.latitude = Number(latitude);
+		object.longitude = Number(longitude);
 		object.updatedOn = updatedOn instanceof Date ? updatedOn.toUTCString() : null;
 		object.compositionIsVisible = compositionIsVisible;
 		object.clientCompanyId = clientCompanyId;
@@ -76,9 +75,9 @@ export class ObjectFactory {
 		object.trafficType = trafficType;
 		object.mainMaterial = mainMaterial;
 		object.marineInfrastrutureType = marineInfrastrutureType;
-		object.length = length;
-		object.width = width;
-		object.squareMeters = squareMeters;
+		// object.length = length;
+		// object.width = width;
+		// object.squareMeters = squareMeters;
 		object.attributes = this.parsePrisma(attributes);
 
 		return object;
@@ -88,7 +87,7 @@ export class ObjectFactory {
 		return JSON.parse(json as string);
 	}
 
-	static createMany(input: CreateObjectInput[]) {
-		return input;
-	}
+	// static createMany(input: CreateObjectInput[]) {
+	// 	return input;
+	// }
 }

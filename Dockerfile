@@ -12,7 +12,7 @@ COPY nest-cli.json nest-cli.json
 COPY tsconfig.build.json tsconfig.build.json
 COPY tsconfig.json tsconfig.json
 RUN npm install
-RUN npm run prisma:generate
+RUN npm run prisma generate
 RUN npm run build
 
 ARG DATABASE_URL

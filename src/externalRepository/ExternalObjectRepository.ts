@@ -5,6 +5,7 @@ import { GraphQLClient } from 'graphql-request';
 import { gql } from 'apollo-server-express';
 
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
+import { Asset } from '../schema/asset/models/asset.model';
 
 @Injectable()
 export class ExternalObjectRepository {
@@ -13,6 +14,10 @@ export class ExternalObjectRepository {
 		private readonly configService: ConfigService,
 		@InjectGraphQLClient() private readonly graphqlClient: GraphQLClient,
 	) {}
+
+	public async getAll(): Promise<Asset> {
+		return undefined;
+	}
 
 	public async createMany(input: CreateObjectInput[]): Promise<number> {
 		const mutation = gql`

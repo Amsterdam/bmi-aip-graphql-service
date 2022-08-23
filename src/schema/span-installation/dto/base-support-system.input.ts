@@ -7,11 +7,11 @@ import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
 @InputType()
 export class BaseSupportSystemInput {
 	@IsEnum(SupportSystemType)
-	@Field()
+	@Field((type) => SupportSystemType)
 	public type: SupportSystemType;
 
 	@IsEnum(SupportSystemTypeDetailed)
-	@Field()
+	@Field((type) => SupportSystemTypeDetailed)
 	public typeDetailed: SupportSystemTypeDetailed;
 
 	@IsOptional()

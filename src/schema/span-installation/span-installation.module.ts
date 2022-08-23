@@ -12,6 +12,19 @@ import { JunctionBoxRepository } from './junction-box.repository';
 import { CreateJunctionBoxHandler } from './commands/create-junction-box.handler';
 import { UpdateJunctionBoxHandler } from './commands/update-junction-box.handler';
 import { DeleteJunctionBoxHandler } from './commands/delete-junction-box.handler';
+import { SupportSystemRepository } from './support-system.repository';
+import { SupportSystemResolver } from './support-system.resolver';
+import { SupportSystemService } from './support-system.service';
+import { DeleteSupportSystemHandler } from './commands/delete-support-system.handler';
+import { UpdateSupportSystemHandler } from './commands/update-support-system.handler';
+import { CreateSupportSystemHandler } from './commands/create-support-system.handler';
+import { CreateLuminaireHandler } from './commands/create-luminaire.handler';
+import { UpdateLuminaireHandler } from './commands/update-luminaire.handler';
+import { LuminaireResolver } from './luminaire.resolver';
+import { LuminaireRepository } from './luminaire.repository';
+import { LuminaireService } from './luminaire.service';
+import { DeleteLuminaireHandler } from './commands/delete-luminaire.handler';
+import { FindSupportSystemsHandler } from './queries/find-support-systems.handler';
 
 @Module({
 	providers: [
@@ -21,6 +34,19 @@ import { DeleteJunctionBoxHandler } from './commands/delete-junction-box.handler
 		CreateJunctionBoxHandler,
 		UpdateJunctionBoxHandler,
 		DeleteJunctionBoxHandler,
+		SupportSystemResolver,
+		SupportSystemService,
+		SupportSystemRepository,
+		CreateSupportSystemHandler,
+		UpdateSupportSystemHandler,
+		DeleteSupportSystemHandler,
+		LuminaireResolver,
+		LuminaireService,
+		LuminaireRepository,
+		CreateLuminaireHandler,
+		UpdateLuminaireHandler,
+		DeleteLuminaireHandler,
+		FindSupportSystemsHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

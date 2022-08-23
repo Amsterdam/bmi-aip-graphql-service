@@ -14,17 +14,17 @@ export class ExternalObjectRepository {
 		@InjectGraphQLClient() private readonly graphqlClient: GraphQLClient,
 	) {}
 
-	public async createMany(input: CreateObjectInput[]): Promise<number> {
+	public async createObject(input: CreateObjectInput[]): Promise<number> {
 		const mutation = gql`
-			mutation createManyObjects($createManyInput: [CreateObjectInput!]!) {
-				createManyObjects(createManyObjects: $createManyInput)
+			mutation createObject($createManyInput: [CreateObjectInput!]!) {
+				createObject(createObject: $createManyInput)
 			}
 		`;
 
 		console.log(`Creating many`);
 
 		this.graphqlClient
-			.request(mutation, { createAssetInput: input })
+			.request(mutation, { createObjectInput: input })
 			.then(() => {
 				console.log(`Success`);
 			})

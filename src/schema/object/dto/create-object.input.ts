@@ -21,13 +21,13 @@ export class CreateObjectInput {
 	@MaxLength(255)
 	public location?: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public latitude?: number;
-
-	@IsOptional()
-	@Field({ nullable: true })
-	public longitude?: number;
+	// @IsOptional()
+	// @Field({ nullable: true })
+	// public latitude?: number;
+	//
+	// @IsOptional()
+	// @Field({ nullable: true })
+	// public longitude?: number;
 
 	@IsOptional()
 	@Field({ nullable: true })
@@ -133,17 +133,17 @@ export class CreateObjectInput {
 	@Field({ nullable: true })
 	public marineInfrastrutureType?: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public length?: number;
-
-	@IsOptional()
-	@Field({ nullable: true })
-	public width?: number;
-
-	@IsOptional()
-	@Field({ nullable: true })
-	public squareMeters?: number;
+	// @IsOptional()
+	// @Field({ nullable: true })
+	// public length?: number;
+	//
+	// @IsOptional()
+	// @Field({ nullable: true })
+	// public width?: number;
+	//
+	// @IsOptional()
+	// @Field({ nullable: true })
+	// public squareMeters?: number;
 
 	@IsOptional()
 	@Field(() => GraphQLJSON, { nullable: true })

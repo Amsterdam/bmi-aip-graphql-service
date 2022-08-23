@@ -9,8 +9,8 @@ export class ObjectFactory {
 		name,
 		code,
 		location,
-		latitude,
-		longitude,
+		// latitude,
+		// longitude,
 		updatedOn,
 		compositionIsVisible,
 		clientCompanyId,
@@ -47,8 +47,8 @@ export class ObjectFactory {
 		object.name = name;
 		object.code = code;
 		object.location = location;
-		object.latitude = Number(latitude);
-		object.longitude = Number(longitude);
+		// object.latitude = Number(latitude);
+		// object.longitude = Number(longitude);
 		object.updatedOn = updatedOn instanceof Date ? updatedOn.toUTCString() : null;
 		object.compositionIsVisible = compositionIsVisible;
 		object.clientCompanyId = clientCompanyId;

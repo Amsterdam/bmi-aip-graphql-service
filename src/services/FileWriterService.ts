@@ -77,7 +77,7 @@ export class FileWriterService {
 		this.logger.debug(`Created ${migrationListChunks.length} migration chunks, each roughly 200 in size.`);
 
 		for (const migrationListChunk of migrationListChunks) {
-			await this.objectService.createMany(migrationListChunk);
+			await this.objectService.createObject(migrationListChunk);
 		}
 	}
 

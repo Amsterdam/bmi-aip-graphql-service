@@ -149,19 +149,19 @@ export class FileWriterService {
 			} else {
 				console.log('object already exists');
 			}
-			const junctionBoxs: JunctionBox[] = [];
+			const junctionBoxes: JunctionBox[] = [];
 			const junctionBox: JunctionBox = {
 				id: newId(),
 				objectId: objectId,
 				surveyId: '',
 				name: '',
-				mastNumber: this.workSheet['D' + row]?.v,
-				location: this.workSheet['A' + row]?.v,
-				// locationIndication: this.workSheet['A' + row]?.v,
-				// a11yDetails: this.workSheet['A' + row]?.v,
-				installationHeight: this.workSheet['V' + row]?.v,
-				riserTubeVisible: false,
-				// remarks: this.workSheet['A' + row]?.v,
+				mastNumber: this.workSheet['D' + row]?.v, // Maps to "Mastgetal"
+				location: this.workSheet['A' + row]?.v, // Maps to "Straat"
+				// locationIndication: this.workSheet['A' + row]?.v, // Maps to "Locatie aanduiding"
+				// a11yDetails: this.workSheet['A' + row]?.v, // Maps to "Bereikbaarheid gedetailleerd"
+				installationHeight: this.workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
+				riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
+				// remarks: this.workSheet['A' + row]?.v, // Maps to "Opmerking"
 				geography: {
 					type: 'Point',
 					coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
@@ -170,26 +170,25 @@ export class FileWriterService {
 				updatedAt: String(Date.now()),
 				deletedAt: String(Date.now()),
 			};
-			junctionBoxs.push(junctionBox);
-			console.log('junctionBox', junctionBoxs);
+			junctionBoxes.push(junctionBox);
 
 			const supportSystemId = newId();
 
 			for (let i = 1; i < Number(this.workSheet['B' + row]?.v); i++) {
 				const supportSystem: SupportSystem = {
 					id: supportSystemId,
-					objectId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
+					objectId: objectId,
 					surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
 					name: `voeding + ${i}`,
 					type: SupportSystemType.facade,
-					typeDetailed: SupportSystemTypeDetailed.two,
-					location: null,
-					constructionYear: 1979,
-					locationIndication: '__LOCATION__INDICATION__',
-					a11yDetails: '__A11Y_DETAILS__',
-					installationHeight: 320,
-					remarks: '',
-					houseNumber: '',
+					typeDetailed: SupportSystemTypeDetailed[this.workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
+					location: null, // Maps to "Straat"
+					constructionYear: 1979, // Maps to "Jaar van aanleg"
+					locationIndication: '__LOCATION__INDICATION__', // Maps to "Locatie aanduiding"
+					a11yDetails: '__A11Y_DETAILS__', // Maps to "Bereikbaarheid gedetailleerd"
+					installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
+					remarks: '', // Maps to "Opmerking"
+					houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
 					geography: {
 						type: 'Point',
 						coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
@@ -206,23 +205,23 @@ export class FileWriterService {
 					id: newId(),
 					supportSystemId: supportSystemId,
 					name: `Armatuur + ${i}`,
-					location: this.workSheet['I' + row]?.v,
-					constructionYear: null,
-					supplierType: SupplierType.two,
-					manufacturer: '__MANUFACTURER__',
+					location: this.workSheet['I' + row]?.v, // Maps to "Straat"
+					constructionYear: null, // Maps to "Jaar van aanleg"
+					supplierType: SupplierType.two, // Maps to "Leverancierstype"
+					manufacturer: '__MANUFACTURER__', // Maps to "Fabrikant"
 					geography: {
 						type: 'Point',
 						coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
 					},
-					remarks: '',
+					remarks: '', // Maps to "Opmerking"
 
 					// Driver
-					driverSupplierType: SupplierType.one,
-					driverCommissioningDate: null,
+					driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
+					driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
 
 					// Light
-					lightSupplierType: SupplierType.two,
-					lightCommissioningDate: '',
+					lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
+					lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
 
 					createdAt: String(Date.now()),
 					updatedAt: String(Date.now()),

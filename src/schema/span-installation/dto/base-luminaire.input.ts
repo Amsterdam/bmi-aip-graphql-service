@@ -25,7 +25,7 @@ export class BaseLuminaireInput {
 	public manufacturer?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
+	@Field((type) => JSON, { nullable: true })
 	geography?: PointType;
 
 	@IsOptional()

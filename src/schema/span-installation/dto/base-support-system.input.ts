@@ -39,7 +39,7 @@ export class BaseSupportSystemInput {
 	public locationIndication?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
+	@Field((type) => JSON, { nullable: true })
 	geography?: PointType;
 
 	@IsOptional()

@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
+import { TerminusModule } from '@nestjs/terminus';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +19,7 @@ import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
 import { SupportSystemType, SupportSystemTypeDetailed } from './schema/span-installation/types';
+import { HealthController } from './HealthController';
 
 registerEnumType(SupportSystemType, { name: 'SupportSystemType' });
 registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' });
@@ -45,8 +47,9 @@ registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' 
 			sortSchema: true,
 			autoSchemaFile: true,
 		}),
+		TerminusModule,
 	],
-	controllers: [AppController],
+	controllers: [AppController, HealthController],
 	providers: [
 		{
 			provide: APP_GUARD,

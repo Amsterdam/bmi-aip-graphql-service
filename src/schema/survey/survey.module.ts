@@ -10,6 +10,8 @@ import { SurveyService } from './survey.service';
 import { SurveyResolver } from './survey.resolver';
 import { CreateSurveyCommand } from './commands/create-survey.command';
 import { CreateSurveyHandler } from './commands/create-survey.handler';
+import { GetSurveyByIdHandler } from './queries/get-survey-by-id.handler';
+import { GetSurveysByObjectIdHandler } from './queries/get-surveys-by-object-id.handler';
 
 @Module({
 	providers: [
@@ -19,6 +21,8 @@ import { CreateSurveyHandler } from './commands/create-survey.handler';
 		PrismaService,
 		CreateSurveyCommand,
 		CreateSurveyHandler,
+		GetSurveyByIdHandler,
+		GetSurveysByObjectIdHandler,
 	],
 	exports: [SurveyService],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => SurveyModule)],

@@ -1,8 +1,13 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
 
 import { Survey } from './models/survey.model';
+import { GetSurveyByIdQuery } from './queries/get-survey-by-id.query';
+import { GetSurveysByObjectIdQuery } from './queries/get-surveys-by-object-id.query';
+import { CreateSurveyInput } from './dto/create-survey.input';
+import { CreateSurveyCommand } from './commands/create-survey.command';
 
 /*
 	This resolver is just for illustrating
@@ -11,29 +16,24 @@ import { Survey } from './models/survey.model';
 
 @Resolver((of) => Survey)
 export class SurveyResolver {
-	public constructor(private readonly prismaService: PrismaService) {}
+	public constructor(
+		private readonly prismaService: PrismaService,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	@Query((returns) => Survey, { name: 'surveys' })
+	@Query((returns) => Survey)
 	public async getSurveyById(@Args('id') id: string): Promise<Survey> {
-		const survey = this.prismaService.surveys.findUnique({
-			where: { id: id },
-		});
-		if (!survey) {
-			throw new Error('Method not implemented.');
-		}
-
-		return survey;
+		return this.queryBus.execute<GetSurveyByIdQuery>(new GetSurveyByIdQuery(id));
 	}
 
+	@Query((returns) => [Survey])
 	public async getSurveysByObjectId(@Args('objectId') objectId: string): Promise<Survey[]> {
-		const surveys = this.prismaService.surveys.findMany({
-			where: { objectId: objectId },
-		});
-		if (!surveys) {
-			throw new Error('Method not implemented.');
-		}
+		return this.queryBus.execute<GetSurveysByObjectIdQuery>(new GetSurveysByObjectIdQuery(objectId));
+	}
 
-		return surveys;
+	@Mutation((returns) => Survey)
+	public async createSurvey(@Args('createSurveyInput') input: CreateSurveyInput): Promise<Survey> {
+		return this.commandBus.execute<CreateSurveyCommand>(new CreateSurveyCommand(input));
 	}
 }

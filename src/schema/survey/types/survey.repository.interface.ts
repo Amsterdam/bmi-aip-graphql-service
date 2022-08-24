@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateSurveyInput } from '../dto/create-survey.input';
+import { Survey } from '../models/survey.model';
 
 const surveys = Prisma.validator<Prisma.surveysArgs>()({
 	select: {
@@ -69,5 +70,5 @@ const surveys = Prisma.validator<Prisma.surveysArgs>()({
 export type DbSurvey = Prisma.surveysGetPayload<typeof surveys>;
 
 export interface ISurveyRepository {
-	createSurvey(input: CreateSurveyInput): Promise<DbSurvey>;
+	createSurvey(input: CreateSurveyInput): Promise<Survey>;
 }

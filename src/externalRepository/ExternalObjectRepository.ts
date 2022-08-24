@@ -5,6 +5,7 @@ import { GraphQLClient } from 'graphql-request';
 import { gql } from 'apollo-server-express';
 
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
+import { ObjectModel } from '../schema/object/models/object.model';
 
 @Injectable()
 export class ExternalObjectRepository {
@@ -14,26 +15,25 @@ export class ExternalObjectRepository {
 		@InjectGraphQLClient() private readonly graphqlClient: GraphQLClient,
 	) {}
 
-	public async createObject(input: CreateObjectInput[]): Promise<number> {
+	public async createObject(input: CreateObjectInput): Promise<ObjectModel> {
 		const mutation = gql`
-			mutation createObject($createManyInput: [CreateObjectInput!]!) {
-				createObject(createObject: $createManyInput)
+			mutation createManyObjects($createObjectInput: CreateObjectInput!) {
+				createObject(createObject: $createObjectInput) {
+					id
+				}
 			}
 		`;
 
-		console.log(`Creating many`);
+		let objectModel: ObjectModel;
+		console.log(input);
+		try {
+			const result = await this.graphqlClient.request(mutation, { createObjectInput: input });
+			objectModel = result.data.createObject;
+			console.log(`Success`);
+		} catch (e) {
+			console.log(e.message);
+		}
 
-		this.graphqlClient
-			.request(mutation, { createObjectInput: input })
-			.then(() => {
-				console.log(`Success`);
-			})
-			.catch((reason) => {
-				console.log(reason);
-			});
-
-		this.logger.verbose(`Executed migration for ${input.length} assets`);
-
-		return input.length;
+		return objectModel;
 	}
 }

@@ -6,9 +6,13 @@ import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 
-import { ObjectService } from '../schema/object/object.service';
 import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';
+import { SurveyRepository } from '../schema/survey/survey.repository';
+import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
+import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
+import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
+import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
 
 @Module({
 	imports: [
@@ -28,6 +32,17 @@ import { PrismaService } from '../prisma.service';
 			inject: [ConfigService, Reflector],
 		}),
 	],
-	providers: [FileWriterService, Logger, ConfigService, ObjectService, ObjectRepository, PrismaService],
+	providers: [
+		FileWriterService,
+		Logger,
+		ConfigService,
+		ObjectRepository,
+		PrismaService,
+		SurveyRepository,
+		JunctionBoxRepository,
+		SupportSystemRepository,
+		LuminaireRepository,
+		ExternalObjectRepository,
+	],
 })
 export class FileModule {}

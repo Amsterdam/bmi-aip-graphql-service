@@ -10,7 +10,7 @@ export class ObjectService {
 	public constructor(private readonly objectRepo: ObjectRepository) {}
 
 	async createObject(input: CreateObjectInput): Promise<ObjectModel> {
-		return ObjectFactory.CreateObject(input);
+		return this.objectRepo.createObject(input);
 	}
 
 	async getObjects(objectType: string): Promise<ObjectModel[]> {

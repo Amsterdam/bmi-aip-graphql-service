@@ -1,5 +1,5 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
+import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType({ description: 'object' })
 export class ObjectModel {
@@ -22,37 +22,37 @@ export class ObjectModel {
 	longitude?: number;
 
 	@Field((type) => String, { nullable: true })
-	updatedOn: string;
+	updatedOn?: string;
 
 	@Field((type) => Boolean)
 	compositionIsVisible: boolean;
 
 	@Field((type) => String, { nullable: true })
-	clientCompanyId: string;
+	clientCompanyId?: string;
 
 	@Field((type) => String, { nullable: true })
-	operatorCompanyId: string;
+	operatorCompanyId?: string;
 
 	@Field((type) => String, { nullable: true })
-	surveyorCompanyId: string;
+	surveyorCompanyId?: string;
 
 	@Field((type) => String, { nullable: false })
 	objectTypeId: string;
 
 	@Field((type) => String, { nullable: true })
-	created_at: string;
+	created_at?: string;
 
 	@Field((type) => String, { nullable: true })
-	updated_at: string;
+	updated_at?: string;
 
 	@Field((type) => String, { nullable: true })
-	inspectionStandardId: string;
+	inspectionStandardId?: string;
 
 	@Field((type) => String, { nullable: true })
-	ownerCompanyId: string;
+	ownerCompanyId?: string;
 
 	@Field((type) => String, { nullable: true })
-	customerVersion: string;
+	customerVersion?: string;
 
 	@Field((type) => Boolean)
 	isPublic: boolean;
@@ -61,43 +61,43 @@ export class ObjectModel {
 	isDemo: boolean;
 
 	@Field((type) => String, { nullable: true })
-	siteId: string;
+	siteId?: string;
 
 	@Field((type) => Number, { nullable: true })
-	constructionYear: number;
+	constructionYear?: number;
 
 	@Field((type) => String, { nullable: true })
-	externalRefId: string;
+	externalRefId?: string;
 
 	@Field((type) => String, { nullable: true })
-	useage: string;
+	useage?: string;
 
 	@Field((type) => String, { nullable: true })
-	managementOrganization: string;
+	managementOrganization?: string;
 
 	@Field((type) => String, { nullable: true })
-	shape: string;
+	shape?: string;
 
 	@Field((type) => Number, { nullable: true })
-	shapeSrid: number;
+	shapeSrid?: number;
 
 	@Field((type) => String, { nullable: true })
-	status: string;
+	status?: string;
 
 	@Field((type) => String, { nullable: true })
-	effortCategory: string;
+	effortCategory?: string;
 
 	@Field((type) => Number, { nullable: true })
-	effortCalculation: number;
+	effortCalculation?: number;
 
 	@Field((type) => String, { nullable: true })
-	trafficType: string;
+	trafficType?: string;
 
 	@Field((type) => String, { nullable: true })
-	mainMaterial: string;
+	mainMaterial?: string;
 
 	@Field((type) => String, { nullable: true })
-	marineInfrastrutureType: string;
+	marineInfrastrutureType?: string;
 
 	@Field((type) => Float, { nullable: true })
 	length?: number;
@@ -108,6 +108,14 @@ export class ObjectModel {
 	@Field((type) => Float, { nullable: true })
 	squareMeters?: number;
 
-	@Field((type) => JSON, { nullable: true })
-	attributes: Prisma.JsonValue;
+	@Field((type) => GraphQLJSON, { nullable: true })
+	attributes?: JSONValue;
 }
+
+type JSONValue =
+	// | JSONValuestring
+	// | number
+	// | boolean
+	// | null
+	// | { [x: string]: JSONValue }
+	Array<JSONValue>;

@@ -6,7 +6,6 @@ import { uniq } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
-import { ObjectModel } from '../schema/object/models/object.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { newId } from '../utils';
 import { Luminaire } from '../schema/span-installation/models/luminaire.model';
@@ -20,6 +19,8 @@ import { Survey } from '../schema/survey/models/survey.model';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
+import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
+import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 
 @Injectable()
 export class FileWriterService {
@@ -36,6 +37,7 @@ export class FileWriterService {
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
 		private readonly luminaireRepository: LuminaireRepository,
+		private readonly externalObjectRepository: ExternalObjectRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -76,44 +78,51 @@ export class FileWriterService {
 		return { workSheet, rowCounter };
 	}
 
-	private async createObject(objectId: string, row: string, workSheet, passport: IPassport): Promise<ObjectModel> {
+	private async createObject(
+		objectId: string,
+		row: string,
+		workSheet,
+		passport: IPassport,
+	): Promise<CreateObjectInput> {
 		const passportInfo: IPassport[] = [];
-		const assetObject: ObjectModel = {
+		passportInfo.push(passport);
+		const assetObject: CreateObjectInput = {
 			id: objectId,
 			code: 'OVS' + ('000' + workSheet['A' + row]?.v).slice(-4),
-			clientCompanyId: '',
+			clientCompanyId: 'f1aaf90a-f560-98b9-3555-24c7a6e5ba44',
 			compositionIsVisible: false,
 			constructionYear: 0,
-			created_at: '',
-			customerVersion: '',
+			created_at: new Date(),
+			customerVersion: 'amsterdam',
 			effortCalculation: 0,
 			effortCategory: '',
 			externalRefId: '',
-			inspectionStandardId: '',
+			inspectionStandardId: '207b5f2d-ded8-48f1-863d-bf9b6f13e602',
 			isDemo: false,
 			isPublic: false,
-			// latitude: 0.0,
-			// length: 0,
-			// longitude: 0,
+			latitude: 0.0,
+			length: 0,
+			longitude: 0,
 			mainMaterial: '',
 			managementOrganization: '',
 			marineInfrastrutureType: '',
 			name: '',
-			objectTypeId: '',
-			operatorCompanyId: '',
-			ownerCompanyId: '',
+			objectTypeId: 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0',
+			operatorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
+			ownerCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
 			shape: '',
 			shapeSrid: 0,
 			siteId: '',
-			// squareMeters: 0,
+			squareMeters: 0,
 			status: '',
-			surveyorCompanyId: '',
+			surveyorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
 			trafficType: '',
-			updatedOn: '',
-			updated_at: '',
+			updatedOn: new Date(),
+			updated_at: new Date(),
 			useage: '',
-			// width: 0,
-			attributes: passportInfo.push(passport),
+			width: 0,
+			attributes: JSON.parse(JSON.stringify(passportInfo)),
+			location: '',
 		};
 		return assetObject;
 	}
@@ -287,11 +296,20 @@ export class FileWriterService {
 
 			if (index === -1) {
 				passportInfo.push(passport);
-				const objectModel: ObjectModel = await this.createObject(objectId, row, workSheet, passport);
-				await this.objectRepository.createObject(objectModel);
+				const input: CreateObjectInput = await this.createObject(objectId, row, workSheet, passport);
+				await this.externalObjectRepository.createObject(input);
 
-				const survey: Survey = await this.createSurvey(objectId, surveyId);
-				await this.surveyRepository.createSurvey(survey);
+				// const survey: Survey = await this.createSurvey(objectId, surveyId);
+				// await this.surveyRepository.createSurvey({
+				// 	careCondition: survey.careCondition,
+				// 	condition: survey.condition,
+				// 	description: survey.description,
+				// 	id: survey.id,
+				// 	inspectionStandardType: survey.inspectionStandardType,
+				// 	objectId: survey.objectId,
+				// 	status: survey.status,
+				// 	summaryAndAdvice: survey.summaryAndAdvice,
+				// });
 			} else {
 				console.log('object already exists');
 			}

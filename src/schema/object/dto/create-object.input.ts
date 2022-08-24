@@ -1,7 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsNumber, IsOptional, IsUUID, MaxLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
-import { Decimal } from '@prisma/client/runtime';
 
 @InputType()
 export class CreateObjectInput {
@@ -24,11 +23,11 @@ export class CreateObjectInput {
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public latitude: Decimal;
+	public latitude: number;
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public longitude: Decimal;
+	public longitude: number;
 
 	@Field({ nullable: true })
 	public updatedOn: Date;
@@ -79,7 +78,7 @@ export class CreateObjectInput {
 	@Field()
 	public constructionYear: number;
 
-	@Field()
+	@Field({ nullable: true })
 	public externalRefId: string;
 
 	@Field()
@@ -114,15 +113,15 @@ export class CreateObjectInput {
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public length: Decimal;
+	public length: number;
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public width: Decimal;
+	public width: number;
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public squareMeters: Decimal;
+	public squareMeters: number;
 
 	@Field(() => GraphQLJSON, { nullable: true })
 	public attributes: JSONValue;

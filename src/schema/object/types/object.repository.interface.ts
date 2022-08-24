@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { CreateObjectInput } from '../dto/create-object.input';
+import { ObjectModel } from '../models/object.model';
 
 const objects = Prisma.validator<Prisma.objectsArgs>()({
 	select: {
@@ -45,5 +46,5 @@ const objects = Prisma.validator<Prisma.objectsArgs>()({
 export type DbObject = Prisma.objectsGetPayload<typeof objects>;
 
 export interface IObjectRepository {
-	createObject(input: CreateObjectInput): Promise<DbObject>;
+	createObject(input: CreateObjectInput): Promise<ObjectModel>;
 }

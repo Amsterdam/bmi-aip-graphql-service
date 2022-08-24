@@ -187,14 +187,14 @@ export class FileWriterService {
 		type,
 		supportSystemId,
 		row,
-		index,
+		key,
 		workSheet,
 	): Promise<SupportSystem> {
 		const supportSystem: SupportSystem = {
 			id: supportSystemId,
 			objectId: objectId,
 			surveyId: surveyId,
-			name: `Draagsystem + ${index}`,
+			name: `Draagsystem + ${key}`,
 			type: type,
 			typeDetailed: SupportSystemTypeDetailed[workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
 			location: workSheet['I' + row]?.v, // Maps to "Straat"
@@ -274,22 +274,22 @@ export class FileWriterService {
 				console.log('object already exists');
 			}
 
-			for (let count = 1; index < Number(workSheet['B' + row]?.v); count++) {
-				const junctionBox: JunctionBox = await this.createJuctionbox(objectId, surveyId, row, index, workSheet);
+			for (let count = 1; count < Number(workSheet['B' + row]?.v); count++) {
+				const junctionBox: JunctionBox = await this.createJuctionbox(objectId, surveyId, row, count, workSheet);
 				await this.junctionBoxRepository.createJunctionBox(junctionBox);
 			}
 
 			const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
 			for (const type of supportSystemTypes) {
-				// const indexOf = Object.keys(type).indexOf(type);
-				// if ()
+				const sameType = supportSystemTypes.filter((_type) => _type == type);
+
 				const supportSystem: SupportSystem = await this.createSupportSystem(
 					objectId,
 					surveyId,
 					type,
 					supportSystemId,
 					row,
-					index,
+					sameType.keys(),
 					workSheet,
 				);
 				await this.supportSystemRepository.createSupportSystem(supportSystem);

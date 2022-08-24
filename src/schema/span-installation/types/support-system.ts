@@ -2,7 +2,7 @@ export enum SupportSystemType {
 	'tensionWire' = 'tensionWire',
 	'facade' = 'facade',
 	'mast' = 'mast',
-	'ring' = 'ring',
+	'knoop' = 'knoop',
 }
 
 // TODO populate this with appropriate options

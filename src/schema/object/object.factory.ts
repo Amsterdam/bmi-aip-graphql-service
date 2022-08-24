@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { DbObject as DomainObject } from './types/object.repository.interface';
-import { CreateObjectInput } from './dto/create-object.input';
+import { ObjectModel } from './models/object.model';
 
 export class ObjectFactory {
 	static CreateObject({
@@ -9,8 +9,8 @@ export class ObjectFactory {
 		name,
 		code,
 		location,
-		// latitude,
-		// longitude,
+		latitude,
+		longitude,
 		updatedOn,
 		compositionIsVisible,
 		clientCompanyId,
@@ -37,18 +37,18 @@ export class ObjectFactory {
 		trafficType,
 		mainMaterial,
 		marineInfrastrutureType,
-		// length,
-		// width,
-		// squareMeters,
+		length,
+		width,
+		squareMeters,
 		attributes,
-	}: DomainObject): CreateObjectInput {
-		const object = new CreateObjectInput();
+	}: DomainObject): ObjectModel {
+		const object = new ObjectModel();
 		object.id = id;
 		object.name = name;
 		object.code = code;
 		object.location = location;
-		// object.latitude = Number(latitude);
-		// object.longitude = Number(longitude);
+		object.latitude = Number(latitude);
+		object.longitude = Number(longitude);
 		object.updatedOn = updatedOn instanceof Date ? updatedOn.toUTCString() : null;
 		object.compositionIsVisible = compositionIsVisible;
 		object.clientCompanyId = clientCompanyId;
@@ -75,9 +75,9 @@ export class ObjectFactory {
 		object.trafficType = trafficType;
 		object.mainMaterial = mainMaterial;
 		object.marineInfrastrutureType = marineInfrastrutureType;
-		// object.length = length;
-		// object.width = width;
-		// object.squareMeters = squareMeters;
+		object.length = Number(length);
+		object.width = Number(width);
+		object.squareMeters = Number(squareMeters);
 		object.attributes = this.parsePrisma(attributes);
 
 		return object;
@@ -86,8 +86,4 @@ export class ObjectFactory {
 	static parsePrisma(json: Prisma.JsonValue) {
 		return JSON.parse(json as string);
 	}
-
-	// static createMany(input: CreateObjectInput[]) {
-	// 	return input;
-	// }
 }

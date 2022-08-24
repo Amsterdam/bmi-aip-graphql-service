@@ -25,4 +25,15 @@ export class SurveyResolver {
 
 		return survey;
 	}
+
+	public async getSurveysByObjectId(@Args('objectId') objectId: string): Promise<Survey[]> {
+		const surveys = this.prismaService.surveys.findMany({
+			where: { objectId: objectId },
+		});
+		if (!surveys) {
+			throw new Error('Method not implemented.');
+		}
+
+		return surveys;
+	}
 }

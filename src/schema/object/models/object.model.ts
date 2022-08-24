@@ -1,8 +1,8 @@
-import { Field } from '@nestjs/graphql';
-import { Decimal } from '@prisma/client/runtime';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 
-export class AssetObject {
+@ObjectType({ description: 'object' })
+export class ObjectModel {
 	@Field((type) => String)
 	id: string;
 
@@ -15,99 +15,99 @@ export class AssetObject {
 	@Field((type) => String, { nullable: true })
 	location?: string;
 
-	@Field((type) => Decimal, { nullable: true })
-	public latitude?: Decimal;
+	@Field((type) => Float, { nullable: true })
+	latitude?: number;
 
-	@Field((type) => Decimal, { nullable: true })
-	public longitude?: Decimal;
+	@Field((type) => Float, { nullable: true })
+	longitude?: number;
 
 	@Field((type) => String, { nullable: true })
-	public updatedOn: string;
+	updatedOn: string;
 
 	@Field((type) => Boolean)
-	public compositionIsVisible: boolean;
+	compositionIsVisible: boolean;
 
 	@Field((type) => String, { nullable: true })
-	public clientCompanyId: string;
+	clientCompanyId: string;
 
 	@Field((type) => String, { nullable: true })
-	public operatorCompanyId: string;
+	operatorCompanyId: string;
 
 	@Field((type) => String, { nullable: true })
-	public surveyorCompanyId: string;
+	surveyorCompanyId: string;
 
 	@Field((type) => String, { nullable: false })
-	public objectTypeId: string;
+	objectTypeId: string;
 
 	@Field((type) => String, { nullable: true })
-	public created_at: string;
+	created_at: string;
 
 	@Field((type) => String, { nullable: true })
-	public updated_at: string;
+	updated_at: string;
 
 	@Field((type) => String, { nullable: true })
-	public inspectionStandardId: string;
+	inspectionStandardId: string;
 
 	@Field((type) => String, { nullable: true })
-	public ownerCompanyId: string;
+	ownerCompanyId: string;
 
 	@Field((type) => String, { nullable: true })
-	public customerVersion: string;
+	customerVersion: string;
 
 	@Field((type) => Boolean)
-	public isPublic: boolean;
+	isPublic: boolean;
 
 	@Field((type) => Boolean)
-	public isDemo: boolean;
+	isDemo: boolean;
 
 	@Field((type) => String, { nullable: true })
-	public siteId: string;
+	siteId: string;
 
 	@Field((type) => Number, { nullable: true })
-	public constructionYear: number;
+	constructionYear: number;
 
 	@Field((type) => String, { nullable: true })
-	public externalRefId: string;
+	externalRefId: string;
 
 	@Field((type) => String, { nullable: true })
-	public useage: string;
+	useage: string;
 
 	@Field((type) => String, { nullable: true })
-	public managementOrganization: string;
+	managementOrganization: string;
 
 	@Field((type) => String, { nullable: true })
-	public shape: string;
+	shape: string;
 
 	@Field((type) => Number, { nullable: true })
-	public shapeSrid: number;
+	shapeSrid: number;
 
 	@Field((type) => String, { nullable: true })
-	public status: string;
+	status: string;
 
 	@Field((type) => String, { nullable: true })
-	public effortCategory: string;
+	effortCategory: string;
 
 	@Field((type) => Number, { nullable: true })
-	public effortCalculation: number;
+	effortCalculation: number;
 
 	@Field((type) => String, { nullable: true })
-	public trafficType: string;
+	trafficType: string;
 
 	@Field((type) => String, { nullable: true })
-	public mainMaterial: string;
+	mainMaterial: string;
 
 	@Field((type) => String, { nullable: true })
-	public marineInfrastrutureType: string;
+	marineInfrastrutureType: string;
 
-	@Field((type) => Decimal, { nullable: true })
-	public length?: Decimal;
+	@Field((type) => Float, { nullable: true })
+	length?: number;
 
-	@Field((type) => Decimal, { nullable: true })
-	public width?: Decimal;
+	@Field((type) => Float, { nullable: true })
+	width?: number;
 
-	@Field((type) => Decimal, { nullable: true })
-	public squareMeters?: Decimal;
+	@Field((type) => Float, { nullable: true })
+	squareMeters?: number;
 
 	@Field((type) => JSON, { nullable: true })
-	public attributes: Prisma.JsonValue;
+	attributes: Prisma.JsonValue;
 }

@@ -1,30 +1,15 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
-ObjectType({ description: 'surveys' });
-export class Survey {
+@InputType()
+export class BaseCreateSurveyInput {
 	@Field((type) => String)
-	id: string;
-
-	@Field((type) => String)
-	objectId: string;
+	summaryAndAdvice: string;
 
 	@Field((type) => String)
-	batchId: string;
+	condition: string;
 
 	@Field((type) => String)
-	status: string;
-
-	@Field((type) => String)
-	description: string;
-
-	@Field((type) => String)
-	summaryAndAdvice?: string;
-
-	@Field((type) => String)
-	condition?: string;
-
-	@Field((type) => String)
-	careCondition?: string;
+	careCondition: string;
 
 	@Field((type) => String)
 	inspectionStandardType: string;
@@ -153,8 +138,8 @@ export class Survey {
 	material?: string;
 
 	@Field()
-	created_at: string;
+	created_at?: string;
 
 	@Field()
-	updated_at: string;
+	updated_at?: string;
 }

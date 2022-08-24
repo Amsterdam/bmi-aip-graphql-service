@@ -3,17 +3,19 @@ import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import * as xlsx from 'xlsx';
 import { uniq } from 'lodash';
-import { Sheet } from 'xlsx';
 import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
-import { ObjectService } from '../schema/object/object.service';
-import { AssetObject } from '../schema/object/models/object.model';
+import { ObjectModel } from '../schema/object/models/object.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { newId } from '../utils';
 import { Luminaire } from '../schema/span-installation/models/luminaire.model';
 import { SupplierType, SupportSystemType, SupportSystemTypeDetailed } from '../types';
 import { SupportSystem } from '../schema/span-installation/models/support-system.model';
+import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
+import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
+import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
+import { ObjectRepository } from '../schema/object/object.repository';
 
 @Injectable()
 export class FileWriterService {
@@ -21,13 +23,14 @@ export class FileWriterService {
 
 	private graphqlClient: GraphQLClient;
 
-	private workSheet: Sheet;
-
 	public constructor(
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
-		private readonly objectService: ObjectService,
 		private configService: ConfigService,
+		private readonly objectRepository: ObjectRepository,
+		private readonly junctionBoxRepository: JunctionBoxRepository,
+		private readonly supportSystemRepository: SupportSystemRepository,
+		private readonly luminaireRepository: LuminaireRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -45,19 +48,9 @@ export class FileWriterService {
 				Authorization: 'Bearer ' + this.configService.get<string>('AUTH_TOKEN'),
 			},
 		});
-		this.workSheet = this.getFile();
 	}
 
-	private sliceArrayIntoChunks(arr, chunkSize) {
-		const res = [];
-		for (let i = 0; i < arr.length; i += chunkSize) {
-			const chunk = arr.slice(i, i + chunkSize);
-			res.push(chunk);
-		}
-		return res;
-	}
-
-	private async getFile(): Promise<any> {
+	private async getFile(): Promise<{ workSheet: any; rowCounter: any[] }> {
 		const filePath: string =
 			this.configService.get<string>('APP_DIR') +
 			this.configService.get<string>('DOC_DIR') +
@@ -68,168 +61,244 @@ export class FileWriterService {
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 
-		return workSheet;
-	}
-
-	public async migrateSpanInstallation() {
-		this.logger.verbose(`Starting file migration...`);
-		const migrationListChunks = this.sliceArrayIntoChunks([...(await this.importObject())], 200);
-		this.logger.debug(`Created ${migrationListChunks.length} migration chunks, each roughly 200 in size.`);
-
-		for (const migrationListChunk of migrationListChunks) {
-			await this.objectService.createObject(migrationListChunk);
-		}
-	}
-
-	private async importObject(): Promise<AssetObject[]> {
 		let rowCounter = [];
-		const passportInfo: IPassport[] = [];
-		const assetObjects: AssetObject[] = [];
 
-		for (const key of Object.keys(this.workSheet)) {
+		for (const key of Object.keys(workSheet)) {
 			const rawKey = key.match(/[a-z]+|\d+/gi);
 			if (rawKey[1] !== undefined) rowCounter.push(rawKey[1]);
 		}
 		rowCounter = uniq(rowCounter);
+		return { workSheet, rowCounter };
+	}
+
+	private async createObject(objectId: string, row: string, workSheet, passport: IPassport): Promise<ObjectModel> {
+		const passportInfo: IPassport[] = [];
+		const assetObject: ObjectModel = {
+			id: objectId,
+			code: 'OVS' + ('000' + workSheet['A' + row]?.v).slice(-4),
+			clientCompanyId: '',
+			compositionIsVisible: false,
+			constructionYear: 0,
+			created_at: '',
+			customerVersion: '',
+			effortCalculation: 0,
+			effortCategory: '',
+			externalRefId: '',
+			inspectionStandardId: '',
+			isDemo: false,
+			isPublic: false,
+			// latitude: 0.0,
+			// length: 0,
+			// longitude: 0,
+			mainMaterial: '',
+			managementOrganization: '',
+			marineInfrastrutureType: '',
+			name: '',
+			objectTypeId: '',
+			operatorCompanyId: '',
+			ownerCompanyId: '',
+			shape: '',
+			shapeSrid: 0,
+			siteId: '',
+			// squareMeters: 0,
+			status: '',
+			surveyorCompanyId: '',
+			trafficType: '',
+			updatedOn: '',
+			updated_at: '',
+			useage: '',
+			// width: 0,
+			attributes: passportInfo.push(passport),
+		};
+		return assetObject;
+	}
+
+	private async createJuctionbox(objectId, surveyId, row: string, index, workSheet): Promise<JunctionBox> {
+		const junctionBox: JunctionBox = {
+			id: newId(),
+			objectId: objectId,
+			surveyId: surveyId,
+			name: `${index}`,
+			mastNumber: workSheet['D' + row]?.v, // Maps to "Mastgetal"
+			location: workSheet['A' + row]?.v, // Maps to "Straat"
+			locationIndication: '', // Maps to "Locatie aanduiding"
+			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+			installationHeight: workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
+			riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
+			remarks: '', // Maps to "Opmerking"
+			geography: {
+				type: 'Point',
+				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+			},
+			createdAt: String(Date.now()),
+			updatedAt: String(Date.now()),
+			deletedAt: String(Date.now()),
+		};
+		return junctionBox;
+	}
+
+	private getSupportSystemType(situation): SupportSystemType[] {
+		let supportSystemType: SupportSystemType[] = [];
+		switch (situation) {
+			case 'MVMA':
+				// MVMA = tensionWire / mast / mast
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				break;
+			case 'MVMAASPIN':
+				// MVMAAspin = tensionWire / mast / mast / knoop
+				supportSystemType = [
+					SupportSystemType.tensionWire,
+					SupportSystemType.mast,
+					SupportSystemType.mast,
+					SupportSystemType.knoop,
+				];
+				break;
+			case 'GMVAASPIN':
+				// GMVAASPIN = tensionWire / facade / mast / knoop
+				supportSystemType = [
+					SupportSystemType.tensionWire,
+					SupportSystemType.facade,
+					SupportSystemType.mast,
+					SupportSystemType.knoop,
+				];
+			case 'MVMAA':
+				// MVMAA = tensionWire / mast / mast
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+			case 'GMVA':
+				// GMVA = tensionWire / facade / mast
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.knoop];
+			case 'GMVAA':
+				// GMVAA = tensionWire / facade / mast
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.mast];
+			case 'GVGA':
+				// GVGA = tensionWire / facade / facade
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+			case 'GVGAA':
+				// GVGAA = tensionWire / facade / facade
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+			default:
+		}
+		return supportSystemType;
+	}
+
+	private async createSupportSystem(
+		objectId,
+		surveyId,
+		type,
+		supportSystemId,
+		row,
+		index,
+		workSheet,
+	): Promise<SupportSystem> {
+		const supportSystem: SupportSystem = {
+			id: supportSystemId,
+			objectId: objectId,
+			surveyId: surveyId,
+			name: `Draagsystem + ${index}`,
+			type: type,
+			typeDetailed: SupportSystemTypeDetailed[workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
+			location: workSheet['I' + row]?.v, // Maps to "Straat"
+			constructionYear: 1979, // Maps to "Jaar van aanleg"
+			locationIndication: '', // Maps to "Locatie aanduiding"
+			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+			installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
+			remarks: '', // Maps to "Opmerking"
+			houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
+			geography: {
+				type: 'Point',
+				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+			},
+			createdAt: String(Date.now()),
+			updatedAt: String(Date.now()),
+			deletedAt: String(Date.now()),
+		};
+		return supportSystem;
+	}
+
+	private async createLuminaires(supportSystemId, row, index, workSheet): Promise<Luminaire> {
+		const luminaire: Luminaire = {
+			id: newId(),
+			supportSystemId: supportSystemId,
+			name: `Armatuur + ${index}`,
+			location: workSheet['I' + row]?.v, // Maps to "Straat"
+			constructionYear: null, // Maps to "Jaar van aanleg"
+			supplierType: SupplierType.two, // Maps to "Leverancierstype"
+			manufacturer: '__MANUFACTURER__', // Maps to "Fabrikant"
+			geography: {
+				type: 'Point',
+				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+			},
+			remarks: '', // Maps to "Opmerking"
+
+			// Driver
+			driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
+			driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
+
+			// Light
+			lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
+			lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
+
+			createdAt: String(Date.now()),
+			updatedAt: String(Date.now()),
+			deletedAt: String(Date.now()),
+		};
+		return luminaire;
+	}
+
+	private async migrateSpanInstallation() {
+		this.logger.verbose(`Starting file migration...`);
+
+		const passportInfo: IPassport[] = [];
+		const objectId = newId();
+		const surveyId = newId();
+		const { workSheet, rowCounter } = await this.getFile();
+		const supportSystemId = newId();
 
 		for (const row of rowCounter) {
 			if (row === '0' || row === '1') continue;
 			const passport: IPassport = {
-				passportIdentification: this.workSheet['A' + row]?.v,
-				passportCityArea: this.workSheet['F' + row]?.v,
-				passportStreet: this.workSheet['I' + row]?.v,
-				passportDistrict: this.workSheet['G' + row]?.v,
-				passportNeighborhood: this.workSheet['H' + row]?.v,
+				passportIdentification: workSheet['A' + row]?.v,
+				passportCityArea: workSheet['F' + row]?.v,
+				passportStreet: workSheet['I' + row]?.v,
+				passportDistrict: workSheet['G' + row]?.v,
+				passportNeighborhood: workSheet['H' + row]?.v,
 			};
 
-			const index: number = passportInfo.findIndex(
-				(x) => x.passportIdentification == this.workSheet['A' + row]?.v,
-			);
+			const index: number = passportInfo.findIndex((x) => x.passportIdentification == workSheet['A' + row]?.v);
 
-			const objectId = newId();
 			if (index === -1) {
-				const assetObject: AssetObject = {
-					id: objectId,
-					code: 'OVS' + ('000' + this.workSheet['A' + row]?.v).slice(-4),
-					clientCompanyId: '',
-					compositionIsVisible: false,
-					constructionYear: 0,
-					created_at: '',
-					customerVersion: '',
-					effortCalculation: 0,
-					effortCategory: '',
-					externalRefId: '',
-					inspectionStandardId: '',
-					isDemo: false,
-					isPublic: false,
-					// latitude: 0.0,
-					// length: 0,
-					// longitude: 0,
-					mainMaterial: '',
-					managementOrganization: '',
-					marineInfrastrutureType: '',
-					name: '',
-					objectTypeId: '',
-					operatorCompanyId: '',
-					ownerCompanyId: '',
-					shape: '',
-					shapeSrid: 0,
-					siteId: '',
-					// squareMeters: 0,
-					status: '',
-					surveyorCompanyId: '',
-					trafficType: '',
-					updatedOn: '',
-					updated_at: '',
-					useage: '',
-					// width: 0,
-					attributes: passportInfo.push(passport),
-				};
-				assetObjects.push(assetObject);
+				passportInfo.push(passport);
+				const objectModel: ObjectModel = await this.createObject(objectId, row, workSheet, passport);
+				await this.objectRepository.createObject(objectModel);
 			} else {
 				console.log('object already exists');
 			}
-			const junctionBoxes: JunctionBox[] = [];
-			const junctionBox: JunctionBox = {
-				id: newId(),
-				objectId: objectId,
-				surveyId: '',
-				name: '',
-				mastNumber: this.workSheet['D' + row]?.v, // Maps to "Mastgetal"
-				location: this.workSheet['A' + row]?.v, // Maps to "Straat"
-				// locationIndication: this.workSheet['A' + row]?.v, // Maps to "Locatie aanduiding"
-				// a11yDetails: this.workSheet['A' + row]?.v, // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: this.workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
-				riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
-				// remarks: this.workSheet['A' + row]?.v, // Maps to "Opmerking"
-				geography: {
-					type: 'Point',
-					coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
-				},
-				createdAt: String(Date.now()),
-				updatedAt: String(Date.now()),
-				deletedAt: String(Date.now()),
-			};
-			junctionBoxes.push(junctionBox);
 
-			const supportSystemId = newId();
-
-			for (let i = 1; i < Number(this.workSheet['B' + row]?.v); i++) {
-				const supportSystem: SupportSystem = {
-					id: supportSystemId,
-					objectId: objectId,
-					surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
-					name: `voeding + ${i}`,
-					type: SupportSystemType.facade,
-					typeDetailed: SupportSystemTypeDetailed[this.workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
-					location: null, // Maps to "Straat"
-					constructionYear: 1979, // Maps to "Jaar van aanleg"
-					locationIndication: '__LOCATION__INDICATION__', // Maps to "Locatie aanduiding"
-					a11yDetails: '__A11Y_DETAILS__', // Maps to "Bereikbaarheid gedetailleerd"
-					installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
-					remarks: '', // Maps to "Opmerking"
-					houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
-					geography: {
-						type: 'Point',
-						coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
-					},
-					createdAt: String(Date.now()),
-					updatedAt: String(Date.now()),
-					deletedAt: String(Date.now()),
-				};
-				console.log('supportSystem', supportSystem);
+			for (let count = 1; index < Number(workSheet['B' + row]?.v); count++) {
+				const junctionBox: JunctionBox = await this.createJuctionbox(objectId, surveyId, row, index, workSheet);
+				await this.junctionBoxRepository.createJunctionBox(junctionBox);
 			}
 
-			for (let i = 1; i < Number(this.workSheet['C' + row]?.v); i++) {
-				const luminaire: Luminaire = {
-					id: newId(),
-					supportSystemId: supportSystemId,
-					name: `Armatuur + ${i}`,
-					location: this.workSheet['I' + row]?.v, // Maps to "Straat"
-					constructionYear: null, // Maps to "Jaar van aanleg"
-					supplierType: SupplierType.two, // Maps to "Leverancierstype"
-					manufacturer: '__MANUFACTURER__', // Maps to "Fabrikant"
-					geography: {
-						type: 'Point',
-						coordinates: [this.workSheet['J' + row]?.v, this.workSheet['K' + row]?.v],
-					},
-					remarks: '', // Maps to "Opmerking"
+			const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
+			for (const type of supportSystemTypes) {
+				// const indexOf = Object.keys(type).indexOf(type);
+				// if ()
+				const supportSystem: SupportSystem = await this.createSupportSystem(
+					objectId,
+					surveyId,
+					type,
+					supportSystemId,
+					row,
+					index,
+					workSheet,
+				);
+				await this.supportSystemRepository.createSupportSystem(supportSystem);
+			}
 
-					// Driver
-					driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
-					driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
-
-					// Light
-					lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
-					lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
-
-					createdAt: String(Date.now()),
-					updatedAt: String(Date.now()),
-					deletedAt: String(Date.now()),
-				};
-				console.log('luminaire', luminaire);
+			for (let count = 1; count < Number(workSheet['C' + row]?.v); count++) {
+				const luminaire: Luminaire = await this.createLuminaires(supportSystemId, row, count, workSheet);
+				await this.luminaireRepository.createLuminaire(luminaire);
 			}
 		}
-		return assetObjects;
 	}
 }

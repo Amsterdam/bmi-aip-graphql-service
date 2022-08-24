@@ -4,7 +4,7 @@ let prismaServiceMock;
 
 beforeEach(() => {
 	const PrismaServiceJest = jest.fn(() => ({
-		batches: {
+		surveys: {
 			delete: jest.fn(() => {
 				return;
 			}),

@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsUUID, MaxLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
+import { Decimal } from '@prisma/client/runtime';
 
 @InputType()
 export class CreateObjectInput {
@@ -14,65 +15,55 @@ export class CreateObjectInput {
 
 	@Field()
 	@MaxLength(255)
-	public code?: string;
+	public code: string;
 
 	@IsOptional()
 	@Field({ nullable: true })
 	@MaxLength(255)
-	public location?: string;
+	public location: string;
 
-	// @IsOptional()
-	// @Field({ nullable: true })
-	// public latitude?: number;
-	//
-	// @IsOptional()
-	// @Field({ nullable: true })
-	// public longitude?: number;
-
-	@IsOptional()
+	@IsNumber()
 	@Field({ nullable: true })
-	public updatedOn?: string;
+	public latitude: Decimal;
+
+	@IsNumber()
+	@Field({ nullable: true })
+	public longitude: Decimal;
+
+	@Field({ nullable: true })
+	public updatedOn: Date;
 
 	@IsBoolean()
 	@Field()
 	public compositionIsVisible: boolean;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public clientCompanyId?: string;
+	@Field()
+	public clientCompanyId: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public operatorCompanyId?: string;
+	@Field()
+	public operatorCompanyId: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public surveyorCompanyId?: string;
+	@Field()
+	public surveyorCompanyId: string;
 
-	@IsOptional()
-	@Field({ nullable: false })
-	public objectTypeId?: string;
+	@Field()
+	public objectTypeId: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public created_at?: string;
+	@Field()
+	public created_at: Date;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public updated_at?: string;
+	@Field()
+	public updated_at: Date;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public inspectionStandardId?: string;
+	@Field()
+	public inspectionStandardId: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public ownerCompanyId?: string;
+	@Field()
+	public ownerCompanyId: string;
 
-	@IsOptional()
-	@Field({ nullable: true })
+	@Field()
 	@MaxLength(255)
-	public customerVersion?: string;
+	public customerVersion: string;
 
 	@Field()
 	@IsBoolean()
@@ -85,69 +76,56 @@ export class CreateObjectInput {
 	@Field()
 	public siteId: string;
 
-	@IsOptional()
+	@Field()
+	public constructionYear: number;
+
+	@Field()
+	public externalRefId: string;
+
+	@Field()
+	public useage: string;
+
+	@Field()
+	public managementOrganization: string;
+
 	@Field({ nullable: true })
-	public constructionYear?: number;
+	public shape: string;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public externalRefId?: string;
+	public shapeSrid: number;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public useage?: string;
+	public status: string;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public managementOrganization?: string;
+	public effortCategory: string;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public shape?: string;
+	public effortCalculation: number;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public shapeSrid?: number;
+	public trafficType: string;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public status?: string;
+	public mainMaterial: string;
 
-	@IsOptional()
 	@Field({ nullable: true })
-	public effortCategory?: string;
+	public marineInfrastrutureType: string;
 
-	@IsOptional()
+	@IsNumber()
 	@Field({ nullable: true })
-	public effortCalculation?: number;
+	public length: Decimal;
 
-	@IsOptional()
+	@IsNumber()
 	@Field({ nullable: true })
-	public trafficType?: string;
+	public width: Decimal;
 
-	@IsOptional()
+	@IsNumber()
 	@Field({ nullable: true })
-	public mainMaterial?: string;
+	public squareMeters: Decimal;
 
-	@IsOptional()
-	@Field({ nullable: true })
-	public marineInfrastrutureType?: string;
-
-	// @IsOptional()
-	// @Field({ nullable: true })
-	// public length?: number;
-	//
-	// @IsOptional()
-	// @Field({ nullable: true })
-	// public width?: number;
-	//
-	// @IsOptional()
-	// @Field({ nullable: true })
-	// public squareMeters?: number;
-
-	@IsOptional()
 	@Field(() => GraphQLJSON, { nullable: true })
-	public attributes?: JSONValue;
+	public attributes: JSONValue;
 }
 
 type JSONValue =

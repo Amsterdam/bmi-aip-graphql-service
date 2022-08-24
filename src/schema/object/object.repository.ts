@@ -25,4 +25,12 @@ export class ObjectRepository implements IObjectRepository {
 		};
 		return this.prisma.objects.create({ data });
 	}
+
+	async getObjectByObjectTypeId(objectTypeId: string): Promise<DbObject[]> {
+		return this.prisma.objects.findMany({
+			where: {
+				objectTypeId,
+			},
+		});
+	}
 }

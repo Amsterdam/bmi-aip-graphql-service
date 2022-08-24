@@ -16,6 +16,10 @@ import { JunctionBoxRepository } from '../schema/span-installation/junction-box.
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ObjectRepository } from '../schema/object/object.repository';
+import { Survey } from '../schema/survey/models/survey.model';
+import { InspectionStandard } from '../schema/survey/types';
+import { SurveyRepository } from '../schema/survey/survey.repository';
+import { SurveyStates } from '../schema/survey/types/surveyStates';
 
 @Injectable()
 export class FileWriterService {
@@ -28,6 +32,7 @@ export class FileWriterService {
 		private readonly logger: Logger,
 		private configService: ConfigService,
 		private readonly objectRepository: ObjectRepository,
+		private readonly surveyRepository: SurveyRepository,
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
 		private readonly luminaireRepository: LuminaireRepository,
@@ -245,6 +250,20 @@ export class FileWriterService {
 		return luminaire;
 	}
 
+	private async createSurvey(objectId, surveyId): Promise<Survey> {
+		const survey: Survey = {
+			id: surveyId,
+			batchId: '',
+			description: '',
+			inspectionStandardType: InspectionStandard.overspanningsInstallatie,
+			objectId: objectId,
+			status: SurveyStates.open,
+			updated_at: String(Date.now()),
+			created_at: String(Date.now()),
+		};
+		return survey;
+	}
+
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
 
@@ -270,6 +289,9 @@ export class FileWriterService {
 				passportInfo.push(passport);
 				const objectModel: ObjectModel = await this.createObject(objectId, row, workSheet, passport);
 				await this.objectRepository.createObject(objectModel);
+
+				const survey: Survey = await this.createSurvey(objectId, surveyId);
+				await this.surveyRepository.createSurvey(survey);
 			} else {
 				console.log('object already exists');
 			}

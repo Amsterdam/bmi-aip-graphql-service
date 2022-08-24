@@ -38,6 +38,7 @@
 		"@nestjs/cqrs": "^8.0.5",
 		"@nestjs/graphql": "^10.0.16",
 		"@nestjs/platform-express": "^8.4.7",
+		"@nestjs/terminus": "^8.1.1",
 		"@prisma/client": "^3.15.2",
 		"apollo-server-express": "^3.9.0",
 		"cache-manager": "^4.1.0",

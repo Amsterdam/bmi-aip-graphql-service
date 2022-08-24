@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
+import { Point } from 'graphql-geojson-scalar-types';
 
 import { SupplierType } from '../../../types';
 
@@ -25,7 +26,7 @@ export class BaseLuminaireInput {
 	public manufacturer?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
+	@Field(() => Point, { nullable: true })
 	geography?: PointType;
 
 	@IsOptional()

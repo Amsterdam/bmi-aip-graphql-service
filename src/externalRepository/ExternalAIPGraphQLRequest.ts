@@ -3,4 +3,5 @@ export interface ExternalAIPGraphQLRequest {
 	createSurvey?: any;
 	createLuminaire?: any;
 	createJunctionBox?: any;
+	createSupportSystem?: any;
 }

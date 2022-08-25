@@ -11,6 +11,9 @@ import { Survey } from '../schema/survey/models/survey.model';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { Luminaire } from '../schema/span-installation/models/luminaire.model';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
+import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
+import { SupportSystem } from '../schema/span-installation/models/support-system.model';
+import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
 
@@ -58,10 +61,22 @@ export class ExternalAIPGraphQLRepository {
 		return this.executeGraphQLRequest(mutation, input);
 	}
 
-	public async createJunctionBox(input: CreateJunctionBoxInput): Promise<Survey> {
+	public async createJunctionBox(input: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const mutation = gql`
 			mutation createJunctionBox($input: CreateJunctionBoxInput!) {
 				createJunctionBox(createJunctionBox: $input) {
+					id
+				}
+			}
+		`;
+
+		return this.executeGraphQLRequest(mutation, input);
+	}
+
+	public async createSupportSystem(input: CreateSupportSystemInput): Promise<SupportSystem> {
+		const mutation = gql`
+			mutation createSupportSystem($input: CreateSupportSystemInput!) {
+				createSupportSystem(createSupportSystem: $input) {
 					id
 				}
 			}

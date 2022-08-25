@@ -15,7 +15,7 @@ import { ObjectRepository } from '../schema/object/object.repository';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
-import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
@@ -37,7 +37,7 @@ export class FileWriterService {
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
 		private readonly luminaireRepository: LuminaireRepository,
-		private readonly externalObjectRepository: ExternalObjectRepository,
+		private readonly externalRepository: ExternalAIPGraphQLRepository,
 	) {
 		const cli = this.consoleService.getCli();
 

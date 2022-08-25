@@ -12,7 +12,7 @@ import { SurveyRepository } from '../schema/survey/survey.repository';
 import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
-import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 
 @Module({
 	imports: [
@@ -42,7 +42,7 @@ import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRe
 		JunctionBoxRepository,
 		SupportSystemRepository,
 		LuminaireRepository,
-		ExternalObjectRepository,
+		ExternalAIPGraphQLRepository,
 	],
 })
 export class FileModule {}

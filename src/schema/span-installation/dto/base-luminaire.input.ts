@@ -41,7 +41,7 @@ export class BaseLuminaireInput {
 	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
-	public driverCommissioningDate?: string;
+	public driverCommissioningDate?: Date;
 
 	// Light Source
 
@@ -51,5 +51,17 @@ export class BaseLuminaireInput {
 	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
-	public lightCommissioningDate?: string;
+	public lightCommissioningDate?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	createdAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	updatedAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	deletedAt?: Date;
 }

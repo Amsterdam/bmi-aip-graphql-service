@@ -25,6 +25,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		createdAt,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesCreateInput = {
 			id: newId(),

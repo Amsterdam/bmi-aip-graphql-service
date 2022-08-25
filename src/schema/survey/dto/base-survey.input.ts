@@ -3,22 +3,22 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class BaseCreateSurveyInput {
 	@Field((type) => String)
-	summaryAndAdvice: string;
+	summaryAndAdvice?: string;
 
 	@Field((type) => String)
 	condition: string;
 
 	@Field((type) => String)
-	careCondition: string;
+	careCondition?: string;
 
 	@Field((type) => String)
 	inspectionStandardType: string;
 
 	@Field((type) => String)
-	surveryedOn?: string;
+	surveryedOn?: Date;
 
 	@Field((type) => String)
-	updatedOn?: string;
+	updatedOn?: Date;
 
 	@Field((type) => Number)
 	pointCloudStorageUsed?: number;
@@ -138,8 +138,8 @@ export class BaseCreateSurveyInput {
 	material?: string;
 
 	@Field()
-	created_at?: string;
+	created_at?: Date;
 
 	@Field()
-	updated_at?: string;
+	updated_at?: Date;
 }

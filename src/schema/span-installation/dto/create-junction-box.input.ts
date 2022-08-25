@@ -6,6 +6,10 @@ import { BaseJunctionBoxInput } from './base-junction-box.input';
 @InputType()
 export class CreateJunctionBoxInput extends BaseJunctionBoxInput {
 	@Field()
+	@IsUUID()
+	public id: string;
+
+	@Field()
 	@MaxLength(255)
 	public name: string;
 

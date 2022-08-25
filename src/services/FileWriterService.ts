@@ -74,7 +74,9 @@ export class FileWriterService {
 			const rawKey = key.match(/[a-z]+|\d+/gi);
 			if (rawKey[1] !== undefined) rowCounter.push(rawKey[1]);
 		}
+
 		rowCounter = uniq(rowCounter);
+
 		return { workSheet, rowCounter };
 	}
 
@@ -127,28 +129,30 @@ export class FileWriterService {
 		return assetObject;
 	}
 
-	private async createJuctionbox(objectId, surveyId, row: string, index, workSheet): Promise<JunctionBox> {
-		const junctionBox: JunctionBox = {
-			id: newId(),
-			objectId: objectId,
-			surveyId: surveyId,
-			name: `${index}`,
-			mastNumber: workSheet['D' + row]?.v, // Maps to "Mastgetal"
-			location: workSheet['A' + row]?.v, // Maps to "Straat"
-			locationIndication: '', // Maps to "Locatie aanduiding"
-			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-			installationHeight: workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
-			riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
-			remarks: '', // Maps to "Opmerking"
-			geography: {
-				type: 'Point',
-				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
-			},
-			createdAt: String(Date.now()),
-			updatedAt: String(Date.now()),
-			deletedAt: String(Date.now()),
-		};
-		return junctionBox;
+	private async createJuctionbox(objectId, surveyId, row, workSheet) {
+		for (let count = 1; count < Number(workSheet['B' + row]?.v); count++) {
+			const junctionBox: JunctionBox = {
+				id: newId(),
+				objectId: objectId,
+				surveyId: surveyId,
+				name: `${count}`,
+				mastNumber: workSheet['D' + row]?.v, // Maps to "Mastgetal"
+				location: workSheet['I' + row]?.v, // Maps to "Straat"
+				locationIndication: '', // Maps to "Locatie aanduiding"
+				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+				installationHeight: workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
+				riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
+				remarks: '', // Maps to "Opmerking"
+				geography: {
+					type: 'Point',
+					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+				},
+				createdAt: String(Date.now()),
+				updatedAt: String(Date.now()),
+				deletedAt: String(Date.now()),
+			};
+			await this.junctionBoxRepository.createJunctionBox(junctionBox);
+		}
 	}
 
 	private getSupportSystemType(situation): SupportSystemType[] {
@@ -195,68 +199,67 @@ export class FileWriterService {
 		return supportSystemType;
 	}
 
-	private async createSupportSystem(
-		objectId,
-		surveyId,
-		type,
-		supportSystemId,
-		row,
-		key,
-		workSheet,
-	): Promise<SupportSystem> {
-		const supportSystem: SupportSystem = {
-			id: supportSystemId,
-			objectId: objectId,
-			surveyId: surveyId,
-			name: `Draagsystem + ${key}`,
-			type: type,
-			typeDetailed: SupportSystemTypeDetailed[workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
-			location: workSheet['I' + row]?.v, // Maps to "Straat"
-			constructionYear: 1979, // Maps to "Jaar van aanleg"
-			locationIndication: '', // Maps to "Locatie aanduiding"
-			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-			installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
-			remarks: '', // Maps to "Opmerking"
-			houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
-			geography: {
-				type: 'Point',
-				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
-			},
-			createdAt: String(Date.now()),
-			updatedAt: String(Date.now()),
-			deletedAt: String(Date.now()),
-		};
-		return supportSystem;
+	private async createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet) {
+		const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
+		for (const type of supportSystemTypes) {
+			const sameType: SupportSystemType[] = supportSystemTypes.filter((_type, index) => _type == type);
+
+			const supportSystem: SupportSystem = {
+				id: supportSystemId,
+				objectId: objectId,
+				surveyId: surveyId,
+				name: `Draagsystem + ${sameType}`,
+				type: type,
+				typeDetailed: SupportSystemTypeDetailed[workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
+				location: workSheet['I' + row]?.v, // Maps to "Straat"
+				constructionYear: 1979, // Maps to "Jaar van aanleg"
+				locationIndication: '', // Maps to "Locatie aanduiding"
+				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+				installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
+				remarks: '', // Maps to "Opmerking"
+				houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
+				geography: {
+					type: 'Point',
+					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+				},
+				createdAt: String(Date.now()),
+				updatedAt: String(Date.now()),
+				deletedAt: String(Date.now()),
+			};
+			await this.supportSystemRepository.createSupportSystem(supportSystem);
+		}
 	}
 
-	private async createLuminaires(supportSystemId, row, index, workSheet): Promise<Luminaire> {
-		const luminaire: Luminaire = {
-			id: newId(),
-			supportSystemId: supportSystemId,
-			name: `Armatuur + ${index}`,
-			location: workSheet['I' + row]?.v, // Maps to "Straat"
-			constructionYear: null, // Maps to "Jaar van aanleg"
-			supplierType: SupplierType.two, // Maps to "Leverancierstype"
-			manufacturer: '__MANUFACTURER__', // Maps to "Fabrikant"
-			geography: {
-				type: 'Point',
-				coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
-			},
-			remarks: '', // Maps to "Opmerking"
+	private async createLuminaires(supportSystemId, row, workSheet) {
+		for (let count = 1; count < Number(workSheet['C' + row]?.v); count++) {
+			const luminaire: Luminaire = {
+				id: newId(),
+				supportSystemId: supportSystemId,
+				name: `Armatuur + ${count}`,
+				location: workSheet['I' + row]?.v, // Maps to "Straat"
+				constructionYear: null, // Maps to "Jaar van aanleg"
+				supplierType: SupplierType.two, // Maps to "Leverancierstype"
+				manufacturer: '', // Maps to "Fabrikant"
+				geography: {
+					type: 'Point',
+					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+				},
+				remarks: '', // Maps to "Opmerking"
 
-			// Driver
-			driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
-			driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
+				// Driver
+				driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
+				driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
 
-			// Light
-			lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
-			lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
+				// Light
+				lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
+				lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
 
-			createdAt: String(Date.now()),
-			updatedAt: String(Date.now()),
-			deletedAt: String(Date.now()),
-		};
-		return luminaire;
+				createdAt: String(Date.now()),
+				updatedAt: String(Date.now()),
+				deletedAt: String(Date.now()),
+			};
+			await this.luminaireRepository.createLuminaire(luminaire);
+		}
 	}
 
 	private async createSurvey(objectId, surveyId): Promise<Survey> {
@@ -314,31 +317,9 @@ export class FileWriterService {
 				console.log('object already exists');
 			}
 
-			for (let count = 1; count < Number(workSheet['B' + row]?.v); count++) {
-				const junctionBox: JunctionBox = await this.createJuctionbox(objectId, surveyId, row, count, workSheet);
-				await this.junctionBoxRepository.createJunctionBox(junctionBox);
-			}
-
-			const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
-			for (const type of supportSystemTypes) {
-				const sameType = supportSystemTypes.filter((_type) => _type == type);
-
-				const supportSystem: SupportSystem = await this.createSupportSystem(
-					objectId,
-					surveyId,
-					type,
-					supportSystemId,
-					row,
-					sameType.keys(),
-					workSheet,
-				);
-				await this.supportSystemRepository.createSupportSystem(supportSystem);
-			}
-
-			for (let count = 1; count < Number(workSheet['C' + row]?.v); count++) {
-				const luminaire: Luminaire = await this.createLuminaires(supportSystemId, row, count, workSheet);
-				await this.luminaireRepository.createLuminaire(luminaire);
-			}
+			await this.createJuctionbox(objectId, surveyId, row, workSheet);
+			await this.createLuminaires(supportSystemId, row, workSheet);
+			await this.createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet);
 		}
 	}
 }

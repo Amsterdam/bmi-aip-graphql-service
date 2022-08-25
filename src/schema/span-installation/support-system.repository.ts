@@ -41,8 +41,8 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			remarks,
 			constructionYear,
 			houseNumber,
-			type: '',
-			typeDetailed: '',
+			type: type,
+			typeDetailed: typeDetailed,
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });

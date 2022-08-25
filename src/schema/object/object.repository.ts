@@ -12,7 +12,6 @@ export class ObjectRepository implements IObjectRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async createObject(input: CreateObjectInput): Promise<ObjectModel> {
-		console.log(input);
 		const data: Prisma.objectsCreateInput = {
 			id: input.id,
 			name: input.name,

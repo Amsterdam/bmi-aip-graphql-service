@@ -200,27 +200,22 @@ export class FileWriterService {
 		return supportSystemType;
 	}
 
-	private getsupportSystemName(type, supportSystemTypes): string {
-		let supportSystemName = '';
-		const sameTypes = [...new Set(supportSystemTypes.filter((_type) => _type == type))];
-		if (sameTypes.includes(type)) {
-			for (let i = 1; i <= sameTypes.length; i++) {
-				supportSystemName = `Draagsystem ${i}`;
-			}
-		}
-		return supportSystemName;
-	}
-
-	private async createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet) {
+	private async createSupportSystems(objectId, surveyId, row, workSheet) {
 		const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
-
+		const supportSystemTracker = {
+			[SupportSystemType.facade]: 0,
+			[SupportSystemType.mast]: 0,
+			[SupportSystemType.knoop]: 0,
+			[SupportSystemType.tensionWire]: 0,
+		};
 		for (const type of supportSystemTypes) {
-			const supportSystemName = this.getsupportSystemName(type, supportSystemTypes);
+			const supportSystemId = newId();
+			supportSystemTracker[type] += 1;
 			const supportSystem: CreateSupportSystemInput = {
-				id: newId(),
+				id: supportSystemId,
 				objectId: objectId,
 				surveyId: surveyId,
-				name: supportSystemName,
+				name: `Draagsystem ${supportSystemTracker[type]}`,
 				type: type,
 				typeDetailed: SupportSystemTypeDetailed.one, // Maps to "Bereikbaarheid gedetailleerd"
 				location: workSheet['I' + row]?.v, // Maps to "Straat"
@@ -239,6 +234,7 @@ export class FileWriterService {
 				deletedAt: new Date(),
 			};
 			await this.supportSystemRepository.createSupportSystem(supportSystem);
+			await this.createLuminaires(supportSystemId, row, workSheet);
 		}
 	}
 
@@ -246,7 +242,7 @@ export class FileWriterService {
 		for (let count = 1; count <= Number(workSheet['C' + row]?.v); count++) {
 			const luminaire: CreateLuminaireInput = {
 				supportSystemId: supportSystemId,
-				name: `Armatuur + ${count}`,
+				name: `Armatuur ${count}`,
 				location: workSheet['I' + row]?.v, // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
 				supplierType: SupplierType.one, // Maps to "Leverancierstype"
@@ -276,7 +272,7 @@ export class FileWriterService {
 	private async createSurvey(objectId, surveyId) {
 		const survey: CreateSurveyInput = {
 			id: surveyId,
-			description: '',
+			description: 'Contract 1',
 			inspectionStandardType: InspectionStandard.overspanningsInstallatie,
 			objectId: objectId,
 			status: SurveyStates.open,
@@ -292,7 +288,6 @@ export class FileWriterService {
 		this.logger.verbose(`Starting file migration...`);
 		let objectId = '';
 		let surveyId = '';
-		let supportSystemId = '';
 
 		const passportInfo: IPassport[] = [];
 		const { workSheet, rowCounter } = await this.getFile();
@@ -320,11 +315,9 @@ export class FileWriterService {
 			} else {
 				console.log('object already exists');
 			}
-			supportSystemId = newId();
 
 			await this.createJuctionbox(objectId, surveyId, row, workSheet);
-			await this.createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet);
-			await this.createLuminaires(supportSystemId, row, workSheet);
+			await this.createSupportSystems(objectId, surveyId, row, workSheet);
 		}
 	}
 }

@@ -3,7 +3,6 @@ import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
-import { newId } from '../../utils';
 
 import { JunctionBox, IJunctionBoxRepository } from './types/junction-box.repository.interface';
 import { CreateJunctionBoxInput } from './dto/create-junction-box.input';
@@ -14,6 +13,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async createJunctionBox({
+		id,
 		objectId,
 		surveyId,
 		name,
@@ -28,7 +28,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		createdAt,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesCreateInput = {
-			id: newId(),
+			id: id,
 			objects: { connect: { id: objectId } },
 			surveys: { connect: { id: surveyId } },
 			name,

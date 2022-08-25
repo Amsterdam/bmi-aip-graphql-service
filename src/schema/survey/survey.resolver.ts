@@ -22,17 +22,17 @@ export class SurveyResolver {
 		private readonly queryBus: QueryBus,
 	) {}
 
-	@Query((returns) => Survey)
+	@Query(() => Survey)
 	public async getSurveyById(@Args('id') id: string): Promise<Survey> {
 		return this.queryBus.execute<GetSurveyByIdQuery>(new GetSurveyByIdQuery(id));
 	}
 
-	@Query((returns) => [Survey])
+	@Query(() => [Survey])
 	public async getSurveysByObjectId(@Args('objectId') objectId: string): Promise<Survey[]> {
 		return this.queryBus.execute<GetSurveysByObjectIdQuery>(new GetSurveysByObjectIdQuery(objectId));
 	}
 
-	@Mutation((returns) => Survey)
+	@Mutation(() => Survey)
 	public async createSurvey(@Args('createSurveyInput') input: CreateSurveyInput): Promise<Survey> {
 		return this.commandBus.execute<CreateSurveyCommand>(new CreateSurveyCommand(input));
 	}

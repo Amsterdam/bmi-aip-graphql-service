@@ -19,7 +19,7 @@ import { Survey } from '../schema/survey/models/survey.model';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
-import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class FileWriterService {
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
 		private readonly luminaireRepository: LuminaireRepository,
-		private readonly externalObjectRepository: ExternalObjectRepository,
+		private readonly externalRepository: ExternalAIPGraphQLRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -300,19 +300,19 @@ export class FileWriterService {
 			if (index === -1) {
 				passportInfo.push(passport);
 				const input: CreateObjectInput = await this.createObject(objectId, row, workSheet, passport);
-				await this.externalObjectRepository.createObject(input);
+				await this.externalRepository.createObject(input);
 
-				// const survey: Survey = await this.createSurvey(objectId, surveyId);
-				// await this.surveyRepository.createSurvey({
-				// 	careCondition: survey.careCondition,
-				// 	condition: survey.condition,
-				// 	description: survey.description,
-				// 	id: survey.id,
-				// 	inspectionStandardType: survey.inspectionStandardType,
-				// 	objectId: survey.objectId,
-				// 	status: survey.status,
-				// 	summaryAndAdvice: survey.summaryAndAdvice,
-				// });
+				const survey: Survey = await this.createSurvey(objectId, surveyId);
+				await this.externalRepository.createSurvey({
+					careCondition: survey.careCondition,
+					condition: survey.condition,
+					description: survey.description,
+					id: survey.id,
+					inspectionStandardType: survey.inspectionStandardType,
+					objectId: survey.objectId,
+					status: survey.status,
+					summaryAndAdvice: survey.summaryAndAdvice,
+				});
 			} else {
 				console.log('object already exists');
 			}

@@ -6,6 +6,10 @@ import { BaseLuminaireInput } from './base-luminaire.input';
 @InputType()
 export class CreateLuminaireInput extends BaseLuminaireInput {
 	@Field()
+	@IsUUID()
+	public id?: string;
+
+	@Field()
 	@MaxLength(255)
 	public name: string;
 

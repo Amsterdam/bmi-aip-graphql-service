@@ -25,7 +25,7 @@ export class ExternalObjectRepository {
 		`;
 
 		let objectModel: ObjectModel;
-		console.log(input);
+
 		try {
 			const result = await this.graphqlClient.request(mutation, { createObjectInput: input });
 			objectModel = result.data.createObject;

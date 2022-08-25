@@ -14,14 +14,14 @@ export class SurveyRepository implements ISurveyRepository {
 	async createSurvey(input: CreateSurveyInput): Promise<Survey> {
 		const data: Prisma.surveysCreateInput = {
 			id: input.id,
-			surveryedOn: '',
-			updatedOn: '',
 			inspectionStandardType: input.inspectionStandardType,
 			objects: {
 				connect: {
 					id: input.objectId,
 				},
 			},
+			surveryedOn: input.surveryedOn,
+			updatedOn: input.updated_at,
 		};
 
 		const survey = await this.prisma.surveys.create({ data });

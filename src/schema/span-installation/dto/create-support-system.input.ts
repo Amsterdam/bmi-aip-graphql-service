@@ -6,6 +6,10 @@ import { BaseSupportSystemInput } from './base-support-system.input';
 @InputType()
 export class CreateSupportSystemInput extends BaseSupportSystemInput {
 	@Field()
+	@IsUUID()
+	public id: string;
+
+	@Field()
 	@MaxLength(255)
 	public name: string;
 

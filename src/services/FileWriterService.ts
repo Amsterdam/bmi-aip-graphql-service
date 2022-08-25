@@ -6,21 +6,21 @@ import { uniq } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
-import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { newId } from '../utils';
-import { Luminaire } from '../schema/span-installation/models/luminaire.model';
 import { SupplierType, SupportSystemType, SupportSystemTypeDetailed } from '../types';
-import { SupportSystem } from '../schema/span-installation/models/support-system.model';
 import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ObjectRepository } from '../schema/object/object.repository';
-import { Survey } from '../schema/survey/models/survey.model';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
 import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
+import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
+import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
+import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
+import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 
 @Injectable()
 export class FileWriterService {
@@ -130,8 +130,8 @@ export class FileWriterService {
 	}
 
 	private async createJuctionbox(objectId, surveyId, row, workSheet) {
-		for (let count = 1; count < Number(workSheet['B' + row]?.v); count++) {
-			const junctionBox: JunctionBox = {
+		for (let count = 1; count <= Number(workSheet['B' + row]?.v); count++) {
+			const junctionBox: CreateJunctionBoxInput = {
 				id: newId(),
 				objectId: objectId,
 				surveyId: surveyId,
@@ -147,10 +147,11 @@ export class FileWriterService {
 					type: 'Point',
 					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
 				},
-				createdAt: String(Date.now()),
-				updatedAt: String(Date.now()),
-				deletedAt: String(Date.now()),
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				deletedAt: new Date(),
 			};
+			console.log('junctionBox', junctionBox);
 			await this.junctionBoxRepository.createJunctionBox(junctionBox);
 		}
 	}
@@ -199,18 +200,29 @@ export class FileWriterService {
 		return supportSystemType;
 	}
 
+	private getsupportSystemName(type, supportSystemTypes): string {
+		let supportSystemName = '';
+		const sameTypes = [...new Set(supportSystemTypes.filter((_type) => _type == type))];
+		if (sameTypes.includes(type)) {
+			for (let i = 1; i <= sameTypes.length; i++) {
+				supportSystemName = `Draagsystem ${i}`;
+			}
+		}
+		return supportSystemName;
+	}
+
 	private async createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet) {
 		const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
-		for (const type of supportSystemTypes) {
-			const sameType: SupportSystemType[] = supportSystemTypes.filter((_type, index) => _type == type);
 
-			const supportSystem: SupportSystem = {
-				id: supportSystemId,
+		for (const type of supportSystemTypes) {
+			const supportSystemName = this.getsupportSystemName(type, supportSystemTypes);
+			const supportSystem: CreateSupportSystemInput = {
+				id: newId(),
 				objectId: objectId,
 				surveyId: surveyId,
-				name: `Draagsystem + ${sameType}`,
+				name: supportSystemName,
 				type: type,
-				typeDetailed: SupportSystemTypeDetailed[workSheet['J' + row]?.v], // Maps to "Bereikbaarheid gedetailleerd"
+				typeDetailed: SupportSystemTypeDetailed.one, // Maps to "Bereikbaarheid gedetailleerd"
 				location: workSheet['I' + row]?.v, // Maps to "Straat"
 				constructionYear: 1979, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"
@@ -222,23 +234,22 @@ export class FileWriterService {
 					type: 'Point',
 					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
 				},
-				createdAt: String(Date.now()),
-				updatedAt: String(Date.now()),
-				deletedAt: String(Date.now()),
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				deletedAt: new Date(),
 			};
 			await this.supportSystemRepository.createSupportSystem(supportSystem);
 		}
 	}
 
 	private async createLuminaires(supportSystemId, row, workSheet) {
-		for (let count = 1; count < Number(workSheet['C' + row]?.v); count++) {
-			const luminaire: Luminaire = {
-				id: newId(),
+		for (let count = 1; count <= Number(workSheet['C' + row]?.v); count++) {
+			const luminaire: CreateLuminaireInput = {
 				supportSystemId: supportSystemId,
 				name: `Armatuur + ${count}`,
 				location: workSheet['I' + row]?.v, // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
-				supplierType: SupplierType.two, // Maps to "Leverancierstype"
+				supplierType: SupplierType.one, // Maps to "Leverancierstype"
 				manufacturer: '', // Maps to "Fabrikant"
 				geography: {
 					type: 'Point',
@@ -248,42 +259,43 @@ export class FileWriterService {
 
 				// Driver
 				driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
-				driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
+				driverCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
 
 				// Light
 				lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
-				lightCommissioningDate: '', // Maps to "Datum in gebruiksname"
+				lightCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
 
-				createdAt: String(Date.now()),
-				updatedAt: String(Date.now()),
-				deletedAt: String(Date.now()),
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				deletedAt: new Date(),
 			};
 			await this.luminaireRepository.createLuminaire(luminaire);
 		}
 	}
 
-	private async createSurvey(objectId, surveyId): Promise<Survey> {
-		const survey: Survey = {
+	private async createSurvey(objectId, surveyId) {
+		const survey: CreateSurveyInput = {
 			id: surveyId,
-			batchId: '',
 			description: '',
 			inspectionStandardType: InspectionStandard.overspanningsInstallatie,
 			objectId: objectId,
 			status: SurveyStates.open,
-			updated_at: String(Date.now()),
-			created_at: String(Date.now()),
+			surveryedOn: new Date(),
+			updated_at: new Date(),
+			created_at: new Date(),
+			condition: 'U',
 		};
-		return survey;
+		await this.surveyRepository.createSurvey(survey);
 	}
 
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
+		let objectId = '';
+		let surveyId = '';
+		let supportSystemId = '';
 
 		const passportInfo: IPassport[] = [];
-		const objectId = newId();
-		const surveyId = newId();
 		const { workSheet, rowCounter } = await this.getFile();
-		const supportSystemId = newId();
 
 		for (const row of rowCounter) {
 			if (row === '0' || row === '1') continue;
@@ -298,28 +310,21 @@ export class FileWriterService {
 			const index: number = passportInfo.findIndex((x) => x.passportIdentification == workSheet['A' + row]?.v);
 
 			if (index === -1) {
+				objectId = newId();
+				surveyId = newId();
 				passportInfo.push(passport);
 				const input: CreateObjectInput = await this.createObject(objectId, row, workSheet, passport);
-				await this.externalObjectRepository.createObject(input);
-
-				// const survey: Survey = await this.createSurvey(objectId, surveyId);
-				// await this.surveyRepository.createSurvey({
-				// 	careCondition: survey.careCondition,
-				// 	condition: survey.condition,
-				// 	description: survey.description,
-				// 	id: survey.id,
-				// 	inspectionStandardType: survey.inspectionStandardType,
-				// 	objectId: survey.objectId,
-				// 	status: survey.status,
-				// 	summaryAndAdvice: survey.summaryAndAdvice,
-				// });
+				//await this.externalObjectRepository.createObject(input);
+				await this.objectRepository.createObject(input);
+				await this.createSurvey(objectId, surveyId);
 			} else {
 				console.log('object already exists');
 			}
+			supportSystemId = newId();
 
 			await this.createJuctionbox(objectId, surveyId, row, workSheet);
-			await this.createLuminaires(supportSystemId, row, workSheet);
 			await this.createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet);
+			await this.createLuminaires(supportSystemId, row, workSheet);
 		}
 	}
 }

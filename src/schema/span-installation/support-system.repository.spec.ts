@@ -7,7 +7,6 @@ import {
 	deletedSupportSystem,
 	domainSupportSystem,
 	supportSystem1,
-	createSupportSystemInput,
 	updateSupportSystemInput,
 	createSupportSystemNormalizedInput,
 	updateSupportSystemNormalizedInput,

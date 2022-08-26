@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule, registerEnumType } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';

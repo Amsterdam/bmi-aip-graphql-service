@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { SupportSystemRepository } from '../support-system.repository';
-import { domainSupportSystem, updateSupportSystemInput } from '../__stubs__';
+import { domainSupportSystem, updateSupportSystemInput, updateSupportSystemNormalizedInput } from '../__stubs__';
 
 import { UpdateSupportSystemCommand } from './update-support-system.command';
 import { UpdateSupportSystemHandler } from './update-support-system.handler';
@@ -17,7 +17,7 @@ describe('UpdateSupportSystemHandler', () => {
 		const result = await new UpdateSupportSystemHandler(supportSystemRepoMock).execute(command);
 
 		expect(supportSystemRepoMock.updateSupportSystem).toHaveBeenCalledTimes(1);
-		expect(supportSystemRepoMock.updateSupportSystem).toHaveBeenCalledWith(updateSupportSystemInput);
+		expect(supportSystemRepoMock.updateSupportSystem).toHaveBeenCalledWith(updateSupportSystemNormalizedInput);
 
 		expect(result).toEqual(domainSupportSystem);
 	});

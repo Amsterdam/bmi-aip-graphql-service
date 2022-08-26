@@ -6,7 +6,12 @@ import { PrismaService } from '../../prisma.service';
 import { SupportSystemResolver } from './support-system.resolver';
 import { SupportSystemService } from './support-system.service';
 import { SupportSystemRepository } from './support-system.repository';
-import { domainSupportSystem, supportSystemInput, updateSupportSystemInput, deletedSupportSystem } from './__stubs__';
+import {
+	domainSupportSystem,
+	createSupportSystemInput,
+	updateSupportSystemInput,
+	deletedSupportSystem,
+} from './__stubs__';
 import { CreateSupportSystemCommand } from './commands/create-support-system.command';
 import { SupportSystem } from './models/support-system.model';
 import { UpdateSupportSystemCommand } from './commands/update-support-system.command';
@@ -60,9 +65,11 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 				commandBusMock,
 				queryBusMock,
 			);
-			const result = await resolver.createSupportSystem(supportSystemInput);
+			const result = await resolver.createSupportSystem(createSupportSystemInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateSupportSystemCommand(supportSystemInput));
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CreateSupportSystemCommand(createSupportSystemInput),
+			);
 
 			expect(result).toBeInstanceOf(SupportSystem);
 			expect(typeof result.id).toBe('string');

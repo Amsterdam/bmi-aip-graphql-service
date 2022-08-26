@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
-import { SupplierType, SupportSystemType, SupportSystemTypeDetailed } from '../types';
+import { SupplierType, SupportSystemType, SupportSystemTypeDetailedMast } from '../types';
 import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
@@ -19,8 +19,8 @@ import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRe
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
-import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
+import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
 
 @Injectable()
 export class FileWriterService {
@@ -164,28 +164,28 @@ export class FileWriterService {
 				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
 				break;
 			case 'MVMAASPIN':
-				// MVMAAspin = tensionWire / mast / mast / knoop
+				// MVMAAspin = tensionWire / mast / mast / node
 				supportSystemType = [
 					SupportSystemType.tensionWire,
 					SupportSystemType.mast,
 					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.node,
 				];
 				break;
 			case 'GMVAASPIN':
-				// GMVAASPIN = tensionWire / facade / mast / knoop
+				// GMVAASPIN = tensionWire / facade / mast / node
 				supportSystemType = [
 					SupportSystemType.tensionWire,
 					SupportSystemType.facade,
 					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.node,
 				];
 			case 'MVMAA':
 				// MVMAA = tensionWire / mast / mast
 				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
 			case 'GMVA':
 				// GMVA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.knoop];
+				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.node];
 			case 'GMVAA':
 				// GMVAA = tensionWire / facade / mast
 				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.mast];
@@ -216,13 +216,13 @@ export class FileWriterService {
 
 		for (const type of supportSystemTypes) {
 			const supportSystemName = this.getsupportSystemName(type, supportSystemTypes);
-			const supportSystem: CreateSupportSystemInput = {
+			const supportSystem: CreateSupportSystemNormalizedInput = {
 				id: newId(),
 				objectId: objectId,
 				surveyId: surveyId,
 				name: supportSystemName,
 				type: type,
-				typeDetailed: SupportSystemTypeDetailed.one, // Maps to "Bereikbaarheid gedetailleerd"
+				typeDetailed: SupportSystemTypeDetailedMast.Spanmast, // Maps to "Bereikbaarheid gedetailleerd"
 				location: workSheet['I' + row]?.v, // Maps to "Straat"
 				constructionYear: 1979, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"

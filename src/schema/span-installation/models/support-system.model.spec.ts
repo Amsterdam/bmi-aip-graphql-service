@@ -1,4 +1,4 @@
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
+import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 
 import { SupportSystem } from './support-system.model';
 
@@ -10,7 +10,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.surveyId = '388ecaaa-c6c2-4613-aa14-f206cf577ca7';
 		supportSystem.name = '__NAME__';
 		supportSystem.type = SupportSystemType.facade;
-		supportSystem.typeDetailed = SupportSystemTypeDetailed.two;
+		supportSystem.typeDetailed = SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS;
 		supportSystem.location = null;
 		supportSystem.constructionYear = 1979;
 		supportSystem.locationIndication = '__LOCATION__INDICATION__';

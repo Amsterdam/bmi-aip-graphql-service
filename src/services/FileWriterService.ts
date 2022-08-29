@@ -6,13 +6,12 @@ import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
-import { SupportSystemType, SupportSystemTypeDetailed } from '../types';
+import { SupportSystemType } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
-import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 // import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 
@@ -21,6 +20,7 @@ import { JunctionBoxRepository } from '../schema/span-installation/junction-box.
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ObjectRepository } from '../schema/object/object.repository';
+import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -38,9 +38,8 @@ export class FileWriterService {
 		private readonly surveyRepository: SurveyRepository,
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
-		private readonly luminaireRepository: LuminaireRepository,
-	) // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
-	{
+		private readonly luminaireRepository: LuminaireRepository, // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
+	) {
 		const cli = this.consoleService.getCli();
 
 		this.consoleService.createCommand(
@@ -167,41 +166,41 @@ export class FileWriterService {
 		let supportSystemType: SupportSystemType[] = [];
 		switch (situation) {
 			case 'MVMA':
-				// MVMA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMA = TensionWire /.Mast /.Mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 				break;
 			case 'MVMAASPIN':
-				// MVMAAspin = tensionWire / mast / mast / knoop
+				// MVMAAspin = TensionWire /.Mast /.Mast /.Node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.mast,
-					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Mast,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 				break;
 			case 'GMVAASPIN':
-				// GMVAASPIN = tensionWire / facade / mast / knoop
+				// GMVAASPIN = TensionWire /.Facade /.Mast /.Node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.facade,
-					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Facade,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 			case 'MVMAA':
-				// MVMAA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMAA = TensionWire /.Mast /.Mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 			case 'GMVA':
-				// GMVA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.knoop];
+				// GMVA = TensionWire /.Facade /.Mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
 			case 'GMVAA':
-				// GMVAA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.mast];
+				// GMVAA = TensionWire /.Facade /.Mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
 			case 'GVGA':
-				// GVGA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGA = TensionWire /.Facade /.Facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			case 'GVGAA':
-				// GVGAA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGAA = TensionWire /.Facade /.Facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			default:
 		}
 		return supportSystemType;
@@ -210,26 +209,26 @@ export class FileWriterService {
 	private async createSupportSystems(objectId, surveyId, excelRowObject: ExcelRowObject) {
 		const supportSystemTypes = this.getSupportSystemType(excelRowObject['situatie nw']);
 		const supportSystemTracker = {
-			[SupportSystemType.facade]: 0,
-			[SupportSystemType.mast]: 0,
-			[SupportSystemType.knoop]: 0,
-			[SupportSystemType.tensionWire]: 0,
+			[SupportSystemType.Facade]: 0,
+			[SupportSystemType.Mast]: 0,
+			[SupportSystemType.Node]: 0,
+			[SupportSystemType.TensionWire]: 0,
 		};
 		for (const type of supportSystemTypes) {
 			const supportSystemId = newId();
 			supportSystemTracker[type] += 1;
-			const supportSystem: CreateSupportSystemInput = {
+			const supportSystem: CreateSupportSystemNormalizedInput = {
 				id: supportSystemId,
 				objectId: objectId,
 				surveyId: surveyId,
 				name: `Draagsystem ${type} ${supportSystemTracker[type]}`,
 				type: type,
-				typeDetailed: SupportSystemTypeDetailed.one, // Maps to "Bereikbaarheid gedetailleerd"
+				typeDetailed: null, // Maps to "Bereikbaarheid gedetailleerd"
 				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"
 				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: null, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
+				installationHeight: null, // Maps to "Aanleghoogte" For type `gevel |.Mast | ring`
 				remarks: '', // Maps to "Opmerking"
 				houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
 				geography: {

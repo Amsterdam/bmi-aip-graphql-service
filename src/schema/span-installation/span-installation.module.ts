@@ -33,6 +33,8 @@ import {
 	SupportSystemTypeDetailedNode,
 	SupportSystemTypeDetailedTensionWire,
 } from './types';
+import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
+import { FindSupportSystemLuminairesHandler } from './commands/find-support-system-luminaires.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -75,6 +77,8 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 		UpdateLuminaireHandler,
 		DeleteLuminaireHandler,
 		FindSupportSystemsHandler,
+		FindSupportSystemLuminairesCommand,
+		FindSupportSystemLuminairesHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

@@ -3,17 +3,13 @@ import { IsEnum, IsInt, IsNumber, IsOptional, MaxLength } from 'class-validator'
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
+import { SupportSystemType } from '../../../types';
 
 @InputType()
 export class BaseSupportSystemInput {
 	@IsEnum(SupportSystemType)
 	@Field((type) => SupportSystemType)
 	public type: SupportSystemType;
-
-	@IsEnum(SupportSystemTypeDetailed)
-	@Field((type) => SupportSystemTypeDetailed)
-	public typeDetailed: SupportSystemTypeDetailed;
 
 	@IsOptional()
 	@MaxLength(255)

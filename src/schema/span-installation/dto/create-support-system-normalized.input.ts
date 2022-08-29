@@ -34,6 +34,6 @@ export class CreateSupportSystemNormalizedInput extends BaseSupportSystemInput {
 		...Object.keys(SupportSystemTypeDetailedTensionWire),
 		...Object.keys(SupportSystemTypeDetailedNode),
 	])
-	@Field()
+	@Field({ nullable: true })
 	public typeDetailed: string;
 }

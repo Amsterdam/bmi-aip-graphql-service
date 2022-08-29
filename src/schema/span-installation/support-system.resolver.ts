@@ -1,6 +1,5 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { UsePipes } from '@nestjs/common';
 import { Resource, Roles } from 'nest-keycloak-connect';
 
 import { SupportSystem } from './models/support-system.model';
@@ -15,7 +14,6 @@ import { DeleteSupportSystemCommand } from './commands/delete-support-system.com
 import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
-import { SupportSystemTypeDetailedValidationPipe } from './validation/support-system-type-detailed-validation.pipe';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -27,7 +25,6 @@ export class SupportSystemResolver {
 	) {}
 
 	@Mutation(() => SupportSystem)
-	@UsePipes(SupportSystemTypeDetailedValidationPipe)
 	public async createSupportSystem(
 		@Args('createSupportSystem') input: CreateSupportSystemInput,
 	): Promise<SupportSystem> {

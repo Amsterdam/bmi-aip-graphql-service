@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsNumber, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
@@ -44,7 +44,7 @@ export class BaseSupportSystemInput {
 	geography?: PointType;
 
 	@IsOptional()
-	@IsInt()
+	@IsNumber()
 	@Field({ nullable: true })
 	public installationHeight?: number;
 

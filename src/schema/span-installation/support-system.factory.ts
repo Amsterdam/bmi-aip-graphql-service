@@ -31,7 +31,7 @@ export class SupportSystemFactory {
 		supportSystem.location = location;
 		supportSystem.locationIndication = locationIndication;
 		supportSystem.a11yDetails = a11yDetails;
-		supportSystem.installationHeight = installationHeight;
+		supportSystem.installationHeight = Number(installationHeight);
 		supportSystem.remarks = remarks;
 		supportSystem.constructionYear = constructionYear;
 		supportSystem.houseNumber = houseNumber;

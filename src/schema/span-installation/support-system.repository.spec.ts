@@ -1,4 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
+import { Decimal } from '@prisma/client/runtime';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -55,7 +56,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					},
 				},
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 100,
+				installationHeight: new Decimal('100'),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',

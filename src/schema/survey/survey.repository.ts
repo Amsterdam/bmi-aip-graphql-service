@@ -20,6 +20,7 @@ export class SurveyRepository implements ISurveyRepository {
 					id: input.objectId,
 				},
 			},
+			status: input.status,
 			surveryedOn: input.surveryedOn,
 			updatedOn: input.updated_at,
 		};

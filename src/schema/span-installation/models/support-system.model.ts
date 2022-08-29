@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -56,7 +56,7 @@ export class SupportSystem {
 
 	// For type `gevel | mast | ring`
 	// Maps to "Aanleghoogte"
-	@Field((type) => Number, { nullable: true })
+	@Field((type) => Float, { nullable: true })
 	installationHeight?: number;
 
 	// For type `gevel`

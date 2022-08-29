@@ -17,25 +17,25 @@ export class TypeDetailedSupportSystemInput extends BaseSupportSystemInput {
 	 * It is not possible to expose a property through GraphQL which represents a union of enums.
 	 * Therefor we expose each as a separate property.
 	 */
-	@ValidateIf((o) => o.type === SupportSystemType.mast)
+	@ValidateIf((o) => o.type === SupportSystemType.Mast)
 	@IsEnum(SupportSystemTypeDetailedMast)
 	// @IsOptional()
 	@Field((type) => SupportSystemTypeDetailedMast, { nullable: true })
 	public typeDetailedMast: SupportSystemTypeDetailedMast;
 
-	@ValidateIf((o) => o.type === SupportSystemType.facade)
+	@ValidateIf((o) => o.type === SupportSystemType.Facade)
 	@IsEnum(SupportSystemTypeDetailedFacade)
 	// @IsOptional()
 	@Field((type) => SupportSystemTypeDetailedFacade, { nullable: true })
 	public typeDetailedFacade: SupportSystemTypeDetailedFacade;
 
-	@ValidateIf((o) => o.type === SupportSystemType.tensionWire)
+	@ValidateIf((o) => o.type === SupportSystemType.TensionWire)
 	@IsEnum(SupportSystemTypeDetailedTensionWire)
 	// @IsOptional()
 	@Field((type) => SupportSystemTypeDetailedTensionWire, { nullable: true })
 	public typeDetailedTensionWire: SupportSystemTypeDetailedTensionWire;
 
-	@ValidateIf((o) => o.type === SupportSystemType.node)
+	@ValidateIf((o) => o.type === SupportSystemType.Node)
 	@IsEnum(SupportSystemTypeDetailedNode)
 	// @IsOptional()
 	@Field((type) => SupportSystemTypeDetailedNode, { nullable: true })

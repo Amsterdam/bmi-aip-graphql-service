@@ -21,16 +21,16 @@ export const normalizeSupportSystemInputUtil = <
 			acc[key] = object[key];
 
 			switch (object.type) {
-				case SupportSystemType.node:
+				case SupportSystemType.Node:
 					acc.typeDetailed = object.typeDetailedNode;
 					break;
-				case SupportSystemType.mast:
+				case SupportSystemType.Mast:
 					acc.typeDetailed = object.typeDetailedMast;
 					break;
-				case SupportSystemType.tensionWire:
+				case SupportSystemType.TensionWire:
 					acc.typeDetailed = object.typeDetailedTensionWire;
 					break;
-				case SupportSystemType.facade:
+				case SupportSystemType.Facade:
 					acc.typeDetailed = object.typeDetailedFacade;
 					break;
 			}

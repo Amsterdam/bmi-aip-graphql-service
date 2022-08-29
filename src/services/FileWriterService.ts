@@ -160,41 +160,41 @@ export class FileWriterService {
 		let supportSystemType: SupportSystemType[] = [];
 		switch (situation) {
 			case 'MVMA':
-				// MVMA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMA =.TensionWire / mast / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 				break;
 			case 'MVMAASPIN':
-				// MVMAAspin = tensionWire / mast / mast / node
+				// MVMAAspin =.TensionWire / mast / mast / node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.mast,
-					SupportSystemType.mast,
-					SupportSystemType.node,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Mast,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 				break;
 			case 'GMVAASPIN':
-				// GMVAASPIN = tensionWire / facade / mast / node
+				// GMVAASPIN =.TensionWire / facade / mast / node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.facade,
-					SupportSystemType.mast,
-					SupportSystemType.node,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Facade,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 			case 'MVMAA':
-				// MVMAA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMAA =.TensionWire / mast / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 			case 'GMVA':
-				// GMVA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.node];
+				// GMVA =.TensionWire / facade / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
 			case 'GMVAA':
-				// GMVAA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.mast];
+				// GMVAA =.TensionWire / facade / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
 			case 'GVGA':
-				// GVGA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGA =.TensionWire / facade / facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			case 'GVGAA':
-				// GVGAA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGAA =.TensionWire / facade / facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			default:
 		}
 		return supportSystemType;

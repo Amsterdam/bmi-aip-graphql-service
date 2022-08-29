@@ -99,8 +99,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				remarks: '__REMARKS__',
 				constructionYear: 1979,
 				houseNumber: '33',
-				typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
-				type: SupportSystemType.facade,
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+				type: SupportSystemType.Facade,
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateSupportSystemNormalizedInput.id);
@@ -110,7 +110,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 			name: '__NAME__',
-			type: SupportSystemType.facade,
+			type: SupportSystemType.Facade,
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
@@ -122,7 +122,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
-			typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
+			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
 		});
 	});
@@ -146,7 +146,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 				surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 				name: '__NAME__',
-				type: SupportSystemType.facade,
+				type: SupportSystemType.Facade,
 				location: '__LOCATION__',
 				constructionYear: 1979,
 				locationIndication: '__LOCATION_INDICATION__',
@@ -160,7 +160,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',
 				},
-				typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			}),
 		);
 		expect(spy).toHaveBeenCalledWith(identifier);

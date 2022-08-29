@@ -3,7 +3,7 @@ import { CreateSupportSystemInput } from '../dto/create-support-system.input';
 import { SupportSystem as DomainSupportSystem } from '../types/support-system.repository.interface';
 import { SupportSystemFactory } from '../support-system.factory';
 import { UpdateSupportSystemInput } from '../dto/update-support-system.input';
-import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../../../types';
+import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-system-input.util';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
@@ -37,8 +37,8 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	remarks: '__REMARKS__',
 	constructionYear: 1979,
 	houseNumber: '33',
-	type: SupportSystemType.facade,
-	typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
+	type: SupportSystemType.Facade,
+	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: '__A11Y_DETAILS__',
 	installationHeight: 100,

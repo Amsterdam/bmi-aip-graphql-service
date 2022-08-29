@@ -28,8 +28,8 @@ describe('normalizeSupportSystemInputUtil', () => {
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			remarks: '__REMARKS__',
 			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			type: SupportSystemType.facade,
-			typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
+			type: SupportSystemType.Facade,
+			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 		});
 	});
 
@@ -56,8 +56,8 @@ describe('normalizeSupportSystemInputUtil', () => {
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			remarks: '__REMARKS__',
 			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			type: SupportSystemType.facade,
-			typeDetailed: SupportSystemTypeDetailedFacade.Muurplaat_inbouw_RVS,
+			type: SupportSystemType.Facade,
+			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 		});
 	});
 });

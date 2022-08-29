@@ -1,46 +1,46 @@
 export enum SupportSystemType {
-	'tensionWire' = 'tensionWire',
-	'facade' = 'facade',
-	'mast' = 'mast',
-	'node' = 'node',
+	'TensionWire' = 'TensionWire',
+	'Facade' = 'Facade',
+	'Mast' = 'Mast',
+	'Node' = 'Node',
 }
 
 export enum SupportSystemTypeDetailedTensionWire {
-	'RVS316_6mm_zonder_buitenmantel' = 'RVS316 6mm zonder buitenmantel',
-	'RVS316_6mm_met_buitenmantel' = 'RVS316 6mm met buitenmantel',
-	'RVS316_8mm_zonder_buitenmantel' = 'RVS316 8mm zonder buitenmantel',
-	'RVS316_8mm_met_buitenmantel' = 'RVS316 8mm met buitenmantel',
-	'Denhalon' = 'Denhalon',
 	'Aramidevezel' = 'Aramidevezel',
+	'Denhalon' = 'Denhalon',
+	'Rvs316_6mmMetBuitenmantel' = 'Rvs316_6mmMetBuitenmantel',
+	'Rvs316_6mmZonderBuitenmantel' = 'Rvs316_6mmZonderBuitenmantel',
+	'Rvs316_8mmMetBuitenmantel' = 'Rvs316_8mmMetBuitenmantel',
+	'Rvs316_8mmZonderBuitenmantel' = 'Rvs316_8mmZonderBuitenmantel',
 }
 
 export enum SupportSystemTypeDetailedMast {
 	'Spanmast' = 'Spanmast',
 	'Trekmast' = 'Trekmast',
-	'GVB' = 'GVB',
+	'Gvb' = 'Gvb',
 }
 
 export enum SupportSystemTypeDetailedFacade {
-	'Muurplaat_klassiekGietijzer' = 'Muurplaat klassiek gietijzer',
-	'Muurplaat_klassiek_RVS316' = 'Muurplaat klassiek RVS316',
-	'Muurplaat_klassiek_met_katrol' = 'Muurplaat klassiek met katrol',
-	'Muurplaat_modern_klein_verz_staal' = 'Muurplaat modern klein verz. staal',
-	'Muurplaat_modern_klein_RVS316' = 'Muurplaat modern klein RVS316',
-	'Muurplaat_modern_groot_verz_staal' = 'Muurplaat modern groot verz. staal',
-	'Muurplaat_modern_groot_RVS316' = 'Muurplaat modern groot RVS316',
-	'Muurplaat_vierkant_200x200x5_RVS316' = 'Muurplaat vierkant 200x200x5 RVS316',
-	'Muurplaat_hoekprofiel_verz_staal' = 'Muurplaat hoekprofiel verz. staal',
-	'Muurplaat_inbouw_RVS' = 'Muurplaat inbouw RVS',
-	'Muurplaat_gevelverlengconstructie' = 'Muurplaat gevelverlengconstructie',
-	'Bevestigingspunt_maatwerk_aan_constructie' = 'Bevestigingspunt maatwerk aan constructie',
-	'Schroefoog' = 'Schroefoog',
+	'BevestigingspuntMaatwerkAanConstructie' = 'BevestigingspuntMaatwerkAanConstructie',
+	'MuurplaatGevelverlengconstructie' = 'MuurplaatGevelverlengconstructie',
+	'MuurplaatHoekprofielVerzStaal' = 'MuurplaatHoekprofielVerzStaal',
+	'MuurplaatInbouwRvs' = 'MuurplaatInbouwRvs',
+	'MuurplaatKlassiekGietijzer' = 'MuurplaatKlassiekGietijzer',
+	'MuurplaatKlassiekRvs316' = 'MuurplaatKlassiekRvs316',
+	'MuurplaatKlassiekMetKatrol' = 'MuurplaatKlassiekMetKatrol',
+	'MuurplaatModernGrootRvs316' = 'MuurplaatModernGrootRvs316',
+	'MuurplaatModernGrootVerzStaal' = 'MuurplaatModernGrootVerzStaal',
+	'MuurplaatModernKleinRvs316' = 'MuurplaatModernKleinRvs316',
+	'MuurplaatModernKleinVerzStaal' = 'MuurplaatModernKleinVerzStaal',
+	'MuurplaatVierkant_200x200x5Rvs316' = 'MuurplaatVierkant_200x200x5Rvs316',
 	'Overig' = 'Overig',
+	'Schroefoog' = 'Schroefoog',
 	// TODO complete this list (still to be provided by client)
 }
 
 export enum SupportSystemTypeDetailedNode {
 	'Ring' = 'Ring',
-	'Y_verbinding' = 'Y-verbinding',
+	'YVerbinding' = 'YVerbinding',
 }
 
 // Translates to "Bereikbaarheid gedetailleerd"

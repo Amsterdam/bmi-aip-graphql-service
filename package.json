@@ -47,7 +47,7 @@
 		"nest-keycloak-connect": "^1.9.0",
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",
-		"rxjs": "^7.5.5",
+		"rxjs": "^7.5.6",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
@@ -73,7 +73,7 @@
 		"eslint-plugin-prettier": "^4.2.1",
 		"husky": "^8.0.1",
 		"jest": "^27.2.5",
-		"jest-mock-extended": "^2.0.4",
+		"jest-mock-extended": "^2.0.7",
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.3.2",
 		"prisma": "^3.15.2",

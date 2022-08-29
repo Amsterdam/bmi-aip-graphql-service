@@ -1,11 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Resource, Roles } from 'nest-keycloak-connect';
-import { UseGuards } from '@nestjs/common';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
+// import { UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { PoliciesGuard } from '../../authorization/policies.guard';
-import { WriteAssetPolicyHandler } from '../../authorization/policies/write-asset.policy-handler';
-import { CheckPolicies } from '../../authorization/check-policies.decorator';
+// import { PoliciesGuard } from '../../authorization/policies.guard';
+// import { WriteAssetPolicyHandler } from '../../authorization/policies/write-asset.policy-handler';
+// import { CheckPolicies } from '../../authorization/check-policies.decorator';
 
 import { Element } from './models/element.model';
 import { ElementFactory } from './element.factory';
@@ -23,6 +23,7 @@ export class ElementResolver {
 	constructor(private elementService: ElementService, private commandBus: CommandBus) {}
 
 	@Mutation(() => Element)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createElement(@Args('createElement') input: CreateElementInput): Promise<Element> {
 		const domainElement: DomainElement = await this.commandBus.execute<CreateElementCommand>(
 			new CreateElementCommand(input),
@@ -31,6 +32,7 @@ export class ElementResolver {
 	}
 
 	@Mutation(() => Element)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateElement(@Args('updateElement') input: UpdateElementInput): Promise<Element> {
 		const domainElement: DomainElement = await this.commandBus.execute<UpdateElementCommand>(
 			new UpdateElementCommand(input),
@@ -39,6 +41,7 @@ export class ElementResolver {
 	}
 
 	@Mutation(() => Element)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteElement(@Args('identifier') identifier: string): Promise<Element> {
 		const domainElement: DomainElement = await this.commandBus.execute<DeleteElementCommand>(
 			new DeleteElementCommand(identifier),
@@ -47,22 +50,23 @@ export class ElementResolver {
 	}
 
 	@Query((returns) => [Element], { name: 'decompositionElements' })
-	@Roles({ roles: ['realm:aip_owner'] })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.elementService.getElements(surveyId);
 	}
 
-	@Query((returns) => [Element], { name: 'tester' })
-	@UseGuards(PoliciesGuard)
-	@CheckPolicies(new WriteAssetPolicyHandler())
-	async tester(@Args('code', { type: () => String }) code: string) {
-		return [];
-	}
-
-	@Query((returns) => [Element], { name: 'tester2' })
-	@UseGuards(PoliciesGuard)
-	@CheckPolicies(new WriteAssetPolicyHandler())
-	async tester2(@Args('code', { type: () => String }) code: string) {
-		return [];
-	}
+	// Leaving this here on purpose to illustrate usage of the PoliciesGuard
+	// @Query((returns) => [Element], { name: 'tester' })
+	// @UseGuards(PoliciesGuard)
+	// @CheckPolicies(new WriteAssetPolicyHandler())
+	// async tester(@Args('code', { type: () => String }) code: string) {
+	// 	return [];
+	// }
+	//
+	// @Query((returns) => [Element], { name: 'tester2' })
+	// @UseGuards(PoliciesGuard)
+	// @CheckPolicies(new WriteAssetPolicyHandler())
+	// async tester2(@Args('code', { type: () => String }) code: string) {
+	// 	return [];
+	// }
 }

@@ -7,18 +7,14 @@ import { ConfigService } from '@nestjs/config';
 import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
 import { SupportSystemType, SupportSystemTypeDetailed } from '../types';
-import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
-import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
-import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
-import { ObjectRepository } from '../schema/object/object.repository';
 import { InspectionStandard } from '../schema/survey/types';
-import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -32,11 +28,7 @@ export class FileWriterService {
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
 		private configService: ConfigService,
-		private readonly objectRepository: ObjectRepository,
-		private readonly surveyRepository: SurveyRepository,
-		private readonly junctionBoxRepository: JunctionBoxRepository,
-		private readonly supportSystemRepository: SupportSystemRepository,
-		private readonly luminaireRepository: LuminaireRepository, // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
+		private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -71,15 +63,6 @@ export class FileWriterService {
 		const minRow = 2;
 		let data: ExcelRowObject[] = xlsx.utils.sheet_to_json(workSheet);
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
-		// let rowCounter = [];
-		//
-		// console.log('data', data);
-		// for (const key of Object.keys(workSheet)) {
-		// 	const rawKey = key.match(/[a-z]+|\d+/gi);
-		// 	if (rawKey[1] !== undefined) rowCounter.push(rawKey[1]);
-		// }
-
-		// rowCounter = uniq(rowCounter);
 
 		return data;
 	}
@@ -123,7 +106,7 @@ export class FileWriterService {
 			attributes: JSON.parse(JSON.stringify(passport)),
 			location: excelRowObject['nieuwe straatnaam'],
 		};
-		await this.objectRepository.createObject(assetObject);
+		await this.externalAIPGraphQLRepository.createObject(assetObject);
 		return assetObject.id;
 	}
 
@@ -139,7 +122,7 @@ export class FileWriterService {
 			created_at: new Date(),
 			condition: 'U',
 		};
-		await this.surveyRepository.createSurvey(survey);
+		await this.externalAIPGraphQLRepository.createSurvey(survey);
 		return survey.id;
 	}
 
@@ -165,7 +148,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.junctionBoxRepository.createJunctionBox(junctionBox);
+			await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
 		}
 	}
 
@@ -246,7 +229,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.supportSystemRepository.createSupportSystem(supportSystem);
+			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem);
 			await this.createLuminaires(supportSystemId, excelRowObject);
 		}
 	}
@@ -278,7 +261,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.luminaireRepository.createLuminaire(luminaire);
+			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
 		}
 	}
 
@@ -356,11 +339,14 @@ export class FileWriterService {
 				'aantal voedingen': this.biggestAantal(aantalVoedingenList),
 				'aantal armaturen': this.biggestAantal(aantalArmaturenList),
 			};
-
-			const objectId = await this.createObject(excelRowObject, passport);
-			const surveyId = await this.createSurvey(objectId);
-			await this.createJuctionbox(objectId, surveyId, excelRowObject);
-			await this.createSupportSystems(objectId, surveyId, excelRowObject);
+			try {
+				const objectId = await this.createObject(excelRowObject, passport);
+				const surveyId = await this.createSurvey(objectId);
+				await this.createJuctionbox(objectId, surveyId, excelRowObject);
+				await this.createSupportSystems(objectId, surveyId, excelRowObject);
+			} catch (error) {
+				reportError({ message: error.message });
+			}
 		}
 	}
 }

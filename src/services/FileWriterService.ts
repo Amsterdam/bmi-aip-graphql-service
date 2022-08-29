@@ -14,7 +14,13 @@ import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
-import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
+// import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
+
+import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
+import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
+import { SurveyRepository } from '../schema/survey/survey.repository';
+import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
+import { ObjectRepository } from '../schema/object/object.repository';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -28,8 +34,13 @@ export class FileWriterService {
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
 		private configService: ConfigService,
-		private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
-	) {
+		private readonly objectRepository: ObjectRepository,
+		private readonly surveyRepository: SurveyRepository,
+		private readonly junctionBoxRepository: JunctionBoxRepository,
+		private readonly supportSystemRepository: SupportSystemRepository,
+		private readonly luminaireRepository: LuminaireRepository,
+	) // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
+	{
 		const cli = this.consoleService.getCli();
 
 		this.consoleService.createCommand(
@@ -71,7 +82,7 @@ export class FileWriterService {
 		const assetObject: CreateObjectInput = {
 			id: newId(),
 			code: 'OVS' + ('000' + excelRowObject.Installatiegroep).slice(-4),
-			clientCompanyId: 'f1aaf90a-f560-98b9-3555-24c7a6e5ba44',
+			clientCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
 			compositionIsVisible: false,
 			constructionYear: null,
 			created_at: new Date(),
@@ -106,7 +117,7 @@ export class FileWriterService {
 			attributes: JSON.parse(JSON.stringify(passport)),
 			location: excelRowObject['nieuwe straatnaam'],
 		};
-		await this.externalAIPGraphQLRepository.createObject(assetObject);
+		await this.objectRepository.createObject(assetObject);
 		return assetObject.id;
 	}
 
@@ -122,7 +133,7 @@ export class FileWriterService {
 			created_at: new Date(),
 			condition: 'U',
 		};
-		await this.externalAIPGraphQLRepository.createSurvey(survey);
+		await this.surveyRepository.createSurvey(survey);
 		return survey.id;
 	}
 
@@ -148,7 +159,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
+			await this.junctionBoxRepository.createJunctionBox(junctionBox);
 		}
 	}
 
@@ -229,7 +240,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem);
+			await this.supportSystemRepository.createSupportSystem(supportSystem);
 			await this.createLuminaires(supportSystemId, excelRowObject);
 		}
 	}
@@ -261,11 +272,11 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
+			await this.luminaireRepository.createLuminaire(luminaire);
 		}
 	}
 
-	private async getUniqueInstallatiegroeps(excelRowObjectList): Promise<number[]> {
+	private getUniqueInstallationgroups(excelRowObjectList): number[] {
 		const uniqueInstallatiegroeps: number[] = [];
 		for (const item of excelRowObjectList) {
 			uniqueInstallatiegroeps.push(item.Installatiegroep);
@@ -307,12 +318,12 @@ export class FileWriterService {
 
 		const grouped = this.groupBy(excelRowObjectList, (item) => item.Installatiegroep);
 
-		const uniqueInstallatiegroeps = await this.getUniqueInstallatiegroeps(excelRowObjectList);
-		let passport: IPassport = {};
-		let excelRowObject: ExcelRowObject = {};
+		const uniqueInstallationgroups = await this.getUniqueInstallationgroups(excelRowObjectList);
 
-		for (const uniqueInstallatiegroep of uniqueInstallatiegroeps) {
-			const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallatiegroep);
+		for (const uniqueInstallationgroup of uniqueInstallationgroups) {
+			let passport: IPassport = {};
+			let excelRowObject: ExcelRowObject = {};
+			const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallationgroup);
 			const situatieNWList: string[] = [];
 			const aantalVoedingenList: number[] = [];
 			const aantalArmaturenList: number[] = [];
@@ -339,13 +350,14 @@ export class FileWriterService {
 				'aantal voedingen': this.biggestAantal(aantalVoedingenList),
 				'aantal armaturen': this.biggestAantal(aantalArmaturenList),
 			};
+
 			try {
 				const objectId = await this.createObject(excelRowObject, passport);
 				const surveyId = await this.createSurvey(objectId);
 				await this.createJuctionbox(objectId, surveyId, excelRowObject);
 				await this.createSupportSystems(objectId, surveyId, excelRowObject);
 			} catch (error) {
-				reportError({ message: error.message });
+				console.log(`Failed to create new entry, error: ${error.message}`);
 			}
 		}
 	}

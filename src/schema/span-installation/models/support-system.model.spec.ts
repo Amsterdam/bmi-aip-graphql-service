@@ -1,4 +1,4 @@
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
+import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 
 import { SupportSystem } from './support-system.model';
 
@@ -9,8 +9,8 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.objectId = 'cecc214d-1c44-4bcd-94e2-f2d661327db3';
 		supportSystem.surveyId = '388ecaaa-c6c2-4613-aa14-f206cf577ca7';
 		supportSystem.name = '__NAME__';
-		supportSystem.type = SupportSystemType.facade;
-		supportSystem.typeDetailed = SupportSystemTypeDetailed.two;
+		supportSystem.type = SupportSystemType.Facade;
+		supportSystem.typeDetailed = SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs;
 		supportSystem.location = null;
 		supportSystem.constructionYear = 1979;
 		supportSystem.locationIndication = '__LOCATION__INDICATION__';
@@ -45,8 +45,8 @@ describe('Span Installation / Model / SupportSystem', () => {
 			objectId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
 			remarks: '__REMARKS__',
 			surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
-			type: 'facade',
-			typeDetailed: 'two',
+			type: SupportSystemType.Facade,
+			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updatedAt: '2022-08-02T15:52:54.044Z',
 		});
 	});

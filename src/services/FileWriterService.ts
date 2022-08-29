@@ -6,15 +6,15 @@ import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
-import { SupportSystemType, SupportSystemTypeDetailed } from '../types';
+import { SupportSystemType, SupportSystemTypeDetailedMast } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
-import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
+import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -156,41 +156,41 @@ export class FileWriterService {
 		let supportSystemType: SupportSystemType[] = [];
 		switch (situation) {
 			case 'MVMA':
-				// MVMA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMA =.TensionWire / mast / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 				break;
 			case 'MVMAASPIN':
-				// MVMAAspin = tensionWire / mast / mast / knoop
+				// MVMAAspin =.TensionWire / mast / mast / node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.mast,
-					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Mast,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 				break;
 			case 'GMVAASPIN':
-				// GMVAASPIN = tensionWire / facade / mast / knoop
+				// GMVAASPIN =.TensionWire / facade / mast / node
 				supportSystemType = [
-					SupportSystemType.tensionWire,
-					SupportSystemType.facade,
-					SupportSystemType.mast,
-					SupportSystemType.knoop,
+					SupportSystemType.TensionWire,
+					SupportSystemType.Facade,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
 				];
 			case 'MVMAA':
-				// MVMAA = tensionWire / mast / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.mast, SupportSystemType.mast];
+				// MVMAA =.TensionWire / mast / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 			case 'GMVA':
-				// GMVA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.knoop];
+				// GMVA =.TensionWire / facade / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
 			case 'GMVAA':
-				// GMVAA = tensionWire / facade / mast
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.mast];
+				// GMVAA =.TensionWire / facade / mast
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
 			case 'GVGA':
-				// GVGA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGA =.TensionWire / facade / facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			case 'GVGAA':
-				// GVGAA = tensionWire / facade / facade
-				supportSystemType = [SupportSystemType.tensionWire, SupportSystemType.facade, SupportSystemType.facade];
+				// GVGAA =.TensionWire / facade / facade
+				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			default:
 		}
 		return supportSystemType;
@@ -199,21 +199,21 @@ export class FileWriterService {
 	private async createSupportSystems(objectId, surveyId, excelRowObject: ExcelRowObject) {
 		const supportSystemTypes = this.getSupportSystemType(excelRowObject['situatie nw']);
 		const supportSystemTracker = {
-			[SupportSystemType.facade]: 0,
-			[SupportSystemType.mast]: 0,
-			[SupportSystemType.knoop]: 0,
-			[SupportSystemType.tensionWire]: 0,
+			[SupportSystemType.Facade]: 0,
+			[SupportSystemType.Mast]: 0,
+			[SupportSystemType.Node]: 0,
+			[SupportSystemType.TensionWire]: 0,
 		};
 		for (const type of supportSystemTypes) {
 			const supportSystemId = newId();
 			supportSystemTracker[type] += 1;
-			const supportSystem: CreateSupportSystemInput = {
+			const supportSystem: CreateSupportSystemNormalizedInput = {
 				id: supportSystemId,
 				objectId: objectId,
 				surveyId: surveyId,
 				name: `Draagsystem ${type} ${supportSystemTracker[type]}`,
 				type: type,
-				typeDetailed: SupportSystemTypeDetailed.one, // Maps to "Bereikbaarheid gedetailleerd"
+				typeDetailed: SupportSystemTypeDetailedMast.Spanmast, // Maps to "Bereikbaarheid gedetailleerd"
 				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"

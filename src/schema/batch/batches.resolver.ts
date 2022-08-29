@@ -1,4 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { PrismaService } from '../../prisma.service';
 import { Batch } from '../../authorization/models/batch.model';
@@ -14,6 +15,7 @@ export class BatchesResolver {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	@Query((returns) => Batch, { name: 'batches' })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async GetBatchById(@Args('id') id: string): Promise<Batch> {
 		const batch = this.prismaService.batches.findUnique({
 			where: { id: id },

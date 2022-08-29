@@ -1,5 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CommandBus } from '@nestjs/cqrs';
+import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { Manifestation as DomainManifestation } from './types/manifestation.repository.interface';
 import { ManifestationService } from './manifestation.service';
@@ -16,6 +17,7 @@ export class ManifestationResolver {
 	constructor(private manifestationService: ManifestationService, private commandBus: CommandBus) {}
 
 	@Mutation(() => Manifestation)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createManifestation(
 		@Args('createManifestation') input: CreateManifestationInput,
 	): Promise<Manifestation> {
@@ -27,6 +29,7 @@ export class ManifestationResolver {
 	}
 
 	@Mutation(() => Manifestation)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateManifestation(
 		@Args('updateManifestation') input: UpdateManifestationInput,
 	): Promise<Manifestation> {
@@ -38,6 +41,7 @@ export class ManifestationResolver {
 	}
 
 	@Mutation(() => Manifestation)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteManifestation(@Args('identifier') identifier: string): Promise<Manifestation> {
 		const domainManifestation: DomainManifestation = await this.commandBus.execute<DeleteManifestationCommand>(
 			new DeleteManifestationCommand(identifier),

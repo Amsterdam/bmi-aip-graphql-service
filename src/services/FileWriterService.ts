@@ -2,25 +2,21 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import * as xlsx from 'xlsx';
-import { uniq } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 
 import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
-import { SupplierType, SupportSystemType, SupportSystemTypeDetailedMast } from '../types';
-import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
-import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
-import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
-import { ObjectRepository } from '../schema/object/object.repository';
+import { SupportSystemType, SupportSystemTypeDetailedMast } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
-import { SurveyRepository } from '../schema/survey/survey.repository';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
-import { ExternalObjectRepository } from '../externalRepository/ExternalObjectRepository';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
+
+import { ExcelRowObject } from './types/excelRowObject';
 
 @Injectable()
 export class FileWriterService {
@@ -32,12 +28,7 @@ export class FileWriterService {
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
 		private configService: ConfigService,
-		private readonly objectRepository: ObjectRepository,
-		private readonly surveyRepository: SurveyRepository,
-		private readonly junctionBoxRepository: JunctionBoxRepository,
-		private readonly supportSystemRepository: SupportSystemRepository,
-		private readonly luminaireRepository: LuminaireRepository,
-		private readonly externalObjectRepository: ExternalObjectRepository,
+		private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -57,43 +48,32 @@ export class FileWriterService {
 		});
 	}
 
-	private async getFile(): Promise<{ workSheet: any; rowCounter: any[] }> {
+	private async getFile(): Promise<ExcelRowObject[]> {
 		const filePath: string =
 			this.configService.get<string>('APP_DIR') +
 			this.configService.get<string>('DOC_DIR') +
 			this.configService.get<string>('READ_FILE');
 		// read from xlsx file
-		const workbook = xlsx.readFile(`${filePath}`);
+		const maxRow = 9628;
+
+		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
 		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
+		const minRow = 2;
+		let data: ExcelRowObject[] = xlsx.utils.sheet_to_json(workSheet);
+		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
-		let rowCounter = [];
-
-		for (const key of Object.keys(workSheet)) {
-			const rawKey = key.match(/[a-z]+|\d+/gi);
-			if (rawKey[1] !== undefined) rowCounter.push(rawKey[1]);
-		}
-
-		rowCounter = uniq(rowCounter);
-
-		return { workSheet, rowCounter };
+		return data;
 	}
 
-	private async createObject(
-		objectId: string,
-		row: string,
-		workSheet,
-		passport: IPassport,
-	): Promise<CreateObjectInput> {
-		const passportInfo: IPassport[] = [];
-		passportInfo.push(passport);
+	private async createObject(excelRowObject: ExcelRowObject, passport: IPassport): Promise<string> {
 		const assetObject: CreateObjectInput = {
-			id: objectId,
-			code: 'OVS' + ('000' + workSheet['A' + row]?.v).slice(-4),
+			id: newId(),
+			code: 'OVS' + ('000' + excelRowObject.Installatiegroep).slice(-4),
 			clientCompanyId: 'f1aaf90a-f560-98b9-3555-24c7a6e5ba44',
 			compositionIsVisible: false,
-			constructionYear: 0,
+			constructionYear: null,
 			created_at: new Date(),
 			customerVersion: 'amsterdam',
 			effortCalculation: 0,
@@ -108,7 +88,7 @@ export class FileWriterService {
 			mainMaterial: '',
 			managementOrganization: '',
 			marineInfrastrutureType: '',
-			name: '',
+			name: 'OVS' + ('000' + excelRowObject.Installatiegroep).slice(-4),
 			objectTypeId: 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0',
 			operatorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
 			ownerCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
@@ -116,43 +96,59 @@ export class FileWriterService {
 			shapeSrid: 0,
 			siteId: '',
 			squareMeters: 0,
-			status: '',
+			status: 'inUse',
 			surveyorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
 			trafficType: '',
 			updatedOn: new Date(),
 			updated_at: new Date(),
 			useage: '',
 			width: 0,
-			attributes: JSON.parse(JSON.stringify(passportInfo)),
-			location: '',
+			attributes: JSON.parse(JSON.stringify(passport)),
+			location: excelRowObject['nieuwe straatnaam'],
 		};
-		return assetObject;
+		await this.externalAIPGraphQLRepository.createObject(assetObject);
+		return assetObject.id;
 	}
 
-	private async createJuctionbox(objectId, surveyId, row, workSheet) {
-		for (let count = 1; count <= Number(workSheet['B' + row]?.v); count++) {
+	private async createSurvey(objectId): Promise<string> {
+		const survey: CreateSurveyInput = {
+			id: newId(),
+			description: 'Contract 1',
+			inspectionStandardType: InspectionStandard.spanInstallation,
+			objectId: objectId,
+			status: SurveyStates.open,
+			surveryedOn: new Date(),
+			updated_at: new Date(),
+			created_at: new Date(),
+			condition: 'U',
+		};
+		await this.externalAIPGraphQLRepository.createSurvey(survey);
+		return survey.id;
+	}
+
+	private async createJuctionbox(objectId, surveyId, excelRowObject: ExcelRowObject) {
+		for (let count = 1; count <= Number(excelRowObject['aantal voedingen']); count++) {
 			const junctionBox: CreateJunctionBoxInput = {
 				id: newId(),
 				objectId: objectId,
 				surveyId: surveyId,
-				name: `${count}`,
-				mastNumber: workSheet['D' + row]?.v, // Maps to "Mastgetal"
-				location: workSheet['I' + row]?.v, // Maps to "Straat"
+				name: `Aansluitkast ${count}`,
+				mastNumber: excelRowObject.Mastgetal, // Maps to "Mastgetal"
+				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
 				locationIndication: '', // Maps to "Locatie aanduiding"
 				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: workSheet['V' + row]?.v, // Maps to "Aanleghoogte"
+				installationHeight: excelRowObject.Lichtpunthoogte, // Maps to "Aanleghoogte"
 				riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
 				remarks: '', // Maps to "Opmerking"
 				geography: {
 					type: 'Point',
-					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+					coordinates: [excelRowObject.X, excelRowObject.Y],
 				},
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			console.log('junctionBox', junctionBox);
-			await this.junctionBoxRepository.createJunctionBox(junctionBox);
+			await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
 		}
 	}
 
@@ -200,131 +196,157 @@ export class FileWriterService {
 		return supportSystemType;
 	}
 
-	private getsupportSystemName(type, supportSystemTypes): string {
-		let supportSystemName = '';
-		const sameTypes = [...new Set(supportSystemTypes.filter((_type) => _type == type))];
-		if (sameTypes.includes(type)) {
-			for (let i = 1; i <= sameTypes.length; i++) {
-				supportSystemName = `Draagsystem ${i}`;
-			}
-		}
-		return supportSystemName;
-	}
-
-	private async createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet) {
-		const supportSystemTypes = this.getSupportSystemType(workSheet['L' + row]?.v);
-
+	private async createSupportSystems(objectId, surveyId, excelRowObject: ExcelRowObject) {
+		const supportSystemTypes = this.getSupportSystemType(excelRowObject['situatie nw']);
+		const supportSystemTracker = {
+			[SupportSystemType.Facade]: 0,
+			[SupportSystemType.Mast]: 0,
+			[SupportSystemType.Node]: 0,
+			[SupportSystemType.TensionWire]: 0,
+		};
 		for (const type of supportSystemTypes) {
-			const supportSystemName = this.getsupportSystemName(type, supportSystemTypes);
+			const supportSystemId = newId();
+			supportSystemTracker[type] += 1;
 			const supportSystem: CreateSupportSystemNormalizedInput = {
-				id: newId(),
+				id: supportSystemId,
 				objectId: objectId,
 				surveyId: surveyId,
-				name: supportSystemName,
+				name: `Draagsystem ${type} ${supportSystemTracker[type]}`,
 				type: type,
 				typeDetailed: SupportSystemTypeDetailedMast.Spanmast, // Maps to "Bereikbaarheid gedetailleerd"
-				location: workSheet['I' + row]?.v, // Maps to "Straat"
-				constructionYear: 1979, // Maps to "Jaar van aanleg"
+				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
+				constructionYear: null, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"
 				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: 320, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
+				installationHeight: null, // Maps to "Aanleghoogte" For type `gevel | mast | ring`
 				remarks: '', // Maps to "Opmerking"
 				houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
 				geography: {
 					type: 'Point',
-					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+					coordinates: [excelRowObject.X, excelRowObject.Y],
 				},
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.supportSystemRepository.createSupportSystem(supportSystem);
+			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem);
+			await this.createLuminaires(supportSystemId, excelRowObject);
 		}
 	}
 
-	private async createLuminaires(supportSystemId, row, workSheet) {
-		for (let count = 1; count <= Number(workSheet['C' + row]?.v); count++) {
+	private async createLuminaires(supportSystemId, excelRowObject: ExcelRowObject) {
+		for (let count = 1; count <= Number(excelRowObject['aantal armaturen']); count++) {
 			const luminaire: CreateLuminaireInput = {
 				supportSystemId: supportSystemId,
-				name: `Armatuur + ${count}`,
-				location: workSheet['I' + row]?.v, // Maps to "Straat"
+				name: `Armatuur ${count}`,
+				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
-				supplierType: SupplierType.one, // Maps to "Leverancierstype"
+				supplierType: null, // Maps to "Leverancierstype"
 				manufacturer: '', // Maps to "Fabrikant"
 				geography: {
 					type: 'Point',
-					coordinates: [workSheet['J' + row]?.v, workSheet['K' + row]?.v],
+					coordinates: [excelRowObject.X, excelRowObject.Y],
 				},
 				remarks: '', // Maps to "Opmerking"
 
 				// Driver
-				driverSupplierType: SupplierType.one, // Maps to "Leverancierstype_driver"
+				driverSupplierType: null, // Maps to "Leverancierstype_driver"
 				driverCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
 
 				// Light
-				lightSupplierType: SupplierType.two, // Maps to "Leverancierstype_lamp"
+				lightSupplierType: null, // Maps to "Leverancierstype_lamp"
 				lightCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
 
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.luminaireRepository.createLuminaire(luminaire);
+			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
 		}
 	}
 
-	private async createSurvey(objectId, surveyId) {
-		const survey: CreateSurveyInput = {
-			id: surveyId,
-			description: '',
-			inspectionStandardType: InspectionStandard.overspanningsInstallatie,
-			objectId: objectId,
-			status: SurveyStates.open,
-			surveryedOn: new Date(),
-			updated_at: new Date(),
-			created_at: new Date(),
-			condition: 'U',
-		};
-		await this.surveyRepository.createSurvey(survey);
+	private async getUniqueInstallatiegroeps(excelRowObjectList): Promise<number[]> {
+		const uniqueInstallatiegroeps: number[] = [];
+		for (const item of excelRowObjectList) {
+			uniqueInstallatiegroeps.push(item.Installatiegroep);
+		}
+		return [...new Set(uniqueInstallatiegroeps)];
+	}
+
+	private groupBy(list, keyGetter) {
+		const map = new Map();
+		list.forEach((item) => {
+			const key = keyGetter(item);
+			const collection = map.get(key);
+			if (!collection) {
+				map.set(key, [item]);
+			} else {
+				collection.push(item);
+			}
+		});
+		return map;
+	}
+
+	private longestString(arr): string {
+		let long1 = arr[0];
+		for (let index = 0; index < arr.length; index++) {
+			if (arr[index].length > long1.length) {
+				long1 = arr[index];
+			}
+		}
+		return long1;
+	}
+
+	private biggestAantal(arr): number {
+		return arr.sort((a, b) => a - b)[arr.length - 1];
 	}
 
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
-		let objectId = '';
-		let surveyId = '';
-		let supportSystemId = '';
+		const excelRowObjectList: ExcelRowObject[] = await this.getFile();
 
-		const passportInfo: IPassport[] = [];
-		const { workSheet, rowCounter } = await this.getFile();
+		const grouped = this.groupBy(excelRowObjectList, (item) => item.Installatiegroep);
 
-		for (const row of rowCounter) {
-			if (row === '0' || row === '1') continue;
-			const passport: IPassport = {
-				passportIdentification: workSheet['A' + row]?.v,
-				passportCityArea: workSheet['F' + row]?.v,
-				passportStreet: workSheet['I' + row]?.v,
-				passportDistrict: workSheet['G' + row]?.v,
-				passportNeighborhood: workSheet['H' + row]?.v,
-			};
+		const uniqueInstallatiegroeps = await this.getUniqueInstallatiegroeps(excelRowObjectList);
+		let passport: IPassport = {};
+		let excelRowObject: ExcelRowObject = {};
 
-			const index: number = passportInfo.findIndex((x) => x.passportIdentification == workSheet['A' + row]?.v);
+		for (const uniqueInstallatiegroep of uniqueInstallatiegroeps) {
+			const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallatiegroep);
+			const situatieNWList: string[] = [];
+			const aantalVoedingenList: number[] = [];
+			const aantalArmaturenList: number[] = [];
 
-			if (index === -1) {
-				objectId = newId();
-				surveyId = newId();
-				passportInfo.push(passport);
-				const input: CreateObjectInput = await this.createObject(objectId, row, workSheet, passport);
-				//await this.externalObjectRepository.createObject(input);
-				await this.objectRepository.createObject(input);
-				await this.createSurvey(objectId, surveyId);
-			} else {
-				console.log('object already exists');
+			for (const item of groupediInstallatiegroeps) {
+				situatieNWList.push(item['situatie nw']);
+				aantalVoedingenList.push(item['aantal voedingen']);
+				aantalArmaturenList.push(item['aantal armaturen']);
+				if (Object.keys(item)[0]) {
+					passport = {
+						passportIdentification: String(item.Installatiegroep),
+						passportCityArea: item.Stadsdeel,
+						passportStreet: item['nieuwe straatnaam'],
+						passportDistrict: item.Wijk,
+						passportNeighborhood: item.Buurt,
+					};
+				}
+				excelRowObject = item;
 			}
-			supportSystemId = newId();
 
-			await this.createJuctionbox(objectId, surveyId, row, workSheet);
-			await this.createSupportSystem(objectId, surveyId, supportSystemId, row, workSheet);
-			await this.createLuminaires(supportSystemId, row, workSheet);
+			excelRowObject = {
+				...excelRowObject,
+				'situatie nw': this.longestString(situatieNWList),
+				'aantal voedingen': this.biggestAantal(aantalVoedingenList),
+				'aantal armaturen': this.biggestAantal(aantalArmaturenList),
+			};
+			try {
+				const objectId = await this.createObject(excelRowObject, passport);
+				const surveyId = await this.createSurvey(objectId);
+				await this.createJuctionbox(objectId, surveyId, excelRowObject);
+				await this.createSupportSystems(objectId, surveyId, excelRowObject);
+			} catch (error) {
+				reportError({ message: error.message });
+			}
 		}
 	}
 }

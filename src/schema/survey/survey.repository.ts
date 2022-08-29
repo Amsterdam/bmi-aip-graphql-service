@@ -14,12 +14,15 @@ export class SurveyRepository implements ISurveyRepository {
 	async createSurvey(input: CreateSurveyInput): Promise<Survey> {
 		const data: Prisma.surveysCreateInput = {
 			id: input.id,
+			description: input.description,
+			condition: input.condition,
 			inspectionStandardType: input.inspectionStandardType,
 			objects: {
 				connect: {
 					id: input.objectId,
 				},
 			},
+			status: input.status,
 			surveryedOn: input.surveryedOn,
 			updatedOn: input.updated_at,
 		};
@@ -107,9 +110,9 @@ export class SurveyRepository implements ISurveyRepository {
 		surveyDto.legacyFailureMode = survey.legacyFailureMode;
 		surveyDto.operatorCompanyId = survey.operatorCompanyId;
 		surveyDto.surveyorCompanyId = survey.surveyorCompanyId;
-		surveyDto['3dUri'] = survey['3dUri'];
-		surveyDto['3dUriGeo'] = survey['3dUriGeo'];
-		surveyDto['3dUriMultiBeam'] = survey['3dUriMultiBeam'];
+		surveyDto.uri3d = survey.uri3d;
+		surveyDto.uriGeo3d = survey.uriGeo3d;
+		surveyDto.uriMultiBeam3d = survey.uriMultiBeam3d;
 		surveyDto.material = survey.material;
 		surveyDto.created_at = survey.created_at;
 		surveyDto.updated_at = survey.updated_at;

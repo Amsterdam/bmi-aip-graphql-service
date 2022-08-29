@@ -98,7 +98,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				type: 'Point',
 			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: 100,
+			installationHeight: new Decimal('100'),
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			mastNumber: new Decimal(33.33),

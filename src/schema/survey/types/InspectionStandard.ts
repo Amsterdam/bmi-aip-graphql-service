@@ -11,5 +11,5 @@ export enum InspectionStandard {
 	sok = 'sok',
 	quaywalls = 'quaywalls',
 	verificatieBerekening = 'verificatieBerekening',
-	overspanningsInstallatie = 'overspanningsInstallatie',
+	spanInstallation = 'spanInstallation',
 }

@@ -36,9 +36,8 @@ export class FileWriterService {
 		private readonly surveyRepository: SurveyRepository,
 		private readonly junctionBoxRepository: JunctionBoxRepository,
 		private readonly supportSystemRepository: SupportSystemRepository,
-		private readonly luminaireRepository: LuminaireRepository,
-	) // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
-	{
+		private readonly luminaireRepository: LuminaireRepository, // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
+	) {
 		const cli = this.consoleService.getCli();
 
 		this.consoleService.createCommand(
@@ -132,7 +131,7 @@ export class FileWriterService {
 		const survey: CreateSurveyInput = {
 			id: newId(),
 			description: 'Contract 1',
-			inspectionStandardType: InspectionStandard.overspanningsInstallatie,
+			inspectionStandardType: InspectionStandard.spanInstallation,
 			objectId: objectId,
 			status: SurveyStates.open,
 			surveryedOn: new Date(),

@@ -22,7 +22,6 @@ import { SpanInstallationModule } from './schema/span-installation/span-installa
 import { ObjectModule } from './schema/object/object.module';
 import { SupportSystemType, SupportSystemTypeDetailed } from './schema/span-installation/types';
 import { HealthController } from './HealthController';
-import { SurveyModule } from './schema/survey/survey.module';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -50,7 +49,6 @@ registerEnumType(SupportSystemTypeDetailed, {
 		ObjectModule,
 		BatchModule,
 		FileModule,
-		SurveyModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,

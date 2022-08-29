@@ -314,6 +314,10 @@ export class FileWriterService {
 		return long1;
 	}
 
+	private biggestAantal(arr): number {
+		return arr.sort((a, b) => a - b)[arr.length - 1];
+	}
+
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
 		const excelRowObjectList: ExcelRowObject[] = await this.getFile();
@@ -344,20 +348,15 @@ export class FileWriterService {
 					};
 				}
 				excelRowObject = item;
-
-				const aantalVoedingen: number = aantalVoedingenList.sort((a, b) => a - b)[
-					aantalVoedingenList.length - 1
-				];
-				const aantalArmaturen: number = aantalArmaturenList.sort((a, b) => a - b)[
-					aantalArmaturenList.length - 1
-				];
-				excelRowObject = {
-					...excelRowObject,
-					'situatie nw': this.longestString(situatieNWList),
-					'aantal voedingen': aantalVoedingen,
-					'aantal armaturen': aantalArmaturen,
-				};
 			}
+
+			excelRowObject = {
+				...excelRowObject,
+				'situatie nw': this.longestString(situatieNWList),
+				'aantal voedingen': this.biggestAantal(aantalVoedingenList),
+				'aantal armaturen': this.biggestAantal(aantalArmaturenList),
+			};
+
 			const objectId = await this.createObject(excelRowObject, passport);
 			const surveyId = await this.createSurvey(objectId);
 			await this.createJuctionbox(objectId, surveyId, excelRowObject);

@@ -5,9 +5,9 @@ import { Point } from 'geojson';
 import { PrismaService } from '../../prisma.service';
 
 import { SupportSystem, ISupportSystemRepository } from './types/support-system.repository.interface';
-import { CreateSupportSystemInput } from './dto/create-support-system.input';
-import { UpdateSupportSystemInput } from './dto/update-support-system.input';
 import { LuminaireRepository } from './luminaire.repository';
+import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
+import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {
@@ -28,7 +28,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
-	}: CreateSupportSystemInput): Promise<SupportSystem> {
+	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsCreateInput = {
 			id: id,
 			objects: { connect: { id: objectId } },
@@ -81,7 +81,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
-	}: UpdateSupportSystemInput): Promise<SupportSystem> {
+	}: UpdateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
 			location,

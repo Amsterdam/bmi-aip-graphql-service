@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Resource, Roles } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { JunctionBox } from './models/junction-box.model';
@@ -18,6 +18,7 @@ export class JunctionBoxResolver {
 	constructor(private junctionBoxService: JunctionBoxService, private commandBus: CommandBus) {}
 
 	@Mutation(() => JunctionBox)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createJunctionBox(@Args('createJunctionBox') input: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<CreateJunctionBoxCommand>(
 			new CreateJunctionBoxCommand(input),
@@ -26,6 +27,7 @@ export class JunctionBoxResolver {
 	}
 
 	@Mutation(() => JunctionBox)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateJunctionBox(@Args('updateJunctionBox') input: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<UpdateJunctionBoxCommand>(
 			new UpdateJunctionBoxCommand(input),
@@ -34,6 +36,7 @@ export class JunctionBoxResolver {
 	}
 
 	@Mutation(() => JunctionBox)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteJunctionBox(@Args('identifier') identifier: string): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<DeleteJunctionBoxCommand>(
 			new DeleteJunctionBoxCommand(identifier),
@@ -42,7 +45,7 @@ export class JunctionBoxResolver {
 	}
 
 	@Query((returns) => [JunctionBox], { name: 'spanInstallationJunctionBoxes' })
-	@Roles({ roles: ['realm:aip_owner'] })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveyJunctionBoxes(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.junctionBoxService.getJunctionBoxes(surveyId);
 	}

@@ -2,7 +2,13 @@ import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
-import type { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
+import type {
+	SupportSystemType,
+	SupportSystemTypeDetailedFacade,
+	SupportSystemTypeDetailedMast,
+	SupportSystemTypeDetailedNode,
+	SupportSystemTypeDetailedTensionWire,
+} from '../types';
 
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
@@ -25,7 +31,11 @@ export class SupportSystem {
 
 	// Maps to "Bereikbaarheid gedetailleerd"
 	@Field((type) => String)
-	typeDetailed: SupportSystemTypeDetailed;
+	typeDetailed:
+		| SupportSystemTypeDetailedTensionWire
+		| SupportSystemTypeDetailedMast
+		| SupportSystemTypeDetailedFacade
+		| SupportSystemTypeDetailedNode;
 
 	// Maps to "Straat"
 	@Field((type) => String, { nullable: true })

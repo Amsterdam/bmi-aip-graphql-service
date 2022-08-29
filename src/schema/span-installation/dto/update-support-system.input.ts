@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional, IsUUID, MaxLength } from 'class-validator';
 
-import { BaseSupportSystemInput } from './base-support-system.input';
+import { TypeDetailedSupportSystemInput } from './type-detailed-support-system.input';
 
 @InputType()
-export class UpdateSupportSystemInput extends BaseSupportSystemInput {
+export class UpdateSupportSystemInput extends TypeDetailedSupportSystemInput {
 	@Field()
 	@IsUUID()
 	public id: string;

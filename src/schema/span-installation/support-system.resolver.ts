@@ -1,5 +1,5 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Resource, Roles } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { SupportSystem } from './models/support-system.model';
@@ -25,6 +25,7 @@ export class SupportSystemResolver {
 	) {}
 
 	@Mutation(() => SupportSystem)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createSupportSystem(
 		@Args('createSupportSystem') input: CreateSupportSystemInput,
 	): Promise<SupportSystem> {
@@ -35,6 +36,7 @@ export class SupportSystemResolver {
 	}
 
 	@Mutation(() => SupportSystem)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateSupportSystem(
 		@Args('updateSupportSystem') input: UpdateSupportSystemInput,
 	): Promise<SupportSystem> {
@@ -45,6 +47,7 @@ export class SupportSystemResolver {
 	}
 
 	@Mutation(() => SupportSystem)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteSupportSystem(@Args('identifier') identifier: string): Promise<SupportSystem> {
 		const domainSupportSystem: DomainSupportSystem = await this.commandBus.execute<DeleteSupportSystemCommand>(
 			new DeleteSupportSystemCommand(identifier),
@@ -53,7 +56,7 @@ export class SupportSystemResolver {
 	}
 
 	@Query((returns) => [SupportSystem], { name: 'spanInstallationSupportSystems' })
-	@Roles({ roles: ['realm:aip_owner'] })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveySupportSystems(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.queryBus.execute<FindSupportSystemsQuery>(new FindSupportSystemsQuery(surveyId));
 	}

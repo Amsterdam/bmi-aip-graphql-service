@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Resource } from 'nest-keycloak-connect';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -9,12 +10,8 @@ import { GetSurveysByObjectIdQuery } from './queries/get-surveys-by-object-id.qu
 import { CreateSurveyInput } from './dto/create-survey.input';
 import { CreateSurveyCommand } from './commands/create-survey.command';
 
-/*
-	This resolver is just for illustrating
-	that the prisma implementation is working, Maybe can removed in future
-*/
-
 @Resolver((of) => Survey)
+@Resource(Survey.name)
 export class SurveyResolver {
 	public constructor(
 		private readonly prismaService: PrismaService,

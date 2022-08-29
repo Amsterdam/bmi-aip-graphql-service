@@ -126,13 +126,13 @@ export class BaseCreateSurveyInput {
 	surveyorCompanyId?: string;
 
 	@Field((type) => String, { nullable: true })
-	'3dUri'?: string;
+	uri3d?: string;
 
 	@Field((type) => String, { nullable: true })
-	'3dUriGeo'?: string;
+	uriGeo3d?: string;
 
 	@Field((type) => String, { nullable: true })
-	'3dUriMultiBeam'?: string;
+	uriMultiBeam3d?: string;
 
 	@Field((type) => String, { nullable: true })
 	material?: string;

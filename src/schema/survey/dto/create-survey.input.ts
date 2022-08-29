@@ -5,22 +5,22 @@ import { BaseCreateSurveyInput } from './base-survey.input';
 
 @InputType()
 export class CreateSurveyInput extends BaseCreateSurveyInput {
-	@Field()
+	@Field((type) => String)
 	@IsUUID()
 	public id: string;
 
-	@Field()
+	@Field((type) => String)
 	@MaxLength(255)
 	public objectId: string;
 
-	@Field()
+	@Field((type) => String)
 	@MaxLength(255)
 	public description: string;
 
 	@Field((type) => String)
 	status: string;
 
-	@Field()
+	@Field((type) => String)
 	@MaxLength(255)
 	public inspectionStandardType: string;
 }

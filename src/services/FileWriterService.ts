@@ -357,11 +357,11 @@ export class FileWriterService {
 					'aantal voedingen': aantalVoedingen,
 					'aantal armaturen': aantalArmaturen,
 				};
-				const objectId = await this.createObject(excelRowObject, passport);
-				const surveyId = await this.createSurvey(objectId);
-				await this.createJuctionbox(objectId, surveyId, excelRowObject);
-				await this.createSupportSystems(objectId, surveyId, excelRowObject);
 			}
+			const objectId = await this.createObject(excelRowObject, passport);
+			const surveyId = await this.createSurvey(objectId);
+			await this.createJuctionbox(objectId, surveyId, excelRowObject);
+			await this.createSupportSystems(objectId, surveyId, excelRowObject);
 		}
 	}
 }

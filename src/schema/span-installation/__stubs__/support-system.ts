@@ -1,5 +1,3 @@
-import { Decimal } from '@prisma/client/runtime';
-
 import { SupportSystem } from '../models/support-system.model';
 import { CreateSupportSystemInput } from '../dto/create-support-system.input';
 import { SupportSystem as DomainSupportSystem } from '../types/support-system.repository.interface';
@@ -43,7 +41,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: '__A11Y_DETAILS__',
-	installationHeight: new Decimal(10.9),
+	installationHeight: 10.9,
 	deleted_at: null,
 	created_at: undefined,
 	updated_at: undefined,

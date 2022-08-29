@@ -12,25 +12,27 @@ describe('normalizeSupportSystemInputUtil', () => {
 			new CreateSupportSystemNormalizedInput(),
 		);
 		expect(normalized).toBeInstanceOf(CreateSupportSystemNormalizedInput);
-		expect(normalized).toEqual({
-			a11yDetails: '__A11Y_DETAILS__',
-			constructionYear: 1979,
-			deleted_at: null,
-			geography: {
-				coordinates: [52.370302853062604, 4.893996915500548],
-				type: 'Point',
-			},
-			houseNumber: '33',
-			installationHeight: 100,
-			location: '__LOCATION__',
-			locationIndication: '__LOCATION_INDICATION__',
-			name: '__NAME__',
-			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
-			remarks: '__REMARKS__',
-			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			type: SupportSystemType.Facade,
-			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
-		});
+		expect(normalized).toEqual(
+			expect.objectContaining({
+				a11yDetails: '__A11Y_DETAILS__',
+				constructionYear: 1979,
+				deleted_at: null,
+				geography: {
+					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				houseNumber: '33',
+				installationHeight: 10.9,
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				name: '__NAME__',
+				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+				remarks: '__REMARKS__',
+				surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+				type: SupportSystemType.Facade,
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+			}),
+		);
 	});
 
 	test('Converts instance of UpdateSupportSystemInput to UpdateSupportSystemNormalizedInput', () => {
@@ -39,25 +41,27 @@ describe('normalizeSupportSystemInputUtil', () => {
 			new UpdateSupportSystemNormalizedInput(),
 		);
 		expect(normalized).toBeInstanceOf(UpdateSupportSystemNormalizedInput);
-		expect(normalized).toEqual({
-			a11yDetails: '__A11Y_DETAILS__',
-			constructionYear: 1979,
-			deleted_at: null,
-			geography: {
-				coordinates: [52.370302853062604, 4.893996915500548],
-				type: 'Point',
-			},
-			houseNumber: '33',
-			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: 100,
-			location: '__LOCATION__',
-			locationIndication: '__LOCATION_INDICATION__',
-			name: '__NAME__',
-			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
-			remarks: '__REMARKS__',
-			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			type: SupportSystemType.Facade,
-			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
-		});
+		expect(normalized).toEqual(
+			expect.objectContaining({
+				a11yDetails: '__A11Y_DETAILS__',
+				constructionYear: 1979,
+				deleted_at: null,
+				geography: {
+					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				houseNumber: '33',
+				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+				installationHeight: 10.9,
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				name: '__NAME__',
+				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+				remarks: '__REMARKS__',
+				surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+				type: SupportSystemType.Facade,
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+			}),
+		);
 	});
 });

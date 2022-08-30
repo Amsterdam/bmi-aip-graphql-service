@@ -1,3 +1,5 @@
+import { SupportSystemType } from '../../schema/span-installation/types';
+
 export type ExcelRowObject = {
 	Installatiegroep?: number;
 	'aantal voedingen'?: number;
@@ -23,4 +25,60 @@ export type ExcelRowObject = {
 	Lichtpunthoogte?: number;
 	'Id-mast (niet weergeven, tbv export)'?: number;
 	'Id-Uithouder (niet weergeven, tbv export)'?: number;
+};
+
+export type ExcelSupportSystemProps = Pick<
+	ExcelRowObject,
+	| 'Mastgetal'
+	| 'Techview Id'
+	| 'Stadsdeel'
+	| 'Wijk'
+	| 'Buurt'
+	| 'nieuwe straatnaam'
+	| 'X'
+	| 'Y'
+	| 'situatie nw'
+	| 'def batch'
+	| 'LOB-tram'
+	| 'Lichtpunthoogte'
+> & {
+	type: SupportSystemType;
+	luminaires: ExcelLuminaireProps[];
+};
+
+export type ExcelJunctionBoxProps = Pick<
+	ExcelRowObject,
+	| 'Mastgetal'
+	| 'Techview Id'
+	| 'Stadsdeel'
+	| 'Wijk'
+	| 'Buurt'
+	| 'nieuwe straatnaam'
+	| 'X'
+	| 'Y'
+	| 'situatie nw'
+	| 'def batch'
+	| 'LOB-tram'
+	| 'Lichtpunthoogte'
+>;
+
+export type ExcelLuminaireProps = Pick<
+	ExcelRowObject,
+	| 'Id-Armatuur'
+	| 'Type Armatuur'
+	| 'Oormerk Armatuur'
+	| 'Familie'
+	| 'Aanp. K-Hang/Bol (contract 3)'
+	| 'Boven tram'
+	| 'Armatuur > 3m bovenleiding (tbv Contract 3)'
+>;
+
+export type NormalizedInstallationFromExcel = {
+	id: number;
+	situation: string;
+	totalJunctionBoxes: number;
+	totalLuminaires: number;
+	supportSystems: ExcelSupportSystemProps[];
+	junctionBoxes: ExcelJunctionBoxProps[];
+	types: SupportSystemType[];
 };

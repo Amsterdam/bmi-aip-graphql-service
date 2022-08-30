@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
@@ -14,7 +17,6 @@ import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 // import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
-
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
 import { SurveyRepository } from '../schema/survey/survey.repository';
@@ -22,7 +24,7 @@ import { LuminaireRepository } from '../schema/span-installation/luminaire.repos
 import { ObjectRepository } from '../schema/object/object.repository';
 import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
 
-import { ExcelRowObject } from './types/excelRowObject';
+import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRowObject';
 
 @Injectable()
 export class FileWriterService {
@@ -311,53 +313,189 @@ export class FileWriterService {
 		return arr.sort((a, b) => a - b)[arr.length - 1];
 	}
 
+	static AddSupportSystemToInstallation(
+		installation: NormalizedInstallationFromExcel,
+		row: ExcelRowObject,
+		type: SupportSystemType,
+	) {
+		// Check if we don't yet have a support system with the same Mastgetal
+		if (installation.supportSystems.find((supportSystem) => supportSystem.Mastgetal === row.Mastgetal)) return;
+
+		installation.supportSystems.push({
+			type,
+			Mastgetal: row.Mastgetal,
+			'Techview Id': row['Techview Id'],
+			Stadsdeel: row.Stadsdeel,
+			Wijk: row.Wijk,
+			Buurt: row.Buurt,
+			'nieuwe straatnaam': row['nieuwe straatnaam'],
+			X: row.X,
+			Y: row.Y,
+			'situatie nw': row['situatie nw'],
+			'def batch': row['def batch'],
+			'LOB-tram': row['LOB-tram'],
+			Lichtpunthoogte: row.Lichtpunthoogte,
+			luminaires: [],
+		});
+	}
+
+	static AddJunctionBoxToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject) {
+		// Check if we don't yet have a junction box with the same Mastgetal
+		if (installation.junctionBoxes.find((junctionBox) => junctionBox.Mastgetal === row.Mastgetal)) return;
+
+		installation.junctionBoxes.push({
+			Mastgetal: row.Mastgetal,
+			'Techview Id': row['Techview Id'],
+			Stadsdeel: row.Stadsdeel,
+			Wijk: row.Wijk,
+			Buurt: row.Buurt,
+			'nieuwe straatnaam': row['nieuwe straatnaam'],
+			X: row.X,
+			Y: row.Y,
+			'situatie nw': row['situatie nw'],
+			'def batch': row['def batch'],
+			'LOB-tram': row['LOB-tram'],
+			Lichtpunthoogte: row.Lichtpunthoogte,
+		});
+	}
+
+	static AddLuminaireToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject) {}
+
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
 		const excelRowObjectList: ExcelRowObject[] = await this.getFile();
 
-		const grouped = this.groupBy(excelRowObjectList, (item) => item.Installatiegroep);
+		let currentInstallationSupportSystemCounter = 0;
 
-		const uniqueInstallationgroups = await this.getUniqueInstallationgroups(excelRowObjectList);
-
-		for (const uniqueInstallationgroup of uniqueInstallationgroups) {
-			let passport: IPassport = {};
-			let excelRowObject: ExcelRowObject = {};
-			const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallationgroup);
-			const situatieNWList: string[] = [];
-			const aantalVoedingenList: number[] = [];
-			const aantalArmaturenList: number[] = [];
-
-			for (const item of groupediInstallatiegroeps) {
-				situatieNWList.push(item['situatie nw']);
-				aantalVoedingenList.push(item['aantal voedingen']);
-				aantalArmaturenList.push(item['aantal armaturen']);
-				if (Object.keys(item)[0]) {
-					passport = {
-						passportIdentification: String(item.Installatiegroep),
-						passportCityArea: item.Stadsdeel,
-						passportStreet: item['nieuwe straatnaam'],
-						passportDistrict: item.Wijk,
-						passportNeighborhood: item.Buurt,
-					};
-				}
-				excelRowObject = item;
-			}
-
-			excelRowObject = {
-				...excelRowObject,
-				'situatie nw': this.longestString(situatieNWList),
-				'aantal voedingen': this.biggestAantal(aantalVoedingenList),
-				'aantal armaturen': this.biggestAantal(aantalArmaturenList),
+		const normalizedData = excelRowObjectList.reduce((acc, row) => {
+			const { Installatiegroep: installationGroup } = row;
+			acc[installationGroup] = acc[installationGroup] || {
+				id: installationGroup,
+				situation: row['situatie nw'],
+				types: this.getSupportSystemType(row['situatie nw']),
+				supportSystems: [],
+				junctionBoxes: [],
+				totalJunctionBoxes: row['aantal voedingen'],
+				totalLuminaires: row['aantal armaturen'],
 			};
 
-			try {
-				const objectId = await this.createObject(excelRowObject, passport);
-				const surveyId = await this.createSurvey(objectId);
-				await this.createJuctionbox(objectId, surveyId, excelRowObject);
-				await this.createSupportSystems(objectId, surveyId, excelRowObject);
-			} catch (error) {
-				console.log(`Failed to create new entry, error: ${error.message}`);
+			// Check if a support system with this Mastgetal was already added to this installation
+			if (!acc[installationGroup].supportSystems.find((s) => s.Mastgetal === row.Mastgetal)) {
+				FileWriterService.AddSupportSystemToInstallation(
+					acc[installationGroup],
+					row,
+					acc[installationGroup].types[currentInstallationSupportSystemCounter],
+				);
+				currentInstallationSupportSystemCounter += 1;
 			}
-		}
+
+			const supportSystem = acc[installationGroup].supportSystems.find((s) => s.Mastgetal === row.Mastgetal);
+			supportSystem.luminaires.push({
+				'Id-Armatuur': row['Id-Armatuur'],
+				'Type Armatuur': row['Type Armatuur'],
+				'Oormerk Armatuur': row['Oormerk Armatuur'],
+				Familie: row.Familie,
+				'Aanp. K-Hang/Bol (contract 3)': row['Aanp. K-Hang/Bol (contract 3)'],
+				'Boven tram': row['Boven tram'],
+				'Armatuur > 3m bovenleiding (tbv Contract 3)': row['Armatuur > 3m bovenleiding (tbv Contract 3)'],
+			});
+
+			// Count number of junction boxes already added to the installation
+			const totalJunctionBoxes = acc[installationGroup].junctionBoxes.filter(
+				(s) => s.Mastgetal === row.Mastgetal,
+			).length;
+			if (totalJunctionBoxes < row['aantal voedingen']) {
+				// Cater for two rows having different "aantal voedingen" values; this ensures the highest number wins
+				for (let i = totalJunctionBoxes; i <= row['aantal voedingen']; i += 1) {
+					FileWriterService.AddJunctionBoxToInstallation(acc[installationGroup], row);
+				}
+				acc[installationGroup].totalJunctionBoxes = row['aantal voedingen'];
+			}
+			currentInstallationSupportSystemCounter += 1;
+
+			return acc;
+		}, {} as Record<string, NormalizedInstallationFromExcel>);
+
+		this.logger.verbose('Writing JSON to ./normalizedData.json');
+
+		// For debugging purposes
+		fs.writeFileSync(path.resolve(process.cwd(), 'normalizedData.json'), JSON.stringify(normalizedData), {
+			encoding: 'utf-8',
+		});
+
+		// Validate
+		Object.keys(normalizedData).forEach((id) => {
+			const installation = normalizedData[id];
+
+			const totalLuminaires = installation.supportSystems.reduce((acc, s) => {
+				acc += s.luminaires.length;
+				return acc;
+			}, 0);
+
+			if (installation.types.length !== installation.supportSystems.length) {
+				this.logger.error(
+					`Installation ${id} expected ${installation.types.length} support systems but got ${installation.supportSystems.length}`,
+				);
+			}
+
+			if (totalLuminaires !== installation.totalLuminaires) {
+				this.logger.error(
+					`Installation ${id} expected ${installation.totalLuminaires} luminaires but got ${totalLuminaires}`,
+				);
+			}
+
+			if (installation.junctionBoxes.length !== installation.totalJunctionBoxes) {
+				this.logger.error(
+					`Installation ${id} expected ${installation.totalJunctionBoxes} junction boxes but got ${installation.junctionBoxes.length}`,
+				);
+			}
+		});
+
+		process.exit(0);
+
+		// const grouped = this.groupBy(excelRowObjectList, (item) => item.Installatiegroep);
+		//
+		// const uniqueInstallationgroups = await this.getUniqueInstallationgroups(excelRowObjectList);
+		//
+		// for (const uniqueInstallationgroup of uniqueInstallationgroups) {
+		// 	let passport: IPassport = {};
+		// 	let excelRowObject: ExcelRowObject = {};
+		// 	const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallationgroup);
+		// 	const situatieNWList: string[] = [];
+		// 	const aantalVoedingenList: number[] = [];
+		// 	const aantalArmaturenList: number[] = [];
+		//
+		// 	for (const item of groupediInstallatiegroeps) {
+		// 		situatieNWList.push(item['situatie nw']);
+		// 		aantalVoedingenList.push(item['aantal voedingen']);
+		// 		aantalArmaturenList.push(item['aantal armaturen']);
+		// 		if (Object.keys(item)[0]) {
+		// 			passport = {
+		// 				passportIdentification: String(item.Installatiegroep),
+		// 				passportCityArea: item.Stadsdeel,
+		// 				passportStreet: item['nieuwe straatnaam'],
+		// 				passportDistrict: item.Wijk,
+		// 				passportNeighborhood: item.Buurt,
+		// 			};
+		// 		}
+		// 		excelRowObject = item;
+		// 	}
+		//
+		// 	excelRowObject = {
+		// 		...excelRowObject,
+		// 		'situatie nw': this.longestString(situatieNWList),
+		// 		'aantal voedingen': this.biggestAantal(aantalVoedingenList),
+		// 		'aantal armaturen': this.biggestAantal(aantalArmaturenList),
+		// 	};
+		//
+		// 	try {
+		// 		const objectId = await this.createObject(excelRowObject, passport);
+		// 		const surveyId = await this.createSurvey(objectId);
+		// 		await this.createJuctionbox(objectId, surveyId, excelRowObject);
+		// 		await this.createSupportSystems(objectId, surveyId, excelRowObject);
+		// 	} catch (error) {
+		// 		console.log(`Failed to create new entry, error: ${error.message}`);
+		// 	}
+		// }
 	}
 }

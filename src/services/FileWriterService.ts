@@ -14,7 +14,7 @@ import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
-import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
+import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -207,13 +207,12 @@ export class FileWriterService {
 		for (const type of supportSystemTypes) {
 			const supportSystemId = newId();
 			supportSystemTracker[type] += 1;
-			const supportSystem: CreateSupportSystemNormalizedInput = {
+			const supportSystem: Partial<CreateSupportSystemInput> = {
 				id: supportSystemId,
 				objectId: objectId,
 				surveyId: surveyId,
 				name: `Draagsystem ${type} ${supportSystemTracker[type]}`,
 				type: type,
-				typeDetailed: null, // Maps to "Bereikbaarheid gedetailleerd"
 				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
 				constructionYear: null, // Maps to "Jaar van aanleg"
 				locationIndication: '', // Maps to "Locatie aanduiding"
@@ -229,7 +228,22 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem);
+
+			switch (type) {
+				case SupportSystemType.Facade:
+					supportSystem.typeDetailedFacade = null;
+					break;
+				case SupportSystemType.Node:
+					supportSystem.typeDetailedNode = null;
+					break;
+				case SupportSystemType.Mast:
+					supportSystem.typeDetailedMast = null;
+					break;
+				case SupportSystemType.TensionWire:
+					supportSystem.typeDetailedTensionWire = null;
+					break;
+			}
+			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem as CreateSupportSystemInput);
 			await this.createLuminaires(supportSystemId, excelRowObject);
 		}
 	}
@@ -251,15 +265,11 @@ export class FileWriterService {
 
 				// Driver
 				driverSupplierType: null, // Maps to "Leverancierstype_driver"
-				driverCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
+				driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
 
 				// Light
 				lightSupplierType: null, // Maps to "Leverancierstype_lamp"
-				lightCommissioningDate: new Date(), // Maps to "Datum in gebruiksname"
-
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				deletedAt: new Date(),
+				lightCommissioningDate: null, // Maps to "Datum in gebruiksname"
 			};
 			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
 		}

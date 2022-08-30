@@ -13,7 +13,7 @@ import { Luminaire } from '../schema/span-installation/models/luminaire.model';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { SupportSystem } from '../schema/span-installation/models/support-system.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
-import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
+import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
 
@@ -40,7 +40,7 @@ export class ExternalAIPGraphQLRepository {
 	public async createSurvey(input: CreateSurveyInput): Promise<Survey> {
 		const mutation = gql`
 			mutation createSurvey($input: CreateSurveyInput!) {
-				createSurvey(createSurvey: $input) {
+				createSurvey(createSurveyInput: $input) {
 					id
 				}
 			}
@@ -73,7 +73,7 @@ export class ExternalAIPGraphQLRepository {
 		return this.executeGraphQLRequest(mutation, input);
 	}
 
-	public async createSupportSystem(input: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
+	public async createSupportSystem(input: CreateSupportSystemInput): Promise<SupportSystem> {
 		const mutation = gql`
 			mutation createSupportSystem($input: CreateSupportSystemInput!) {
 				createSupportSystem(createSupportSystem: $input) {

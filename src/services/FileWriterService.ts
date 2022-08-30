@@ -13,13 +13,7 @@ import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
-// import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
-
-import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
-import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
-import { SurveyRepository } from '../schema/survey/survey.repository';
-import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
-import { ObjectRepository } from '../schema/object/object.repository';
+import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
 
 import { ExcelRowObject } from './types/excelRowObject';
@@ -34,11 +28,7 @@ export class FileWriterService {
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
 		private configService: ConfigService,
-		private readonly objectRepository: ObjectRepository,
-		private readonly surveyRepository: SurveyRepository,
-		private readonly junctionBoxRepository: JunctionBoxRepository,
-		private readonly supportSystemRepository: SupportSystemRepository,
-		private readonly luminaireRepository: LuminaireRepository, // private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
+		private readonly externalAIPGraphQLRepository: ExternalAIPGraphQLRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -116,7 +106,7 @@ export class FileWriterService {
 			attributes: JSON.parse(JSON.stringify(passport)),
 			location: excelRowObject['nieuwe straatnaam'],
 		};
-		await this.objectRepository.createObject(assetObject);
+		await this.externalAIPGraphQLRepository.createObject(assetObject);
 		return assetObject.id;
 	}
 
@@ -132,7 +122,7 @@ export class FileWriterService {
 			created_at: new Date(),
 			condition: 'U',
 		};
-		await this.surveyRepository.createSurvey(survey);
+		await this.externalAIPGraphQLRepository.createSurvey(survey);
 		return survey.id;
 	}
 
@@ -158,7 +148,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.junctionBoxRepository.createJunctionBox(junctionBox);
+			await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
 		}
 	}
 
@@ -239,7 +229,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.supportSystemRepository.createSupportSystem(supportSystem);
+			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem);
 			await this.createLuminaires(supportSystemId, excelRowObject);
 		}
 	}
@@ -271,7 +261,7 @@ export class FileWriterService {
 				updatedAt: new Date(),
 				deletedAt: new Date(),
 			};
-			await this.luminaireRepository.createLuminaire(luminaire);
+			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
 		}
 	}
 

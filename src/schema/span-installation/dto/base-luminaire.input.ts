@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
+import { IsDate, IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
@@ -18,6 +18,8 @@ export class BaseLuminaireInput {
 	public constructionYear?: number;
 
 	@IsEnum(SupplierType)
+	@IsOptional()
+	@Field(() => String, { nullable: true })
 	public supplierType?: SupplierType;
 
 	@IsOptional()
@@ -36,32 +38,39 @@ export class BaseLuminaireInput {
 	// Driver
 
 	@IsEnum(SupplierType)
+	@IsOptional()
+	@Field(() => String, { nullable: true })
 	public driverSupplierType?: SupplierType;
 
 	@IsOptional()
-	@MaxLength(255)
+	@IsDate()
 	@Field({ nullable: true })
-	public driverCommissioningDate?: Date;
+	public driverCommissioningDate?: string;
 
 	// Light Source
 
 	@IsEnum(SupplierType)
+	@IsOptional()
+	@Field(() => String, { nullable: true })
 	public lightSupplierType?: SupplierType;
 
 	@IsOptional()
-	@MaxLength(255)
+	@IsDate()
 	@Field({ nullable: true })
-	public lightCommissioningDate?: Date;
+	public lightCommissioningDate?: string;
 
 	@IsOptional()
+	@IsDate()
 	@Field({ nullable: true })
-	createdAt?: Date;
+	createdAt?: string;
 
 	@IsOptional()
+	@IsDate()
 	@Field({ nullable: true })
-	updatedAt?: Date;
+	updatedAt?: string;
 
 	@IsOptional()
+	@IsDate()
 	@Field({ nullable: true })
-	deletedAt?: Date;
+	deletedAt?: string;
 }

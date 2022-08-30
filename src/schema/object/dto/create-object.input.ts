@@ -75,11 +75,11 @@ export class CreateObjectInput {
 	@Field()
 	public siteId: string;
 
-	@Field()
-	public constructionYear: number;
+	@Field({ nullable: true })
+	public constructionYear?: number;
 
 	@Field({ nullable: true })
-	public externalRefId: string;
+	public externalRefId?: string;
 
 	@Field()
 	public useage: string;
@@ -88,43 +88,43 @@ export class CreateObjectInput {
 	public managementOrganization: string;
 
 	@Field({ nullable: true })
-	public shape: string;
+	public shape?: string;
 
 	@Field({ nullable: true })
-	public shapeSrid: number;
+	public shapeSrid?: number;
 
 	@Field({ nullable: true })
-	public status: string;
+	public status?: string;
 
 	@Field({ nullable: true })
-	public effortCategory: string;
+	public effortCategory?: string;
 
 	@Field({ nullable: true })
-	public effortCalculation: number;
+	public effortCalculation?: number;
 
 	@Field({ nullable: true })
-	public trafficType: string;
+	public trafficType?: string;
 
 	@Field({ nullable: true })
-	public mainMaterial: string;
+	public mainMaterial?: string;
 
 	@Field({ nullable: true })
-	public marineInfrastrutureType: string;
-
-	@IsNumber()
-	@Field({ nullable: true })
-	public length: number;
+	public marineInfrastrutureType?: string;
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public width: number;
+	public length?: number;
 
 	@IsNumber()
 	@Field({ nullable: true })
-	public squareMeters: number;
+	public width?: number;
+
+	@IsNumber()
+	@Field({ nullable: true })
+	public squareMeters?: number;
 
 	@Field(() => GraphQLJSON, { nullable: true })
-	public attributes: JSONValue;
+	public attributes?: JSONValue;
 }
 
 type JSONValue =

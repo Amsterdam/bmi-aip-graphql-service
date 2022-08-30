@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, ValidateIf } from 'class-validator';
+import { IsEnum, IsOptional, ValidateIf } from 'class-validator';
 
 import {
 	SupportSystemType,
@@ -19,25 +19,25 @@ export class TypeDetailedSupportSystemInput extends BaseSupportSystemInput {
 	 */
 	@ValidateIf((o) => o.type === SupportSystemType.Mast)
 	@IsEnum(SupportSystemTypeDetailedMast)
-	// @IsOptional()
+	@IsOptional()
 	@Field((type) => SupportSystemTypeDetailedMast, { nullable: true })
 	public typeDetailedMast: SupportSystemTypeDetailedMast;
 
 	@ValidateIf((o) => o.type === SupportSystemType.Facade)
 	@IsEnum(SupportSystemTypeDetailedFacade)
-	// @IsOptional()
+	@IsOptional()
 	@Field((type) => SupportSystemTypeDetailedFacade, { nullable: true })
 	public typeDetailedFacade: SupportSystemTypeDetailedFacade;
 
 	@ValidateIf((o) => o.type === SupportSystemType.TensionWire)
 	@IsEnum(SupportSystemTypeDetailedTensionWire)
-	// @IsOptional()
+	@IsOptional()
 	@Field((type) => SupportSystemTypeDetailedTensionWire, { nullable: true })
 	public typeDetailedTensionWire: SupportSystemTypeDetailedTensionWire;
 
 	@ValidateIf((o) => o.type === SupportSystemType.Node)
 	@IsEnum(SupportSystemTypeDetailedNode)
-	// @IsOptional()
+	@IsOptional()
 	@Field((type) => SupportSystemTypeDetailedNode, { nullable: true })
 	public typeDetailedNode: SupportSystemTypeDetailedNode;
 }

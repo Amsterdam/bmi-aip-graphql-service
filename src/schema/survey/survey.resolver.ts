@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Resource } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -25,11 +25,13 @@ export class SurveyResolver {
 	}
 
 	@Query(() => [Survey])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async getSurveysByObjectId(@Args('objectId') objectId: string): Promise<Survey[]> {
 		return this.queryBus.execute<GetSurveysByObjectIdQuery>(new GetSurveysByObjectIdQuery(objectId));
 	}
 
 	@Mutation(() => Survey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createSurvey(@Args('createSurveyInput') input: CreateSurveyInput): Promise<Survey> {
 		return this.commandBus.execute<CreateSurveyCommand>(new CreateSurveyCommand(input));
 	}

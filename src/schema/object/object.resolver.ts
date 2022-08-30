@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Resource } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { ObjectService } from '../object/object.service';
@@ -14,6 +14,7 @@ export class ObjectResolver {
 	constructor(private objectService: ObjectService, private commandBus: CommandBus) {}
 
 	@Mutation(() => ObjectModel)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createObject(@Args('createObject') input: CreateObjectInput): Promise<ObjectModel> {
 		return this.commandBus.execute<CreateObjectCommand>(new CreateObjectCommand(input));
 	}

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule, registerEnumType } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
+import { TerminusModule } from '@nestjs/terminus';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,6 +18,11 @@ import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
+import { SupportSystemType, SupportSystemTypeDetailed } from './schema/span-installation/types';
+import { HealthController } from './HealthController';
+
+registerEnumType(SupportSystemType, { name: 'SupportSystemType' });
+registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' });
 
 @Module({
 	imports: [
@@ -41,8 +47,9 @@ import { SpanInstallationModule } from './schema/span-installation/span-installa
 			sortSchema: true,
 			autoSchemaFile: true,
 		}),
+		TerminusModule,
 	],
-	controllers: [AppController],
+	controllers: [AppController, HealthController],
 	providers: [
 		{
 			provide: APP_GUARD,

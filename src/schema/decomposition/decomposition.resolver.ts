@@ -1,6 +1,6 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { CommandBus } from '@nestjs/cqrs';
-import { Resource } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { Element } from './models/element.model';
 import { ElementService } from './element.service';
@@ -20,6 +20,7 @@ export class DecompositionResolver {
 	) {}
 
 	@Mutation(() => Element)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createDecomposition(
 		@Args('assetCode') assetCode: string,
 		@Args('surveyId') surveyId: string,
@@ -34,6 +35,7 @@ export class DecompositionResolver {
 	}
 
 	@Query((returns) => [Element], { name: 'elements' })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async findSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string): Promise<Element[]> {
 		return this.commandBus.execute<FindSurveyElementsCommand>(new FindSurveyElementsCommand(surveyId));
 	}

@@ -15,6 +15,7 @@ import { CreateLuminaireInput } from '../schema/span-installation/dto/create-lum
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemNormalizedInput } from '../schema/span-installation/dto/create-support-system-normalized.input';
+import { transformToRD } from '../schema/span-installation/utils/transformRD';
 
 import { ExcelRowObject } from './types/excelRowObject';
 
@@ -142,7 +143,7 @@ export class FileWriterService {
 				remarks: '', // Maps to "Opmerking"
 				geography: {
 					type: 'Point',
-					coordinates: [excelRowObject.X, excelRowObject.Y],
+					coordinates: transformToRD(excelRowObject.X, excelRowObject.Y),
 				},
 				createdAt: new Date(),
 				updatedAt: new Date(),

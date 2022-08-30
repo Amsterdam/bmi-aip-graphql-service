@@ -18,10 +18,13 @@ export class ObjectRepository implements IObjectRepository {
 			code: input.code,
 			location: input.location,
 			updatedOn: input.updatedOn,
-			created_at: input.created_at,
-			updated_at: input.updated_at,
 			attributes: input.attributes,
 			status: input.status,
+			companies_companiesToobjects_clientCompanyId: {
+				connect: {
+					id: input.clientCompanyId,
+				},
+			},
 			customerVersion: input.customerVersion,
 			inspectionStandards: {
 				connect: {

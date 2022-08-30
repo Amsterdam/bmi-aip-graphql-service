@@ -30,7 +30,7 @@ export class SupportSystem {
 	type: SupportSystemType;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => String)
+	@Field((type) => String, { nullable: true })
 	typeDetailed:
 		| SupportSystemTypeDetailedTensionWire
 		| SupportSystemTypeDetailedMast

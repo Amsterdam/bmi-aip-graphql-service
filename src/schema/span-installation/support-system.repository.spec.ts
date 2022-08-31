@@ -1,4 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
+import { Decimal } from '@prisma/client/runtime';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -57,13 +58,15 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					},
 				},
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 10.9,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				constructionYear: 1979,
 				houseNumber: '33',
+				type: 'Facade',
+				typeDetailed: 'MuurplaatInbouwRvs',
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -94,7 +97,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			where: { id: updateSupportSystemNormalizedInput.id },
 			data: {
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 10.9,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -117,7 +120,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
 			a11yDetails: '__A11Y_DETAILS__',
-			installationHeight: 10.9,
+			installationHeight: new Decimal(10),
 			remarks: '__REMARKS__',
 			houseNumber: '33',
 			geography: {
@@ -153,7 +156,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				constructionYear: 1979,
 				locationIndication: '__LOCATION_INDICATION__',
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 10.9,
+				installationHeight: new Decimal(10),
 				remarks: '__REMARKS__',
 				houseNumber: '33',
 				created_at: undefined,

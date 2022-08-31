@@ -11,6 +11,7 @@ describe('Span Installation / JunctionBox / Factory', () => {
 			updatedAt: domainJunctionBox.updated_at ?? null,
 			deletedAt: domainJunctionBox.deleted_at ?? null,
 			mastNumber: Number(domainJunctionBox.mastNumber),
+			installationHeight: 10,
 		};
 		delete object.created_at;
 		delete object.updated_at;

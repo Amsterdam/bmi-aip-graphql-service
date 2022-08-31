@@ -6,25 +6,30 @@ import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import * as xlsx from 'xlsx';
 import { ConfigService } from '@nestjs/config';
+import PQueue from 'p-queue';
 
-import { IPassport } from '../schema/object/models/passport.model';
 import { newId } from '../utils';
 import { SupportSystemType } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
 import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
-import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
-import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { transformToRD } from '../schema/span-installation/utils/transformRD';
 
-import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRowObject';
+import {
+	ExcelJunctionBoxProps,
+	ExcelRowObject,
+	ExcelSupportSystemProps,
+	NormalizedInstallationFromExcel,
+} from './types/excelRowObject';
 
 @Injectable()
 export class FileWriterService {
 	private static CLI_COMMAND = 'file:read';
+
+	private static DEBUG = true;
 
 	private graphqlClient: GraphQLClient;
 
@@ -71,14 +76,38 @@ export class FileWriterService {
 		return data;
 	}
 
-	private async createObject(excelRowObject: ExcelRowObject, passport: IPassport): Promise<string> {
+	private async createInstallation(installation: NormalizedInstallationFromExcel): Promise<void> {
+		const { supportSystems, junctionBoxes, object } = installation;
+
+		const objectId = await this.createObject(object);
+		if (!objectId) return;
+
+		const surveyId = await this.createSurvey(objectId);
+		if (!surveyId) return;
+
+		await Promise.all(
+			supportSystems.map(async (s, idx) => {
+				await this.createSupportSystem(objectId, surveyId, s, idx + 1);
+			}),
+		);
+
+		await Promise.all(
+			junctionBoxes.map(async (jb, idx) => {
+				await this.createJuctionbox(objectId, surveyId, jb, idx + 1);
+			}),
+		);
+	}
+
+	private async createObject(object: NormalizedInstallationFromExcel['object']): Promise<string> {
+		const {
+			passport: { passportIdentification },
+		} = object;
 		const assetObject: CreateObjectInput = {
 			id: newId(),
-			code: 'OVS' + ('000' + excelRowObject.Installatiegroep).slice(-4),
+			code: 'OVS' + ('000' + passportIdentification).slice(-4),
 			clientCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
 			compositionIsVisible: false,
 			constructionYear: null,
-			created_at: new Date(),
 			customerVersion: 'amsterdam',
 			effortCalculation: 0,
 			effortCategory: '',
@@ -92,7 +121,7 @@ export class FileWriterService {
 			mainMaterial: '',
 			managementOrganization: '',
 			marineInfrastrutureType: '',
-			name: 'OVS' + ('000' + excelRowObject.Installatiegroep).slice(-4),
+			name: 'OVS' + ('000' + passportIdentification).slice(-4),
 			objectTypeId: 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0',
 			operatorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
 			ownerCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
@@ -104,14 +133,17 @@ export class FileWriterService {
 			surveyorCompanyId: '26f0c97e-6a8f-4baf-184e-7c1c2a7964f6',
 			trafficType: '',
 			updatedOn: new Date(),
-			updated_at: new Date(),
 			useage: '',
 			width: 0,
-			attributes: JSON.parse(JSON.stringify(passport)),
-			location: excelRowObject['nieuwe straatnaam'],
+			attributes: JSON.parse(JSON.stringify(object.passport)),
+			location: object['nieuwe straatnaam'],
 		};
-		await this.externalAIPGraphQLRepository.createObject(assetObject);
-		return assetObject.id;
+		try {
+			const { id } = await this.externalAIPGraphQLRepository.createObject(assetObject);
+			return id;
+		} catch (err) {
+			this.logger.debug('Failed to create object', assetObject);
+		}
 	}
 
 	private async createSurvey(objectId): Promise<string> {
@@ -122,38 +154,35 @@ export class FileWriterService {
 			objectId: objectId,
 			status: SurveyStates.open,
 			surveryedOn: new Date(),
-			updated_at: new Date(),
-			created_at: new Date(),
+			updatedOn: new Date(),
 			condition: 'U',
 		};
-		await this.externalAIPGraphQLRepository.createSurvey(survey);
-		return survey.id;
+		try {
+			const { id } = await this.externalAIPGraphQLRepository.createSurvey(survey);
+			return id;
+		} catch (err) {
+			this.logger.debug('Failed to create survey', survey);
+		}
 	}
 
-	private async createJuctionbox(objectId, surveyId, excelRowObject: ExcelRowObject) {
-		for (let count = 1; count <= Number(excelRowObject['aantal voedingen']); count++) {
-			const junctionBox: CreateJunctionBoxInput = {
-				id: newId(),
-				objectId: objectId,
-				surveyId: surveyId,
-				name: `Aansluitkast ${count}`,
-				mastNumber: excelRowObject.Mastgetal, // Maps to "Mastgetal"
-				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
-				locationIndication: '', // Maps to "Locatie aanduiding"
-				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: excelRowObject.Lichtpunthoogte, // Maps to "Aanleghoogte"
-				riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
-				remarks: '', // Maps to "Opmerking"
-				geography: {
-					type: 'Point',
-					coordinates: transformToRD(excelRowObject.X, excelRowObject.Y),
-				},
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				deletedAt: new Date(),
-			};
-			await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
-		}
+	private async createJuctionbox(objectId, surveyId, excelRowObject: ExcelJunctionBoxProps, count: number) {
+		await this.externalAIPGraphQLRepository.createJunctionBox({
+			id: newId(),
+			objectId: objectId,
+			surveyId: surveyId,
+			name: `Aansluitkast ${count}`,
+			mastNumber: excelRowObject.Mastgetal, // Maps to "Mastgetal"
+			location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
+			locationIndication: '', // Maps to "Locatie aanduiding"
+			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+			installationHeight: excelRowObject.Lichtpunthoogte, // Maps to "Aanleghoogte"
+			riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
+			remarks: '', // Maps to "Opmerking"
+			geography: {
+				type: 'Point',
+				coordinates: transformToRD(excelRowObject.X, excelRowObject.Y),
+			},
+		});
 	}
 
 	private getSupportSystemTypes(situation): SupportSystemType[] {
@@ -199,119 +228,71 @@ export class FileWriterService {
 		}
 	}
 
-	private async createSupportSystems(objectId, surveyId, excelRowObject: ExcelRowObject) {
-		const supportSystemTypes = this.getSupportSystemTypes(excelRowObject['situatie nw']);
-		const supportSystemTracker = {
-			[SupportSystemType.Facade]: 0,
-			[SupportSystemType.Mast]: 0,
-			[SupportSystemType.Node]: 0,
-			[SupportSystemType.TensionWire]: 0,
+	private async createSupportSystem(objectId, surveyId, supportSystemProps: ExcelSupportSystemProps, count: number) {
+		const supportSystemId = newId();
+		const supportSystem: Partial<CreateSupportSystemInput> = {
+			id: supportSystemId,
+			objectId: objectId,
+			surveyId: surveyId,
+			name: `${supportSystemProps.type} ${count}`,
+			type: supportSystemProps.type,
+			location: supportSystemProps['nieuwe straatnaam'], // Maps to "Straat"
+			constructionYear: null, // Maps to "Jaar van aanleg"
+			locationIndication: '', // Maps to "Locatie aanduiding"
+			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+			installationHeight: supportSystemProps.Lichtpunthoogte, // Maps to "Aanleghoogte" For type `gevel |.Mast | ring`
+			remarks: '', // Maps to "Opmerking"
+			houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
+			geography: {
+				type: 'Point',
+				coordinates: transformToRD(supportSystemProps.X, supportSystemProps.Y),
+			},
 		};
-		for (const type of supportSystemTypes) {
-			const supportSystemId = newId();
-			supportSystemTracker[type] += 1;
-			const supportSystem: Partial<CreateSupportSystemInput> = {
-				id: supportSystemId,
-				objectId: objectId,
-				surveyId: surveyId,
-				name: `Draagsystem ${type} ${supportSystemTracker[type]}`,
-				type: type,
-				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
-				constructionYear: null, // Maps to "Jaar van aanleg"
-				locationIndication: '', // Maps to "Locatie aanduiding"
-				a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-				installationHeight: null, // Maps to "Aanleghoogte" For type `gevel |.Mast | ring`
-				remarks: '', // Maps to "Opmerking"
-				houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
-				geography: {
-					type: 'Point',
-					coordinates: [excelRowObject.X, excelRowObject.Y],
-				},
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				deletedAt: new Date(),
-			};
 
-			switch (type) {
-				case SupportSystemType.Facade:
-					supportSystem.typeDetailedFacade = null;
-					break;
-				case SupportSystemType.Node:
-					supportSystem.typeDetailedNode = null;
-					break;
-				case SupportSystemType.Mast:
-					supportSystem.typeDetailedMast = null;
-					break;
-				case SupportSystemType.TensionWire:
-					supportSystem.typeDetailedTensionWire = null;
-					break;
-			}
-			await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem as CreateSupportSystemInput);
-			await this.createLuminaires(supportSystemId, excelRowObject);
+		switch (supportSystem.type) {
+			case SupportSystemType.Facade:
+				supportSystem.typeDetailedFacade = null;
+				break;
+			case SupportSystemType.Node:
+				supportSystem.typeDetailedNode = null;
+				break;
+			case SupportSystemType.Mast:
+				supportSystem.typeDetailedMast = null;
+				break;
+			case SupportSystemType.TensionWire:
+				supportSystem.typeDetailedTensionWire = null;
+				break;
 		}
+		await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem as CreateSupportSystemInput);
+		await this.createLuminaires(supportSystemId, supportSystemProps);
 	}
 
-	private async createLuminaires(supportSystemId, excelRowObject: ExcelRowObject) {
-		for (let count = 1; count <= Number(excelRowObject['aantal armaturen']); count++) {
-			const luminaire: CreateLuminaireInput = {
-				supportSystemId: supportSystemId,
-				name: `Armatuur ${count}`,
-				location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
-				constructionYear: null, // Maps to "Jaar van aanleg"
-				supplierType: null, // Maps to "Leverancierstype"
-				manufacturer: '', // Maps to "Fabrikant"
-				geography: {
-					type: 'Point',
-					coordinates: [excelRowObject.X, excelRowObject.Y],
-				},
-				remarks: '', // Maps to "Opmerking"
+	private async createLuminaires(supportSystemId: string, excelRowObject: ExcelSupportSystemProps) {
+		await Promise.all(
+			excelRowObject.luminaires.map((luminaire, idx) =>
+				this.externalAIPGraphQLRepository.createLuminaire({
+					supportSystemId: supportSystemId,
+					name: `Armatuur ${idx + 1}`,
+					location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
+					constructionYear: null, // Maps to "Jaar van aanleg"
+					supplierType: null, // Maps to "Leverancierstype"
+					manufacturer: '', // Maps to "Fabrikant"
+					geography: {
+						type: 'Point',
+						coordinates: [excelRowObject.X, excelRowObject.Y],
+					},
+					remarks: '', // Maps to "Opmerking"
 
-				// Driver
-				driverSupplierType: null, // Maps to "Leverancierstype_driver"
-				driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
+					// Driver
+					driverSupplierType: null, // Maps to "Leverancierstype_driver"
+					driverCommissioningDate: null, // Maps to "Datum in gebruiksname"
 
-				// Light
-				lightSupplierType: null, // Maps to "Leverancierstype_lamp"
-				lightCommissioningDate: null, // Maps to "Datum in gebruiksname"
-			};
-			await this.externalAIPGraphQLRepository.createLuminaire(luminaire);
-		}
-	}
-
-	private getUniqueInstallationgroups(excelRowObjectList): number[] {
-		const uniqueInstallatiegroeps: number[] = [];
-		for (const item of excelRowObjectList) {
-			uniqueInstallatiegroeps.push(item.Installatiegroep);
-		}
-		return [...new Set(uniqueInstallatiegroeps)];
-	}
-
-	private groupBy(list, keyGetter) {
-		const map = new Map();
-		list.forEach((item) => {
-			const key = keyGetter(item);
-			const collection = map.get(key);
-			if (!collection) {
-				map.set(key, [item]);
-			} else {
-				collection.push(item);
-			}
-		});
-		return map;
-	}
-
-	private longestString(arr): string {
-		let long1 = arr[0];
-		for (let index = 0; index < arr.length; index++) {
-			if (arr[index].length > long1.length) {
-				long1 = arr[index];
-			}
-		}
-		return long1;
-	}
-
-	private biggestAantal(arr): number {
-		return arr.sort((a, b) => a - b)[arr.length - 1];
+					// Light
+					lightSupplierType: null, // Maps to "Leverancierstype_lamp"
+					lightCommissioningDate: null, // Maps to "Datum in gebruiksname"
+				}),
+			),
+		);
 	}
 
 	static AddSupportSystemToInstallation(
@@ -354,14 +335,11 @@ export class FileWriterService {
 		});
 	}
 
-	addLuminaireToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject, situation) {
+	static AddLuminaireToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject, situation) {
 		const tensionWire = installation.supportSystems.find(
 			(s) => s.type === SupportSystemType.TensionWire && s['situatie nw'] === situation,
 		);
-		if (!tensionWire) {
-			// this.logger.debug('!!!', situation, row, installation.supportSystems);
-			return;
-		}
+		if (!tensionWire) return;
 
 		tensionWire.luminaires.push({
 			'Id-Armatuur': row['Id-Armatuur'],
@@ -400,6 +378,7 @@ export class FileWriterService {
 				totalJunctionBoxes: installationGroupRows[0]['aantal voedingen'],
 				totalLuminaires: installationGroupRows[0]['aantal armaturen'],
 				types: [],
+				tramTracks: installationGroupRows[0]['Boven tram'] === 'ja',
 			};
 
 			// Add support systems aka "Draagsystemen"
@@ -431,13 +410,30 @@ export class FileWriterService {
 				installationGroupRows
 					.filter((row) => row['situatie nw'] === situation)
 					.forEach((row) => {
-						this.addLuminaireToInstallation(
+						FileWriterService.AddLuminaireToInstallation(
 							acc[installationKey],
 							row,
 							onlyAddSpin ? uniqueSituations[idx - 1] : situation,
 						);
 					});
 			});
+
+			acc[installationKey].passportSplits = !!uniqueSituations.find((situation) =>
+				situation.toUpperCase().endsWith('SPIN'),
+			);
+
+			acc[installationKey].object = {
+				'nieuwe straatnaam': installationGroupRows[0]['nieuwe straatnaam'],
+				passport: {
+					passportIdentification: String(installationKey),
+					passportCityArea: '',
+					passportStreet: installationGroupRows[0]['nieuwe straatnaam'],
+					passportDistrict: installationGroupRows[0].Wijk,
+					passportNeighborhood: installationGroupRows[0].Buurt,
+					tramTracks: acc[installationKey].tramTracks,
+					passportSplits: acc[installationKey].passportSplits,
+				},
+			};
 
 			// Get unique rows from installation group
 			const { rows: uniqueRowsInGroup } = installationGroupRows.reduce(
@@ -468,83 +464,51 @@ export class FileWriterService {
 		this.logger.verbose('Writing JSON to ./normalizedData.json');
 
 		// For debugging purposes
-		fs.writeFileSync(path.resolve(process.cwd(), 'normalizedData.json'), JSON.stringify(normalizedData), {
-			encoding: 'utf-8',
+		if (FileWriterService.DEBUG) {
+			fs.writeFileSync(path.resolve(process.cwd(), 'normalizedData.json'), JSON.stringify(normalizedData), {
+				encoding: 'utf-8',
+			});
+		}
+
+		if (FileWriterService.DEBUG) {
+			// Validate
+			Object.keys(normalizedData).forEach((id) => {
+				const installation = normalizedData[id];
+
+				const totalLuminaires = installation.supportSystems.reduce((acc, s) => {
+					acc += s.luminaires.length;
+					return acc;
+				}, 0);
+
+				if (installation.types.length !== installation.supportSystems.length) {
+					this.logger.error(
+						`Installation ${id} expected ${installation.types.length} support systems but got ${installation.supportSystems.length}`,
+					);
+				}
+
+				if (totalLuminaires !== installation.totalLuminaires) {
+					this.logger.error(
+						`Installation ${id} expected ${installation.totalLuminaires} luminaires but got ${totalLuminaires}`,
+					);
+				}
+
+				if (installation.junctionBoxes.length !== installation.totalJunctionBoxes) {
+					this.logger.error(
+						`Installation ${id} expected ${installation.totalJunctionBoxes} junction boxes but got ${installation.junctionBoxes.length}`,
+					);
+				}
+			});
+		}
+
+		const queue = new PQueue({ concurrency: 1 });
+
+		Object.keys(normalizedData).forEach((key) => {
+			queue.add(() => this.createInstallation(normalizedData[key]));
 		});
+		await queue.onIdle();
 
-		// Validate
-		Object.keys(normalizedData).forEach((id) => {
-			const installation = normalizedData[id];
+		// await Promise.all(Object.keys(normalizedData).map((key) => this.createInstallation(normalizedData[key])));
 
-			const totalLuminaires = installation.supportSystems.reduce((acc, s) => {
-				acc += s.luminaires.length;
-				return acc;
-			}, 0);
-
-			if (installation.types.length !== installation.supportSystems.length) {
-				this.logger.error(
-					`Installation ${id} expected ${installation.types.length} support systems but got ${installation.supportSystems.length}`,
-				);
-			}
-
-			if (totalLuminaires !== installation.totalLuminaires) {
-				this.logger.error(
-					`Installation ${id} expected ${installation.totalLuminaires} luminaires but got ${totalLuminaires}`,
-				);
-			}
-
-			if (installation.junctionBoxes.length !== installation.totalJunctionBoxes) {
-				this.logger.error(
-					`Installation ${id} expected ${installation.totalJunctionBoxes} junction boxes but got ${installation.junctionBoxes.length}`,
-				);
-			}
-		});
-
-		process.exit(0);
-
-		// const grouped = this.groupBy(excelRowObjectList, (item) => item.Installatiegroep);
-		//
-		// const uniqueInstallationgroups = await this.getUniqueInstallationgroups(excelRowObjectList);
-		//
-		// for (const uniqueInstallationgroup of uniqueInstallationgroups) {
-		// 	let passport: IPassport = {};
-		// 	let excelRowObject: ExcelRowObject = {};
-		// 	const groupediInstallatiegroeps: ExcelRowObject[] = grouped.get(uniqueInstallationgroup);
-		// 	const situatieNWList: string[] = [];
-		// 	const aantalVoedingenList: number[] = [];
-		// 	const aantalArmaturenList: number[] = [];
-		//
-		// 	for (const item of groupediInstallatiegroeps) {
-		// 		situatieNWList.push(item['situatie nw']);
-		// 		aantalVoedingenList.push(item['aantal voedingen']);
-		// 		aantalArmaturenList.push(item['aantal armaturen']);
-		// 		if (Object.keys(item)[0]) {
-		// 			passport = {
-		// 				passportIdentification: String(item.Installatiegroep),
-		// 				passportCityArea: item.Stadsdeel,
-		// 				passportStreet: item['nieuwe straatnaam'],
-		// 				passportDistrict: item.Wijk,
-		// 				passportNeighborhood: item.Buurt,
-		// 			};
-		// 		}
-		// 		excelRowObject = item;
-		// 	}
-		//
-		// 	excelRowObject = {
-		// 		...excelRowObject,
-		// 		'situatie nw': this.longestString(situatieNWList),
-		// 		'aantal voedingen': this.biggestAantal(aantalVoedingenList),
-		// 		'aantal armaturen': this.biggestAantal(aantalArmaturenList),
-		// 	};
-		//
-		// 	try {
-		// 		const objectId = await this.createObject(excelRowObject, passport);
-		// 		const surveyId = await this.createSurvey(objectId);
-		// 		await this.createJuctionbox(objectId, surveyId, excelRowObject);
-		// 		await this.createSupportSystems(objectId, surveyId, excelRowObject);
-		// 	} catch (error) {
-		// 		console.log(`Failed to create new entry, error: ${error.message}`);
-		// 	}
-		// }
+		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} installations`);
 	}
 }

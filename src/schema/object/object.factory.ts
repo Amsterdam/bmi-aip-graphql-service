@@ -19,8 +19,6 @@ export class ObjectFactory {
 		object.operatorCompanyId = domainObject.operatorCompanyId;
 		object.surveyorCompanyId = domainObject.surveyorCompanyId;
 		object.objectTypeId = domainObject.objectTypeId;
-		object.created_at = domainObject.created_at instanceof Date ? domainObject.created_at.toUTCString() : null;
-		object.updated_at = domainObject.updated_at instanceof Date ? domainObject.updated_at.toUTCString() : null;
 		object.inspectionStandardId = domainObject.inspectionStandardId;
 		object.ownerCompanyId = domainObject.ownerCompanyId;
 		object.customerVersion = domainObject.customerVersion;

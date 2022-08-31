@@ -136,10 +136,4 @@ export class BaseCreateSurveyInput {
 
 	@Field((type) => String, { nullable: true })
 	material?: string;
-
-	@Field({ nullable: true })
-	created_at?: Date;
-
-	@Field({ nullable: true })
-	updated_at?: Date;
 }

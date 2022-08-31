@@ -24,7 +24,7 @@ export class SurveyRepository implements ISurveyRepository {
 			},
 			status: input.status,
 			surveryedOn: input.surveryedOn,
-			updatedOn: input.updated_at,
+			updatedOn: input.updatedOn,
 		};
 
 		const survey = await this.prisma.surveys.create({ data });
@@ -114,8 +114,6 @@ export class SurveyRepository implements ISurveyRepository {
 		surveyDto.uriGeo3d = survey.uriGeo3d;
 		surveyDto.uriMultiBeam3d = survey.uriMultiBeam3d;
 		surveyDto.material = survey.material;
-		surveyDto.created_at = survey.created_at;
-		surveyDto.updated_at = survey.updated_at;
 		return surveyDto;
 	}
 }

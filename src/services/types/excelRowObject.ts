@@ -1,4 +1,5 @@
 import { SupportSystemType } from '../../schema/span-installation/types';
+import { IPassport } from '../../schema/object/models/passport.model';
 
 export type ExcelRowObject = {
 	Installatiegroep?: number;
@@ -78,8 +79,14 @@ export type NormalizedInstallationFromExcel = {
 	situations?: string[];
 	totalJunctionBoxes?: number;
 	totalLuminaires?: number;
+	object?: {
+		'nieuwe straatnaam': string;
+		passport: IPassport;
+	};
 	supportSystems?: ExcelSupportSystemProps[];
 	junctionBoxes?: ExcelJunctionBoxProps[];
 	types?: SupportSystemType[];
 	spin?: boolean;
+	tramTracks?: boolean;
+	passportSplits?: boolean;
 };

@@ -49,12 +49,6 @@ export class CreateObjectInput {
 	public objectTypeId: string;
 
 	@Field()
-	public created_at: Date;
-
-	@Field()
-	public updated_at: Date;
-
-	@Field()
 	public inspectionStandardId: string;
 
 	@Field()

@@ -75,10 +75,11 @@ export type ExcelLuminaireProps = Pick<
 
 export type NormalizedInstallationFromExcel = {
 	id: number;
-	situation: string;
-	totalJunctionBoxes: number;
-	totalLuminaires: number;
-	supportSystems: ExcelSupportSystemProps[];
-	junctionBoxes: ExcelJunctionBoxProps[];
-	types: SupportSystemType[];
+	situations?: string[];
+	totalJunctionBoxes?: number;
+	totalLuminaires?: number;
+	supportSystems?: ExcelSupportSystemProps[];
+	junctionBoxes?: ExcelJunctionBoxProps[];
+	types?: SupportSystemType[];
+	spin?: boolean;
 };

@@ -164,25 +164,22 @@ export class FileWriterService {
 		}
 	}
 
-	private getSupportSystemType(situation): SupportSystemType[] {
-		let supportSystemType: SupportSystemType[] = [];
-		switch (situation) {
+	private getSupportSystemTypes(situation): SupportSystemType[] {
+		switch (situation.toUpperCase()) {
 			case 'MVMA':
 				// MVMA = TensionWire /.Mast /.Mast
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
-				break;
+				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 			case 'MVMAASPIN':
 				// MVMAAspin = TensionWire /.Mast /.Mast /.Node
-				supportSystemType = [
+				return [
 					SupportSystemType.TensionWire,
 					SupportSystemType.Mast,
 					SupportSystemType.Mast,
 					SupportSystemType.Node,
 				];
-				break;
 			case 'GMVAASPIN':
 				// GMVAASPIN = TensionWire /.Facade /.Mast /.Node
-				supportSystemType = [
+				return [
 					SupportSystemType.TensionWire,
 					SupportSystemType.Facade,
 					SupportSystemType.Mast,
@@ -190,26 +187,28 @@ export class FileWriterService {
 				];
 			case 'MVMAA':
 				// MVMAA = TensionWire /.Mast /.Mast
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
+				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
 			case 'GMVA':
 				// GMVA = TensionWire /.Facade /.Mast
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
 			case 'GMVAA':
 				// GMVAA = TensionWire /.Facade /.Mast
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
 			case 'GVGA':
 				// GVGA = TensionWire /.Facade /.Facade
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
 			case 'GVGAA':
 				// GVGAA = TensionWire /.Facade /.Facade
-				supportSystemType = [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
+			case 'ARENAWEB':
+				return [SupportSystemType.TensionWire];
 			default:
+				return [];
 		}
-		return supportSystemType;
 	}
 
 	private async createSupportSystems(objectId, surveyId, excelRowObject: ExcelRowObject) {
-		const supportSystemTypes = this.getSupportSystemType(excelRowObject['situatie nw']);
+		const supportSystemTypes = this.getSupportSystemTypes(excelRowObject['situatie nw']);
 		const supportSystemTracker = {
 			[SupportSystemType.Facade]: 0,
 			[SupportSystemType.Mast]: 0,
@@ -318,9 +317,6 @@ export class FileWriterService {
 		row: ExcelRowObject,
 		type: SupportSystemType,
 	) {
-		// Check if we don't yet have a support system with the same Mastgetal
-		if (installation.supportSystems.find((supportSystem) => supportSystem.Mastgetal === row.Mastgetal)) return;
-
 		installation.supportSystems.push({
 			type,
 			Mastgetal: row.Mastgetal,
@@ -340,9 +336,6 @@ export class FileWriterService {
 	}
 
 	static AddJunctionBoxToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject) {
-		// Check if we don't yet have a junction box with the same Mastgetal
-		if (installation.junctionBoxes.find((junctionBox) => junctionBox.Mastgetal === row.Mastgetal)) return;
-
 		installation.junctionBoxes.push({
 			Mastgetal: row.Mastgetal,
 			'Techview Id': row['Techview Id'],
@@ -359,59 +352,113 @@ export class FileWriterService {
 		});
 	}
 
-	static AddLuminaireToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject) {}
+	addLuminaireToInstallation(installation: NormalizedInstallationFromExcel, row: ExcelRowObject, situation) {
+		const tensionWire = installation.supportSystems.find(
+			(s) => s.type === SupportSystemType.TensionWire && s['situatie nw'] === situation,
+		);
+		if (!tensionWire) {
+			// this.logger.debug('!!!', situation, row, installation.supportSystems);
+			return;
+		}
+
+		tensionWire.luminaires.push({
+			'Id-Armatuur': row['Id-Armatuur'],
+			'Type Armatuur': row['Type Armatuur'],
+			'Oormerk Armatuur': row['Oormerk Armatuur'],
+			Familie: row.Familie,
+			'Aanp. K-Hang/Bol (contract 3)': row['Aanp. K-Hang/Bol (contract 3)'],
+			'Boven tram': row['Boven tram'],
+			'Armatuur > 3m bovenleiding (tbv Contract 3)': row['Armatuur > 3m bovenleiding (tbv Contract 3)'],
+		});
+	}
 
 	private async migrateSpanInstallation() {
 		this.logger.verbose(`Starting file migration...`);
 		const excelRowObjectList: ExcelRowObject[] = await this.getFile();
 
-		let currentInstallationSupportSystemCounter = 0;
-
-		const normalizedData = excelRowObjectList.reduce((acc, row) => {
+		const groupedData = excelRowObjectList.reduce((acc, row) => {
 			const { Installatiegroep: installationGroup } = row;
-			acc[installationGroup] = acc[installationGroup] || {
-				id: installationGroup,
-				situation: row['situatie nw'],
-				types: this.getSupportSystemType(row['situatie nw']),
+			acc[installationGroup] = acc[installationGroup] || [];
+			acc[installationGroup].push(row);
+			return acc;
+		}, {} as Record<string, ExcelRowObject[]>);
+
+		const normalizedData = Object.keys(groupedData).reduce((acc, installationKey) => {
+			// Get unique "situatie nw" strings
+			const uniqueSituations = [...new Set(groupedData[installationKey].map((i) => i['situatie nw']))];
+			const hasSpin = !!uniqueSituations.find((s) => s.toUpperCase().endsWith('SPIN'));
+			const installationGroupRows = groupedData[installationKey];
+
+			acc[installationKey] = acc[installationKey] || {
+				id: Number(installationKey),
+				spin: hasSpin,
+				situations: [],
 				supportSystems: [],
 				junctionBoxes: [],
-				totalJunctionBoxes: row['aantal voedingen'],
-				totalLuminaires: row['aantal armaturen'],
+				totalJunctionBoxes: installationGroupRows[0]['aantal voedingen'],
+				totalLuminaires: installationGroupRows[0]['aantal armaturen'],
+				types: [],
 			};
 
-			// Check if a support system with this Mastgetal was already added to this installation
-			if (!acc[installationGroup].supportSystems.find((s) => s.Mastgetal === row.Mastgetal)) {
-				FileWriterService.AddSupportSystemToInstallation(
-					acc[installationGroup],
-					row,
-					acc[installationGroup].types[currentInstallationSupportSystemCounter],
-				);
-				currentInstallationSupportSystemCounter += 1;
-			}
+			// Add support systems aka "Draagsystemen"
+			uniqueSituations.forEach((situation, idx) => {
+				let onlyAddSpin = false;
+				let types = this.getSupportSystemTypes(situation);
 
-			const supportSystem = acc[installationGroup].supportSystems.find((s) => s.Mastgetal === row.Mastgetal);
-			supportSystem.luminaires.push({
-				'Id-Armatuur': row['Id-Armatuur'],
-				'Type Armatuur': row['Type Armatuur'],
-				'Oormerk Armatuur': row['Oormerk Armatuur'],
-				Familie: row.Familie,
-				'Aanp. K-Hang/Bol (contract 3)': row['Aanp. K-Hang/Bol (contract 3)'],
-				'Boven tram': row['Boven tram'],
-				'Armatuur > 3m bovenleiding (tbv Contract 3)': row['Armatuur > 3m bovenleiding (tbv Contract 3)'],
+				if (
+					idx > 0 &&
+					situation.toUpperCase().endsWith('SPIN') &&
+					!uniqueSituations[idx - 1].toUpperCase().endsWith('SPIN')
+				) {
+					// Only add Node
+					types = [SupportSystemType.Node];
+					onlyAddSpin = true;
+				}
+
+				acc[installationKey].types = [...acc[installationKey].types, ...types];
+
+				types.forEach((type) => {
+					FileWriterService.AddSupportSystemToInstallation(
+						acc[installationKey],
+						installationGroupRows.find((r) => r['situatie nw'] === situation),
+						type,
+					);
+				});
+
+				// Add a Luminaire aka "armatuur" for each row
+				installationGroupRows
+					.filter((row) => row['situatie nw'] === situation)
+					.forEach((row) => {
+						this.addLuminaireToInstallation(
+							acc[installationKey],
+							row,
+							onlyAddSpin ? uniqueSituations[idx - 1] : situation,
+						);
+					});
 			});
 
-			// Count number of junction boxes already added to the installation
-			const totalJunctionBoxes = acc[installationGroup].junctionBoxes.filter(
-				(s) => s.Mastgetal === row.Mastgetal,
-			).length;
-			if (totalJunctionBoxes < row['aantal voedingen']) {
-				// Cater for two rows having different "aantal voedingen" values; this ensures the highest number wins
-				for (let i = totalJunctionBoxes; i <= row['aantal voedingen']; i += 1) {
-					FileWriterService.AddJunctionBoxToInstallation(acc[installationGroup], row);
-				}
-				acc[installationGroup].totalJunctionBoxes = row['aantal voedingen'];
-			}
-			currentInstallationSupportSystemCounter += 1;
+			// Get unique rows from installation group
+			const { rows: uniqueRowsInGroup } = installationGroupRows.reduce(
+				(_acc, row) => {
+					if (!_acc.ids.find((id) => id === Number(row.Mastgetal))) {
+						_acc.rows.push(row);
+					}
+					_acc.ids.push(Number(row.Mastgetal));
+					return _acc;
+				},
+				{ rows: [], ids: [] } as {
+					rows: ExcelRowObject[];
+					ids: number[];
+				},
+			);
+
+			// Add Junction boxes aka "aansluitkast" for each unique row
+			uniqueRowsInGroup.forEach((row, idx) => {
+				// Check if we've reached the maximum number of junction boxes
+				// We stop reading rows from that point on; first come, first served
+				if (idx + 1 > acc[installationKey].totalJunctionBoxes) return;
+				FileWriterService.AddJunctionBoxToInstallation(acc[installationKey], row);
+			});
 
 			return acc;
 		}, {} as Record<string, NormalizedInstallationFromExcel>);

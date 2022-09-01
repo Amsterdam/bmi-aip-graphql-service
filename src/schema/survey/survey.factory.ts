@@ -1,6 +1,7 @@
 import { DbSurvey as DomainSurvey } from '../survey/types/survey.repository.interface';
-import { Survey } from '../survey/models/survey.model';
 import { PartialBy } from '../../utils/utils';
+
+import { Survey } from './models/survey.model';
 
 type SurveyType =
 	| 'id'

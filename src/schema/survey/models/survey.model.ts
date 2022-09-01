@@ -30,7 +30,7 @@ export class Survey {
 	inspectionStandardType: string;
 
 	@Field((type) => String, { nullable: true })
-	surveryedOn?: string;
+	surveyedOn?: string;
 
 	@Field((type) => String, { nullable: true })
 	updatedOn?: string;

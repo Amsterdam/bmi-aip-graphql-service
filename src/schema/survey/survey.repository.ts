@@ -24,7 +24,7 @@ export class SurveyRepository implements ISurveyRepository {
 				},
 			},
 			status: input.status,
-			surveryedOn: input.surveryedOn,
+			surveryedOn: input.surveyedOn,
 			updatedOn: input.updatedOn,
 		};
 
@@ -71,7 +71,7 @@ export class SurveyRepository implements ISurveyRepository {
 		surveyDto.condition = survey.condition;
 		surveyDto.careCondition = survey.careCondition;
 		surveyDto.inspectionStandardType = survey.inspectionStandardType;
-		surveyDto.surveryedOn = survey.surveryedOn;
+		surveyDto.surveyedOn = survey.surveryedOn;
 		surveyDto.updatedOn = survey.updatedOn;
 		surveyDto.pointCloudStorageUsed = survey.pointCloudStorageUsed;
 		surveyDto.craInitialHistoryIsBuildBetween4074 = survey.craInitialHistoryIsBuildBetween4074;

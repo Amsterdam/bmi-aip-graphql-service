@@ -15,7 +15,7 @@ export class BaseCreateSurveyInput {
 	inspectionStandardType: string;
 
 	@Field((type) => String, { nullable: true })
-	surveryedOn?: Date;
+	surveyedOn?: Date;
 
 	@Field((type) => String, { nullable: true })
 	updatedOn?: Date;

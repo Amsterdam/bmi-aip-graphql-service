@@ -34,7 +34,7 @@ export class JunctionBox {
 	a11yDetails?: string;
 
 	// Maps to "Aanleghoogte"
-	@Field((type) => Number, { nullable: true })
+	@Field((type) => Float, { nullable: true })
 	installationHeight?: number;
 
 	// Maps to "Stijgbuis zichtbaar"

@@ -28,7 +28,7 @@ export class JunctionBoxFactory {
 		jb.location = location;
 		jb.locationIndication = locationIndication;
 		jb.a11yDetails = a11yDetails;
-		jb.installationHeight = installationHeight;
+		jb.installationHeight = Number(installationHeight);
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;

@@ -14,6 +14,7 @@ describe('Span Installation / SupportSystem / Factory', () => {
 			houseNumber: domainSupportSystem.houseNumber ?? null,
 			type: domainSupportSystem.type ?? null,
 			typeDetailed: domainSupportSystem.typeDetailed ?? null,
+			installationHeight: 10,
 		};
 		delete object.created_at;
 		delete object.updated_at;

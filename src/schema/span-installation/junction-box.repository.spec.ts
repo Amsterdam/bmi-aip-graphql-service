@@ -45,7 +45,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					},
 				},
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 100,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal(33.33),
@@ -63,11 +63,27 @@ describe('Span Installation / JunctionBox / Repository', () => {
 	});
 
 	test('getJunctionBoxes()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainJunctionBox,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
+
 		const junctionBoxes = await repo.getJunctionBoxes('__SURVEY_ID__');
 		expect(prismaServiceMock.spanJunctionBoxes.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
 		});
-		expect(junctionBoxes).toEqual([domainJunctionBox]);
+		expect(junctionBoxes).toEqual([expected]);
 	});
 
 	test('updateJunctionBox()', async () => {
@@ -80,7 +96,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			where: { id: updateJunctionBoxInput.id },
 			data: {
 				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 100,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal('33.33'),
@@ -98,7 +114,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				type: 'Point',
 			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: 100,
+			installationHeight: new Decimal(10),
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			mastNumber: new Decimal(33.33),
@@ -129,7 +145,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					type: 'Point',
 				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				installationHeight: 100,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal(33.33),

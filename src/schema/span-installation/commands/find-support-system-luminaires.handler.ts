@@ -9,7 +9,7 @@ import { FindSupportSystemLuminairesCommand } from './find-support-system-lumina
 export class FindSupportSystemLuminairesHandler implements ICommandHandler<FindSupportSystemLuminairesCommand> {
 	constructor(private service: LuminaireService) {}
 
-	public async execute({ type }: FindSupportSystemLuminairesCommand): Promise<Luminaire[]> {
-		return this.service.getLuminaires(type);
+	public async execute({ id }: FindSupportSystemLuminairesCommand): Promise<Luminaire[]> {
+		return this.service.getLuminaires(id);
 	}
 }

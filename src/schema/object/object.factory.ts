@@ -2,10 +2,9 @@ import { Prisma } from '@prisma/client';
 
 import { DbObject as DomainObject } from './types/object.repository.interface';
 import { ObjectModel } from './models/object.model';
-import { CreateObjectInput } from './dto/create-object.input';
 
 export class ObjectFactory {
-	static CreateObject(domainObject: DomainObject | CreateObjectInput): ObjectModel {
+	static CreateObject(domainObject: DomainObject): ObjectModel {
 		const object = new ObjectModel();
 		object.id = domainObject.id;
 		object.name = domainObject.name;

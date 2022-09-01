@@ -268,11 +268,24 @@ export class FileWriterService {
 		}
 	}
 
+	static GetSupportSystemNameFromType(type: SupportSystemType): string {
+		switch (type) {
+			case SupportSystemType.Facade:
+				return 'Gevel';
+			case SupportSystemType.Node:
+				return 'Knoop';
+			case SupportSystemType.Mast:
+				return 'Mast';
+			case SupportSystemType.TensionWire:
+				return 'Spandraad';
+		}
+	}
+
 	private async createSupportSystem(objectId, surveyId, supportSystemProps: ExcelSupportSystemProps, count: number) {
 		const supportSystem: Partial<CreateSupportSystemInput> = {
 			objectId: objectId,
 			surveyId: surveyId,
-			name: `${supportSystemProps.type} ${count}`,
+			name: `${FileWriterService.GetSupportSystemNameFromType(supportSystemProps.type)} ${count}`,
 			type: supportSystemProps.type,
 			location: supportSystemProps['nieuwe straatnaam'], // Maps to "Straat"
 			constructionYear: null, // Maps to "Jaar van aanleg"

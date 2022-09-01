@@ -85,7 +85,7 @@ export class FileWriterService {
 		const maxRow = 9628;
 
 		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
-		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
+		const workSheet = workbook.Sheets[workbook.SheetNames[1]];
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;
@@ -341,7 +341,7 @@ export class FileWriterService {
 					manufacturer: '', // Maps to "Fabrikant"
 					geography: {
 						type: 'Point',
-						coordinates: [excelRowObject.X, excelRowObject.Y],
+						coordinates: transformRDToWGS([excelRowObject.X, excelRowObject.Y]),
 					},
 					remarks: '', // Maps to "Opmerking"
 
@@ -499,7 +499,7 @@ export class FileWriterService {
 				'nieuwe straatnaam': installationGroupRows[0]['nieuwe straatnaam'],
 				passport: {
 					passportIdentification: String(installationKey),
-					passportCityArea: '',
+					passportCityArea: installationGroupRows[0].Stadsdeel,
 					passportStreet: installationGroupRows[0]['nieuwe straatnaam'],
 					passportDistrict: installationGroupRows[0].Wijk,
 					passportNeighborhood: installationGroupRows[0].Buurt,

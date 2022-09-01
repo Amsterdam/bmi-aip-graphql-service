@@ -61,11 +61,18 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 	}
 
 	async getSupportSystems(surveyId: string): Promise<SupportSystem[]> {
-		return this.prisma.spanSupportSystems.findMany({
+		const supportSystems = (await this.prisma.spanSupportSystems.findMany({
 			where: {
 				surveyId,
 			},
-		});
+		})) as SupportSystem[];
+
+		return Promise.all(
+			supportSystems.map(async (supportSystem) => {
+				supportSystem.geography = await this.getGeographyAsGeoJSON(supportSystem.id);
+				return supportSystem;
+			}),
+		);
 	}
 
 	async updateSupportSystem({

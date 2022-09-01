@@ -78,11 +78,26 @@ describe('Span Installation / SupportSystem / Repository', () => {
 	});
 
 	test('getSupportSystems()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainSupportSystem,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
 		const supportSystems = await repository.getSupportSystems('__SURVEY_ID__');
 		expect(prismaServiceMock.spanSupportSystems.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
 		});
-		expect(supportSystems).toEqual([domainSupportSystem]);
+		expect(supportSystems).toEqual([expected]);
 	});
 
 	test('updateSupportSystem()', async () => {

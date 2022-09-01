@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
+import { newId } from '../../utils';
 
 import { SupportSystem, ISupportSystemRepository } from './types/support-system.repository.interface';
 import { LuminaireRepository } from './luminaire.repository';
@@ -14,7 +15,6 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 	public constructor(private readonly prisma: PrismaService, private readonly luminaireRepo: LuminaireRepository) {}
 
 	async createSupportSystem({
-		id,
 		objectId,
 		surveyId,
 		name,
@@ -30,7 +30,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		geography,
 	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsCreateInput = {
-			id: id,
+			id: newId(),
 			objects: { connect: { id: objectId } },
 			surveys: { connect: { id: surveyId } },
 			name,

@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma.service';
+import { newId } from '../../utils';
 
 import { ISurveyRepository } from './types/survey.repository.interface';
 import { Survey } from './models/survey.model';
@@ -13,7 +14,7 @@ export class SurveyRepository implements ISurveyRepository {
 
 	async createSurvey(input: CreateSurveyInput): Promise<Survey> {
 		const data: Prisma.surveysCreateInput = {
-			id: input.id,
+			id: newId(),
 			description: input.description,
 			condition: input.condition,
 			inspectionStandardType: input.inspectionStandardType,

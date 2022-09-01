@@ -1,13 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsNumber, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, MaxLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
 
 @InputType()
 export class CreateObjectInput {
-	@Field()
-	@IsUUID()
-	public id: string;
-
 	@Field()
 	@MaxLength(255)
 	public name: string;

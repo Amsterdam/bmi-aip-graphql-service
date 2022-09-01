@@ -3,7 +3,7 @@ import { IsDate, IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
-import { SupplierType } from '../../../types';
+import { SupplierType } from '../types';
 
 @InputType()
 export class BaseLuminaireInput {

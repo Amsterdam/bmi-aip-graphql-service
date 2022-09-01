@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma.service';
+import { newId } from '../../utils';
 
 import { DbObject, IObjectRepository } from './types/object.repository.interface';
 import { ObjectModel } from './models/object.model';
@@ -13,7 +14,7 @@ export class ObjectRepository implements IObjectRepository {
 
 	async createObject(input: CreateObjectInput): Promise<ObjectModel> {
 		const data: Prisma.objectsCreateInput = {
-			id: input.id,
+			id: newId(),
 			name: input.name,
 			code: input.code,
 			location: input.location,

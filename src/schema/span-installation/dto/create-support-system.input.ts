@@ -6,10 +6,6 @@ import { TypeDetailedSupportSystemInput } from './type-detailed-support-system.i
 @InputType()
 export class CreateSupportSystemInput extends TypeDetailedSupportSystemInput {
 	@Field()
-	@IsUUID()
-	public id: string;
-
-	@Field()
 	@MaxLength(255)
 	public name: string;
 

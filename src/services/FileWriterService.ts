@@ -8,7 +8,6 @@ import * as xlsx from 'xlsx';
 import { ConfigService } from '@nestjs/config';
 import PQueue from 'p-queue';
 
-import { newId } from '../utils';
 import { SupportSystemType } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
 import { SurveyStates } from '../schema/survey/types/surveyStates';
@@ -103,7 +102,6 @@ export class FileWriterService {
 			passport: { passportIdentification },
 		} = object;
 		const assetObject: CreateObjectInput = {
-			id: newId(),
 			code: 'OVS' + ('000' + passportIdentification).slice(-4),
 			clientCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
 			compositionIsVisible: false,
@@ -148,7 +146,6 @@ export class FileWriterService {
 
 	private async createSurvey(objectId): Promise<string> {
 		const survey: CreateSurveyInput = {
-			id: newId(),
 			description: 'Contract 1',
 			inspectionStandardType: InspectionStandard.spanInstallation,
 			objectId: objectId,
@@ -167,7 +164,6 @@ export class FileWriterService {
 
 	private async createJuctionbox(objectId, surveyId, excelRowObject: ExcelJunctionBoxProps, count: number) {
 		await this.externalAIPGraphQLRepository.createJunctionBox({
-			id: newId(),
 			objectId: objectId,
 			surveyId: surveyId,
 			name: `Aansluitkast ${count}`,
@@ -229,9 +225,7 @@ export class FileWriterService {
 	}
 
 	private async createSupportSystem(objectId, surveyId, supportSystemProps: ExcelSupportSystemProps, count: number) {
-		const supportSystemId = newId();
 		const supportSystem: Partial<CreateSupportSystemInput> = {
-			id: supportSystemId,
 			objectId: objectId,
 			surveyId: surveyId,
 			name: `${supportSystemProps.type} ${count}`,
@@ -263,8 +257,10 @@ export class FileWriterService {
 				supportSystem.typeDetailedTensionWire = null;
 				break;
 		}
-		await this.externalAIPGraphQLRepository.createSupportSystem(supportSystem as CreateSupportSystemInput);
-		await this.createLuminaires(supportSystemId, supportSystemProps);
+		const { id } = await this.externalAIPGraphQLRepository.createSupportSystem(
+			supportSystem as CreateSupportSystemInput,
+		);
+		await this.createLuminaires(id, supportSystemProps);
 	}
 
 	private async createLuminaires(supportSystemId: string, excelRowObject: ExcelSupportSystemProps) {

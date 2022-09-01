@@ -16,7 +16,7 @@ import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
-import { transformToRD } from '../schema/span-installation/utils/transformRD';
+import { transformRDToWGS } from '../schema/span-installation/utils/transformRD';
 
 import {
 	ExcelJunctionBoxProps,
@@ -180,7 +180,7 @@ export class FileWriterService {
 			remarks: '', // Maps to "Opmerking"
 			geography: {
 				type: 'Point',
-				coordinates: transformToRD(excelRowObject.X, excelRowObject.Y),
+				coordinates: transformRDToWGS([excelRowObject.X, excelRowObject.Y]),
 			},
 		});
 	}
@@ -245,7 +245,7 @@ export class FileWriterService {
 			houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`
 			geography: {
 				type: 'Point',
-				coordinates: transformToRD(supportSystemProps.X, supportSystemProps.Y),
+				coordinates: transformRDToWGS([supportSystemProps.X, supportSystemProps.Y]),
 			},
 		};
 

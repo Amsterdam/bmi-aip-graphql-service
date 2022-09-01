@@ -1,5 +1,10 @@
 import * as proj4 from 'proj4';
 
+/**
+ * @see https://epsg.io/4326
+ * @see https://epsg.io/28992
+ */
+
 // eslint-disable-next-line import/namespace
 proj4.defs(
 	'EPSG:28992',
@@ -7,22 +12,15 @@ proj4.defs(
 );
 
 /**
- *
- * @param {String} x
- * @param {String} y
- * @returns Array of [longitude, latitude]
+ * Transforms "Amersfoort RD" coordinates to "World Geodetic System 1984" lon/lat
  */
-export function transformToRD(x: number, y: number) {
-	return proj4('EPSG:28992', 'EPSG:4326').forward([x, y]);
+export function transformRDToWGS(coordinates: [number, number]): [number, number] {
+	return proj4('EPSG:28992', 'EPSG:4326').forward(coordinates);
 }
 
 /**
- *
- * @param {number} lng
- * @param {number} lat
- * @returns Array of [x, y]
+ * Transforms "World Geodetic System 1984" lon/lat coordinates to "Amersfoort RD"
  */
-export function transformLatLng(lng: number, lat: number) {
-	const transformed = proj4('EPSG:4326', 'EPSG:28992').forward([lng, lat]);
-	return transformed;
+export function transformWGSToRD(coordinates: [number, number]): [number, number] {
+	return proj4('EPSG:4326', 'EPSG:28992').forward(coordinates);
 }

@@ -96,8 +96,8 @@ export class ExternalAIPGraphQLRepository {
 			return result[propertyName];
 		} catch (e) {
 			console.log(`Failed to create new entry, error: ${e.message}`);
-
-			return;
+			// Re-throw so that it can be caught by the caller
+			throw e;
 		}
 	}
 }

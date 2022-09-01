@@ -15,6 +15,8 @@ import { CreateObjectInput } from '../schema/object/dto/create-object.input';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
+import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
+import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { transformRDToWGS } from '../schema/span-installation/utils/transformRD';
 
 import {
@@ -31,6 +33,24 @@ export class FileWriterService {
 	private static DEBUG = true;
 
 	private graphqlClient: GraphQLClient;
+
+	private report: {
+		file: string;
+		success: string[];
+		failures: {
+			error: string;
+			input:
+				| CreateObjectInput
+				| CreateSurveyInput
+				| CreateSupportSystemInput
+				| CreateLuminaireInput
+				| CreateJunctionBoxInput;
+		}[];
+	} = {
+		file: '',
+		success: [],
+		failures: [],
+	};
 
 	public constructor(
 		private readonly consoleService: ConsoleService,
@@ -138,9 +158,16 @@ export class FileWriterService {
 		};
 		try {
 			const { id } = await this.externalAIPGraphQLRepository.createObject(assetObject);
+
+			this.report.success.push(`Created new Object with ID ${id}`);
+
 			return id;
 		} catch (err) {
-			this.logger.debug('Failed to create object', assetObject);
+			this.logger.debug('Failed to create Object', assetObject);
+			this.report.failures.push({
+				error: `Failed to create new Object, error: ${err.message}`,
+				input: assetObject,
+			});
 		}
 	}
 
@@ -150,35 +177,52 @@ export class FileWriterService {
 			inspectionStandardType: InspectionStandard.spanInstallation,
 			objectId: objectId,
 			status: SurveyStates.open,
-			surveryedOn: new Date(),
+			surveyedOn: new Date(),
 			updatedOn: new Date(),
 			condition: 'U',
 		};
 		try {
 			const { id } = await this.externalAIPGraphQLRepository.createSurvey(survey);
+
+			this.report.success.push(`Created new Survey with ID ${id}`);
+
 			return id;
 		} catch (err) {
-			this.logger.debug('Failed to create survey', survey);
+			this.logger.debug('Failed to create Survey', survey);
+			this.report.failures.push({
+				error: `Failed to create new Survey, error: ${err.message}`,
+				input: survey,
+			});
 		}
 	}
 
 	private async createJuctionbox(objectId, surveyId, excelRowObject: ExcelJunctionBoxProps, count: number) {
-		await this.externalAIPGraphQLRepository.createJunctionBox({
-			objectId: objectId,
-			surveyId: surveyId,
-			name: `Aansluitkast ${count}`,
-			mastNumber: excelRowObject.Mastgetal, // Maps to "Mastgetal"
-			location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
-			locationIndication: '', // Maps to "Locatie aanduiding"
-			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
-			installationHeight: excelRowObject.Lichtpunthoogte, // Maps to "Aanleghoogte"
-			riserTubeVisible: false, // Maps to "Stijgbuis zichtbaar"
-			remarks: '', // Maps to "Opmerking"
-			geography: {
-				type: 'Point',
-				coordinates: transformRDToWGS([excelRowObject.X, excelRowObject.Y]),
-			},
-		});
+		const junctionBox: CreateJunctionBoxInput = new CreateJunctionBoxInput();
+		junctionBox.objectId = objectId;
+		junctionBox.surveyId = surveyId;
+		junctionBox.name = `Aansluitkast ${count}`;
+		junctionBox.mastNumber = excelRowObject.Mastgetal; // Maps to "Mastgetal"
+		junctionBox.location = excelRowObject['nieuwe straatnaam']; // Maps to "Straat"
+		junctionBox.locationIndication = ''; // Maps to "Locatie aanduiding"
+		junctionBox.a11yDetails = ''; // Maps to "Bereikbaarheid gedetailleerd"
+		junctionBox.installationHeight = excelRowObject.Lichtpunthoogte; // Maps to "Aanleghoogte"
+		junctionBox.riserTubeVisible = false; // Maps to "Stijgbuis zichtbaar"
+		junctionBox.remarks = ''; // Maps to "Opmerking"
+		junctionBox.geography = {
+			type: 'Point',
+			coordinates: transformRDToWGS([excelRowObject.X, excelRowObject.Y]),
+		};
+
+		try {
+			const { id } = await this.externalAIPGraphQLRepository.createJunctionBox(junctionBox);
+			this.report.success.push(`Created new JunctionBox with ID ${id}`);
+		} catch (err) {
+			this.logger.debug('Failed to create junctionBox', junctionBox);
+			this.report.failures.push({
+				error: `Failed to create new entry, error: ${err.message}`,
+				input: junctionBox,
+			});
+		}
 	}
 
 	private getSupportSystemTypes(situation): SupportSystemType[] {
@@ -257,16 +301,25 @@ export class FileWriterService {
 				supportSystem.typeDetailedTensionWire = null;
 				break;
 		}
-		const { id } = await this.externalAIPGraphQLRepository.createSupportSystem(
-			supportSystem as CreateSupportSystemInput,
-		);
-		await this.createLuminaires(id, supportSystemProps);
+		try {
+			const { id } = await this.externalAIPGraphQLRepository.createSupportSystem(
+				supportSystem as CreateSupportSystemInput,
+			);
+			await this.createLuminaires(id, supportSystemProps);
+			this.report.success.push(`Created new Support System with ID ${id} (+ Luminaires)`);
+		} catch (err) {
+			this.logger.debug('Failed to create SupportSystem or its Luminaires', supportSystem);
+			this.report.failures.push({
+				error: `Failed to create new supportSystem, error: ${err.message}`,
+				input: supportSystem as CreateSupportSystemInput,
+			});
+		}
 	}
 
 	private async createLuminaires(supportSystemId: string, excelRowObject: ExcelSupportSystemProps) {
 		await Promise.all(
-			excelRowObject.luminaires.map((luminaire, idx) =>
-				this.externalAIPGraphQLRepository.createLuminaire({
+			excelRowObject.luminaires.map(async (luminaire, idx) => {
+				const input: CreateLuminaireInput = {
 					supportSystemId: supportSystemId,
 					name: `Armatuur ${idx + 1}`,
 					location: excelRowObject['nieuwe straatnaam'], // Maps to "Straat"
@@ -286,8 +339,19 @@ export class FileWriterService {
 					// Light
 					lightSupplierType: null, // Maps to "Leverancierstype_lamp"
 					lightCommissioningDate: null, // Maps to "Datum in gebruiksname"
-				}),
-			),
+				};
+
+				try {
+					const { id } = await this.externalAIPGraphQLRepository.createLuminaire(input);
+					this.report.success.push(`Created new Luminaire with ID ${id}`);
+				} catch (err) {
+					this.logger.debug('Failed to create luminaire', input);
+					this.report.failures.push({
+						error: `Failed to create new supportSystem, error: ${err.message}`,
+						input,
+					});
+				}
+			}),
 		);
 	}
 
@@ -504,6 +568,15 @@ export class FileWriterService {
 		await queue.onIdle();
 
 		// await Promise.all(Object.keys(normalizedData).map((key) => this.createInstallation(normalizedData[key])));
+
+		this.report.file = this.configService.get<string>('READ_FILE');
+		fs.writeFileSync(
+			path.resolve(process.cwd(), `report_${new Date().toISOString()}.json`),
+			JSON.stringify(this.report),
+			{
+				encoding: 'utf-8',
+			},
+		);
 
 		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} installations`);
 	}

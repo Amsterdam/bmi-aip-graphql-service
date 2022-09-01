@@ -2,8 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Resource } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { ObjectService } from '../object/object.service';
-
+import { ObjectService } from './object.service';
 import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
 import { CreateObjectCommand } from './commands/create-object.command';

@@ -63,11 +63,27 @@ describe('Span Installation / JunctionBox / Repository', () => {
 	});
 
 	test('getJunctionBoxes()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainJunctionBox,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
+
 		const junctionBoxes = await repo.getJunctionBoxes('__SURVEY_ID__');
 		expect(prismaServiceMock.spanJunctionBoxes.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
 		});
-		expect(junctionBoxes).toEqual([domainJunctionBox]);
+		expect(junctionBoxes).toEqual([expected]);
 	});
 
 	test('updateJunctionBox()', async () => {

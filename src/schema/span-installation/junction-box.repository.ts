@@ -57,11 +57,18 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 	}
 
 	async getJunctionBoxes(surveyId: string): Promise<JunctionBox[]> {
-		return this.prisma.spanJunctionBoxes.findMany({
+		const junctionBoxes = (await this.prisma.spanJunctionBoxes.findMany({
 			where: {
 				surveyId,
 			},
-		});
+		})) as JunctionBox[];
+
+		return Promise.all(
+			junctionBoxes.map(async (junctionBox) => {
+				junctionBox.geography = await this.getGeographyAsGeoJSON(junctionBox.id);
+				return junctionBox;
+			}),
+		);
 	}
 
 	async updateJunctionBox({

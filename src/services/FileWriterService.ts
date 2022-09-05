@@ -7,6 +7,7 @@ import { GraphQLClient } from 'graphql-request';
 import * as xlsx from 'xlsx';
 import { ConfigService } from '@nestjs/config';
 import PQueue from 'p-queue';
+import { SingleBar } from 'cli-progress';
 
 import { SupportSystemType } from '../types';
 import { InspectionStandard } from '../schema/survey/types';
@@ -51,6 +52,10 @@ export class FileWriterService {
 		success: [],
 		failures: [],
 	};
+
+	progressBar = new SingleBar({});
+
+	progressTracker = 0;
 
 	public constructor(
 		private readonly consoleService: ConsoleService,
@@ -168,6 +173,9 @@ export class FileWriterService {
 				error: `Failed to create new Object, error: ${err.message}`,
 				input: assetObject,
 			});
+		} finally {
+			this.progressTracker += 1;
+			this.progressBar.update(this.progressTracker);
 		}
 	}
 
@@ -193,6 +201,9 @@ export class FileWriterService {
 				error: `Failed to create new Survey, error: ${err.message}`,
 				input: survey,
 			});
+		} finally {
+			this.progressTracker += 1;
+			this.progressBar.update(this.progressTracker);
 		}
 	}
 
@@ -222,6 +233,9 @@ export class FileWriterService {
 				error: `Failed to create new entry, error: ${err.message}`,
 				input: junctionBox,
 			});
+		} finally {
+			this.progressTracker += 1;
+			this.progressBar.update(this.progressTracker);
 		}
 	}
 
@@ -326,6 +340,9 @@ export class FileWriterService {
 				error: `Failed to create new supportSystem, error: ${err.message}`,
 				input: supportSystem as CreateSupportSystemInput,
 			});
+		} finally {
+			this.progressTracker += 1;
+			this.progressBar.update(this.progressTracker);
 		}
 	}
 
@@ -363,6 +380,9 @@ export class FileWriterService {
 						error: `Failed to create new supportSystem, error: ${err.message}`,
 						input,
 					});
+				} finally {
+					this.progressTracker += 1;
+					this.progressBar.update(this.progressTracker);
 				}
 			}),
 		);
@@ -573,7 +593,27 @@ export class FileWriterService {
 			});
 		}
 
-		const queue = new PQueue({ concurrency: 1 });
+		this.progressBar.start(
+			Object.keys(normalizedData).reduce((acc, installation) => {
+				acc += 2; // 1 object, 1 survey
+
+				// Luminaires
+				acc += (normalizedData[installation]?.supportSystems ?? []).reduce((_acc, supportSystem) => {
+					_acc += supportSystem.luminaires.length;
+					return _acc;
+				}, 0);
+
+				// Support Systems
+				acc += (normalizedData[installation]?.supportSystems ?? []).length;
+
+				// Junction Boxes
+				acc += (normalizedData[installation]?.junctionBoxes ?? []).length;
+				return acc;
+			}, 0),
+			0,
+		);
+
+		const queue = new PQueue({ concurrency: 10 });
 
 		Object.keys(normalizedData).forEach((key) => {
 			queue.add(() => this.createInstallation(normalizedData[key]));
@@ -591,6 +631,9 @@ export class FileWriterService {
 			},
 		);
 
+		this.progressBar.stop();
+
+		this.logger.log('');
 		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} installations`);
 	}
 }

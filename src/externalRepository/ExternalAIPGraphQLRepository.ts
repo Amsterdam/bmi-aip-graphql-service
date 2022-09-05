@@ -103,8 +103,7 @@ export class ExternalAIPGraphQLRepository {
 				input: input,
 			});
 			const propertyName = Object.getOwnPropertyNames(result)[0];
-			console.log(`New entry introduced for ${propertyName} with ID ${result[propertyName].id}`);
-
+			// console.log(`New entry introduced for ${propertyName} with ID ${result[propertyName].id}`);
 			return result[propertyName];
 		} catch (e) {
 			console.log(`Failed to create new entry, error: ${e.message}`);

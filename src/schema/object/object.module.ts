@@ -10,6 +10,8 @@ import { ObjectService } from './object.service';
 import { ObjectResolver } from './object.resolver';
 import { CreateObjectCommand } from './commands/create-object.command';
 import { CreateObjectHandler } from './commands/create-object.handler';
+import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
+import { UndoOVSImportHandler } from './commands/undo-ovs-import.handler';
 
 @Module({
 	providers: [
@@ -19,6 +21,8 @@ import { CreateObjectHandler } from './commands/create-object.handler';
 		PrismaService,
 		CreateObjectCommand,
 		CreateObjectHandler,
+		UndoOVSImportCommand,
+		UndoOVSImportHandler,
 	],
 	exports: [ObjectService],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => ObjectModule)],

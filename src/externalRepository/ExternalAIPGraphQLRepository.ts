@@ -85,6 +85,18 @@ export class ExternalAIPGraphQLRepository {
 		return this.executeGraphQLRequest(mutation, input);
 	}
 
+	public async undoOVSImport(): Promise<any> {
+		const mutation = gql`
+			mutation undoOVSImport {
+				undoOVSImport {
+					success
+				}
+			}
+		`;
+
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation);
+	}
+
 	private async executeGraphQLRequest(mutation, input): Promise<any> {
 		try {
 			const result = await this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, {

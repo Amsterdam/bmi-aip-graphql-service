@@ -13,6 +13,7 @@ import { JunctionBoxRepository } from '../schema/span-installation/junction-box.
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
+import { UndoOVSImportService } from '../services/UndoOVSImportService';
 
 @Module({
 	imports: [
@@ -34,6 +35,7 @@ import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPG
 	],
 	providers: [
 		FileWriterService,
+		UndoOVSImportService,
 		Logger,
 		ConfigService,
 		ObjectRepository,

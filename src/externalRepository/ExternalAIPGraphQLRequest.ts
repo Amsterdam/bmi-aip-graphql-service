@@ -4,4 +4,5 @@ export interface ExternalAIPGraphQLRequest {
 	createLuminaire?: any;
 	createJunctionBox?: any;
 	createSupportSystem?: any;
+	undoOVSImport?: any;
 }

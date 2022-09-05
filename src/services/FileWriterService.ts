@@ -538,7 +538,6 @@ export class FileWriterService {
 			let tensionWireCounter = 0;
 			let primeTensionWireKey;
 			for (const key in acc[installationKey].supportSystems) {
-				console.log(key);
 				const supportSystem = acc[installationKey].supportSystems[key];
 
 				if (tensionWireCounter >= 1 && supportSystem.type === SupportSystemType.TensionWire) {

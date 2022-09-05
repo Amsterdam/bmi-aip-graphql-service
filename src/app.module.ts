@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule, registerEnumType } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -17,12 +17,11 @@ import { KeycloakConfigService } from './authentication/keycloak-config.service'
 import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
+import { FileModule } from './modules/FileModule';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
-import { SupportSystemType, SupportSystemTypeDetailed } from './schema/span-installation/types';
+import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
-
-registerEnumType(SupportSystemType, { name: 'SupportSystemType' });
-registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' });
+import { SurveyModule } from './schema/survey/survey.module';
 
 @Module({
 	imports: [
@@ -39,7 +38,10 @@ registerEnumType(SupportSystemTypeDetailed, { name: 'SupportSystemTypeDetailed' 
 		AuthorizationModule,
 		DecompositionModule,
 		SpanInstallationModule,
+		ObjectModule,
 		BatchModule,
+		FileModule,
+		SurveyModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,

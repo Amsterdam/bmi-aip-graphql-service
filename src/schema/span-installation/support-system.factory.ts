@@ -31,12 +31,12 @@ export class SupportSystemFactory {
 		supportSystem.location = location;
 		supportSystem.locationIndication = locationIndication;
 		supportSystem.a11yDetails = a11yDetails;
-		supportSystem.installationHeight = installationHeight;
+		supportSystem.installationHeight = Number(installationHeight);
 		supportSystem.remarks = remarks;
 		supportSystem.constructionYear = constructionYear;
 		supportSystem.houseNumber = houseNumber;
 		supportSystem.type = SupportSystemType[type];
-		supportSystem.typeDetailed = SupportSystemTypeDetailed[typeDetailed];
+		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
 		supportSystem.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		supportSystem.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

@@ -52,11 +52,27 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('getLuminaires()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainLuminaire,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
+
 		const luminaires = await repo.getLuminaires('__SUPPORTSYSTEM_ID__');
 		expect(prismaServiceMock.spanLuminaires.findMany).toHaveBeenCalledWith({
 			where: { supportSystemId: '__SUPPORTSYSTEM_ID__' },
 		});
-		expect(luminaires).toEqual([domainLuminaire]);
+		expect(luminaires).toEqual([expected]);
 	});
 
 	test('updateLuminaire()', async () => {

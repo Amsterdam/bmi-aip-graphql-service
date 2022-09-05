@@ -58,11 +58,18 @@ export class LuminaireRepository implements ILuminaireRepository {
 	}
 
 	async getLuminaires(supportSystemId: string): Promise<Luminaire[]> {
-		return this.prisma.spanLuminaires.findMany({
+		const luminaires = (await this.prisma.spanLuminaires.findMany({
 			where: {
 				supportSystemId,
 			},
-		});
+		})) as Luminaire[];
+
+		return Promise.all(
+			luminaires.map(async (luminaire) => {
+				luminaire.geography = await this.getGeographyAsGeoJSON(luminaire.id);
+				return luminaire;
+			}),
+		);
 	}
 
 	async updateLuminaire({

@@ -109,9 +109,17 @@ export class FileWriterService {
 		const surveyId = await this.createSurvey(objectId);
 		if (!surveyId) return;
 
+		const supportSystemTracker = {
+			[SupportSystemType.Facade]: 0,
+			[SupportSystemType.Mast]: 0,
+			[SupportSystemType.Node]: 0,
+			[SupportSystemType.TensionWire]: 0,
+		};
+
 		await Promise.all(
-			supportSystems.map(async (s, idx) => {
-				await this.createSupportSystem(objectId, surveyId, s, idx + 1);
+			supportSystems.map(async (s) => {
+				const count = (supportSystemTracker[s.type] += 1);
+				await this.createSupportSystem(objectId, surveyId, s, count);
 			}),
 		);
 

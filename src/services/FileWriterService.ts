@@ -499,6 +499,22 @@ export class FileWriterService {
 
 				acc[installationKey].types = [...acc[installationKey].types, ...types];
 
+				const newTypeList = [];
+				let firstTensionWire = true;
+
+				for (const type of acc[installationKey].types) {
+					if (type === SupportSystemType.TensionWire) {
+						if (firstTensionWire) {
+							newTypeList.push(type);
+							firstTensionWire = false;
+						}
+					} else {
+						newTypeList.push(type);
+					}
+				}
+
+				acc[installationKey].types = newTypeList;
+
 				types.forEach((type) => {
 					FileWriterService.AddSupportSystemToInstallation(
 						acc[installationKey],
@@ -518,6 +534,25 @@ export class FileWriterService {
 						);
 					});
 			});
+
+			let tensionWireCounter = 0;
+			let primeTensionWireKey;
+			for (const key in acc[installationKey].supportSystems) {
+				console.log(key);
+				const supportSystem = acc[installationKey].supportSystems[key];
+
+				if (tensionWireCounter >= 1 && supportSystem.type === SupportSystemType.TensionWire) {
+					for (const luminaire of supportSystem.luminaires) {
+						acc[installationKey].supportSystems[primeTensionWireKey].luminaires.push(luminaire);
+					}
+					acc[installationKey].supportSystems.splice(parseInt(key), 1);
+				}
+
+				if (tensionWireCounter === 0 && supportSystem.type === SupportSystemType.TensionWire) {
+					primeTensionWireKey = key;
+					tensionWireCounter++;
+				}
+			}
 
 			acc[installationKey].passportSplits = !!uniqueSituations.find((situation) =>
 				situation.toUpperCase().endsWith('SPIN'),

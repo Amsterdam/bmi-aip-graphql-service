@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
+import PQueue from 'p-queue';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -92,5 +93,77 @@ export class ObjectRepository implements IObjectRepository {
 		objectModel.attributes = JSON.parse(JSON.stringify(object.attributes));
 
 		return objectModel;
+	}
+
+	async undoOVSImport(): Promise<string> {
+		try {
+			await this.prisma.$queryRaw`TRUNCATE TABLE "spanLuminaires" CASCADE;`;
+			await this.prisma.$queryRaw`TRUNCATE TABLE "spanSupportSystems" CASCADE;`;
+			await this.prisma.$queryRaw`TRUNCATE TABLE "spanJunctionBoxes" CASCADE;`;
+
+			// Surveys
+			const ovsSurveys = await this.prisma.surveys.findMany({
+				select: {
+					id: true,
+				},
+				where: {
+					description: 'Contract 1',
+					inspectionStandardType: 'spanInstallation',
+				},
+			});
+			const queue = new PQueue({ concurrency: 10 });
+			ovsSurveys.forEach(({ id }) => {
+				queue.add(() =>
+					this.prisma.auditEvents.deleteMany({
+						where: {
+							surveyId: id,
+						},
+					}),
+				);
+			});
+			await queue.onIdle();
+
+			await this.prisma.surveys.deleteMany({
+				where: {
+					description: 'Contract 1',
+					inspectionStandardType: 'spanInstallation',
+				},
+			});
+			// await this.prisma
+			// 	.$queryRaw`DELETE FROM "surveys" WHERE "description" = 'Contract 1' AND "inspectionStandardType" = 'spanInstallation'`;
+
+			// Objects
+			const ovsObjects = await this.prisma.objects.findMany({
+				select: {
+					id: true,
+				},
+				where: {
+					objectTypeId: 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0',
+				},
+			});
+			ovsObjects.forEach(({ id }) => {
+				queue.add(() =>
+					this.prisma.auditEvents.deleteMany({
+						where: {
+							objectId: id,
+						},
+					}),
+				);
+			});
+			await queue.onIdle();
+
+			await this.prisma.objects.deleteMany({
+				where: {
+					objectTypeId: 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0',
+				},
+			});
+			// await this.prisma
+			// 	.$queryRaw`DELETE FROM "objects" WHERE "code" LIKE 'OVS%' AND "objectTypeId" = 'd728c6da-6320-4114-ae1d-7cbcc4b8c2a0'`;
+			console.log('Undid import');
+			return 'SUCCESS';
+		} catch (err) {
+			console.error('Failed to undo import', err);
+			return err.message;
+		}
 	}
 }

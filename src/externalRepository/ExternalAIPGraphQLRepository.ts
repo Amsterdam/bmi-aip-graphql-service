@@ -97,6 +97,18 @@ export class ExternalAIPGraphQLRepository {
 		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation);
 	}
 
+	public async removeDuplicateInstallationGroup(installationGroupId: number): Promise<boolean> {
+		const mutation = gql`
+			mutation removeDuplicateInstallationGroup($installationGroupId: Float!) {
+				removeDuplicateInstallationGroup(installationGroupId: $installationGroupId)
+			}
+		`;
+
+		const result = await this.graphqlClient.request(mutation, { installationGroupId: installationGroupId });
+
+		return result?.removeDuplicateInstallationGroup;
+	}
+
 	private async executeGraphQLRequest(mutation, input): Promise<any> {
 		try {
 			const result = await this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, {

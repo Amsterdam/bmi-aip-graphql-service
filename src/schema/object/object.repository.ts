@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 
 import { PrismaService } from '../../prisma.service';
@@ -11,7 +11,7 @@ import { CreateObjectInput } from './dto/create-object.input';
 
 @Injectable()
 export class ObjectRepository implements IObjectRepository {
-	public constructor(private readonly prisma: PrismaService) {}
+	public constructor(private readonly prisma: PrismaService, private logger: Logger) {}
 
 	async createObject(input: CreateObjectInput): Promise<ObjectModel> {
 		const data: Prisma.objectsCreateInput = {
@@ -93,6 +93,91 @@ export class ObjectRepository implements IObjectRepository {
 		objectModel.attributes = JSON.parse(JSON.stringify(object.attributes));
 
 		return objectModel;
+	}
+
+	public async removeDuplicateInstallationGroup(installationGroupId: number): Promise<boolean> {
+		const name = `OVS${installationGroupId}`;
+		const objects = await this.prisma.objects.findMany({ where: { name: name } });
+
+		if (objects.length < 2) {
+			this.logger.log(`There are no duplicates for installation group with ID ${installationGroupId}`);
+			return false;
+		}
+
+		for (const key in objects) {
+			const object = objects[key];
+			if (parseInt(key) > 0) {
+				const surveyIds = [];
+				const junctionBoxIds = [];
+				const supportSystemIds = [];
+				const luminaireIds = [];
+
+				const surveys = await this.prisma.surveys.findMany({ where: { objectId: object.id } });
+				surveys.map((survey) => {
+					surveyIds.push(survey.id);
+				});
+
+				const junctionBoxes = await this.prisma.spanJunctionBoxes.findMany({ where: { objectId: object.id } });
+				junctionBoxes.map((junctionBox) => {
+					junctionBoxIds.push(junctionBox.id);
+				});
+
+				const supportSystems = await this.prisma.spanSupportSystems.findMany({
+					where: { objectId: object.id },
+				});
+				supportSystems.map((supportSystem) => {
+					supportSystemIds.push(supportSystem.id);
+				});
+
+				if (supportSystems.length > 0) {
+					const luminaires = await this.prisma.spanLuminaires.findMany({
+						where: { supportSystemId: { in: supportSystemIds } },
+					});
+					luminaires.map((luminaire) => {
+						luminaireIds.push(luminaire.id);
+					});
+				}
+
+				this.logger.log(`Object with ID ${object.id} is a duplicate. Will attempt to remove dependencies`);
+
+				try {
+					if (luminaireIds.length > 0) {
+						const deletedLuminaires = await this.prisma.spanLuminaires.deleteMany({
+							where: { id: { in: luminaireIds } },
+						});
+						this.logger.log(`Deleted luminaires for duplicate object:  ${deletedLuminaires.count}`);
+					}
+
+					if (junctionBoxIds.length > 0) {
+						const deletedJunctionBoxes = await this.prisma.spanJunctionBoxes.deleteMany({
+							where: { id: { in: junctionBoxIds } },
+						});
+						this.logger.log(`Deleted junction boxes for duplicate object: ${deletedJunctionBoxes.count}`);
+					}
+
+					if (supportSystemIds.length > 0) {
+						const deletedSupportSystems = await this.prisma.spanSupportSystems.deleteMany({
+							where: { id: { in: supportSystemIds } },
+						});
+						this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
+					}
+
+					if (surveyIds.length > 0) {
+						const deletedSurveys = await this.prisma.surveys.deleteMany({
+							where: { id: { in: surveyIds } },
+						});
+						this.logger.log(`Deleted surveys for duplicate object: ${deletedSurveys.count}`);
+					}
+
+					await this.prisma.objects.delete({ where: { id: object.id } });
+					this.logger.log(`Deleted duplicate object with ID ${object.id}`);
+				} catch (e) {
+					this.logger.log(`Failed to remove dependencies, error: ${e.message}`);
+				}
+			}
+		}
+
+		return true;
 	}
 
 	async undoOVSImport(): Promise<string> {

@@ -5,4 +5,5 @@ export interface ExternalAIPGraphQLRequest {
 	createJunctionBox?: any;
 	createSupportSystem?: any;
 	undoOVSImport?: any;
+	removeDuplicateInstallationGroup?: any;
 }

@@ -111,6 +111,7 @@ export class ObjectRepository implements IObjectRepository {
 				const junctionBoxIds = [];
 				const supportSystemIds = [];
 				const luminaireIds = [];
+				const auditEventIds = [];
 
 				const surveys = await this.prisma.surveys.findMany({ where: { objectId: object.id } });
 				surveys.map((survey) => {
@@ -127,6 +128,13 @@ export class ObjectRepository implements IObjectRepository {
 				});
 				supportSystems.map((supportSystem) => {
 					supportSystemIds.push(supportSystem.id);
+				});
+
+				const auditEvents = await this.prisma.auditEvents.findMany({
+					where: { objectId: object.id },
+				});
+				auditEvents.map((auditEvent) => {
+					auditEventIds.push(auditEvent.id);
 				});
 
 				if (supportSystems.length > 0) {
@@ -160,6 +168,13 @@ export class ObjectRepository implements IObjectRepository {
 							where: { id: { in: supportSystemIds } },
 						});
 						this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
+					}
+
+					if (auditEventIds.length > 0) {
+						const deletedAuditEvents = await this.prisma.auditEvents.deleteMany({
+							where: { id: { in: auditEventIds } },
+						});
+						this.logger.log(`Deleted audit events for duplicate object: ${deletedAuditEvents.count}`);
 					}
 
 					if (surveyIds.length > 0) {

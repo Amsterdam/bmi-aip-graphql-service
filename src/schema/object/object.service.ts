@@ -18,4 +18,8 @@ export class ObjectService {
 			ObjectFactory.CreateObject(object),
 		);
 	}
+
+	async removeDuplicateInstallationGroup(installationGroupId: number): Promise<boolean> {
+		return this.objectRepo.removeDuplicateInstallationGroup(installationGroupId);
+	}
 }

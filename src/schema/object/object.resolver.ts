@@ -8,6 +8,7 @@ import { CreateObjectInput } from './dto/create-object.input';
 import { CreateObjectCommand } from './commands/create-object.command';
 import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
 import { UndoOVSImportModel } from './models/undoOVSImport.model';
+import { RemoveDuplicateInstallationGroupCommand } from './commands/remove-duplicate-installation-group.command';
 
 @Resolver((of) => ObjectModel)
 @Resource(ObjectModel.name)
@@ -27,5 +28,15 @@ export class ObjectResolver {
 		const response = new UndoOVSImportModel();
 		response.success = result;
 		return response;
+	}
+
+	@Mutation(() => Boolean)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async removeDuplicateInstallationGroup(
+		@Args('installationGroupId') installationGroupId: number,
+	): Promise<boolean> {
+		return this.commandBus.execute<RemoveDuplicateInstallationGroupCommand>(
+			new RemoveDuplicateInstallationGroupCommand(installationGroupId),
+		);
 	}
 }

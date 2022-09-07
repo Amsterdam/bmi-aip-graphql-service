@@ -1,16 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConsoleService } from 'nestjs-console';
 
 import { SupportSystemType } from '../schema/span-installation/types';
 
 import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRowObject';
 
+@Injectable()
 export class NormalizeOVSImportData {
 	private static DEBUG = true;
 
-	public constructor(private readonly logger: Logger) {}
+	public constructor(private readonly consoleService: ConsoleService, private readonly logger: Logger) {}
 
 	static AddSupportSystemToInstallation(
 		installation: NormalizedInstallationFromExcel,
@@ -69,50 +71,7 @@ export class NormalizeOVSImportData {
 		});
 	}
 
-	private getSupportSystemTypes(situation): SupportSystemType[] {
-		switch (situation?.toUpperCase()) {
-			case 'MVMA':
-				// MVMA = TensionWire /.Mast /.Mast
-				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
-			case 'MVMAASPIN':
-				// MVMAAspin = TensionWire /.Mast /.Mast /.Node
-				return [
-					SupportSystemType.TensionWire,
-					SupportSystemType.Mast,
-					SupportSystemType.Mast,
-					SupportSystemType.Node,
-				];
-			case 'GMVAASPIN':
-				// GMVAASPIN = TensionWire /.Facade /.Mast /.Node
-				return [
-					SupportSystemType.TensionWire,
-					SupportSystemType.Facade,
-					SupportSystemType.Mast,
-					SupportSystemType.Node,
-				];
-			case 'MVMAA':
-				// MVMAA = TensionWire /.Mast /.Mast
-				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
-			case 'GMVA':
-				// GMVA = TensionWire /.Facade /.Mast
-				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
-			case 'GMVAA':
-				// GMVAA = TensionWire /.Facade /.Mast
-				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
-			case 'GVGA':
-				// GVGA = TensionWire /.Facade /.Facade
-				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
-			case 'GVGAA':
-				// GVGAA = TensionWire /.Facade /.Facade
-				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
-			case 'ARENAWEB':
-				return [SupportSystemType.TensionWire];
-			default:
-				return [];
-		}
-	}
-
-	async normalizeSpanInstallationData(
+	public async normalizeSpanInstallationData(
 		excelRowObjectList: ExcelRowObject[],
 	): Promise<Record<string, NormalizedInstallationFromExcel>> {
 		const groupedData = excelRowObjectList.reduce((acc, row) => {
@@ -137,7 +96,7 @@ export class NormalizeOVSImportData {
 				totalJunctionBoxes: installationGroupRows[0]['aantal voedingen'],
 				totalLuminaires: installationGroupRows[0]['aantal armaturen'],
 				types: [],
-				tramTracks: installationGroupRows[0]['Boven tram'] === 'ja',
+				tramTracks: installationGroupRows[0]['Boven tram'] === 'Ja',
 			};
 
 			// Add support systems aka "Draagsystemen"
@@ -294,5 +253,48 @@ export class NormalizeOVSImportData {
 		}
 
 		return normalizedData;
+	}
+
+	private getSupportSystemTypes(situation): SupportSystemType[] {
+		switch (situation?.toUpperCase()) {
+			case 'MVMA':
+				// MVMA = TensionWire /.Mast /.Mast
+				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
+			case 'MVMAASPIN':
+				// MVMAAspin = TensionWire /.Mast /.Mast /.Node
+				return [
+					SupportSystemType.TensionWire,
+					SupportSystemType.Mast,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
+				];
+			case 'GMVAASPIN':
+				// GMVAASPIN = TensionWire /.Facade /.Mast /.Node
+				return [
+					SupportSystemType.TensionWire,
+					SupportSystemType.Facade,
+					SupportSystemType.Mast,
+					SupportSystemType.Node,
+				];
+			case 'MVMAA':
+				// MVMAA = TensionWire /.Mast /.Mast
+				return [SupportSystemType.TensionWire, SupportSystemType.Mast, SupportSystemType.Mast];
+			case 'GMVA':
+				// GMVA = TensionWire /.Facade /.Mast
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Node];
+			case 'GMVAA':
+				// GMVAA = TensionWire /.Facade /.Mast
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Mast];
+			case 'GVGA':
+				// GVGA = TensionWire /.Facade /.Facade
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
+			case 'GVGAA':
+				// GVGAA = TensionWire /.Facade /.Facade
+				return [SupportSystemType.TensionWire, SupportSystemType.Facade, SupportSystemType.Facade];
+			case 'ARENAWEB':
+				return [SupportSystemType.TensionWire];
+			default:
+				return [];
+		}
 	}
 }

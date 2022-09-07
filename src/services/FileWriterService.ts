@@ -28,7 +28,6 @@ import {
 } from './types/excelRowObject';
 import { NormalizeOVSImportData } from './NormalizeOVSImportData';
 
-
 @Injectable()
 export class FileWriterService {
 	private static CLI_COMMAND = 'file:read';
@@ -358,9 +357,9 @@ export class FileWriterService {
 
 	private async migrateSpanInstallation() {
 		const excelRowObjectList: ExcelRowObject[] = await this.getFile();
-		const { normalizedData } = await this.normalizeOVSImportData.normalizeSpanInstallationData(excelRowObjectList);
+		const normalizedData = await this.normalizeOVSImportData.normalizeSpanInstallationData(excelRowObjectList);
 
-		// this.logger.verbose(`Starting file migration...`);
+		this.logger.verbose(`Starting file migration...`);
 
 		this.progressBar.start(
 			Object.keys(normalizedData).reduce((acc, installation) => {

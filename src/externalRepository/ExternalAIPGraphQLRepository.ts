@@ -14,6 +14,7 @@ import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-j
 import { SupportSystem } from '../schema/span-installation/models/support-system.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
+import { CorrectCoordinatesInput } from '../schema/object/dto/correct-coordinates.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
 
@@ -107,6 +108,17 @@ export class ExternalAIPGraphQLRepository {
 		const result = await this.graphqlClient.request(mutation, { installationGroupId: installationGroupId });
 
 		return result?.removeDuplicateInstallationGroup;
+	}
+
+	public async correctCoordinates(input: CorrectCoordinatesInput): Promise<any> {
+		const mutation = gql`
+			mutation correctCoordinates($input: CorrectCoordinatesInput!) {
+				correctCoordinates(correctCoordinates: $input) {
+					success
+				}
+			}
+		`;
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, { input });
 	}
 
 	private async executeGraphQLRequest(mutation, input): Promise<any> {

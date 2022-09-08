@@ -6,4 +6,5 @@ export interface ExternalAIPGraphQLRequest {
 	createSupportSystem?: any;
 	undoOVSImport?: any;
 	removeDuplicateInstallationGroup?: any;
+	correctCoordinates?: any;
 }

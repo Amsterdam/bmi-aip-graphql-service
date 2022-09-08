@@ -265,8 +265,7 @@ export class ObjectRepository implements IObjectRepository {
 			const survey = await this.prisma.surveys.findFirst({ where: { objectId: object.id } });
 
 			await Promise.all(
-				source.supportSystems.map(async (s, idx) => {
-					const { X, Y, type, luminaires } = s;
+				source.supportSystems.map(async ({ X, Y, type, luminaires }, idx) => {
 					const { id: supportSystemId } = await this.prisma.spanSupportSystems.findFirst({
 						where: {
 							surveyId: survey.id,

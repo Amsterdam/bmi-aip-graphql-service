@@ -133,35 +133,45 @@ export class ObjectRepository implements IObjectRepository {
 					supportSystemIds.push(supportSystem.id);
 				});
 
-				const luminaires = await this.prisma.spanLuminaires.findMany({
-					where: { supportSystemId: { in: supportSystemIds } },
-				});
-				luminaires.map((luminaire) => {
-					luminaireIds.push(luminaire.id);
-				});
+				if (supportSystems.length > 0) {
+					const luminaires = await this.prisma.spanLuminaires.findMany({
+						where: { supportSystemId: { in: supportSystemIds } },
+					});
+					luminaires.map((luminaire) => {
+						luminaireIds.push(luminaire.id);
+					});
+				}
 
 				this.logger.log(`Object with ID ${object.id} is a duplicate. Will attempt to remove dependencies`);
 
 				try {
-					const deletedLuminaires = await this.prisma.spanLuminaires.deleteMany({
-						where: { id: { in: luminaireIds } },
-					});
-					this.logger.log(`Deleted luminaires for duplicate object:  ${deletedLuminaires.count}`);
+					if (luminaireIds.length > 0) {
+						const deletedLuminaires = await this.prisma.spanLuminaires.deleteMany({
+							where: { id: { in: luminaireIds } },
+						});
+						this.logger.log(`Deleted luminaires for duplicate object:  ${deletedLuminaires.count}`);
+					}
 
-					const deletedJunctionBoxes = await this.prisma.spanJunctionBoxes.deleteMany({
-						where: { id: { in: junctionBoxIds } },
-					});
-					this.logger.log(`Deleted junction boxes for duplicate object: ${deletedJunctionBoxes.count}`);
+					if (junctionBoxIds.length > 0) {
+						const deletedJunctionBoxes = await this.prisma.spanJunctionBoxes.deleteMany({
+							where: { id: { in: junctionBoxIds } },
+						});
+						this.logger.log(`Deleted junction boxes for duplicate object: ${deletedJunctionBoxes.count}`);
+					}
 
-					const deletedSupportSystems = await this.prisma.spanSupportSystems.deleteMany({
-						where: { id: { in: supportSystemIds } },
-					});
-					this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
+					if (supportSystemIds.length > 0) {
+						const deletedSupportSystems = await this.prisma.spanSupportSystems.deleteMany({
+							where: { id: { in: supportSystemIds } },
+						});
+						this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
+					}
 
-					const deletedSurveys = await this.prisma.surveys.deleteMany({
-						where: { id: { in: surveyIds } },
-					});
-					this.logger.log(`Deleted surveys for duplicate object: ${deletedSurveys.count}`);
+					if (surveyIds.length > 0) {
+						const deletedSurveys = await this.prisma.surveys.deleteMany({
+							where: { id: { in: surveyIds } },
+						});
+						this.logger.log(`Deleted surveys for duplicate object: ${deletedSurveys.count}`);
+					}
 
 					await this.prisma.objects.delete({ where: { id: object.id } });
 					this.logger.log(`Deleted duplicate object with ID ${object.id}`);

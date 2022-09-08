@@ -25,8 +25,8 @@ export class DuplicateInstallationGroupRemovalService {
 	}
 
 	private async removeDuplicateInstallationGroups() {
-		const groupIdStart = 2155;
-		const groupIdEnd = 2500;
+		const groupIdStart = 2011;
+		const groupIdEnd = 2210;
 		const total = groupIdEnd - groupIdStart + 1;
 		let removedDuplicates = 0;
 		this.logger.verbose(

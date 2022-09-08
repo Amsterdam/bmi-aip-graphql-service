@@ -283,11 +283,11 @@ export class ObjectRepository implements IObjectRepository {
 					`;
 
 					await Promise.all(
-						luminaires.map(async (l) => {
+						luminaires.map(async (l, _idx) => {
 							const { id: luminaireId } = await this.prisma.spanLuminaires.findFirst({
 								where: {
 									supportSystemId,
-									name: `Armatuur ${idx + 1}`,
+									name: `Armatuur ${_idx + 1}`,
 								},
 							});
 							const geo: Point = {

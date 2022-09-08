@@ -25,7 +25,7 @@ export class ObjectResolver {
 
 	@Mutation(() => ObjectModel)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	public async updateObject(@Args('updateObject') input: UpdateObjectInput): Promise<ObjectModel> {
+	public async updatePassportByObjectCode(@Args('updateObject') input: UpdateObjectInput): Promise<ObjectModel> {
 		return this.commandBus.execute<UpdateObjectCommand>(new UpdateObjectCommand(input));
 	}
 

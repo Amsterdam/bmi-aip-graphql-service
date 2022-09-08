@@ -7,10 +7,13 @@ import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
 import { CreateObjectCommand } from './commands/create-object.command';
 import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
-import { UndoOVSImportModel } from './models/undoOVSImport.model';
+import { UndoOVSImportModel } from './models/undo-ovs-import.model';
 import { RemoveDuplicateInstallationGroupCommand } from './commands/remove-duplicate-installation-group.command';
 import { UpdateObjectCommand } from './commands/update-object.command';
 import { UpdateObjectInput } from './dto/update-object.input';
+import { CorrectCoordinatesModel } from './models/correct-coordinates.model';
+import { CorrectCoordinatesCommand } from './commands/correct-coordinates.command';
+import { CorrectCoordinatesInput } from './dto/correct-coordinates.input';
 
 @Resolver((of) => ObjectModel)
 @Resource(ObjectModel.name)
@@ -29,6 +32,7 @@ export class ObjectResolver {
 		return this.commandBus.execute<UpdateObjectCommand>(new UpdateObjectCommand(input));
 	}
 
+	// TMP
 	@Mutation(() => UndoOVSImportModel)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async undoOVSImport(): Promise<UndoOVSImportModel> {
@@ -46,5 +50,17 @@ export class ObjectResolver {
 		return this.commandBus.execute<RemoveDuplicateInstallationGroupCommand>(
 			new RemoveDuplicateInstallationGroupCommand(installationGroupId),
 		);
+	}
+
+	// TMP
+	@Mutation(() => CorrectCoordinatesModel)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async correctCoordinates(
+		@Args('correctCoordinates') input: CorrectCoordinatesInput,
+	): Promise<CorrectCoordinatesModel> {
+		const result = await this.commandBus.execute<CorrectCoordinatesCommand>(new CorrectCoordinatesCommand(input));
+		const response = new CorrectCoordinatesModel();
+		response.success = result;
+		return response;
 	}
 }

@@ -15,6 +15,8 @@ import { UndoOVSImportHandler } from './commands/undo-ovs-import.handler';
 import { RemoveDuplicateInstallationGroupHandler } from './commands/remove-duplicate-installation-group.handler';
 import { UpdateObjectHandler } from './commands/update-object.handler';
 import { UpdateObjectCommand } from './commands/update-object.command';
+import { CorrectCoordinatesCommand } from './commands/correct-coordinates.command';
+import { CorrectCoordinatesHandler } from './commands/correct-coordinates.handler';
 
 @Module({
 	providers: [
@@ -28,6 +30,8 @@ import { UpdateObjectCommand } from './commands/update-object.command';
 		UpdateObjectHandler,
 		UndoOVSImportCommand,
 		UndoOVSImportHandler,
+		CorrectCoordinatesCommand,
+		CorrectCoordinatesHandler,
 		RemoveDuplicateInstallationGroupHandler,
 		Logger,
 	],

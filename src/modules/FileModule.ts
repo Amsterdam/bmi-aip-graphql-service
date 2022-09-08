@@ -13,8 +13,9 @@ import { JunctionBoxRepository } from '../schema/span-installation/junction-box.
 import { SupportSystemRepository } from '../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
-import { UndoOVSImportService } from '../services/UndoOVSImportService';
+import { UndoOVSImportService } from '../services/undo-ovs-import.service';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
+import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 
@@ -41,6 +42,7 @@ import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 		FileWriterService,
 		UpdateOVSPassport,
 		UndoOVSImportService,
+		CorrectCoordinatesService,
 		Logger,
 		ConfigService,
 		ObjectRepository,

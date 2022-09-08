@@ -8,6 +8,7 @@ import { newId } from '../../utils';
 import { DbObject, IObjectRepository } from './types/object.repository.interface';
 import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
+import { UpdateObjectInput } from './dto/update-object.input';
 
 @Injectable()
 export class ObjectRepository implements IObjectRepository {
@@ -52,6 +53,22 @@ export class ObjectRepository implements IObjectRepository {
 				objectTypeId,
 			},
 		});
+	}
+
+	async updatePassportByObjectCode(input: UpdateObjectInput): Promise<string> {
+		try {
+			const code = 'OVS' + ('000' + input.code).slice(-4);
+
+			await this.prisma.$executeRaw`
+				UPDATE "objects"
+				SET attributes = ${input.attributes}
+				WHERE code = ${code}
+			`;
+		} catch (err) {
+			return err.message;
+		}
+
+		return 'SUCCESS';
 	}
 
 	private transformToDto(object: DbObject): ObjectModel {

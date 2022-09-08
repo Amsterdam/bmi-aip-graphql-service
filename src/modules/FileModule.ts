@@ -16,6 +16,7 @@ import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPG
 import { UndoOVSImportService } from '../services/UndoOVSImportService';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
+import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 
 @Module({
 	imports: [
@@ -38,6 +39,7 @@ import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateI
 	providers: [
 		DuplicateInstallationGroupRemovalService,
 		FileWriterService,
+		UpdateOVSPassport,
 		UndoOVSImportService,
 		Logger,
 		ConfigService,

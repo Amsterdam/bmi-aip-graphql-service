@@ -14,6 +14,7 @@ import { UpdateObjectInput } from './dto/update-object.input';
 import { CorrectCoordinatesModel } from './models/correct-coordinates.model';
 import { CorrectCoordinatesCommand } from './commands/correct-coordinates.command';
 import { CorrectCoordinatesInput } from './dto/correct-coordinates.input';
+import { UpdateObjectModel } from './models/update-object.model';
 
 @Resolver((of) => ObjectModel)
 @Resource(ObjectModel.name)
@@ -26,10 +27,15 @@ export class ObjectResolver {
 		return this.commandBus.execute<CreateObjectCommand>(new CreateObjectCommand(input));
 	}
 
-	@Mutation(() => ObjectModel)
+	@Mutation(() => UpdateObjectModel)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	public async updatePassportByObjectCode(@Args('updateObject') input: UpdateObjectInput): Promise<ObjectModel> {
-		return this.commandBus.execute<UpdateObjectCommand>(new UpdateObjectCommand(input));
+	public async updatePassportByObjectCode(
+		@Args('updateObject') input: UpdateObjectInput,
+	): Promise<UpdateObjectModel> {
+		const success = await this.commandBus.execute<UpdateObjectCommand>(new UpdateObjectCommand(input));
+		const response = new UpdateObjectModel();
+		response.success = success;
+		return response;
 	}
 
 	// TMP

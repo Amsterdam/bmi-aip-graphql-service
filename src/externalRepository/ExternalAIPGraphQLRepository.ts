@@ -43,7 +43,7 @@ export class ExternalAIPGraphQLRepository {
 		const mutation = gql`
 			mutation updatePassportByObjectCode($input: UpdateObjectInput!) {
 				updatePassportByObjectCode(updateObject: $input) {
-					id
+					success
 				}
 			}
 		`;

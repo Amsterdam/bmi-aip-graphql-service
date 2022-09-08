@@ -89,13 +89,13 @@ export class UpdateOVSPassport {
 
 		const assetObject: Partial<UpdateObjectInput> = {
 			code: object.passport.passportIdentification,
-			attributes: JSON.parse(JSON.stringify(object.passport)),
+			attributes: object.passport,
 		};
 
 		try {
-			const id = await this.externalAIPGraphQLRepository.updatePassportByObjectCode(assetObject);
+			await this.externalAIPGraphQLRepository.updatePassportByObjectCode(assetObject);
 
-			this.report.success.push(`Update Passport Object ${id}`);
+			this.report.success.push(object.passport.passportIdentification);
 		} catch (err) {
 			this.logger.debug('Failed to update Object', assetObject);
 			this.report.failures.push({

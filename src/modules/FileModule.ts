@@ -14,6 +14,7 @@ import { SupportSystemRepository } from '../schema/span-installation/support-sys
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { UndoOVSImportService } from '../services/UndoOVSImportService';
+import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 
 @Module({
@@ -38,6 +39,7 @@ import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateI
 		DuplicateInstallationGroupRemovalService,
 		FileWriterService,
 		UndoOVSImportService,
+		CorrectCoordinatesService,
 		Logger,
 		ConfigService,
 		ObjectRepository,

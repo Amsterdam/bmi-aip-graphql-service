@@ -118,6 +118,6 @@ export class CorrectCoordinatesService {
 			},
 		);
 
-		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} installations`);
+		this.logger.log(`Completed correcting coordinates for ${Object.keys(normalizedData).length} installations`);
 	}
 }

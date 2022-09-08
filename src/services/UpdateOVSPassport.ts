@@ -74,7 +74,7 @@ export class UpdateOVSPassport {
 		const maxRow = 9628;
 
 		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
-		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
+		const workSheet = workbook.Sheets[workbook.SheetNames[1]];
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;
@@ -122,7 +122,7 @@ export class UpdateOVSPassport {
 		this.report.file = this.configService.get<string>('READ_FILE');
 
 		fs.writeFileSync(
-			path.resolve(process.cwd(), `report_${new Date().toISOString()}.json`),
+			path.resolve(process.cwd(), `pu_report_${new Date().toISOString()}.json`),
 			JSON.stringify(this.report),
 			{
 				encoding: 'utf-8',

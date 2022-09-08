@@ -9,6 +9,8 @@ import { CreateObjectCommand } from './commands/create-object.command';
 import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
 import { UndoOVSImportModel } from './models/undoOVSImport.model';
 import { RemoveDuplicateInstallationGroupCommand } from './commands/remove-duplicate-installation-group.command';
+import { UpdateObjectCommand } from './commands/update-object.command';
+import { UpdateObjectInput } from './dto/update-object.input';
 
 @Resolver((of) => ObjectModel)
 @Resource(ObjectModel.name)
@@ -19,6 +21,12 @@ export class ObjectResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createObject(@Args('createObject') input: CreateObjectInput): Promise<ObjectModel> {
 		return this.commandBus.execute<CreateObjectCommand>(new CreateObjectCommand(input));
+	}
+
+	@Mutation(() => ObjectModel)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async updateObject(@Args('updateObject') input: UpdateObjectInput): Promise<ObjectModel> {
+		return this.commandBus.execute<UpdateObjectCommand>(new UpdateObjectCommand(input));
 	}
 
 	@Mutation(() => UndoOVSImportModel)

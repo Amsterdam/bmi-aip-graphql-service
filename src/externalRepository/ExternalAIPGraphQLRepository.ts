@@ -14,6 +14,7 @@ import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-j
 import { SupportSystem } from '../schema/span-installation/models/support-system.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
+import { UpdateObjectInput } from '../schema/object/dto/update-object.input';
 import { CorrectCoordinatesInput } from '../schema/object/dto/correct-coordinates.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
@@ -31,6 +32,18 @@ export class ExternalAIPGraphQLRepository {
 			mutation createObject($input: CreateObjectInput!) {
 				createObject(createObject: $input) {
 					id
+				}
+			}
+		`;
+
+		return this.executeGraphQLRequest(mutation, input);
+	}
+
+	public async updatePassportByObjectCode(input: Partial<UpdateObjectInput>): Promise<string> {
+		const mutation = gql`
+			mutation updatePassportByObjectCode($input: UpdateObjectInput!) {
+				updatePassportByObjectCode(updateObject: $input) {
+					success
 				}
 			}
 		`;

@@ -1,5 +1,6 @@
 export interface ExternalAIPGraphQLRequest {
 	createObject?: any;
+	updatePassportByObjectCode?: any;
 	createSurvey?: any;
 	createLuminaire?: any;
 	createJunctionBox?: any;

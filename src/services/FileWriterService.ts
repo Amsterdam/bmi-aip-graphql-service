@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
@@ -345,7 +345,7 @@ export class FileWriterService {
 		const maxRow = 9628;
 
 		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
-		const workSheet = workbook.Sheets[workbook.SheetNames[1]];
+		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;

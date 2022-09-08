@@ -7,7 +7,7 @@ import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
 import { CreateObjectCommand } from './commands/create-object.command';
 import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
-import { UndoOVSImportModel } from './models/undoOVSImport.model';
+import { UndoOVSImportModel } from './models/undo-ovs-import.model';
 import { RemoveDuplicateInstallationGroupCommand } from './commands/remove-duplicate-installation-group.command';
 import { CorrectCoordinatesModel } from './models/correct-coordinates.model';
 import { CorrectCoordinatesCommand } from './commands/correct-coordinates.command';

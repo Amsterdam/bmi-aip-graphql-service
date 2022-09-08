@@ -17,6 +17,7 @@ import { UndoOVSImportService } from '../services/undo-ovs-import.service';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
 import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
+import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 
 @Module({
 	imports: [
@@ -39,6 +40,7 @@ import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateI
 	providers: [
 		DuplicateInstallationGroupRemovalService,
 		FileWriterService,
+		UpdateOVSPassport,
 		UndoOVSImportService,
 		CorrectCoordinatesService,
 		Logger,

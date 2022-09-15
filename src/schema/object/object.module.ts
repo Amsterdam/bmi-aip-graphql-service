@@ -13,6 +13,10 @@ import { CreateObjectHandler } from './commands/create-object.handler';
 import { UndoOVSImportCommand } from './commands/undo-ovs-import.command';
 import { UndoOVSImportHandler } from './commands/undo-ovs-import.handler';
 import { RemoveDuplicateInstallationGroupHandler } from './commands/remove-duplicate-installation-group.handler';
+import { UpdateObjectHandler } from './commands/update-object.handler';
+import { UpdateObjectCommand } from './commands/update-object.command';
+import { CorrectCoordinatesCommand } from './commands/correct-coordinates.command';
+import { CorrectCoordinatesHandler } from './commands/correct-coordinates.handler';
 
 @Module({
 	providers: [
@@ -22,8 +26,12 @@ import { RemoveDuplicateInstallationGroupHandler } from './commands/remove-dupli
 		PrismaService,
 		CreateObjectCommand,
 		CreateObjectHandler,
+		UpdateObjectCommand,
+		UpdateObjectHandler,
 		UndoOVSImportCommand,
 		UndoOVSImportHandler,
+		CorrectCoordinatesCommand,
+		CorrectCoordinatesHandler,
 		RemoveDuplicateInstallationGroupHandler,
 		Logger,
 	],

@@ -116,7 +116,10 @@ export class ObjectRepository implements IObjectRepository {
 		return objectModel;
 	}
 
-	public async removeDuplicateInstallationGroup(installationGroupId: number): Promise<boolean> {
+	public async removeDuplicateInstallationGroup(
+		installationGroupId: number,
+		targetRemoved?: boolean,
+	): Promise<boolean> {
 		const name = `OVS${installationGroupId}`;
 		const objects = await this.prisma.objects.findMany({ where: { name: name } });
 
@@ -127,93 +130,105 @@ export class ObjectRepository implements IObjectRepository {
 
 		for (const key in objects) {
 			const object = objects[key];
-			if (parseInt(key) > 0) {
-				const surveyIds = [];
-				const junctionBoxIds = [];
-				const supportSystemIds = [];
-				const luminaireIds = [];
-				const auditEventIds = [];
+			this.logger.log(`ID: ${object.id}`);
 
-				const surveys = await this.prisma.surveys.findMany({ where: { objectId: object.id } });
-				surveys.map((survey) => {
-					surveyIds.push(survey.id);
-				});
+			if (targetRemoved && object.status === 'deleted') {
+				await this.removeObjectAndDependencies(object);
+				this.logger.log(`Blerp`);
+				break;
+			}
 
-				const junctionBoxes = await this.prisma.spanJunctionBoxes.findMany({ where: { objectId: object.id } });
-				junctionBoxes.map((junctionBox) => {
-					junctionBoxIds.push(junctionBox.id);
-				});
-
-				const supportSystems = await this.prisma.spanSupportSystems.findMany({
-					where: { objectId: object.id },
-				});
-				supportSystems.map((supportSystem) => {
-					supportSystemIds.push(supportSystem.id);
-				});
-
-				const auditEvents = await this.prisma.auditEvents.findMany({
-					where: { objectId: object.id },
-				});
-				auditEvents.map((auditEvent) => {
-					auditEventIds.push(auditEvent.id);
-				});
-
-				if (supportSystems.length > 0) {
-					const luminaires = await this.prisma.spanLuminaires.findMany({
-						where: { supportSystemId: { in: supportSystemIds } },
-					});
-					luminaires.map((luminaire) => {
-						luminaireIds.push(luminaire.id);
-					});
-				}
-
-				this.logger.log(`Object with ID ${object.id} is a duplicate. Will attempt to remove dependencies`);
-
-				try {
-					if (luminaireIds.length > 0) {
-						const deletedLuminaires = await this.prisma.spanLuminaires.deleteMany({
-							where: { id: { in: luminaireIds } },
-						});
-						this.logger.log(`Deleted luminaires for duplicate object:  ${deletedLuminaires.count}`);
-					}
-
-					if (junctionBoxIds.length > 0) {
-						const deletedJunctionBoxes = await this.prisma.spanJunctionBoxes.deleteMany({
-							where: { id: { in: junctionBoxIds } },
-						});
-						this.logger.log(`Deleted junction boxes for duplicate object: ${deletedJunctionBoxes.count}`);
-					}
-
-					if (supportSystemIds.length > 0) {
-						const deletedSupportSystems = await this.prisma.spanSupportSystems.deleteMany({
-							where: { id: { in: supportSystemIds } },
-						});
-						this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
-					}
-
-					if (auditEventIds.length > 0) {
-						const deletedAuditEvents = await this.prisma.auditEvents.deleteMany({
-							where: { id: { in: auditEventIds } },
-						});
-						this.logger.log(`Deleted audit events for duplicate object: ${deletedAuditEvents.count}`);
-					}
-
-					if (surveyIds.length > 0) {
-						const deletedSurveys = await this.prisma.surveys.deleteMany({
-							where: { id: { in: surveyIds } },
-						});
-						this.logger.log(`Deleted surveys for duplicate object: ${deletedSurveys.count}`);
-					}
-
-					await this.prisma.objects.delete({ where: { id: object.id } });
-					this.logger.log(`Deleted duplicate object with ID ${object.id}`);
-				} catch (e) {
-					this.logger.log(`Failed to remove dependencies, error: ${e.message}`);
-				}
+			if (!targetRemoved && parseInt(key) > 0) {
+				await this.removeObjectAndDependencies(object);
 			}
 		}
 
 		return true;
+	}
+
+	private async removeObjectAndDependencies(object: DbObject) {
+		const surveyIds = [];
+		const junctionBoxIds = [];
+		const supportSystemIds = [];
+		const luminaireIds = [];
+		const auditEventIds = [];
+
+		const surveys = await this.prisma.surveys.findMany({ where: { objectId: object.id } });
+		surveys.map((survey) => {
+			surveyIds.push(survey.id);
+		});
+
+		const junctionBoxes = await this.prisma.spanJunctionBoxes.findMany({ where: { objectId: object.id } });
+		junctionBoxes.map((junctionBox) => {
+			junctionBoxIds.push(junctionBox.id);
+		});
+
+		const supportSystems = await this.prisma.spanSupportSystems.findMany({
+			where: { objectId: object.id },
+		});
+		supportSystems.map((supportSystem) => {
+			supportSystemIds.push(supportSystem.id);
+		});
+
+		const auditEvents = await this.prisma.auditEvents.findMany({
+			where: { objectId: object.id },
+		});
+		auditEvents.map((auditEvent) => {
+			auditEventIds.push(auditEvent.id);
+		});
+
+		if (supportSystems.length > 0) {
+			const luminaires = await this.prisma.spanLuminaires.findMany({
+				where: { supportSystemId: { in: supportSystemIds } },
+			});
+			luminaires.map((luminaire) => {
+				luminaireIds.push(luminaire.id);
+			});
+		}
+
+		this.logger.log(`Object with ID ${object.id} is a duplicate. Will attempt to remove dependencies`);
+
+		try {
+			if (luminaireIds.length > 0) {
+				const deletedLuminaires = await this.prisma.spanLuminaires.deleteMany({
+					where: { id: { in: luminaireIds } },
+				});
+				this.logger.log(`Deleted luminaires for duplicate object:  ${deletedLuminaires.count}`);
+			}
+
+			if (junctionBoxIds.length > 0) {
+				const deletedJunctionBoxes = await this.prisma.spanJunctionBoxes.deleteMany({
+					where: { id: { in: junctionBoxIds } },
+				});
+				this.logger.log(`Deleted junction boxes for duplicate object: ${deletedJunctionBoxes.count}`);
+			}
+
+			if (supportSystemIds.length > 0) {
+				const deletedSupportSystems = await this.prisma.spanSupportSystems.deleteMany({
+					where: { id: { in: supportSystemIds } },
+				});
+				this.logger.log(`Deleted support systems for duplicate object: ${deletedSupportSystems.count}`);
+			}
+
+			if (auditEventIds.length > 0) {
+				const deletedAuditEvents = await this.prisma.auditEvents.deleteMany({
+					where: { id: { in: auditEventIds } },
+				});
+				this.logger.log(`Deleted audit events for duplicate object: ${deletedAuditEvents.count}`);
+			}
+
+			if (surveyIds.length > 0) {
+				const deletedSurveys = await this.prisma.surveys.deleteMany({
+					where: { id: { in: surveyIds } },
+				});
+				this.logger.log(`Deleted surveys for duplicate object: ${deletedSurveys.count}`);
+			}
+
+			await this.prisma.objects.delete({ where: { id: object.id } });
+			this.logger.log(`Deleted duplicate object with ID ${object.id}`);
+		} catch (e) {
+			this.logger.log(`Failed to remove dependencies, error: ${e.message}`);
+		}
 	}
 
 	async undoOVSImport(): Promise<string> {

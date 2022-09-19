@@ -26,7 +26,7 @@ export class DuplicateInstallationGroupRemovalService {
 
 	private async removeDuplicateInstallationGroups() {
 		const groupIdStart = 2011;
-		const groupIdEnd = 2210;
+		const groupIdEnd = 2011;
 		const total = groupIdEnd - groupIdStart + 1;
 		let removedDuplicates = 0;
 		this.logger.verbose(
@@ -36,7 +36,7 @@ export class DuplicateInstallationGroupRemovalService {
 		for (let i = groupIdStart; i <= groupIdEnd; i++) {
 			const name = `OVS${i}`;
 			this.logger.verbose(`Checking installation group ${name}...`);
-			const result = await this.externalAIPGraphQLRepository.removeDuplicateInstallationGroup(i);
+			const result = await this.externalAIPGraphQLRepository.removeDuplicateInstallationGroup(i, true);
 
 			if (result) {
 				removedDuplicates++;

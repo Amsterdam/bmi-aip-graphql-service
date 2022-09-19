@@ -19,7 +19,7 @@ export class ObjectService {
 		);
 	}
 
-	async removeDuplicateInstallationGroup(installationGroupId: number): Promise<boolean> {
-		return this.objectRepo.removeDuplicateInstallationGroup(installationGroupId);
+	async removeDuplicateInstallationGroup(installationGroupId: number, targetRemoved?: boolean): Promise<boolean> {
+		return this.objectRepo.removeDuplicateInstallationGroup(installationGroupId, targetRemoved);
 	}
 }

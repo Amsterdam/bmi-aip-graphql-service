@@ -36,8 +36,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-//const surveyRepo = new SurveyRepository(prismaServiceMock);
-
 describe('Survey / Resolver', () => {
 	describe('createSurvey', () => {
 		test('create a survey', async () => {

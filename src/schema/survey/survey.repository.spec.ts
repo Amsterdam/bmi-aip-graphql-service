@@ -4,6 +4,7 @@ import { PrismaService } from '../../prisma.service';
 
 import { SurveyRepository } from './survey.repository';
 import { domainSurvey, survey1, surveyInput } from './__stubs__';
+import { InspectionStandard } from './types';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	surveys: {
@@ -26,7 +27,7 @@ describe('SurveyRepository', () => {
 			data: expect.objectContaining({
 				condition: '__CONDITION__',
 				description: '__DESCRIPTION__',
-				inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+				inspectionStandardType: InspectionStandard.spanInstallation,
 				objects: {
 					connect: {
 						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
@@ -44,7 +45,7 @@ describe('SurveyRepository', () => {
 		expect(surveys).toEqual({
 			description: '__DESCRIPTION__',
 			id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
-			inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+			inspectionStandardType: InspectionStandard.spanInstallation,
 			status: '__STATUS__',
 		});
 	});

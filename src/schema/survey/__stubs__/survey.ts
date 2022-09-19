@@ -4,11 +4,12 @@ import { Survey } from '../models/survey.model';
 import { CreateSurveyInput } from '../dto/create-survey.input';
 import { DbSurvey as DomainSurvey } from '../types/survey.repository.interface';
 import { SurveyFactory } from '../survey.factory';
+import { InspectionStandard } from '../types';
 
 const survey1 = new Survey();
 survey1.id = '0deb07f3-28f5-47e1-b72a-d1b2a19d4670';
 survey1.description = '__DESCRIPTION__';
-survey1.inspectionStandardType = '__INSPECTIONSTANDARDTYPE__';
+survey1.inspectionStandardType = InspectionStandard.spanInstallation;
 survey1.status = '__STATUS__';
 
 const survey2 = new Survey();
@@ -21,7 +22,7 @@ export const surveyRaw: Omit<DomainSurvey, 'id'> = {
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 	description: '__DESCRIPTION__',
 	condition: '__CONDITION__',
-	inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+	inspectionStandardType: InspectionStandard.spanInstallation,
 	status: '__STATUS__',
 	surveryedOn: undefined,
 	updatedOn: undefined,
@@ -88,7 +89,7 @@ export const domainSurvey: DomainSurvey = {
 	...surveyRaw,
 	id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 	description: '__DESCRIPTION__',
-	inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+	inspectionStandardType: InspectionStandard.spanInstallation,
 	objectId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 };
 

@@ -134,12 +134,13 @@ export class ObjectRepository implements IObjectRepository {
 
 			if (targetRemoved && object.status === 'deleted') {
 				await this.removeObjectAndDependencies(object);
-				this.logger.log(`Blerp`);
+				this.logger.log(`Removed deleted object ${object.id} for installation group with name ${name}`);
 				break;
 			}
 
 			if (!targetRemoved && parseInt(key) > 0) {
 				await this.removeObjectAndDependencies(object);
+				this.logger.log(`Removed duplicate object ${object.id} for installation group with name ${name}`);
 			}
 		}
 

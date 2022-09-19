@@ -1,5 +1,6 @@
-import { junctionBox1, junctionBox2 } from '../__stubs__';
+import { survey1, survey2 } from '../__stubs__';
 
-export const JunctionBoxService = jest.fn(() => ({
-	getJunctionBoxes: jest.fn(() => [junctionBox1, junctionBox2]),
+export const SurveyService = jest.fn(() => ({
+	getSurveys: jest.fn(() => [survey1, survey2]),
+	getSurvey: jest.fn(() => survey1),
 }));

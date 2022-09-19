@@ -1,24 +1,27 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { ElementRepository } from '../element.repository';
-import { elementInput, domainElement } from '../__stubs__';
+import { SurveyRepository } from '../survey.repository';
+import { surveyInput, domainSurvey } from '../__stubs__';
+import { SurveyService } from '../survey.service';
 
-import { CreateElementCommand } from './create-element.command';
-import { CreateElementHandler } from './create-element.handler';
+import { CreateSurveyCommand } from './create-survey.command';
+import { CreateSurveyHandler } from './create-survey.handler';
 
-const elementRepoMock: MockedObjectDeep<ElementRepository> = {
-	createElement: jest.fn().mockResolvedValue(domainElement),
+const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
+	createSurvey: jest.fn().mockResolvedValue(domainSurvey),
 	...(<any>{}),
 };
 
-describe('CreateElementHandler', () => {
+describe('CreateSurveyHandler', () => {
 	test('executes command', async () => {
-		const command = new CreateElementCommand(elementInput);
-		const result = await new CreateElementHandler(elementRepoMock).execute(command);
+		const command = new CreateSurveyCommand(surveyInput);
+		const service = new SurveyService(surveyRepoMock);
 
-		expect(elementRepoMock.createElement).toHaveBeenCalledTimes(1);
-		expect(elementRepoMock.createElement).toHaveBeenCalledWith(elementInput);
+		const result = await new CreateSurveyHandler(service).execute(command);
 
-		expect(result).toEqual(domainElement);
+		expect(surveyRepoMock.createSurvey).toHaveBeenCalledTimes(1);
+		expect(surveyRepoMock.createSurvey).toHaveBeenCalledWith(surveyInput);
+
+		expect(result).toEqual(domainSurvey);
 	});
 });

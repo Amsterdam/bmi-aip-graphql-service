@@ -2,19 +2,50 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
-import { AssetRepository } from './asset.repository';
+import { SurveyRepository } from './survey.repository';
+import { domainSurvey, survey1, surveyInput } from './__stubs__';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-	$queryRaw: jest.fn().mockResolvedValue([{ code: 'BRU001' }, { code: 'BRU002' }]),
+	surveys: {
+		create: jest.fn().mockResolvedValue(domainSurvey),
+	},
 	...(<any>{}),
 };
 
-describe('AssetRepository', () => {
-	test('getWritableAssetCodesForCompanyId()', async () => {
-		const repo = new AssetRepository(prismaServiceMock);
-		const codes = await repo.getWritableAssetCodesForCompanyId('__COMPANY_ID__');
-		const [, arg2] = prismaServiceMock.$queryRaw.mock.calls[0];
-		expect(arg2).toBe('__COMPANY_ID__');
-		expect(codes).toEqual(['BRU001', 'BRU002']);
+const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
+	getSurveyById: jest.fn().mockResolvedValue(survey1),
+	...(<any>{}),
+};
+
+const repo = new SurveyRepository(prismaServiceMock);
+
+describe('SurveyRepository', () => {
+	test('createSurvey()', async () => {
+		await repo.createSurvey(surveyInput);
+		expect(prismaServiceMock.surveys.create).toHaveBeenCalledWith({
+			data: expect.objectContaining({
+				condition: '__CONDITION__',
+				description: '__DESCRIPTION__',
+				inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+				objects: {
+					connect: {
+						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+					},
+				},
+				status: '__STATUS__',
+				surveryedOn: undefined,
+				updatedOn: undefined,
+			}),
+		});
+	});
+
+	test('getSurvey()', async () => {
+		const surveys = await surveyRepoMock.getSurveyById('0deb07f3-28f5-47e1-b72a-d1b2a19d4670');
+		expect(surveys).toEqual({
+			description: '__DESCRIPTION__',
+			id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
+			inspectionStandardType: '__INSPECTIONSTANDARDTYPE__',
+			status: '__STATUS__',
+		});
 	});
 });

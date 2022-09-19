@@ -9,7 +9,7 @@ describe('SurveyFactory', () => {
 		expect(result).toEqual(expect.objectContaining(survey));
 	});
 
-	test('CreateElementInput', () => {
+	test('CreateSurveyInput', () => {
 		const result = SurveyFactory.CreateSurvey(domainSurvey);
 		expect(result).toEqual({
 			description: '__DESCRIPTION__',

@@ -27,7 +27,7 @@
 		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate:gisib-api-types/index.ts"
 	},
 	"dependencies": {
-		"@casl/ability": "^5.4.3",
+		"@casl/ability": "^6.2.0",
 		"@casl/prisma": "^1.1.0",
 		"@golevelup/nestjs-graphql-request": "^0.1.13",
 		"@nestjs/apollo": "^10.0.19",

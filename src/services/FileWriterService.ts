@@ -206,7 +206,7 @@ export class FileWriterService {
 		junctionBox.mastNumber = excelRowObject.Mastgetal; // Maps to "Mastgetal"
 		junctionBox.location = excelRowObject['nieuwe straatnaam']; // Maps to "Straat"
 		junctionBox.locationIndication = ''; // Maps to "Locatie aanduiding"
-		junctionBox.a11yDetails = ''; // Maps to "Bereikbaarheid gedetailleerd"
+		junctionBox.a11yDetails = {}; // Maps to "Bereikbaarheid gedetailleerd"
 		junctionBox.installationHeight = excelRowObject.Lichtpunthoogte; // Maps to "Aanleghoogte"
 		junctionBox.riserTubeVisible = false; // Maps to "Stijgbuis zichtbaar"
 		junctionBox.remarks = ''; // Maps to "Opmerking"
@@ -252,7 +252,7 @@ export class FileWriterService {
 			location: supportSystemProps['nieuwe straatnaam'], // Maps to "Straat"
 			constructionYear: null, // Maps to "Jaar van aanleg"
 			locationIndication: '', // Maps to "Locatie aanduiding"
-			a11yDetails: '', // Maps to "Bereikbaarheid gedetailleerd"
+			a11yDetails: {}, // Maps to "Bereikbaarheid gedetailleerd"
 			installationHeight: supportSystemProps.Lichtpunthoogte, // Maps to "Aanleghoogte" For type `gevel |.Mast | ring`
 			remarks: '', // Maps to "Opmerking"
 			houseNumber: '', // Maps to "Huisnummer + verdieping" For type `gevel`

@@ -4,6 +4,8 @@ import { Point } from 'geojson';
 import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
 
+import type { CheckedA11yDetails } from './a11y-details-enum';
+
 const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 	select: {
 		id: true,
@@ -17,7 +19,6 @@ const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 		installationHeight: true,
 		riserTubeVisible: true,
 		remarks: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
@@ -27,6 +28,7 @@ const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 export type JunctionBoxWithoutGeography = Prisma.spanJunctionBoxesGetPayload<typeof junctionBoxes>;
 export type JunctionBox = JunctionBoxWithoutGeography & {
 	geography?: Point;
+	a11yDetails: CheckedA11yDetails;
 };
 
 export interface IJunctionBoxRepository {

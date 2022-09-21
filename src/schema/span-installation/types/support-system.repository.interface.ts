@@ -4,6 +4,8 @@ import { Point } from 'geojson';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 
+import type { CheckedA11yDetails } from './a11y-details-enum';
+
 const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 	select: {
 		id: true,
@@ -19,7 +21,6 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 		houseNumber: true,
 		type: true,
 		typeDetailed: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
@@ -29,6 +30,7 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 export type SupportSystemWithoutGeography = Prisma.spanSupportSystemsGetPayload<typeof supportSystems>;
 export type SupportSystem = SupportSystemWithoutGeography & {
 	geography?: Point;
+	a11yDetails: CheckedA11yDetails;
 };
 
 export interface ISupportSystemRepository {

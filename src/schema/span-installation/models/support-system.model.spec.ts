@@ -14,7 +14,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.location = null;
 		supportSystem.constructionYear = 1979;
 		supportSystem.locationIndication = '__LOCATION__INDICATION__';
-		supportSystem.a11yDetails = '__A11Y_DETAILS__';
+		supportSystem.a11yDetails = { NoChimneyPathAvailable: true };
 		supportSystem.installationHeight = 320;
 		supportSystem.remarks = '__REMARKS__';
 		supportSystem.houseNumber = '33';
@@ -29,7 +29,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		expect(supportSystem).toBeInstanceOf(SupportSystem);
 		expect(supportSystem).toEqual({
 			name: '__NAME__',
-			a11yDetails: '__A11Y_DETAILS__',
+			a11yDetails: { NoChimneyPathAvailable: true },
 			constructionYear: 1979,
 			createdAt: '2022-08-02T15:51:54.044Z',
 			deletedAt: '2022-08-02T15:53:07.441Z',

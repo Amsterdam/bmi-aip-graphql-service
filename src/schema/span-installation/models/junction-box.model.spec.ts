@@ -10,7 +10,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 		junctionBox.mastNumber = 33;
 		junctionBox.location = null;
 		junctionBox.locationIndication = '__LOCATION__INDICATION__';
-		junctionBox.a11yDetails = '__A11Y_DETAILS__';
+		junctionBox.a11yDetails = { NoChimneyPathAvailable: true };
 		junctionBox.installationHeight = 320;
 		junctionBox.riserTubeVisible = false;
 		junctionBox.remarks = '__REMARKS__';
@@ -24,7 +24,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 
 		expect(junctionBox).toBeInstanceOf(JunctionBox);
 		expect(junctionBox).toEqual({
-			a11yDetails: '__A11Y_DETAILS__',
+			a11yDetails: { NoChimneyPathAvailable: true },
 			createdAt: '2022-08-02T15:51:54.044Z',
 			deletedAt: '2022-08-02T15:53:07.441Z',
 			geography: {

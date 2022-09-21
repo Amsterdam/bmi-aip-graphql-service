@@ -42,7 +42,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	type: SupportSystemType.Facade,
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: '__A11Y_DETAILS__',
+	a11yDetails: { NoChimneyPathAvailable: true },
 	installationHeight: new Decimal(10),
 	deleted_at: null,
 	created_at: undefined,

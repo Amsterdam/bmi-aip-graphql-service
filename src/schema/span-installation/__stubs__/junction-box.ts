@@ -35,7 +35,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	remarks: '__REMARKS__',
 	mastNumber: new Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: '__A11Y_DETAILS__',
+	a11yDetails: { NoChimneyPathAvailable: true },
 	installationHeight: new Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,

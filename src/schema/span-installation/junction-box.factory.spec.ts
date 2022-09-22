@@ -22,7 +22,20 @@ describe('Span Installation / JunctionBox / Factory', () => {
 		expect(result).toBeInstanceOf(JunctionBox);
 		expect(result.a11yDetails).toBeInstanceOf(A11yDetails);
 		expect(result.a11yDetails).toEqual({
+			countersink: false,
+			fencing: false,
+			keyNeeded: false,
+			keySafe: false,
 			limitationOnTheMaximumHeadroom: true,
+			limitationOnTheMaximumPermittedAxleLoad: false,
+			limitationOnTheMaximumVehicleWidth: false,
+			noChimneyPathAvailable: false,
+			normallyAccessible: false,
+			notAccessibleForAerialPlatform: false,
+			requestAccess: false,
+			threeMeterDistanceToTramCatenary: false,
+			trafficMeasuresNecessary: false,
+			workOnPrivateLand: false,
 		});
 	});
 });

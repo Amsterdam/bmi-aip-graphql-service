@@ -39,7 +39,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	remarks: '__REMARKS__',
 	mastNumber: new Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
+	a11yDetails: JSON.stringify(a11yDetails),
 	installationHeight: new Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,
@@ -52,6 +52,10 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 };
 
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(junctionBoxRaw.a11yDetails as string);
+		return input;
+	}
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, new CreateJunctionBoxInput());
@@ -59,6 +63,10 @@ export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) 
 const updateJunctionBox = new UpdateJunctionBoxInput();
 updateJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(junctionBoxRaw.a11yDetails as string);
+		return input;
+	}
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, updateJunctionBox);

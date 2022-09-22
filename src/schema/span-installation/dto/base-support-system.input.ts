@@ -2,9 +2,10 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsNumber, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
-import GraphQLJSON from 'graphql-type-json';
 
-import { SupportSystemType, CheckedA11yDetails } from '../types';
+import { SupportSystemType } from '../types';
+
+import { A11yDetailsInput } from './a11y-details.input';
 
 @InputType()
 export class BaseSupportSystemInput {
@@ -23,8 +24,8 @@ export class BaseSupportSystemInput {
 	public constructionYear?: number;
 
 	@IsOptional()
-	@Field(() => GraphQLJSON, { nullable: true })
-	public a11yDetails?: CheckedA11yDetails;
+	@Field(() => A11yDetailsInput, { nullable: true })
+	public a11yDetails?: A11yDetailsInput;
 
 	@IsOptional()
 	@Field({ nullable: true })

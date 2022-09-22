@@ -9,6 +9,7 @@ import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-system-input.util';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
+import { A11yDetails } from '../models/a11y-details.model';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -31,6 +32,9 @@ supportSystem2.geography = {
 
 export { supportSystem1, supportSystem2 };
 
+const a11yDetails = new A11yDetails();
+a11yDetails.limitationOnTheMaximumHeadroom = true;
+
 const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
@@ -42,7 +46,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	type: SupportSystemType.Facade,
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: { NoChimneyPathAvailable: true },
+	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
 	installationHeight: new Decimal(10),
 	deleted_at: null,
 	created_at: undefined,

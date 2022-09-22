@@ -1,6 +1,7 @@
 import { SupportSystemFactory } from './support-system.factory';
 import { domainSupportSystem } from './__stubs__';
 import { SupportSystem } from './models/support-system.model';
+import { A11yDetails } from './models/a11y-details.model';
 
 describe('Span Installation / SupportSystem / Factory', () => {
 	test('CreateSupportSystem() constructs an instance of a SupportSystem GraphQL model', () => {
@@ -19,7 +20,12 @@ describe('Span Installation / SupportSystem / Factory', () => {
 		delete object.created_at;
 		delete object.updated_at;
 		delete object.deleted_at;
+		delete object.a11yDetails;
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(SupportSystem);
+		expect(result.a11yDetails).toBeInstanceOf(A11yDetails);
+		expect(result.a11yDetails).toEqual({
+			limitationOnTheMaximumHeadroom: true,
+		});
 	});
 });

@@ -1,8 +1,11 @@
 import { JunctionBox } from './junction-box.model';
+import { A11yDetails } from './a11y-details.model';
 
 describe('Span Installation / Model / JunctionBox', () => {
 	test('constructs a JunctionBox instance', () => {
 		const junctionBox = new JunctionBox();
+		const a11yDetails = new A11yDetails();
+		a11yDetails.limitationOnTheMaximumHeadroom = true;
 		junctionBox.id = '71c5450a-c0a3-48ea-adbb-ea435a8804d5';
 		junctionBox.objectId = 'cecc214d-1c44-4bcd-94e2-f2d661327db3';
 		junctionBox.surveyId = '388ecaaa-c6c2-4613-aa14-f206cf577ca7';
@@ -10,7 +13,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 		junctionBox.mastNumber = 33;
 		junctionBox.location = null;
 		junctionBox.locationIndication = '__LOCATION__INDICATION__';
-		junctionBox.a11yDetails = { NoChimneyPathAvailable: true };
+		junctionBox.a11yDetails = a11yDetails;
 		junctionBox.installationHeight = 320;
 		junctionBox.riserTubeVisible = false;
 		junctionBox.remarks = '__REMARKS__';
@@ -24,7 +27,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 
 		expect(junctionBox).toBeInstanceOf(JunctionBox);
 		expect(junctionBox).toEqual({
-			a11yDetails: { NoChimneyPathAvailable: true },
+			a11yDetails: { limitationOnTheMaximumHeadroom: true },
 			createdAt: '2022-08-02T15:51:54.044Z',
 			deletedAt: '2022-08-02T15:53:07.441Z',
 			geography: {

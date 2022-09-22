@@ -1,5 +1,6 @@
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
+import { A11yDetails } from './models/a11y-details.model';
 
 export class JunctionBoxFactory {
 	static CreateJunctionBox({
@@ -20,6 +21,10 @@ export class JunctionBoxFactory {
 		deleted_at: deletedAt,
 	}: DomainJunctionBox): JunctionBox {
 		const jb = new JunctionBox();
+		const a11yDetailsModel = Object.keys(a11yDetails).reduce((acc, key) => {
+			acc[key] = a11yDetails[key];
+			return acc;
+		}, new A11yDetails());
 		jb.id = id;
 		jb.objectId = objectId;
 		jb.surveyId = surveyId;
@@ -27,7 +32,7 @@ export class JunctionBoxFactory {
 		jb.mastNumber = Number(mastNumber);
 		jb.location = location;
 		jb.locationIndication = locationIndication;
-		jb.a11yDetails = a11yDetails;
+		jb.a11yDetails = a11yDetailsModel;
 		jb.installationHeight = Number(installationHeight);
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;

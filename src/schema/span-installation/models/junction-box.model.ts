@@ -1,9 +1,8 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
-import GraphQLJSON from 'graphql-type-json';
 
-import type { CheckedA11yDetails } from '../types';
+import { A11yDetails } from './a11y-details.model';
 
 @ObjectType({ description: 'junctionBox' })
 export class JunctionBox {
@@ -33,8 +32,10 @@ export class JunctionBox {
 	locationIndication?: string;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => GraphQLJSON, { nullable: true })
-	a11yDetails?: CheckedA11yDetails;
+	@Field((type) => A11yDetails, { nullable: true })
+	a11yDetails?: A11yDetails;
+	// @Field((type) => GraphQLJSON, { nullable: true })
+	// a11yDetails?: CheckedA11yDetails;
 
 	// Maps to "Aanleghoogte"
 	@Field((type) => Float, { nullable: true })

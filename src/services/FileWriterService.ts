@@ -19,6 +19,7 @@ import { CreateSupportSystemInput } from '../schema/span-installation/dto/create
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
 import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-junction-box.input';
 import { transformRDToWGS } from '../schema/span-installation/utils/transformRD';
+import { A11yDetails } from '../schema/span-installation/models/a11y-details.model';
 
 import {
 	ExcelJunctionBoxProps,
@@ -206,7 +207,7 @@ export class FileWriterService {
 		junctionBox.mastNumber = excelRowObject.Mastgetal; // Maps to "Mastgetal"
 		junctionBox.location = excelRowObject['nieuwe straatnaam']; // Maps to "Straat"
 		junctionBox.locationIndication = ''; // Maps to "Locatie aanduiding"
-		junctionBox.a11yDetails = {}; // Maps to "Bereikbaarheid gedetailleerd"
+		junctionBox.a11yDetails = new A11yDetails(); // Maps to "Bereikbaarheid gedetailleerd"
 		junctionBox.installationHeight = excelRowObject.Lichtpunthoogte; // Maps to "Aanleghoogte"
 		junctionBox.riserTubeVisible = false; // Maps to "Stijgbuis zichtbaar"
 		junctionBox.remarks = ''; // Maps to "Opmerking"

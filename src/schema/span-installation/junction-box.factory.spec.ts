@@ -1,6 +1,7 @@
 import { JunctionBoxFactory } from './junction-box.factory';
 import { domainJunctionBox } from './__stubs__';
 import { JunctionBox } from './models/junction-box.model';
+import { A11yDetails } from './models/a11y-details.model';
 
 describe('Span Installation / JunctionBox / Factory', () => {
 	test('CreateJunctionBox() constructs an instance of a JunctionBox GraphQL model', () => {
@@ -16,7 +17,12 @@ describe('Span Installation / JunctionBox / Factory', () => {
 		delete object.created_at;
 		delete object.updated_at;
 		delete object.deleted_at;
+		delete object.a11yDetails;
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(JunctionBox);
+		expect(result.a11yDetails).toBeInstanceOf(A11yDetails);
+		expect(result.a11yDetails).toEqual({
+			limitationOnTheMaximumHeadroom: true,
+		});
 	});
 });

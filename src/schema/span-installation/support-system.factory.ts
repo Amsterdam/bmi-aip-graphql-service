@@ -1,7 +1,7 @@
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../types';
-
+import { SupportSystemType, SupportSystemTypeDetailed } from './types';
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
+import { A11yDetails } from './models/a11y-details.model';
 
 export class SupportSystemFactory {
 	static CreateSupportSystem({
@@ -24,13 +24,17 @@ export class SupportSystemFactory {
 		deleted_at: deletedAt,
 	}: DomainSupportSystem): SupportSystem {
 		const supportSystem = new SupportSystem();
+		const a11yDetailsModel = Object.keys(a11yDetails).reduce((acc, key) => {
+			acc[key] = a11yDetails[key];
+			return acc;
+		}, new A11yDetails());
 		supportSystem.id = id;
 		supportSystem.objectId = objectId;
 		supportSystem.surveyId = surveyId;
 		supportSystem.name = name;
 		supportSystem.location = location;
 		supportSystem.locationIndication = locationIndication;
-		supportSystem.a11yDetails = a11yDetails;
+		supportSystem.a11yDetails = a11yDetailsModel;
 		supportSystem.installationHeight = Number(installationHeight);
 		supportSystem.remarks = remarks;
 		supportSystem.constructionYear = constructionYear;

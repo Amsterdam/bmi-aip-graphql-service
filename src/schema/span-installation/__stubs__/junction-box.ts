@@ -5,6 +5,7 @@ import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
 import { JunctionBox as DomainJunctionBox } from '../types/junction-box.repository.interface';
 import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
+import { A11yDetails } from '../models/a11y-details.model';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -27,6 +28,9 @@ junctionBox2.geography = {
 
 export { junctionBox1, junctionBox2 };
 
+const a11yDetails = new A11yDetails();
+a11yDetails.limitationOnTheMaximumHeadroom = true;
+
 const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
@@ -35,7 +39,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	remarks: '__REMARKS__',
 	mastNumber: new Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: { NoChimneyPathAvailable: true },
+	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
 	installationHeight: new Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,

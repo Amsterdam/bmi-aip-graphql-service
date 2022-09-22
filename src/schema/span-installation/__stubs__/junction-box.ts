@@ -5,6 +5,7 @@ import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
 import { JunctionBox as DomainJunctionBox } from '../types/junction-box.repository.interface';
 import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
+import { A11yDetails } from '../models/a11y-details.model';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -27,6 +28,9 @@ junctionBox2.geography = {
 
 export { junctionBox1, junctionBox2 };
 
+const a11yDetails = new A11yDetails();
+a11yDetails.limitationOnTheMaximumHeadroom = true;
+
 const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
@@ -35,7 +39,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 	remarks: '__REMARKS__',
 	mastNumber: new Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: '__A11Y_DETAILS__',
+	a11yDetails: JSON.stringify(a11yDetails),
 	installationHeight: new Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,
@@ -48,6 +52,10 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 };
 
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(junctionBoxRaw.a11yDetails as string);
+		return input;
+	}
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, new CreateJunctionBoxInput());
@@ -55,6 +63,10 @@ export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) 
 const updateJunctionBox = new UpdateJunctionBoxInput();
 updateJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(junctionBoxRaw.a11yDetails as string);
+		return input;
+	}
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, updateJunctionBox);

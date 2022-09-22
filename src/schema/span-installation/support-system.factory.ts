@@ -1,7 +1,7 @@
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../types';
-
+import { SupportSystemType, SupportSystemTypeDetailed } from './types';
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
+import { A11yDetailsFactory } from './a11y-details.factory';
 
 export class SupportSystemFactory {
 	static CreateSupportSystem({
@@ -30,7 +30,6 @@ export class SupportSystemFactory {
 		supportSystem.name = name;
 		supportSystem.location = location;
 		supportSystem.locationIndication = locationIndication;
-		supportSystem.a11yDetails = a11yDetails;
 		supportSystem.installationHeight = Number(installationHeight);
 		supportSystem.remarks = remarks;
 		supportSystem.constructionYear = constructionYear;
@@ -38,6 +37,7 @@ export class SupportSystemFactory {
 		supportSystem.type = SupportSystemType[type];
 		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
+		supportSystem.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		supportSystem.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		supportSystem.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		supportSystem.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

@@ -1,5 +1,6 @@
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
+import { A11yDetailsFactory } from './a11y-details.factory';
 
 export class JunctionBoxFactory {
 	static CreateJunctionBox({
@@ -27,11 +28,11 @@ export class JunctionBoxFactory {
 		jb.mastNumber = Number(mastNumber);
 		jb.location = location;
 		jb.locationIndication = locationIndication;
-		jb.a11yDetails = a11yDetails;
 		jb.installationHeight = Number(installationHeight);
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
+		jb.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		jb.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		jb.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		jb.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

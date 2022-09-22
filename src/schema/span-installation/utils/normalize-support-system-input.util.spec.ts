@@ -16,7 +16,7 @@ describe('normalizeSupportSystemInputUtil', () => {
 		expect(normalized).toBeInstanceOf(CreateSupportSystemNormalizedInput);
 		expect(normalized).toEqual(
 			expect.objectContaining({
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				constructionYear: 1979,
 				deleted_at: null,
 				geography: {
@@ -45,7 +45,7 @@ describe('normalizeSupportSystemInputUtil', () => {
 		expect(normalized).toBeInstanceOf(UpdateSupportSystemNormalizedInput);
 		expect(normalized).toEqual(
 			expect.objectContaining({
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				constructionYear: 1979,
 				deleted_at: null,
 				geography: {

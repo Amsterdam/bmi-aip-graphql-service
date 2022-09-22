@@ -9,6 +9,7 @@ import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-system-input.util';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
+import { A11yDetails } from '../models/a11y-details.model';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -31,6 +32,9 @@ supportSystem2.geography = {
 
 export { supportSystem1, supportSystem2 };
 
+const a11yDetails = new A11yDetails();
+a11yDetails.limitationOnTheMaximumHeadroom = true;
+
 const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
@@ -42,7 +46,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	type: SupportSystemType.Facade,
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: '__A11Y_DETAILS__',
+	a11yDetails: JSON.stringify(a11yDetails),
 	installationHeight: new Decimal(10),
 	deleted_at: null,
 	created_at: undefined,
@@ -58,6 +62,10 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 		input.typeDetailedFacade = supportSystemRaw[key] as SupportSystemTypeDetailedFacade;
 		return input;
 	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(supportSystemRaw.a11yDetails as string);
+		return input;
+	}
 	input[key] = supportSystemRaw[key];
 	return input;
 }, new CreateSupportSystemInput());
@@ -67,6 +75,10 @@ updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
 		input.typeDetailedFacade = supportSystemRaw[key] as SupportSystemTypeDetailedFacade;
+		return input;
+	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = JSON.parse(supportSystemRaw.a11yDetails as string);
 		return input;
 	}
 	input[key] = supportSystemRaw[key];

@@ -1,9 +1,11 @@
+import { isString } from '@nestjs/common/utils/shared.utils';
+
 import { A11yDetails } from './models/a11y-details.model';
 
 export class A11yDetailsFactory {
 	static CreateA11yDetailsFromJSONB(a11yDetails: string): A11yDetails {
 		const a11yDetailsModel = new A11yDetails();
-		const parsedA11yDetails = JSON.parse(a11yDetails);
+		const parsedA11yDetails = isString(a11yDetails) ? JSON.parse(a11yDetails) : {};
 		a11yDetailsModel.normallyAccessible = parsedA11yDetails?.normallyAccessible ?? false;
 		a11yDetailsModel.limitationOnTheMaximumPermittedAxleLoad =
 			parsedA11yDetails?.limitationOnTheMaximumPermittedAxleLoad ?? false;

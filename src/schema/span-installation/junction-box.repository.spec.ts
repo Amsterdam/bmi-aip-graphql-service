@@ -44,7 +44,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
-				a11yDetails: JSON.stringify(junctionBoxInput.a11yDetails),
+				a11yDetails: junctionBoxInput.a11yDetails,
 				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
@@ -58,7 +58,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...junctionBoxInput,
-				a11yDetails: JSON.stringify(junctionBoxInput.a11yDetails),
+				a11yDetails: junctionBoxInput.a11yDetails,
 			}),
 		);
 	});
@@ -108,7 +108,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		});
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
 		expect(returnValue).toEqual({
-			a11yDetails: JSON.stringify(updateJunctionBoxInput.a11yDetails),
+			a11yDetails: updateJunctionBoxInput.a11yDetails,
 
 			deleted_at: null,
 			geography: {
@@ -141,7 +141,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(junctionBox.deleted_at instanceof Date).toBe(true);
 		expect(junctionBox).toEqual(
 			expect.objectContaining({
-				a11yDetails: JSON.stringify(junctionBoxInput.a11yDetails),
+				a11yDetails: junctionBoxInput.a11yDetails,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',

@@ -1,9 +1,11 @@
+import { Prisma } from '@prisma/client';
+
 import { A11yDetails } from './models/a11y-details.model';
 
 export class A11yDetailsFactory {
-	static CreateA11yDetailsFromJSONB(a11yDetails: string): A11yDetails {
+	static CreateA11yDetailsFromJSONB(a11yDetails: Prisma.JsonValue): A11yDetails {
 		const a11yDetailsModel = new A11yDetails();
-		const parsedA11yDetails = JSON.parse(a11yDetails);
+		const parsedA11yDetails = a11yDetails as A11yDetails;
 		a11yDetailsModel.normallyAccessible = parsedA11yDetails?.normallyAccessible ?? false;
 		a11yDetailsModel.limitationOnTheMaximumPermittedAxleLoad =
 			parsedA11yDetails?.limitationOnTheMaximumPermittedAxleLoad ?? false;

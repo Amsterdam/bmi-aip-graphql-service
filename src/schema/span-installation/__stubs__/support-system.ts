@@ -46,7 +46,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	type: SupportSystemType.Facade,
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
-	a11yDetails: JSON.stringify(a11yDetails),
+	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
 	installationHeight: new Decimal(10),
 	deleted_at: null,
 	created_at: undefined,
@@ -63,7 +63,7 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 		return input;
 	}
 	if (key === 'a11yDetails') {
-		input.a11yDetails = JSON.parse(supportSystemRaw.a11yDetails as string);
+		input.a11yDetails = a11yDetails;
 		return input;
 	}
 	input[key] = supportSystemRaw[key];
@@ -78,7 +78,7 @@ export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 		return input;
 	}
 	if (key === 'a11yDetails') {
-		input.a11yDetails = JSON.parse(supportSystemRaw.a11yDetails as string);
+		input.a11yDetails = a11yDetails;
 		return input;
 	}
 	input[key] = supportSystemRaw[key];

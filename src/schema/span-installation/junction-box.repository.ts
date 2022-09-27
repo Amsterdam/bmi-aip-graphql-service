@@ -35,7 +35,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			mastNumber,
 			location,
 			locationIndication,
-			a11yDetails: JSON.stringify(a11yDetails),
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
 			installationHeight,
 			riserTubeVisible,
 			remarks,

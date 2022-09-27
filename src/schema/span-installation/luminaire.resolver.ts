@@ -18,7 +18,7 @@ export class LuminaireResolver {
 	constructor(private luminaireService: LuminaireService, private commandBus: CommandBus) {}
 
 	@Mutation(() => Luminaire)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createLuminaire(@Args('createLuminaire') input: CreateLuminaireInput): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<CreateLuminaireCommand>(
 			new CreateLuminaireCommand(input),
@@ -27,7 +27,7 @@ export class LuminaireResolver {
 	}
 
 	@Mutation(() => Luminaire)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateLuminaire(@Args('updateLuminaire') input: UpdateLuminaireInput): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateLuminaireCommand>(
 			new UpdateLuminaireCommand(input),
@@ -36,7 +36,7 @@ export class LuminaireResolver {
 	}
 
 	@Mutation(() => Luminaire)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteLuminaire(@Args('identifier') identifier: string): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<DeleteLuminaireCommand>(
 			new DeleteLuminaireCommand(identifier),

@@ -18,7 +18,7 @@ export class JunctionBoxResolver {
 	constructor(private junctionBoxService: JunctionBoxService, private commandBus: CommandBus) {}
 
 	@Mutation(() => JunctionBox)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createJunctionBox(@Args('createJunctionBox') input: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<CreateJunctionBoxCommand>(
 			new CreateJunctionBoxCommand(input),
@@ -27,7 +27,7 @@ export class JunctionBoxResolver {
 	}
 
 	@Mutation(() => JunctionBox)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateJunctionBox(@Args('updateJunctionBox') input: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<UpdateJunctionBoxCommand>(
 			new UpdateJunctionBoxCommand(input),
@@ -36,7 +36,7 @@ export class JunctionBoxResolver {
 	}
 
 	@Mutation(() => JunctionBox)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteJunctionBox(@Args('identifier') identifier: string): Promise<JunctionBox> {
 		const domainJunctionBox: DomainJunctionBox = await this.commandBus.execute<DeleteJunctionBoxCommand>(
 			new DeleteJunctionBoxCommand(identifier),

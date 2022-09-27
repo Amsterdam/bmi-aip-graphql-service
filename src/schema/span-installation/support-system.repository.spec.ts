@@ -57,7 +57,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 						id: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 					},
 				},
-				a11yDetails: JSON.stringify(createSupportSystemNormalizedInput.a11yDetails),
+				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
 				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
@@ -73,7 +73,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...createSupportSystemNormalizedInput,
-				a11yDetails: JSON.stringify(createSupportSystemNormalizedInput.a11yDetails),
+				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
 			}),
 		);
 	});
@@ -135,7 +135,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
-			a11yDetails: JSON.stringify(updateSupportSystemNormalizedInput.a11yDetails),
+			a11yDetails: updateSupportSystemNormalizedInput.a11yDetails,
 			installationHeight: new Decimal(10),
 			remarks: '__REMARKS__',
 			houseNumber: '33',
@@ -171,7 +171,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				location: '__LOCATION__',
 				constructionYear: 1979,
 				locationIndication: '__LOCATION_INDICATION__',
-				a11yDetails: JSON.stringify(createSupportSystemNormalizedInput.a11yDetails),
+				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
 				installationHeight: new Decimal(10),
 				remarks: '__REMARKS__',
 				houseNumber: '33',

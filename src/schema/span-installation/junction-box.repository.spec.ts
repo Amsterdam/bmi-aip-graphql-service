@@ -44,7 +44,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: junctionBoxInput.a11yDetails,
 				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
@@ -58,6 +58,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...junctionBoxInput,
+				a11yDetails: junctionBoxInput.a11yDetails,
 			}),
 		);
 	});
@@ -95,7 +96,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(prismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
 			where: { id: updateJunctionBoxInput.id },
 			data: {
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
@@ -107,7 +108,8 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		});
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
 		expect(returnValue).toEqual({
-			a11yDetails: '__A11Y_DETAILS__',
+			a11yDetails: updateJunctionBoxInput.a11yDetails,
+
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
@@ -139,7 +141,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(junctionBox.deleted_at instanceof Date).toBe(true);
 		expect(junctionBox).toEqual(
 			expect.objectContaining({
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: junctionBoxInput.a11yDetails,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',

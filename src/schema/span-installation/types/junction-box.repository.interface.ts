@@ -17,7 +17,6 @@ const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 		installationHeight: true,
 		riserTubeVisible: true,
 		remarks: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,

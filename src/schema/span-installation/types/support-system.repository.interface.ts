@@ -19,7 +19,6 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 		houseNumber: true,
 		type: true,
 		typeDetailed: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,

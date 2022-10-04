@@ -3,6 +3,8 @@ import { IsBoolean, IsNumber, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
+import { A11yDetailsInput } from './a11y-details.input';
+
 @InputType()
 export class BaseJunctionBoxInput {
 	@IsOptional()
@@ -21,9 +23,8 @@ export class BaseJunctionBoxInput {
 	public locationIndication?: string;
 
 	@IsOptional()
-	@MaxLength(255)
-	@Field({ nullable: true })
-	public a11yDetails?: string;
+	@Field(() => A11yDetailsInput, { nullable: true })
+	public a11yDetails?: A11yDetailsInput;
 
 	@IsOptional()
 	@IsNumber()

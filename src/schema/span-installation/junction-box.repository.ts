@@ -35,7 +35,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			mastNumber,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
 			installationHeight,
 			riserTubeVisible,
 			remarks,
@@ -44,11 +44,13 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
 
 		// Work around Prisma not supporting spatial data types
-		await this.prisma.$executeRaw`
-			UPDATE "spanJunctionBoxes"
-			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${junctionBox.id}
-		`;
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanJunctionBoxes"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${junctionBox.id}
+			`;
+		}
 
 		return {
 			...junctionBox,
@@ -88,7 +90,9 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			mastNumber,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: {
+				...a11yDetails,
+			},
 			installationHeight,
 			riserTubeVisible,
 			remarks,

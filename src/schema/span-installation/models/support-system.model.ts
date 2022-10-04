@@ -10,6 +10,8 @@ import type {
 	SupportSystemTypeDetailedTensionWire,
 } from '../types';
 
+import { A11yDetails } from './a11y-details.model';
+
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
 	@Field((type) => String)
@@ -46,8 +48,8 @@ export class SupportSystem {
 	constructionYear?: number;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => String, { nullable: true })
-	a11yDetails?: string;
+	@Field((type) => A11yDetails, { nullable: true })
+	a11yDetails?: A11yDetails;
 
 	// Maps to "Opmerking"
 	@Field((type) => String, { nullable: true })

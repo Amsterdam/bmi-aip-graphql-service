@@ -26,5 +26,4 @@ export interface ITensionWireSurveyRepository {
 	getTensionWireSurvey(surveyId: string, supportSystemId: string): Promise<TensionWireSurvey>;
 	createTensionWireSurvey(input: CreateTensionWireSurveyInput): Promise<TensionWireSurvey>;
 	updateTensionWireSurvey(input: UpdateTensionWireSurveyInput): Promise<TensionWireSurvey>;
-	deleteTensionWireSurvey(identifier: string): Promise<TensionWireSurvey>;
 }

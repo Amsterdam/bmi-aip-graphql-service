@@ -3,7 +3,7 @@ import { TensionWireSurveyFactory } from './tension-wire-survey.factory';
 import { TensionWireSurvey } from './models/tension-wire-survey.model';
 
 describe('Span Installation Survey / Tension Wire / Factory', () => {
-	test('CreateSupportSystem() constructs an instance of a SupportSystem GraphQL model', () => {
+	test('CreateSupportSystem() constructs an instance of a TensionWireSurvey GraphQL model', () => {
 		const result = TensionWireSurveyFactory.CreateTensionWireSurvey(domainTensionWireSurvey);
 		const object = {
 			...domainTensionWireSurvey,

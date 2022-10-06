@@ -20,7 +20,7 @@ const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / Tension Wire / Service', () => {
-	test('getSupportSystems returns array of SupportSystem objects', async () => {
+	test('getSupportSystems returns array of TensionWireSurvey objects', async () => {
 		const service = new TensionWireSurveyService(repo);
 		const survey = await service.getTensionWireSurvey(surveyId, supportSystemId);
 		expect(survey).toBeInstanceOf(TensionWireSurvey);

@@ -8,7 +8,7 @@ describe('Span Installation Survey / Model / Mast', () => {
 		mastSurvey.supportSystemId = '83ca470b-768a-49a7-a59f-4fe5da5620cf';
 		mastSurvey.mastDamage = true;
 		mastSurvey.mastMissingParts = true;
-		mastSurvey.tensionMastAngle = true;
+		mastSurvey.tensionMastAngle = 10;
 		mastSurvey.mastAttachmentDamage = true;
 		mastSurvey.mastBracketMissingParts = true;
 		mastSurvey.mastBracketDamage = true;
@@ -24,7 +24,7 @@ describe('Span Installation Survey / Model / Mast', () => {
 			remarks: '__REMARKS__',
 			supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 			surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
-			tensionMastAngle: true,
+			tensionMastAngle: 10,
 		});
 	});
 });

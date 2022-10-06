@@ -1301,70 +1301,70 @@ model surveyModifications {
 }
 
 model surveys {
-  id                                                   String                       @id @unique(map: "surveys_id_unique") @db.Uuid
-  surveryedOn                                          DateTime                     @db.Timestamptz(6)
-  updatedOn                                            DateTime                     @db.Timestamptz(6)
+  id                                                   String                                @id @unique(map: "surveys_id_unique") @db.Uuid
+  surveryedOn                                          DateTime                              @db.Timestamptz(6)
+  updatedOn                                            DateTime                              @db.Timestamptz(6)
   status                                               String?
   description                                          String?
-  dUri                                                 String?                      @map("3dUri") @db.VarChar(255)
+  dUri                                                 String?                               @map("3dUri") @db.VarChar(255)
   summaryAndAdvice                                     String?
-  operatorCompanyId                                    String?                      @db.Uuid
-  surveyorCompanyId                                    String?                      @db.Uuid
-  objectId                                             String                       @db.Uuid
-  created_at                                           DateTime?                    @db.Timestamptz(6)
-  updated_at                                           DateTime?                    @db.Timestamptz(6)
-  condition                                            String?                      @db.VarChar(1)
+  operatorCompanyId                                    String?                               @db.Uuid
+  surveyorCompanyId                                    String?                               @db.Uuid
+  objectId                                             String                                @db.Uuid
+  created_at                                           DateTime?                             @db.Timestamptz(6)
+  updated_at                                           DateTime?                             @db.Timestamptz(6)
+  condition                                            String?                               @db.VarChar(1)
   storageUsed                                          BigInt?
-  material                                             String?                      @db.VarChar(255)
+  material                                             String?                               @db.VarChar(255)
   isDOMLight                                           Boolean?
-  pointCloudStorageUsed                                BigInt                       @default(0)
+  pointCloudStorageUsed                                BigInt                                @default(0)
   isAssetDescriptionVisible                            Boolean?
-  isAnnotationsDefaultVisible                          Boolean?                     @default(true)
-  isVideoDownloadVisible                               Boolean?                     @default(true)
-  projectNumber                                        String?                      @db.VarChar(255)
-  inspectionStandardType                               String?                      @db.VarChar(255)
-  dUriGeo                                              String?                      @map("3dUriGeo") @db.VarChar(255)
-  dUriMultiBeam                                        String?                      @map("3dUriMultiBeam") @db.VarChar(255)
-  careCondition                                        String?                      @db.VarChar(1)
+  isAnnotationsDefaultVisible                          Boolean?                              @default(true)
+  isVideoDownloadVisible                               Boolean?                              @default(true)
+  projectNumber                                        String?                               @db.VarChar(255)
+  inspectionStandardType                               String?                               @db.VarChar(255)
+  dUriGeo                                              String?                               @map("3dUriGeo") @db.VarChar(255)
+  dUriMultiBeam                                        String?                               @map("3dUriMultiBeam") @db.VarChar(255)
+  careCondition                                        String?                               @db.VarChar(1)
   scanLineCoordinates                                  Json?
   shapesInModel                                        Json?
-  isFmecaAvailable                                     Boolean                      @default(false)
-  isCraAvailable                                       Boolean                      @default(false)
-  craInitialHistoryIsBuildBetween4074                  Boolean                      @default(false)
-  craInitialHistoryIsStaticallyIndeterminate           Boolean                      @default(false)
+  isFmecaAvailable                                     Boolean                               @default(false)
+  isCraAvailable                                       Boolean                               @default(false)
+  craInitialHistoryIsBuildBetween4074                  Boolean                               @default(false)
+  craInitialHistoryIsStaticallyIndeterminate           Boolean                               @default(false)
   craInitialHistoryBuildBetween4074Remarks             String?
   craInitialHistoryStaticallyIndeterminateRemarks      String?
-  craInspectionIsBuildBetween4074                      Boolean                      @default(false)
-  craInspectionIsStaticallyIndeterminate               Boolean                      @default(false)
+  craInspectionIsBuildBetween4074                      Boolean                               @default(false)
+  craInspectionIsStaticallyIndeterminate               Boolean                               @default(false)
   craInspectionBuildBetween4074Remarks                 String?
   craInspectionStaticallyIndeterminateRemarks          String?
   craInitialHistoryRemarks                             String?
   craInspectionRemarks                                 String?
-  craInitialHistoryScore                               Decimal?                     @db.Decimal(15, 6)
-  craInspectionScore                                   Decimal?                     @db.Decimal(15, 6)
-  craInitialHistoryCondition                           Int                          @default(0)
-  craInspectionCondition                               Int                          @default(0)
-  craInitialHistoryConditionWithoutFactor              Int                          @default(0)
-  craInspectionConditionWithoutFactor                  Int                          @default(0)
-  preparedAuthor                                       String?                      @db.VarChar(255)
-  preparedDate                                         DateTime?                    @db.Timestamptz(6)
-  verifiedAuthor                                       String?                      @db.VarChar(255)
-  verifiedDate                                         DateTime?                    @db.Timestamptz(6)
+  craInitialHistoryScore                               Decimal?                              @db.Decimal(15, 6)
+  craInspectionScore                                   Decimal?                              @db.Decimal(15, 6)
+  craInitialHistoryCondition                           Int                                   @default(0)
+  craInspectionCondition                               Int                                   @default(0)
+  craInitialHistoryConditionWithoutFactor              Int                                   @default(0)
+  craInspectionConditionWithoutFactor                  Int                                   @default(0)
+  preparedAuthor                                       String?                               @db.VarChar(255)
+  preparedDate                                         DateTime?                             @db.Timestamptz(6)
+  verifiedAuthor                                       String?                               @db.VarChar(255)
+  verifiedDate                                         DateTime?                             @db.Timestamptz(6)
   craInitialHistoryConditionScoreWithoutFactor         Int?
   craInspectionConditionScoreWithoutFactor             Int?
   craInitialHistoryConditionScore                      Int?
   craInspectionConditionScore                          Int?
-  batchId                                              String?                      @db.Uuid
-  inspectionStandardData                               Json                         @default("{}")
-  craInitialHistoryIsBuildBetween4074IsRelevant        Boolean                      @default(false)
-  craInitialHistoryIsStaticallyIndeterminateIsRelevant Boolean                      @default(false)
-  craInspectionIsBuildBetween4074IsRelevant            Boolean                      @default(false)
-  craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                      @default(false)
+  batchId                                              String?                               @db.Uuid
+  inspectionStandardData                               Json                                  @default("{}")
+  craInitialHistoryIsBuildBetween4074IsRelevant        Boolean                               @default(false)
+  craInitialHistoryIsStaticallyIndeterminateIsRelevant Boolean                               @default(false)
+  craInspectionIsBuildBetween4074IsRelevant            Boolean                               @default(false)
+  craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                               @default(false)
   legacyFailureMode                                    Boolean?
-  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
-  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
-  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
-  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
+  batches                                              batches?                              @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
+  objects                                              objects                               @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
+  companies_companiesTosurveys_operatorCompanyId       companies?                            @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
+  companies_companiesTosurveys_surveyorCompanyId       companies?                            @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
   assets                                               assets[]
   auditEvents                                          auditEvents[]
   conditions                                           conditions[]
@@ -1384,7 +1384,11 @@ model surveys {
   poleLabResults                                       poleLabResults[]
   spanJunctionBoxes                                    spanJunctionBoxes[]
   spanJunctionBoxesSurveys                             spanJunctionBoxesSurveys[]
+  spanSupportSystemFacadeSurveys                       spanSupportSystemFacadeSurveys[]
+  spanSupportSystemMastSurveys                         spanSupportSystemMastSurveys[]
+  spanSupportSystemNodeSurveys                         spanSupportSystemNodeSurveys[]
   spanSupportSystems                                   spanSupportSystems[]
+  spanSupportSystemTensionWireSurveys                  spanSupportSystemTensionWireSurveys[]
   surveyElementGroups                                  surveyElementGroups[]
   surveyElements                                       surveyElements[]
   surveyManifestations                                 surveyManifestations[]
@@ -1612,31 +1616,36 @@ model spanLuminaires {
   updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at              DateTime?                 @db.Timestamptz(6)
   spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
+  spanLuminaireSurveys    spanLuminaireSurveys[]
 
   @@index([deleted_at], map: "spanluminaires_deleted_at_index")
 }
 
 model spanSupportSystems {
-  id                 String                    @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
-  objectId           String                    @db.Uuid
-  surveyId           String                    @db.Uuid
-  name               String                    @db.VarChar(128)
-  type               String                    @db.VarChar(32)
-  location           String?                   @db.VarChar(255)
-  locationIndication String?                   @db.VarChar(255)
-  constructionYear   Int?
-  remarks            String?
-  geography          Unsupported("geography")?
-  houseNumber        String?                   @db.VarChar(32)
-  created_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at         DateTime?                 @db.Timestamptz(6)
-  installationHeight Decimal?                  @db.Decimal(8, 2)
-  typeDetailed       String?                   @db.VarChar(64)
-  a11yDetails        Json                      @default("{}")
-  objects            objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
-  surveys            surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
-  spanLuminaires     spanLuminaires[]
+  id                                  String                                @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
+  objectId                            String                                @db.Uuid
+  surveyId                            String                                @db.Uuid
+  name                                String                                @db.VarChar(128)
+  type                                String                                @db.VarChar(32)
+  location                            String?                               @db.VarChar(255)
+  locationIndication                  String?                               @db.VarChar(255)
+  constructionYear                    Int?
+  remarks                             String?
+  geography                           Unsupported("geography")?
+  houseNumber                         String?                               @db.VarChar(32)
+  created_at                          DateTime                              @default(now()) @db.Timestamptz(6)
+  updated_at                          DateTime                              @default(now()) @db.Timestamptz(6)
+  deleted_at                          DateTime?                             @db.Timestamptz(6)
+  installationHeight                  Decimal?                              @db.Decimal(8, 2)
+  typeDetailed                        String?                               @db.VarChar(64)
+  a11yDetails                         Json                                  @default("{}")
+  objects                             objects                               @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
+  surveys                             surveys                               @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
+  spanLuminaires                      spanLuminaires[]
+  spanSupportSystemFacadeSurveys      spanSupportSystemFacadeSurveys[]
+  spanSupportSystemMastSurveys        spanSupportSystemMastSurveys[]
+  spanSupportSystemNodeSurveys        spanSupportSystemNodeSurveys[]
+  spanSupportSystemTensionWireSurveys spanSupportSystemTensionWireSurveys[]
 
   @@index([deleted_at], map: "spansupportsystems_deleted_at_index")
 }
@@ -2820,6 +2829,83 @@ model web_origins {
 
   @@id([client_id, value], map: "constraint_web_origins")
   @@index([client_id], map: "idx_web_orig_client")
+}
+
+model spanLuminaireSurveys {
+  id              String         @id @unique(map: "spanluminairesurveys_id_unique") @db.Uuid
+  luminaireId     String         @db.Uuid
+  luminaireDamage Boolean?
+  remarks         String?
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime       @default(now()) @db.Timestamptz(6)
+  spanLuminaires  spanLuminaires @relation(fields: [luminaireId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminairesurveys_luminaireid_foreign")
+}
+
+model spanSupportSystemFacadeSurveys {
+  id                                        String             @id @unique(map: "spansupportsystemfacadesurveys_id_unique") @db.Uuid
+  surveyId                                  String             @db.Uuid
+  supportSystemId                           String             @db.Uuid
+  facadeDamageWithin1m                      Boolean?
+  hinderingVegetation                       Boolean?
+  wallPlateDamage                           Boolean?
+  faultyMontage                             Boolean?
+  nutNotFullyOverThreadedRod                Boolean?
+  missingFasteners                          Boolean?
+  measuredPreload                           Int?
+  appliedAdditionalTraction                 Int?
+  facadeConnectionFailed                    Int?
+  facadeConnectionFailureAdditionalTraction Int?
+  remarks                                   String?
+  created_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems                        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemfacadesurveys_supportsystemid_foreign")
+  surveys                                   surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemfacadesurveys_surveyid_foreign")
+}
+
+model spanSupportSystemMastSurveys {
+  id                      String             @id @unique(map: "spansupportsystemmastsurveys_id_unique") @db.Uuid
+  surveyId                String             @db.Uuid
+  supportSystemId         String             @db.Uuid
+  mastDamage              Boolean?
+  mastMissingParts        Boolean?
+  tensionMastAngle        Int?
+  mastAttachmentDamage    Boolean?
+  mastBracketMissingParts Boolean?
+  mastBracketDamage       Boolean?
+  remarks                 String?
+  created_at              DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems      spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemmastsurveys_supportsystemid_foreign")
+  surveys                 surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemmastsurveys_surveyid_foreign")
+}
+
+model spanSupportSystemNodeSurveys {
+  id                 String             @id @unique(map: "spansupportsystemnodesurveys_id_unique") @db.Uuid
+  surveyId           String             @db.Uuid
+  supportSystemId    String             @db.Uuid
+  nodeDamage         Boolean?
+  remarks            String?
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemnodesurveys_supportsystemid_foreign")
+  surveys            surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemnodesurveys_surveyid_foreign")
+}
+
+model spanSupportSystemTensionWireSurveys {
+  id                        String             @id @unique(map: "spansupportsystemtensionwiresurveys_id_unique") @db.Uuid
+  surveyId                  String             @db.Uuid
+  supportSystemId           String             @db.Uuid
+  tensionWireDamage         Boolean?
+  thirdPartyObjectsAttached Boolean?
+  gaffTerminalDamage        Boolean?
+  gaffTerminalMissingParts  Boolean?
+  faultyMontage             Boolean?
+  tensionWireClampDamage    Boolean?
+  remarks                   String?
+  created_at                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemtensionwiresurveys_supportsystemid_foreign")
+  surveys                   surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemtensionwiresurveys_surveyid_foreign")
 }
 
 enum degreeOfDamage {

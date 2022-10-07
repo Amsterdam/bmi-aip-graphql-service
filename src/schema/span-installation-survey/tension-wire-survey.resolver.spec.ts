@@ -45,9 +45,9 @@ const tensionWireSurveyRepo = new TensionWireSurveyRepository(prismaServiceMock)
 const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
-describe('Span Installation Surveys / Tension Wire / Resolver', () => {
+describe('Span Installation Survey / Tension Wire / Resolver', () => {
 	describe('createTensionWireSurvey', () => {
-		test('creates and returns a tension wire survey', async () => {
+		test('creates and returns a TensionWireSurvey object', async () => {
 			const commandBusMock = getCommandBusMock();
 			const queryBusMock = getQueryBusMock();
 			const resolver = new TensionWireSurveyResolver(
@@ -67,7 +67,7 @@ describe('Span Installation Surveys / Tension Wire / Resolver', () => {
 	});
 
 	describe('updateTensionWireSurvey', () => {
-		test('updates and returns a support system', async () => {
+		test('updates and returns a TensionWireSurvey object', async () => {
 			const commandBusMock = getCommandBusMock();
 			const queryBusMock = getQueryBusMock();
 			const resolver = new TensionWireSurveyResolver(
@@ -86,7 +86,7 @@ describe('Span Installation Surveys / Tension Wire / Resolver', () => {
 		});
 	});
 
-	test('getTensionWireSurvey returns a single tension wire survey object', async () => {
+	test('getTensionWireSurvey returns a single TensionWireSurvey object', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
 		const resolver = new TensionWireSurveyResolver(

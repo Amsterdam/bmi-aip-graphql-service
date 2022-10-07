@@ -3,21 +3,26 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
-import { ITensionWireSurveyRepository, TensionWireSurvey } from './types/tension-wire-survey.repository.interface';
+import { ITensionWireSurveyRepository, TensionWireSurvey } from './types';
 import { CreateTensionWireSurveyInput } from './dto/create-tension-wire-survey.input';
 import { UpdateTensionWireSurveyInput } from './dto/update-tension-wire-survey.input';
+import { SupportSystemSurveyNotFoundException } from './exceptions/support-system-survey-not-found.exception';
 
 @Injectable()
 export class TensionWireSurveyRepository implements ITensionWireSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	getTensionWireSurvey(surveyId: string, supportSystemId: string): Promise<TensionWireSurvey> {
-		return this.prisma.spanSupportSystemTensionWireSurveys.findFirst({
+	async getTensionWireSurvey(surveyId: string, supportSystemId: string): Promise<TensionWireSurvey> {
+		const tensionWireSurvey = await this.prisma.spanSupportSystemTensionWireSurveys.findFirst({
 			where: {
 				surveyId,
 				supportSystemId,
 			},
 		});
+
+		if (!tensionWireSurvey) throw new SupportSystemSurveyNotFoundException(surveyId, supportSystemId);
+
+		return tensionWireSurvey;
 	}
 
 	async createTensionWireSurvey({

@@ -2,6 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
+import { SupportSystemSurveyNotFoundException } from './exceptions/support-system-survey-not-found.exception';
 import { TensionWireSurveyRepository } from './tension-wire-survey.repository';
 import { domainTensionWireSurvey, createTensionWireSurveyInput, updateTensionWireSurveyInput } from './__stubs__';
 
@@ -19,17 +20,26 @@ let repository: TensionWireSurveyRepository;
 const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
-describe('Span Installation Surveys / Tension Wire / Repository', () => {
+describe('Span Installation Survey / Tension Wire / Repository', () => {
 	beforeEach(() => {
 		repository = new TensionWireSurveyRepository(prismaServiceMock);
 	});
 
-	test('getTensionWireSurvey()', async () => {
-		const survey = await repository.getTensionWireSurvey(surveyId, supportSystemId);
-		expect(prismaServiceMock.spanSupportSystemTensionWireSurveys.findFirst).toHaveBeenCalledWith({
-			where: { surveyId, supportSystemId },
+	describe('getTensionWireSurvey()', () => {
+		test('returns tension wire survey', async () => {
+			const survey = await repository.getTensionWireSurvey(surveyId, supportSystemId);
+			expect(prismaServiceMock.spanSupportSystemTensionWireSurveys.findFirst).toHaveBeenCalledWith({
+				where: { surveyId, supportSystemId },
+			});
+			expect(survey).toEqual(domainTensionWireSurvey);
 		});
-		expect(survey).toEqual(domainTensionWireSurvey);
+
+		test('throws an exception when not found', async () => {
+			prismaServiceMock.spanSupportSystemTensionWireSurveys.findFirst.mockResolvedValueOnce(null);
+			await expect(repository.getTensionWireSurvey(surveyId, supportSystemId)).rejects.toThrow(
+				SupportSystemSurveyNotFoundException,
+			);
+		});
 	});
 
 	test('createTensionWireSurvey()', async () => {
@@ -64,7 +74,7 @@ describe('Span Installation Surveys / Tension Wire / Repository', () => {
 		);
 	});
 
-	test('updateSupportSystem()', async () => {
+	test('updateTensionWireSurvey()', async () => {
 		prismaServiceMock.spanSupportSystemTensionWireSurveys.update.mockResolvedValue(domainTensionWireSurvey);
 		const returnValue = await repository.updateTensionWireSurvey(updateTensionWireSurveyInput);
 		expect(prismaServiceMock.spanSupportSystemTensionWireSurveys.update).toHaveBeenCalledWith({

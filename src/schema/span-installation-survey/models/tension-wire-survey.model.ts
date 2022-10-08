@@ -11,21 +11,27 @@ export class TensionWireSurvey {
 	@Field((type) => String)
 	supportSystemId: string;
 
+	// Maps to "Schade aan spandraad?"
 	@Field((type) => Boolean)
 	tensionWireDamage: boolean;
 
+	// Maps to "Objecten van derden aan spandraad bevestigd?"
 	@Field((type) => Boolean)
 	thirdPartyObjectsAttached: boolean;
 
+	// Maps to "Schade aan gaffelterminal?"
 	@Field((type) => Boolean)
 	gaffTerminalDamage: boolean;
 
+	// Maps to "Ontbrekende onderdelen aan gaffelterminal?"
 	@Field((type) => Boolean)
 	gaffTerminalMissingParts: boolean;
 
+	// Maps to "Onjuiste montage?"
 	@Field((type) => Boolean)
 	faultyMontage: boolean;
 
+	// Maps to "Schade aan spandraadklem?"
 	@Field((type) => Boolean)
 	tensionWireClampDamage: boolean;
 

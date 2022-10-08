@@ -23,15 +23,25 @@ import { CreateMastSurveyCommand } from './commands/create-mast-survey.command';
 import { CreateMastSurveyHandler } from './commands/create-mast-survey.handler';
 import { UpdateMastSurveyCommand } from './commands/update-mast-survey.command';
 import { UpdateMastSurveyHandler } from './commands/update-mast-survey.handler';
+import { CreateFacadeSurveyCommand } from './commands/create-facade-survey.command';
+import { CreateFacadeSurveyHandler } from './commands/create-facade-survey.handler';
+import { UpdateFacadeSurveyCommand } from './commands/update-facade-survey.command';
+import { UpdateFacadeSurveyHandler } from './commands/update-facade-survey.handler';
+import { FacadeSurveyResolver } from './facade-survey.resolver';
+import { FacadeSurveyService } from './facade-survey.service';
+import { FacadeSurveyRepository } from './facade-survey.repository';
 
 @Module({
 	providers: [
 		TensionWireSurveyResolver,
 		MastSurveyResolver,
+		FacadeSurveyResolver,
 		TensionWireSurveyService,
 		MastSurveyService,
+		FacadeSurveyService,
 		TensionWireSurveyRepository,
 		MastSurveyRepository,
+		FacadeSurveyRepository,
 		GetTensionWireSurveyHandler,
 		GetMastSurveyHandler,
 		GetTensionWireSurveyQuery,
@@ -40,10 +50,14 @@ import { UpdateMastSurveyHandler } from './commands/update-mast-survey.handler';
 		CreateMastSurveyCommand,
 		CreateTensionWireSurveyHandler,
 		CreateMastSurveyHandler,
+		CreateFacadeSurveyCommand,
+		CreateFacadeSurveyHandler,
 		UpdateTensionWireSurveyCommand,
 		UpdateMastSurveyCommand,
 		UpdateTensionWireSurveyHandler,
 		UpdateMastSurveyHandler,
+		UpdateFacadeSurveyCommand,
+		UpdateFacadeSurveyHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],

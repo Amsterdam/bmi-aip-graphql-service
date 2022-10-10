@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
@@ -24,7 +24,7 @@ import { AssetResolver } from './asset.resolver';
 		UpdateAssetCommand,
 		UpdateAssetHandler,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	imports: [CqrsModule, forwardRef(() => AuthorizationModule), AuthenticationModule],
 	exports: [AssetService],
 })
 export class AssetModule {}

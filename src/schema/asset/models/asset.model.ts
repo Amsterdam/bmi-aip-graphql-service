@@ -1,77 +1,119 @@
+import { Field, ObjectType } from '@nestjs/graphql';
+
 import { AssetStatuses } from '../../../types';
 
+import { IPassport } from './passport.model';
+
+@ObjectType({ description: 'asset' })
 export class Asset {
+	@Field((type) => String)
 	public id: string;
 
+	@Field((type) => String)
 	public gisibId: number;
 
+	@Field((type) => String)
 	public name: string;
 
-	public code: string | null;
+	@Field((type) => String, { nullable: true })
+	public code: string;
 
-	public location: string | null;
+	@Field((type) => String, { nullable: true })
+	public location: string;
 
-	public latitude: number | null;
+	@Field((type) => Number, { nullable: true })
+	public latitude: number;
 
-	public longitude: number | null;
+	@Field((type) => Number, { nullable: true })
+	public longitude: number;
 
-	public updatedOn: string | null;
+	@Field((type) => String, { nullable: true })
+	public updatedOn: string;
 
+	@Field((type) => Boolean)
 	public compositionIsVisible: boolean;
 
-	public clientCompanyId: string | null;
+	@Field((type) => String, { nullable: true })
+	public clientCompanyId: string;
 
-	public operatorCompanyId: string | null;
+	@Field((type) => String, { nullable: true })
+	public operatorCompanyId: string;
 
+	@Field((type) => String, { nullable: true })
 	public status: keyof typeof AssetStatuses | null;
 
+	@Field((type) => String)
 	public ownerCompanyId: string;
 
+	@Field((type) => String)
 	public objectTypeId: string;
 
-	public inspectionStandardId: string | null;
+	@Field((type) => String, { nullable: true })
+	public inspectionStandardId: string;
 
-	public created_at: string | null;
+	@Field((type) => String, { nullable: true })
+	public created_at: string;
 
-	public updated_at: string | null;
+	@Field((type) => String, { nullable: true })
+	public updated_at: string;
 
-	public customerVersion: string | null;
+	@Field((type) => String, { nullable: true })
+	public customerVersion: string;
 
-	public externalRefId: string | null;
+	@Field((type) => String, { nullable: true })
+	public externalRefId: string;
 
-	public managementOrganization: string | null;
+	@Field((type) => String, { nullable: true })
+	public managementOrganization: string;
 
-	public shape: string | null;
+	@Field((type) => String, { nullable: true })
+	public shape: string;
 
-	public useage: string | null;
+	@Field((type) => String, { nullable: true })
+	public useage: string;
 
-	public siteId: string | null;
+	@Field((type) => String, { nullable: true })
+	public siteId: string;
 
+	@Field((type) => String)
 	public surveyorCompanyId: string;
 
-	public isPublic: boolean | null;
+	@Field((type) => Boolean, { nullable: true })
+	public isPublic: boolean;
 
-	public isDemo: boolean | null;
+	@Field((type) => Boolean, { nullable: true })
+	public isDemo: boolean;
 
-	public constructionYear: number | null;
+	@Field((type) => Number, { nullable: true })
+	public constructionYear: number;
 
-	public shapeSrid: number | null;
+	@Field((type) => Number, { nullable: true })
+	public shapeSrid: number;
 
-	public effortCategory: string | null;
+	@Field((type) => String, { nullable: true })
+	public effortCategory: string;
 
-	public effortCalculation: number | null;
+	@Field((type) => Number, { nullable: true })
+	public effortCalculation: number;
 
-	public length: number | null;
+	@Field((type) => Number, { nullable: true })
+	public length: number;
 
-	public width: number | null;
+	@Field((type) => Number, { nullable: true })
+	public width: number;
 
-	public squareMeters: number | null;
+	@Field((type) => Number, { nullable: true })
+	public squareMeters: number;
 
-	public trafficType: string | null;
+	@Field((type) => String, { nullable: true })
+	public trafficType: string;
 
-	public mainMaterial: string | null;
+	@Field((type) => String, { nullable: true })
+	public mainMaterial: string;
 
-	public marineInfrastrutureType: string | null;
+	@Field((type) => String, { nullable: true })
+	public marineInfrastrutureType: string;
 
-	public attributes: string | null;
+	@Field((type) => String || IPassport, { nullable: true })
+	public attributes: string | IPassport;
 }

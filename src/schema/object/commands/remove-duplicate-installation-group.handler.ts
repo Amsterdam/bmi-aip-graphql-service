@@ -11,6 +11,6 @@ export class RemoveDuplicateInstallationGroupHandler
 	constructor(private service: ObjectService) {}
 
 	public async execute(command: RemoveDuplicateInstallationGroupCommand): Promise<boolean> {
-		return this.service.removeDuplicateInstallationGroup(command.installationGroupId);
+		return this.service.removeDuplicateInstallationGroup(command.installationGroupId, command.targetRemoved);
 	}
 }

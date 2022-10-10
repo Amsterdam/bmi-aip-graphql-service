@@ -52,9 +52,10 @@ export class ObjectResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async removeDuplicateInstallationGroup(
 		@Args('installationGroupId') installationGroupId: number,
+		@Args('targetRemoved') targetRemoved?: boolean,
 	): Promise<boolean> {
 		return this.commandBus.execute<RemoveDuplicateInstallationGroupCommand>(
-			new RemoveDuplicateInstallationGroupCommand(installationGroupId),
+			new RemoveDuplicateInstallationGroupCommand(installationGroupId, targetRemoved),
 		);
 	}
 

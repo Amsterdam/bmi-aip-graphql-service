@@ -23,27 +23,57 @@ import { CreateMastSurveyCommand } from './commands/create-mast-survey.command';
 import { CreateMastSurveyHandler } from './commands/create-mast-survey.handler';
 import { UpdateMastSurveyCommand } from './commands/update-mast-survey.command';
 import { UpdateMastSurveyHandler } from './commands/update-mast-survey.handler';
+import { CreateFacadeSurveyCommand } from './commands/create-facade-survey.command';
+import { CreateFacadeSurveyHandler } from './commands/create-facade-survey.handler';
+import { UpdateFacadeSurveyCommand } from './commands/update-facade-survey.command';
+import { UpdateFacadeSurveyHandler } from './commands/update-facade-survey.handler';
+import { FacadeSurveyResolver } from './facade-survey.resolver';
+import { FacadeSurveyService } from './facade-survey.service';
+import { FacadeSurveyRepository } from './facade-survey.repository';
+import { NodeSurveyResolver } from './node-survey.resolver';
+import { NodeSurveyService } from './node-survey.service';
+import { NodeSurveyRepository } from './node-survey.repository';
+import { GetNodeSurveyQuery } from './queries/get-node-survey.query';
+import { CreateNodeSurveyCommand } from './commands/create-node-survey.command';
+import { CreateNodeSurveyHandler } from './commands/create-node-survey.handler';
+import { UpdateNodeSurveyCommand } from './commands/update-node-survey.command';
+import { UpdateNodeSurveyHandler } from './commands/update-node-survey.handler';
 
 @Module({
 	providers: [
 		TensionWireSurveyResolver,
 		MastSurveyResolver,
+		FacadeSurveyResolver,
+		NodeSurveyResolver,
 		TensionWireSurveyService,
 		MastSurveyService,
+		FacadeSurveyService,
+		NodeSurveyService,
 		TensionWireSurveyRepository,
 		MastSurveyRepository,
+		FacadeSurveyRepository,
+		NodeSurveyRepository,
 		GetTensionWireSurveyHandler,
 		GetMastSurveyHandler,
 		GetTensionWireSurveyQuery,
 		GetMastSurveyQuery,
+		GetNodeSurveyQuery,
 		CreateTensionWireSurveyCommand,
 		CreateMastSurveyCommand,
 		CreateTensionWireSurveyHandler,
 		CreateMastSurveyHandler,
+		CreateFacadeSurveyCommand,
+		CreateFacadeSurveyHandler,
+		CreateNodeSurveyCommand,
+		CreateNodeSurveyHandler,
 		UpdateTensionWireSurveyCommand,
 		UpdateMastSurveyCommand,
 		UpdateTensionWireSurveyHandler,
 		UpdateMastSurveyHandler,
+		UpdateFacadeSurveyCommand,
+		UpdateFacadeSurveyHandler,
+		UpdateNodeSurveyCommand,
+		UpdateNodeSurveyHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],

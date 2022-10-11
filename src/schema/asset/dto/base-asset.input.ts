@@ -6,16 +6,16 @@ import GraphQLJSON from 'graphql-type-json';
 export class BaseAssetInput {
 	@Field()
 	@MaxLength(255)
-	public name: string;
+	public name?: string;
 
 	@Field()
 	@MaxLength(255)
-	public code: string;
+	public code?: string;
 
 	@IsOptional()
 	@Field({ nullable: true })
 	@MaxLength(255)
-	public location: string;
+	public location?: string;
 
 	@IsNumber()
 	@Field({ nullable: true })

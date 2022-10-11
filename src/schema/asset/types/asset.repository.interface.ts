@@ -7,5 +7,5 @@ export interface IAssetRepository {
 	getWritableAssetCodesForCompanyId(companyId: string): Promise<string[]>;
 	createAsset(input: CreateAssetInput): Promise<DBAsset>;
 	updateAsset(input: UpdateAssetInput): Promise<DBAsset>;
-	updatePassportByObjectCode(input: AssetAttributesInput): Promise<DBAsset>;
+	updateAssetPassportByObjectCode(input: AssetAttributesInput): Promise<DBAsset>;
 }

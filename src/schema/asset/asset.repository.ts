@@ -159,11 +159,11 @@ export class AssetRepository implements IAssetRepository {
 		});
 	}
 
-	async updatePassportByObjectCode(input: AssetAttributesInput): Promise<DBAsset> {
+	async updateAssetPassportByObjectCode(input: AssetAttributesInput): Promise<DBAsset> {
 		const id = input.assetId;
 
 		const data: Prisma.objectsUpdateInput = {
-			attributes: JSON.stringify(input.attributes),
+			attributes: JSON.parse(JSON.stringify(input.attributes)), //JSON.stringify(input.attributes),
 		};
 
 		return this.prisma.objects.update({

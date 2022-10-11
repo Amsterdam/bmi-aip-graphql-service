@@ -10,6 +10,8 @@ import { UpdateAssetCommand } from './commands/update-asset.command';
 import { UpdateAssetInput } from './dto/update-asset.input';
 import { DBAsset } from './asset.repository';
 import { AssetFactory } from './asset.factory';
+import { UpdatePassportByObjectCodeCommand } from './commands/update-passport-by-objectCode.command';
+import { AssetAttributesInput } from './dto/asset-attributes.input';
 
 @Resolver((of) => Asset)
 @Resource(Asset.name)
@@ -26,6 +28,17 @@ export class AssetResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateAsset(@Args('updateAsset') input: UpdateAssetInput): Promise<Asset> {
 		const domainAsset: DBAsset = await this.commandBus.execute<UpdateAssetCommand>(new UpdateAssetCommand(input));
+		return AssetFactory.FromDBAsset(domainAsset);
+	}
+
+	@Mutation(() => Asset)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async updatePassportByObjectCode(
+		@Args('updatePassportByObjectCode') input: AssetAttributesInput,
+	): Promise<Asset> {
+		const domainAsset: DBAsset = await this.commandBus.execute<UpdatePassportByObjectCodeCommand>(
+			new UpdatePassportByObjectCodeCommand(input),
+		);
 		return AssetFactory.FromDBAsset(domainAsset);
 	}
 }

@@ -7,6 +7,7 @@ import { newId } from '../../utils';
 import type { IAssetRepository } from './types/asset.repository.interface';
 import { CreateAssetInput } from './dto/create-asset.input';
 import { UpdateAssetInput } from './dto/update-asset.input';
+import { AssetAttributesInput } from './dto/asset-attributes.input';
 
 const assetCode = Prisma.validator<Prisma.objectsArgs>()({
 	select: { code: true },
@@ -150,6 +151,19 @@ export class AssetRepository implements IAssetRepository {
 			length: input.length,
 			width: input.width,
 			squareMeters: input.squareMeters,
+		};
+
+		return this.prisma.objects.update({
+			where: { id },
+			data,
+		});
+	}
+
+	async updatePassportByObjectCode(input: AssetAttributesInput): Promise<DBAsset> {
+		const id = input.assetId;
+
+		const data: Prisma.objectsUpdateInput = {
+			attributes: JSON.stringify(input.attributes),
 		};
 
 		return this.prisma.objects.update({

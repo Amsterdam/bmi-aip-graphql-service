@@ -12,6 +12,8 @@ import { UpdateAssetHandler } from './commands/update-asset.handler';
 import { CreateAssetCommand } from './commands/create-asset.command';
 import { UpdateAssetCommand } from './commands/update-asset.command';
 import { AssetResolver } from './asset.resolver';
+import { UpdatePassportByObjectCodeCommand } from './commands/update-passport-by-objectCode.command';
+import { UpdatePassportByObjectCodeHandler } from './commands/update-passport-by-objectCode.handler';
 
 @Module({
 	providers: [
@@ -23,6 +25,8 @@ import { AssetResolver } from './asset.resolver';
 		CreateAssetHandler,
 		UpdateAssetCommand,
 		UpdateAssetHandler,
+		UpdatePassportByObjectCodeCommand,
+		UpdatePassportByObjectCodeHandler,
 	],
 	imports: [CqrsModule, forwardRef(() => AuthorizationModule), AuthenticationModule],
 	exports: [AssetService],

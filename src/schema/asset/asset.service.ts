@@ -17,10 +17,4 @@ export class AssetService {
 		const asset = await this.assetRepo.getAssetByCode(code);
 		return AssetFactory.FromDBAsset(asset);
 	}
-
-	// async getAssets(assetType: string): Promise<ObjectModel[]> {
-	// 	return (await this.assetRepo.getAssetByAssetTypeId(assetType)).map((asset) =>
-	// 		ObjectFactory.CreateObject(asset),
-	// 	);
-	// }
 }

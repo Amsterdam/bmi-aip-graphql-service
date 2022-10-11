@@ -1,5 +1,5 @@
-import { CreateAssetInput } from '../dto/create-asset.input';
 import { DBAsset } from '../asset.repository';
+import { CreateAssetInput } from '../dto/create-asset.input';
 import { UpdateAssetInput } from '../dto/update-asset.input';
 import { AssetAttributesInput } from '../dto/asset-attributes.input';
 

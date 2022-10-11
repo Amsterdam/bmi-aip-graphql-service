@@ -1,0 +1,3 @@
+export class GetMastSurveyQuery {
+	public constructor(public readonly surveyId: string, public readonly supportSystemId: string) {}
+}

@@ -3,3 +3,4 @@ export * from './mast-survey.repository.interface';
 export * from './facade-survey.repository.interface';
 export * from './node-survey.repository.interface';
 export * from './junction-box-survey.repository.interface';
+export * from './luminaire-survey.repository.interface';

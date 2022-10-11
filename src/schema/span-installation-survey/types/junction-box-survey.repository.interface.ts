@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { CreateJunctionBoxSurveyInput } from '../dto/create-junction-box-survey.input';
 import { UpdateJunctionBoxSurveyInput } from '../dto/update-junction-box-survey.input';
 
-const mastSurveys = Prisma.validator<Prisma.spanJunctionBoxesSurveysArgs>()({
+const mastSurveys = Prisma.validator<Prisma.spanJunctionBoxSurveysArgs>()({
 	select: {
 		id: true,
 		surveyId: true,
@@ -19,7 +19,7 @@ const mastSurveys = Prisma.validator<Prisma.spanJunctionBoxesSurveysArgs>()({
 	},
 });
 
-export type JunctionBoxSurvey = Prisma.spanJunctionBoxesSurveysGetPayload<typeof mastSurveys>;
+export type JunctionBoxSurvey = Prisma.spanJunctionBoxSurveysGetPayload<typeof mastSurveys>;
 
 export interface IJunctionBoxSurveyRepository {
 	getJunctionBoxSurvey(surveyId: string, supportSystemId: string): Promise<JunctionBoxSurvey>;

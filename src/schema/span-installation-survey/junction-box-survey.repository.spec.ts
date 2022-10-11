@@ -7,7 +7,7 @@ import { domainJunctionBoxSurvey, createJunctionBoxSurveyInput, updateJunctionBo
 import { JunctionBoxSurveyNotFoundException } from './exceptions/junction-box-survey-not-found.exception';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-	spanJunctionBoxesSurveys: {
+	spanJunctionBoxSurveys: {
 		create: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		findFirst: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		update: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
@@ -28,14 +28,14 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 	describe('getJunctionBoxSurvey()', () => {
 		test('returns mast survey', async () => {
 			const survey = await repository.getJunctionBoxSurvey(surveyId, junctionBoxId);
-			expect(prismaServiceMock.spanJunctionBoxesSurveys.findFirst).toHaveBeenCalledWith({
+			expect(prismaServiceMock.spanJunctionBoxSurveys.findFirst).toHaveBeenCalledWith({
 				where: { surveyId, junctionBoxId },
 			});
 			expect(survey).toEqual(domainJunctionBoxSurvey);
 		});
 
 		test('throws an exception when not found', async () => {
-			prismaServiceMock.spanJunctionBoxesSurveys.findFirst.mockResolvedValueOnce(null);
+			prismaServiceMock.spanJunctionBoxSurveys.findFirst.mockResolvedValueOnce(null);
 			await expect(repository.getJunctionBoxSurvey(surveyId, junctionBoxId)).rejects.toThrow(
 				JunctionBoxSurveyNotFoundException,
 			);
@@ -44,7 +44,7 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 
 	test('createJunctionBoxSurvey()', async () => {
 		const returnValue = await repository.createJunctionBoxSurvey(createJunctionBoxSurveyInput);
-		const survey = prismaServiceMock.spanJunctionBoxesSurveys.create.mock.calls[0][0].data;
+		const survey = prismaServiceMock.spanJunctionBoxSurveys.create.mock.calls[0][0].data;
 		expect(survey).toEqual(
 			expect.objectContaining({
 				cableDamage: true,
@@ -74,9 +74,9 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 	});
 
 	test('updateJunctionBoxSurvey()', async () => {
-		prismaServiceMock.spanJunctionBoxesSurveys.update.mockResolvedValue(domainJunctionBoxSurvey);
+		prismaServiceMock.spanJunctionBoxSurveys.update.mockResolvedValue(domainJunctionBoxSurvey);
 		const returnValue = await repository.updateJunctionBoxSurvey(updateJunctionBoxSurveyInput);
-		expect(prismaServiceMock.spanJunctionBoxesSurveys.update).toHaveBeenCalledWith({
+		expect(prismaServiceMock.spanJunctionBoxSurveys.update).toHaveBeenCalledWith({
 			where: { id: updateJunctionBoxSurveyInput.id },
 			data: {
 				remarks: '__REMARKS__',

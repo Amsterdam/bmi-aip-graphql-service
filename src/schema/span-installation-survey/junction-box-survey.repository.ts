@@ -13,7 +13,7 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async getJunctionBoxSurvey(surveyId: string, junctionBoxId: string): Promise<JunctionBoxSurvey> {
-		const junctionBoxSurvey = await this.prisma.spanJunctionBoxesSurveys.findFirst({
+		const junctionBoxSurvey = await this.prisma.spanJunctionBoxSurveys.findFirst({
 			where: {
 				surveyId,
 				junctionBoxId,
@@ -35,7 +35,7 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 		stickerNotReadable,
 		remarks,
 	}: CreateJunctionBoxSurveyInput): Promise<JunctionBoxSurvey> {
-		return this.prisma.spanJunctionBoxesSurveys.create({
+		return this.prisma.spanJunctionBoxSurveys.create({
 			data: {
 				id: newId(),
 				surveys: { connect: { id: surveyId } },
@@ -59,7 +59,7 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 		stickerNotReadable,
 		remarks,
 	}: UpdateJunctionBoxSurveyInput): Promise<JunctionBoxSurvey> {
-		return this.prisma.spanJunctionBoxesSurveys.update({
+		return this.prisma.spanJunctionBoxSurveys.update({
 			where: {
 				id,
 			},
@@ -75,7 +75,7 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 	}
 
 	async deleteJunctionBoxSurvey(id: string): Promise<JunctionBoxSurvey> {
-		return this.prisma.spanJunctionBoxesSurveys.delete({
+		return this.prisma.spanJunctionBoxSurveys.delete({
 			where: { id },
 		});
 	}

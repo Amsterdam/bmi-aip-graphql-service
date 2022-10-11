@@ -38,6 +38,18 @@ import { CreateNodeSurveyCommand } from './commands/create-node-survey.command';
 import { CreateNodeSurveyHandler } from './commands/create-node-survey.handler';
 import { UpdateNodeSurveyCommand } from './commands/update-node-survey.command';
 import { UpdateNodeSurveyHandler } from './commands/update-node-survey.handler';
+import { JunctionBoxSurveyResolver } from './junction-box-survey.resolver';
+import { JunctionBoxSurveyService } from './junction-box-survey.service';
+import { JunctionBoxSurveyRepository } from './junction-box-survey.repository';
+import { GetJunctionBoxSurveyQuery } from './queries/get-junction-box-survey.query';
+import { GetNodeSurveyHandler } from './queries/get-node-survey.handler';
+import { GetJunctionBoxSurveyHandler } from './queries/get-junction-box-survey.handler';
+import { GetFacadeSurveyHandler } from './queries/get-facade-survey.handler';
+import { GetFacadeSurveyQuery } from './queries/get-facade-survey.query';
+import { CreateJunctionBoxSurveyCommand } from './commands/create-junction-box-survey.command';
+import { CreateJunctionBoxSurveyHandler } from './commands/create-junction-box-survey.handler';
+import { UpdateJunctionBoxSurveyCommand } from './commands/update-junction-box-survey.command';
+import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-survey.handler';
 
 @Module({
 	providers: [
@@ -45,27 +57,42 @@ import { UpdateNodeSurveyHandler } from './commands/update-node-survey.handler';
 		MastSurveyResolver,
 		FacadeSurveyResolver,
 		NodeSurveyResolver,
+		JunctionBoxSurveyResolver,
+
 		TensionWireSurveyService,
 		MastSurveyService,
 		FacadeSurveyService,
 		NodeSurveyService,
+		JunctionBoxSurveyService,
+
 		TensionWireSurveyRepository,
 		MastSurveyRepository,
 		FacadeSurveyRepository,
 		NodeSurveyRepository,
-		GetTensionWireSurveyHandler,
-		GetMastSurveyHandler,
+		JunctionBoxSurveyRepository,
+
 		GetTensionWireSurveyQuery,
+		GetTensionWireSurveyHandler,
 		GetMastSurveyQuery,
+		GetMastSurveyHandler,
+		GetFacadeSurveyQuery,
+		GetFacadeSurveyHandler,
 		GetNodeSurveyQuery,
+		GetNodeSurveyHandler,
+		GetJunctionBoxSurveyQuery,
+		GetJunctionBoxSurveyHandler,
+
 		CreateTensionWireSurveyCommand,
-		CreateMastSurveyCommand,
 		CreateTensionWireSurveyHandler,
+		CreateMastSurveyCommand,
 		CreateMastSurveyHandler,
 		CreateFacadeSurveyCommand,
 		CreateFacadeSurveyHandler,
 		CreateNodeSurveyCommand,
 		CreateNodeSurveyHandler,
+		CreateJunctionBoxSurveyCommand,
+		CreateJunctionBoxSurveyHandler,
+
 		UpdateTensionWireSurveyCommand,
 		UpdateMastSurveyCommand,
 		UpdateTensionWireSurveyHandler,
@@ -74,6 +101,9 @@ import { UpdateNodeSurveyHandler } from './commands/update-node-survey.handler';
 		UpdateFacadeSurveyHandler,
 		UpdateNodeSurveyCommand,
 		UpdateNodeSurveyHandler,
+		UpdateJunctionBoxSurveyCommand,
+		UpdateJunctionBoxSurveyHandler,
+
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],

@@ -8,9 +8,9 @@ import { JunctionBoxSurveyFactory } from './junction-box-survey.factory';
 export class JunctionBoxSurveyService {
 	public constructor(private readonly mastSurveyRepo: JunctionBoxSurveyRepository) {}
 
-	async getJunctionBoxSurvey(surveyId: string, supportSystemId: string): Promise<JunctionBoxSurvey> {
+	async getJunctionBoxSurvey(supportSystemId: string): Promise<JunctionBoxSurvey> {
 		return JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(
-			await this.mastSurveyRepo.getJunctionBoxSurvey(surveyId, supportSystemId),
+			await this.mastSurveyRepo.getJunctionBoxSurvey(supportSystemId),
 		);
 	}
 }

@@ -22,8 +22,8 @@ export class FacadeSurveyResolver {
 
 	@Query(() => FacadeSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getFacadeSurvey(@Args('surveyId') surveyId: string, @Args('supportSystemId') supportSystemId: string) {
-		return this.queryBus.execute<GetFacadeSurveyQuery>(new GetFacadeSurveyQuery(surveyId, supportSystemId));
+	public async getFacadeSurvey(@Args('supportSystemId') supportSystemId: string) {
+		return this.queryBus.execute<GetFacadeSurveyQuery>(new GetFacadeSurveyQuery(supportSystemId));
 	}
 
 	@Mutation(() => FacadeSurvey)

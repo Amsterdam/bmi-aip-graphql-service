@@ -4,7 +4,6 @@ describe('Span Installation Survey / Model / TensionWire', () => {
 	test('constructs a TensionWireSurvey instance', () => {
 		const tensionWireSurvey = new TensionWireSurvey();
 		tensionWireSurvey.id = '796229bf-1b54-4bb7-a7d4-acb0dc3062df';
-		tensionWireSurvey.surveyId = '9003d096-4dd2-4d0d-b74b-9406a721d94d';
 		tensionWireSurvey.supportSystemId = '83ca470b-768a-49a7-a59f-4fe5da5620cf';
 		tensionWireSurvey.tensionWireDamage = true;
 		tensionWireSurvey.thirdPartyObjectsAttached = true;
@@ -16,7 +15,6 @@ describe('Span Installation Survey / Model / TensionWire', () => {
 		expect(tensionWireSurvey).toBeInstanceOf(TensionWireSurvey);
 		expect(tensionWireSurvey).toEqual({
 			id: '796229bf-1b54-4bb7-a7d4-acb0dc3062df',
-			surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 			supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 			tensionWireDamage: true,
 			thirdPartyObjectsAttached: true,

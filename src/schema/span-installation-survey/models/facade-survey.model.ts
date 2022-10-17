@@ -6,9 +6,6 @@ export class FacadeSurvey {
 	id: string;
 
 	@Field((type) => String)
-	surveyId: string;
-
-	@Field((type) => String)
 	supportSystemId: string;
 
 	// Maps to "Schade op gevel binnen 1 m van gevelbevestiging?"

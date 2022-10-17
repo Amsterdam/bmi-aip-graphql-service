@@ -8,8 +8,4 @@ export class CreateFacadeSurveyInput extends BaseFacadeSurveyInput {
 	@Field()
 	@IsUUID()
 	public supportSystemId: string;
-
-	@Field()
-	@IsUUID()
-	public surveyId: string;
 }

@@ -10,6 +10,6 @@ export class GetMastSurveyHandler implements IQueryHandler<GetMastSurveyQuery> {
 	constructor(private service: MastSurveyService) {}
 
 	async execute(query: GetMastSurveyQuery): Promise<MastSurvey> {
-		return this.service.getMastSurvey(query.surveyId, query.supportSystemId);
+		return this.service.getMastSurvey(query.supportSystemId);
 	}
 }

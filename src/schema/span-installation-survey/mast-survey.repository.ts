@@ -12,21 +12,19 @@ import { SupportSystemSurveyNotFoundException } from './exceptions/support-syste
 export class MastSurveyRepository implements IMastSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async getMastSurvey(surveyId: string, supportSystemId: string): Promise<MastSurvey> {
+	async getMastSurvey(supportSystemId: string): Promise<MastSurvey> {
 		const mastSurvey = await this.prisma.spanSupportSystemMastSurveys.findFirst({
 			where: {
-				surveyId,
 				supportSystemId,
 			},
 		});
 
-		if (!mastSurvey) throw new SupportSystemSurveyNotFoundException(surveyId, supportSystemId);
+		if (!mastSurvey) throw new SupportSystemSurveyNotFoundException(supportSystemId);
 
 		return mastSurvey;
 	}
 
 	async createMastSurvey({
-		surveyId,
 		supportSystemId,
 		mastDamage,
 		mastMissingParts,
@@ -39,7 +37,6 @@ export class MastSurveyRepository implements IMastSurveyRepository {
 		return this.prisma.spanSupportSystemMastSurveys.create({
 			data: {
 				id: newId(),
-				surveys: { connect: { id: surveyId } },
 				spanSupportSystems: { connect: { id: supportSystemId } },
 				mastDamage,
 				mastMissingParts,

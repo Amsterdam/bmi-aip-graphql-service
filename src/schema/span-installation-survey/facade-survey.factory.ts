@@ -4,7 +4,6 @@ import { FacadeSurvey } from './models/facade-survey.model';
 export class FacadeSurveyFactory {
 	static CreateFacadeSurvey({
 		id,
-		surveyId,
 		supportSystemId,
 		facadeDamageWithin1m,
 		hinderingVegetation,
@@ -22,7 +21,6 @@ export class FacadeSurveyFactory {
 	}: DomainFacadeSurvey): FacadeSurvey {
 		const facadeSurvey = new FacadeSurvey();
 		facadeSurvey.id = id;
-		facadeSurvey.surveyId = surveyId;
 		facadeSurvey.supportSystemId = supportSystemId;
 		facadeSurvey.facadeDamageWithin1m = !!facadeDamageWithin1m;
 		facadeSurvey.hinderingVegetation = !!hinderingVegetation;

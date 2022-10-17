@@ -10,6 +10,6 @@ export class GetJunctionBoxSurveyHandler implements IQueryHandler<GetJunctionBox
 	constructor(private service: JunctionBoxSurveyService) {}
 
 	async execute(query: GetJunctionBoxSurveyQuery): Promise<JunctionBoxSurvey> {
-		return this.service.getJunctionBoxSurvey(query.surveyId, query.junctionBoxId);
+		return this.service.getJunctionBoxSurvey(query.junctionBoxId);
 	}
 }

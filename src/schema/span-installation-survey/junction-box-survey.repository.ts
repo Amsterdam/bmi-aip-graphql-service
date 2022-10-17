@@ -12,21 +12,19 @@ import { JunctionBoxSurveyNotFoundException } from './exceptions/junction-box-su
 export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async getJunctionBoxSurvey(surveyId: string, junctionBoxId: string): Promise<JunctionBoxSurvey> {
+	async getJunctionBoxSurvey(junctionBoxId: string): Promise<JunctionBoxSurvey> {
 		const junctionBoxSurvey = await this.prisma.spanJunctionBoxSurveys.findFirst({
 			where: {
-				surveyId,
 				junctionBoxId,
 			},
 		});
 
-		if (!junctionBoxSurvey) throw new JunctionBoxSurveyNotFoundException(surveyId, junctionBoxId);
+		if (!junctionBoxSurvey) throw new JunctionBoxSurveyNotFoundException(junctionBoxId);
 
 		return junctionBoxSurvey;
 	}
 
 	async createJunctionBoxSurvey({
-		surveyId,
 		junctionBoxId,
 		cableDamage,
 		faultyMontageTensionWire,
@@ -38,7 +36,6 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 		return this.prisma.spanJunctionBoxSurveys.create({
 			data: {
 				id: newId(),
-				surveys: { connect: { id: surveyId } },
 				spanJunctionBoxes: { connect: { id: junctionBoxId } },
 				cableDamage,
 				faultyMontageTensionWire,

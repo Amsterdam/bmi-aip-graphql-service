@@ -22,13 +22,8 @@ export class TensionWireSurveyResolver {
 
 	@Query(() => TensionWireSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getTensionWireSurvey(
-		@Args('surveyId') surveyId: string,
-		@Args('supportSystemId') supportSystemId: string,
-	) {
-		return this.queryBus.execute<GetTensionWireSurveyQuery>(
-			new GetTensionWireSurveyQuery(surveyId, supportSystemId),
-		);
+	public async getTensionWireSurvey(@Args('supportSystemId') supportSystemId: string) {
+		return this.queryBus.execute<GetTensionWireSurveyQuery>(new GetTensionWireSurveyQuery(supportSystemId));
 	}
 
 	@Mutation(() => TensionWireSurvey)

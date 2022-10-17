@@ -8,8 +8,4 @@ export class CreateMastSurveyInput extends BaseMastSurveyInput {
 	@Field()
 	@IsUUID()
 	public supportSystemId: string;
-
-	@Field()
-	@IsUUID()
-	public surveyId: string;
 }

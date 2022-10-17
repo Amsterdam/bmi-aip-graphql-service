@@ -8,7 +8,7 @@ import { NodeSurveyFactory } from './node-survey.factory';
 export class NodeSurveyService {
 	public constructor(private readonly nodeSurveyRepo: NodeSurveyRepository) {}
 
-	async getNodeSurvey(surveyId: string, supportSystemId: string): Promise<NodeSurvey> {
-		return NodeSurveyFactory.CreateNodeSurvey(await this.nodeSurveyRepo.getNodeSurvey(surveyId, supportSystemId));
+	async getNodeSurvey(supportSystemId: string): Promise<NodeSurvey> {
+		return NodeSurveyFactory.CreateNodeSurvey(await this.nodeSurveyRepo.getNodeSurvey(supportSystemId));
 	}
 }

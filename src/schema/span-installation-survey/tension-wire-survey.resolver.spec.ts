@@ -42,7 +42,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const tensionWireSurveyRepo = new TensionWireSurveyRepository(prismaServiceMock);
 
-const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / Tension Wire / Resolver', () => {
@@ -94,6 +93,6 @@ describe('Span Installation Survey / Tension Wire / Resolver', () => {
 			commandBusMock,
 			queryBusMock,
 		);
-		expect(await resolver.getTensionWireSurvey(surveyId, supportSystemId)).toEqual(domainTensionWireSurvey);
+		expect(await resolver.getTensionWireSurvey(supportSystemId)).toEqual(domainTensionWireSurvey);
 	});
 });

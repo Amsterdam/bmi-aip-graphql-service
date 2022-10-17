@@ -6,7 +6,6 @@ import { UpdateTensionWireSurveyInput } from '../dto/update-tension-wire-survey.
 const tensionWireSurveys = Prisma.validator<Prisma.spanSupportSystemTensionWireSurveysArgs>()({
 	select: {
 		id: true,
-		surveyId: true,
 		supportSystemId: true,
 		tensionWireDamage: true,
 		thirdPartyObjectsAttached: true,

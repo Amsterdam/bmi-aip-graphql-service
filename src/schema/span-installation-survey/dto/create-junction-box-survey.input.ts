@@ -8,8 +8,4 @@ export class CreateJunctionBoxSurveyInput extends BaseJunctionBoxSurveyInput {
 	@Field()
 	@IsUUID()
 	public junctionBoxId: string;
-
-	@Field()
-	@IsUUID()
-	public surveyId: string;
 }

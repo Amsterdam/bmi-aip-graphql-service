@@ -16,13 +16,12 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const repo = new JunctionBoxSurveyRepository(prismaServiceMock);
 
-const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const junctionBoxId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / JunctionBox / Service', () => {
 	test('getJunctionBoxSurvey returns a JunctionBoxSurvey object', async () => {
 		const service = new JunctionBoxSurveyService(repo);
-		const survey = await service.getJunctionBoxSurvey(surveyId, junctionBoxId);
+		const survey = await service.getJunctionBoxSurvey(junctionBoxId);
 		expect(survey).toBeInstanceOf(JunctionBoxSurvey);
 		expect(survey).toEqual(JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(domainJunctionBoxSurvey));
 	});

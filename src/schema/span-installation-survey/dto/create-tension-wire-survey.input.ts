@@ -8,8 +8,4 @@ export class CreateTensionWireSurveyInput extends BaseTensionWireSurveyInput {
 	@Field()
 	@IsUUID()
 	public supportSystemId: string;
-
-	@Field()
-	@IsUUID()
-	public surveyId: string;
 }

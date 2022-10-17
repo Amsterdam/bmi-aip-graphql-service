@@ -4,7 +4,6 @@ import { MastSurvey } from './models/mast-survey.model';
 export class MastSurveyFactory {
 	static CreateMastSurvey({
 		id,
-		surveyId,
 		supportSystemId,
 		mastDamage,
 		mastMissingParts,
@@ -18,7 +17,6 @@ export class MastSurveyFactory {
 	}: DomainMastSurvey): MastSurvey {
 		const mastSurvey = new MastSurvey();
 		mastSurvey.id = id;
-		mastSurvey.surveyId = surveyId;
 		mastSurvey.supportSystemId = supportSystemId;
 		mastSurvey.mastDamage = !!mastDamage;
 		mastSurvey.mastMissingParts = !!mastMissingParts;

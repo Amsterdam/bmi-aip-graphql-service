@@ -6,7 +6,6 @@ import { UpdateFacadeSurveyInput } from '../dto/update-facade-survey.input';
 const facadeSurveys = Prisma.validator<Prisma.spanSupportSystemFacadeSurveysArgs>()({
 	select: {
 		id: true,
-		surveyId: true,
 		supportSystemId: true,
 		facadeDamageWithin1m: true,
 		hinderingVegetation: true,

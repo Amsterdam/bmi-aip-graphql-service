@@ -22,8 +22,8 @@ export class MastSurveyResolver {
 
 	@Query(() => MastSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getMastSurvey(@Args('surveyId') surveyId: string, @Args('supportSystemId') supportSystemId: string) {
-		return this.queryBus.execute<GetMastSurveyQuery>(new GetMastSurveyQuery(surveyId, supportSystemId));
+	public async getMastSurvey(@Args('supportSystemId') supportSystemId: string) {
+		return this.queryBus.execute<GetMastSurveyQuery>(new GetMastSurveyQuery(supportSystemId));
 	}
 
 	@Mutation(() => MastSurvey)

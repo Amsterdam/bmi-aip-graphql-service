@@ -12,21 +12,17 @@ import { SupportSystemSurveyNotFoundException } from './exceptions/support-syste
 export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async getFacadeSurvey(surveyId: string, supportSystemId: string): Promise<FacadeSurvey> {
+	async getFacadeSurvey(supportSystemId: string): Promise<FacadeSurvey> {
 		const facadeSurvey = await this.prisma.spanSupportSystemFacadeSurveys.findFirst({
-			where: {
-				surveyId,
-				supportSystemId,
-			},
+			where: { supportSystemId },
 		});
 
-		if (!facadeSurvey) throw new SupportSystemSurveyNotFoundException(surveyId, supportSystemId);
+		if (!facadeSurvey) throw new SupportSystemSurveyNotFoundException(supportSystemId);
 
 		return facadeSurvey;
 	}
 
 	async createFacadeSurvey({
-		surveyId,
 		supportSystemId,
 		facadeDamageWithin1m,
 		hinderingVegetation,
@@ -43,7 +39,6 @@ export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 		return this.prisma.spanSupportSystemFacadeSurveys.create({
 			data: {
 				id: newId(),
-				surveys: { connect: { id: surveyId } },
 				spanSupportSystems: { connect: { id: supportSystemId } },
 				facadeDamageWithin1m,
 				hinderingVegetation,

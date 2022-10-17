@@ -6,9 +6,6 @@ export class JunctionBoxSurvey {
 	id: string;
 
 	@Field((type) => String)
-	surveyId: string;
-
-	@Field((type) => String)
 	junctionBoxId: string;
 
 	// Maps to "Schade aan aansluitkabel?"

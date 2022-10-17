@@ -8,9 +8,9 @@ import { TensionWireSurveyFactory } from './tension-wire-survey.factory';
 export class TensionWireSurveyService {
 	public constructor(private readonly tensionWireSurveyRepo: TensionWireSurveyRepository) {}
 
-	async getTensionWireSurvey(surveyId: string, supportSystemId: string): Promise<TensionWireSurvey> {
+	async getTensionWireSurvey(supportSystemId: string): Promise<TensionWireSurvey> {
 		return TensionWireSurveyFactory.CreateTensionWireSurvey(
-			await this.tensionWireSurveyRepo.getTensionWireSurvey(surveyId, supportSystemId),
+			await this.tensionWireSurveyRepo.getTensionWireSurvey(supportSystemId),
 		);
 	}
 }

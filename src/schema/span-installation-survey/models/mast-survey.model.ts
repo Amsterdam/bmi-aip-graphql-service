@@ -6,9 +6,6 @@ export class MastSurvey {
 	id: string;
 
 	@Field((type) => String)
-	surveyId: string;
-
-	@Field((type) => String)
 	supportSystemId: string;
 
 	// Maps to "Schade aan de mast?"

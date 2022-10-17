@@ -8,7 +8,7 @@ import { MastSurveyFactory } from './mast-survey.factory';
 export class MastSurveyService {
 	public constructor(private readonly mastSurveyRepo: MastSurveyRepository) {}
 
-	async getMastSurvey(surveyId: string, supportSystemId: string): Promise<MastSurvey> {
-		return MastSurveyFactory.CreateMastSurvey(await this.mastSurveyRepo.getMastSurvey(surveyId, supportSystemId));
+	async getMastSurvey(supportSystemId: string): Promise<MastSurvey> {
+		return MastSurveyFactory.CreateMastSurvey(await this.mastSurveyRepo.getMastSurvey(supportSystemId));
 	}
 }

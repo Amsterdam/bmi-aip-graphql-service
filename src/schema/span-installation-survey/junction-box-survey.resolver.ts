@@ -22,11 +22,8 @@ export class JunctionBoxSurveyResolver {
 
 	@Query(() => JunctionBoxSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getJunctionBoxSurvey(
-		@Args('surveyId') surveyId: string,
-		@Args('junctionBoxId') junctionBoxId: string,
-	) {
-		return this.queryBus.execute<GetJunctionBoxSurveyQuery>(new GetJunctionBoxSurveyQuery(surveyId, junctionBoxId));
+	public async getJunctionBoxSurvey(@Args('junctionBoxId') junctionBoxId: string) {
+		return this.queryBus.execute<GetJunctionBoxSurveyQuery>(new GetJunctionBoxSurveyQuery(junctionBoxId));
 	}
 
 	@Mutation(() => JunctionBoxSurvey)

@@ -62,6 +62,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		const junctionBoxes = (await this.prisma.spanJunctionBoxes.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		})) as JunctionBox[];
 

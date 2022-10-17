@@ -70,7 +70,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 
 		const luminaires = await repo.getLuminaires('__SUPPORTSYSTEM_ID__');
 		expect(prismaServiceMock.spanLuminaires.findMany).toHaveBeenCalledWith({
-			where: { supportSystemId: '__SUPPORTSYSTEM_ID__' },
+			where: { supportSystemId: '__SUPPORTSYSTEM_ID__', deleted_at: null },
 		});
 		expect(luminaires).toEqual([expected]);
 	});

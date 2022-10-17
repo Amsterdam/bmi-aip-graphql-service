@@ -82,7 +82,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 
 		const junctionBoxes = await repo.getJunctionBoxes('__SURVEY_ID__');
 		expect(prismaServiceMock.spanJunctionBoxes.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(junctionBoxes).toEqual([expected]);
 	});

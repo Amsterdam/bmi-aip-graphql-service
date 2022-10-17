@@ -61,6 +61,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		const luminaires = (await this.prisma.spanLuminaires.findMany({
 			where: {
 				supportSystemId,
+				deleted_at: null,
 			},
 		})) as Luminaire[];
 

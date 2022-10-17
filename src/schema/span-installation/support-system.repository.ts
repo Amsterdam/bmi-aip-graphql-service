@@ -64,6 +64,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const supportSystems = (await this.prisma.spanSupportSystems.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		})) as SupportSystem[];
 

@@ -4,7 +4,6 @@ import { TensionWireSurvey } from './models/tension-wire-survey.model';
 export class TensionWireSurveyFactory {
 	static CreateTensionWireSurvey({
 		id,
-		surveyId,
 		supportSystemId,
 		tensionWireDamage,
 		thirdPartyObjectsAttached,
@@ -18,7 +17,6 @@ export class TensionWireSurveyFactory {
 	}: DomainTensionWireSurvey): TensionWireSurvey {
 		const tensionWireSurvey = new TensionWireSurvey();
 		tensionWireSurvey.id = id;
-		tensionWireSurvey.surveyId = surveyId;
 		tensionWireSurvey.supportSystemId = supportSystemId;
 		tensionWireSurvey.tensionWireDamage = !!tensionWireDamage;
 		tensionWireSurvey.thirdPartyObjectsAttached = !!thirdPartyObjectsAttached;

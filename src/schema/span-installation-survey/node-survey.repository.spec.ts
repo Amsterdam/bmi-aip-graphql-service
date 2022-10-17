@@ -17,7 +17,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 let repository: NodeSurveyRepository;
 
-const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / Node / Repository', () => {
@@ -27,16 +26,16 @@ describe('Span Installation Survey / Node / Repository', () => {
 
 	describe('getNodeSurvey()', () => {
 		test('returns node survey', async () => {
-			const survey = await repository.getNodeSurvey(surveyId, supportSystemId);
+			const survey = await repository.getNodeSurvey(supportSystemId);
 			expect(prismaServiceMock.spanSupportSystemNodeSurveys.findFirst).toHaveBeenCalledWith({
-				where: { surveyId, supportSystemId },
+				where: { supportSystemId },
 			});
 			expect(survey).toEqual(domainNodeSurvey);
 		});
 
 		test('throws an exception when not found', async () => {
 			prismaServiceMock.spanSupportSystemNodeSurveys.findFirst.mockResolvedValueOnce(null);
-			await expect(repository.getNodeSurvey(surveyId, supportSystemId)).rejects.toThrow(
+			await expect(repository.getNodeSurvey(supportSystemId)).rejects.toThrow(
 				SupportSystemSurveyNotFoundException,
 			);
 		});
@@ -52,11 +51,6 @@ describe('Span Installation Survey / Node / Repository', () => {
 				spanSupportSystems: {
 					connect: {
 						id: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
-					},
-				},
-				surveys: {
-					connect: {
-						id: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 					},
 				},
 			}),
@@ -84,7 +78,6 @@ describe('Span Installation Survey / Node / Repository', () => {
 			nodeDamage: true,
 			remarks: '__REMARKS__',
 			supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
-			surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 		});
 	});
 });

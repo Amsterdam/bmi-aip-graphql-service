@@ -12,29 +12,22 @@ import { SupportSystemSurveyNotFoundException } from './exceptions/support-syste
 export class NodeSurveyRepository implements INodeSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async getNodeSurvey(surveyId: string, supportSystemId: string): Promise<NodeSurvey> {
+	async getNodeSurvey(supportSystemId: string): Promise<NodeSurvey> {
 		const nodeSurvey = await this.prisma.spanSupportSystemNodeSurveys.findFirst({
 			where: {
-				surveyId,
 				supportSystemId,
 			},
 		});
 
-		if (!nodeSurvey) throw new SupportSystemSurveyNotFoundException(surveyId, supportSystemId);
+		if (!nodeSurvey) throw new SupportSystemSurveyNotFoundException(supportSystemId);
 
 		return nodeSurvey;
 	}
 
-	async createNodeSurvey({
-		surveyId,
-		supportSystemId,
-		nodeDamage,
-		remarks,
-	}: CreateNodeSurveyInput): Promise<NodeSurvey> {
+	async createNodeSurvey({ supportSystemId, nodeDamage, remarks }: CreateNodeSurveyInput): Promise<NodeSurvey> {
 		return this.prisma.spanSupportSystemNodeSurveys.create({
 			data: {
 				id: newId(),
-				surveys: { connect: { id: surveyId } },
 				spanSupportSystems: { connect: { id: supportSystemId } },
 				nodeDamage,
 				remarks,

@@ -17,7 +17,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 let repository: JunctionBoxSurveyRepository;
 
-const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const junctionBoxId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / JunctionBox / Repository', () => {
@@ -27,16 +26,16 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 
 	describe('getJunctionBoxSurvey()', () => {
 		test('returns mast survey', async () => {
-			const survey = await repository.getJunctionBoxSurvey(surveyId, junctionBoxId);
+			const survey = await repository.getJunctionBoxSurvey(junctionBoxId);
 			expect(prismaServiceMock.spanJunctionBoxSurveys.findFirst).toHaveBeenCalledWith({
-				where: { surveyId, junctionBoxId },
+				where: { junctionBoxId },
 			});
 			expect(survey).toEqual(domainJunctionBoxSurvey);
 		});
 
 		test('throws an exception when not found', async () => {
 			prismaServiceMock.spanJunctionBoxSurveys.findFirst.mockResolvedValueOnce(null);
-			await expect(repository.getJunctionBoxSurvey(surveyId, junctionBoxId)).rejects.toThrow(
+			await expect(repository.getJunctionBoxSurvey(junctionBoxId)).rejects.toThrow(
 				JunctionBoxSurveyNotFoundException,
 			);
 		});
@@ -56,11 +55,6 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 				spanJunctionBoxes: {
 					connect: {
 						id: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
-					},
-				},
-				surveys: {
-					connect: {
-						id: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 					},
 				},
 			}),
@@ -96,7 +90,6 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 			junctionBoxId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 			remarks: '__REMARKS__',
 			stickerNotReadable: true,
-			surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 		});
 	});
 });

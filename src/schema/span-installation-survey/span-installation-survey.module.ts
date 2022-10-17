@@ -50,6 +50,15 @@ import { CreateJunctionBoxSurveyCommand } from './commands/create-junction-box-s
 import { CreateJunctionBoxSurveyHandler } from './commands/create-junction-box-survey.handler';
 import { UpdateJunctionBoxSurveyCommand } from './commands/update-junction-box-survey.command';
 import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-survey.handler';
+import { LuminaireSurveyResolver } from './luminaire-survey.resolver';
+import { LuminaireSurveyService } from './luminaire-survey.service';
+import { LuminaireSurveyRepository } from './luminaire-survey.repository';
+import { GetLuminaireSurveyQuery } from './queries/get-luminaire-survey.query';
+import { GetLuminaireSurveyHandler } from './queries/get-luminaire-survey.handler';
+import { CreateLuminaireSurveyCommand } from './commands/create-luminaire-survey.command';
+import { CreateLuminaireSurveyHandler } from './commands/create-luminaire-survey.handler';
+import { UpdateLuminaireSurveyCommand } from './commands/update-luminaire-survey.command';
+import { UpdateLuminaireSurveyHandler } from './commands/update-luminaire-survey.handler';
 
 @Module({
 	providers: [
@@ -58,18 +67,21 @@ import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-s
 		FacadeSurveyResolver,
 		NodeSurveyResolver,
 		JunctionBoxSurveyResolver,
+		LuminaireSurveyResolver,
 
 		TensionWireSurveyService,
 		MastSurveyService,
 		FacadeSurveyService,
 		NodeSurveyService,
 		JunctionBoxSurveyService,
+		LuminaireSurveyService,
 
 		TensionWireSurveyRepository,
 		MastSurveyRepository,
 		FacadeSurveyRepository,
 		NodeSurveyRepository,
 		JunctionBoxSurveyRepository,
+		LuminaireSurveyRepository,
 
 		GetTensionWireSurveyQuery,
 		GetTensionWireSurveyHandler,
@@ -81,6 +93,8 @@ import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-s
 		GetNodeSurveyHandler,
 		GetJunctionBoxSurveyQuery,
 		GetJunctionBoxSurveyHandler,
+		GetLuminaireSurveyQuery,
+		GetLuminaireSurveyHandler,
 
 		CreateTensionWireSurveyCommand,
 		CreateTensionWireSurveyHandler,
@@ -92,6 +106,8 @@ import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-s
 		CreateNodeSurveyHandler,
 		CreateJunctionBoxSurveyCommand,
 		CreateJunctionBoxSurveyHandler,
+		CreateLuminaireSurveyCommand,
+		CreateLuminaireSurveyHandler,
 
 		UpdateTensionWireSurveyCommand,
 		UpdateMastSurveyCommand,
@@ -103,6 +119,8 @@ import { UpdateJunctionBoxSurveyHandler } from './commands/update-junction-box-s
 		UpdateNodeSurveyHandler,
 		UpdateJunctionBoxSurveyCommand,
 		UpdateJunctionBoxSurveyHandler,
+		UpdateLuminaireSurveyCommand,
+		UpdateLuminaireSurveyHandler,
 
 		PrismaService,
 	],

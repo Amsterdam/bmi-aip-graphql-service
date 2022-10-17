@@ -4,7 +4,6 @@ import { UpdateNodeSurveyInput } from '../dto/update-node-survey.input';
 import { NodeSurvey } from '../models/node-survey.model';
 
 const nodeSurveyRaw: Omit<DomainNodeSurvey, 'id'> = {
-	surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 	supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 	nodeDamage: true,
 	remarks: '__REMARKS__',

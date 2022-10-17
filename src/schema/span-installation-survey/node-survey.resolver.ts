@@ -22,8 +22,8 @@ export class NodeSurveyResolver {
 
 	@Query(() => NodeSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getNodeSurvey(@Args('surveyId') surveyId: string, @Args('supportSystemId') supportSystemId: string) {
-		return this.queryBus.execute<GetNodeSurveyQuery>(new GetNodeSurveyQuery(surveyId, supportSystemId));
+	public async getNodeSurvey(@Args('supportSystemId') supportSystemId: string) {
+		return this.queryBus.execute<GetNodeSurveyQuery>(new GetNodeSurveyQuery(supportSystemId));
 	}
 
 	@Mutation(() => NodeSurvey)

@@ -4,7 +4,6 @@ import { UpdateFacadeSurveyInput } from '../dto/update-facade-survey.input';
 import { FacadeSurvey } from '../models/facade-survey.model';
 
 const facadeSurveyRaw: Omit<DomainFacadeSurvey, 'id'> = {
-	surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 	supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 	facadeDamageWithin1m: true,
 	hinderingVegetation: true,

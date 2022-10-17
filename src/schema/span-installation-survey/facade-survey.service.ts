@@ -8,9 +8,7 @@ import { FacadeSurveyFactory } from './facade-survey.factory';
 export class FacadeSurveyService {
 	public constructor(private readonly facadeSurveyRepo: FacadeSurveyRepository) {}
 
-	async getFacadeSurvey(surveyId: string, supportSystemId: string): Promise<FacadeSurvey> {
-		return FacadeSurveyFactory.CreateFacadeSurvey(
-			await this.facadeSurveyRepo.getFacadeSurvey(surveyId, supportSystemId),
-		);
+	async getFacadeSurvey(supportSystemId: string): Promise<FacadeSurvey> {
+		return FacadeSurveyFactory.CreateFacadeSurvey(await this.facadeSurveyRepo.getFacadeSurvey(supportSystemId));
 	}
 }

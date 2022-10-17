@@ -10,6 +10,6 @@ export class GetNodeSurveyHandler implements IQueryHandler<GetNodeSurveyQuery> {
 	constructor(private service: NodeSurveyService) {}
 
 	async execute(query: GetNodeSurveyQuery): Promise<NodeSurvey> {
-		return this.service.getNodeSurvey(query.surveyId, query.supportSystemId);
+		return this.service.getNodeSurvey(query.supportSystemId);
 	}
 }

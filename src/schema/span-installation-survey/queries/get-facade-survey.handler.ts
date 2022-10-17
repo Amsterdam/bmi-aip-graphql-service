@@ -10,6 +10,6 @@ export class GetFacadeSurveyHandler implements IQueryHandler<GetFacadeSurveyQuer
 	constructor(private service: FacadeSurveyService) {}
 
 	async execute(query: GetFacadeSurveyQuery): Promise<FacadeSurvey> {
-		return this.service.getFacadeSurvey(query.surveyId, query.supportSystemId);
+		return this.service.getFacadeSurvey(query.supportSystemId);
 	}
 }

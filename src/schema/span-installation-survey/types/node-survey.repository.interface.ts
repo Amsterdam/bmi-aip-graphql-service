@@ -6,7 +6,6 @@ import { UpdateNodeSurveyInput } from '../dto/update-node-survey.input';
 const nodeSurveys = Prisma.validator<Prisma.spanSupportSystemNodeSurveysArgs>()({
 	select: {
 		id: true,
-		surveyId: true,
 		supportSystemId: true,
 		nodeDamage: true,
 		remarks: true,

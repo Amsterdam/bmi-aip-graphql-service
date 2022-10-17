@@ -6,7 +6,6 @@ import { UpdateMastSurveyInput } from '../dto/update-mast-survey.input';
 const mastSurveys = Prisma.validator<Prisma.spanSupportSystemMastSurveysArgs>()({
 	select: {
 		id: true,
-		surveyId: true,
 		supportSystemId: true,
 		mastDamage: true,
 		mastMissingParts: true,

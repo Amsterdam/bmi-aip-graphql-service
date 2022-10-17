@@ -4,7 +4,6 @@ import { JunctionBoxSurvey } from './models/junction-box-survey.model';
 export class JunctionBoxSurveyFactory {
 	static CreateJunctionBoxSurvey({
 		id,
-		surveyId,
 		junctionBoxId,
 		cableDamage,
 		faultyMontageTensionWire,
@@ -17,7 +16,6 @@ export class JunctionBoxSurveyFactory {
 	}: DomainJunctionBoxSurvey): JunctionBoxSurvey {
 		const mastSurvey = new JunctionBoxSurvey();
 		mastSurvey.id = id;
-		mastSurvey.surveyId = surveyId;
 		mastSurvey.junctionBoxId = junctionBoxId;
 		mastSurvey.cableDamage = !!cableDamage;
 		mastSurvey.faultyMontageTensionWire = !!faultyMontageTensionWire;

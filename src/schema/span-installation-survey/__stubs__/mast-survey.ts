@@ -4,7 +4,6 @@ import { UpdateMastSurveyInput } from '../dto/update-mast-survey.input';
 import { MastSurvey } from '../models/mast-survey.model';
 
 const mastSurveyRaw: Omit<DomainMastSurvey, 'id'> = {
-	surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 	supportSystemId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 	mastDamage: true,
 	mastMissingParts: true,

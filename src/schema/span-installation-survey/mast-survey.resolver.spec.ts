@@ -42,7 +42,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const mastSurveyRepo = new MastSurveyRepository(prismaServiceMock);
 
-const surveyId = '82580f03-5fe9-4554-aa85-6c0fe28a693d';
 const supportSystemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('Span Installation Survey / Mast / Resolver', () => {
@@ -86,6 +85,6 @@ describe('Span Installation Survey / Mast / Resolver', () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
 		const resolver = new MastSurveyResolver(new MastSurveyService(mastSurveyRepo), commandBusMock, queryBusMock);
-		expect(await resolver.getMastSurvey(surveyId, supportSystemId)).toEqual(domainMastSurvey);
+		expect(await resolver.getMastSurvey(supportSystemId)).toEqual(domainMastSurvey);
 	});
 });

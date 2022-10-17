@@ -6,7 +6,6 @@ import { UpdateJunctionBoxSurveyInput } from '../dto/update-junction-box-survey.
 const mastSurveys = Prisma.validator<Prisma.spanJunctionBoxSurveysArgs>()({
 	select: {
 		id: true,
-		surveyId: true,
 		junctionBoxId: true,
 		cableDamage: true,
 		faultyMontageTensionWire: true,

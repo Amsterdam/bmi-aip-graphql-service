@@ -4,7 +4,6 @@ import { NodeSurvey } from './models/node-survey.model';
 export class NodeSurveyFactory {
 	static CreateNodeSurvey({
 		id,
-		surveyId,
 		supportSystemId,
 		nodeDamage,
 		remarks,
@@ -13,7 +12,6 @@ export class NodeSurveyFactory {
 	}: DomainNodeSurvey): NodeSurvey {
 		const nodeSurvey = new NodeSurvey();
 		nodeSurvey.id = id;
-		nodeSurvey.surveyId = surveyId;
 		nodeSurvey.supportSystemId = supportSystemId;
 		nodeSurvey.nodeDamage = !!nodeDamage;
 		nodeSurvey.remarks = remarks;

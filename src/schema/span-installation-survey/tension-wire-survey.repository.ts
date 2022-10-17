@@ -12,21 +12,19 @@ import { SupportSystemSurveyNotFoundException } from './exceptions/support-syste
 export class TensionWireSurveyRepository implements ITensionWireSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async getTensionWireSurvey(surveyId: string, supportSystemId: string): Promise<TensionWireSurvey> {
+	async getTensionWireSurvey(supportSystemId: string): Promise<TensionWireSurvey> {
 		const tensionWireSurvey = await this.prisma.spanSupportSystemTensionWireSurveys.findFirst({
 			where: {
-				surveyId,
 				supportSystemId,
 			},
 		});
 
-		if (!tensionWireSurvey) throw new SupportSystemSurveyNotFoundException(surveyId, supportSystemId);
+		if (!tensionWireSurvey) throw new SupportSystemSurveyNotFoundException(supportSystemId);
 
 		return tensionWireSurvey;
 	}
 
 	async createTensionWireSurvey({
-		surveyId,
 		supportSystemId,
 		tensionWireDamage,
 		thirdPartyObjectsAttached,
@@ -39,7 +37,6 @@ export class TensionWireSurveyRepository implements ITensionWireSurveyRepository
 		return this.prisma.spanSupportSystemTensionWireSurveys.create({
 			data: {
 				id: newId(),
-				surveys: { connect: { id: surveyId } },
 				spanSupportSystems: { connect: { id: supportSystemId } },
 				tensionWireDamage,
 				thirdPartyObjectsAttached,

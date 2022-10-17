@@ -4,7 +4,6 @@ import { UpdateJunctionBoxSurveyInput } from '../dto/update-junction-box-survey.
 import { JunctionBoxSurvey } from '../models/junction-box-survey.model';
 
 const junctionBoxSurveyRaw: Omit<DomainJunctionBoxSurvey, 'id'> = {
-	surveyId: '9003d096-4dd2-4d0d-b74b-9406a721d94d',
 	junctionBoxId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 	cableDamage: true,
 	faultyMontageTensionWire: true,

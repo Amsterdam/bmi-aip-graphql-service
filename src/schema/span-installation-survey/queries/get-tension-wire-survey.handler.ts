@@ -10,6 +10,6 @@ export class GetTensionWireSurveyHandler implements IQueryHandler<GetTensionWire
 	constructor(private service: TensionWireSurveyService) {}
 
 	async execute(query: GetTensionWireSurveyQuery): Promise<TensionWireSurvey> {
-		return this.service.getTensionWireSurvey(query.surveyId, query.supportSystemId);
+		return this.service.getTensionWireSurvey(query.supportSystemId);
 	}
 }

@@ -13,7 +13,7 @@ export class NodeSurveyFactory {
 		const nodeSurvey = new NodeSurvey();
 		nodeSurvey.id = id;
 		nodeSurvey.supportSystemId = supportSystemId;
-		nodeSurvey.nodeDamage = !!nodeDamage;
+		nodeSurvey.nodeDamage = nodeDamage;
 		nodeSurvey.remarks = remarks;
 		nodeSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		nodeSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

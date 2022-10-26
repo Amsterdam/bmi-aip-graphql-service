@@ -13,7 +13,7 @@ export class LuminaireSurveyFactory {
 		const luminaireSurvey = new LuminaireSurvey();
 		luminaireSurvey.id = id;
 		luminaireSurvey.luminaireId = luminaireId;
-		luminaireSurvey.luminaireDamage = !!luminaireDamage;
+		luminaireSurvey.luminaireDamage = luminaireDamage;
 		luminaireSurvey.remarks = remarks;
 		luminaireSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		luminaireSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

@@ -17,11 +17,11 @@ export class JunctionBoxSurveyFactory {
 		const mastSurvey = new JunctionBoxSurvey();
 		mastSurvey.id = id;
 		mastSurvey.junctionBoxId = junctionBoxId;
-		mastSurvey.cableDamage = !!cableDamage;
-		mastSurvey.faultyMontageTensionWire = !!faultyMontageTensionWire;
-		mastSurvey.faultyMontageFacade = !!faultyMontageFacade;
-		mastSurvey.junctionBoxDamage = !!junctionBoxDamage;
-		mastSurvey.stickerNotReadable = !!stickerNotReadable;
+		mastSurvey.cableDamage = cableDamage;
+		mastSurvey.faultyMontageTensionWire = faultyMontageTensionWire;
+		mastSurvey.faultyMontageFacade = faultyMontageFacade;
+		mastSurvey.junctionBoxDamage = junctionBoxDamage;
+		mastSurvey.stickerNotReadable = stickerNotReadable;
 		mastSurvey.remarks = remarks;
 		mastSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		mastSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

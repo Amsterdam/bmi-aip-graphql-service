@@ -15,4 +15,24 @@ describe('Span Installation Survey / Luminaire / Factory', () => {
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(LuminaireSurvey);
 	});
+
+	test('null values are permitted', () => {
+		const nullValues = {
+			luminaireDamage: null,
+		};
+		const result = LuminaireSurveyFactory.CreateLuminaireSurvey({
+			...domainLuminaireSurvey,
+			...nullValues,
+		});
+		const object = {
+			...domainLuminaireSurvey,
+			...nullValues,
+			createdAt: domainLuminaireSurvey.created_at ?? null,
+			updatedAt: domainLuminaireSurvey.updated_at ?? null,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(result).toEqual(expect.objectContaining(object));
+		expect(result).toBeInstanceOf(LuminaireSurvey);
+	});
 });

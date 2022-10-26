@@ -15,4 +15,24 @@ describe('Span Installation Survey / Node / Factory', () => {
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(NodeSurvey);
 	});
+
+	test('null values are permitted', () => {
+		const nullValues = {
+			nodeDamage: null,
+		};
+		const result = NodeSurveyFactory.CreateNodeSurvey({
+			...domainNodeSurvey,
+			...nullValues,
+		});
+		const object = {
+			...domainNodeSurvey,
+			...nullValues,
+			createdAt: domainNodeSurvey.created_at ?? null,
+			updatedAt: domainNodeSurvey.updated_at ?? null,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(result).toEqual(expect.objectContaining(object));
+		expect(result).toBeInstanceOf(NodeSurvey);
+	});
 });

@@ -15,4 +15,29 @@ describe('Span Installation Survey / Tension Wire / Factory', () => {
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(TensionWireSurvey);
 	});
+
+	test('null values are permitted', () => {
+		const nullValues = {
+			tensionWireDamage: null,
+			thirdPartyObjectsAttached: null,
+			gaffTerminalDamage: null,
+			gaffTerminalMissingParts: null,
+			faultyMontage: null,
+			tensionWireClampDamage: null,
+		};
+		const result = TensionWireSurveyFactory.CreateTensionWireSurvey({
+			...domainTensionWireSurvey,
+			...nullValues,
+		});
+		const object = {
+			...domainTensionWireSurvey,
+			...nullValues,
+			createdAt: domainTensionWireSurvey.created_at ?? null,
+			updatedAt: domainTensionWireSurvey.updated_at ?? null,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(result).toEqual(expect.objectContaining(object));
+		expect(result).toBeInstanceOf(TensionWireSurvey);
+	});
 });

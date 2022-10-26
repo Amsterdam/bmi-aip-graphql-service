@@ -22,20 +22,20 @@ export class FacadeSurveyFactory {
 		const facadeSurvey = new FacadeSurvey();
 		facadeSurvey.id = id;
 		facadeSurvey.supportSystemId = supportSystemId;
-		facadeSurvey.facadeDamageWithin1m = !!facadeDamageWithin1m;
-		facadeSurvey.hinderingVegetation = !!hinderingVegetation;
-		facadeSurvey.wallPlateDamage = !!wallPlateDamage;
-		facadeSurvey.faultyMontage = !!faultyMontage;
-		facadeSurvey.nutNotFullyOverThreadedRod = !!nutNotFullyOverThreadedRod;
-		facadeSurvey.missingFasteners = !!missingFasteners;
-		facadeSurvey.measuredPreload = typeof measuredPreload === 'number' ? measuredPreload : undefined;
+		facadeSurvey.facadeDamageWithin1m = facadeDamageWithin1m;
+		facadeSurvey.hinderingVegetation = hinderingVegetation;
+		facadeSurvey.wallPlateDamage = wallPlateDamage;
+		facadeSurvey.faultyMontage = faultyMontage;
+		facadeSurvey.nutNotFullyOverThreadedRod = nutNotFullyOverThreadedRod;
+		facadeSurvey.missingFasteners = missingFasteners;
+		facadeSurvey.measuredPreload = typeof measuredPreload === 'number' ? measuredPreload : null;
 		facadeSurvey.appliedAdditionalTraction =
-			typeof appliedAdditionalTraction === 'number' ? appliedAdditionalTraction : undefined;
-		facadeSurvey.facadeConnectionFailed = !!facadeConnectionFailed;
+			typeof appliedAdditionalTraction === 'number' ? appliedAdditionalTraction : null;
+		facadeSurvey.facadeConnectionFailed = facadeConnectionFailed;
 		facadeSurvey.facadeConnectionFailureAdditionalTraction =
 			typeof facadeConnectionFailureAdditionalTraction === 'number'
 				? facadeConnectionFailureAdditionalTraction
-				: undefined;
+				: null;
 		facadeSurvey.remarks = remarks;
 		facadeSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		facadeSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

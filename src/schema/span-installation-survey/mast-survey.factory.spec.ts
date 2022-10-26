@@ -15,4 +15,29 @@ describe('Span Installation Survey / Mast / Factory', () => {
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(MastSurvey);
 	});
+
+	test('null values are permitted', () => {
+		const nullValues = {
+			mastDamage: null,
+			mastMissingParts: null,
+			tensionMastAngle: null,
+			mastAttachmentDamage: null,
+			mastBracketMissingParts: null,
+			mastBracketDamage: null,
+		};
+		const result = MastSurveyFactory.CreateMastSurvey({
+			...domainMastSurvey,
+			...nullValues,
+		});
+		const object = {
+			...domainMastSurvey,
+			...nullValues,
+			createdAt: domainMastSurvey.created_at ?? null,
+			updatedAt: domainMastSurvey.updated_at ?? null,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(result).toEqual(expect.objectContaining(object));
+		expect(result).toBeInstanceOf(MastSurvey);
+	});
 });

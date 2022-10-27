@@ -9,8 +9,8 @@ export class LuminaireSurvey {
 	luminaireId: string;
 
 	// Maps to "Schade aan armatuur?"
-	@Field((type) => Boolean)
-	luminaireDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	luminaireDamage?: boolean;
 
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

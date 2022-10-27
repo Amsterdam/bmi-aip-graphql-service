@@ -9,8 +9,8 @@ export class NodeSurvey {
 	supportSystemId: string;
 
 	// Maps to "Schade aan de node?"
-	@Field((type) => Boolean)
-	nodeDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	nodeDamage?: boolean;
 
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

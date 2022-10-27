@@ -9,44 +9,44 @@ export class FacadeSurvey {
 	supportSystemId: string;
 
 	// Maps to "Schade op gevel binnen 1 m van gevelbevestiging?"
-	@Field((type) => Boolean)
-	facadeDamageWithin1m: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	facadeDamageWithin1m?: boolean;
 
 	// Maps to "Belemmerende/belastende begroeiing bij overspanningsinstallatie?"
-	@Field((type) => Boolean)
-	hinderingVegetation: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	hinderingVegetation?: boolean;
 
 	// Maps to "Schade aan muurplaat?"
-	@Field((type) => Boolean)
-	wallPlateDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	wallPlateDamage?: boolean;
 
 	// Maps to "Onjuiste montage?"
-	@Field((type) => Boolean)
-	faultyMontage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	faultyMontage?: boolean;
 
 	// Maps to "Moer niet volledig over draadeind?"
-	@Field((type) => Boolean)
-	nutNotFullyOverThreadedRod: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	nutNotFullyOverThreadedRod?: boolean;
 
 	// Maps to "Ontbrekende bevestigingsmaterialen?"
-	@Field((type) => Boolean)
-	missingFasteners: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	missingFasteners?: boolean;
 
 	// Maps to "Gemeten voorspanning"
-	@Field((type) => Int)
-	measuredPreload: number;
+	@Field((type) => Int, { nullable: true })
+	measuredPreload?: number;
 
 	// Maps to "Toegepaste additionele trekkracht"
-	@Field((type) => Int)
-	appliedAdditionalTraction: number;
+	@Field((type) => Int, { nullable: true })
+	appliedAdditionalTraction?: number;
 
 	// Maps to "Gevelverbinding gefaald?"
-	@Field((type) => Boolean)
-	facadeConnectionFailed: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	facadeConnectionFailed?: boolean;
 
 	// Maps to "Additionele trekkracht waarbij gevelverbinding faalde"
-	@Field((type) => Int)
-	facadeConnectionFailureAdditionalTraction: number;
+	@Field((type) => Int, { nullable: true })
+	facadeConnectionFailureAdditionalTraction?: number;
 
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

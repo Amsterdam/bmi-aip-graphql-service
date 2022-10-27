@@ -9,28 +9,28 @@ export class MastSurvey {
 	supportSystemId: string;
 
 	// Maps to "Schade aan de mast?"
-	@Field((type) => Boolean)
-	mastDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	mastDamage?: boolean;
 
 	// Maps to "Ontbrekende onderdelen aan de mast?"
-	@Field((type) => Boolean)
-	mastMissingParts: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	mastMissingParts?: boolean;
 
 	// Maps to "Hoek van de spanmast"
 	@Field((type) => Float, { nullable: true })
 	tensionMastAngle?: number;
 
 	// Maps to "Schade aan het mastopzetstuk?"
-	@Field((type) => Boolean)
-	mastAttachmentDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	mastAttachmentDamage?: boolean;
 
 	// Maps to "Ontbrekende onderdelen aan de mastbeugel?"
-	@Field((type) => Boolean)
-	mastBracketMissingParts: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	mastBracketMissingParts?: boolean;
 
 	// Maps to "Schade aan de mastbeugel?"
-	@Field((type) => Boolean)
-	mastBracketDamage: boolean;
+	@Field((type) => Boolean, { nullable: true })
+	mastBracketDamage?: boolean;
 
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

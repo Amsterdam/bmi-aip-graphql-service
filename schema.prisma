@@ -1383,6 +1383,7 @@ model surveys {
   observationPoints                                    observationPoints[]
   poleLabResults                                       poleLabResults[]
   spanJunctionBoxes                                    spanJunctionBoxes[]
+  spanJunctionBoxesSurveys                             spanJunctionBoxesSurveys[]
   spanSupportSystems                                   spanSupportSystems[]
   surveyElementGroups                                  surveyElementGroups[]
   surveyElements                                       surveyElements[]

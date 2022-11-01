@@ -96,7 +96,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		};
 		const supportSystems = await repository.getSupportSystems('__SURVEY_ID__');
 		expect(prismaServiceMock.spanSupportSystems.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(supportSystems).toEqual([expected]);
 	});

@@ -45,12 +45,13 @@ export class LuminaireRepository implements ILuminaireRepository {
 		const luminaire = await this.prisma.spanLuminaires.create({ data });
 
 		// Work around Prisma not supporting spatial data types
-		await this.prisma.$executeRaw`
-			UPDATE "spanLuminaires"
-			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${luminaire.id}
-		`;
-
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanLuminaires"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${luminaire.id}
+			`;
+		}
 		return {
 			...luminaire,
 			geography,
@@ -61,6 +62,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		const luminaires = (await this.prisma.spanLuminaires.findMany({
 			where: {
 				supportSystemId,
+				deleted_at: null,
 			},
 		})) as Luminaire[];
 

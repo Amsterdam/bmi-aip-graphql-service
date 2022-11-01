@@ -19,6 +19,7 @@ import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
 import { FileModule } from './modules/FileModule';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
+import { SpanInstallationSurveyModule } from './schema/span-installation-survey/span-installation-survey.module';
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
@@ -38,6 +39,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		AuthorizationModule,
 		DecompositionModule,
 		SpanInstallationModule,
+		SpanInstallationSurveyModule,
 		ObjectModule,
 		BatchModule,
 		FileModule,

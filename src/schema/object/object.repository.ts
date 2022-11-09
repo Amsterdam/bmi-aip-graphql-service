@@ -336,12 +336,6 @@ export class ObjectRepository implements IObjectRepository {
 						WHERE id = ${junctionBoxId}
 					`;
 
-					// await this.prisma.$executeRaw`
-					// 	UPDATE "spanJunctionBoxes"
-					// 	SET geographyRD = ST_SetSRID(ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)}))
-					// 	WHERE id = ${junctionBoxId}
-					// `;
-
 					const data: Prisma.objectsUpdateInput = {
 						latitude: X,
 						longitude: Y,

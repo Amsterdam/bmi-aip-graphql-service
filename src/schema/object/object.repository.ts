@@ -332,7 +332,7 @@ export class ObjectRepository implements IObjectRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						SET geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
+						AND geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
 						WHERE id = ${junctionBoxId}
 					`;
 

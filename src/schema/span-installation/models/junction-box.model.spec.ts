@@ -34,6 +34,10 @@ describe('Span Installation / Model / JunctionBox', () => {
 				coordinates: [52.37593907780107, 4.894690444015065],
 				type: 'Point',
 			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
 			installationHeight: 320,
 			location: null,

@@ -85,6 +85,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
@@ -108,13 +109,25 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			`;
 		}
 
+		if (geographyRD) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanJunctionBoxes"
+				SET geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
+				WHERE id = ${id}
+			`;
+		}
+
 		const junctionBox = await this.prisma.spanJunctionBoxes.update({
 			where: { id },
 			data,
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(id) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(id),
+			geographyRD: await this.getGeographyRDAsGeoJSON(id),
+		};
 	}
 
 	async deleteJunctionBox(identifier: string): Promise<JunctionBox> {
@@ -128,7 +141,11 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(identifier) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(identifier),
+			geographyRD: await this.getGeographyRDAsGeoJSON(identifier),
+		};
 	}
 
 	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
@@ -139,5 +156,15 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
+	}
+
+	async getGeographyRDAsGeoJSON(identifier: string): Promise<Point | null> {
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON(geographyRD) as geographyRD
+			FROM "spanJunctionBoxes"
+			WHERE id = ${identifier};
+		`;
+		const geographyRD = result?.[0]?.geographyRD;
+		return geographyRD ? JSON.parse(geographyRD) : null;
 	}
 }

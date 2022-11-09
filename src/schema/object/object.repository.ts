@@ -6,7 +6,6 @@ import { Point } from 'geojson';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 import { transformRDToWGS } from '../span-installation/utils/transformRD';
-import { FileWriterService } from '../../services/FileWriterService';
 
 import { DbObject, IObjectRepository } from './types/object.repository.interface';
 import { ObjectModel } from './models/object.model';
@@ -306,6 +305,7 @@ export class ObjectRepository implements IObjectRepository {
 
 	async correctCoordinates(input: CorrectCoordinatesInput): Promise<string> {
 		const { installationGroup, source } = input;
+		console.log('data', source.junctionBoxes);
 
 		try {
 			const name = 'OVS' + ('000' + installationGroup).slice(-4);
@@ -313,60 +313,45 @@ export class ObjectRepository implements IObjectRepository {
 			const survey = await this.prisma.surveys.findFirst({ where: { objectId: object.id } });
 
 			await Promise.all(
-				source.supportSystems.map(async ({ X, Y, type, luminaires }, idx) => {
-					const { id: supportSystemId } = await this.prisma.spanSupportSystems.findFirst({
-						where: {
-							surveyId: survey.id,
-							name: `${FileWriterService.GetSupportSystemNameFromType(type)} ${idx + 1}`,
-						},
-					});
-					const geography: Point = {
-						type: 'Point',
-						coordinates: transformRDToWGS([X, Y]),
-					};
-					await this.prisma.$executeRaw`
-						UPDATE "spanSupportSystems"
-						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${supportSystemId}
-					`;
-
-					await Promise.all(
-						luminaires.map(async (l, _idx) => {
-							const { id: luminaireId } = await this.prisma.spanLuminaires.findFirst({
-								where: {
-									supportSystemId,
-									name: `Armatuur ${_idx + 1}`,
-								},
-							});
-							const geo: Point = {
-								type: 'Point',
-								coordinates: transformRDToWGS([X, Y]),
-							};
-							await this.prisma.$executeRaw`
-								UPDATE "spanLuminaires"
-								SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geo)})
-								WHERE id = ${luminaireId}
-							`;
-						}),
-					);
-				}),
-			);
-
-			await Promise.all(
 				source.junctionBoxes.map(async (jb, idx) => {
 					const { X, Y } = jb;
 					const { id: junctionBoxId } = await this.prisma.spanJunctionBoxes.findFirst({
 						where: { surveyId: survey.id, name: `Aansluitkast ${idx + 1}` },
 					});
+
 					const geography: Point = {
 						type: 'Point',
 						coordinates: transformRDToWGS([X, Y]),
 					};
+
+					const geographyRD: Point = {
+						type: 'Point',
+						coordinates: [X, Y],
+					};
+
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+						SET geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
 						WHERE id = ${junctionBoxId}
 					`;
+
+					// await this.prisma.$executeRaw`
+					// 	UPDATE "spanJunctionBoxes"
+					// 	SET geographyRD = ST_SetSRID(ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)}))
+					// 	WHERE id = ${junctionBoxId}
+					// `;
+
+					const data: Prisma.objectsUpdateInput = {
+						latitude: X,
+						longitude: Y,
+					};
+
+					//Update objects latitude and longitude
+					await this.prisma.objects.update({
+						where: { id: object.id },
+						data,
+					});
 				}),
 			);
 		} catch (err) {

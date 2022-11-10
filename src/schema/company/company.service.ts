@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { CompanyRepository } from './company.repository';
 import { CompanyFactory } from './company.factory';
 

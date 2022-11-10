@@ -2,9 +2,6 @@ import { Prisma } from '@prisma/client';
 
 import { DBCompany } from '../../company/types/company.repository.interface';
 
-// import { CreateBatchInput } from '../dto/create-batch.input';
-// import { Batch } from '../models/batch.model';
-
 const batches = Prisma.validator<Prisma.batchesArgs>()({
 	select: {
 		id: true,

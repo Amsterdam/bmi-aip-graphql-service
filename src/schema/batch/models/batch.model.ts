@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+
 import { Company } from '../../company/models/company.model';
 
 @ObjectType({ description: 'batch' })

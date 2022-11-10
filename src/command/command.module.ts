@@ -19,13 +19,13 @@ import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
 import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
+import { SetOVSSurveySurveyorService } from '../services/set-ovs-survey-surveyor.service';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
 import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';
 import { CommandService } from './command.service';
 import { CommandRepository } from './command.repository';
 import { CommandResolver } from './command.resolver';
-import { SetOVSSurveySurveyorService } from '../services/set-ovs-survey-surveyor.service';
 
 @Module({
 	imports: [

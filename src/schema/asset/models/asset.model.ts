@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { AssetStatuses } from '../../../types';
+import { Batch } from '../../batch/models/batch.model';
 
 import { IPassport } from './passport.model';
 
@@ -116,4 +117,7 @@ export class Asset {
 
 	@Field((type) => String || IPassport, { nullable: true })
 	public attributes: string | IPassport;
+
+	@Field((type) => [Batch])
+	batches?: Batch[];
 }

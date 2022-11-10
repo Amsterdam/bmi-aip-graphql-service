@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
+import { CqrsModule } from '@nestjs/cqrs';
 
 import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';
@@ -19,9 +20,17 @@ import { CorrectCoordinatesService } from '../services/correct-coordinates-servi
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 
+import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
+import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';
+import { CommandService } from './command.service';
+import { CommandRepository } from './command.repository';
+import { CommandResolver } from './command.resolver';
+import { SetOVSSurveySurveyorService } from '../services/set-ovs-survey-surveyor.service';
+
 @Module({
 	imports: [
 		ConsoleModule,
+		CqrsModule,
 		HttpModule,
 		CacheModule.register(),
 		GraphQLRequestModule.forRootAsync(GraphQLRequestModule, {
@@ -43,6 +52,7 @@ import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 		UpdateOVSPassport,
 		UndoOVSImportService,
 		CorrectCoordinatesService,
+		SetOVSSurveySurveyorService,
 		Logger,
 		ConfigService,
 		ObjectRepository,
@@ -53,6 +63,11 @@ import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 		LuminaireRepository,
 		NormalizeOVSImportData,
 		ExternalAIPGraphQLRepository,
+		SetOVSSurveySurveyorsCommand,
+		SetOVSSurveySurveyorsHandler,
+		CommandService,
+		CommandRepository,
+		CommandResolver,
 	],
 })
-export class FileModule {}
+export class CommandModule {}

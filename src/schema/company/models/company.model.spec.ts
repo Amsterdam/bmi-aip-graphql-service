@@ -1,7 +1,7 @@
 import { Company } from './company.model';
 
 describe('Company / Model', () => {
-	test('constructs an Company instance object', () => {
+	test('constructs a Company instance object', () => {
 		const company = new Company();
 		company.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
 		company.role = 'Owner';

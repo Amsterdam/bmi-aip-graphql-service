@@ -19,3 +19,7 @@ const companies = Prisma.validator<Prisma.companiesArgs>()({
 	},
 });
 export type DBCompany = Prisma.companiesGetPayload<typeof companies>;
+
+export interface ICompanyRepository {
+	getBatchExecutorCompanies(batchId: string): Promise<DBCompany[]>;
+}

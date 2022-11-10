@@ -32,7 +32,7 @@ export class AssetResolver {
 	}
 
 	@Mutation(() => Asset)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateAssetPassportByObjectCode(
 		@Args('updateAssetPassportByObjectCode') input: AssetAttributesInput,
 	): Promise<Asset> {

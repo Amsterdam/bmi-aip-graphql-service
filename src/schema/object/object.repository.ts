@@ -321,31 +321,21 @@ export class ObjectRepository implements IObjectRepository {
 
 					const geography: Point = {
 						type: 'Point',
-						coordinates: transformRDToWGS([X, Y]),
+						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
 					const geographyRD: Point = {
 						type: 'Point',
-						coordinates: [X, Y],
+						coordinates: [Number(X), Number(Y)],
 					};
 
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
-						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						AND geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
+						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)}), "geographyRD" = ST_GeomFromGeoJSON(${JSON.stringify(
+						geographyRD,
+					)})
 						WHERE id = ${junctionBoxId}
 					`;
-
-					const data: Prisma.objectsUpdateInput = {
-						latitude: X,
-						longitude: Y,
-					};
-
-					//Update objects latitude and longitude
-					await this.prisma.objects.update({
-						where: { id: object.id },
-						data,
-					});
 				}),
 			);
 		} catch (err) {

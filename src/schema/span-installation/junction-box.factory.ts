@@ -16,6 +16,7 @@ export class JunctionBoxFactory {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
@@ -32,6 +33,7 @@ export class JunctionBoxFactory {
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
+		jb.geographyRD = geographyRD;
 		jb.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		jb.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		jb.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

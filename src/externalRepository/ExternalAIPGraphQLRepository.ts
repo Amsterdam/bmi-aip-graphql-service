@@ -111,6 +111,20 @@ export class ExternalAIPGraphQLRepository {
 		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation);
 	}
 
+	public async setOVSSurveySurveyors(): Promise<any> {
+		const mutation = gql`
+			mutation setOVSSurveySurveyors {
+				setOVSSurveySurveyors {
+					done
+					errors
+					log
+				}
+			}
+		`;
+
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation);
+	}
+
 	public async removeDuplicateInstallationGroup(
 		installationGroupId: number,
 		targetRemoved?: boolean,

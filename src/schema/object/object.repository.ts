@@ -305,7 +305,6 @@ export class ObjectRepository implements IObjectRepository {
 
 	async correctCoordinates(input: CorrectCoordinatesInput): Promise<string> {
 		const { installationGroup, source } = input;
-		console.log('data', source.junctionBoxes);
 
 		try {
 			const name = 'OVS' + ('000' + installationGroup).slice(-4);
@@ -324,16 +323,10 @@ export class ObjectRepository implements IObjectRepository {
 						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
-					const geographyRD: Point = {
-						type: 'Point',
-						coordinates: [Number(X), Number(Y)],
-					};
-
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
-						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)}), "geographyRD" = ST_GeomFromGeoJSON(${JSON.stringify(
-						geographyRD,
-					)})
+						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)}),
+							"geographyRD" = ST_Transform(ST_GeomFromText('POINT('|| ${X} ||' '|| ${Y} ||')',28992),4326)
 						WHERE id = ${junctionBoxId}
 					`;
 				}),

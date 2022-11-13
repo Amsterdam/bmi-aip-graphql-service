@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsDate, IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsInt, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
@@ -11,6 +11,11 @@ export class BaseLuminaireInput {
 	@MaxLength(255)
 	@Field({ nullable: true })
 	public location?: string;
+
+	@IsOptional()
+	@IsBoolean()
+	@Field({ nullable: true })
+	public hasLED?: boolean;
 
 	@IsOptional()
 	@IsInt()

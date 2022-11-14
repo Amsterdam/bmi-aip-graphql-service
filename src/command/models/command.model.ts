@@ -10,4 +10,7 @@ export class CommandModel {
 
 	@Field((type) => [String])
 	log: string[];
+
+	@Field((type) => [String])
+	companyIds: string[];
 }

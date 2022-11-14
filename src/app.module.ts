@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
@@ -69,6 +69,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		},
 		AppService,
 		PrismaService,
+		Logger,
 	],
 })
 export class AppModule {}

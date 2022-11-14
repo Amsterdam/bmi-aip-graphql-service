@@ -45,6 +45,12 @@ export class SetOVSSurveySurveyorService {
 
 		const { setOVSSurveySurveyors } = await this.externalAIPGraphQLRepository.setOVSSurveySurveyors();
 
+		const { errors, companyIds } = setOVSSurveySurveyors;
+
 		this.logger.verbose('Result:', setOVSSurveySurveyors);
+		if (errors.length) {
+			this.logger.error('Errors:', errors);
+		}
+		this.logger.verbose("Company Id's:", companyIds);
 	}
 }

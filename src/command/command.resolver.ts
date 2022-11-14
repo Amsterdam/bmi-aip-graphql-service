@@ -21,6 +21,8 @@ export class CommandResolver {
 		commandModel.done = result.done;
 		commandModel.log = result.log;
 		commandModel.errors = result.errors;
+		commandModel.companyIds = result.companyIds;
+
 		return commandModel;
 	}
 }

@@ -159,7 +159,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 	}
 
 	async getGeographyRDAsGeoJSON(identifier: string): Promise<Point | null> {
-		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+		const result = await this.prisma.$queryRaw<{ geographyRD?: Point | null }>`
 			SELECT ST_AsGeoJSON(geographyRD) as geographyRD
 			FROM "spanJunctionBoxes"
 			WHERE id = ${identifier};

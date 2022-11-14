@@ -12,6 +12,7 @@ export class CommandRepository {
 	async setOVSSurveySurveyors(): Promise<CommandReturnType> {
 		const log = [];
 		const errors = [];
+		const companyIds = [];
 
 		// Find all OVS survey id's based on the survey type
 		const surveyIds = await this.prisma.surveys.findMany({
@@ -69,6 +70,10 @@ export class CommandRepository {
 							},
 						});
 						log.push(`Survey with id ${surveyId} was updated; surveyorCompanyId ${companyId}`);
+
+						if (!companyIds.includes(companyId)) {
+							companyIds.push(companyId);
+						}
 					}
 				} catch (err) {
 					errors.push(err.message);
@@ -83,6 +88,7 @@ export class CommandRepository {
 			done: true,
 			errors,
 			log,
+			companyIds,
 		};
 	}
 }

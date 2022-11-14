@@ -1,3 +1,5 @@
+import { CommandModel } from '../command/models/command.model';
+
 export interface ExternalAIPGraphQLRequest {
 	createObject?: any;
 	updatePassportByObjectCode?: any;
@@ -6,7 +8,7 @@ export interface ExternalAIPGraphQLRequest {
 	createJunctionBox?: any;
 	createSupportSystem?: any;
 	undoOVSImport?: any;
-	setOVSSurveySurveyors?: any;
+	setOVSSurveySurveyors?: CommandModel;
 	removeDuplicateInstallationGroup?: any;
 	correctCoordinates?: any;
 }

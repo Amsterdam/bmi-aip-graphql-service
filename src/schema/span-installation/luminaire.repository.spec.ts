@@ -41,6 +41,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
+				hasLED: true,
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -94,6 +95,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
+				hasLED: true,
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateLuminaireInput.id);
@@ -115,6 +117,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			remarks: '__REMARKS__',
 			supplierType: 'two',
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			hasLED: true,
 		});
 	});
 

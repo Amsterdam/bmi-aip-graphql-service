@@ -1,6 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
+import { NotImplementedException } from '@nestjs/common';
+
+import { Batch } from '../batch/models/batch.model';
 
 import { AssetService } from './asset.service';
 import { Asset } from './models/asset.model';
@@ -32,7 +35,7 @@ export class AssetResolver {
 	}
 
 	@Mutation(() => Asset)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateAssetPassportByObjectCode(
 		@Args('updateAssetPassportByObjectCode') input: AssetAttributesInput,
 	): Promise<Asset> {
@@ -40,5 +43,10 @@ export class AssetResolver {
 			new UpdateAssetPassportByObjectCodeCommand(input),
 		);
 		return AssetFactory.FromDBAsset(domainAsset);
+	}
+
+	@ResolveField()
+	batches(@Parent() { id }: Asset): Promise<Batch[]> {
+		throw new NotImplementedException('The field resolver for asset.batches has not yet been implemented');
 	}
 }

@@ -1,5 +1,4 @@
-import { SupplierType } from '../../types';
-
+import { SupplierType } from './types';
 import { Luminaire } from './models/luminaire.model';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
 
@@ -9,6 +8,7 @@ export class LuminaireFactory {
 		supportSystemId,
 		name,
 		location,
+		hasLED,
 		constructionYear,
 		supplierType,
 		manufacturer,
@@ -27,6 +27,7 @@ export class LuminaireFactory {
 		luminaire.supportSystemId = supportSystemId;
 		luminaire.name = name;
 		luminaire.location = location;
+		luminaire.hasLED = hasLED;
 		luminaire.constructionYear = constructionYear;
 		luminaire.supplierType = SupplierType[supplierType];
 		luminaire.manufacturer = manufacturer;

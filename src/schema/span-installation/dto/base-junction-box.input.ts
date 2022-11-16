@@ -4,6 +4,7 @@ import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
 import { A11yDetailsInput } from './a11y-details.input';
+import { GeographyRdInput } from './geography-rd.input';
 
 @InputType()
 export class BaseJunctionBoxInput {
@@ -45,8 +46,8 @@ export class BaseJunctionBoxInput {
 	geography?: PointType;
 
 	@IsOptional()
-	@Field(() => Point, { nullable: true })
-	geographyRD?: PointType;
+	@Field(() => GeographyRdInput, { nullable: true })
+	geographyRD?: GeographyRdInput;
 
 	@IsOptional()
 	@Field({ nullable: true })

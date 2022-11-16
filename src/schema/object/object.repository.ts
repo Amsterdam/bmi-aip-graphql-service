@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Point } from 'geojson';
+import { GeographyRD } from 'src/schema/span-installation/models/geography-rd.model';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -323,10 +324,15 @@ export class ObjectRepository implements IObjectRepository {
 						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
+					const geographyRD: GeographyRD = {
+						x: X,
+						y: Y,
+					};
+
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)}),
-							"geographyRD" = ST_Transform(ST_GeomFromText('POINT('|| ${X} ||' '|| ${Y} ||')',28992),4326)
+							"geographyRD" = ${JSON.stringify(geographyRD)}
 						WHERE id = ${junctionBoxId}
 					`;
 				}),

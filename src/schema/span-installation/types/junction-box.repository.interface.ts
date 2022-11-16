@@ -20,13 +20,13 @@ const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
+		geographyRD: true,
 	},
 });
 
 export type JunctionBoxWithoutGeography = Prisma.spanJunctionBoxesGetPayload<typeof junctionBoxes>;
 export type JunctionBox = JunctionBoxWithoutGeography & {
 	geography?: Point;
-	geographyRD?: Point;
 };
 
 export interface IJunctionBoxRepository {

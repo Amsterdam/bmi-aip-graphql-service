@@ -25,6 +25,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 		createdAt,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesCreateInput = {
@@ -39,6 +40,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: geographyRD as Prisma.InputJsonObject,
 		};
 
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
@@ -98,6 +100,9 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types
@@ -105,14 +110,6 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanJunctionBoxes"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
-			`;
-		}
-
-		if (geographyRD) {
-			await this.prisma.$executeRaw`
-				UPDATE "spanJunctionBoxes"
-				SET geographyRD = ST_GeomFromGeoJSON(${JSON.stringify(geographyRD)})
 				WHERE id = ${id}
 			`;
 		}
@@ -126,7 +123,6 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		return {
 			...junctionBox,
 			geography: await this.getGeographyAsGeoJSON(id),
-			geographyRD: await this.getGeographyRDAsGeoJSON(id),
 		};
 	}
 
@@ -144,7 +140,6 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		return {
 			...junctionBox,
 			geography: await this.getGeographyAsGeoJSON(identifier),
-			geographyRD: await this.getGeographyRDAsGeoJSON(identifier),
 		};
 	}
 
@@ -156,15 +151,5 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
-	}
-
-	async getGeographyRDAsGeoJSON(identifier: string): Promise<Point | null> {
-		const result = await this.prisma.$queryRaw<{ geographyRD?: Point | null }>`
-			SELECT ST_AsGeoJSON(geographyRD) as geographyRD
-			FROM "spanJunctionBoxes"
-			WHERE id = ${identifier};
-		`;
-		const geographyRD = result?.[0]?.geographyRD;
-		return geographyRD ? JSON.parse(geographyRD) : null;
 	}
 }

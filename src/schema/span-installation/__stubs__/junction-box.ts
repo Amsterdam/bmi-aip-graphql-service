@@ -17,8 +17,8 @@ junctionBox1.geography = {
 	coordinates: [52.370302853062604, 4.893996915500548],
 };
 junctionBox1.geographyRD = {
-	type: 'Point',
-	coordinates: [116211.88, 487352.77],
+	x: 116211.88,
+	y: 487352.77,
 };
 
 const junctionBox2 = new JunctionBox();
@@ -30,8 +30,8 @@ junctionBox2.geography = {
 	coordinates: [52.370302853062604, 4.893996915500548],
 };
 junctionBox2.geographyRD = {
-	type: 'Point',
-	coordinates: [116211.88, 487352.77],
+	x: 116211.88,
+	y: 487352.77,
 };
 
 export { junctionBox1, junctionBox2 };
@@ -58,8 +58,8 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
 	geographyRD: {
-		type: 'Point',
-		coordinates: [116211.88, 487352.77],
+		x: 116211.88,
+		y: 487352.77,
 	},
 };
 

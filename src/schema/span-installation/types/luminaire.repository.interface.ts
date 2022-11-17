@@ -10,6 +10,7 @@ const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 		supportSystemId: true,
 		name: true,
 		location: true,
+		hasLED: true,
 		remarks: true,
 		constructionYear: true,
 		driverCommissioningDate: true,

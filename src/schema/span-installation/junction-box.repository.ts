@@ -25,6 +25,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 		createdAt,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesCreateInput = {
@@ -39,6 +40,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: geographyRD as Prisma.InputJsonObject,
 		};
 
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
@@ -85,6 +87,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
@@ -97,6 +100,9 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types
@@ -114,7 +120,10 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(id) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(id),
+		};
 	}
 
 	async deleteJunctionBox(identifier: string): Promise<JunctionBox> {
@@ -128,7 +137,10 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(identifier) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(identifier),
+		};
 	}
 
 	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {

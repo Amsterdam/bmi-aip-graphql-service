@@ -3,6 +3,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
 import { A11yDetails } from './a11y-details.model';
+import { GeographyRD } from './geography-rd.model';
 
 @ObjectType({ description: 'junctionBox' })
 export class JunctionBox {
@@ -54,6 +55,9 @@ export class JunctionBox {
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
+
+	@Field((type) => GeographyRD, { nullable: true })
+	geographyRD?: GeographyRD;
 
 	@Field((type) => String, { nullable: true })
 	createdAt: string;

@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Point } from 'geojson';
-import { GeographyRD } from 'src/schema/span-installation/models/geography-rd.model';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -13,6 +12,7 @@ import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
 import { UpdateObjectInput } from './dto/update-object.input';
 import { CorrectCoordinatesInput } from './dto/correct-coordinates.input';
+import { FileWriterService } from './../../services/FileWriterService';
 
 @Injectable()
 export class ObjectRepository implements IObjectRepository {
@@ -313,6 +313,43 @@ export class ObjectRepository implements IObjectRepository {
 			const survey = await this.prisma.surveys.findFirst({ where: { objectId: object.id } });
 
 			await Promise.all(
+				source.supportSystems.map(async ({ X, Y, type, luminaires }, idx) => {
+					const { id: supportSystemId } = await this.prisma.spanSupportSystems.findFirst({
+						where: {
+							surveyId: survey.id,
+							name: `${FileWriterService.GetSupportSystemNameFromType(type)} ${idx + 1}`,
+						},
+					});
+					const geographyRD: Point = {
+						type: 'Point',
+						coordinates: [X, Y],
+					};
+					await this.prisma.$executeRaw`
+						UPDATE "spanSupportSystems"
+						SET "geographyRD" = ${JSON.stringify(geographyRD)}
+						WHERE id = ${supportSystemId}
+					`;
+
+					await Promise.all(
+						luminaires.map(async (l, _idx) => {
+							const { id: luminaireId } = await this.prisma.spanLuminaires.findFirst({
+								where: {
+									supportSystemId,
+									name: `Armatuur ${_idx + 1}`,
+								},
+							});
+
+							await this.prisma.$executeRaw`
+								UPDATE "spanLuminaires"
+								SET "geographyRD" = ${JSON.stringify(geographyRD)}
+								WHERE id = ${luminaireId}
+							`;
+						}),
+					);
+				}),
+			);
+
+			await Promise.all(
 				source.junctionBoxes.map(async (jb, idx) => {
 					const { X, Y } = jb;
 					const { id: junctionBoxId } = await this.prisma.spanJunctionBoxes.findFirst({
@@ -324,9 +361,9 @@ export class ObjectRepository implements IObjectRepository {
 						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
-					const geographyRD: GeographyRD = {
-						x: X,
-						y: Y,
+					const geographyRD: Point = {
+						type: 'Point',
+						coordinates: [X, Y],
 					};
 
 					await this.prisma.$executeRaw`

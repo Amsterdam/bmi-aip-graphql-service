@@ -14,6 +14,10 @@ luminaire1.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
 };
+luminaire1.geographyRD = {
+	coordinates: [116211.88, 487352.77],
+	type: 'Point',
+};
 
 const luminaire2 = new Luminaire();
 luminaire2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
@@ -23,6 +27,10 @@ luminaire2.hasLED = false;
 luminaire2.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
+};
+luminaire2.geographyRD = {
+	coordinates: [116211.88, 487352.77],
+	type: 'Point',
 };
 
 export { luminaire1, luminaire2 };
@@ -38,6 +46,10 @@ const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
 	geography: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
+	},
+	geographyRD: {
+		coordinates: [116211.88, 487352.77],
+		type: 'Point',
 	},
 	constructionYear: 1979,
 	driverCommissioningDate: null,

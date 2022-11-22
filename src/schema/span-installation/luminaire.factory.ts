@@ -14,6 +14,7 @@ export class LuminaireFactory {
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -32,6 +33,7 @@ export class LuminaireFactory {
 		luminaire.supplierType = SupplierType[supplierType];
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
+		luminaire.geographyRD = JSON.parse(JSON.stringify(geographyRD));
 		luminaire.remarks = remarks;
 		luminaire.driverSupplierType = SupplierType[driverSupplierType];
 		luminaire.driverCommissioningDate =

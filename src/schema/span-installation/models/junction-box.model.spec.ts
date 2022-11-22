@@ -1,12 +1,10 @@
 import { JunctionBox } from './junction-box.model';
 import { A11yDetails } from './a11y-details.model';
-import { GeographyRD } from './geography-rd.model';
 
 describe('Span Installation / Model / JunctionBox', () => {
 	test('constructs a JunctionBox instance', () => {
 		const junctionBox = new JunctionBox();
 		const a11yDetails = new A11yDetails();
-		const geographyRD = new GeographyRD();
 		a11yDetails.limitationOnTheMaximumHeadroom = true;
 		junctionBox.id = '71c5450a-c0a3-48ea-adbb-ea435a8804d5';
 		junctionBox.objectId = 'cecc214d-1c44-4bcd-94e2-f2d661327db3';
@@ -23,7 +21,10 @@ describe('Span Installation / Model / JunctionBox', () => {
 			type: 'Point',
 			coordinates: [52.37593907780107, 4.894690444015065],
 		};
-		junctionBox.geographyRD = geographyRD;
+		junctionBox.geographyRD = {
+			type: 'Point',
+			coordinates: [116211.88, 487352.77],
+		};
 		junctionBox.createdAt = '2022-08-02T15:51:54.044Z';
 		junctionBox.updatedAt = '2022-08-02T15:52:54.044Z';
 		junctionBox.deletedAt = '2022-08-02T15:53:07.441Z';
@@ -37,7 +38,10 @@ describe('Span Installation / Model / JunctionBox', () => {
 				coordinates: [52.37593907780107, 4.894690444015065],
 				type: 'Point',
 			},
-			geographyRD: {},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
 			installationHeight: 320,
 			location: null,

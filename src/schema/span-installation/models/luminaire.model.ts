@@ -41,6 +41,9 @@ export class Luminaire {
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
 
+	@Field((type) => Point, { nullable: true })
+	geographyRD?: PointType;
+
 	// Maps to "Opmerking"
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

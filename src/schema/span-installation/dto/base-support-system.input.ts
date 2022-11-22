@@ -41,6 +41,10 @@ export class BaseSupportSystemInput {
 	geography?: PointType;
 
 	@IsOptional()
+	@Field(() => Point, { nullable: true })
+	geographyRD?: PointType;
+
+	@IsOptional()
 	@IsNumber()
 	@Field({ nullable: true })
 	public installationHeight?: number;

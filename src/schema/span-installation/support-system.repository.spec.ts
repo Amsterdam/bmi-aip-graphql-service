@@ -122,6 +122,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				houseNumber: '33',
 				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 				type: SupportSystemType.Facade,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateSupportSystemNormalizedInput.id);
@@ -141,6 +145,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			houseNumber: '33',
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
 				type: 'Point',
 			},
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
@@ -179,6 +187,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				updated_at: undefined,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
 				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,

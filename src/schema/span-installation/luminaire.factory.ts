@@ -1,6 +1,7 @@
 import { SupplierType } from './types';
 import { Luminaire } from './models/luminaire.model';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
+import { GeographyRDFactory } from './geography-rd.factory';
 
 export class LuminaireFactory {
 	static CreateLuminaire({
@@ -14,6 +15,7 @@ export class LuminaireFactory {
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -32,6 +34,7 @@ export class LuminaireFactory {
 		luminaire.supplierType = SupplierType[supplierType];
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
+		luminaire.geographyRD = GeographyRDFactory.CreateGeographyRDFromJSONB(geographyRD as string);
 		luminaire.remarks = remarks;
 		luminaire.driverSupplierType = SupplierType[driverSupplierType];
 		luminaire.driverCommissioningDate =

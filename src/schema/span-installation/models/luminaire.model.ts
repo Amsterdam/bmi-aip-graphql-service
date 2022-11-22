@@ -4,6 +4,8 @@ import { Point as PointType } from 'geojson';
 
 import { SupplierType } from '../types';
 
+import { GeographyRD } from './geography-rd.model';
+
 @ObjectType({ description: 'luminaire' })
 export class Luminaire {
 	@Field((type) => String)
@@ -40,6 +42,9 @@ export class Luminaire {
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
+
+	@Field((type) => GeographyRD, { nullable: true })
+	geographyRD?: GeographyRD;
 
 	// Maps to "Opmerking"
 	@Field((type) => String, { nullable: true })

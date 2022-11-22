@@ -28,6 +28,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
+		geographyRD,
 	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsCreateInput = {
 			id: newId(),
@@ -43,6 +44,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			houseNumber,
 			type: type,
 			typeDetailed: typeDetailed,
+			geographyRD: geographyRD as Prisma.InputJsonObject,
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });
@@ -89,6 +91,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
+		geographyRD,
 	}: UpdateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
@@ -103,6 +106,9 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			houseNumber,
 			type,
 			typeDetailed,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types

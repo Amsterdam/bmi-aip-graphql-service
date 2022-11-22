@@ -16,6 +16,7 @@ describe('Span Installation / Model / Luminaire', () => {
 			type: 'Point',
 			coordinates: [52.37593907780107, 4.894690444015065],
 		};
+		luminaire.geographyRD = {};
 		luminaire.remarks = '__REMARKS__';
 
 		// Driver
@@ -42,6 +43,7 @@ describe('Span Installation / Model / Luminaire', () => {
 				coordinates: [52.37593907780107, 4.894690444015065],
 				type: 'Point',
 			},
+			geographyRD: {},
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
 			lightCommissioningDate: '',
 			lightSupplierType: 'two',

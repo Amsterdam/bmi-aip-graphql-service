@@ -25,6 +25,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 			type: 'Point',
 			coordinates: [52.37593907780107, 4.894690444015065],
 		};
+		supportSystem.geographyRD = {};
 		supportSystem.createdAt = '2022-08-02T15:51:54.044Z';
 		supportSystem.updatedAt = '2022-08-02T15:52:54.044Z';
 		supportSystem.deletedAt = '2022-08-02T15:53:07.441Z';
@@ -40,6 +41,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 				coordinates: [52.37593907780107, 4.894690444015065],
 				type: 'Point',
 			},
+			geographyRD: {},
 			houseNumber: '33',
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
 			installationHeight: 320,

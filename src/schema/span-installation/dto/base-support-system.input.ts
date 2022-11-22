@@ -6,6 +6,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { SupportSystemType } from '../types';
 
 import { A11yDetailsInput } from './a11y-details.input';
+import { GeographyRdInput } from './geography-rd.input';
 
 @InputType()
 export class BaseSupportSystemInput {
@@ -39,6 +40,10 @@ export class BaseSupportSystemInput {
 	@IsOptional()
 	@Field(() => Point, { nullable: true })
 	geography?: PointType;
+
+	@IsOptional()
+	@Field(() => GeographyRdInput, { nullable: true })
+	geographyRD?: GeographyRdInput;
 
 	@IsOptional()
 	@IsNumber()

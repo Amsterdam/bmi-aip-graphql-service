@@ -20,6 +20,10 @@ supportSystem1.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
 };
+supportSystem1.geographyRD = {
+	x: 116211.88,
+	y: 487352.77,
+};
 
 const supportSystem2 = new SupportSystem();
 supportSystem2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
@@ -28,6 +32,10 @@ supportSystem2.name = 'Support System 2';
 supportSystem2.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
+};
+supportSystem2.geographyRD = {
+	x: 116211.88,
+	y: 487352.77,
 };
 
 export { supportSystem1, supportSystem2 };
@@ -54,6 +62,10 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	geography: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
+	},
+	geographyRD: {
+		x: 116211.88,
+		y: 487352.77,
 	},
 };
 

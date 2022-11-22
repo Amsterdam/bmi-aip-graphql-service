@@ -11,6 +11,7 @@ import type {
 } from '../types';
 
 import { A11yDetails } from './a11y-details.model';
+import { GeographyRD } from './geography-rd.model';
 
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
@@ -65,6 +66,9 @@ export class SupportSystem {
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
+
+	@Field((type) => GeographyRD, { nullable: true })
+	geographyRD?: GeographyRD;
 
 	// For type `gevel | mast | ring`
 	// Maps to "Aanleghoogte"

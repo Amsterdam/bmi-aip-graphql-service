@@ -23,6 +23,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -42,6 +43,9 @@ export class LuminaireRepository implements ILuminaireRepository {
 			driverCommissioningDate,
 			lightSupplierType,
 			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const luminaire = await this.prisma.spanLuminaires.create({ data });
@@ -86,6 +90,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -103,6 +108,9 @@ export class LuminaireRepository implements ILuminaireRepository {
 			driverCommissioningDate,
 			lightSupplierType,
 			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types

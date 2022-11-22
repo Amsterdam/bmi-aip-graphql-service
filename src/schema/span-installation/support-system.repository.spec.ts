@@ -123,8 +123,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 				type: SupportSystemType.Facade,
 				geographyRD: {
-					x: 116211.88,
-					y: 487352.77,
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
 				},
 			},
 		});
@@ -147,7 +147,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
-			geographyRD: { x: 116211.88, y: 487352.77 },
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
 		});
@@ -186,7 +189,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',
 				},
-				geographyRD: { x: 116211.88, y: 487352.77 },
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			}),
 		);

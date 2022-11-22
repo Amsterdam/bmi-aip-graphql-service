@@ -1,7 +1,6 @@
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { A11yDetailsFactory } from './a11y-details.factory';
-import { GeographyRDFactory } from './geography-rd.factory';
 
 export class JunctionBoxFactory {
 	static CreateJunctionBox({
@@ -34,7 +33,7 @@ export class JunctionBoxFactory {
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
-		jb.geographyRD = GeographyRDFactory.CreateGeographyRDFromJSONB(geographyRD as string);
+		jb.geographyRD = JSON.parse(JSON.stringify(geographyRD));
 		jb.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		jb.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		jb.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

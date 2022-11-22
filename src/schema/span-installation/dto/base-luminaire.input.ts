@@ -5,8 +5,6 @@ import { Point } from 'graphql-geojson-scalar-types';
 
 import { SupplierType } from '../types';
 
-import { GeographyRdInput } from './geography-rd.input';
-
 @InputType()
 export class BaseLuminaireInput {
 	@IsOptional()
@@ -39,8 +37,8 @@ export class BaseLuminaireInput {
 	geography?: PointType;
 
 	@IsOptional()
-	@Field(() => GeographyRdInput, { nullable: true })
-	geographyRD?: GeographyRdInput;
+	@Field(() => Point, { nullable: true })
+	geographyRD?: PointType;
 
 	@IsOptional()
 	@Field({ nullable: true })

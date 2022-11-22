@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Point } from 'geojson';
-import { GeographyRD } from 'src/schema/span-installation/models/geography-rd.model';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -321,9 +320,9 @@ export class ObjectRepository implements IObjectRepository {
 							name: `${FileWriterService.GetSupportSystemNameFromType(type)} ${idx + 1}`,
 						},
 					});
-					const geographyRD: GeographyRD = {
-						x: X,
-						y: Y,
+					const geographyRD: Point = {
+						type: 'Point',
+						coordinates: [X, Y],
 					};
 					await this.prisma.$executeRaw`
 						UPDATE "spanSupportSystems"
@@ -362,9 +361,9 @@ export class ObjectRepository implements IObjectRepository {
 						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
-					const geographyRD: GeographyRD = {
-						x: X,
-						y: Y,
+					const geographyRD: Point = {
+						type: 'Point',
+						coordinates: [X, Y],
 					};
 
 					await this.prisma.$executeRaw`

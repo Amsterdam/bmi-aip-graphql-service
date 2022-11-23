@@ -12,7 +12,6 @@ import { ObjectModel } from './models/object.model';
 import { CreateObjectInput } from './dto/create-object.input';
 import { UpdateObjectInput } from './dto/update-object.input';
 import { CorrectCoordinatesInput } from './dto/correct-coordinates.input';
-import { FileWriterService } from './../../services/FileWriterService';
 
 @Injectable()
 export class ObjectRepository implements IObjectRepository {
@@ -311,43 +310,6 @@ export class ObjectRepository implements IObjectRepository {
 			const name = 'OVS' + ('000' + installationGroup).slice(-4);
 			const object = await this.prisma.objects.findFirst({ where: { name } });
 			const survey = await this.prisma.surveys.findFirst({ where: { objectId: object.id } });
-
-			await Promise.all(
-				source.supportSystems.map(async ({ X, Y, type, luminaires }, idx) => {
-					const { id: supportSystemId } = await this.prisma.spanSupportSystems.findFirst({
-						where: {
-							surveyId: survey.id,
-							name: `${FileWriterService.GetSupportSystemNameFromType(type)} ${idx + 1}`,
-						},
-					});
-					const geographyRD: Point = {
-						type: 'Point',
-						coordinates: [X, Y],
-					};
-					await this.prisma.$executeRaw`
-						UPDATE "spanSupportSystems"
-						SET "geographyRD" = ${JSON.stringify(geographyRD)}
-						WHERE id = ${supportSystemId}
-					`;
-
-					await Promise.all(
-						luminaires.map(async (l, _idx) => {
-							const { id: luminaireId } = await this.prisma.spanLuminaires.findFirst({
-								where: {
-									supportSystemId,
-									name: `Armatuur ${_idx + 1}`,
-								},
-							});
-
-							await this.prisma.$executeRaw`
-								UPDATE "spanLuminaires"
-								SET "geographyRD" = ${JSON.stringify(geographyRD)}
-								WHERE id = ${luminaireId}
-							`;
-						}),
-					);
-				}),
-			);
 
 			await Promise.all(
 				source.junctionBoxes.map(async (jb, idx) => {

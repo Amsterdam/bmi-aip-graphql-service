@@ -38,7 +38,13 @@ export class SupportSystemFactory {
 		supportSystem.type = SupportSystemType[type];
 		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
-		supportSystem.geographyRD = JSON.parse(JSON.stringify(geographyRD));
+
+		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
+		// Allow geographyRD to be null by not defining it
+		if (parsedGeographyRD?.type) {
+			supportSystem.geographyRD = parsedGeographyRD;
+		}
+
 		supportSystem.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		supportSystem.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		supportSystem.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

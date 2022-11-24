@@ -33,7 +33,13 @@ export class JunctionBoxFactory {
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
-		jb.geographyRD = JSON.parse(JSON.stringify(geographyRD));
+
+		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
+		// Allow geographyRD to be null by not defining it
+		if (parsedGeographyRD?.type) {
+			jb.geographyRD = parsedGeographyRD;
+		}
+
 		jb.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		jb.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		jb.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;

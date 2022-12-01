@@ -6,13 +6,12 @@ import { PrismaService } from '../../prisma.service';
 import { ElementResolver } from './element.resolver';
 import { ElementService } from './element.service';
 import { ElementRepository } from './element.repository';
-import { UnitRepository } from './unit.repository';
-import { ManifestationRepository } from './manifestation.repository';
 import { domainElement, element1, element2, elementInput, updateElementInput, deletedElement } from './__stubs__';
 import { CreateElementCommand } from './commands/create-element.command';
 import { Element } from './models/element.model';
 import { UpdateElementCommand } from './commands/update-element.command';
 import { DeleteElementCommand } from './commands/delete-element.command';
+import { ElementFactory } from './element.factory';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
@@ -26,7 +25,7 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 			case UpdateElementCommand.name:
 				return domainElement;
 			case DeleteElementCommand.name:
-				return deletedElement;
+				return ElementFactory.CreateElement(deletedElement);
 		}
 	}),
 	...(<any>{}),
@@ -36,8 +35,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
-const elementRepo = new ElementRepository(prismaServiceMock, unitRepo);
+const elementRepo = new ElementRepository(prismaServiceMock);
 
 describe('Decomposition / Element / Resolver', () => {
 	describe('createElement', () => {

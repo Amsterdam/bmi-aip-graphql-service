@@ -7,8 +7,9 @@ import { ElementRepository } from './element.repository';
 import { domainElement } from './__stubs__';
 import { ElementFactory } from './element.factory';
 import { Element } from './models/element.model';
-import { UnitRepository } from './unit.repository';
-import { ManifestationRepository } from './manifestation.repository';
+import { ElementHasUnitsException } from './exceptions/element-has-units.exception';
+
+import mocked = jest.mocked;
 
 jest.mock('./element.repository');
 jest.mock('./unit.repository');
@@ -18,8 +19,8 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
-const repo = new ElementRepository(prismaServiceMock, unitRepo);
+// const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
+const repo = new ElementRepository(prismaServiceMock);
 
 describe('Decomposition / Elements / Service', () => {
 	test('getElements returns array of Element objects', async () => {
@@ -28,5 +29,21 @@ describe('Decomposition / Elements / Service', () => {
 		expect(elements).toBeInstanceOf(Array);
 		expect(elements[0]).toBeInstanceOf(Element);
 		expect(elements).toEqual([domainElement].map((element) => ElementFactory.CreateElement(element)));
+	});
+
+	describe('deleteElement', () => {
+		test('Throws ElementHasUnitsException exception if element has units', async () => {
+			mocked(repo.hasUnits).mockResolvedValue(true);
+			const service = new ElementService(repo);
+			await expect(service.deleteElement(domainElement.id)).rejects.toThrow(ElementHasUnitsException);
+		});
+
+		test('Deletes element and returns it', async () => {
+			mocked(repo.hasUnits).mockResolvedValue(false);
+			const service = new ElementService(repo);
+			const returnValue = await service.deleteElement(domainElement.id);
+			expect(repo.deleteElement).toHaveBeenCalledWith(domainElement.id);
+			expect(returnValue).toEqual(ElementFactory.CreateElement(domainElement));
+		});
 	});
 });

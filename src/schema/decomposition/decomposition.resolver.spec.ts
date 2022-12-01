@@ -40,12 +40,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const constructResolver = (commandBusMock) => {
 	return new DecompositionResolver(
-		new ElementService(
-			new ElementRepository(
-				prismaServiceMock,
-				new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock)),
-			),
-		),
+		new ElementService(new ElementRepository(prismaServiceMock)),
 		new UnitService(new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock))),
 		commandBusMock,
 	);

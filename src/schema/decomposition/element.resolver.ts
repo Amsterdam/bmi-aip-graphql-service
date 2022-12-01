@@ -43,10 +43,7 @@ export class ElementResolver {
 	@Mutation(() => Element)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteElement(@Args('identifier') identifier: string): Promise<Element> {
-		const domainElement: DomainElement = await this.commandBus.execute<DeleteElementCommand>(
-			new DeleteElementCommand(identifier),
-		);
-		return ElementFactory.CreateElement(domainElement);
+		return this.commandBus.execute<DeleteElementCommand>(new DeleteElementCommand(identifier));
 	}
 
 	@Query((returns) => [Element], { name: 'decompositionElements' })

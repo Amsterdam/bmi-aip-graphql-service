@@ -5,8 +5,6 @@ import { PrismaService } from '../../prisma.service';
 import { ElementRepository } from './element.repository';
 import { deletedElement, domainElement, elementInput, updateElementInput } from './__stubs__';
 
-jest.mock('./manifestation.repository');
-
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
 		create: jest.fn().mockResolvedValue(domainElement),

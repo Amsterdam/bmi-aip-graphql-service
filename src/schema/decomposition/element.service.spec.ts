@@ -19,7 +19,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-// const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
 const repo = new ElementRepository(prismaServiceMock);
 
 describe('Decomposition / Elements / Service', () => {

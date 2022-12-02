@@ -13,7 +13,7 @@ export class ElementService {
 		return (await this.elementRepo.getElements(surveyId)).map((element) => ElementFactory.CreateElement(element));
 	}
 
-	async deleteElement(elementId: string): Promise<Element> {
+	public async deleteElement(elementId: string): Promise<Element> {
 		// It is not allowed to delete elements with units
 		const hasUnits = await this.elementRepo.hasUnits(elementId);
 		if (hasUnits) {

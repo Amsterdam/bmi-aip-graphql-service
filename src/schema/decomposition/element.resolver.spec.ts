@@ -15,8 +15,6 @@ import { ElementFactory } from './element.factory';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
-jest.mock('./unit.repository');
-jest.mock('./manifestation.repository');
 
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {

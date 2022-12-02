@@ -4,7 +4,6 @@ import { PrismaService } from '../../prisma.service';
 
 import { UnitRepository } from './unit.repository';
 import { domainUnit, unitInput, updateUnitInput, deletedUnit } from './__stubs__';
-import { ManifestationRepository } from './manifestation.repository';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	units: {
@@ -12,13 +11,15 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		findMany: jest.fn().mockResolvedValue([domainUnit]),
 		update: jest.fn().mockResolvedValue(domainUnit),
 	},
+	manifestations: {
+		count: jest.fn(),
+	},
 	...(<any>{}),
 };
 
-jest.mock('./manifestation.repository');
+// jest.mock('./manifestation.repository');
 
-const manifestationRepo = new ManifestationRepository(prismaServiceMock);
-const repo = new UnitRepository(prismaServiceMock, manifestationRepo);
+const repo = new UnitRepository(prismaServiceMock);
 
 describe('UnitRepository', () => {
 	test('create()', async () => {
@@ -99,21 +100,15 @@ describe('UnitRepository', () => {
 		expect(unit.deleted_at instanceof Date).toBe(true);
 	});
 
-	test('deleteUnitsForElement', async () => {
-		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
-		const uuid1 = '0cd685ff-8566-4f62-9757-65a16b483c2e';
-		const uuid2 = '1e76227d-cc0c-469f-8359-dee4dc74adba';
-		const deleteUnitSpy = jest.spyOn(repo, 'deleteUnit');
-		// @ts-ignore
-		prismaServiceMock.units.findMany.mockResolvedValue([{ id: uuid1 }, { id: uuid2 }]);
-		await repo.deleteUnitsForElement(identifier);
-		expect(prismaServiceMock.units.findMany).toHaveBeenCalledWith({
-			where: { elementId: identifier },
-			select: { id: true },
+	describe('hasManifestations', () => {
+		test('true', async () => {
+			prismaServiceMock.manifestations.count.mockResolvedValue(2);
+			expect(await repo.hasManifestations('610d0b4e-c06f-4894-9f60-8e1d0f78d2f1')).toBe(true);
 		});
-		expect(manifestationRepo.deleteManifestationsForUnit).toHaveBeenCalledWith(uuid1);
-		expect(manifestationRepo.deleteManifestationsForUnit).toHaveBeenCalledWith(uuid2);
-		expect(deleteUnitSpy).toHaveBeenCalledWith(uuid1);
-		expect(deleteUnitSpy).toHaveBeenCalledWith(uuid2);
+
+		test('false', async () => {
+			prismaServiceMock.manifestations.count.mockResolvedValue(0);
+			expect(await repo.hasManifestations('610d0b4e-c06f-4894-9f60-8e1d0f78d2f1')).toBe(false);
+		});
 	});
 });

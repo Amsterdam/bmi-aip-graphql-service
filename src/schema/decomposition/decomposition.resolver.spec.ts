@@ -12,7 +12,6 @@ import { FindSurveyElementsCommand } from './commands/find-survey-elements.comma
 import { CreateDecompositionCommand } from './commands/create-decomposition.command';
 import { ElementRepository } from './element.repository';
 import { UnitRepository } from './unit.repository';
-import { ManifestationRepository } from './manifestation.repository';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
 import { Unit } from './models/unit.model';
 
@@ -41,7 +40,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const constructResolver = (commandBusMock) => {
 	return new DecompositionResolver(
 		new ElementService(new ElementRepository(prismaServiceMock)),
-		new UnitService(new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock))),
+		new UnitService(new UnitRepository(prismaServiceMock)),
 		commandBusMock,
 	);
 };

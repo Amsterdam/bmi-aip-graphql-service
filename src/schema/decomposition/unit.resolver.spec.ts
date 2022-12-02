@@ -11,10 +11,10 @@ import { Unit } from './models/unit.model';
 import { UnitRepository } from './unit.repository';
 import { UpdateUnitCommand } from './commands/update-unit.command';
 import { DeleteUnitCommand } from './commands/delete-unit.command';
-import { ManifestationRepository } from './manifestation.repository';
+import { UnitFactory } from './unit.factory';
 
+jest.mock('./unit.service');
 jest.mock('./unit.repository');
-jest.mock('./manifestation.repository');
 
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
@@ -23,7 +23,7 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 			case UpdateUnitCommand.name:
 				return domainUnit;
 			case DeleteUnitCommand.name:
-				return deletedUnit;
+				return UnitFactory.CreateUnit(deletedUnit);
 		}
 	}),
 	...(<any>{}),
@@ -33,7 +33,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
+const unitRepo = new UnitRepository(prismaServiceMock);
 
 describe('Decomposition / Unit / Resolver', () => {
 	describe('createUnit', () => {

@@ -90,6 +90,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 	test('updateJunctionBox()', async () => {
 		prismaServiceMock.spanJunctionBoxes.update.mockResolvedValue(domainJunctionBox);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(junctionBox1.geography) }]);
+		prismaServiceMock.$queryRaw.mockResolvedValue([{ geographyRD: JSON.stringify(junctionBox1.geographyRD) }]);
 		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateJunctionBoxInput.geography);
 		const returnValue = await repo.updateJunctionBox(updateJunctionBoxInput);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -104,6 +105,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
@@ -113,6 +118,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
 				type: 'Point',
 			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
@@ -144,6 +153,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				a11yDetails: junctionBoxInput.a11yDetails,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',

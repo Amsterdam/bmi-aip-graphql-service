@@ -45,6 +45,10 @@ export class BaseJunctionBoxInput {
 	geography?: PointType;
 
 	@IsOptional()
+	@Field(() => Point, { nullable: true })
+	geographyRD?: PointType;
+
+	@IsOptional()
 	@Field({ nullable: true })
 	createdAt?: Date;
 

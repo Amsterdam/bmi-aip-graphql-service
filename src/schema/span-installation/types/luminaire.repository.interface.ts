@@ -19,10 +19,10 @@ const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 		lightSupplierType: true,
 		manufacturer: true,
 		supplierType: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
+		geographyRD: true,
 	},
 });
 

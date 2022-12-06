@@ -37,6 +37,10 @@ export class BaseLuminaireInput {
 	geography?: PointType;
 
 	@IsOptional()
+	@Field(() => Point, { nullable: true })
+	geographyRD?: PointType;
+
+	@IsOptional()
 	@Field({ nullable: true })
 	public remarks?: string;
 

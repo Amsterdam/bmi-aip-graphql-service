@@ -25,6 +25,10 @@ describe('Span Installation / Model / SupportSystem', () => {
 			type: 'Point',
 			coordinates: [52.37593907780107, 4.894690444015065],
 		};
+		supportSystem.geographyRD = {
+			type: 'Point',
+			coordinates: [116211.88, 487352.77],
+		};
 		supportSystem.createdAt = '2022-08-02T15:51:54.044Z';
 		supportSystem.updatedAt = '2022-08-02T15:52:54.044Z';
 		supportSystem.deletedAt = '2022-08-02T15:53:07.441Z';
@@ -38,6 +42,10 @@ describe('Span Installation / Model / SupportSystem', () => {
 			deletedAt: '2022-08-02T15:53:07.441Z',
 			geography: {
 				coordinates: [52.37593907780107, 4.894690444015065],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
 				type: 'Point',
 			},
 			houseNumber: '33',

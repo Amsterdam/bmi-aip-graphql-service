@@ -66,6 +66,9 @@ export class SupportSystem {
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
 
+	@Field((type) => Point, { nullable: true })
+	geographyRD?: PointType;
+
 	// For type `gevel | mast | ring`
 	// Maps to "Aanleghoogte"
 	@Field((type) => Float, { nullable: true })

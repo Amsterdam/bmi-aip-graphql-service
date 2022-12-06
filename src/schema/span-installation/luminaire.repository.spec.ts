@@ -96,6 +96,10 @@ describe('Span Installation / Luminaire / Repository', () => {
 				remarks: '__REMARKS__',
 				supplierType: 'two',
 				hasLED: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateLuminaireInput.id);
@@ -110,6 +114,10 @@ describe('Span Installation / Luminaire / Repository', () => {
 			location: '__LOCATION__',
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
 				type: 'Point',
 			},
 			lightSupplierType: 'two',
@@ -141,6 +149,10 @@ describe('Span Installation / Luminaire / Repository', () => {
 				driverSupplierType: 'one',
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',

@@ -21,6 +21,10 @@ describe('Span Installation / Model / JunctionBox', () => {
 			type: 'Point',
 			coordinates: [52.37593907780107, 4.894690444015065],
 		};
+		junctionBox.geographyRD = {
+			type: 'Point',
+			coordinates: [116211.88, 487352.77],
+		};
 		junctionBox.createdAt = '2022-08-02T15:51:54.044Z';
 		junctionBox.updatedAt = '2022-08-02T15:52:54.044Z';
 		junctionBox.deletedAt = '2022-08-02T15:53:07.441Z';
@@ -32,6 +36,10 @@ describe('Span Installation / Model / JunctionBox', () => {
 			deletedAt: '2022-08-02T15:53:07.441Z',
 			geography: {
 				coordinates: [52.37593907780107, 4.894690444015065],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
 				type: 'Point',
 			},
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',

@@ -58,6 +58,7 @@ export class UnitRepository implements IUnitRepository {
 		return this.prisma.units.findMany({
 			where: {
 				elementId,
+				deleted_at: null,
 			},
 		});
 	}

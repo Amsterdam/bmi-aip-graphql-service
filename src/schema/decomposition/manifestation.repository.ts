@@ -49,6 +49,7 @@ export class ManifestationRepository implements IManifestationRepository {
 		return this.prisma.manifestations.findMany({
 			where: {
 				unitId,
+				deleted_at: null,
 			},
 		});
 	}

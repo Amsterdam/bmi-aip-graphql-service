@@ -116,7 +116,7 @@ export class UnitRepository implements IUnitRepository {
 		const manifestationCount = await this.prisma.manifestations.count({
 			where: {
 				unitId: identifier,
-				created_at: null,
+				deleted_at: null,
 			},
 		});
 		return !!manifestationCount;

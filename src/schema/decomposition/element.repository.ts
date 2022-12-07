@@ -122,7 +122,7 @@ export class ElementRepository implements IElementRepository {
 		const unitCount = await this.prisma.units.count({
 			where: {
 				elementId: identifier,
-				created_at: null,
+				deleted_at: null,
 			},
 		});
 		return !!unitCount;

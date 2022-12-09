@@ -308,32 +308,27 @@ export class ObjectRepository implements IObjectRepository {
 
 		try {
 			const name = 'OVS' + ('000' + installationGroup).slice(-4);
-			const object = await this.prisma.objects.findFirst({ where: { name } });
-			const survey = await this.prisma.surveys.findFirst({ where: { objectId: object.id } });
+			const object: DbObject = await this.prisma.objects.findFirst({ where: { name } });
 
 			await Promise.all(
 				source.junctionBoxes.map(async (jb, idx) => {
 					const { X, Y } = jb;
-					const { id: junctionBoxId } = await this.prisma.spanJunctionBoxes.findFirst({
-						where: { surveyId: survey.id, name: `Aansluitkast ${idx + 1}` },
-					});
 
 					const geography: Point = {
 						type: 'Point',
 						coordinates: transformRDToWGS([Number(X), Number(Y)]),
 					};
 
-					const geographyRD: Point = {
-						type: 'Point',
-						coordinates: [X, Y],
+					const data: Prisma.objectsUpdateInput = {
+						longitude: geography.coordinates[0],
+						latitude: geography.coordinates[1],
 					};
 
-					await this.prisma.$executeRaw`
-						UPDATE "spanJunctionBoxes"
-						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)}),
-							"geographyRD" = ${JSON.stringify(geographyRD)}
-						WHERE id = ${junctionBoxId}
-					`;
+					//Update objects latitude and longitude
+					await this.prisma.objects.update({
+						where: { id: object.id },
+						data,
+					});
 				}),
 			);
 		} catch (err) {

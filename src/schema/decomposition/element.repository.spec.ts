@@ -60,7 +60,7 @@ describe('ElementRepository', () => {
 		// const repo = new ElementRepository(prismaServiceMock);
 		const elements = await repo.getElements('__SURVEY_ID__');
 		expect(prismaServiceMock.elements.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(elements).toEqual([domainElement]);
 	});

@@ -62,6 +62,7 @@ describe('UnitRepository', () => {
 		expect(prismaServiceMock.units.findMany).toHaveBeenCalledWith({
 			where: {
 				elementId: '__ELEMENT_ID__',
+				deleted_at: null,
 			},
 		});
 		expect(units).toEqual([domainUnit]);

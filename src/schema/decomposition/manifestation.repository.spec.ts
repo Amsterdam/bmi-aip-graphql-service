@@ -55,6 +55,7 @@ describe('ManifestationRepository', () => {
 		expect(prismaServiceMock.manifestations.findMany).toHaveBeenCalledWith({
 			where: {
 				unitId: '__UNIT_ID__',
+				deleted_at: null,
 			},
 		});
 		expect(manifestations).toEqual([domainManifestation]);

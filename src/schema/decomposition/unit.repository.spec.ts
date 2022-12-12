@@ -17,8 +17,6 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-// jest.mock('./manifestation.repository');
-
 const repo = new UnitRepository(prismaServiceMock);
 
 describe('UnitRepository', () => {

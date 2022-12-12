@@ -61,6 +61,7 @@ export class ElementRepository implements IElementRepository {
 		return this.prisma.elements.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		});
 	}

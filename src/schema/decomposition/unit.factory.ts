@@ -8,6 +8,7 @@ import { CreateUnitInput } from './dto/create-unit.input';
 export class UnitFactory {
 	static CreateUnit({
 		id,
+		permanentId,
 		name,
 		code,
 		location,
@@ -30,6 +31,7 @@ export class UnitFactory {
 	}: DomainUnit): Unit {
 		const unit = new Unit();
 		unit.id = id;
+		unit.permanentId = permanentId;
 		unit.name = name;
 		unit.code = code;
 		unit.location = location;

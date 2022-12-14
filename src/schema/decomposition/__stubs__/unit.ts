@@ -38,6 +38,7 @@ const unitRaw = {
 	isStructuralObjectSpecific: false,
 	isElectricalObjectSpecific: false,
 	deleted_at: null,
+	permanentId: null,
 };
 
 export const unitInput = Object.keys(unitRaw).reduce((input, key) => {

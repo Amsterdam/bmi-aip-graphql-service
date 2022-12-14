@@ -14,6 +14,7 @@ const manifestationRaw = {
 	quantity: 3,
 	quantityUnitOfMeasurement: 'm2',
 	deleted_at: null,
+	permanentId: null,
 };
 
 export const manifestationInput = Object.keys(manifestationRaw).reduce((input, key) => {

@@ -39,6 +39,7 @@ const elementRaw: Omit<DomainElement, 'id'> = {
 	isArchived: false,
 	gisibId: null,
 	deleted_at: null,
+	permanentId: null,
 };
 
 export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
@@ -46,16 +47,19 @@ export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
 	return input;
 }, new CreateElementInput());
 
+const fixedGuid = '1f728e79-1b89-4333-a309-ea93bf17667c';
 const updateElement = new UpdateElementInput();
-updateElement.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+updateElement.id = fixedGuid;
+
 export const updateElementInput = Object.keys(elementRaw).reduce((input, key) => {
 	input[key] = elementRaw[key];
 	return input;
 }, updateElement);
 
 export const domainElement: DomainElement = {
-	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	id: fixedGuid,
 	...elementRaw,
+	permanentId: fixedGuid,
 	gisibId: null,
 	conditionId: null,
 	constructionYear: null,

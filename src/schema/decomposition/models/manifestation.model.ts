@@ -6,6 +6,9 @@ export class Manifestation {
 	@Field((type) => String)
 	id: string;
 
+	@Field((type) => String, { nullable: true })
+	permanentId: string;
+
 	@Field((type) => String)
 	name: string;
 

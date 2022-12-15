@@ -8,7 +8,6 @@ import { CreateElementInput } from './dto/create-element.input';
 export class ElementFactory {
 	static CreateElement({
 		id,
-		permanentId,
 		name,
 		objectId,
 		surveyId,
@@ -31,7 +30,7 @@ export class ElementFactory {
 	}: DomainElement): Element {
 		const element = new Element();
 		element.id = id;
-		element.permanentId = permanentId;
+		element.permanentId = id;
 		element.name = name;
 		element.code = code;
 		element.location = location;

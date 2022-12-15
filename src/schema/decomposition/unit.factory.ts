@@ -31,7 +31,7 @@ export class UnitFactory {
 	}: DomainUnit): Unit {
 		const unit = new Unit();
 		unit.id = id;
-		unit.permanentId = permanentId;
+		unit.permanentId = id;
 		unit.name = name;
 		unit.code = code;
 		unit.location = location;

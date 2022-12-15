@@ -47,18 +47,19 @@ export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
 	return input;
 }, new CreateElementInput());
 
-const givenId = '1f728e79-1b89-4333-a309-ea93bf17667c';
+const fixedGuid = '1f728e79-1b89-4333-a309-ea93bf17667c';
 const updateElement = new UpdateElementInput();
-updateElement.id = givenId;
+updateElement.id = fixedGuid;
+updateElement.permanentId = fixedGuid;
 export const updateElementInput = Object.keys(elementRaw).reduce((input, key) => {
 	input[key] = elementRaw[key];
 	return input;
 }, updateElement);
 
 export const domainElement: DomainElement = {
-	id: givenId,
-	permanentId: null,
+	id: fixedGuid,
 	...elementRaw,
+	permanentId: fixedGuid,
 	gisibId: null,
 	conditionId: null,
 	constructionYear: null,

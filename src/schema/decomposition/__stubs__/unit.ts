@@ -38,7 +38,6 @@ const unitRaw = {
 	isStructuralObjectSpecific: false,
 	isElectricalObjectSpecific: false,
 	deleted_at: null,
-	permanentId: null,
 };
 
 export const unitInput = Object.keys(unitRaw).reduce((input, key) => {
@@ -46,9 +45,12 @@ export const unitInput = Object.keys(unitRaw).reduce((input, key) => {
 	return input;
 }, new CreateUnitInput());
 
+const fixedGuid = '1f728e79-1b89-4333-a309-ea93bf17667c';
+
 export const domainUnit: DomainUnit = {
-	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	id: fixedGuid,
 	...unitRaw,
+	permanentId: fixedGuid,
 	gisibId: null,
 	conditionId: null,
 	constructionYear: null,
@@ -56,7 +58,7 @@ export const domainUnit: DomainUnit = {
 };
 
 const updateUnit = new UpdateUnitInput();
-updateUnit.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+updateUnit.id = fixedGuid;
 export const updateUnitInput = Object.keys(unitRaw)
 	.filter((key) => !['objectId', 'surveyId', 'elementId'].includes(key))
 	.reduce((input, key) => {

@@ -10,10 +10,6 @@ export class UpdateElementInput extends BaseElementInput {
 	public id: string;
 
 	@Field()
-	@IsUUID()
-	public permanentId: string;
-
-	@Field()
 	@MaxLength(255)
 	@IsOptional()
 	public name?: string;

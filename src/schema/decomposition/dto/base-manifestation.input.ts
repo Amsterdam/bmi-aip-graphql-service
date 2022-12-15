@@ -3,11 +3,6 @@ import { IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 @InputType()
 export class BaseManifestationInput {
-	@IsOptional()
-	@IsUUID()
-	@Field({ nullable: true })
-	public permanentId?: string;
-
 	@Field({ nullable: true })
 	@MaxLength(255)
 	@IsOptional()

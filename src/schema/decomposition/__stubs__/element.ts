@@ -50,7 +50,7 @@ export const elementInput = Object.keys(elementRaw).reduce((input, key) => {
 const fixedGuid = '1f728e79-1b89-4333-a309-ea93bf17667c';
 const updateElement = new UpdateElementInput();
 updateElement.id = fixedGuid;
-updateElement.permanentId = fixedGuid;
+
 export const updateElementInput = Object.keys(elementRaw).reduce((input, key) => {
 	input[key] = elementRaw[key];
 	return input;

@@ -4,6 +4,11 @@ import { IsBoolean, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator
 @InputType()
 export class BaseElementInput {
 	@IsOptional()
+	@IsUUID()
+	@Field({ nullable: true })
+	public permanentId?: string;
+
+	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
 	public code?: string;

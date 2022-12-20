@@ -9,7 +9,7 @@ AIP_REMOTE_URL='http://localhost:3000/graphql' # Remote GraphQL service we'll be
 AIP_REMOTE_TOKEN='KEYCLOAK_BEARER_TOKEN' # Keycloak bearer token
 ```
 
-On confluence you can information on how to generate a local admin user Keycloak token.
+On confluence you can find information on how to generate a local admin user Keycloak token.
 
 ## The `ovs:set-survey-surveyor` command
 

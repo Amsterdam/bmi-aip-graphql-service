@@ -327,6 +327,7 @@ model defaultMaintenanceMeasures {
   created_at                DateTime?             @db.Timestamptz(6)
   updated_at                DateTime?             @db.Timestamptz(6)
   objectTypeUnitCodes       objectTypeUnitCodes?  @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultmaintenancemeasures_objecttypeunitcodeid_foreign")
+  cyclicMeasures            cyclicMeasures[]
   maintenanceMeasures       maintenanceMeasures[]
 
   @@index([objectTypeUnitCodeId])
@@ -1476,6 +1477,7 @@ model units {
   surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
   assets                                                        assets[]
   conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
+  cyclicMeasures                                                cyclicMeasures[]
   derivedConditionScores                                        derivedConditionScores[]
   failureModes                                                  failureModes[]
   fmecaFurtherInvestigations                                    fmecaFurtherInvestigations[]
@@ -1483,6 +1485,7 @@ model units {
   inspectionPlans                                               inspectionPlans[]
   maintenanceMeasures                                           maintenanceMeasures[]
   manifestations                                                manifestations[]
+  measures                                                      measures[]
   observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
   surveyUnits                                                   surveyUnits[]
   unitRemarks                                                   unitRemarks[]
@@ -1733,6 +1736,51 @@ model spanJunctionBoxSurveys {
   created_at               DateTime          @default(now()) @db.Timestamptz(6)
   updated_at               DateTime          @default(now()) @db.Timestamptz(6)
   spanJunctionBoxes        spanJunctionBoxes @relation(fields: [junctionBoxId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxessurveys_junctionboxid_foreign")
+}
+
+model cyclicMeasures {
+  id                          String                     @id @unique(map: "cyclicmeasures_id_unique") @db.Uuid
+  unitId                      String                     @db.Uuid
+  planYear                    Int?
+  finalPlanYear               Int?
+  costSurcharge               Float?
+  maintenanceType             String?                    @db.VarChar(255)
+  remarks                     String?
+  cycle                       Float?
+  unitPrice                   Float?
+  quantityUnitOfMeasurement   String?                    @db.VarChar(8)
+  defaultMaintenanceMeasureId String                     @db.Uuid
+  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  deleted_at                  DateTime?                  @db.Timestamptz(6)
+  defaultMaintenanceMeasures  defaultMaintenanceMeasures @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "cyclicmeasures_defaultmaintenancemeasureid_foreign")
+  units                       units                      @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_unitid_foreign")
+
+  @@index([deleted_at], map: "cyclicmeasures_deleted_at_index")
+}
+
+model measures {
+  id                        String    @id @unique(map: "measures_id_unique") @db.Uuid
+  unitId                    String    @db.Uuid
+  manifestationId           String?   @unique(map: "measures_manifestationid_unique") @db.Uuid
+  failureModeId             String?   @unique(map: "measures_failuremodeid_unique") @db.Uuid
+  defectId                  String?   @unique(map: "measures_defectid_unique") @db.Uuid
+  surveyScopeId             String?   @db.Uuid
+  description               String?
+  maintenanceType           String?   @db.VarChar(255)
+  location                  String?   @db.VarChar(128)
+  planYear                  Int?
+  finalPlanYear             Int?
+  quantity                  Int?
+  quantityUnitOfMeasurement String?   @db.VarChar(8)
+  unitPrice                 Float?
+  costSurcharge             Float?
+  created_at                DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime  @default(now()) @db.Timestamptz(6)
+  deleted_at                DateTime? @db.Timestamptz(6)
+  units                     units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_unitid_foreign")
+
+  @@index([deleted_at], map: "measures_deleted_at_index")
 }
 
 enum degreeOfDamage {

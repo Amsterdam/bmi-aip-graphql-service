@@ -10,6 +10,21 @@ import type { MigrateNen2767DecompositionReturnType } from './types';
 export class MigrateNen2767DecompositionRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
+	async findObjectsWithNen2767Decomposition(): Promise<{ id: string; code: string }[]> {
+		// Considering the temporary nature of this code I didn't see any value in uncovering how to do this in a
+		// somewhat Prisma friendly (less efficient ) manner
+		return this.prisma.$queryRaw<{ id: string; code: string }[]>`
+			SELECT o.id, o.code
+			FROM "objects" AS o
+			WHERE o.id IN (
+				SELECT o2.id
+				FROM "objects" AS o2
+				INNER JOIN "surveys" s on s."objectId" = o.id
+				WHERE s."inspectionStandardType" in ('nen2767', 'fmeca')
+			)
+		`;
+	}
+
 	private async setPermanentIdOnElements(surveyId: string) {
 		const elements = await this.prisma.elements.findMany({
 			where: {
@@ -89,6 +104,30 @@ export class MigrateNen2767DecompositionRepository {
 		await this.prisma.elements.updateMany({
 			where: {
 				objectId,
+				// Ensure we don't include any newer elements that have been inserted via the GraphQL service
+				surveyId: null,
+			},
+			data: {
+				surveyId,
+			},
+		});
+
+		await this.prisma.units.updateMany({
+			where: {
+				objectId,
+				// Ensure we don't include any newer units that have been inserted via the GraphQL service
+				surveyId: null,
+			},
+			data: {
+				surveyId,
+			},
+		});
+
+		await this.prisma.manifestations.updateMany({
+			where: {
+				objectId,
+				// Ensure we don't include any newer manifestations that have been inserted via the GraphQL service
+				surveyId: null,
 			},
 			data: {
 				surveyId,
@@ -135,6 +174,7 @@ export class MigrateNen2767DecompositionRepository {
 		});
 
 		await Promise.all(
+			// Duplicate manifestation record but with new id and different surveyId
 			manifestations.map(async (manifestation) => {
 				await this.prisma.manifestations.create({
 					data: {
@@ -174,10 +214,32 @@ export class MigrateNen2767DecompositionRepository {
 		);
 	}
 
+	private async checkIfAlreadyMigrated(surveyId: string): Promise<boolean> {
+		const count = await this.prisma.elements.count({
+			where: {
+				surveyId,
+			},
+		});
+		return !!count;
+	}
+
 	async migrateNen2767Decomposition(objectId: string): Promise<MigrateNen2767DecompositionReturnType> {
 		const errors = [];
 		const log = [];
+		const successSurveyIds = [];
+		const failedSurveyIds = [];
 
+		// Determine object code for log readability
+		const { code: objectCode } = await this.prisma.objects.findUnique({
+			where: {
+				id: objectId,
+			},
+			select: {
+				code: true,
+			},
+		});
+
+		// Fetch chronologically ordered (oldest first) TI/IHA surveys for object
 		const surveysWithNen2767Decomposition = await this.prisma.surveys.findMany({
 			where: {
 				objectId,
@@ -188,6 +250,9 @@ export class MigrateNen2767DecompositionRepository {
 			orderBy: {
 				created_at: 'asc',
 			},
+			select: {
+				id: true,
+			},
 		});
 
 		const queue = new PQueue({ concurrency: 1 });
@@ -196,38 +261,45 @@ export class MigrateNen2767DecompositionRepository {
 
 		surveysWithNen2767Decomposition.forEach(({ id: surveyId }, idx) => {
 			queue.add(async () => {
-				if (idx === 0) {
-					await this.scopeDecompositionToSurveyId(objectId, surveyId);
-					await this.setPermanentIdOnElements(surveyId);
-					await this.setPermanentIdOnUnits(surveyId);
-					await this.setPermanentIdOnManifestations(surveyId);
-				} else {
-					await this.cloneDecompositionFromPreviousSurvey(surveyId, previousSurveyId);
+				try {
+					const alreadyMigrated = await this.checkIfAlreadyMigrated(surveyId);
+					if (alreadyMigrated) {
+						log.push(
+							`[MIGRATED ALREADY] Skipping decomposition for "${objectCode}" for survey with id "${surveyId}"`,
+						);
+						return;
+					}
+
+					if (idx === 0) {
+						// The oldest survey is assigned the original set of elements/units/manifestations records
+						await this.scopeDecompositionToSurveyId(objectId, surveyId);
+						await this.setPermanentIdOnElements(surveyId);
+						await this.setPermanentIdOnUnits(surveyId);
+						await this.setPermanentIdOnManifestations(surveyId);
+						log.push(`Scoped decomposition for "${objectCode}" to survey with id "${surveyId}"`);
+					} else {
+						// Newer surveys get a clone of the decomposition
+						await this.cloneDecompositionFromPreviousSurvey(surveyId, previousSurveyId);
+						log.push(`Cloned decomposition for "${objectCode}" to survey with id "${surveyId}"`);
+					}
+					successSurveyIds.push(surveyId);
+				} catch (err) {
+					failedSurveyIds.push(surveyId);
+					errors.push(
+						`Failed to migrate decomposition for "${objectCode}" to survey with id ${surveyId}: ${err.message}`,
+					);
 				}
 				previousSurveyId = surveyId;
 			});
 		});
 
+		await queue.onIdle();
+
 		return {
 			errors,
 			log,
-			successSurveyIds: [],
-			failedSurveyIds: [],
+			successSurveyIds,
+			failedSurveyIds,
 		};
-	}
-
-	async findObjectsWithNen2767Decomposition(): Promise<{ id: string; code: string }[]> {
-		// Considering the temporary nature of this code I didn't see any value in uncovering how to do this in a
-		// somewhat Prisma friendly (less efficient ) manner
-		return this.prisma.$queryRaw<{ id: string; code: string }[]>`
-			SELECT o.id, o.code
-			FROM "objects" AS o
-			WHERE o.id IN (
-				SELECT o2.id
-				FROM "objects" AS o2
-				INNER JOIN "surveys" s on s."objectId" = o.id
-				WHERE s."inspectionStandardType" in ('nen2767', 'fmeca')
-			)
-		`;
 	}
 }

@@ -15,14 +15,11 @@ import { ExternalAIPGraphQLRepository } from '../../externalRepository/ExternalA
  */
 @Injectable()
 export class MigrateNen2767DecompositionCli {
-	private static CLI_COMMAND = 'migrate-nen2767-decomposition';
-
-	private static DEBUG = true;
+	private static CLI_COMMAND = 'nen2767:migrate-decomposition';
 
 	private graphqlClient: GraphQLClient;
 
 	private report: {
-		success: string[];
 		log: string[];
 		errors: Array<{
 			objectId: string;
@@ -32,6 +29,13 @@ export class MigrateNen2767DecompositionCli {
 		successSurveyIds: string[];
 		failedObjectIds: string[];
 		failedSurveyIds: string[];
+	} = {
+		log: [],
+		errors: [],
+		successObjectIds: [],
+		successSurveyIds: [],
+		failedObjectIds: [],
+		failedSurveyIds: [],
 	};
 
 	progressBar = new SingleBar({});
@@ -64,7 +68,6 @@ export class MigrateNen2767DecompositionCli {
 	}
 
 	private async migrateDecompositionForObject(objectId: string, code: string) {
-		this.logger.verbose('::', objectId, code);
 		try {
 			const {
 				migrateNen2767Decomposition: { log, errors, failedSurveyIds, successSurveyIds },
@@ -80,10 +83,10 @@ export class MigrateNen2767DecompositionCli {
 			}
 
 			this.report.log.push(...log);
-			this.report.errors.push(...errors.map((error) => ({ error: error, objectId })));
+			this.report.errors.push(...errors.map((error) => ({ error, objectId })));
 		} catch (err) {
 			this.report.errors.push({
-				error: `[CAUGHT EXCEPTION] ${err.message}`,
+				error: `[UNCAUGHT EXCEPTION] ${code} ${err.message}`,
 				objectId,
 			});
 		}
@@ -92,17 +95,35 @@ export class MigrateNen2767DecompositionCli {
 		this.progressBar.update(this.progressTracker);
 	}
 
+	/**
+	 * Allows testing with a limited set of object codes by setting an .env var
+	 */
+	private limitObjects(objects: { id: string; code: string }[]): { id: string; code: string }[] {
+		const commaSeparatedObjectCodes = this.configService.get<string>('NEN2767_MIGRATION_OBJECT_CODES');
+		if (!commaSeparatedObjectCodes) {
+			return objects;
+		}
+		const objectCodes = commaSeparatedObjectCodes.split(',');
+		return objects.filter(({ code }) => objectCodes.includes(code));
+	}
+
 	private async run() {
 		this.logger.verbose(`Finding objects with Nen2767 decomposition...`);
 
 		const { findObjectsWithNen2767Decomposition: objectsWithNen2767Decomposition } =
 			await this.externalAIPGraphQLRepository.findObjectsWithNen2767Decomposition();
 
-		this.logger.verbose(`Queueing ${objectsWithNen2767Decomposition.length} objects for migration...`);
-		this.progressBar.start(objectsWithNen2767Decomposition.length, 0);
+		const objectsToMigrate = this.limitObjects(objectsWithNen2767Decomposition);
+
+		this.logger.verbose(
+			`Queueing ${objectsToMigrate.length} ${
+				objectsToMigrate.length !== 1 ? 'objects' : 'object'
+			} for migration...`,
+		);
+		this.progressBar.start(objectsToMigrate.length, 0);
 
 		const queue = new PQueue({ concurrency: 10 });
-		objectsWithNen2767Decomposition.forEach(({ id, code }) => {
+		objectsToMigrate.forEach(({ id, code }) => {
 			queue.add(() => this.migrateDecompositionForObject(id, code));
 		});
 

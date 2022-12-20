@@ -176,7 +176,7 @@ export class ExternalAIPGraphQLRepository {
 				migrateNen2767Decomposition(objectId: $objectId) {
 					errors
 					log
-					successObjectIds
+					failedSurveyIds
 					successSurveyIds
 				}
 			}

@@ -38,7 +38,7 @@ export class CommandResolver {
 		);
 	}
 
-	@Mutation((returns) => [MigrateNen2767DecompositionModel], { name: 'migrateNen2767Decomposition' })
+	@Mutation((returns) => MigrateNen2767DecompositionModel, { name: 'migrateNen2767Decomposition' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async migrateNen2767Decomposition(@Args('objectId', { type: () => String }) objectId: string) {
 		return this.commandBus.execute<MigrateNen2767DecompositionCommand>(

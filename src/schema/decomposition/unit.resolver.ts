@@ -36,10 +36,7 @@ export class UnitResolver {
 	@Mutation(() => Unit)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteUnit(@Args('identifier') identifier: string): Promise<Unit> {
-		const domainUnit: DomainUnit = await this.commandBus.execute<DeleteUnitCommand>(
-			new DeleteUnitCommand(identifier),
-		);
-		return UnitFactory.CreateUnit(domainUnit);
+		return this.commandBus.execute<DeleteUnitCommand>(new DeleteUnitCommand(identifier));
 	}
 
 	@ResolveField()

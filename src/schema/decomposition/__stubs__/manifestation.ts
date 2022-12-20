@@ -21,9 +21,12 @@ export const manifestationInput = Object.keys(manifestationRaw).reduce((input, k
 	return input;
 }, new CreateManifestationInput());
 
+const fixedGuid = '1f728e79-1b89-4333-a309-ea93bf17667c';
+
 export const domainManifestation: DomainManifestation = {
-	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	id: fixedGuid,
 	...manifestationRaw,
+	permanentId: fixedGuid,
 	material: null,
 	conditionId: null,
 	constructionYear: null,
@@ -31,7 +34,7 @@ export const domainManifestation: DomainManifestation = {
 };
 
 const updateManifestation = new UpdateUnitInput();
-updateManifestation.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+updateManifestation.id = fixedGuid;
 export const updateManifestationInput = Object.keys(manifestationRaw)
 	.filter((key) => !['objectId', 'surveyId', 'unitId'].includes(key))
 	.reduce((input, key) => {

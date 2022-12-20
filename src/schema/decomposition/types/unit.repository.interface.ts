@@ -6,6 +6,7 @@ import { UpdateUnitInput } from '../dto/update-unit.input';
 const units = Prisma.validator<Prisma.unitsArgs>()({
 	select: {
 		id: true,
+		permanentId: true,
 		name: true,
 		code: true,
 		location: true,

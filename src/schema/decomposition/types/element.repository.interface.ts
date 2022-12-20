@@ -6,6 +6,7 @@ import { UpdateElementInput } from '../dto/update-element.input';
 const elements = Prisma.validator<Prisma.elementsArgs>()({
 	select: {
 		id: true,
+		permanentId: true,
 		name: true,
 		objectId: true,
 		surveyId: true,

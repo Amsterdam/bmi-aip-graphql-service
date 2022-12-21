@@ -142,8 +142,9 @@ export class MigrateNen2767DecompositionRepository {
 			},
 		});
 
-		await Promise.all(
-			units.map(async (unit) => {
+		const queue = new PQueue({ concurrency: 1 });
+		units.forEach((unit) => {
+			queue.add(async () => {
 				const newUnitId = newId();
 				// Duplicate unit record but with new id and different surveyId
 				await this.prisma.units.create({
@@ -157,8 +158,9 @@ export class MigrateNen2767DecompositionRepository {
 
 				// Duplicate manifestations for unit
 				await this.duplicateManifestationsForUnit(surveyId, newElementId, unit.id, newUnitId);
-			}),
-		);
+			});
+		});
+		await queue.onIdle();
 	}
 
 	private async duplicateManifestationsForUnit(
@@ -173,10 +175,10 @@ export class MigrateNen2767DecompositionRepository {
 			},
 		});
 
-		await Promise.all(
-			// Duplicate manifestation record but with new id and different surveyId
-			manifestations.map(async (manifestation) => {
-				await this.prisma.manifestations.create({
+		const queue = new PQueue({ concurrency: 1 });
+		manifestations.forEach((manifestation) => {
+			queue.add(() =>
+				this.prisma.manifestations.create({
 					data: {
 						...manifestation,
 						id: newId(),
@@ -184,9 +186,10 @@ export class MigrateNen2767DecompositionRepository {
 						unitId: newUnitId,
 						surveyId,
 					},
-				});
-			}),
-		);
+				}),
+			);
+		});
+		await queue.onIdle();
 	}
 
 	private async cloneDecompositionFromPreviousSurvey(surveyId: string, previousSurveyId: string) {
@@ -196,8 +199,9 @@ export class MigrateNen2767DecompositionRepository {
 			},
 		});
 
-		await Promise.all(
-			elements.map(async (element) => {
+		const queue = new PQueue({ concurrency: 1 });
+		elements.forEach((element) => {
+			queue.add(async () => {
 				const newElementId = newId();
 				// Duplicate element record but with new id and different surveyId
 				await this.prisma.elements.create({
@@ -210,8 +214,9 @@ export class MigrateNen2767DecompositionRepository {
 
 				// Duplicate units for element
 				await this.duplicateUnitsForElement(surveyId, element.id, newElementId);
-			}),
-		);
+			});
+		});
+		await queue.onIdle();
 	}
 
 	private async checkIfAlreadyMigrated(surveyId: string): Promise<boolean> {

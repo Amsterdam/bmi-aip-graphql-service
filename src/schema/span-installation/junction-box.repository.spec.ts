@@ -52,6 +52,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();

@@ -5,7 +5,7 @@ export type SetOvsSurveySurveyorsReturnType = {
 	companyIds: string[];
 };
 
-export type MigrateNen2767DecompositionReturnType = {
+export type Nen2767MigrateDecompositionReturnType = {
 	errors: string[];
 	log: string[];
 	successSurveyIds: string[];

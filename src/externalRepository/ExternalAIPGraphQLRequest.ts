@@ -1,6 +1,6 @@
 import { SetOvsSurveySurveyorsModel } from '../command/models/set-ovs-survey-surveyors.model';
-import { MigrateNen2767DecompositionModel } from '../command/models/migrate-nen2767-decomposition.model';
-import { ObjectWithNen2767DecompositionModel } from '../command/models/object-with-nen2767-decomposition.model';
+import { Nen2767MigrateDecompositionModel } from '../command/models/nen2767-migrate-decomposition.model';
+import { Nen2767ObjectWithDecompositionModel } from '../command/models/nen2767-object-with-decomposition.model';
 
 export interface ExternalAIPGraphQLRequest {
 	createObject?: any;
@@ -13,6 +13,6 @@ export interface ExternalAIPGraphQLRequest {
 	setOVSSurveySurveyors?: SetOvsSurveySurveyorsModel;
 	removeDuplicateInstallationGroup?: any;
 	correctCoordinates?: any;
-	findObjectsWithNen2767Decomposition?: ObjectWithNen2767DecompositionModel[];
-	migrateNen2767Decomposition?: MigrateNen2767DecompositionModel;
+	findObjectsWithNen2767Decomposition?: Nen2767ObjectWithDecompositionModel[];
+	migrateNen2767Decomposition?: Nen2767MigrateDecompositionModel;
 }

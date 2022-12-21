@@ -4,10 +4,10 @@ import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { SetOvsSurveySurveyorsModel } from './models/set-ovs-survey-surveyors.model';
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
-import { FindObjectsWithNen2767DecompositionQuery } from './queries/find-objects-with-nen2767-decomposition.query';
-import { ObjectWithNen2767DecompositionModel } from './models/object-with-nen2767-decomposition.model';
-import { MigrateNen2767DecompositionModel } from './models/migrate-nen2767-decomposition.model';
-import { MigrateNen2767DecompositionCommand } from './commands/migrate-nen2767-decomposition.command';
+import { Nen2767FindObjectsWithDecompositionQuery } from './queries/nen2767-find-objects-with-decomposition.query';
+import { Nen2767ObjectWithDecompositionModel } from './models/nen2767-object-with-decomposition.model';
+import { Nen2767MigrateDecompositionModel } from './models/nen2767-migrate-decomposition.model';
+import { Nen2767MigrateDecompositionCommand } from './commands/nen2767-migrate-decomposition.command';
 
 @Resolver((of) => SetOvsSurveySurveyorsModel)
 export class CommandResolver {
@@ -30,19 +30,19 @@ export class CommandResolver {
 		return commandModel;
 	}
 
-	@Query((returns) => [ObjectWithNen2767DecompositionModel], { name: 'findObjectsWithNen2767Decomposition' })
+	@Query((returns) => [Nen2767ObjectWithDecompositionModel], { name: 'findObjectsWithNen2767Decomposition' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async findObjectsWithNen2767Decomposition() {
-		return this.queryBus.execute<FindObjectsWithNen2767DecompositionQuery>(
-			new FindObjectsWithNen2767DecompositionQuery(),
+		return this.queryBus.execute<Nen2767FindObjectsWithDecompositionQuery>(
+			new Nen2767FindObjectsWithDecompositionQuery(),
 		);
 	}
 
-	@Mutation((returns) => MigrateNen2767DecompositionModel, { name: 'migrateNen2767Decomposition' })
+	@Mutation((returns) => Nen2767MigrateDecompositionModel, { name: 'migrateNen2767Decomposition' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async migrateNen2767Decomposition(@Args('objectId', { type: () => String }) objectId: string) {
-		return this.commandBus.execute<MigrateNen2767DecompositionCommand>(
-			new MigrateNen2767DecompositionCommand(objectId),
+		return this.commandBus.execute<Nen2767MigrateDecompositionCommand>(
+			new Nen2767MigrateDecompositionCommand(objectId),
 		);
 	}
 }

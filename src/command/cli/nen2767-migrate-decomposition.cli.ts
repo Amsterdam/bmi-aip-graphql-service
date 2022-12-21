@@ -14,7 +14,7 @@ import { ExternalAIPGraphQLRepository } from '../../externalRepository/ExternalA
  * npm run console migrate-nen2767-decomposition
  */
 @Injectable()
-export class MigrateNen2767DecompositionCli {
+export class Nen2767MigrateDecompositionCli {
 	private static CLI_COMMAND = 'nen2767:migrate-decomposition';
 
 	private graphqlClient: GraphQLClient;
@@ -52,7 +52,7 @@ export class MigrateNen2767DecompositionCli {
 
 		this.consoleService.createCommand(
 			{
-				command: MigrateNen2767DecompositionCli.CLI_COMMAND,
+				command: Nen2767MigrateDecompositionCli.CLI_COMMAND,
 				description:
 					'Determines all objects that have a Nen2767 decomposition and performs a data migration for each',
 			},

@@ -26,13 +26,13 @@ import { SetOvsSurveySurveyorsService } from './set-ovs-survey-surveyors.service
 import { SetOvsSurveySurveyorsRepository } from './set-ovs-survey-surveyors.repository';
 import { SetOvsSurveySurveyorCli } from './cli/set-ovs-survey-surveyor.cli';
 import { CommandResolver } from './command.resolver';
-import { MigrateNen2767DecompositionService } from './migrate-nen2767-decomposition.service';
-import { MigrateNen2767DecompositionRepository } from './migrate-nen2767-decomposition.repository';
-import { MigrateNen2767DecompositionCommand } from './commands/migrate-nen2767-decomposition.command';
-import { MigrateNen2767DecompositionHandler } from './commands/migrate-nen2767-decomposition.handler';
-import { MigrateNen2767DecompositionCli } from './cli/migrate-nen2767-decomposition.cli';
-import { FindObjectsWithNen2767DecompositionQuery } from './queries/find-objects-with-nen2767-decomposition.query';
-import { FindObjectsWithNen2767DecompositionHandler } from './queries/find-objects-with-nen2767-decomposition.handler';
+import { Nen2767MigrateDecompositionService } from './nen2767-migrate-decomposition.service';
+import { Nen2767MigrateDecompositionRepository } from './nen2767-migrate-decomposition.repository';
+import { Nen2767MigrateDecompositionCommand } from './commands/nen2767-migrate-decomposition.command';
+import { Nen2767MigrateDecompositionHandler } from './commands/nen2767-migrate-decomposition.handler';
+import { Nen2767MigrateDecompositionCli } from './cli/nen2767-migrate-decomposition.cli';
+import { Nen2767FindObjectsWithDecompositionQuery } from './queries/nen2767-find-objects-with-decomposition.query';
+import { Nen2767FindObjectsWithDecompositionHandler } from './queries/nen2767-find-objects-with-decomposition.handler';
 
 @Module({
 	imports: [
@@ -74,13 +74,13 @@ import { FindObjectsWithNen2767DecompositionHandler } from './queries/find-objec
 		SetOVSSurveySurveyorsHandler,
 		SetOvsSurveySurveyorsService,
 		SetOvsSurveySurveyorsRepository,
-		FindObjectsWithNen2767DecompositionQuery,
-		FindObjectsWithNen2767DecompositionHandler,
-		MigrateNen2767DecompositionCommand,
-		MigrateNen2767DecompositionHandler,
-		MigrateNen2767DecompositionService,
-		MigrateNen2767DecompositionRepository,
-		MigrateNen2767DecompositionCli,
+		Nen2767FindObjectsWithDecompositionQuery,
+		Nen2767FindObjectsWithDecompositionHandler,
+		Nen2767MigrateDecompositionCommand,
+		Nen2767MigrateDecompositionHandler,
+		Nen2767MigrateDecompositionService,
+		Nen2767MigrateDecompositionRepository,
+		Nen2767MigrateDecompositionCli,
 		CommandResolver,
 	],
 })

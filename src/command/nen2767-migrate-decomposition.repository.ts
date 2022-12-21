@@ -4,10 +4,10 @@ import PQueue from 'p-queue';
 import { PrismaService } from '../prisma.service';
 import { newId } from '../utils';
 
-import type { MigrateNen2767DecompositionReturnType } from './types';
+import type { Nen2767MigrateDecompositionReturnType } from './types';
 
 @Injectable()
-export class MigrateNen2767DecompositionRepository {
+export class Nen2767MigrateDecompositionRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async findObjectsWithNen2767Decomposition(): Promise<{ id: string; code: string }[]> {
@@ -228,7 +228,7 @@ export class MigrateNen2767DecompositionRepository {
 		return !!count;
 	}
 
-	async migrateNen2767Decomposition(objectId: string): Promise<MigrateNen2767DecompositionReturnType> {
+	async migrateNen2767Decomposition(objectId: string): Promise<Nen2767MigrateDecompositionReturnType> {
 		const errors = [];
 		const log = [];
 		const successSurveyIds = [];

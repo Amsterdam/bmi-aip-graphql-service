@@ -21,6 +21,8 @@ export class Nen2767MigrateDecompositionRepository {
 				FROM "objects" AS o2
 				INNER JOIN "surveys" s on s."objectId" = o.id
 				WHERE s."inspectionStandardType" in ('nen2767', 'fmeca')
+				AND o2."code" IS NOT NULL
+				AND o2."status" != 'deleted'
 			)
 		`;
 	}

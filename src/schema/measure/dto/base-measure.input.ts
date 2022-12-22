@@ -1,5 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
+
+import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
 
 @InputType()
 export class BaseMeasureInput {
@@ -31,6 +33,7 @@ export class BaseMeasureInput {
 	public unitPrice?: number;
 
 	@IsOptional()
+	@IsEnum(QuantityUnitOfMeasurement)
 	@Field({ nullable: true })
 	public quantityUnitOfMeasurement?: string;
 
@@ -39,6 +42,7 @@ export class BaseMeasureInput {
 	public quantity?: number;
 
 	@IsOptional()
+	@IsEnum(MeasureTypes)
 	@MaxLength(255)
 	@Field({ nullable: true })
 	public maintenanceType?: string;

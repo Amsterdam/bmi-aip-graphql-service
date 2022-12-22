@@ -3,16 +3,17 @@ import { CreateCyclicMeasureInput } from '../dto/create-cyclic-measure.input';
 import { CyclicMeasure as DomainCyclicMeasure } from '../types/cyclic-measure.repository.interface';
 import { CyclicMeasureFactory } from '../cyclic-measure.factory';
 import { UpdateCyclicMeasureInput } from '../dto/update-cyclic-measure.input';
+import { CyclicMeasureTypes, QuantityUnitOfMeasurement } from '../types/cyclic-measure';
 
 const cyclicMeasure1 = new CyclicMeasure();
 cyclicMeasure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
-cyclicMeasure1.maintenanceType = 'Groot onderhoud';
+cyclicMeasure1.maintenanceType = CyclicMeasureTypes['Groot onderhoud'];
 cyclicMeasure1.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 cyclicMeasure1.remarks = 'Aan de zuidzijde';
 
 const cyclicMeasure2 = new CyclicMeasure();
 cyclicMeasure2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
-cyclicMeasure2.maintenanceType = 'Dagelijksonderhoud';
+cyclicMeasure2.maintenanceType = CyclicMeasureTypes.Dagelijksonderhoud;
 cyclicMeasure2.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 cyclicMeasure2.remarks = 'Kabel';
 
@@ -20,7 +21,7 @@ export { cyclicMeasure1, cyclicMeasure2 };
 
 const cyclicMeasureRaw: Omit<DomainCyclicMeasure, 'id'> = {
 	unitId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
-	maintenanceType: '__MAINTENANCETYPE__',
+	maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
 	defaultMaintenanceMeasureId: '68a95a2c-b909-e77f-4d66-9fd5afef5af3',
 	planYear: 2010,
 	finalPlanYear: 2010,
@@ -28,7 +29,7 @@ const cyclicMeasureRaw: Omit<DomainCyclicMeasure, 'id'> = {
 	remarks: '__REMARKS__',
 	cycle: 2.3,
 	unitPrice: 33.99,
-	quantityUnitOfMeasurement: '',
+	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 	deleted_at: null,
 };
 

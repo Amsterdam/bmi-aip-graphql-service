@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
+import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
+
 @ObjectType({ description: 'measure' })
 export class Measure {
 	@Field((type) => String)
@@ -29,10 +31,10 @@ export class Measure {
 	@Field((type) => Number, { nullable: true })
 	unitPrice?: number;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => QuantityUnitOfMeasurement, { nullable: true })
 	quantityUnitOfMeasurement?: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => MeasureTypes, { nullable: true })
 	maintenanceType?: string;
 
 	@Field((type) => String, { nullable: true })

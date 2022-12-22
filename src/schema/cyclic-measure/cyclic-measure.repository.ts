@@ -26,7 +26,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 	}: CreateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresCreateInput = {
 			id: newId(),
-			maintenanceType,
+			maintenanceType: maintenanceType,
 			units: { connect: { id: unitId } },
 			planYear,
 			finalPlanYear,
@@ -34,7 +34,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			remarks,
 			cycle,
 			unitPrice,
-			quantityUnitOfMeasurement,
+			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasureId } },
 		};
 

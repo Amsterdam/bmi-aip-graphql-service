@@ -43,7 +43,7 @@ export class BaseMeasureInput {
 
 	@IsOptional()
 	@IsEnum(MeasureTypes)
-	@MaxLength(255)
+	@MaxLength(128)
 	@Field({ nullable: true })
 	public maintenanceType?: string;
 

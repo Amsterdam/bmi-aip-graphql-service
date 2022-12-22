@@ -6,9 +6,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
-import { MeasureModule } from 'src/schema/measure/measure.module';
-import { CyclicMeasureModule } from 'src/schema/cyclic-measure/cyclic-measure.module';
 
+import { MeasureModule } from './schema/measure/measure.module';
+import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';

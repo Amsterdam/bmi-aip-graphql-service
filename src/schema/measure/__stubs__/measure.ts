@@ -3,6 +3,7 @@ import { CreateMeasureInput } from '../dto/create-measure.input';
 import { Measure as DomainMeasure } from '../types/measure.repository.interface';
 import { MeasureFactory } from '../measure.factory';
 import { UpdateMeasureInput } from '../dto/update-measure.input';
+import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
 
 const measure1 = new Measure();
 measure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -22,7 +23,7 @@ export { measure1, measure2 };
 
 const measureRaw: Omit<DomainMeasure, 'id'> = {
 	unitId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
-	maintenanceType: '__MAINTENANCETYPE__',
+	maintenanceType: MeasureTypes.CorrectiveMaintenance,
 	planYear: 2010,
 	finalPlanYear: 2010,
 	costSurcharge: 7.3,
@@ -30,7 +31,7 @@ const measureRaw: Omit<DomainMeasure, 'id'> = {
 	description: '__DESCTIPTION__',
 	quantity: 20,
 	unitPrice: 33.99,
-	quantityUnitOfMeasurement: '',
+	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 	manifestationId: '',
 	failureModeId: '',
 	defectId: '',

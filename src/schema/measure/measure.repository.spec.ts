@@ -4,6 +4,7 @@ import { PrismaService } from '../../prisma.service';
 
 import { MeasureRepository } from './measure.repository';
 import { deletedMeasure, domainMeasure, measureInput, updateMeasureInput } from './__stubs__';
+import { MeasureTypes, QuantityUnitOfMeasurement } from './types/measure';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	measures: {
@@ -21,7 +22,7 @@ describe('MeasureRepository', () => {
 		await repo.createMeasure(measureInput);
 		expect(prismaServiceMock.measures.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
-				maintenanceType: '__MAINTENANCETYPE__',
+				maintenanceType: MeasureTypes.CorrectiveMaintenance,
 				units: {
 					connect: {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
@@ -32,18 +33,11 @@ describe('MeasureRepository', () => {
 				costSurcharge: 7.3,
 				quantity: 20,
 				unitPrice: 33.99,
-				quantityUnitOfMeasurement: '',
+				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 				location: '__LOCATION__',
+				description: '__DESCTIPTION__',
 			}),
 		});
-	});
-
-	test('getMeasures()', async () => {
-		const measures = await repo.getMeasures('__UNIT_ID__');
-		expect(prismaServiceMock.measures.findMany).toHaveBeenCalledWith({
-			where: { unitId: '__UNIT_ID__' },
-		});
-		expect(measures).toEqual([domainMeasure]);
 	});
 
 	test('updateMeasure()', async () => {
@@ -51,14 +45,15 @@ describe('MeasureRepository', () => {
 		expect(prismaServiceMock.measures.update).toHaveBeenCalledWith({
 			where: { id: updateMeasureInput.id },
 			data: expect.objectContaining({
-				maintenanceType: '__MAINTENANCETYPE__',
+				maintenanceType: MeasureTypes.CorrectiveMaintenance,
 				planYear: 2010,
 				finalPlanYear: 2010,
 				costSurcharge: 7.3,
 				quantity: 20,
 				unitPrice: 33.99,
-				quantityUnitOfMeasurement: '',
+				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 				location: '__LOCATION__',
+				description: '__DESCTIPTION__',
 			}),
 		});
 	});

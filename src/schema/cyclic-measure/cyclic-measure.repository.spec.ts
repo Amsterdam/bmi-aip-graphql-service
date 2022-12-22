@@ -4,6 +4,7 @@ import { PrismaService } from '../../prisma.service';
 
 import { CyclicMeasureRepository } from './cyclic-measure.repository';
 import { deletedCyclicMeasure, domainCyclicMeasure, cyclicMeasureInput, updateCyclicMeasureInput } from './__stubs__';
+import { CyclicMeasureTypes, QuantityUnitOfMeasurement } from './types/cyclic-measure';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	cyclicMeasures: {
@@ -21,7 +22,7 @@ describe('CyclicMeasureRepository', () => {
 		await repo.createCyclicMeasure(cyclicMeasureInput);
 		expect(prismaServiceMock.cyclicMeasures.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
-				maintenanceType: '__MAINTENANCETYPE__',
+				maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
 				units: {
 					connect: {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
@@ -38,7 +39,7 @@ describe('CyclicMeasureRepository', () => {
 				remarks: '__REMARKS__',
 				cycle: 2.3,
 				unitPrice: 33.99,
-				quantityUnitOfMeasurement: '',
+				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 			}),
 		});
 	});
@@ -56,14 +57,14 @@ describe('CyclicMeasureRepository', () => {
 		expect(prismaServiceMock.cyclicMeasures.update).toHaveBeenCalledWith({
 			where: { id: updateCyclicMeasureInput.id },
 			data: expect.objectContaining({
-				maintenanceType: '__MAINTENANCETYPE__',
+				maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
 				planYear: 2010,
 				finalPlanYear: 2010,
 				costSurcharge: 7.3,
 				remarks: '__REMARKS__',
 				cycle: 2.3,
 				unitPrice: 33.99,
-				quantityUnitOfMeasurement: '',
+				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 			}),
 		});
 	});

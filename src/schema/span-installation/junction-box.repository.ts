@@ -40,7 +40,9 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
-			geographyRD: JSON.stringify(geographyRD),
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });

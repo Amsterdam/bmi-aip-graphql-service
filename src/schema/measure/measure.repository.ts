@@ -41,6 +41,14 @@ export class MeasureRepository implements IMeasureRepository {
 		return this.prisma.measures.create({ data });
 	}
 
+	async getMeasures(unitId: string): Promise<Measure[]> {
+		return this.prisma.measures.findMany({
+			where: {
+				unitId,
+			},
+		});
+	}
+
 	async updateMeasure({
 		id,
 		planYear,

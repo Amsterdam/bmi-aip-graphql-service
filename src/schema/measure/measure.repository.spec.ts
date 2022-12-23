@@ -40,6 +40,14 @@ describe('MeasureRepository', () => {
 		});
 	});
 
+	test('getMeasures()', async () => {
+		const measures = await repo.getMeasures('__UNIT_ID__');
+		expect(prismaServiceMock.measures.findMany).toHaveBeenCalledWith({
+			where: { unitId: '__UNIT_ID__' },
+		});
+		expect(measures).toEqual([domainMeasure]);
+	});
+
 	test('updateMeasure()', async () => {
 		await repo.updateMeasure(updateMeasureInput);
 		expect(prismaServiceMock.measures.update).toHaveBeenCalledWith({

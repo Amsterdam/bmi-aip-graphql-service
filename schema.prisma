@@ -457,6 +457,7 @@ model elements {
   surveyId                                                         String?                  @db.Uuid
   deleted_at                                                       DateTime?                @db.Timestamptz(6)
   gisibId                                                          Int?
+  permanentId                                                      String?                  @db.Uuid
   elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
   conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
   objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
@@ -848,6 +849,7 @@ model manifestations {
   surveyId                                                               String?                      @db.Uuid
   deleted_at                                                             DateTime?                    @db.Timestamptz(6)
   gisibId                                                                Int?
+  permanentId                                                            String?                      @db.Uuid
   conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
   elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
   objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
@@ -1470,6 +1472,7 @@ model units {
   surveyId                                                      String?                      @db.Uuid
   deleted_at                                                    DateTime?                    @db.Timestamptz(6)
   gisibId                                                       Int?
+  permanentId                                                   String?                      @db.Uuid
   conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
   elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
   objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")

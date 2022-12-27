@@ -887,6 +887,8 @@ model measurementCandidates {
 
   @@index([flightId])
   @@index([measurementId])
+  flights   flights? @relation(fields: [flightsId], references: [id])
+  flightsId String?  @db.Uuid
 }
 
 model measurements {
@@ -903,6 +905,8 @@ model measurements {
   measurementCandidates measurementCandidates[]
 
   @@index([flightId])
+  flights   flights? @relation(fields: [flightsId], references: [id])
+  flightsId String?  @db.Uuid
 }
 
 model mutationQueue {
@@ -1737,6 +1741,6 @@ model spanJunctionBoxSurveys {
 }
 
 enum degreeOfDamage {
-  Matig_aangetast @map("Matig aangetast")
-  Licht_aangetast @map("Licht aangetast")
+  Matig_aangetast  @map("Matig aangetast")
+  Licht_aangetast  @map("Licht aangetast")
 }

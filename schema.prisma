@@ -598,14 +598,16 @@ model finishedJobs {
 }
 
 model flights {
-  id                String     @id @db.Uuid
-  projectId         String     @db.Uuid
-  startedOnDateTime DateTime?  @db.Timestamptz(6)
-  takenOffDateTime  DateTime?  @db.Timestamptz(6)
-  updatedOnDateTime DateTime   @db.Timestamptz(6)
-  createdOnDateTime DateTime   @db.Timestamptz(6)
-  indexNumber       Int        @default(1)
-  utProjects        utProjects @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flights_projectid_foreign")
+  id                    String                  @id @unique(map: "flights_id_unique") @db.Uuid
+  projectId             String                  @db.Uuid
+  startedOnDateTime     DateTime?               @db.Timestamptz(6)
+  takenOffDateTime      DateTime?               @db.Timestamptz(6)
+  updatedOnDateTime     DateTime                @db.Timestamptz(6)
+  createdOnDateTime     DateTime                @db.Timestamptz(6)
+  indexNumber           Int                     @default(1)
+  utProjects            utProjects              @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flights_projectid_foreign")
+  measurementCandidates measurementCandidates[]
+  measurements          measurements[]
 
   @@index([projectId])
 }
@@ -1209,7 +1211,7 @@ model poleLabResults {
 }
 
 model registrations {
-  emailAddress String    @id
+  emailAddress String    @id @unique(map: "registrations_emailaddress_unique")
   firstName    String?
   lastName     String?
   phoneNumber  String?

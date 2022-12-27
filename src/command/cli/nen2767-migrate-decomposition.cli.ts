@@ -103,6 +103,7 @@ export class Nen2767MigrateDecompositionCli {
 		if (!commaSeparatedObjectCodes) {
 			return objects;
 		}
+		this.logger.verbose(objects);
 		const objectCodes = commaSeparatedObjectCodes.split(',');
 		return objects.filter(({ code }) => objectCodes.includes(code));
 	}
@@ -131,7 +132,7 @@ export class Nen2767MigrateDecompositionCli {
 
 		this.progressBar.stop();
 
-		const fileName = `nen2767-migration-report_${new Date().toISOString()}.json`;
+		const fileName = `nen2767-migration-report_${new Date().toISOString().replace(':', '-')}.json`;
 		this.logger.verbose(`Writing report to "${fileName}"`);
 		fs.writeFileSync(path.resolve(process.cwd(), fileName), JSON.stringify(this.report), {
 			encoding: 'utf-8',

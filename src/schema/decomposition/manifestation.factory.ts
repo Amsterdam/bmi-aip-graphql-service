@@ -4,6 +4,7 @@ import { Manifestation as DomainManifestation } from './types/manifestation.repo
 export class ManifestationFactory {
 	static CreateManifestation({
 		id,
+		permanentId,
 		name,
 		code,
 		location,
@@ -21,6 +22,7 @@ export class ManifestationFactory {
 	}: DomainManifestation): Manifestation {
 		const manifestation = new Manifestation();
 		manifestation.id = id;
+		manifestation.permanentId = id;
 		manifestation.name = name;
 		manifestation.code = code;
 		manifestation.location = location;

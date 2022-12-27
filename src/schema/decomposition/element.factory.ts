@@ -30,6 +30,7 @@ export class ElementFactory {
 	}: DomainElement): Element {
 		const element = new Element();
 		element.id = id;
+		element.permanentId = id;
 		element.name = name;
 		element.code = code;
 		element.location = location;

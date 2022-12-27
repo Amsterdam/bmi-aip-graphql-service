@@ -597,6 +597,19 @@ model finishedJobs {
   updated_at        DateTime? @db.Timestamptz(6)
 }
 
+model flights {
+  id                String     @id @db.Uuid
+  projectId         String     @db.Uuid
+  startedOnDateTime DateTime?  @db.Timestamptz(6)
+  takenOffDateTime  DateTime?  @db.Timestamptz(6)
+  updatedOnDateTime DateTime   @db.Timestamptz(6)
+  createdOnDateTime DateTime   @db.Timestamptz(6)
+  indexNumber       Int        @default(1)
+  utProjects        utProjects @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flights_projectid_foreign")
+
+  @@index([projectId])
+}
+
 model fmecaFurtherInvestigations {
   id              String          @id @unique(map: "fmecafurtherinvestigations_id_unique") @db.Uuid
   description     String          @db.VarChar(255)
@@ -1195,6 +1208,15 @@ model poleLabResults {
   surveys                    surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "polelabresults_surveyid_foreign")
 }
 
+model registrations {
+  emailAddress String    @id
+  firstName    String?
+  lastName     String?
+  phoneNumber  String?
+  created_at   DateTime? @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+}
+
 model session {
   sid    String   @id @db.VarChar
   sess   Json     @db.Json
@@ -1710,28 +1732,6 @@ model spanJunctionBoxSurveys {
   created_at               DateTime          @default(now()) @db.Timestamptz(6)
   updated_at               DateTime          @default(now()) @db.Timestamptz(6)
   spanJunctionBoxes        spanJunctionBoxes @relation(fields: [junctionBoxId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxessurveys_junctionboxid_foreign")
-}
-
-model flights {
-  id                String     @id @db.Uuid
-  projectId         String     @db.Uuid
-  startedOnDateTime DateTime?  @db.Timestamptz(6)
-  takenOffDateTime  DateTime?  @db.Timestamptz(6)
-  updatedOnDateTime DateTime   @db.Timestamptz(6)
-  createdOnDateTime DateTime   @db.Timestamptz(6)
-  indexNumber       Int        @default(1)
-  utProjects        utProjects @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flights_projectid_foreign")
-
-  @@index([projectId])
-}
-
-model registrations {
-  emailAddress String    @id
-  firstName    String?
-  lastName     String?
-  phoneNumber  String?
-  created_at   DateTime? @db.Timestamptz(6)
-  updated_at   DateTime? @db.Timestamptz(6)
 }
 
 enum degreeOfDamage {

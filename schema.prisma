@@ -883,11 +883,12 @@ model measurementCandidates {
   altitude          Float?       @db.Real
   updatedOnDateTime DateTime     @db.Timestamptz(6)
   createdOnDateTime DateTime     @db.Timestamptz(6)
-  flights           flights      @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_flightid_foreign")
   measurements      measurements @relation(fields: [measurementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_measurementid_foreign")
 
   @@index([flightId])
   @@index([measurementId])
+  flights   flights? @relation(fields: [flightsId], references: [id])
+  flightsId String?  @db.Uuid
 }
 
 model measurements {
@@ -901,10 +902,11 @@ model measurements {
   updatedOnDateTime     DateTime                @db.Timestamptz(6)
   createdOnDateTime     DateTime                @db.Timestamptz(6)
   pointNumber           Int                     @default(1)
-  flights               flights                 @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurements_flightid_foreign")
   measurementCandidates measurementCandidates[]
 
   @@index([flightId])
+  flights   flights? @relation(fields: [flightsId], references: [id])
+  flightsId String?  @db.Uuid
 }
 
 model mutationQueue {
@@ -1157,8 +1159,8 @@ model poleLabResults {
   woodtype                   String?         @db.VarChar(32)
   polediameter               Int?
   lengthToHeartPole          Int?
-  thicknessOfHeartwood       String?
-  thicknessOfSapwood         String?
+  thicknessOfHeartwood       String?         @db.VarChar(255)
+  thicknessOfSapwood         String?         @db.VarChar(255)
   erosionBacteria            Boolean?
   tunnelingBacteria          Boolean?
   moldThreads                Boolean?
@@ -1591,7 +1593,7 @@ model spanJunctionBoxes {
   updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at             DateTime?                 @db.Timestamptz(6)
   installationHeight     Decimal?                  @db.Decimal(8, 2)
-  a11yDetails            Json?                     @default("{}")
+  a11yDetails            Json                      @default("{}")
   geographyRD            Json?                     @default("{}")
   objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
   surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
@@ -1642,7 +1644,7 @@ model spanSupportSystems {
   deleted_at                          DateTime?                            @db.Timestamptz(6)
   installationHeight                  Decimal?                             @db.Decimal(8, 2)
   typeDetailed                        String?                              @db.VarChar(64)
-  a11yDetails                         Json?                                @default("{}")
+  a11yDetails                         Json                                 @default("{}")
   geographyRD                         Json?                                @default("{}")
   objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
   surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
@@ -1739,6 +1741,6 @@ model spanJunctionBoxSurveys {
 }
 
 enum degreeOfDamage {
-  Matig_aangetast @map("Matig aangetast")
-  Licht_aangetast @map("Licht aangetast")
+  Matig_aangetast  @map("Matig aangetast")
+  Licht_aangetast  @map("Licht aangetast")
 }

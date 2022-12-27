@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-@ObjectType({ description: 'command' })
-export class CommandModel {
+@ObjectType({ description: 'setOvsSurveySurveyorsCommandResponse' })
+export class SetOvsSurveySurveyorsModel {
 	@Field((type) => Boolean)
 	done: boolean;
 

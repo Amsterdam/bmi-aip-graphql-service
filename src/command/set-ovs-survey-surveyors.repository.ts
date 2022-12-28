@@ -3,13 +3,13 @@ import PQueue from 'p-queue';
 
 import { PrismaService } from '../prisma.service';
 
-import { CommandReturnType } from './types';
+import { SetOvsSurveySurveyorsReturnType } from './types';
 
 @Injectable()
-export class CommandRepository {
+export class SetOvsSurveySurveyorsRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async setOVSSurveySurveyors(): Promise<CommandReturnType> {
+	async setOVSSurveySurveyors(): Promise<SetOvsSurveySurveyorsReturnType> {
 		const log = [];
 		const errors = [];
 		const companyIds = [];

@@ -9,15 +9,12 @@ const bootstrap = new BootstrapConsole({
 		logger: ['debug', 'error', 'verbose', 'warn'],
 	},
 });
+
 bootstrap.init().then(async (app) => {
 	try {
-		// console.log(e);
-
 		await app.init();
 		await bootstrap.boot();
-		//process.exit(0);
 	} catch (e) {
-		console.log(e);
-		//process.exit(1);
+		console.error(e);
 	}
 });

@@ -7,6 +7,8 @@ import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
 
+import { MeasureModule } from './schema/measure/measure.module';
+import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
@@ -38,6 +40,8 @@ import { SurveyModule } from './schema/survey/survey.module';
 		}),
 		AuthorizationModule,
 		DecompositionModule,
+		MeasureModule,
+		CyclicMeasureModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		ObjectModule,

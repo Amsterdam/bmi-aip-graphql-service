@@ -31,6 +31,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		const returnValue = await repo.createJunctionBox(junctionBoxInput);
 		const junctionBox = prismaServiceMock.spanJunctionBoxes.create.mock.calls[0][0]
 			.data as JunctionBoxWithoutGeography;
+
 		expect(junctionBox).toEqual(
 			expect.objectContaining({
 				id: junctionBox.id,
@@ -52,6 +53,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();

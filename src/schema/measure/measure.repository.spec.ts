@@ -28,6 +28,21 @@ describe('MeasureRepository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
+				failureModes: {
+					connect: {
+						id: '',
+					},
+				},
+				manifestations: {
+					connect: {
+						id: '',
+					},
+				},
+				defects: {
+					connect: {
+						id: '',
+					},
+				},
 				planYear: 2010,
 				finalPlanYear: 2010,
 				costSurcharge: 7.3,

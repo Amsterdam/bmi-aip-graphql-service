@@ -16,7 +16,10 @@ const survey2 = new Survey();
 survey2.id = 'ab8adf9e-65a0-40aa-9b1c-ea3537d1f8d7';
 survey2.description = 'BRU0002';
 
-export { survey1, survey2 };
+const arkSurvey = new Survey();
+arkSurvey.inspectionStandardType = InspectionStandard.quaywalls;
+
+export { survey1, survey2, arkSurvey };
 
 export const surveyRaw: Omit<DomainSurvey, 'id'> = {
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',

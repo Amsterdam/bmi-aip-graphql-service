@@ -1403,6 +1403,7 @@ model surveys {
   @@index([operatorCompanyId])
   @@index([surveryedOn])
   @@index([surveyorCompanyId])
+  arkSurveyReachSegments arkSurveyReachSegments[]
 }
 
 model surveyUnits {
@@ -2903,7 +2904,6 @@ model web_origins {
   @@index([client_id], map: "idx_web_orig_client")
 }
 
-
 model arkSurveyReachSegments {
   id                 String    @id @unique(map: "arksurveyreachsegments_id_unique") @db.Uuid
   name               String    @db.VarChar(255)
@@ -2921,6 +2921,6 @@ model arkSurveyReachSegments {
 }
 
 enum degreeOfDamage {
-  Matig_aangetast @map("Matig aangetast")
-  Licht_aangetast @map("Licht aangetast")
+  Matig_aangetast  @map("Matig aangetast")
+  Licht_aangetast  @map("Licht aangetast")
 }

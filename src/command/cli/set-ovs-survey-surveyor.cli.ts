@@ -3,13 +3,13 @@ import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import { ConfigService } from '@nestjs/config';
 
-import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
+import { ExternalAIPGraphQLRepository } from '../../externalRepository/ExternalAIPGraphQLRepository';
 
 /**
  * npm run console ovs:set-survey-surveyor
  */
 @Injectable()
-export class SetOVSSurveySurveyorService {
+export class SetOvsSurveySurveyorCli {
 	private static CLI_COMMAND = 'ovs:set-survey-surveyor';
 
 	private static DEBUG = true;
@@ -26,7 +26,7 @@ export class SetOVSSurveySurveyorService {
 
 		this.consoleService.createCommand(
 			{
-				command: SetOVSSurveySurveyorService.CLI_COMMAND,
+				command: SetOvsSurveySurveyorCli.CLI_COMMAND,
 				description: 'Loops over all OVS surveys and sets the surveyorCompanyId based on the batch executor',
 			},
 			this.run.bind(this),

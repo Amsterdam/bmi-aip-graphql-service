@@ -7,7 +7,6 @@ import { newId } from '../../utils';
 import { ReachSegment, IReachSegmentRepository } from './types/reach-segment.repository.interface';
 import { CreateReachSegmentInput } from './dto/create-reach-segment.input';
 import { UpdateReachSegmentInput } from './dto/update-reach-segment.input';
-// import { UpdateReachSegmentNormalizedInput } from './dto/update-support-system-normalized.input';
 
 @Injectable()
 export class ReachSegmentRepository implements IReachSegmentRepository {

@@ -13,7 +13,6 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
 	async createReachSegment({
-		id,
 		surveyId,
 		name,
 		reachSegmentLength,
@@ -39,11 +38,22 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 			sortNumber,
 		};
 
+		if (!sortNumber) {
+			data.sortNumber = (await this.findHighestSortNumber(surveyId)) + 1;
+		}
+
 		const reachSegment = await this.prisma.arkSurveyReachSegments.create({ data });
 
 		return {
 			...reachSegment,
 		};
+	}
+
+	async findHighestSortNumber(surveyId: string): Promise<number> {
+		const result = await this.prisma.$queryRaw<{
+			max: number | null;
+		}>`SELECT MAX("sortNumber") FROM "arkSurveyReachSegments" WHERE "surveyId" = ${surveyId};`;
+		return result[0].max ?? 0;
 	}
 
 	async getReachSegments(surveyId: string): Promise<ReachSegment[]> {
@@ -52,9 +62,12 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 				surveyId,
 				deleted_at: null,
 			},
+			orderBy: [
+				{
+					sortNumber: 'asc',
+				},
+			],
 		})) as ReachSegment[];
-
-		console.log(reachSegments);
 
 		return Promise.all(
 			reachSegments.map(async (reachSegment) => {
@@ -97,10 +110,6 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 		return reachSegment;
 	}
 
-	// 	// Work around Prisma not supporting spatial data types
-	// 	return { ...supportSystem, geography: await this.getGeographyAsGeoJSON(id) };
-	// }
-
 	async deleteReachSegment(identifier: string): Promise<ReachSegment> {
 		const data: Prisma.arkSurveyReachSegmentsUpdateInput = {
 			deleted_at: new Date(),
@@ -113,19 +122,4 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 
 		return reachSegment;
 	}
-
-	// 	// Work around Prisma not supporting spatial data types
-	// 	// return { ...reachSegment, geography: await this.getGeographyAsGeoJSON(identifier) };
-	// 	return { ...reachSegment };
-	// }
-
-	// async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
-	// 	const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
-	// 		SELECT ST_AsGeoJSON(geography) as geography
-	// 		FROM "spanSupportSystems"
-	// 		WHERE id = ${identifier};
-	// 	`;
-	// 	const geography = result?.[0]?.geography;
-	// 	return geography ? JSON.parse(geography) : null;
-	// }
 }

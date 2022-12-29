@@ -3,9 +3,6 @@ import { Field, Float, InputType } from '@nestjs/graphql';
 @InputType()
 export class BaseReachSegmentInput {
 	@Field((type) => String)
-	id: string;
-
-	@Field((type) => String)
 	surveyId: string;
 
 	@Field((type) => String)

@@ -11,9 +11,5 @@ export class CreateReachSegmentInput extends BaseReachSegmentInput {
 
 	@Field()
 	@IsUUID()
-	public objectId: string;
-
-	@Field()
-	@IsUUID()
 	public surveyId: string;
 }

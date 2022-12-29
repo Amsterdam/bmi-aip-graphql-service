@@ -75,7 +75,6 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 		sortNumber,
 	}: UpdateReachSegmentInput): Promise<ReachSegment> {
 		const data: Prisma.arkSurveyReachSegmentsUpdateInput = {
-			id: newId(),
 			surveys: {
 				connect: {
 					id: surveyId,

@@ -44,7 +44,9 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			houseNumber,
 			type: type,
 			typeDetailed: typeDetailed,
-			geographyRD: JSON.stringify(geographyRD),
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });

@@ -67,6 +67,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				houseNumber: '33',
 				type: 'Facade',
 				typeDetailed: 'MuurplaatInbouwRvs',
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();

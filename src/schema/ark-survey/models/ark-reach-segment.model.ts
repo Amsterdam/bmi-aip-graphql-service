@@ -1,7 +1,4 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
-// import { Point } from 'graphql-geojson-scalar-types';
-// import { Point as PointType } from 'geojson';
-
 @ObjectType({ description: 'reachSegment' })
 export class ReachSegment {
 	@Field((type) => String)

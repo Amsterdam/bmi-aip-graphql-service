@@ -49,9 +49,9 @@ export class ReachSegmentResolver {
 		return ReachSegmentFactory.CreateReachSegment(domainReachSegment);
 	}
 
-	@Query((returns) => [ReachSegment], { name: 'surveyReachSegments' })
+	@Query((returns) => [ReachSegment], { name: 'reachSegments' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	async getSurveyReachSegments(@Args('surveyId', { type: () => String }) surveyId: string) {
+	async arkSurveyReachSegments(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.queryBus.execute<FindReachSegmentsQuery>(new FindReachSegmentsQuery(surveyId));
 	}
 }

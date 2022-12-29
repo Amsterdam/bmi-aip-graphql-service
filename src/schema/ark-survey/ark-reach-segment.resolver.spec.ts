@@ -72,7 +72,7 @@ describe('Span Installation / ReachSegment / Resolver', () => {
 			commandBusMock,
 			queryBusMock,
 		);
-		const elements = await resolver.getSurveyReachSegments('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const elements = await resolver.arkSurveyReachSegments('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([domainReachSegment, domainReachSegment]);
 	});
 });

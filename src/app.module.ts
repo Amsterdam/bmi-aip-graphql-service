@@ -9,7 +9,6 @@ import { TerminusModule } from '@nestjs/terminus';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
@@ -57,7 +56,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		}),
 		TerminusModule,
 	],
-	controllers: [AppController, HealthController],
+	controllers: [HealthController],
 	providers: [
 		{
 			provide: APP_GUARD,

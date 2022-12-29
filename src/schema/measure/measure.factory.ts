@@ -1,6 +1,7 @@
 import { Measure } from './models/measure.model';
 import { Measure as DomainMeasure } from './types/measure.repository.interface';
 import { CreateMeasureInput } from './dto/create-measure.input';
+import { QuantityUnitOfMeasurement } from './types/measure';
 
 export class MeasureFactory {
 	static CreateMeasure({
@@ -32,7 +33,7 @@ export class MeasureFactory {
 		measure.location = location;
 		measure.unitPrice = unitPrice;
 		measure.quantity = quantity;
-		measure.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
+		measure.quantityUnitOfMeasurement = QuantityUnitOfMeasurement[quantityUnitOfMeasurement];
 		measure.surveyScopeId = surveyScopeId;
 		measure.failureModeId = failureModeId;
 		measure.defectId = defectId;

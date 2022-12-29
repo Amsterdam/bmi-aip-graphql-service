@@ -1,10 +1,11 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
+import { QuantityUnitOfMeasurement } from '../measure/types/measure';
 
 import { CyclicMeasureRepository } from './cyclic-measure.repository';
 import { deletedCyclicMeasure, domainCyclicMeasure, cyclicMeasureInput, updateCyclicMeasureInput } from './__stubs__';
-import { CyclicMeasureTypes, QuantityUnitOfMeasurement } from './types/cyclic-measure';
+import { CyclicMeasureTypes } from './types/cyclic-measure';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	cyclicMeasures: {

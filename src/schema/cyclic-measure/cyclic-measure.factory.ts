@@ -1,3 +1,5 @@
+import { QuantityUnitOfMeasurement } from '../measure/types/measure';
+
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
@@ -27,7 +29,7 @@ export class CyclicMeasureFactory {
 		cyclicMeasure.remarks = remarks;
 		cyclicMeasure.cycle = cycle;
 		cyclicMeasure.unitPrice = unitPrice;
-		cyclicMeasure.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
+		cyclicMeasure.quantityUnitOfMeasurement = QuantityUnitOfMeasurement[quantityUnitOfMeasurement];
 		cyclicMeasure.defaultMaintenanceMeasureId = defaultMaintenanceMeasureId;
 		cyclicMeasure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return cyclicMeasure;

@@ -1,12 +1,5 @@
-export enum QuantityUnitOfMeasurement {
-	'm' = 'm',
-	'm2' = 'm2',
-	'm3' = 'm3',
-	'pcs' = 'pcs',
-}
-
 export enum CyclicMeasureTypes {
-	'Groot onderhoud' = 'Groot onderhoud',
+	'GrootOnderhoud' = 'GrootOnderhoud',
 	'Dagelijksonderhoud' = 'Dagelijksonderhoud',
 	'Vervangen' = 'Vervangen',
 }

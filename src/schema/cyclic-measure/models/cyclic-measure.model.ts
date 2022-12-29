@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { CyclicMeasureTypes, QuantityUnitOfMeasurement } from '../types/cyclic-measure';
+import { CyclicMeasureTypes } from '../types/cyclic-measure';
+import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
 
 @ObjectType({ description: 'cyclicMeasure' })
 export class CyclicMeasure {

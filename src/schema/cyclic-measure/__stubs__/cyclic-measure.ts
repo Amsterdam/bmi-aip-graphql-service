@@ -3,11 +3,12 @@ import { CreateCyclicMeasureInput } from '../dto/create-cyclic-measure.input';
 import { CyclicMeasure as DomainCyclicMeasure } from '../types/cyclic-measure.repository.interface';
 import { CyclicMeasureFactory } from '../cyclic-measure.factory';
 import { UpdateCyclicMeasureInput } from '../dto/update-cyclic-measure.input';
-import { CyclicMeasureTypes, QuantityUnitOfMeasurement } from '../types/cyclic-measure';
+import { CyclicMeasureTypes } from '../types/cyclic-measure';
+import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
 
 const cyclicMeasure1 = new CyclicMeasure();
 cyclicMeasure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
-cyclicMeasure1.maintenanceType = CyclicMeasureTypes['Groot onderhoud'];
+cyclicMeasure1.maintenanceType = CyclicMeasureTypes.GrootOnderhoud;
 cyclicMeasure1.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 cyclicMeasure1.remarks = 'Aan de zuidzijde';
 

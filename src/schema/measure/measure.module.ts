@@ -13,6 +13,8 @@ import { MeasureRepository } from './measure.repository';
 import { UpdateMeasureHandler } from './commands/update-measure.handler';
 import { DeleteMeasureHandler } from './commands/delete-measure.handler';
 import { MeasureTypes, QuantityUnitOfMeasurement } from './types/measure';
+import { GetMeasuresQuery } from './queries/get-measures.query';
+import { GetMeasuresHandler } from './queries/get-measures.handler';
 
 registerEnumType(MeasureTypes, {
 	name: 'MeasureTypes',
@@ -24,6 +26,8 @@ registerEnumType(QuantityUnitOfMeasurement, {
 
 @Module({
 	providers: [
+		GetMeasuresQuery,
+		GetMeasuresHandler,
 		MeasureResolver,
 		MeasureService,
 		MeasureRepository,

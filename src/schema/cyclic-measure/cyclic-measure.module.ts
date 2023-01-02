@@ -14,7 +14,8 @@ import { CyclicMeasureRepository } from './cyclic-measure.repository';
 import { UpdateCyclicMeasureHandler } from './commands/update-cyclic-measure.handler';
 import { DeleteCyclicMeasureHandler } from './commands/delete-cyclic-measure.handler';
 import { CyclicMeasureTypes } from './types/cyclic-measure';
-
+import { GetCyclicMeasuresQuery } from './queries/get-cyclic-measures.query';
+import { GetCyclicMeasuresHandler } from './queries/get-cyclic-measures.handler';
 
 registerEnumType(CyclicMeasureTypes, {
 	name: 'CyclicMeasureTypes',
@@ -26,6 +27,8 @@ registerEnumType(QuantityUnitOfMeasurement, {
 
 @Module({
 	providers: [
+		GetCyclicMeasuresQuery,
+		GetCyclicMeasuresHandler,
 		CyclicMeasureResolver,
 		CyclicMeasureService,
 		CyclicMeasureRepository,

@@ -24,6 +24,11 @@ describe('CyclicMeasureRepository', () => {
 		expect(prismaServiceMock.cyclicMeasures.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
 				maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
+				surveys: {
+					connect: {
+						id: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',
+					},
+				},
 				units: {
 					connect: {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',

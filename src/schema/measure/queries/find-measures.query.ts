@@ -1,3 +1,3 @@
 export class FindMeasuresQuery {
-	public constructor(public readonly unitId: string) {}
+	public constructor(public readonly surveyId: string) {}
 }

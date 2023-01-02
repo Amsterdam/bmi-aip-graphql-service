@@ -11,4 +11,8 @@ export class CreateCyclicMeasureInput extends BaseCyclicMeasureInput {
 	@Field()
 	@IsUUID()
 	public unitId: string;
+
+	@Field()
+	@IsUUID()
+	public surveyId: string;
 }

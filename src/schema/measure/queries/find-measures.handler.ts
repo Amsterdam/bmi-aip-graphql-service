@@ -9,7 +9,7 @@ import { FindMeasuresQuery } from './find-measures.query';
 export class FindMeasuresHandler implements IQueryHandler<FindMeasuresQuery> {
 	constructor(private service: MeasureService) {}
 
-	async execute({ unitId }: FindMeasuresQuery): Promise<Measure[]> {
-		return this.service.getMeasures(unitId);
+	async execute({ surveyId }: FindMeasuresQuery): Promise<Measure[]> {
+		return this.service.getMeasures(surveyId);
 	}
 }

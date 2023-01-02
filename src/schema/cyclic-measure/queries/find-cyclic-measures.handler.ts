@@ -8,7 +8,7 @@ import { FindCyclicMeasuresQuery } from '../queries/find-cyclic-measures.query';
 export class FindCyclicMeasuresHandler implements IQueryHandler<FindCyclicMeasuresQuery> {
 	constructor(private service: CyclicMeasureService) {}
 
-	async execute({ unitId }: FindCyclicMeasuresQuery): Promise<CyclicMeasure[]> {
-		return this.service.getCyclicMeasures(unitId);
+	async execute({ surveyId }: FindCyclicMeasuresQuery): Promise<CyclicMeasure[]> {
+		return this.service.getCyclicMeasures(surveyId);
 	}
 }

@@ -1163,8 +1163,8 @@ model poleLabResults {
   woodtype                   String?         @db.VarChar(32)
   polediameter               Int?
   lengthToHeartPole          Int?
-  thicknessOfHeartwood       Int?
-  thicknessOfSapwood         Int?
+  thicknessOfHeartwood       String?         @db.VarChar(255)
+  thicknessOfSapwood         String?         @db.VarChar(255)
   erosionBacteria            Boolean?
   tunnelingBacteria          Boolean?
   moldThreads                Boolean?
@@ -1601,7 +1601,7 @@ model spanJunctionBoxes {
   updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at             DateTime?                 @db.Timestamptz(6)
   installationHeight     Decimal?                  @db.Decimal(8, 2)
-  a11yDetails            Json?                     @default("{}")
+  a11yDetails            Json                      @default("{}")
   geographyRD            Json?                     @default("{}")
   objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
   surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
@@ -1652,7 +1652,7 @@ model spanSupportSystems {
   deleted_at                          DateTime?                            @db.Timestamptz(6)
   installationHeight                  Decimal?                             @db.Decimal(8, 2)
   typeDetailed                        String?                              @db.VarChar(64)
-  a11yDetails                         Json?                                @default("{}")
+  a11yDetails                         Json                                 @default("{}")
   geographyRD                         Json?                                @default("{}")
   objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
   surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
@@ -1807,6 +1807,6 @@ model measures {
 }
 
 enum degreeOfDamage {
-  Matig_aangetast @map("Matig aangetast")
-  Licht_aangetast @map("Licht aangetast")
+  Matig_aangetast  @map("Matig aangetast")
+  Licht_aangetast  @map("Licht aangetast")
 }

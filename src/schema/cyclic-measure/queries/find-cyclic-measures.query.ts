@@ -1,3 +1,3 @@
-export class GetMeasuresQuery {
+export class FindCyclicMeasuresQuery {
 	public constructor(public readonly unitId: string) {}
 }

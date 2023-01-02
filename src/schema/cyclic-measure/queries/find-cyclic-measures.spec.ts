@@ -2,9 +2,8 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { CyclicMeasureService } from '../cyclic-measure.service';
 import { domainCyclicMeasure } from '../__stubs__';
-
-import { GetCyclicMeasuresQuery } from './get-cyclic-measures.query';
-import { GetCyclicMeasuresHandler } from './get-cyclic-measures.handler';
+import { FindCyclicMeasuresQuery } from '../queries/find-cyclic-measures.query';
+import { FindCyclicMeasuresHandler } from '../queries/find-cyclic-measures.handler';
 
 const cyclicMeasureMock: MockedObjectDeep<CyclicMeasureService> = {
 	getCyclicMeasures: jest.fn().mockResolvedValue([domainCyclicMeasure]),
@@ -13,10 +12,10 @@ const cyclicMeasureMock: MockedObjectDeep<CyclicMeasureService> = {
 
 const identifier = 'b6bbf83e-da23-4693-9502-e6000015c709';
 
-describe('GetMeasuresHandler', () => {
+describe('FindMeasuresHandler', () => {
 	test('executes command', async () => {
-		const command = new GetCyclicMeasuresQuery(identifier);
-		const result = await new GetCyclicMeasuresHandler(cyclicMeasureMock).execute(command);
+		const command = new FindCyclicMeasuresQuery(identifier);
+		const result = await new FindCyclicMeasuresHandler(cyclicMeasureMock).execute(command);
 
 		expect(cyclicMeasureMock.getCyclicMeasures).toHaveBeenCalledTimes(1);
 		expect(cyclicMeasureMock.getCyclicMeasures).toHaveBeenCalledWith(identifier);

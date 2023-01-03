@@ -11,4 +11,8 @@ export class CreateMeasureInput extends BaseMeasureInput {
 	@Field()
 	@IsUUID()
 	public unitId: string;
+
+	@Field()
+	@IsUUID()
+	public surveyId: string;
 }

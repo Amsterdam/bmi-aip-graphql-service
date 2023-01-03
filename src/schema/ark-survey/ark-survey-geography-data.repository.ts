@@ -43,26 +43,16 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			},
 		};
 
-		const arkSurveyGeographyData = await this.prisma.arkSurveyGeographyData.create({ data });
-
-		return {
-			...arkSurveyGeographyData,
-		};
+		return this.prisma.arkSurveyGeographyData.create({ data });
 	}
 
 	async getGeographyData(surveyId: string): Promise<ArkSurveyGeographyData[]> {
-		const arkSurveyGeographyDataResults = (await this.prisma.arkSurveyGeographyData.findMany({
+		return this.prisma.arkSurveyGeographyData.findMany({
 			where: {
 				surveyId,
 				deleted_at: null,
 			},
-		})) as ArkSurveyGeographyData[];
-
-		return Promise.all(
-			arkSurveyGeographyDataResults.map(async (arkSurveyGeographyData) => {
-				return arkSurveyGeographyData;
-			}),
-		);
+		});
 	}
 
 	async updateArkSurveyGeographyData({
@@ -93,12 +83,10 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			},
 		};
 
-		const arkSurveyGeographyData = await this.prisma.arkSurveyGeographyData.update({
+		return this.prisma.arkSurveyGeographyData.update({
 			where: { id },
 			data,
 		});
-
-		return arkSurveyGeographyData;
 	}
 
 	async deleteArkSurveyGeographyData(identifier: string): Promise<ArkSurveyGeographyData> {
@@ -106,11 +94,9 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			deleted_at: new Date(),
 		};
 
-		const arkSurveyGeographyData = await this.prisma.arkSurveyGeographyData.update({
+		return this.prisma.arkSurveyGeographyData.update({
 			where: { id: identifier },
 			data,
 		});
-
-		return arkSurveyGeographyData;
 	}
 }

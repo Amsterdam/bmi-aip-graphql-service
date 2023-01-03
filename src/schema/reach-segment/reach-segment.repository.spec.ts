@@ -2,9 +2,8 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
+import { ReachSegmentRepository } from './reach-segment.repository';
 import { domainReachSegment, createReachSegmentInput } from './__stubs__';
-import { ReachSegment } from './models/ark-reach-segment.model';
 
 jest.mock('./types/reach-segment.repository.interface');
 
@@ -28,7 +27,7 @@ describe('ARK/ ReachSegment / Repository', () => {
 
 	test('createReachSegment()', async () => {
 		const returnValue = await repository.createReachSegment(createReachSegmentInput);
-		const reachSegment = prismaServiceMock.arkSurveyReachSegments.create.mock.calls[0][0].data as ReachSegment;
+		const reachSegment = prismaServiceMock.arkSurveyReachSegments.create.mock.calls[0][0].data;
 		expect(reachSegment).toEqual(
 			expect.objectContaining({
 				id: reachSegment.id,

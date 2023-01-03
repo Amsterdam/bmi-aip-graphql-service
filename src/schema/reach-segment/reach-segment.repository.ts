@@ -42,11 +42,7 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 			data.sortNumber = (await this.findHighestSortNumber(surveyId)) + 1;
 		}
 
-		const reachSegment = await this.prisma.arkSurveyReachSegments.create({ data });
-
-		return {
-			...reachSegment,
-		};
+		return this.prisma.arkSurveyReachSegments.create({ data });
 	}
 
 	async findHighestSortNumber(surveyId: string): Promise<number> {
@@ -57,7 +53,7 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 	}
 
 	async getReachSegments(surveyId: string): Promise<ReachSegment[]> {
-		const reachSegments = (await this.prisma.arkSurveyReachSegments.findMany({
+		return this.prisma.arkSurveyReachSegments.findMany({
 			where: {
 				surveyId,
 				deleted_at: null,
@@ -67,13 +63,7 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 					sortNumber: 'asc',
 				},
 			],
-		})) as ReachSegment[];
-
-		return Promise.all(
-			reachSegments.map(async (reachSegment) => {
-				return reachSegment;
-			}),
-		);
+		});
 	}
 
 	async updateReachSegment({
@@ -102,12 +92,10 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 			sortNumber,
 		};
 
-		const reachSegment = await this.prisma.arkSurveyReachSegments.update({
+		return this.prisma.arkSurveyReachSegments.update({
 			where: { id },
 			data,
 		});
-
-		return reachSegment;
 	}
 
 	async deleteReachSegment(identifier: string): Promise<ReachSegment> {
@@ -115,11 +103,9 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 			deleted_at: new Date(),
 		};
 
-		const reachSegment = await this.prisma.arkSurveyReachSegments.update({
+		return this.prisma.arkSurveyReachSegments.update({
 			where: { id: identifier },
 			data,
 		});
-
-		return reachSegment;
 	}
 }

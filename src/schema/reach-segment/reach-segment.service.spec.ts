@@ -2,13 +2,13 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
-import { ReachSegmentService } from './ark-reach-segment.service';
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
+import { ReachSegmentService } from './reach-segment.service';
+import { ReachSegmentRepository } from './reach-segment.repository';
 import { domainReachSegment } from './__stubs__';
-import { ReachSegmentFactory } from './ark-reach-segment.factory';
-import { ReachSegment } from './models/ark-reach-segment.model';
+import { ReachSegmentFactory } from './reach-segment.factory';
+import { ReachSegment } from './models/reach-segment.model';
 
-jest.mock('./ark-reach-segment.repository');
+jest.mock('./reach-segment.repository');
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),

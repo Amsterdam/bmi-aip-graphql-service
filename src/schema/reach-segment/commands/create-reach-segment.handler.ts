@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { ReachSegment } from '../types/reach-segment.repository.interface';
-import { ReachSegmentRepository } from '../ark-reach-segment.repository';
+import { ReachSegmentRepository } from '../reach-segment.repository';
 
 import { CreateReachSegmentCommand } from './create-reach-segment.command';
 

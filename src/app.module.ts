@@ -25,7 +25,8 @@ import { SpanInstallationSurveyModule } from './schema/span-installation-survey/
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
-import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
+import { ArkSurveyGeographyDataModule } from './schema/ark-survey/ark-survey-geography-data.module';
 
 @Module({
 	imports: [
@@ -57,7 +58,8 @@ import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 			autoSchemaFile: true,
 		}),
 		TerminusModule,
-		ArkSurveyModule,
+		ReachSegmentModule,
+		ArkSurveyGeographyDataModule,
 	],
 	controllers: [AppController, HealthController],
 	providers: [

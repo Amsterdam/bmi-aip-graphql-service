@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { ReachSegment } from './models/ark-reach-segment.model';
-import { ReachSegmentFactory } from './ark-reach-segment.factory';
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
+import { ReachSegment } from './models/reach-segment.model';
+import { ReachSegmentFactory } from './reach-segment.factory';
+import { ReachSegmentRepository } from './reach-segment.repository';
 
 @Injectable()
 export class ReachSegmentService {

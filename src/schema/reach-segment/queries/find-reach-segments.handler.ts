@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
-import { ReachSegmentService } from '../ark-reach-segment.service';
-import { ReachSegment } from '../models/ark-reach-segment.model';
+import { ReachSegmentService } from '../reach-segment.service';
+import { ReachSegment } from '../models/reach-segment.model';
 
 import { FindReachSegmentsQuery } from './find-reach-segments.query';
 

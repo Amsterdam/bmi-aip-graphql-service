@@ -1,4 +1,4 @@
-import { ReachSegment } from './ark-reach-segment.model';
+import { ReachSegment } from './reach-segment.model';
 
 describe('ARK ReachSegments', () => {
 	test('constructs a ReachSegment instance', () => {

@@ -6,6 +6,7 @@ import { UpdateCyclicMeasureInput } from '../dto/update-cyclic-measure.input';
 const cyclicMeasures = Prisma.validator<Prisma.cyclicMeasuresArgs>()({
 	select: {
 		id: true,
+		surveyId: true,
 		unitId: true,
 		planYear: true,
 		finalPlanYear: true,

@@ -7,6 +7,7 @@ import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
 export class CyclicMeasureFactory {
 	static CreateCyclicMeasure({
 		id,
+		surveyId,
 		maintenanceType,
 		unitId,
 		planYear,
@@ -22,6 +23,7 @@ export class CyclicMeasureFactory {
 		const cyclicMeasure = new CyclicMeasure();
 		cyclicMeasure.id = id;
 		cyclicMeasure.maintenanceType = maintenanceType;
+		cyclicMeasure.surveyId = surveyId;
 		cyclicMeasure.unitId = unitId;
 		cyclicMeasure.planYear = planYear;
 		cyclicMeasure.finalPlanYear = finalPlanYear;

@@ -7,6 +7,7 @@ export class MeasureFactory {
 	static CreateMeasure({
 		id,
 		maintenanceType,
+		surveyId,
 		unitId,
 		planYear,
 		finalPlanYear,
@@ -25,6 +26,7 @@ export class MeasureFactory {
 		const measure = new Measure();
 		measure.id = id;
 		measure.maintenanceType = maintenanceType;
+		measure.surveyId = surveyId;
 		measure.unitId = unitId;
 		measure.planYear = planYear;
 		measure.finalPlanYear = finalPlanYear;

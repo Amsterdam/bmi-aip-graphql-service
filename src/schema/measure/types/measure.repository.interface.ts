@@ -6,6 +6,7 @@ import { UpdateMeasureInput } from '../dto/update-measure.input';
 const measures = Prisma.validator<Prisma.measuresArgs>()({
 	select: {
 		id: true,
+		surveyId: true,
 		unitId: true,
 		planYear: true,
 		finalPlanYear: true,

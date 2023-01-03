@@ -9,6 +9,9 @@ export class CyclicMeasure {
 	id: string;
 
 	@Field((type) => String)
+	surveyId: string;
+
+	@Field((type) => String)
 	unitId: string;
 
 	@Field((type) => String)

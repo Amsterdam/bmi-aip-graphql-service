@@ -21,6 +21,7 @@ cyclicMeasure2.remarks = 'Kabel';
 export { cyclicMeasure1, cyclicMeasure2 };
 
 const cyclicMeasureRaw: Omit<DomainCyclicMeasure, 'id'> = {
+	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',
 	unitId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 	maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
 	defaultMaintenanceMeasureId: '68a95a2c-b909-e77f-4d66-9fd5afef5af3',

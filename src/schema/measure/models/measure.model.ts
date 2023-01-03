@@ -8,6 +8,9 @@ export class Measure {
 	id: string;
 
 	@Field((type) => String)
+	surveyId: string;
+
+	@Field((type) => String)
 	unitId: string;
 
 	@Field((type) => Number, { nullable: true })

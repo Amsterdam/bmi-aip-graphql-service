@@ -1417,7 +1417,6 @@ model surveys {
   @@index([operatorCompanyId])
   @@index([surveryedOn])
   @@index([surveyorCompanyId])
-  arkSurveyReachSegments arkSurveyReachSegments[]
 }
 
 model surveyUnits {
@@ -1832,6 +1831,8 @@ model arkSurveyReachSegments {
 model arkSurveyGeographyData {
   id                  String                    @id @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
   surveyId            String                    @db.Uuid
+  ArkGeographyStart Json?                     @default("{}")
+  ArkGeographyEnd   Json?                     @default("{}")
   ArkGeographyRDStart Json?                     @default("{}")
   ArkGeographyRDEnd   Json?                     @default("{}")
   created_at          DateTime                  @default(now()) @db.Timestamptz(6)

@@ -14,6 +14,7 @@ export class MeasureRepository implements IMeasureRepository {
 
 	async createMeasure({
 		maintenanceType,
+		surveyId,
 		unitId,
 		failureModeId,
 		manifestationId,
@@ -31,6 +32,7 @@ export class MeasureRepository implements IMeasureRepository {
 		const data: Prisma.measuresCreateInput = {
 			id: newId(),
 			maintenanceType: maintenanceType,
+			surveys: { connect: { id: surveyId } },
 			units: { connect: { id: unitId } },
 			failureModes: {
 				connect: {

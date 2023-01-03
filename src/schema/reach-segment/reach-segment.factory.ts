@@ -1,4 +1,4 @@
-import { ReachSegment } from './models/ark-reach-segment.model';
+import { ReachSegment } from './models/reach-segment.model';
 import { ReachSegment as DomainReachSegment } from './types/reach-segment.repository.interface';
 
 export class ReachSegmentFactory {

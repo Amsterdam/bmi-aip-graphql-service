@@ -2,9 +2,9 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { ReachSegment } from './models/ark-reach-segment.model';
-import { ReachSegmentFactory } from './ark-reach-segment.factory';
-import { ReachSegmentService } from './ark-reach-segment.service';
+import { ReachSegment } from './models/reach-segment.model';
+import { ReachSegmentFactory } from './reach-segment.factory';
+import { ReachSegmentService } from './reach-segment.service';
 import { CreateReachSegmentInput } from './dto/create-reach-segment.input';
 import { UpdateReachSegmentInput } from './dto/update-reach-segment.input';
 import { CreateReachSegmentCommand } from './commands/create-reach-segment.command';

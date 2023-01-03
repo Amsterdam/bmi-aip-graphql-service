@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { ReachSegmentRepository } from '../ark-reach-segment.repository';
-import { domainReachSegment } from '../__stubs__';
+import { ReachSegmentRepository } from '../reach-segment.repository';
+import { domainReachSegment } from '../../reach-segment/__stubs__';
 
 import { DeleteReachSegmentCommand } from './delete-reach-segment.command';
 import { DeleteReachSegmentHandler } from './delete-reach-segment.handler';

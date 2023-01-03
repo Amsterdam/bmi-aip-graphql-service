@@ -1,5 +1,5 @@
-import { ReachSegmentFactory } from './ark-reach-segment.factory';
-import { ReachSegment } from './models/ark-reach-segment.model';
+import { ReachSegmentFactory } from './reach-segment.factory';
+import { ReachSegment } from './models/reach-segment.model';
 import { domainReachSegment } from './__stubs__';
 
 describe('ARK / ReachSegment Factory', () => {

@@ -6,9 +6,9 @@ import { PrismaService } from 'src/prisma.service';
 
 import { AssetModule } from '../asset/asset.module';
 
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
-import { ReachSegmentResolver } from './ark-reach-segment.resolver';
-import { ReachSegmentService } from './ark-reach-segment.service';
+import { ReachSegmentRepository } from './reach-segment.repository';
+import { ReachSegmentResolver } from './reach-segment.resolver';
+import { ReachSegmentService } from './reach-segment.service';
 import { CreateReachSegmentHandler } from './commands/create-reach-segment.handler';
 import { DeleteReachSegmentHandler } from './commands/delete-reach-segment.handler';
 import { UpdateReachSegmentHandler } from './commands/update-reach-segment.handler';
@@ -27,4 +27,4 @@ import { FindReachSegmentsHandler } from './queries/find-reach-segments.handler'
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })
-export class ArkSurveyModule {}
+export class ReachSegmentModule {}

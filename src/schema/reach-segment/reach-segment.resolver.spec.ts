@@ -3,18 +3,18 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
 
-import { ReachSegmentResolver } from './ark-reach-segment.resolver';
-import { ReachSegmentService } from './ark-reach-segment.service';
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
+import { ReachSegmentResolver } from './reach-segment.resolver';
+import { ReachSegmentService } from './reach-segment.service';
+import { ReachSegmentRepository } from './reach-segment.repository';
 import { domainReachSegment, createReachSegmentInput, deletedReachSegment } from './__stubs__';
 import { CreateReachSegmentCommand } from './commands/create-reach-segment.command';
-import { ReachSegment } from './models/ark-reach-segment.model';
+import { ReachSegment } from './models/reach-segment.model';
 import { UpdateReachSegmentCommand } from './commands/update-reach-segment.command';
 import { DeleteReachSegmentCommand } from './commands/delete-reach-segment.command';
 import { FindReachSegmentsQuery } from './queries/find-reach-segments.query';
 
-jest.mock('./ark-reach-segment.service');
-jest.mock('./ark-reach-segment.repository');
+jest.mock('./reach-segment.service');
+jest.mock('./reach-segment.repository');
 
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {

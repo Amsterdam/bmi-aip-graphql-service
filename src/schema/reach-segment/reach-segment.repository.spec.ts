@@ -2,9 +2,9 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
 
-import { ReachSegmentRepository } from './ark-reach-segment.repository';
+import { ReachSegmentRepository } from './reach-segment.repository';
 import { domainReachSegment, createReachSegmentInput } from './__stubs__';
-import { ReachSegment } from './models/ark-reach-segment.model';
+import { ReachSegment } from './models/reach-segment.model';
 
 jest.mock('./types/reach-segment.repository.interface');
 

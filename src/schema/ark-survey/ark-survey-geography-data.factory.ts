@@ -20,8 +20,6 @@ export class ArkSurveyGeographyDataFactory {
 		// Allow geographyRD to be null by not defining it
 		const parsedArkGeographyRDStart = JSON.parse(JSON.stringify(ArkGeographyRDStart));
 		const parsedArkGeographyRDEnd = JSON.parse(JSON.stringify(ArkGeographyRDEnd));
-		const parsedArkGeographyStart = JSON.parse(JSON.stringify(ArkGeographyStart));
-		const parsedArkGeographyEnd = JSON.parse(JSON.stringify(ArkGeographyEnd));
 
 		if (parsedArkGeographyRDStart?.type) {
 			arkSurveyGeographyData.ArkGeographyRDStart = parsedArkGeographyRDStart;
@@ -31,16 +29,8 @@ export class ArkSurveyGeographyDataFactory {
 			arkSurveyGeographyData.ArkGeographyRDEnd = parsedArkGeographyRDEnd;
 		}
 
-		if (parsedArkGeographyStart?.type) {
-			arkSurveyGeographyData.ArkGeographyRDStart = parsedArkGeographyRDStart;
-		}
-
-		if (parsedArkGeographyEnd?.type) {
-			arkSurveyGeographyData.ArkGeographyRDEnd = parsedArkGeographyRDEnd;
-		}
-
-		arkSurveyGeographyData.ArkGeographyStart = parsedArkGeographyRDStart;
-		arkSurveyGeographyData.ArkGeographyEnd = parsedArkGeographyRDEnd;
+		arkSurveyGeographyData.ArkGeographyStart = ArkGeographyStart;
+		arkSurveyGeographyData.ArkGeographyEnd = ArkGeographyEnd;
 
 		arkSurveyGeographyData.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
 		arkSurveyGeographyData.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;

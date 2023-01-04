@@ -43,15 +43,15 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		// Work around Prisma not supporting spatial data types
 		if (ArkGeographyStart) {
 			await this.prisma.$executeRaw`
-				UPDATE "spanLuminaires"
-				SET ArkGeographyStart = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
+				UPDATE "arkSurveyGeographyData"
+				SET "ArkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
 				WHERE id = ${arkSurveyGeoRecord.id}
 			`;
 		}
 		if (ArkGeographyEnd) {
 			await this.prisma.$executeRaw`
-				UPDATE "spanLuminaires"
-				SET ArkGeographyEnd = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
+				UPDATE "arkSurveyGeographyData"
+				SET "ArkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
 				WHERE id = ${arkSurveyGeoRecord.id}
 			`;
 		}
@@ -72,8 +72,8 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 
 		return Promise.all(
 			geographyDataResult.map(async (result) => {
-				result.ArkGeographyStart = await this.getGeographyAsGeoJSON(result.id);
-				result.ArkGeographyEnd = await this.getGeographyAsGeoJSON(result.id);
+				result.ArkGeographyStart = await this.getGeographyAsGeoJSONStart(result.id);
+				result.ArkGeographyEnd = await this.getGeographyAsGeoJSONEnd(result.id);
 				return result;
 			}),
 		);
@@ -93,12 +93,6 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 					id: surveyId,
 				},
 			},
-			ArkGeographyStart: {
-				...ArkGeographyStart,
-			},
-			ArkGeographyEnd: {
-				...ArkGeographyEnd,
-			},
 			ArkGeographyRDStart: {
 				...ArkGeographyRDStart,
 			},
@@ -107,10 +101,34 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			},
 		};
 
-		return this.prisma.arkSurveyGeographyData.update({
+		// Work around Prisma not supporting spatial data types
+		if (ArkGeographyStart) {
+			await this.prisma.$executeRaw`
+				UPDATE "arkSurveyGeographyData"
+				SET "ArkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
+				WHERE id = ${id}
+			`;
+		}
+
+		if (ArkGeographyEnd) {
+			await this.prisma.$executeRaw`
+				UPDATE "arkSurveyGeographyData"
+				SET "ArkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
+				WHERE id = ${id}
+			`;
+		}
+
+		const arkSurveyGeoData = await this.prisma.arkSurveyGeographyData.update({
 			where: { id },
 			data,
 		});
+
+		// Work around Prisma not supporting spatial data types
+		return {
+			...arkSurveyGeoData,
+			ArkGeographyStart: await this.getGeographyAsGeoJSONStart(id),
+			ArkGeographyEnd: await this.getGeographyAsGeoJSONEnd(id),
+		};
 	}
 
 	async deleteArkSurveyGeographyData(identifier: string): Promise<ArkSurveyGeographyData> {
@@ -124,10 +142,20 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		});
 	}
 
-	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
+	async getGeographyAsGeoJSONStart(identifier: string): Promise<Point | null> {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
-			SELECT ST_AsGeoJSON(geography) as geography
-			FROM "spanJunctionBoxes"
+			SELECT ST_AsGeoJSON("ArkGeographyStart") as geography
+			FROM "arkSurveyGeographyData"
+			WHERE id = ${identifier};
+		`;
+		const geography = result?.[0]?.geography;
+		return geography ? JSON.parse(geography) : null;
+	}
+
+	async getGeographyAsGeoJSONEnd(identifier: string): Promise<Point | null> {
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON("ArkGeographyEnd") as geography
+			FROM "arkSurveyGeographyData"
 			WHERE id = ${identifier};
 		`;
 		const geography = result?.[0]?.geography;

@@ -59,6 +59,6 @@ export class ArkSurveyGeographyDataResolver {
 	@Query((returns) => [ArkSurveyGeographyData], { name: 'arkSurveyGeographyData' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async arkSurveyGeographyData(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.queryBus.execute<FindArkSurveyGeographyDataQuery>(new FindArkSurveyGeographyDataQuery(surveyId));
+		return this.arkSurveyGeographyDataService.getGeographyData(surveyId);
 	}
 }

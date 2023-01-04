@@ -7,9 +7,6 @@ export class BaseArkSurveyGeographyDataInput {
 	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => String)
-	name: string;
-
 	@Field((type) => Point, { nullable: true })
 	ArkGeographyStart?: PointType;
 

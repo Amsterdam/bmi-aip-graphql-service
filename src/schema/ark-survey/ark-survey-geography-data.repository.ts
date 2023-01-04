@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -47,12 +48,22 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 	}
 
 	async getGeographyData(surveyId: string): Promise<ArkSurveyGeographyData[]> {
-		return this.prisma.arkSurveyGeographyData.findMany({
+		const geographyDataResult = (await this.prisma.arkSurveyGeographyData.findMany({
 			where: {
 				surveyId,
 				deleted_at: null,
 			},
-		});
+		})) as ArkSurveyGeographyData[];
+
+		return Promise.all(
+			geographyDataResult.map(async (result) => {
+				result.ArkGeographyStart = await this.getGeographyAsGeoJSON(result.id);
+				result.ArkGeographyRDStart = await this.getGeographyAsGeoJSON(result.id);
+				result.ArkGeographyEnd = await this.getGeographyAsGeoJSON(result.id);
+				result.ArkGeographyRDEnd = await this.getGeographyAsGeoJSON(result.id);
+				return result;
+			}),
+		);
 	}
 
 	async updateArkSurveyGeographyData({
@@ -98,5 +109,15 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			where: { id: identifier },
 			data,
 		});
+	}
+
+	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON(geography) as geography
+			FROM "spanJunctionBoxes"
+			WHERE id = ${identifier};
+		`;
+		const geography = result?.[0]?.geography;
+		return geography ? JSON.parse(geography) : null;
 	}
 }

@@ -887,12 +887,11 @@ model measurementCandidates {
   altitude          Float?       @db.Real
   updatedOnDateTime DateTime     @db.Timestamptz(6)
   createdOnDateTime DateTime     @db.Timestamptz(6)
+  flights           flights      @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_flightid_foreign")
   measurements      measurements @relation(fields: [measurementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurementcandidates_measurementid_foreign")
 
   @@index([flightId])
   @@index([measurementId])
-  flights   flights? @relation(fields: [flightsId], references: [id])
-  flightsId String?  @db.Uuid
 }
 
 model measurements {
@@ -906,11 +905,10 @@ model measurements {
   updatedOnDateTime     DateTime                @db.Timestamptz(6)
   createdOnDateTime     DateTime                @db.Timestamptz(6)
   pointNumber           Int                     @default(1)
+  flights               flights                 @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurements_flightid_foreign")
   measurementCandidates measurementCandidates[]
 
   @@index([flightId])
-  flights   flights? @relation(fields: [flightsId], references: [id])
-  flightsId String?  @db.Uuid
 }
 
 model mutationQueue {
@@ -1807,6 +1805,6 @@ model measures {
 }
 
 enum degreeOfDamage {
-  Matig_aangetast  @map("Matig aangetast")
-  Licht_aangetast  @map("Licht aangetast")
+  Matig_aangetast @map("Matig aangetast")
+  Licht_aangetast @map("Licht aangetast")
 }

@@ -300,15 +300,18 @@ export class MigrateMaintenanceMeasuresRepository {
 	private async getMutatedMaintenanceMeasureRecord(surveyId: string, cyclicMeasureId: CyclicMeasureId) {
 		const maintenanceMeasureId = this.cyclicMeasureRegistry[cyclicMeasureId];
 
+		if (!maintenanceMeasureId) {
+			return null;
+		}
+
 		// Retrieve maintenanceMeasure record this cyclicMeasure was created from
 		const { unitId, defaultMaintenanceMeasureId } = await this.prisma.maintenanceMeasures.findUnique({
-			select: {
-				id: true,
-				unitId: true,
-				defaultMaintenanceMeasureId: true,
-			},
 			where: {
 				id: maintenanceMeasureId,
+			},
+			select: {
+				unitId: true,
+				defaultMaintenanceMeasureId: true,
 			},
 		});
 
@@ -342,11 +345,44 @@ export class MigrateMaintenanceMeasuresRepository {
 					await this.createCyclicMeasureFromMaintenanceMeasure(surveyId, mutatedMaintenanceMeasure);
 				} else {
 					// Simply clone the cyclicMeasures record from the previous survey to the current survey
+					const {
+						planYear,
+						finalPlanYear,
+						costSurcharge,
+						maintenanceType,
+						remarks,
+						cycle,
+						unitPrice,
+						quantityUnitOfMeasurement,
+						defaultMaintenanceMeasureId,
+					} = cyclicMeasure;
+
 					await this.prisma.cyclicMeasures.create({
 						data: {
-							...cyclicMeasure,
 							id: newId(),
-							unitId: await this.getUnitIdMatchingSurveyId(surveyId, cyclicMeasure.unitId),
+							surveys: {
+								connect: {
+									id: surveyId,
+								},
+							},
+							units: {
+								connect: {
+									id: await this.getUnitIdMatchingSurveyId(surveyId, cyclicMeasure.unitId),
+								},
+							},
+							planYear,
+							finalPlanYear,
+							costSurcharge,
+							maintenanceType,
+							remarks,
+							cycle,
+							unitPrice,
+							quantityUnitOfMeasurement,
+							defaultMaintenanceMeasures: {
+								connect: {
+									id: defaultMaintenanceMeasureId,
+								},
+							},
 						},
 					});
 				}

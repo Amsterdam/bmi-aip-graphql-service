@@ -10,6 +10,6 @@ export class FindReachSegmentsHandler implements IQueryHandler<FindReachSegments
 	constructor(private service: ReachSegmentService) {}
 
 	async execute(query: FindReachSegmentsQuery): Promise<ReachSegment[]> {
-		return this.service.getReachSegments(query.surveyId);
+		return this.service.findReachSegments(query.surveyId);
 	}
 }

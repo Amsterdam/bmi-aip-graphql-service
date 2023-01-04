@@ -23,7 +23,7 @@ const reachSegments = Prisma.validator<Prisma.arkSurveyReachSegmentsArgs>()({
 export type ReachSegment = Prisma.arkSurveyReachSegmentsGetPayload<typeof reachSegments>;
 
 export interface IReachSegmentRepository {
-	getReachSegments(surveyId: string): Promise<ReachSegment[]>;
+	findReachSegments(surveyId: string): Promise<ReachSegment[]>;
 	createReachSegment(input: CreateReachSegmentInput): Promise<ReachSegment>;
 	updateReachSegment(input: UpdateReachSegmentInput): Promise<ReachSegment>;
 	deleteReachSegment(identifier: string): Promise<ReachSegment>;

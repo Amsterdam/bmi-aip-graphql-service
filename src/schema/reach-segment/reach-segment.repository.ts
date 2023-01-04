@@ -39,20 +39,20 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 		};
 
 		if (!sortNumber) {
-			data.sortNumber = (await this.findHighestSortNumber(surveyId)) + 1;
+			data.sortNumber = (await this.getHighestSortNumber(surveyId)) + 1;
 		}
 
 		return this.prisma.arkSurveyReachSegments.create({ data });
 	}
 
-	async findHighestSortNumber(surveyId: string): Promise<number> {
+	async getHighestSortNumber(surveyId: string): Promise<number> {
 		const result = await this.prisma.$queryRaw<{
 			max: number | null;
 		}>`SELECT MAX("sortNumber") FROM "arkSurveyReachSegments" WHERE "surveyId" = ${surveyId};`;
 		return result[0].max ?? 0;
 	}
 
-	async getReachSegments(surveyId: string): Promise<ReachSegment[]> {
+	async findReachSegments(surveyId: string): Promise<ReachSegment[]> {
 		return this.prisma.arkSurveyReachSegments.findMany({
 			where: {
 				surveyId,

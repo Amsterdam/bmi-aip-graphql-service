@@ -96,21 +96,11 @@ export class MigrateMaintenanceMeasuresRepository {
 									id: unitId,
 								},
 							},
-							manifestations: {
-								connect: {
-									id: manifestationId,
-								},
-							},
-							failureModes: {
-								connect: {
-									id: failureModeId,
-								},
-							},
-							defects: {
-								connect: {
-									id: defectId,
-								},
-							},
+							// manifestations: {
+							// 	connect: {
+							// 		id: manifestationId,
+							// 	},
+							// },
 							description,
 							maintenanceType,
 							location,
@@ -122,6 +112,33 @@ export class MigrateMaintenanceMeasuresRepository {
 							costSurcharge,
 							created_at: createdAt,
 							updated_at: updatedAt,
+							...(manifestationId
+								? {
+										manifestations: {
+											connect: {
+												id: manifestationId,
+											},
+										},
+								  }
+								: {}),
+							...(defectId
+								? {
+										defects: {
+											connect: {
+												id: defectId,
+											},
+										},
+								  }
+								: {}),
+							...(failureModeId
+								? {
+										failureModes: {
+											connect: {
+												id: failureModeId,
+											},
+										},
+								  }
+								: {}),
 						},
 					}),
 				);

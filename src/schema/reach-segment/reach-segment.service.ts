@@ -8,8 +8,8 @@ import { ReachSegmentRepository } from './reach-segment.repository';
 export class ReachSegmentService {
 	public constructor(private readonly reachSegmentRepo: ReachSegmentRepository) {}
 
-	async getReachSegments(surveyId: string): Promise<ReachSegment[]> {
-		return (await this.reachSegmentRepo.getReachSegments(surveyId)).map((reachSegment) =>
+	async findReachSegments(surveyId: string): Promise<ReachSegment[]> {
+		return (await this.reachSegmentRepo.findReachSegments(surveyId)).map((reachSegment) =>
 			ReachSegmentFactory.CreateReachSegment(reachSegment),
 		);
 	}

@@ -7,7 +7,7 @@ import { FindReachSegmentsQuery } from './find-reach-segments.query';
 import { FindReachSegmentsHandler } from './find-reach-segments.handler';
 
 const ReachSegmentMock: MockedObjectDeep<ReachSegmentService> = {
-	getReachSegments: jest.fn().mockResolvedValue([domainReachSegment]),
+	findReachSegments: jest.fn().mockResolvedValue([domainReachSegment]),
 	...(<any>{}),
 };
 
@@ -18,8 +18,8 @@ describe('FindReachSegmentsHandler', () => {
 		const command = new FindReachSegmentsQuery(identifier);
 		const result = await new FindReachSegmentsHandler(ReachSegmentMock).execute(command);
 
-		expect(ReachSegmentMock.getReachSegments).toHaveBeenCalledTimes(1);
-		expect(ReachSegmentMock.getReachSegments).toHaveBeenCalledWith(identifier);
+		expect(ReachSegmentMock.findReachSegments).toHaveBeenCalledTimes(1);
+		expect(ReachSegmentMock.findReachSegments).toHaveBeenCalledWith(identifier);
 
 		expect(result).toEqual([domainReachSegment]);
 	});

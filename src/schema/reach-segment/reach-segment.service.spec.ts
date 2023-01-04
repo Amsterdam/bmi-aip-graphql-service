@@ -17,9 +17,9 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const repo = new ReachSegmentRepository(prismaServiceMock);
 
 describe('ARK Reach Segments / Service', () => {
-	test('getReachSegments returns an array of ReachSegment objects', async () => {
+	test('findReachSegments returns an array of ReachSegment objects', async () => {
 		const service = new ReachSegmentService(repo);
-		const ReachSegments = await service.getReachSegments('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const ReachSegments = await service.findReachSegments('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(ReachSegments).toBeInstanceOf(Array);
 		expect(ReachSegments[0]).toBeInstanceOf(ReachSegment);
 		expect(ReachSegments).toEqual(

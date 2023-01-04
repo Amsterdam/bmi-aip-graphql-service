@@ -96,11 +96,6 @@ export class MigrateMaintenanceMeasuresRepository {
 									id: unitId,
 								},
 							},
-							// manifestations: {
-							// 	connect: {
-							// 		id: manifestationId,
-							// 	},
-							// },
 							description,
 							maintenanceType,
 							location,

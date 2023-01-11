@@ -159,6 +159,7 @@ export class ExternalAIPGraphQLRepository {
 	}
 
 	public async findObjectsWithNen2767Decomposition(): Promise<ExternalAIPGraphQLRequest> {
+		// TODO rename `findObjectsWithNen2767Decomposition` to `objectsWithNen2767Decomposition`
 		const query = gql`
 			query findObjectsWithNen2767Decomposition {
 				findObjectsWithNen2767Decomposition {
@@ -174,6 +175,34 @@ export class ExternalAIPGraphQLRepository {
 		const mutation = gql`
 			mutation migrateNen2767Decomposition($objectId: String!) {
 				migrateNen2767Decomposition(objectId: $objectId) {
+					errors
+					log
+					failedSurveyIds
+					successSurveyIds
+				}
+			}
+		`;
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, {
+			objectId,
+		});
+	}
+
+	public async findObjectsWithMaintenanceMeasures(): Promise<ExternalAIPGraphQLRequest> {
+		const query = gql`
+			query findObjectsWithMaintenanceMeasures {
+				objectsWithMaintenanceMeasures {
+					id
+					code
+				}
+			}
+		`;
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(query);
+	}
+
+	public async migrateMaintenanceMeasures(objectId: string): Promise<ExternalAIPGraphQLRequest> {
+		const mutation = gql`
+			mutation migrateMaintenanceMeasures($objectId: String!) {
+				migrateMaintenanceMeasures(objectId: $objectId) {
 					errors
 					log
 					failedSurveyIds

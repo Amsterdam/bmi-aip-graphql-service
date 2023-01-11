@@ -24,7 +24,7 @@
 		"prepare": "husky install",
 		"console": "node dist/src/console.js",
 		"prisma": "prisma",
-		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate:gisib-api-types/index.ts"
+		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate-gisib-api-types/index.ts"
 	},
 	"dependencies": {
 		"@casl/ability": "^5.4.3",
@@ -73,6 +73,7 @@
 		"@types/supertest": "^2.0.11",
 		"@typescript-eslint/eslint-plugin": "^5.35.1",
 		"@typescript-eslint/parser": "^5.31.0",
+		"dotenv": "^16.0.1",
 		"eslint": "^8.23.0",
 		"eslint-config-airbnb": "^19.0.4",
 		"eslint-config-airbnb-typescript": "^17.0.0",

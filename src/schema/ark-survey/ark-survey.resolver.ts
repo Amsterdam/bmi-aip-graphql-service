@@ -49,9 +49,9 @@ export class ArkSurveyResolver {
 		return ArkSurveyFactory.createArkSurvey(domainArkSurvey);
 	}
 
-	@Query((returns) => [ArkSurvey], { name: 'arkSurvey' })
+	@Query((returns) => [ArkSurvey], { name: 'getArkSurvey' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	async arkSurvey(@Args('surveyId', { type: () => String }) surveyId: string) {
+	async getArkSurvey(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.arkSurveyService.getArkSurveyData(surveyId);
 	}
 }

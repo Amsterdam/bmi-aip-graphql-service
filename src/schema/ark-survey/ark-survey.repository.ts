@@ -5,25 +5,22 @@ import { Point } from 'geojson';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
-import {
-	ArkSurveyGeographyData,
-	IArkSurveyGeographyDataRepository,
-} from './types/ark-survey-geography-data.repository.interface';
-import { CreateArkSurveyGeographyDataInput } from './dto/create-ark-survey-geography-data.input';
-import { UpdateArkSurveyGeographyDataInput } from './dto/update-ark-survey-geography-data.input';
+import { ArkSurvey, IArkSurveyRepository } from './types/ark-survey.repository.interface';
+import { CreateArkSurveyInput } from './dto/create-ark-survey.input';
+import { UpdateArkSurveyInput } from './dto/update-ark-survey.input';
 
 @Injectable()
-export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyDataRepository {
+export class ArkSurveyRepository implements IArkSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async createArkSurveyGeographyData({
+	async createArkSurvey({
 		surveyId,
 		ArkGeographyStart,
 		ArkGeographyRDStart,
 		ArkGeographyEnd,
 		ArkGeographyRDEnd,
-	}: CreateArkSurveyGeographyDataInput): Promise<ArkSurveyGeographyData> {
-		const data: Prisma.arkSurveyGeographyDataCreateInput = {
+	}: CreateArkSurveyInput): Promise<ArkSurvey> {
+		const data: Prisma.arkSurveysCreateInput = {
 			id: newId(),
 			surveys: {
 				connect: {
@@ -38,19 +35,19 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 			},
 		};
 
-		const arkSurveyGeoRecord = await this.prisma.arkSurveyGeographyData.create({ data });
+		const arkSurveyGeoRecord = await this.prisma.arkSurveys.create({ data });
 
 		// Work around Prisma not supporting spatial data types
 		if (ArkGeographyStart) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurveyGeographyData"
+				UPDATE "arkSurvey"
 				SET "ArkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
 				WHERE id = ${arkSurveyGeoRecord.id}
 			`;
 		}
 		if (ArkGeographyEnd) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurveyGeographyData"
+				UPDATE "arkSurvey"
 				SET "ArkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
 				WHERE id = ${arkSurveyGeoRecord.id}
 			`;
@@ -62,13 +59,13 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		};
 	}
 
-	async getGeographyData(surveyId: string): Promise<ArkSurveyGeographyData[]> {
-		const geographyDataResult = (await this.prisma.arkSurveyGeographyData.findMany({
+	async getArkSurveyData(surveyId: string): Promise<ArkSurvey[]> {
+		const geographyDataResult = (await this.prisma.arkSurveys.findMany({
 			where: {
 				surveyId,
 				deleted_at: null,
 			},
-		})) as ArkSurveyGeographyData[];
+		})) as ArkSurvey[];
 
 		return Promise.all(
 			geographyDataResult.map(async (result) => {
@@ -79,15 +76,15 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		);
 	}
 
-	async updateArkSurveyGeographyData({
+	async updateArkSurvey({
 		id,
 		surveyId,
 		ArkGeographyStart,
 		ArkGeographyRDStart,
 		ArkGeographyEnd,
 		ArkGeographyRDEnd,
-	}: UpdateArkSurveyGeographyDataInput): Promise<ArkSurveyGeographyData> {
-		const data: Prisma.arkSurveyGeographyDataUpdateInput = {
+	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
+		const data: Prisma.arkSurveysUpdateInput = {
 			surveys: {
 				connect: {
 					id: surveyId,
@@ -104,7 +101,7 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		// Work around Prisma not supporting spatial data types
 		if (ArkGeographyStart) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurveyGeographyData"
+				UPDATE "arkSurveys"
 				SET "ArkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
 				WHERE id = ${id}
 			`;
@@ -112,13 +109,13 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 
 		if (ArkGeographyEnd) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurveyGeographyData"
+				UPDATE "arkSurveys"
 				SET "ArkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
 				WHERE id = ${id}
 			`;
 		}
 
-		const arkSurveyGeoData = await this.prisma.arkSurveyGeographyData.update({
+		const arkSurveyGeoData = await this.prisma.arkSurveys.update({
 			where: { id },
 			data,
 		});
@@ -131,12 +128,12 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 		};
 	}
 
-	async deleteArkSurveyGeographyData(identifier: string): Promise<ArkSurveyGeographyData> {
-		const data: Prisma.arkSurveyGeographyDataUpdateInput = {
+	async deleteArkSurvey(identifier: string): Promise<ArkSurvey> {
+		const data: Prisma.arkSurveysUpdateInput = {
 			deleted_at: new Date(),
 		};
 
-		return this.prisma.arkSurveyGeographyData.update({
+		return this.prisma.arkSurveys.update({
 			where: { id: identifier },
 			data,
 		});
@@ -145,7 +142,7 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 	async getGeographyAsGeoJSONStart(identifier: string): Promise<Point | null> {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("ArkGeographyStart") as geography
-			FROM "arkSurveyGeographyData"
+			FROM "arkSurveys"
 			WHERE id = ${identifier};
 		`;
 		const geography = result?.[0]?.geography;
@@ -155,7 +152,7 @@ export class ArkSurveyGeographyDataRepository implements IArkSurveyGeographyData
 	async getGeographyAsGeoJSONEnd(identifier: string): Promise<Point | null> {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("ArkGeographyEnd") as geography
-			FROM "arkSurveyGeographyData"
+			FROM "arkSurveys"
 			WHERE id = ${identifier};
 		`;
 		const geography = result?.[0]?.geography;

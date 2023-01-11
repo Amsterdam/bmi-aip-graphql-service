@@ -3,7 +3,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
 @InputType()
-export class BaseArkSurveyGeographyDataInput {
+export class BaseArkSurveyInput {
 	@Field((type) => String)
 	surveyId: string;
 

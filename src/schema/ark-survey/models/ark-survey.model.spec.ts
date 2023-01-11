@@ -1,8 +1,8 @@
-import { ArkSurveyGeographyData } from './ark-survey-geography-data.model';
+import { ArkSurvey } from './ark-survey.model';
 
 describe('ARKSurvey Geography data', () => {
-	test('constructs a ArkSurveyGeographyData instance', () => {
-		const geographyData = new ArkSurveyGeographyData();
+	test('constructs a ArkSurvey instance', () => {
+		const geographyData = new ArkSurvey();
 		geographyData.id = '71c5450a-c0a3-48ea-adbb-ea435a8804d5';
 		geographyData.surveyId = '388ecaaa-c6c2-4613-aa14-f206cf577ca7';
 		geographyData.ArkGeographyStart = {
@@ -21,6 +21,6 @@ describe('ARKSurvey Geography data', () => {
 			coordinates: [116211.88, 487352.77],
 			type: 'Point',
 		};
-		expect(geographyData).toBeInstanceOf(ArkSurveyGeographyData);
+		expect(geographyData).toBeInstanceOf(ArkSurvey);
 	});
 });

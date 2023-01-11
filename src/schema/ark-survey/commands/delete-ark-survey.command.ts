@@ -1,3 +1,3 @@
-export class DeleteArkSurveyGeographyDataCommand {
+export class DeleteArkSurveyCommand {
 	public constructor(public readonly identifier: string) {}
 }

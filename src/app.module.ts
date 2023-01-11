@@ -25,7 +25,7 @@ import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
-import { ArkSurveyGeographyDataModule } from './schema/ark-survey/ark-survey-geography-data.module';
+import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 
 @Module({
 	imports: [
@@ -58,7 +58,7 @@ import { ArkSurveyGeographyDataModule } from './schema/ark-survey/ark-survey-geo
 		}),
 		TerminusModule,
 		ReachSegmentModule,
-		ArkSurveyGeographyDataModule,
+		ArkSurveyModule,
 	],
 	controllers: [HealthController],
 	providers: [

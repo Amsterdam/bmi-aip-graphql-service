@@ -1,3 +1,3 @@
-export class FindArkSurveyGeographyDataQuery {
+export class FindArkSurveyQuery {
 	public constructor(public readonly surveyId: string) {}
 }

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 import * as prettier from 'prettier';
 
-import { GisibResponse } from '../../../src/gisib/types/GisibResponse';
+import { GisibResponse } from '../../src/gisib/types/GisibResponse';
 
 import { ObjectProperty, Property, Types } from './types';
 import { login } from './login';

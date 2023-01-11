@@ -1,0 +1,15 @@
+export enum InspectionStandard {
+	free = 'free',
+	nen2767 = 'nen2767',
+	eemua159 = 'eemua159',
+	api653 = 'api653',
+	fmeca = 'fmeca',
+	memo = 'memo',
+	model3d = 'model3d',
+	amsterdamBridgePoles = 'amsterdamBridgePoles',
+	monitoring = 'monitoring',
+	sok = 'sok',
+	quaywalls = 'quaywalls',
+	verificatieBerekening = 'verificatieBerekening',
+	spanInstallation = 'spanInstallation',
+}

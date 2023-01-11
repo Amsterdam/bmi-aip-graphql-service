@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { registerEnumType } from '@nestjs/graphql';
 
 import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
@@ -25,6 +26,35 @@ import { LuminaireRepository } from './luminaire.repository';
 import { LuminaireService } from './luminaire.service';
 import { DeleteLuminaireHandler } from './commands/delete-luminaire.handler';
 import { FindSupportSystemsHandler } from './queries/find-support-systems.handler';
+import {
+	SupportSystemType,
+	SupportSystemTypeDetailedFacade,
+	SupportSystemTypeDetailedMast,
+	SupportSystemTypeDetailedNode,
+	SupportSystemTypeDetailedTensionWire,
+} from './types';
+import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
+import { FindSupportSystemLuminairesHandler } from './commands/find-support-system-luminaires.handler';
+
+registerEnumType(SupportSystemType, {
+	name: 'SupportSystemType',
+});
+
+registerEnumType(SupportSystemTypeDetailedMast, {
+	name: 'SupportSystemTypeDetailedMast',
+});
+
+registerEnumType(SupportSystemTypeDetailedFacade, {
+	name: 'SupportSystemTypeDetailedFacade',
+});
+
+registerEnumType(SupportSystemTypeDetailedNode, {
+	name: 'SupportSystemTypeDetailedNode',
+});
+
+registerEnumType(SupportSystemTypeDetailedTensionWire, {
+	name: 'SupportSystemTypeDetailedTensionWire',
+});
 
 @Module({
 	providers: [
@@ -47,6 +77,8 @@ import { FindSupportSystemsHandler } from './queries/find-support-systems.handle
 		UpdateLuminaireHandler,
 		DeleteLuminaireHandler,
 		FindSupportSystemsHandler,
+		FindSupportSystemLuminairesCommand,
+		FindSupportSystemLuminairesHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

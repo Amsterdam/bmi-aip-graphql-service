@@ -1,7 +1,7 @@
-import { SupportSystemType, SupportSystemTypeDetailed } from '../../types';
-
+import { SupportSystemType, SupportSystemTypeDetailed } from './types';
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
+import { A11yDetailsFactory } from './a11y-details.factory';
 
 export class SupportSystemFactory {
 	static CreateSupportSystem({
@@ -19,6 +19,7 @@ export class SupportSystemFactory {
 		type,
 		typeDetailed,
 		geography,
+		geographyRD,
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
@@ -30,14 +31,21 @@ export class SupportSystemFactory {
 		supportSystem.name = name;
 		supportSystem.location = location;
 		supportSystem.locationIndication = locationIndication;
-		supportSystem.a11yDetails = a11yDetails;
-		supportSystem.installationHeight = installationHeight;
+		supportSystem.installationHeight = Number(installationHeight);
 		supportSystem.remarks = remarks;
 		supportSystem.constructionYear = constructionYear;
 		supportSystem.houseNumber = houseNumber;
 		supportSystem.type = SupportSystemType[type];
-		supportSystem.typeDetailed = SupportSystemTypeDetailed[typeDetailed];
+		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
+
+		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
+		// Allow geographyRD to be null by not defining it
+		if (parsedGeographyRD?.type) {
+			supportSystem.geographyRD = parsedGeographyRD;
+		}
+
+		supportSystem.a11yDetails = A11yDetailsFactory.CreateA11yDetailsFromJSONB(a11yDetails as string);
 		supportSystem.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		supportSystem.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		supportSystem.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

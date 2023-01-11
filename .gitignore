@@ -5,6 +5,8 @@
 logs
 *.log
 npm-debug.log*
+report_*.json
+normalizedData.json
 
 # IDEA
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
@@ -77,3 +79,7 @@ junit.xml
 node_modules/
 
 dist/
+
+docs/
+
+coverage/

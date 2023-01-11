@@ -17,11 +17,13 @@ export class LuminaireRepository implements ILuminaireRepository {
 		supportSystemId,
 		name,
 		location,
+		hasLED,
 		constructionYear,
 		supplierType,
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -32,6 +34,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			spanSupportSystems: { connect: { id: supportSystemId } },
 			name,
 			location,
+			hasLED,
 			constructionYear,
 			supplierType,
 			manufacturer,
@@ -40,17 +43,21 @@ export class LuminaireRepository implements ILuminaireRepository {
 			driverCommissioningDate,
 			lightSupplierType,
 			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const luminaire = await this.prisma.spanLuminaires.create({ data });
 
 		// Work around Prisma not supporting spatial data types
-		await this.prisma.$executeRaw`
-			UPDATE "spanLuminaires"
-			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${luminaire.id}
-		`;
-
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanLuminaires"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${luminaire.id}
+			`;
+		}
 		return {
 			...luminaire,
 			geography,
@@ -58,22 +65,32 @@ export class LuminaireRepository implements ILuminaireRepository {
 	}
 
 	async getLuminaires(supportSystemId: string): Promise<Luminaire[]> {
-		return this.prisma.spanLuminaires.findMany({
+		const luminaires = (await this.prisma.spanLuminaires.findMany({
 			where: {
 				supportSystemId,
+				deleted_at: null,
 			},
-		});
+		})) as Luminaire[];
+
+		return Promise.all(
+			luminaires.map(async (luminaire) => {
+				luminaire.geography = await this.getGeographyAsGeoJSON(luminaire.id);
+				return luminaire;
+			}),
+		);
 	}
 
 	async updateLuminaire({
 		id,
 		name,
 		location,
+		hasLED,
 		constructionYear,
 		supplierType,
 		manufacturer,
 		remarks,
 		geography,
+		geographyRD,
 		driverSupplierType,
 		driverCommissioningDate,
 		lightSupplierType,
@@ -82,6 +99,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		const data: Prisma.spanLuminairesUpdateInput = {
 			name,
 			location,
+			hasLED,
 			constructionYear,
 			supplierType,
 			manufacturer,
@@ -90,6 +108,9 @@ export class LuminaireRepository implements ILuminaireRepository {
 			driverCommissioningDate,
 			lightSupplierType,
 			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types

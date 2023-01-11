@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
-import { SupplierType } from '../../../types';
+import { SupplierType } from '../types';
 
 @ObjectType({ description: 'luminaire' })
 export class Luminaire {
@@ -19,6 +19,9 @@ export class Luminaire {
 	// Maps to "Straat"
 	@Field((type) => String, { nullable: true })
 	location?: string;
+
+	@Field((type) => Boolean, { nullable: true })
+	hasLED?: boolean;
 
 	// Maps to "Jaar van aanleg"
 	@Field((type) => Number, { nullable: true })
@@ -37,6 +40,9 @@ export class Luminaire {
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
+
+	@Field((type) => Point, { nullable: true })
+	geographyRD?: PointType;
 
 	// Maps to "Opmerking"
 	@Field((type) => String, { nullable: true })

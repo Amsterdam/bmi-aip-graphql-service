@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Resource, Roles } from 'nest-keycloak-connect';
+import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { Luminaire } from './models/luminaire.model';
@@ -18,6 +18,7 @@ export class LuminaireResolver {
 	constructor(private luminaireService: LuminaireService, private commandBus: CommandBus) {}
 
 	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createLuminaire(@Args('createLuminaire') input: CreateLuminaireInput): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<CreateLuminaireCommand>(
 			new CreateLuminaireCommand(input),
@@ -26,6 +27,7 @@ export class LuminaireResolver {
 	}
 
 	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateLuminaire(@Args('updateLuminaire') input: UpdateLuminaireInput): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateLuminaireCommand>(
 			new UpdateLuminaireCommand(input),
@@ -34,6 +36,7 @@ export class LuminaireResolver {
 	}
 
 	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteLuminaire(@Args('identifier') identifier: string): Promise<Luminaire> {
 		const domainLuminaire: DomainLuminaire = await this.commandBus.execute<DeleteLuminaireCommand>(
 			new DeleteLuminaireCommand(identifier),
@@ -42,7 +45,7 @@ export class LuminaireResolver {
 	}
 
 	@Query((returns) => [Luminaire], { name: 'spanInstallationLuminaires' })
-	@Roles({ roles: ['realm:aip_owner'] })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getsupportSystemLuminaires(@Args('supportSystemId', { type: () => String }) supportSystemId: string) {
 		return this.luminaireService.getLuminaires(supportSystemId);
 	}

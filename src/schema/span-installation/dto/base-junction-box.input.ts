@@ -1,7 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsNumber, IsInt, IsOptional, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, MaxLength } from 'class-validator';
 import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
+
+import { A11yDetailsInput } from './a11y-details.input';
 
 @InputType()
 export class BaseJunctionBoxInput {
@@ -21,12 +23,11 @@ export class BaseJunctionBoxInput {
 	public locationIndication?: string;
 
 	@IsOptional()
-	@MaxLength(255)
-	@Field({ nullable: true })
-	public a11yDetails?: string;
+	@Field(() => A11yDetailsInput, { nullable: true })
+	public a11yDetails?: A11yDetailsInput;
 
 	@IsOptional()
-	@IsInt()
+	@IsNumber()
 	@Field({ nullable: true })
 	public installationHeight?: number;
 
@@ -42,4 +43,20 @@ export class BaseJunctionBoxInput {
 	@IsOptional()
 	@Field(() => Point, { nullable: true })
 	geography?: PointType;
+
+	@IsOptional()
+	@Field(() => Point, { nullable: true })
+	geographyRD?: PointType;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	createdAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	updatedAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	deletedAt?: Date;
 }

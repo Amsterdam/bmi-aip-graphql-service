@@ -31,6 +31,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		const returnValue = await repo.createJunctionBox(junctionBoxInput);
 		const junctionBox = prismaServiceMock.spanJunctionBoxes.create.mock.calls[0][0]
 			.data as JunctionBoxWithoutGeography;
+
 		expect(junctionBox).toEqual(
 			expect.objectContaining({
 				id: junctionBox.id,
@@ -44,61 +45,92 @@ describe('Span Installation / JunctionBox / Repository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
-				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 100,
+				a11yDetails: junctionBoxInput.a11yDetails,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal(33.33),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...junctionBoxInput,
+				a11yDetails: junctionBoxInput.a11yDetails,
 			}),
 		);
 	});
 
 	test('getJunctionBoxes()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainJunctionBox,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
+
 		const junctionBoxes = await repo.getJunctionBoxes('__SURVEY_ID__');
 		expect(prismaServiceMock.spanJunctionBoxes.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
-		expect(junctionBoxes).toEqual([domainJunctionBox]);
+		expect(junctionBoxes).toEqual([expected]);
 	});
 
 	test('updateJunctionBox()', async () => {
 		prismaServiceMock.spanJunctionBoxes.update.mockResolvedValue(domainJunctionBox);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(junctionBox1.geography) }]);
+		prismaServiceMock.$queryRaw.mockResolvedValue([{ geographyRD: JSON.stringify(junctionBox1.geographyRD) }]);
 		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateJunctionBoxInput.geography);
 		const returnValue = await repo.updateJunctionBox(updateJunctionBoxInput);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(prismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
 			where: { id: updateJunctionBoxInput.id },
 			data: {
-				a11yDetails: '__A11Y_DETAILS__',
-				installationHeight: 100,
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal('33.33'),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
 		expect(returnValue).toEqual({
-			a11yDetails: '__A11Y_DETAILS__',
+			a11yDetails: updateJunctionBoxInput.a11yDetails,
+
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: 100,
+			installationHeight: new Decimal(10),
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			mastNumber: new Decimal(33.33),
@@ -123,13 +155,17 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(junctionBox.deleted_at instanceof Date).toBe(true);
 		expect(junctionBox).toEqual(
 			expect.objectContaining({
-				a11yDetails: '__A11Y_DETAILS__',
+				a11yDetails: junctionBoxInput.a11yDetails,
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
 					type: 'Point',
 				},
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				installationHeight: 100,
+				installationHeight: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				mastNumber: new Decimal(33.33),

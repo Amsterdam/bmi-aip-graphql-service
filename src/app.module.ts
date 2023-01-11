@@ -1,22 +1,29 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
+import { TerminusModule } from '@nestjs/terminus';
 
-import { AppController } from './app.controller';
+import { MeasureModule } from './schema/measure/measure.module';
+import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
-import { Batch as BatchModule } from './schema/batch/batch.module';
+import { BatchModule } from './schema/batch/batch.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { KeycloakConfigService } from './authentication/keycloak-config.service';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './schema/user/user.module';
 import { AssetModule } from './schema/asset/asset.module';
+import { CommandModule } from './command/command.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
+import { SpanInstallationSurveyModule } from './schema/span-installation-survey/span-installation-survey.module';
+import { ObjectModule } from './schema/object/object.module';
+import { HealthController } from './HealthController';
+import { SurveyModule } from './schema/survey/survey.module';
 
 @Module({
 	imports: [
@@ -32,8 +39,14 @@ import { SpanInstallationModule } from './schema/span-installation/span-installa
 		}),
 		AuthorizationModule,
 		DecompositionModule,
+		MeasureModule,
+		CyclicMeasureModule,
 		SpanInstallationModule,
+		SpanInstallationSurveyModule,
+		ObjectModule,
 		BatchModule,
+		CommandModule,
+		SurveyModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,
@@ -41,8 +54,9 @@ import { SpanInstallationModule } from './schema/span-installation/span-installa
 			sortSchema: true,
 			autoSchemaFile: true,
 		}),
+		TerminusModule,
 	],
-	controllers: [AppController],
+	controllers: [HealthController],
 	providers: [
 		{
 			provide: APP_GUARD,
@@ -58,6 +72,7 @@ import { SpanInstallationModule } from './schema/span-installation/span-installa
 		},
 		AppService,
 		PrismaService,
+		Logger,
 	],
 })
 export class AppModule {}

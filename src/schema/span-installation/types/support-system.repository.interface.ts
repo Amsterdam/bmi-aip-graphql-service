@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
-import { CreateSupportSystemInput } from '../dto/create-support-system.input';
-import { UpdateSupportSystemInput } from '../dto/update-support-system.input';
+import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
+import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 
 const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 	select: {
@@ -19,10 +19,10 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 		houseNumber: true,
 		type: true,
 		typeDetailed: true,
-		// geography: true,
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
+		geographyRD: true,
 	},
 });
 
@@ -33,7 +33,7 @@ export type SupportSystem = SupportSystemWithoutGeography & {
 
 export interface ISupportSystemRepository {
 	getSupportSystems(surveyId: string): Promise<SupportSystem[]>;
-	createSupportSystem(input: CreateSupportSystemInput): Promise<SupportSystem>;
-	updateSupportSystem(input: UpdateSupportSystemInput): Promise<SupportSystem>;
+	createSupportSystem(input: CreateSupportSystemNormalizedInput): Promise<SupportSystem>;
+	updateSupportSystem(input: UpdateSupportSystemNormalizedInput): Promise<SupportSystem>;
 	deleteSupportSystem(identifier: string): Promise<SupportSystem>;
 }

@@ -3,24 +3,34 @@ import { CreateLuminaireInput } from '../dto/create-luminaire.input';
 import { Luminaire as DomainLuminaire } from '../types/luminaire.repository.interface';
 import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
-import { SupplierType } from '../../../types';
+import { SupplierType } from '../types';
 
 const luminaire1 = new Luminaire();
 luminaire1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
 luminaire1.supportSystemId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 luminaire1.name = 'Support System 1';
+luminaire1.hasLED = true;
 luminaire1.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
+};
+luminaire1.geographyRD = {
+	coordinates: [116211.88, 487352.77],
+	type: 'Point',
 };
 
 const luminaire2 = new Luminaire();
 luminaire2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 luminaire2.supportSystemId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 luminaire2.name = 'Support System 2';
+luminaire2.hasLED = false;
 luminaire2.geography = {
 	type: 'Point',
 	coordinates: [52.370302853062604, 4.893996915500548],
+};
+luminaire2.geographyRD = {
+	coordinates: [116211.88, 487352.77],
+	type: 'Point',
 };
 
 export { luminaire1, luminaire2 };
@@ -37,6 +47,10 @@ const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
+	geographyRD: {
+		coordinates: [116211.88, 487352.77],
+		type: 'Point',
+	},
 	constructionYear: 1979,
 	driverCommissioningDate: null,
 	lightCommissioningDate: null,
@@ -44,6 +58,7 @@ const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
 	lightSupplierType: SupplierType.two,
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
+	hasLED: true,
 };
 
 export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {

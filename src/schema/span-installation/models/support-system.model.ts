@@ -1,8 +1,16 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
-import type { SupportSystemType, SupportSystemTypeDetailed } from '../../../types';
+import type {
+	SupportSystemType,
+	SupportSystemTypeDetailedFacade,
+	SupportSystemTypeDetailedMast,
+	SupportSystemTypeDetailedNode,
+	SupportSystemTypeDetailedTensionWire,
+} from '../types';
+
+import { A11yDetails } from './a11y-details.model';
 
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
@@ -24,8 +32,12 @@ export class SupportSystem {
 	type: SupportSystemType;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => String)
-	typeDetailed: SupportSystemTypeDetailed;
+	@Field((type) => String, { nullable: true })
+	typeDetailed:
+		| SupportSystemTypeDetailedTensionWire
+		| SupportSystemTypeDetailedMast
+		| SupportSystemTypeDetailedFacade
+		| SupportSystemTypeDetailedNode;
 
 	// Maps to "Straat"
 	@Field((type) => String, { nullable: true })
@@ -36,8 +48,8 @@ export class SupportSystem {
 	constructionYear?: number;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => String, { nullable: true })
-	a11yDetails?: string;
+	@Field((type) => A11yDetails, { nullable: true })
+	a11yDetails?: A11yDetails;
 
 	// Maps to "Opmerking"
 	@Field((type) => String, { nullable: true })
@@ -54,9 +66,12 @@ export class SupportSystem {
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
 
+	@Field((type) => Point, { nullable: true })
+	geographyRD?: PointType;
+
 	// For type `gevel | mast | ring`
 	// Maps to "Aanleghoogte"
-	@Field((type) => Number, { nullable: true })
+	@Field((type) => Float, { nullable: true })
 	installationHeight?: number;
 
 	// For type `gevel`

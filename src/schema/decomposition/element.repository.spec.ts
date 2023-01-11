@@ -3,12 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ElementRepository } from './element.repository';
-import { UnitRepository } from './unit.repository';
-import { ManifestationRepository } from './manifestation.repository';
 import { deletedElement, domainElement, elementInput, updateElementInput } from './__stubs__';
-
-jest.mock('./unit.repository');
-jest.mock('./manifestation.repository');
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	elements: {
@@ -16,11 +11,13 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		findMany: jest.fn().mockResolvedValue([domainElement]),
 		update: jest.fn().mockResolvedValue(domainElement),
 	},
+	units: {
+		count: jest.fn(),
+	},
 	...(<any>{}),
 };
 
-const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
-const repo = new ElementRepository(prismaServiceMock, unitRepo);
+const repo = new ElementRepository(prismaServiceMock);
 
 describe('ElementRepository', () => {
 	test('createElement()', async () => {
@@ -63,7 +60,7 @@ describe('ElementRepository', () => {
 		// const repo = new ElementRepository(prismaServiceMock);
 		const elements = await repo.getElements('__SURVEY_ID__');
 		expect(prismaServiceMock.elements.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(elements).toEqual([domainElement]);
 	});
@@ -100,13 +97,23 @@ describe('ElementRepository', () => {
 		// @ts-ignore
 		prismaServiceMock.elements.update.mockResolvedValue(deletedElement);
 		const identifier = '610d0b4e-c06f-4894-9f60-8e1d0f78d2f1';
-		// const repo = new ElementRepository(prismaServiceMock);
 		const element = await repo.deleteElement(identifier);
 		expect(prismaServiceMock.elements.update).toHaveBeenCalledWith({
 			where: { id: identifier },
 			data: expect.objectContaining({}),
 		});
 		expect(element.deleted_at instanceof Date).toBe(true);
-		expect(unitRepo.deleteUnitsForElement).toHaveBeenCalledWith(identifier);
+	});
+
+	describe('hasUnits', () => {
+		test('true', async () => {
+			prismaServiceMock.units.count.mockResolvedValue(2);
+			expect(await repo.hasUnits('610d0b4e-c06f-4894-9f60-8e1d0f78d2f1')).toBe(true);
+		});
+
+		test('false', async () => {
+			prismaServiceMock.units.count.mockResolvedValue(0);
+			expect(await repo.hasUnits('610d0b4e-c06f-4894-9f60-8e1d0f78d2f1')).toBe(false);
+		});
 	});
 });

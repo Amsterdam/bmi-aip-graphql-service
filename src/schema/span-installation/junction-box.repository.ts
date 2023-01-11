@@ -25,6 +25,8 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
+		createdAt,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesCreateInput = {
 			id: newId(),
@@ -34,20 +36,25 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			mastNumber,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
 
 		// Work around Prisma not supporting spatial data types
-		await this.prisma.$executeRaw`
-			UPDATE "spanJunctionBoxes"
-			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${junctionBox.id}
-		`;
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanJunctionBoxes"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${junctionBox.id}
+			`;
+		}
 
 		return {
 			...junctionBox,
@@ -56,11 +63,19 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 	}
 
 	async getJunctionBoxes(surveyId: string): Promise<JunctionBox[]> {
-		return this.prisma.spanJunctionBoxes.findMany({
+		const junctionBoxes = (await this.prisma.spanJunctionBoxes.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
-		});
+		})) as JunctionBox[];
+
+		return Promise.all(
+			junctionBoxes.map(async (junctionBox) => {
+				junctionBox.geography = await this.getGeographyAsGeoJSON(junctionBox.id);
+				return junctionBox;
+			}),
+		);
 	}
 
 	async updateJunctionBox({
@@ -74,16 +89,22 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		riserTubeVisible,
 		remarks,
 		geography,
+		geographyRD,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
 			mastNumber,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: {
+				...a11yDetails,
+			},
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types
@@ -101,7 +122,10 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(id) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(id),
+		};
 	}
 
 	async deleteJunctionBox(identifier: string): Promise<JunctionBox> {
@@ -115,7 +139,10 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		});
 
 		// Work around Prisma not supporting spatial data types
-		return { ...junctionBox, geography: await this.getGeographyAsGeoJSON(identifier) };
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(identifier),
+		};
 	}
 
 	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {

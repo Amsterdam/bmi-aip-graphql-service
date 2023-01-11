@@ -41,6 +41,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
+				hasLED: true,
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -52,11 +53,27 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('getLuminaires()', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([
+			{
+				geography: JSON.stringify({
+					type: 'Point',
+					coordinates: [33, 22],
+				}),
+			},
+		]);
+		const expected = {
+			...domainLuminaire,
+			geography: {
+				type: 'Point',
+				coordinates: [33, 22],
+			},
+		};
+
 		const luminaires = await repo.getLuminaires('__SUPPORTSYSTEM_ID__');
 		expect(prismaServiceMock.spanLuminaires.findMany).toHaveBeenCalledWith({
-			where: { supportSystemId: '__SUPPORTSYSTEM_ID__' },
+			where: { supportSystemId: '__SUPPORTSYSTEM_ID__', deleted_at: null },
 		});
-		expect(luminaires).toEqual([domainLuminaire]);
+		expect(luminaires).toEqual([expected]);
 	});
 
 	test('updateLuminaire()', async () => {
@@ -78,6 +95,11 @@ describe('Span Installation / Luminaire / Repository', () => {
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
 				supplierType: 'two',
+				hasLED: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateLuminaireInput.id);
@@ -94,11 +116,16 @@ describe('Span Installation / Luminaire / Repository', () => {
 				coordinates: [52.370302853062604, 4.893996915500548],
 				type: 'Point',
 			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
 			lightSupplierType: 'two',
 			manufacturer: '__MANUFACTURER__',
 			remarks: '__REMARKS__',
 			supplierType: 'two',
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			hasLED: true,
 		});
 	});
 
@@ -122,6 +149,10 @@ describe('Span Installation / Luminaire / Repository', () => {
 				driverSupplierType: 'one',
 				geography: {
 					coordinates: [52.370302853062604, 4.893996915500548],
+					type: 'Point',
+				},
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',

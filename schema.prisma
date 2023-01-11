@@ -327,6 +327,7 @@ model defaultMaintenanceMeasures {
   created_at                DateTime?             @db.Timestamptz(6)
   updated_at                DateTime?             @db.Timestamptz(6)
   objectTypeUnitCodes       objectTypeUnitCodes?  @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultmaintenancemeasures_objecttypeunitcodeid_foreign")
+  cyclicMeasures            cyclicMeasures[]
   maintenanceMeasures       maintenanceMeasures[]
 
   @@index([objectTypeUnitCodeId])
@@ -370,6 +371,7 @@ model defects {
   conditions                conditions            @relation(fields: [conditionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defects_conditionid_foreign")
   assets                    assets[]
   maintenanceMeasures       maintenanceMeasures[]
+  measures                  measures[]
 
   @@index([conditionId])
 }
@@ -456,6 +458,7 @@ model elements {
   surveyId                                                         String?                  @db.Uuid
   deleted_at                                                       DateTime?                @db.Timestamptz(6)
   gisibId                                                          Int?
+  permanentId                                                      String?                  @db.Uuid
   elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
   conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
   objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
@@ -557,6 +560,7 @@ model failureModes {
   findings                                        findings[]
   fmecaFurtherInvestigations                      fmecaFurtherInvestigations[]
   maintenanceMeasures                             maintenanceMeasures[]
+  measures                                        measures[]
   observationPoints                               observationPoints[]
 
   @@unique([surveyId, surveyScopeId], map: "failuremodes_surveyid_surveyscopeid_unique")
@@ -847,6 +851,7 @@ model manifestations {
   surveyId                                                               String?                      @db.Uuid
   deleted_at                                                             DateTime?                    @db.Timestamptz(6)
   gisibId                                                                Int?
+  permanentId                                                            String?                      @db.Uuid
   conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
   elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
   objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
@@ -861,6 +866,7 @@ model manifestations {
   inspectionPlans                                                        inspectionPlans[]
   maintenanceMeasures                                                    maintenanceMeasures[]
   manifestationRemarks                                                   manifestationRemarks[]
+  measures                                                               measures[]
   observationPoints_manifestationsToobservationPoints_manifestationId    observationPoints[]          @relation("manifestationsToobservationPoints_manifestationId")
   surveyManifestations                                                   surveyManifestations[]
   utProjects                                                             utProjects[]
@@ -1361,6 +1367,9 @@ model surveys {
   craInspectionIsBuildBetween4074IsRelevant            Boolean                      @default(false)
   craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                      @default(false)
   legacyFailureMode                                    Boolean?
+  ARBCraInspectionScore                                Int?
+  ARBCraInitialFlagScore                               Int?
+  ARBCraInspectionSummary                              String?
   batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
   objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
   companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
@@ -1368,6 +1377,7 @@ model surveys {
   assets                                               assets[]
   auditEvents                                          auditEvents[]
   conditions                                           conditions[]
+  cyclicMeasures                                       cyclicMeasures[]
   derivedConditionScores                               derivedConditionScores[]
   elementRemarks                                       elementRemarks[]
   elements                                             elements[]
@@ -1380,6 +1390,7 @@ model surveys {
   maintenanceMeasures                                  maintenanceMeasures[]
   manifestationRemarks                                 manifestationRemarks[]
   manifestations                                       manifestations[]
+  measures                                             measures[]
   observationPoints                                    observationPoints[]
   poleLabResults                                       poleLabResults[]
   spanJunctionBoxes                                    spanJunctionBoxes[]
@@ -1466,6 +1477,7 @@ model units {
   surveyId                                                      String?                      @db.Uuid
   deleted_at                                                    DateTime?                    @db.Timestamptz(6)
   gisibId                                                       Int?
+  permanentId                                                   String?                      @db.Uuid
   conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
   elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
   objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
@@ -1473,6 +1485,7 @@ model units {
   surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
   assets                                                        assets[]
   conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
+  cyclicMeasures                                                cyclicMeasures[]
   derivedConditionScores                                        derivedConditionScores[]
   failureModes                                                  failureModes[]
   fmecaFurtherInvestigations                                    fmecaFurtherInvestigations[]
@@ -1480,6 +1493,7 @@ model units {
   inspectionPlans                                               inspectionPlans[]
   maintenanceMeasures                                           maintenanceMeasures[]
   manifestations                                                manifestations[]
+  measures                                                      measures[]
   observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
   surveyUnits                                                   surveyUnits[]
   unitRemarks                                                   unitRemarks[]
@@ -1571,23 +1585,25 @@ model utProjects {
 }
 
 model spanJunctionBoxes {
-  id                 String                    @id @unique(map: "spanjunctionboxes_id_unique") @db.Uuid
-  objectId           String                    @db.Uuid
-  surveyId           String                    @db.Uuid
-  name               String                    @db.VarChar(128)
-  mastNumber         Decimal?                  @db.Decimal(10, 3)
-  location           String?                   @db.VarChar(255)
-  locationIndication String?                   @db.VarChar(255)
-  a11yDetails        String?                   @db.VarChar(255)
-  installationHeight Int?
-  riserTubeVisible   Boolean?
-  remarks            String?
-  geography          Unsupported("geography")?
-  created_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at         DateTime?                 @db.Timestamptz(6)
-  objects            objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
-  surveys            surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
+  id                     String                    @id @unique(map: "spanjunctionboxes_id_unique") @db.Uuid
+  objectId               String                    @db.Uuid
+  surveyId               String                    @db.Uuid
+  name                   String                    @db.VarChar(128)
+  mastNumber             Decimal?                  @db.Decimal(10, 3)
+  location               String?                   @db.VarChar(255)
+  locationIndication     String?                   @db.VarChar(255)
+  riserTubeVisible       Boolean?
+  remarks                String?
+  geography              Unsupported("geography")?
+  created_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  deleted_at             DateTime?                 @db.Timestamptz(6)
+  installationHeight     Decimal?                  @db.Decimal(8, 2)
+  a11yDetails            Json                      @default("{}")
+  geographyRD            Json?                     @default("{}")
+  objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
+  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
+  spanJunctionBoxSurveys spanJunctionBoxSurveys?
 
   @@index([deleted_at], map: "spanjunctionboxes_deleted_at_index")
 }
@@ -1609,34 +1625,183 @@ model spanLuminaires {
   created_at              DateTime                  @default(now()) @db.Timestamptz(6)
   updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at              DateTime?                 @db.Timestamptz(6)
+  hasLED                  Boolean?
+  geographyRD             Json?                     @default("{}")
   spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
+  spanLuminaireSurveys    spanLuminaireSurveys?
 
   @@index([deleted_at], map: "spanluminaires_deleted_at_index")
 }
 
 model spanSupportSystems {
-  id                 String                    @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
-  objectId           String                    @db.Uuid
-  surveyId           String                    @db.Uuid
-  name               String                    @db.VarChar(128)
-  type               String                    @db.VarChar(32)
-  typeDetailed       String                    @db.VarChar(32)
-  location           String?                   @db.VarChar(255)
-  locationIndication String?                   @db.VarChar(255)
-  a11yDetails        String?                   @db.VarChar(255)
-  constructionYear   Int?
-  remarks            String?
-  geography          Unsupported("geography")?
-  installationHeight Int?
-  houseNumber        String?                   @db.VarChar(32)
-  created_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at         DateTime?                 @db.Timestamptz(6)
-  objects            objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
-  surveys            surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
-  spanLuminaires     spanLuminaires[]
+  id                                  String                               @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
+  objectId                            String                               @db.Uuid
+  surveyId                            String                               @db.Uuid
+  name                                String                               @db.VarChar(128)
+  type                                String                               @db.VarChar(32)
+  location                            String?                              @db.VarChar(255)
+  locationIndication                  String?                              @db.VarChar(255)
+  constructionYear                    Int?
+  remarks                             String?
+  geography                           Unsupported("geography")?
+  houseNumber                         String?                              @db.VarChar(32)
+  created_at                          DateTime                             @default(now()) @db.Timestamptz(6)
+  updated_at                          DateTime                             @default(now()) @db.Timestamptz(6)
+  deleted_at                          DateTime?                            @db.Timestamptz(6)
+  installationHeight                  Decimal?                             @db.Decimal(8, 2)
+  typeDetailed                        String?                              @db.VarChar(64)
+  a11yDetails                         Json                                 @default("{}")
+  geographyRD                         Json?                                @default("{}")
+  objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
+  surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
+  spanLuminaires                      spanLuminaires[]
+  spanSupportSystemFacadeSurveys      spanSupportSystemFacadeSurveys?
+  spanSupportSystemMastSurveys        spanSupportSystemMastSurveys?
+  spanSupportSystemNodeSurveys        spanSupportSystemNodeSurveys?
+  spanSupportSystemTensionWireSurveys spanSupportSystemTensionWireSurveys?
 
   @@index([deleted_at], map: "spansupportsystems_deleted_at_index")
+}
+
+model spanLuminaireSurveys {
+  id              String         @id @unique(map: "spanluminairesurveys_id_unique") @db.Uuid
+  luminaireId     String         @unique(map: "spanluminairesurveys_luminaireid_unique") @db.Uuid
+  luminaireDamage Boolean?
+  remarks         String?
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime       @default(now()) @db.Timestamptz(6)
+  spanLuminaires  spanLuminaires @relation(fields: [luminaireId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminairesurveys_luminaireid_foreign")
+}
+
+model spanSupportSystemFacadeSurveys {
+  id                                        String             @id @unique(map: "spansupportsystemfacadesurveys_id_unique") @db.Uuid
+  supportSystemId                           String             @unique(map: "spansupportsystemfacadesurveys_supportsystemid_unique") @db.Uuid
+  facadeDamageWithin1m                      Boolean?
+  hinderingVegetation                       Boolean?
+  wallPlateDamage                           Boolean?
+  faultyMontage                             Boolean?
+  nutNotFullyOverThreadedRod                Boolean?
+  missingFasteners                          Boolean?
+  measuredPreload                           Int?
+  appliedAdditionalTraction                 Int?
+  facadeConnectionFailureAdditionalTraction Int?
+  remarks                                   String?
+  created_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  facadeConnectionFailed                    Boolean?
+  spanSupportSystems                        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemfacadesurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystemMastSurveys {
+  id                      String             @id @unique(map: "spansupportsystemmastsurveys_id_unique") @db.Uuid
+  supportSystemId         String             @unique(map: "spansupportsystemmastsurveys_supportsystemid_unique") @db.Uuid
+  mastDamage              Boolean?
+  mastMissingParts        Boolean?
+  tensionMastAngle        Int?
+  mastAttachmentDamage    Boolean?
+  mastBracketMissingParts Boolean?
+  mastBracketDamage       Boolean?
+  remarks                 String?
+  created_at              DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems      spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemmastsurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystemNodeSurveys {
+  id                 String             @id @unique(map: "spansupportsystemnodesurveys_id_unique") @db.Uuid
+  supportSystemId    String             @unique(map: "spansupportsystemnodesurveys_supportsystemid_unique") @db.Uuid
+  nodeDamage         Boolean?
+  remarks            String?
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemnodesurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystemTensionWireSurveys {
+  id                        String             @id @unique(map: "spansupportsystemtensionwiresurveys_id_unique") @db.Uuid
+  supportSystemId           String             @unique(map: "spansupportsystemtensionwiresurveys_supportsystemid_unique") @db.Uuid
+  tensionWireDamage         Boolean?
+  thirdPartyObjectsAttached Boolean?
+  gaffTerminalDamage        Boolean?
+  gaffTerminalMissingParts  Boolean?
+  faultyMontage             Boolean?
+  tensionWireClampDamage    Boolean?
+  remarks                   String?
+  created_at                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemtensionwiresurveys_supportsystemid_foreign")
+}
+
+model spanJunctionBoxSurveys {
+  id                       String            @id(map: "spanJunctionBoxesSurveys_pkey") @unique(map: "spanjunctionboxessurveys_id_unique") @db.Uuid
+  junctionBoxId            String            @unique(map: "spanjunctionboxsurveys_junctionboxid_unique") @db.Uuid
+  cableDamage              Boolean?
+  faultyMontageTensionWire Boolean?
+  faultyMontageFacade      Boolean?
+  junctionBoxDamage        Boolean?
+  stickerNotReadable       Boolean?
+  remarks                  String?
+  created_at               DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime          @default(now()) @db.Timestamptz(6)
+  spanJunctionBoxes        spanJunctionBoxes @relation(fields: [junctionBoxId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxessurveys_junctionboxid_foreign")
+}
+
+model cyclicMeasures {
+  id                          String                     @id @unique(map: "cyclicmeasures_id_unique") @db.Uuid
+  unitId                      String                     @db.Uuid
+  planYear                    Int?
+  finalPlanYear               Int?
+  costSurcharge               Float?
+  maintenanceType             String?                    @db.VarChar(128)
+  remarks                     String?
+  cycle                       Float?
+  unitPrice                   Float?
+  quantityUnitOfMeasurement   String?                    @db.VarChar(8)
+  defaultMaintenanceMeasureId String                     @db.Uuid
+  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  deleted_at                  DateTime?                  @db.Timestamptz(6)
+  surveyId                    String                     @db.Uuid
+  defaultMaintenanceMeasures  defaultMaintenanceMeasures @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "cyclicmeasures_defaultmaintenancemeasureid_foreign")
+  surveys                     surveys                    @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_surveyid_foreign")
+  units                       units                      @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_unitid_foreign")
+
+  @@index([deleted_at], map: "cyclicmeasures_deleted_at_index")
+  @@index([unitId], map: "cyclicmeasures_unitid_index")
+  @@index([surveyId], map: "cyclicmeasures_surveyid_index")
+}
+
+model measures {
+  id                        String          @id @unique(map: "measures_id_unique") @db.Uuid
+  unitId                    String          @db.Uuid
+  manifestationId           String?         @db.Uuid
+  failureModeId             String?         @db.Uuid
+  defectId                  String?         @db.Uuid
+  surveyScopeId             String?         @db.Uuid
+  description               String?
+  maintenanceType           String?         @db.VarChar(128)
+  location                  String?         @db.VarChar(128)
+  planYear                  Int?
+  finalPlanYear             Int?
+  quantity                  Int?
+  quantityUnitOfMeasurement String?         @db.VarChar(8)
+  unitPrice                 Float?
+  costSurcharge             Float?
+  created_at                DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime        @default(now()) @db.Timestamptz(6)
+  deleted_at                DateTime?       @db.Timestamptz(6)
+  surveyId                  String          @db.Uuid
+  defects                   defects?        @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_defectid_foreign")
+  failureModes              failureModes?   @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_failuremodeid_foreign")
+  manifestations            manifestations? @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_manifestationid_foreign")
+  surveys                   surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_surveyid_foreign")
+  units                     units           @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_unitid_foreign")
+
+  @@index([deleted_at], map: "measures_deleted_at_index")
+  @@index([defectId], map: "measures_defectid_index")
+  @@index([manifestationId], map: "measures_manifestationid_index")
+  @@index([unitId], map: "measures_unitid_index")
+  @@index([surveyId], map: "measures_surveyid_index")
 }
 
 enum degreeOfDamage {

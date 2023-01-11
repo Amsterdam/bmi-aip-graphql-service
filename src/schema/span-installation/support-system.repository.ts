@@ -6,9 +6,9 @@ import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
 import { SupportSystem, ISupportSystemRepository } from './types/support-system.repository.interface';
-import { CreateSupportSystemInput } from './dto/create-support-system.input';
-import { UpdateSupportSystemInput } from './dto/update-support-system.input';
 import { LuminaireRepository } from './luminaire.repository';
+import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
+import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {
@@ -28,7 +28,8 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
-	}: CreateSupportSystemInput): Promise<SupportSystem> {
+		geographyRD,
+	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsCreateInput = {
 			id: newId(),
 			objects: { connect: { id: objectId } },
@@ -36,13 +37,16 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			name,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
 			installationHeight,
 			remarks,
 			constructionYear,
 			houseNumber,
-			type: '',
-			typeDetailed: '',
+			type: type,
+			typeDetailed: typeDetailed,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });
@@ -61,11 +65,19 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 	}
 
 	async getSupportSystems(surveyId: string): Promise<SupportSystem[]> {
-		return this.prisma.spanSupportSystems.findMany({
+		const supportSystems = (await this.prisma.spanSupportSystems.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
-		});
+		})) as SupportSystem[];
+
+		return Promise.all(
+			supportSystems.map(async (supportSystem) => {
+				supportSystem.geography = await this.getGeographyAsGeoJSON(supportSystem.id);
+				return supportSystem;
+			}),
+		);
 	}
 
 	async updateSupportSystem({
@@ -81,18 +93,24 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		type,
 		typeDetailed,
 		geography,
-	}: UpdateSupportSystemInput): Promise<SupportSystem> {
+		geographyRD,
+	}: UpdateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
 			location,
 			locationIndication,
-			a11yDetails,
+			a11yDetails: {
+				...a11yDetails,
+			},
 			installationHeight,
 			remarks,
 			constructionYear,
 			houseNumber,
 			type,
 			typeDetailed,
+			geographyRD: {
+				...geographyRD,
+			},
 		};
 
 		// Work around Prisma not supporting spatial data types

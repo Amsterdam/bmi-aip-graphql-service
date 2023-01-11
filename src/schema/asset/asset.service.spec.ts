@@ -13,8 +13,8 @@ const assetRepoMock: MockedObjectDeep<AssetRepository> = {
 
 jest.mock('./asset.factory');
 
-describe('UserService', () => {
-	test('getUser()', async () => {
+describe('assetService', () => {
+	test('getAssetByCode()', async () => {
 		AssetFactory.FromDBAsset = jest.fn().mockResolvedValue(asset);
 		const service = new AssetService(assetRepoMock);
 		expect(await service.getAssetByCode('BRU001')).toEqual(asset);

@@ -2,6 +2,8 @@ import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
+import { A11yDetails } from './a11y-details.model';
+
 @ObjectType({ description: 'junctionBox' })
 export class JunctionBox {
 	@Field((type) => String)
@@ -30,11 +32,13 @@ export class JunctionBox {
 	locationIndication?: string;
 
 	// Maps to "Bereikbaarheid gedetailleerd"
-	@Field((type) => String, { nullable: true })
-	a11yDetails?: string;
+	@Field((type) => A11yDetails, { nullable: true })
+	a11yDetails?: A11yDetails;
+	// @Field((type) => GraphQLJSON, { nullable: true })
+	// a11yDetails?: CheckedA11yDetails;
 
 	// Maps to "Aanleghoogte"
-	@Field((type) => Number, { nullable: true })
+	@Field((type) => Float, { nullable: true })
 	installationHeight?: number;
 
 	// Maps to "Stijgbuis zichtbaar"
@@ -50,6 +54,9 @@ export class JunctionBox {
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography
 	@Field((type) => Point, { nullable: true })
 	geography?: PointType;
+
+	@Field((type) => Point, { nullable: true })
+	geographyRD?: PointType;
 
 	@Field((type) => String, { nullable: true })
 	createdAt: string;

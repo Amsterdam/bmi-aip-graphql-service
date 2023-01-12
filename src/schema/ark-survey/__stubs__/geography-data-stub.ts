@@ -2,6 +2,7 @@ import { ArkSurvey as DomainArkSurvey } from '../types/ark-survey.repository.int
 import { CreateArkSurveyInput } from '../dto/create-ark-survey.input';
 import { ArkSurveyFactory } from '../ark-survey.factory';
 import { UpdateArkSurveyInput } from '../dto/update-ark-survey.input';
+import { SaveArkSurveyInput } from '../dto/save-ark-survey.input';
 
 const arkSurveyRaw: Omit<DomainArkSurvey, 'id'> = {
 	surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
@@ -37,6 +38,13 @@ export const updateArkSurveyInput = Object.keys(arkSurveyRaw).reduce((input, key
 	input[key] = arkSurveyRaw[key];
 	return input;
 }, updateArkSurvey);
+
+const saveArkSurveyInput = new SaveArkSurveyInput();
+//saveArkSurveyInput.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const saveArkSurveyInputInput = Object.keys(arkSurveyRaw).reduce((input, key) => {
+	input[key] = arkSurveyRaw[key];
+	return input;
+}, saveArkSurveyInput);
 
 export const domainArkSurvey: DomainArkSurvey = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',

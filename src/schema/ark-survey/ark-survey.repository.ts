@@ -40,14 +40,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		// Work around Prisma not supporting spatial data types
 		if (ArkGeographyStart) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurvey"
+				UPDATE "arkSurveys"
 				SET "ArkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyStart)})
 				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
 			`;
 		}
 		if (ArkGeographyEnd) {
 			await this.prisma.$executeRaw`
-				UPDATE "arkSurvey"
+				UPDATE "arkSurveys"
 				SET "ArkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(ArkGeographyEnd)})
 				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
 			`;
@@ -122,14 +122,42 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		};
 	}
 
-	async deleteArkSurvey(identifier: string): Promise<ArkSurvey> {
-		const data: Prisma.arkSurveysUpdateInput = {
-			deleted_at: new Date(),
+	async saveArkSurvey({
+		surveyId,
+		ArkGeographyStart,
+		ArkGeographyRDStart,
+		ArkGeographyEnd,
+		ArkGeographyRDEnd,
+	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
+		// Find existing record
+		const existingRecord = await this.prisma.arkSurveys.findFirst({
+			where: {
+				surveyId,
+				deleted_at: null,
+			},
+		});
+
+		const insertData = {
+			surveyId,
+			ArkGeographyStart,
+			ArkGeographyRDStart,
+			ArkGeographyEnd,
+			ArkGeographyRDEnd,
+			created_at: null,
+			updated_at: null,
+			deleted_at: null,
 		};
 
-		return this.prisma.arkSurveys.update({
+		if (existingRecord) {
+			return this.updateArkSurvey(insertData);
+		} else {
+			return this.createArkSurvey(insertData);
+		}
+	}
+
+	async deleteArkSurvey(identifier: string): Promise<ArkSurvey> {
+		return this.prisma.arkSurveys.delete({
 			where: { id: identifier },
-			data,
 		});
 	}
 

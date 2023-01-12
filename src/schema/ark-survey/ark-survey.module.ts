@@ -11,6 +11,7 @@ import { ArkSurveyResolver } from './ark-survey.resolver';
 import { ArkSurveyService } from './ark-survey.service';
 import { CreateArkSurveyHandler } from './commands/create-ark-survey.handler';
 import { DeleteArkSurveyHandler } from './commands/delete-ark-survey.handler';
+import { SaveArkSurveyHandler } from './commands/save-ark-survey.handler';
 import { UpdateArkSurveyHandler } from './commands/update-ark-survey.handler';
 import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';
 
@@ -22,6 +23,7 @@ import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';
 		CreateArkSurveyHandler,
 		UpdateArkSurveyHandler,
 		DeleteArkSurveyHandler,
+		SaveArkSurveyHandler,
 		FindArkSurveyHandler,
 		PrismaService,
 	],

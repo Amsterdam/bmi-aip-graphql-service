@@ -69,8 +69,8 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		return Promise.all(
 			geographyDataResult.map(async (result) => {
-				result.ArkGeographyStart = await this.getGeographyAsGeoJSONStart(result.id);
-				result.ArkGeographyEnd = await this.getGeographyAsGeoJSONEnd(result.id);
+				result.ArkGeographyStart = await this.getGeographyAsGeoJSONStart(result.surveyId);
+				result.ArkGeographyEnd = await this.getGeographyAsGeoJSONEnd(result.surveyId);
 				return result;
 			}),
 		);
@@ -162,12 +162,17 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 	}
 
 	async getGeographyAsGeoJSONStart(identifier: string): Promise<Point | null> {
+		console.log('fetch geo');
+		console.log(identifier);
+
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("ArkGeographyStart") as geography
 			FROM "arkSurveys"
 			WHERE "surveyId" = ${identifier};
 		`;
+
 		const geography = result?.[0]?.geography;
+		console.log(geography);
 		return geography ? JSON.parse(geography) : null;
 	}
 
@@ -177,6 +182,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			FROM "arkSurveys"
 			WHERE "surveyId" = ${identifier};
 		`;
+
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
 	}

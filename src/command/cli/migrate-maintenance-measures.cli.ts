@@ -11,11 +11,11 @@ import { SingleBar } from 'cli-progress';
 import { ExternalAIPGraphQLRepository } from '../../externalRepository/ExternalAIPGraphQLRepository';
 
 /**
- * npm run console nen2767:migrate-decomposition
+ * npm run console migrate-maintenance-measures
  */
 @Injectable()
-export class Nen2767MigrateDecompositionCli {
-	private static CLI_COMMAND = 'nen2767:migrate-decomposition';
+export class MigrateMaintenanceMeasuresCli {
+	private static CLI_COMMAND = 'migrate-maintenance-measures';
 
 	private graphqlClient: GraphQLClient;
 
@@ -52,9 +52,9 @@ export class Nen2767MigrateDecompositionCli {
 
 		this.consoleService.createCommand(
 			{
-				command: Nen2767MigrateDecompositionCli.CLI_COMMAND,
+				command: MigrateMaintenanceMeasuresCli.CLI_COMMAND,
 				description:
-					'Determines all objects that have a Nen2767 decomposition and performs a data migration for each',
+					'Determines all objects that have a maintenanceMeasures and performs a data migration for all maintenanceMeasures for each object',
 			},
 			this.run.bind(this),
 			cli,
@@ -67,11 +67,11 @@ export class Nen2767MigrateDecompositionCli {
 		});
 	}
 
-	private async migrateDecompositionForObject(objectId: string, code: string) {
+	private async migrateMaintenanceMeasuresForObject(objectId: string, code: string) {
 		try {
 			const {
-				migrateNen2767Decomposition: { log, errors, failedSurveyIds, successSurveyIds },
-			} = await this.externalAIPGraphQLRepository.migrateNen2767DecompositionForObject(objectId);
+				migrateMaintenanceMeasures: { log, errors, failedSurveyIds, successSurveyIds },
+			} = await this.externalAIPGraphQLRepository.migrateMaintenanceMeasures(objectId);
 
 			this.report.successSurveyIds.push(...successSurveyIds);
 			this.report.failedSurveyIds.push(...failedSurveyIds);
@@ -99,7 +99,7 @@ export class Nen2767MigrateDecompositionCli {
 	 * Allows testing with a limited set of object codes by setting an .env var
 	 */
 	private limitObjects(objects: { id: string; code: string }[]): { id: string; code: string }[] {
-		const commaSeparatedObjectCodes = this.configService.get<string>('NEN2767_MIGRATION_OBJECT_CODES');
+		const commaSeparatedObjectCodes = this.configService.get<string>('MAINTENANCE_MEASURES_MIGRATION_OBJECT_CODES');
 		if (!commaSeparatedObjectCodes) {
 			return objects;
 		}
@@ -108,12 +108,12 @@ export class Nen2767MigrateDecompositionCli {
 	}
 
 	private async run() {
-		this.logger.verbose(`Finding objects with Nen2767 decomposition...`);
+		this.logger.verbose(`Finding objects with maintenanceMeasures...`);
 
-		const { findObjectsWithNen2767Decomposition: objectsWithNen2767Decomposition } =
-			await this.externalAIPGraphQLRepository.findObjectsWithNen2767Decomposition();
+		const { objectsWithMaintenanceMeasures } =
+			await this.externalAIPGraphQLRepository.findObjectsWithMaintenanceMeasures();
 
-		const objectsToMigrate = this.limitObjects(objectsWithNen2767Decomposition);
+		const objectsToMigrate = this.limitObjects(objectsWithMaintenanceMeasures);
 
 		this.logger.verbose(
 			`Queueing ${objectsToMigrate.length} ${
@@ -124,14 +124,14 @@ export class Nen2767MigrateDecompositionCli {
 
 		const queue = new PQueue({ concurrency: 10 });
 		objectsToMigrate.forEach(({ id, code }) => {
-			queue.add(() => this.migrateDecompositionForObject(id, code));
+			queue.add(() => this.migrateMaintenanceMeasuresForObject(id, code));
 		});
 
 		await queue.onIdle();
 
 		this.progressBar.stop();
 
-		const fileName = `nen2767-migration-report_${new Date().toISOString()}.json`;
+		const fileName = `migrate-maintenance-measures-report_${new Date().toISOString().replace(':', '-')}.json`;
 		this.logger.verbose(`Writing report to "${fileName}"`);
 		fs.writeFileSync(path.resolve(process.cwd(), fileName), JSON.stringify(this.report), {
 			encoding: 'utf-8',
@@ -145,6 +145,6 @@ export class Nen2767MigrateDecompositionCli {
 		this.logger.verbose(`${this.report.failedObjectIds.length} objects were NOT successfully migrated`);
 
 		this.logger.log('');
-		this.logger.log(`Completed migrating ${objectsWithNen2767Decomposition.length} objects`);
+		this.logger.log(`Completed migrating ${objectsWithMaintenanceMeasures.length} objects`);
 	}
 }

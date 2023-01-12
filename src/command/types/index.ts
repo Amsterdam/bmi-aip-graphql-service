@@ -11,3 +11,5 @@ export type Nen2767MigrateDecompositionReturnType = {
 	successSurveyIds: string[];
 	failedSurveyIds: string[];
 };
+
+export type MigrateMaintenanceMeasuresReturnType = Nen2767MigrateDecompositionReturnType;

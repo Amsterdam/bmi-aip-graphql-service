@@ -14,17 +14,8 @@ import { getAssets } from './getAssets';
 const makeUnique = (arr: any[]) => [...new Set(arr)];
 
 const getValueType = (value: unknown) => {
-	if (typeof value === 'number') {
-		return 'number';
-	}
-	if (typeof value === 'boolean') {
-		return 'boolean';
-	}
-	if (typeof value === 'string') {
-		return 'string';
-	}
-
-	return value;
+	const type = typeof value;
+	return ['string', 'boolean', 'number'].includes(type) ? type : value;
 };
 
 const getObjectType = (input: GisibResponse<any>, objectKey: string): ObjectProperty | null => {

@@ -8,6 +8,10 @@ import { Nen2767FindObjectsWithDecompositionQuery } from './queries/nen2767-find
 import { Nen2767ObjectWithDecompositionModel } from './models/nen2767-object-with-decomposition.model';
 import { Nen2767MigrateDecompositionModel } from './models/nen2767-migrate-decomposition.model';
 import { Nen2767MigrateDecompositionCommand } from './commands/nen2767-migrate-decomposition.command';
+import { FindObjectsWithMaintenanceMeasuresQuery } from './queries/find-objects-with-maintenance-measures.query';
+import { ObjectWithMaintenanceMeasuresModel } from './models/object-with-maintenance-measures.model';
+import { MigrateMaintenanceMeasuresModel } from './models/migrate-maintenance-measures.model';
+import { MigrateMaintenanceMeasuresCommand } from './commands/migrate-maintenance-measures.command';
 
 @Resolver((of) => SetOvsSurveySurveyorsModel)
 export class CommandResolver {
@@ -43,6 +47,22 @@ export class CommandResolver {
 	public async migrateNen2767Decomposition(@Args('objectId', { type: () => String }) objectId: string) {
 		return this.commandBus.execute<Nen2767MigrateDecompositionCommand>(
 			new Nen2767MigrateDecompositionCommand(objectId),
+		);
+	}
+
+	@Query((returns) => [ObjectWithMaintenanceMeasuresModel], { name: 'objectsWithMaintenanceMeasures' })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async findObjectsWithMaintenanceMeasures() {
+		return this.queryBus.execute<FindObjectsWithMaintenanceMeasuresQuery>(
+			new FindObjectsWithMaintenanceMeasuresQuery(),
+		);
+	}
+
+	@Mutation((returns) => MigrateMaintenanceMeasuresModel, { name: 'migrateMaintenanceMeasures' })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async migrateMaintenanceMeasures(@Args('objectId', { type: () => String }) objectId: string) {
+		return this.commandBus.execute<MigrateMaintenanceMeasuresCommand>(
+			new MigrateMaintenanceMeasuresCommand(objectId),
 		);
 	}
 }

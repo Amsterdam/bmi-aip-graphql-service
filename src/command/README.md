@@ -35,3 +35,18 @@ NEN2767_MIGRATION_OBJECT_CODES='BRU0175,BRU0176'
 ```
 
 NOTE: comma separated, no spaces
+
+## The `migrate-maintenance-measures` command
+
+This command aims to perform a maintenanceMeasures data migration for all objects. After running this command,
+each survey will have its own set of maintenance measures which is scoped by surveyId.
+
+### Limit to one or a few object codes for testing/debugging
+
+By adding the following to your `.env` file, the migration is only performed for the objects with the given codes:
+
+```dotenv
+MAINTENANCE_MEASURES_MIGRATION_OBJECT_CODES='BRU0175,BRU0176'
+```
+
+NOTE: comma separated, no spaces

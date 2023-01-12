@@ -162,9 +162,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 	}
 
 	async getGeographyAsGeoJSONStart(identifier: string): Promise<Point | null> {
-		console.log('fetch geo');
-		console.log(identifier);
-
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("ArkGeographyStart") as geography
 			FROM "arkSurveys"

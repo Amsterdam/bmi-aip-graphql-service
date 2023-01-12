@@ -2,6 +2,9 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { ReachSegment } from '../reach-segment/models/reach-segment.model';
+import { FindReachSegmentsQuery } from '../reach-segment/queries/find-reach-segments.query';
+
 import { ArkSurvey } from './models/ark-survey.model';
 import { ArkSurveyFactory } from './ark-survey.factory';
 import { ArkSurveyService } from './ark-survey.service';
@@ -13,6 +16,7 @@ import { ArkSurvey as DomainArkSurvey } from './types/ark-survey.repository.inte
 import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { FindArkSurveyQuery } from './queries/find-ark-survey.query';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
+import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)
@@ -63,5 +67,10 @@ export class ArkSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getArkSurvey(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.arkSurveyService.getArkSurveyData(surveyId);
+	}
+
+	@ResolveField()
+	async reachSegments(@Parent() { id }: ArkSurvey): Promise<ReachSegment[]> {
+		return this.commandBus.execute<FindArkSurveyReachSegmentsCommand>(new FindArkSurveyReachSegmentsCommand(id));
 	}
 }

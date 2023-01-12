@@ -1374,7 +1374,6 @@ model surveys {
   objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
   companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
   companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
-  arkSurveyReachSegments                               arkSurveyReachSegments[]
   arkSurveys                                           arkSurveys?
   assets                                               assets[]
   auditEvents                                          auditEvents[]
@@ -1808,32 +1807,33 @@ model measures {
 }
 
 model arkSurveyReachSegments {
-  id                 String    @id @unique(map: "arksurveyreachsegments_id_unique") @db.Uuid
-  name               String    @db.VarChar(255)
-  surveyId           String    @db.Uuid
-  reachSegmentLength Decimal?  @db.Decimal(8, 2)
+  id                 String     @id @unique(map: "arksurveyreachsegments_id_unique") @db.Uuid
+  name               String     @db.VarChar(255)
+  arkSurveyId        String     @db.Uuid
+  reachSegmentLength Decimal?   @db.Decimal(8, 2)
   riskScore          Int?
-  riskScoreDigit     Decimal?  @db.Decimal(2, 1)
-  failureModeScore   Decimal?  @db.Decimal(2, 1)
-  consequenceScore   Decimal?  @db.Decimal(2, 1)
-  sortNumber         Int?      @db.SmallInt
-  created_at         DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime  @default(now()) @db.Timestamptz(6)
-  deleted_at         DateTime? @db.Timestamptz(6)
-  surveys            surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveyreachsegments_surveyid_foreign")
+  riskScoreDigit     Decimal?   @db.Decimal(2, 1)
+  failureModeScore   Decimal?   @db.Decimal(2, 1)
+  consequenceScore   Decimal?   @db.Decimal(2, 1)
+  sortNumber         Int?       @db.SmallInt
+  created_at         DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime   @default(now()) @db.Timestamptz(6)
+  deleted_at         DateTime?  @db.Timestamptz(6)
+  arkSurveys         arkSurveys @relation(fields: [arkSurveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveyreachsegments_arksurveyid_foreign")
 }
 
 model arkSurveys {
-  id                  String                    @id(map: "arkSurveyGeographyData_pkey") @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
-  surveyId            String                    @unique(map: "arksurveygeographydata_surveyid_unique") @db.Uuid
-  ArkGeographyStart   Unsupported("geography")?
-  ArkGeographyEnd     Unsupported("geography")?
-  ArkGeographyRDStart Json?
-  ArkGeographyRDEnd   Json?
-  created_at          DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at          DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at          DateTime?                 @db.Timestamptz(6)
-  surveys             surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
+  id                     String                    @id(map: "arkSurveyGeographyData_pkey") @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
+  surveyId               String                    @unique(map: "arksurveygeographydata_surveyid_unique") @db.Uuid
+  ArkGeographyStart      Unsupported("geography")?
+  ArkGeographyEnd        Unsupported("geography")?
+  ArkGeographyRDStart    Json?
+  ArkGeographyRDEnd      Json?
+  created_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  deleted_at             DateTime?                 @db.Timestamptz(6)
+  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
+  reachSegments arkSurveyReachSegments[]
 }
 
 model admin_event_entity {

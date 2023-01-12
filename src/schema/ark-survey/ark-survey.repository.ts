@@ -52,6 +52,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
 			`;
 		}
+
 		return {
 			...arkSurveyGeoRecord,
 			ArkGeographyStart,
@@ -169,7 +170,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		`;
 
 		const geography = result?.[0]?.geography;
-		console.log(geography);
 		return geography ? JSON.parse(geography) : null;
 	}
 
@@ -182,5 +182,15 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
+	}
+
+	async hasReachSegments(identifier: string): Promise<boolean> {
+		const segmentCount = await this.prisma.arkSurveyReachSegments.count({
+			where: {
+				arkSurveyId: identifier,
+				deleted_at: null,
+			},
+		});
+		return !!segmentCount;
 	}
 }

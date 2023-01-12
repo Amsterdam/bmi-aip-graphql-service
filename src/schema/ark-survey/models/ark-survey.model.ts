@@ -2,6 +2,8 @@ import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
+import { ReachSegment } from '../../reach-segment/models/reach-segment.model';
+
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
 	@Field((type) => String)
@@ -30,4 +32,7 @@ export class ArkSurvey {
 
 	@Field((type) => String, { nullable: true })
 	deleted_at: string;
+
+	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })
+	reachSegments: ReachSegment[];
 }

@@ -33,14 +33,12 @@ export const createArkSurveyInput = Object.keys(arkSurveyRaw).reduce((input, key
 }, new CreateArkSurveyInput());
 
 const updateArkSurvey = new UpdateArkSurveyInput();
-//updateArkSurvey.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateArkSurveyInput = Object.keys(arkSurveyRaw).reduce((input, key) => {
 	input[key] = arkSurveyRaw[key];
 	return input;
 }, updateArkSurvey);
 
 const saveArkSurveyInput = new SaveArkSurveyInput();
-//saveArkSurveyInput.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const saveArkSurveyInputInput = Object.keys(arkSurveyRaw).reduce((input, key) => {
 	input[key] = arkSurveyRaw[key];
 	return input;

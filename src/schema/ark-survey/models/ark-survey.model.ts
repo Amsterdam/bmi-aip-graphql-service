@@ -13,16 +13,16 @@ export class ArkSurvey {
 	surveyId: string;
 
 	@Field((type) => Point, { nullable: true })
-	ArkGeographyStart?: PointType;
+	arkGeographyStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	ArkGeographyRDStart?: PointType;
+	arkGeographyRDStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	ArkGeographyEnd?: PointType;
+	arkGeographyEnd?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	ArkGeographyRDEnd?: PointType;
+	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })
 	created_at: string;

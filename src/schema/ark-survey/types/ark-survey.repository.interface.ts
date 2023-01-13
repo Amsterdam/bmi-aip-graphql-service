@@ -11,15 +11,15 @@ const arkSurvey = Prisma.validator<Prisma.arkSurveysArgs>()({
 		created_at: true,
 		updated_at: true,
 		deleted_at: true,
-		ArkGeographyRDStart: true,
-		ArkGeographyRDEnd: true,
+		arkGeographyRDStart: true,
+		arkGeographyRDEnd: true,
 	},
 });
 
 export type ArkSurveyWithoutGeography = Prisma.arkSurveysGetPayload<typeof arkSurvey>;
 export type ArkSurvey = ArkSurveyWithoutGeography & {
-	ArkGeographyStart?: Point;
-	ArkGeographyEnd?: Point;
+	arkGeographyStart?: Point;
+	arkGeographyEnd?: Point;
 };
 
 export interface IArkSurveyRepository {

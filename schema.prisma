@@ -1825,10 +1825,10 @@ model arkSurveyReachSegments {
 model arkSurveys {
   id                     String                    @id(map: "arkSurveyGeographyData_pkey") @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
   surveyId               String                    @unique(map: "arksurveygeographydata_surveyid_unique") @db.Uuid
-  ArkGeographyStart      Unsupported("geography")?
-  ArkGeographyEnd        Unsupported("geography")?
-  ArkGeographyRDStart    Json?
-  ArkGeographyRDEnd      Json?
+  arkGeographyStart      Unsupported("geography")?
+  arkGeographyEnd        Unsupported("geography")?
+  arkGeographyRDStart    Json?
+  arkGeographyRDEnd      Json?
   created_at             DateTime                  @default(now()) @db.Timestamptz(6)
   updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at             DateTime?                 @db.Timestamptz(6)

@@ -6,19 +6,19 @@ import { SaveArkSurveyInput } from '../dto/save-ark-survey.input';
 
 const arkSurveyRaw: Omit<DomainArkSurvey, 'id'> = {
 	surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-	ArkGeographyStart: {
+	arkGeographyStart: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
-	ArkGeographyRDStart: {
+	arkGeographyRDStart: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
-	ArkGeographyEnd: {
+	arkGeographyEnd: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},
-	ArkGeographyRDEnd: {
+	arkGeographyRDEnd: {
 		type: 'Point',
 		coordinates: [52.370302853062604, 4.893996915500548],
 	},

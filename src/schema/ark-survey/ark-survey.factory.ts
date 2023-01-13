@@ -8,29 +8,29 @@ export class ArkSurveyFactory {
 		created_at: created_at,
 		updated_at: updated_at,
 		deleted_at: deleted_at,
-		ArkGeographyStart: ArkGeographyStart,
-		ArkGeographyRDStart: ArkGeographyRDStart,
-		ArkGeographyEnd: ArkGeographyEnd,
-		ArkGeographyRDEnd: ArkGeographyRDEnd,
+		arkGeographyStart: arkGeographyStart,
+		arkGeographyRDStart: arkGeographyRDStart,
+		arkGeographyEnd: arkGeographyEnd,
+		arkGeographyRDEnd: arkGeographyRDEnd,
 	}: DomainArkSurvey): ArkSurvey {
 		const arkSurvey = new ArkSurvey();
 		arkSurvey.id = id;
 		arkSurvey.surveyId = surveyId;
 
 		// Allow geographyRD to be null by not defining it
-		const parsedArkGeographyRDStart = JSON.parse(JSON.stringify(ArkGeographyRDStart));
-		const parsedArkGeographyRDEnd = JSON.parse(JSON.stringify(ArkGeographyRDEnd));
+		const parsedarkGeographyRDStart = JSON.parse(JSON.stringify(arkGeographyRDStart));
+		const parsedarkGeographyRDEnd = JSON.parse(JSON.stringify(arkGeographyRDEnd));
 
-		if (parsedArkGeographyRDStart?.type) {
-			arkSurvey.ArkGeographyRDStart = parsedArkGeographyRDStart;
+		if (parsedarkGeographyRDStart?.type) {
+			arkSurvey.arkGeographyRDStart = parsedarkGeographyRDStart;
 		}
 
-		if (parsedArkGeographyRDEnd?.type) {
-			arkSurvey.ArkGeographyRDEnd = parsedArkGeographyRDEnd;
+		if (parsedarkGeographyRDEnd?.type) {
+			arkSurvey.arkGeographyRDEnd = parsedarkGeographyRDEnd;
 		}
 
-		arkSurvey.ArkGeographyStart = ArkGeographyStart;
-		arkSurvey.ArkGeographyEnd = ArkGeographyEnd;
+		arkSurvey.arkGeographyStart = arkGeographyStart;
+		arkSurvey.arkGeographyEnd = arkGeographyEnd;
 
 		arkSurvey.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
 		arkSurvey.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;

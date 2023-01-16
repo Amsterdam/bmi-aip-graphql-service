@@ -59,12 +59,10 @@ export class MigrateMaintenanceMeasuresRepository {
 
 	private castMeasureMaintenanceType(maintenanceType: string) {
 		switch (maintenanceType) {
-			case 'GrootOnderhoud':
-				return CyclicMeasureTypes.MajorMaintenance;
-			case 'Dagelijksonderhoud':
-				return CyclicMeasureTypes.DailyMaintenance;
-			case 'Vervangen':
-				return CyclicMeasureTypes.ToReplace;
+			case 'Correctief onderhoud':
+				return MeasureTypes.CorrectiveMaintenance;
+			case 'Preventief onderhoud':
+				return MeasureTypes.PreventiveMaintenance;
 			default:
 				return maintenanceType;
 		}
@@ -72,10 +70,12 @@ export class MigrateMaintenanceMeasuresRepository {
 
 	private castCyclicMeasureMaintenanceType(maintenanceType: string) {
 		switch (maintenanceType) {
-			case 'Correctief onderhoud':
-				return MeasureTypes.CorrectiveMaintenance;
-			case 'Preventief onderhoud':
-				return MeasureTypes.PreventiveMaintenance;
+			case 'Groot onderhoud':
+				return CyclicMeasureTypes.MajorMaintenance;
+			case 'Dagelijksonderhoud':
+				return CyclicMeasureTypes.DailyMaintenance;
+			case 'Vervangen':
+				return CyclicMeasureTypes.ToReplace;
 			default:
 				return maintenanceType;
 		}

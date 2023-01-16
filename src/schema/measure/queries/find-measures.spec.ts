@@ -7,7 +7,7 @@ import { FindMeasuresQuery } from './find-measures.query';
 import { FindMeasuresHandler } from './find-measures.handler';
 
 const measureMock: MockedObjectDeep<MeasureService> = {
-	getMeasures: jest.fn().mockResolvedValue([domainMeasure]),
+	findMeasures: jest.fn().mockResolvedValue([domainMeasure]),
 	...(<any>{}),
 };
 
@@ -18,8 +18,8 @@ describe('FindMeasuresHandler', () => {
 		const command = new FindMeasuresQuery(identifier);
 		const result = await new FindMeasuresHandler(measureMock).execute(command);
 
-		expect(measureMock.getMeasures).toHaveBeenCalledTimes(1);
-		expect(measureMock.getMeasures).toHaveBeenCalledWith(identifier);
+		expect(measureMock.findMeasures).toHaveBeenCalledTimes(1);
+		expect(measureMock.findMeasures).toHaveBeenCalledWith(identifier);
 
 		expect(result).toEqual([domainMeasure]);
 	});

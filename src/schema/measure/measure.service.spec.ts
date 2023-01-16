@@ -17,9 +17,9 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const repo = new MeasureRepository(prismaServiceMock);
 
 describe('Measures / Service', () => {
-	test('getMeasures returns array of Measure unit', async () => {
+	test('findMeasures returns array of Measure survey', async () => {
 		const service = new MeasureService(repo);
-		const measures = await service.getMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const measures = await service.findMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(measures).toBeInstanceOf(Array);
 		expect(measures[0]).toBeInstanceOf(Measure);
 		expect(measures).toEqual([domainMeasure].map((measure) => MeasureFactory.CreateMeasure(measure)));

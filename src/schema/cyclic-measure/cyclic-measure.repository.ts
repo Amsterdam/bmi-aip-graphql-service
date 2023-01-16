@@ -43,7 +43,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		return this.prisma.cyclicMeasures.create({ data });
 	}
 
-	async getCyclicMeasures(surveyId: string): Promise<CyclicMeasure[]> {
+	async findCyclicMeasures(surveyId: string): Promise<CyclicMeasure[]> {
 		return this.prisma.cyclicMeasures.findMany({
 			where: {
 				surveyId,

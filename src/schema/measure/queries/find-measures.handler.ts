@@ -10,6 +10,6 @@ export class FindMeasuresHandler implements IQueryHandler<FindMeasuresQuery> {
 	constructor(private service: MeasureService) {}
 
 	async execute({ surveyId }: FindMeasuresQuery): Promise<Measure[]> {
-		return this.service.getMeasures(surveyId);
+		return this.service.findMeasures(surveyId);
 	}
 }

@@ -60,8 +60,8 @@ describe('MeasureRepository', () => {
 		});
 	});
 
-	test('getMeasures()', async () => {
-		const measures = await repo.getMeasures('__SURVEY_ID__');
+	test('findMeasures()', async () => {
+		const measures = await repo.findMeasures('__SURVEY_ID__');
 		expect(prismaServiceMock.measures.findMany).toHaveBeenCalledWith({
 			where: { surveyId: '__SURVEY_ID__' },
 		});

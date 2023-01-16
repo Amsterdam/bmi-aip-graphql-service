@@ -1,3 +1,7 @@
+import { Prisma } from '@prisma/client';
+
+import { newId } from '../../utils';
+
 import { ReachSegment } from './models/reach-segment.model';
 import { ReachSegment as DomainReachSegment } from './types/reach-segment.repository.interface';
 
@@ -31,5 +35,19 @@ export class ReachSegmentFactory {
 		reachSegment.deleted_at = deleted_at instanceof Date ? deleted_at.toUTCString() : null;
 
 		return reachSegment;
+	}
+
+	static CreateReachSegmentsFromJson(jsonData: Prisma.JsonValue, arkSurveyId: string): ReachSegment[] {
+		const collection = [];
+		const data = JSON.parse(JSON.stringify(jsonData));
+
+		data.map((item) => {
+			const seg = item as ReachSegment;
+			seg.id = newId();
+			seg.arkSurveyId = arkSurveyId;
+			collection.push(seg);
+		});
+
+		return collection;
 	}
 }

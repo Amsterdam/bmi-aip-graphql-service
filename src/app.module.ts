@@ -24,6 +24,8 @@ import { SpanInstallationSurveyModule } from './schema/span-installation-survey/
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
+import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
 
 @Module({
 	imports: [
@@ -55,6 +57,8 @@ import { SurveyModule } from './schema/survey/survey.module';
 			autoSchemaFile: true,
 		}),
 		TerminusModule,
+		ArkSurveyModule,
+		ReachSegmentModule,
 	],
 	controllers: [HealthController],
 	providers: [

@@ -50,10 +50,10 @@ describe('CyclicMeasureRepository', () => {
 		});
 	});
 
-	test('getCyclicMeasures()', async () => {
-		const cyclicMeasures = await repo.getCyclicMeasures('__UNIT_ID__');
+	test('findCyclicMeasures()', async () => {
+		const cyclicMeasures = await repo.findCyclicMeasures('__SURVEY_ID__');
 		expect(prismaServiceMock.cyclicMeasures.findMany).toHaveBeenCalledWith({
-			where: { unitId: '__UNIT_ID__' },
+			where: { surveyId: '__SURVEY_ID__' },
 		});
 		expect(cyclicMeasures).toEqual([domainCyclicMeasure]);
 	});

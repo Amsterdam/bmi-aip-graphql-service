@@ -8,8 +8,8 @@ import { CyclicMeasureRepository } from './cyclic-measure.repository';
 export class CyclicMeasureService {
 	public constructor(private readonly cyclicMeasureRepo: CyclicMeasureRepository) {}
 
-	async getCyclicMeasures(unitId: string): Promise<CyclicMeasure[]> {
-		return (await this.cyclicMeasureRepo.getCyclicMeasures(unitId)).map((cyclicMeasure) =>
+	async findCyclicMeasures(surveyId: string): Promise<CyclicMeasure[]> {
+		return (await this.cyclicMeasureRepo.findCyclicMeasures(surveyId)).map((cyclicMeasure) =>
 			CyclicMeasureFactory.CreateCyclicMeasure(cyclicMeasure),
 		);
 	}

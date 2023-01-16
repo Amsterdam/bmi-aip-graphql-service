@@ -8,7 +8,7 @@ import { MeasureRepository } from './measure.repository';
 export class MeasureService {
 	public constructor(private readonly measureRepo: MeasureRepository) {}
 
-	async getMeasures(unitId: string): Promise<Measure[]> {
-		return (await this.measureRepo.getMeasures(unitId)).map((measure) => MeasureFactory.CreateMeasure(measure));
+	async findMeasures(surveyId: string): Promise<Measure[]> {
+		return (await this.measureRepo.findMeasures(surveyId)).map((measure) => MeasureFactory.CreateMeasure(measure));
 	}
 }

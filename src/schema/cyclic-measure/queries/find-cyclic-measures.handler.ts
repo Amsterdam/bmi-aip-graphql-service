@@ -9,6 +9,6 @@ export class FindCyclicMeasuresHandler implements IQueryHandler<FindCyclicMeasur
 	constructor(private service: CyclicMeasureService) {}
 
 	async execute({ surveyId }: FindCyclicMeasuresQuery): Promise<CyclicMeasure[]> {
-		return this.service.getCyclicMeasures(surveyId);
+		return this.service.findCyclicMeasures(surveyId);
 	}
 }

@@ -38,16 +38,10 @@ export class ReachSegmentFactory {
 	}
 
 	static CreateReachSegmentsFromJson(jsonData: Prisma.JsonValue, arkSurveyId: string): ReachSegment[] {
-		const collection = [];
-		const data = JSON.parse(JSON.stringify(jsonData));
-
-		data.map((item) => {
-			const seg = item as ReachSegment;
-			seg.id = newId();
-			seg.arkSurveyId = arkSurveyId;
-			collection.push(seg);
-		});
-
-		return collection;
+		return JSON.parse(JSON.stringify(jsonData)).map((item) => ({
+			...item,
+			id: newId(),
+			arkSurveyId,
+		}));
 	}
 }

@@ -33,6 +33,13 @@ import { Nen2767MigrateDecompositionHandler } from './commands/nen2767-migrate-d
 import { Nen2767MigrateDecompositionCli } from './cli/nen2767-migrate-decomposition.cli';
 import { Nen2767FindObjectsWithDecompositionQuery } from './queries/nen2767-find-objects-with-decomposition.query';
 import { Nen2767FindObjectsWithDecompositionHandler } from './queries/nen2767-find-objects-with-decomposition.handler';
+import { FindObjectsWithMaintenanceMeasuresQuery } from './queries/find-objects-with-maintenance-measures.query';
+import { FindObjectsWithMaintenanceMeasuresHandler } from './queries/find-objects-with-maintenance-measures.handler';
+import { MigrateMaintenanceMeasuresCommand } from './commands/migrate-maintenance-measures.command';
+import { MigrateMaintenanceMeasuresHandler } from './commands/migrate-maintenance-measures.handler';
+import { MigrateMaintenanceMeasuresService } from './migrate-maintenance-measures.service';
+import { MigrateMaintenanceMeasuresRepository } from './migrate-maintenance-measures.repository';
+import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measures.cli';
 
 @Module({
 	imports: [
@@ -81,6 +88,13 @@ import { Nen2767FindObjectsWithDecompositionHandler } from './queries/nen2767-fi
 		Nen2767MigrateDecompositionService,
 		Nen2767MigrateDecompositionRepository,
 		Nen2767MigrateDecompositionCli,
+		FindObjectsWithMaintenanceMeasuresQuery,
+		FindObjectsWithMaintenanceMeasuresHandler,
+		MigrateMaintenanceMeasuresCommand,
+		MigrateMaintenanceMeasuresHandler,
+		MigrateMaintenanceMeasuresService,
+		MigrateMaintenanceMeasuresRepository,
+		MigrateMaintenanceMeasuresCli,
 		CommandResolver,
 	],
 })

@@ -8,11 +8,11 @@ export function badUserInputFormatter(): (error: GraphQLError) => GraphQLFormatt
 				errors: [],
 			};
 
-			if (error.extensions?.response) {
-				error.extensions?.response.message.forEach((item: string) => {
-					extensions.errors.push(item);
-				});
-			}
+			// if (error.extensions?.response) {
+			// 	error.extensions?.response['message'].forEach((item: string) => {
+			// 		extensions.errors.push(item);
+			// 	});
+			// }
 
 			const graphQLFormattedError: GraphQLFormattedError = {
 				message: extensions.errors.join(', '),

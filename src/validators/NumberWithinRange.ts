@@ -5,14 +5,13 @@ export class NumberWithinRange implements ValidatorConstraintInterface {
 	validate(body: object[], args: ValidationArguments) {
 		const [property, min, max] = args.constraints;
 		let allValid = true;
-		
+
 		body.forEach((item) => {
 			if (item[property] < min || item[property] > max) {
 				allValid = false;
-			} 
+			}
 		});
- 
-		console.log({allValid}); 
+
 		return allValid;
 	}
 

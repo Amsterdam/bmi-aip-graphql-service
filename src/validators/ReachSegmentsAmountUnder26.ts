@@ -3,7 +3,11 @@ import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments 
 @ValidatorConstraint({ name: 'reachSegmentsAmountUnder26', async: false })
 export class ReachSegmentsAmountUnder26 implements ValidatorConstraintInterface {
 	validate(body: string, args: ValidationArguments) {
-		return args.value.length < 26;
+		if (args?.value?.length > 26) {
+			return false;
+		}
+
+		return true;
 	}
 
 	defaultMessage(args: ValidationArguments) {

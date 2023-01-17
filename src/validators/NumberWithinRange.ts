@@ -6,11 +6,13 @@ export class NumberWithinRange implements ValidatorConstraintInterface {
 		const [property, min, max] = args.constraints;
 		let allValid = true;
 
-		body.forEach((item) => {
-			if (item[property] < min || item[property] > max) {
-				allValid = false;
-			}
-		});
+		if (body?.length > 0) {
+			body.forEach((item) => {
+				if (item[property] < min || item[property] > max) {
+					allValid = false;
+				}
+			});
+		}
 
 		return allValid;
 	}

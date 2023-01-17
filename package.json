@@ -72,7 +72,7 @@
 		"@types/proj4": "^2.5.2",
 		"@types/supertest": "^2.0.11",
 		"@typescript-eslint/eslint-plugin": "^5.35.1",
-		"@typescript-eslint/parser": "^5.31.0",
+		"@typescript-eslint/parser": "^5.48.2",
 		"dotenv": "^16.0.1",
 		"eslint": "^8.23.0",
 		"eslint-config-airbnb": "^19.0.4",

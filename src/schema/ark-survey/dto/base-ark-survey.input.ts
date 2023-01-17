@@ -18,13 +18,4 @@ export class BaseArkSurveyInput {
 
 	@Field((type) => Point, { nullable: true })
 	arkGeographyRDEnd?: PointType;
-
-	@Field((type) => String, { nullable: true })
-	created_at: string;
-
-	@Field((type) => String, { nullable: true })
-	updated_at: string;
-
-	@Field((type) => String, { nullable: true })
-	deleted_at: string;
 }

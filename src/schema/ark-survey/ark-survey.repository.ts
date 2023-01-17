@@ -4,6 +4,7 @@ import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
+import { ReachSegmentFactory } from '../reach-segment/reach-segment.factory';
 
 import { ArkSurvey, IArkSurveyRepository } from './types/ark-survey.repository.interface';
 import { CreateArkSurveyInput } from './dto/create-ark-survey.input';
@@ -129,6 +130,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		arkGeographyRDStart,
 		arkGeographyEnd,
 		arkGeographyRDEnd,
+		reachSegments,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Find existing record
 		const existingRecord = await this.prisma.arkSurveys.findFirst({
@@ -144,15 +146,46 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			arkGeographyRDStart,
 			arkGeographyEnd,
 			arkGeographyRDEnd,
+			reachSegments,
 			created_at: null,
 			updated_at: null,
 			deleted_at: null,
 		};
 
 		if (existingRecord) {
+			// Delete existing reach segments
+			await this.prisma.arkSurveyReachSegments.deleteMany({
+				where: {
+					arkSurveyId: existingRecord.id,
+				},
+			});
+
+			// Create new reach segments
+			const reachSegmentsFormatted = ReachSegmentFactory.CreateReachSegmentsFromJson(
+				insertData.reachSegments,
+				existingRecord.id,
+			);
+
+			await this.prisma.arkSurveyReachSegments.createMany({
+				data: reachSegmentsFormatted,
+			});
+
 			return this.updateArkSurvey(insertData);
 		} else {
-			return this.createArkSurvey(insertData);
+			const newRecord = await this.createArkSurvey(insertData);
+			const reachSegmentsFormatted = ReachSegmentFactory.CreateReachSegmentsFromJson(
+				insertData.reachSegments,
+				newRecord.id,
+			);
+
+			await this.prisma.arkSurveyReachSegments.createMany({
+				data: reachSegmentsFormatted,
+			});
+
+			// Workaround to make sure created reachSegments are included in response
+			const updated = await this.updateArkSurvey(insertData);
+
+			return updated;
 		}
 	}
 

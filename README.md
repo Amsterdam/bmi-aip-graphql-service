@@ -41,7 +41,8 @@ $ npm run test:cov
 Database migrations are still managed by Knex. Therefore we do not rely on Prisma migrations here.
 Instead `schema.prisma` and the prisma client should be regenerated after the knex migrations have been rolled out:
 
-NOTE: A `db pull` should only be performed when actively working on a database change and know what you are doing.
+NOTE: A `db pull` should only be performed when you are actively working on a database change and you know what you are
+doing.
 
 ```shell
 # Introspect the database and overwrite the schema.prisma file
@@ -54,8 +55,8 @@ You might have to restart the TypeScript service in IntelliJ after this to re-in
 
 ### Re-generating the prisma client
 
-When checking out a branch or pulling code that contains updates to the `schema.prisma` file after a change to the
-database structure was made, it will be necessary to re-generate the Prisma client by running the following command:
+When checking out a branch or pulling code that contains updates to the `schema.prisma` file (after a change to the
+database structure was made) it will be necessary to re-generate the Prisma client by running the following command:
 
 ```shell
 node_modules/.bin/prisma generate

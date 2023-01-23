@@ -16,7 +16,6 @@ const reachSegments = Prisma.validator<Prisma.arkSurveyReachSegmentsArgs>()({
 		sortNumber: true,
 		created_at: true,
 		updated_at: true,
-		deleted_at: true,
 	},
 });
 

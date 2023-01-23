@@ -35,16 +35,4 @@ export class ReachSegmentInput {
 	@IsOptional()
 	@Field((type) => Float, { nullable: true })
 	public sortNumber?: number;
-
-	@IsOptional()
-	@Field((type) => String, { nullable: true })
-	public created_at: string;
-
-	@IsOptional()
-	@Field((type) => String, { nullable: true })
-	public updated_at: string;
-
-	@IsOptional()
-	@Field((type) => String, { nullable: true })
-	public deleted_at: string;
 }

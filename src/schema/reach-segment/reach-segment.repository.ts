@@ -56,7 +56,6 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 		return this.prisma.arkSurveyReachSegments.findMany({
 			where: {
 				arkSurveyId,
-				deleted_at: null,
 			},
 			orderBy: [
 				{
@@ -98,14 +97,9 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 		});
 	}
 
-	async deleteReachSegment(identifier: string): Promise<ReachSegment> {
-		const data: Prisma.arkSurveyReachSegmentsUpdateInput = {
-			deleted_at: new Date(),
-		};
-
-		return this.prisma.arkSurveyReachSegments.update({
+	deleteReachSegment(identifier: string): Promise<ReachSegment> {
+		return this.prisma.arkSurveyReachSegments.delete({
 			where: { id: identifier },
-			data,
 		});
 	}
 }

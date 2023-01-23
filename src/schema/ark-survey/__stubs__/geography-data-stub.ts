@@ -44,6 +44,34 @@ export const saveArkSurveyInputInput = Object.keys(arkSurveyRaw).reduce((input, 
 	return input;
 }, saveArkSurveyInput);
 
+export const saveArkSurveyInputWithReachSegmentsInput: UpdateArkSurveyInput = {
+	...updateArkSurvey,
+	reachSegments: [
+		{
+			name: 'reach segment 1',
+			consequenceScore: 4,
+			failureModeScore: 1,
+			riskScore: 1,
+			riskScoreDigit: 5.0,
+			reachSegmentLength: 1.23,
+			created_at: null,
+			updated_at: null,
+			deleted_at: null,
+		},
+		{
+			name: 'reach segment 2',
+			consequenceScore: 4,
+			failureModeScore: 1,
+			riskScore: 5,
+			riskScoreDigit: 15.0,
+			reachSegmentLength: 1.23,
+			created_at: null,
+			updated_at: null,
+			deleted_at: null,
+		},
+	],
+};
+
 export const domainArkSurvey: DomainArkSurvey = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...arkSurveyRaw,

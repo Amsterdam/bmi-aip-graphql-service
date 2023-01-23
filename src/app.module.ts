@@ -26,7 +26,6 @@ import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
-import { badUserInputFormatter } from './validators/formatters/BadUserInputFormatter';
 
 @Module({
 	imports: [
@@ -56,7 +55,6 @@ import { badUserInputFormatter } from './validators/formatters/BadUserInputForma
 			playground: true,
 			sortSchema: true,
 			autoSchemaFile: true,
-			formatError: badUserInputFormatter(),
 		}),
 		TerminusModule,
 		ArkSurveyModule,

@@ -4,7 +4,6 @@ import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
-import { ReachSegmentFactory } from '../reach-segment/reach-segment.factory';
 
 import { ArkSurvey, IArkSurveyRepository } from './types/ark-survey.repository.interface';
 import { CreateArkSurveyInput } from './dto/create-ark-survey.input';
@@ -160,27 +159,36 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				},
 			});
 
-			// Create new reach segments
-			const reachSegmentsFormatted = ReachSegmentFactory.CreateReachSegmentsFromJson(
-				insertData.reachSegments,
-				existingRecord.id,
-			);
+			// Create new reach segments if applicable
+			if (insertData.reachSegments) {
+				const reachSegmentsFormatted =
+					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
+				reachSegmentsFormatted.map((segment) => {
+					segment.arkSurveyId = existingRecord.id;
+					segment.id = newId();
+				});
 
-			await this.prisma.arkSurveyReachSegments.createMany({
-				data: reachSegmentsFormatted,
-			});
+				await this.prisma.arkSurveyReachSegments.createMany({
+					data: reachSegmentsFormatted,
+				});
+			}
 
 			return this.updateArkSurvey(insertData);
 		} else {
-			const newRecord = await this.createArkSurvey(insertData);
-			const reachSegmentsFormatted = ReachSegmentFactory.CreateReachSegmentsFromJson(
-				insertData.reachSegments,
-				newRecord.id,
-			);
+			await this.createArkSurvey(insertData);
+			// Create new reach segments if applicable
+			if (insertData.reachSegments) {
+				const reachSegmentsFormatted =
+					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
+				reachSegmentsFormatted.map((segment) => {
+					segment.arkSurveyId = existingRecord.id;
+					segment.id = newId();
+				});
 
-			await this.prisma.arkSurveyReachSegments.createMany({
-				data: reachSegmentsFormatted,
-			});
+				await this.prisma.arkSurveyReachSegments.createMany({
+					data: reachSegmentsFormatted,
+				});
+			}
 
 			// Workaround to make sure created reachSegments are included in response
 			const updated = await this.updateArkSurvey(insertData);

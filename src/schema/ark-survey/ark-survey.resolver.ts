@@ -17,7 +17,6 @@ import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { FindArkSurveyQuery } from './queries/find-ark-survey.query';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
-import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey-id.query';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)

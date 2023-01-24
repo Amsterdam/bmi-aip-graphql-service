@@ -100,6 +100,17 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		const queryBusMock = getQueryBusMock();
 		const resolver = new ArkSurveyResolver(new ArkSurveyService(ArkSurveyRepo), commandBusMock, queryBusMock);
 		const elements = await resolver.getArkSurvey('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-		expect(elements).toEqual(domainArkSurvey);
+
+		const object = {
+			...domainArkSurvey,
+			createdAt: domainArkSurvey.created_at ?? null,
+			updatedAt: domainArkSurvey.updated_at ?? null,
+			deletedAt: domainArkSurvey.deleted_at ?? null,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		delete object.deleted_at;
+
+		expect(elements).toEqual(object);
 	});
 });

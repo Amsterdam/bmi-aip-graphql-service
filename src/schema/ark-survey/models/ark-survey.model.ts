@@ -25,13 +25,13 @@ export class ArkSurvey {
 	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })
-	created_at: string;
+	createdAt: string;
 
 	@Field((type) => String, { nullable: true })
-	updated_at: string;
+	updatedAt: string;
 
 	@Field((type) => String, { nullable: true })
-	deleted_at: string;
+	deletedAt: string;
 
 	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })
 	reachSegments: ReachSegment[];

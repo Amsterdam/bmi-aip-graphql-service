@@ -227,7 +227,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		const segmentCount = await this.prisma.arkSurveyReachSegments.count({
 			where: {
 				arkSurveyId: identifier,
-				deleted_at: null,
 			},
 		});
 		return !!segmentCount;

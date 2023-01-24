@@ -5,9 +5,9 @@ export class ArkSurveyFactory {
 	static createArkSurvey({
 		id,
 		surveyId,
-		created_at: created_at,
-		updated_at: updated_at,
-		deleted_at: deleted_at,
+		created_at: createdAt,
+		updated_at: updatedAt,
+		deleted_at: deletedAt,
 		arkGeographyStart: arkGeographyStart,
 		arkGeographyRDStart: arkGeographyRDStart,
 		arkGeographyEnd: arkGeographyEnd,
@@ -32,9 +32,9 @@ export class ArkSurveyFactory {
 		arkSurvey.arkGeographyStart = arkGeographyStart;
 		arkSurvey.arkGeographyEnd = arkGeographyEnd;
 
-		arkSurvey.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
-		arkSurvey.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;
-		arkSurvey.deleted_at = deleted_at instanceof Date ? deleted_at.toUTCString() : null;
+		arkSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
+		arkSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
+		arkSurvey.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 
 		return arkSurvey;
 	}

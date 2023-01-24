@@ -11,7 +11,12 @@ describe('ARK / ReachSegment Factory', () => {
 			failureModeScore: Number(domainReachSegment.failureModeScore),
 			reachSegmentLength: Number(domainReachSegment.reachSegmentLength),
 			riskScoreDigit: Number(domainReachSegment.riskScoreDigit),
+			createdAt: domainReachSegment.created_at ?? null,
+			updatedAt: domainReachSegment.updated_at ?? null,
 		};
+
+		delete object.created_at;
+		delete object.updated_at;
 
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(ReachSegment);

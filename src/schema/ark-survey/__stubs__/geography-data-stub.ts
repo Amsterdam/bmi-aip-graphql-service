@@ -54,9 +54,6 @@ export const saveArkSurveyInputWithReachSegmentsInput: UpdateArkSurveyInput = {
 			riskScore: 1,
 			riskScoreDigit: 5.0,
 			reachSegmentLength: 1.23,
-			created_at: null,
-			updated_at: null,
-			deleted_at: null,
 		},
 		{
 			name: 'reach segment 2',
@@ -65,9 +62,6 @@ export const saveArkSurveyInputWithReachSegmentsInput: UpdateArkSurveyInput = {
 			riskScore: 5,
 			riskScoreDigit: 15.0,
 			reachSegmentLength: 1.23,
-			created_at: null,
-			updated_at: null,
-			deleted_at: null,
 		},
 	],
 };

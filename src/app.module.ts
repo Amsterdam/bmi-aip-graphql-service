@@ -9,6 +9,7 @@ import { TerminusModule } from '@nestjs/terminus';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
+import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
@@ -41,6 +42,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		DecompositionModule,
 		MeasureModule,
 		CyclicMeasureModule,
+		FailureModeModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		ObjectModule,

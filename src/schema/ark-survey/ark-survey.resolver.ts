@@ -17,6 +17,7 @@ import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { FindArkSurveyQuery } from './queries/find-ark-survey.query';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
+import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey-id.query';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)
@@ -63,7 +64,7 @@ export class ArkSurveyResolver {
 		return ArkSurveyFactory.createArkSurvey(domainArkSurvey);
 	}
 
-	@Query((returns) => [ArkSurvey], { name: 'getArkSurvey' })
+	@Query((returns) => ArkSurvey, { name: 'getArkSurvey' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getArkSurvey(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.arkSurveyService.getArkSurveyData(surveyId);

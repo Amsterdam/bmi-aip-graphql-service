@@ -9,7 +9,7 @@ import { FindArkSurveyQuery } from './find-ark-survey.query';
 export class FindArkSurveyHandler implements IQueryHandler<FindArkSurveyQuery> {
 	constructor(private service: ArkSurveyService) {}
 
-	async execute(query: FindArkSurveyQuery): Promise<ArkSurvey[]> {
+	async execute(query: FindArkSurveyQuery): Promise<ArkSurvey> {
 		return this.service.getArkSurveyData(query.surveyId);
 	}
 }

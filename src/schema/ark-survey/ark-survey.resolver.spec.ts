@@ -95,7 +95,7 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		});
 	});
 
-	test('getArkSurvey returns an array of ArkSurvey objects', async () => {
+	test('getArkSurvey returns an ArkSurvey object', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
 		const resolver = new ArkSurveyResolver(new ArkSurveyService(ArkSurveyRepo), commandBusMock, queryBusMock);
@@ -111,6 +111,6 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		delete object.updated_at;
 		delete object.deleted_at;
 
-		expect(elements).toEqual([object, object]);
+		expect(elements).toEqual(object);
 	});
 });

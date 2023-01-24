@@ -60,21 +60,19 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		};
 	}
 
-	async getArkSurveyData(surveyId: string): Promise<ArkSurvey[]> {
-		const geographyDataResult = (await this.prisma.arkSurveys.findMany({
-			where: {
-				surveyId,
-				deleted_at: null,
-			},
-		})) as ArkSurvey[];
+	async getArkSurveyData(surveyId: string): Promise<ArkSurvey> {
+		const survey = (await this.prisma.arkSurveys.findFirst({
+			where: { surveyId: surveyId },
+		})) as ArkSurvey;
 
-		return Promise.all(
-			geographyDataResult.map(async (result) => {
-				result.arkGeographyStart = await this.getGeographyAsGeoJSONStart(result.surveyId);
-				result.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(result.surveyId);
-				return result;
-			}),
-		);
+		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
+		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
+
+		if (!survey) {
+			throw new Error('No ARK survey found.');
+		}
+
+		return survey;
 	}
 
 	async updateArkSurvey({

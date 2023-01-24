@@ -70,12 +70,6 @@ export class ArkSurveyResolver {
 		return this.arkSurveyService.getArkSurveyData(surveyId);
 	}
 
-	// @Query(() => ArkSurvey)
-	// @Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	// public async getArkSurvey(@Args('surveyId') surveyId: string): Promise<ArkSurvey> {
-	// 	return this.queryBus.execute<GetArkSurveyBySurveyIdQuery>(new GetArkSurveyBySurveyIdQuery(surveyId));
-	// }
-
 	@ResolveField()
 	async reachSegments(@Parent() { id }: ArkSurvey): Promise<ReachSegment[]> {
 		return this.commandBus.execute<FindArkSurveyReachSegmentsCommand>(new FindArkSurveyReachSegmentsCommand(id));

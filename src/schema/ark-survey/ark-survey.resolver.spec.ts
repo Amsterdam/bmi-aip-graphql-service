@@ -95,11 +95,11 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		});
 	});
 
-	test('getArkSurvey returns an array of ArkSurvey objects', async () => {
+	test('getArkSurvey returns an ArkSurvey object', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
 		const resolver = new ArkSurveyResolver(new ArkSurveyService(ArkSurveyRepo), commandBusMock, queryBusMock);
 		const elements = await resolver.getArkSurvey('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-		expect(elements).toEqual([domainArkSurvey, domainArkSurvey]);
+		expect(elements).toEqual(domainArkSurvey);
 	});
 });

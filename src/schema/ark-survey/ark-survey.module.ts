@@ -16,7 +16,7 @@ import { DeleteArkSurveyHandler } from './commands/delete-ark-survey.handler';
 import { FindArkSurveyReachSegmentsHandler } from './commands/find-ark-survey-reach-segments.handler';
 import { SaveArkSurveyHandler } from './commands/save-ark-survey.handler';
 import { UpdateArkSurveyHandler } from './commands/update-ark-survey.handler';
-import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';
+import { GetArkSurveyBySurveyIdHandler } from './queries/get-ark-survey-by-survey.handler';
 
 @Module({
 	providers: [
@@ -27,8 +27,7 @@ import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';
 		UpdateArkSurveyHandler,
 		DeleteArkSurveyHandler,
 		SaveArkSurveyHandler,
-		FindArkSurveyHandler,
-		FindArkSurveyHandler,
+		GetArkSurveyBySurveyIdHandler,
 		ReachSegmentService,
 		ReachSegmentRepository,
 		FindArkSurveyReachSegmentsHandler,

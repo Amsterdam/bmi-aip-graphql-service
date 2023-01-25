@@ -35,32 +35,32 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			},
 		};
 
-		const arkSurveyGeoRecord = await this.prisma.arkSurveys.create({ data });
+		const arkSurveyRecord = await this.prisma.arkSurveys.create({ data });
 
 		// Work around Prisma not supporting spatial data types
 		if (arkGeographyStart) {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyStart)})
-				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
+				WHERE "surveyId" = ${arkSurveyRecord.id}
 			`;
 		}
 		if (arkGeographyEnd) {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyEnd)})
-				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
+				WHERE "surveyId" = ${arkSurveyRecord.id}
 			`;
 		}
 
 		return {
-			...arkSurveyGeoRecord,
+			...arkSurveyRecord,
 			arkGeographyStart,
 			arkGeographyEnd,
 		};
 	}
 
-	async getArkSurveyData(surveyId: string): Promise<ArkSurvey> {
+	async getArkSurvey(surveyId: string): Promise<ArkSurvey> {
 		const survey = (await this.prisma.arkSurveys.findFirst({
 			where: { surveyId: surveyId },
 		})) as ArkSurvey;

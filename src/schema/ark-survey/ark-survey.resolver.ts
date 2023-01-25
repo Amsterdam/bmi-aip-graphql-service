@@ -3,7 +3,6 @@ import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { ReachSegment } from '../reach-segment/models/reach-segment.model';
-import { FindReachSegmentsQuery } from '../reach-segment/queries/find-reach-segments.query';
 
 import { ArkSurvey } from './models/ark-survey.model';
 import { ArkSurveyFactory } from './ark-survey.factory';
@@ -14,7 +13,6 @@ import { CreateArkSurveyCommand } from './commands/create-ark-survey.command';
 import { UpdateArkSurveyCommand } from './commands/update-ark-survey.command';
 import { ArkSurvey as DomainArkSurvey } from './types/ark-survey.repository.interface';
 import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
-import { FindArkSurveyQuery } from './queries/find-ark-survey.query';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
 

@@ -159,15 +159,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 			// Create new reach segments if applicable
 			if (insertData.reachSegments) {
-				const reachSegmentsFormatted =
-					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
-				reachSegmentsFormatted.map((segment) => {
-					segment.arkSurveyId = existingRecord.id;
-					segment.id = newId();
-				});
-
 				await this.prisma.arkSurveyReachSegments.createMany({
-					data: reachSegmentsFormatted,
+					data: (insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[]).map(
+						(segment) => ({
+							...segment,
+							arkSurveyId: existingRecord.id,
+							id: newId(),
+						}),
+					),
 				});
 			}
 
@@ -176,22 +175,19 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			await this.createArkSurvey(insertData);
 			// Create new reach segments if applicable
 			if (insertData.reachSegments) {
-				const reachSegmentsFormatted =
-					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
-				reachSegmentsFormatted.map((segment) => {
-					segment.arkSurveyId = existingRecord.id;
-					segment.id = newId();
-				});
-
 				await this.prisma.arkSurveyReachSegments.createMany({
-					data: reachSegmentsFormatted,
+					data: (insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[]).map(
+						(segment) => ({
+							...segment,
+							arkSurveyId: existingRecord.id,
+							id: newId(),
+						}),
+					),
 				});
 			}
 
 			// Workaround to make sure created reachSegments are included in response
-			const updated = await this.updateArkSurvey(insertData);
-
-			return updated;
+			return this.updateArkSurvey(insertData);
 		}
 	}
 
@@ -221,14 +217,5 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
-	}
-
-	async hasReachSegments(identifier: string): Promise<boolean> {
-		const segmentCount = await this.prisma.arkSurveyReachSegments.count({
-			where: {
-				arkSurveyId: identifier,
-			},
-		});
-		return !!segmentCount;
 	}
 }

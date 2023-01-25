@@ -1,7 +1,3 @@
-import { Prisma } from '@prisma/client';
-
-import { newId } from '../../utils';
-
 import { ReachSegment } from './models/reach-segment.model';
 import { ReachSegment as DomainReachSegment } from './types/reach-segment.repository.interface';
 
@@ -33,15 +29,5 @@ export class ReachSegmentFactory {
 		reachSegment.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 
 		return reachSegment;
-	}
-
-	static CreateReachSegmentsFromJson(jsonData: Prisma.JsonValue, arkSurveyId: string): ReachSegment[] {
-		if (!jsonData) return [];
-
-		return JSON.parse(JSON.stringify(jsonData)).map((item) => ({
-			...item,
-			id: newId(),
-			arkSurveyId,
-		}));
 	}
 }

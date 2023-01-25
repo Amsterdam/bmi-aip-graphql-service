@@ -16,12 +16,10 @@ import { DeleteReachSegmentHandler } from './commands/delete-reach-segment.handl
 import { FindArkSurveyReachSegmentsHandler } from './queries/find-ark-survey-reach-segments.handler';
 import { SaveArkSurveyHandler } from './commands/save-ark-survey.handler';
 import { UpdateArkSurveyHandler } from './commands/update-ark-survey.handler';
-import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';
 import { UpdateReachSegmentHandler } from './commands/update-reach-segment.handler';
 import { FindReachSegmentsHandler } from './queries/find-reach-segments.handler';
 import { GetArkSurveyBySurveyIdHandler } from './queries/get-ark-survey-by-survey.handler';
 import { ReachSegmentRepository } from './reach-segment.repository';
-import { ReachSegmentResolver } from './reach-segment.resolver';
 import { ReachSegmentService } from './reach-segment.service';
 
 @Module({
@@ -33,13 +31,11 @@ import { ReachSegmentService } from './reach-segment.service';
 		UpdateArkSurveyHandler,
 		DeleteArkSurveyHandler,
 		SaveArkSurveyHandler,
-		FindArkSurveyHandler,
 		ReachSegmentService,
 		ReachSegmentRepository,
 		GetArkSurveyBySurveyIdHandler,
 		FindArkSurveyReachSegmentsHandler,
 		PrismaService,
-		ReachSegmentResolver,
 		ReachSegmentService,
 		ReachSegmentRepository,
 		CreateReachSegmentHandler,

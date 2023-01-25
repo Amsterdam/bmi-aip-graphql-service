@@ -17,9 +17,9 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const repo = new ArkSurveyRepository(prismaServiceMock);
 
 describe('ARK Reach Segments / Service', () => {
-	test('getArkSurveyData returns an ArkSurvey object', async () => {
+	test('getArkSurvey returns an ArkSurvey object', async () => {
 		const service = new ArkSurveyService(repo);
-		const ArkSurveyResults = await service.getArkSurveyData('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const ArkSurveyResults = await service.getArkSurvey('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(ArkSurveyResults).toBeInstanceOf(ArkSurvey);
 		expect(ArkSurveyResults).toEqual(ArkSurveyFactory.createArkSurvey(domainArkSurvey));
 	});

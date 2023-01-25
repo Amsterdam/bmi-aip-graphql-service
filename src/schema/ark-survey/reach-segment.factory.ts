@@ -18,7 +18,6 @@ export class ReachSegmentFactory {
 		sortNumber,
 		created_at: created_at,
 		updated_at: updated_at,
-		deleted_at: deleted_at,
 	}: DomainReachSegment): ReachSegment {
 		const reachSegment = new ReachSegment();
 		reachSegment.id = id;
@@ -32,7 +31,6 @@ export class ReachSegmentFactory {
 		reachSegment.sortNumber = Number(sortNumber);
 		reachSegment.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
 		reachSegment.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;
-		reachSegment.deleted_at = deleted_at instanceof Date ? deleted_at.toUTCString() : null;
 
 		return reachSegment;
 	}

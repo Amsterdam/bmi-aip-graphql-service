@@ -12,9 +12,9 @@ import { UpdateArkSurveyCommand } from './commands/update-ark-survey.command';
 import { ArkSurvey as DomainArkSurvey } from './types/ark-survey.repository.interface';
 import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
-import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
 import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.query';
 import { ReachSegment } from './models/reach-segment.model';
+import { FindArkSurveyReachSegmentsQuery } from './queries/find-ark-survey-reach-segments.query';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)
@@ -69,6 +69,6 @@ export class ArkSurveyResolver {
 
 	@ResolveField()
 	async reachSegments(@Parent() { id }: ArkSurvey): Promise<ReachSegment[]> {
-		return this.commandBus.execute<FindArkSurveyReachSegmentsCommand>(new FindArkSurveyReachSegmentsCommand(id));
+		return this.queryBus.execute<FindArkSurveyReachSegmentsQuery>(new FindArkSurveyReachSegmentsQuery(id));
 	}
 }

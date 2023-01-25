@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { JsonableValue } from 'ts-jest';
+
+import { FailureModeMetaData } from './failure-mode-meta-data.model';
 
 @ObjectType({ description: 'failureMode' })
 export class FailureMode {
@@ -21,8 +22,8 @@ export class FailureMode {
 	@Field((type) => String, { nullable: true })
 	customName?: string;
 
-	@Field((type) => JsonableValue, { nullable: true })
-	metaData?: JSON;
+	@Field((type) => FailureModeMetaData, { nullable: true })
+	metaData?: FailureModeMetaData;
 
 	@Field((type) => String, { nullable: true })
 	analysisRemarks?: string;
@@ -32,12 +33,6 @@ export class FailureMode {
 
 	@Field((type) => String, { nullable: true })
 	maintenanceRemarks?: string;
-
-	@Field((type) => String, { nullable: true })
-	created_at?: string;
-
-	@Field((type) => String, { nullable: true })
-	updated_at?: string;
 
 	@Field((type) => String, { nullable: true })
 	defaultFailureModeId?: string;
@@ -133,7 +128,7 @@ export class FailureMode {
 	failureModeType?: string;
 
 	@Field((type) => String, { nullable: true })
-	function?: string;
+	purpose?: string; // function
 
 	@Field((type) => String, { nullable: true })
 	guideword?: string;
@@ -152,4 +147,10 @@ export class FailureMode {
 
 	@Field((type) => String, { nullable: true })
 	noticableFailure?: string;
+
+	@Field((type) => String, { nullable: true })
+	createdAt: string;
+
+	@Field((type) => String, { nullable: true })
+	updatedAt: string;
 }

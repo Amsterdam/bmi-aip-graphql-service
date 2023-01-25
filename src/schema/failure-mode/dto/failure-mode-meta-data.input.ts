@@ -5,7 +5,7 @@ import { IsOptional } from 'class-validator';
 export class FailureModeMetaDataInput {
 	@IsOptional()
 	@Field({ nullable: true })
-	public faaloorzaak?: string;
+	public faalOorzaak?: string;
 
 	@IsOptional()
 	@Field({ nullable: true })

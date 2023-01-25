@@ -1,37 +1,21 @@
-import { A11yDetails } from './a11y-details.model';
+import { FailureModeMetaData } from './failure-mode-meta-data.model';
 
-describe('Span Installation / Model / A11yDetails', () => {
-	test('constructs a A11yDetails instance', () => {
-		const a11yDetails = new A11yDetails();
-		a11yDetails.limitationOnTheMaximumHeadroom = true;
-		a11yDetails.countersink = true;
-		a11yDetails.fencing = false;
-		a11yDetails.keyNeeded = true;
-		a11yDetails.keySafe = true;
-		a11yDetails.limitationOnTheMaximumPermittedAxleLoad = true;
-		a11yDetails.limitationOnTheMaximumVehicleWidth = true;
-		a11yDetails.noChimneyPathAvailable = true;
-		a11yDetails.normallyAccessible = true;
-		a11yDetails.notAccessibleForAerialPlatform = true;
-		a11yDetails.threeMeterDistanceToTramCatenary = true;
-		a11yDetails.trafficMeasuresNecessary = true;
-		a11yDetails.workOnPrivateLand = false;
+describe('FailureMode / Model / FailureModeMetaData', () => {
+	test('constructs a FailureModeMetaData instance', () => {
+		const failureModeMetaData = new FailureModeMetaData();
+		failureModeMetaData.faalOorzaak = null;
+		failureModeMetaData.bronVanValen = null;
+		failureModeMetaData.gevolgVanFalen = null;
+		failureModeMetaData.faaloorzaakAnders = null;
+		failureModeMetaData.bronVanFalenAnders = null;
 
-		expect(a11yDetails).toBeInstanceOf(A11yDetails);
-		expect(a11yDetails).toEqual({
-			countersink: true,
-			fencing: false,
-			keyNeeded: true,
-			keySafe: true,
-			limitationOnTheMaximumHeadroom: true,
-			limitationOnTheMaximumPermittedAxleLoad: true,
-			limitationOnTheMaximumVehicleWidth: true,
-			noChimneyPathAvailable: true,
-			normallyAccessible: true,
-			notAccessibleForAerialPlatform: true,
-			threeMeterDistanceToTramCatenary: true,
-			trafficMeasuresNecessary: true,
-			workOnPrivateLand: false,
+		expect(failureModeMetaData).toBeInstanceOf(FailureModeMetaData);
+		expect(failureModeMetaData).toEqual({
+			faalOorzaak: null,
+			bronVanValen: null,
+			gevolgVanFalen: null,
+			faaloorzaakAnders: null,
+			bronVanFalenAnders: null,
 		});
 	});
 });

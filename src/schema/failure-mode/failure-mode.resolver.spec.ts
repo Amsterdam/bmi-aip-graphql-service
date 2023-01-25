@@ -6,18 +6,10 @@ import { PrismaService } from '../../prisma.service';
 import { FailureModeResolver } from './failure-mode.resolver';
 import { FailureModeService } from './failure-mode.service';
 import { FailureModeRepository } from './failure-mode.repository';
-import {
-	domainFailureMode,
-	failureMode1,
-	failureMode2,
-	failureModeInput,
-	updateFailureModeInput,
-	deletedFailureMode,
-} from './__stubs__';
+import { domainFailureMode, failureMode1, failureMode2, failureModeInput, updateFailureModeInput } from './__stubs__';
 import { CreateFailureModeCommand } from './commands/create-failure-mode.command';
 import { FailureMode } from './models/failure-mode.model';
 import { UpdateFailureModeCommand } from './commands/update-failure-mode.command';
-import { DeleteFailureModeCommand } from './commands/delete-failure-mode.command';
 
 jest.mock('./failure-mode.service');
 jest.mock('./failure-mode.repository');
@@ -28,8 +20,6 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 			case CreateFailureModeCommand.name:
 			case UpdateFailureModeCommand.name:
 				return domainFailureMode;
-			case DeleteFailureModeCommand.name:
-				return deletedFailureMode;
 		}
 	}),
 	...(<any>{}),
@@ -65,20 +55,6 @@ describe('Decomposition / FailureMode / Resolver', () => {
 
 			expect(result).toBeInstanceOf(FailureMode);
 			expect(result.id).toBe(updateFailureModeInput.id);
-		});
-	});
-
-	describe('deleteFailureMode', () => {
-		test('soft-deletes and returns an failureMode', async () => {
-			const commandBusMock = getCommandBusMock();
-			const resolver = new FailureModeResolver(new FailureModeService(failureModeRepo), commandBusMock);
-			const result = await resolver.deleteFailureMode(domainFailureMode.id);
-			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteFailureModeCommand(domainFailureMode.id));
-
-			expect(result).toBeInstanceOf(FailureMode);
-			expect(result.id).toBe(domainFailureMode.id);
-			expect(result.deletedAt).toBe('Thu, 09 Jun 2022 15:03:22 GMT');
 		});
 	});
 

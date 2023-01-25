@@ -52,16 +52,16 @@ export class FailureModeRepository implements IFailureModeRepository {
 		analysisRamsWeightedPriority,
 		verificationRamsWeightedPriority,
 		maintenanceRamsWeightedPriority,
-		// copyOfFailureModeId,
 		surveyScopeId,
 		failureModeType,
-		// function,
+		purpose,
 		guideword,
 		failureMode,
 		causeOfFailure,
 		sourceOfFailure,
 		consequenceOfFailure,
 		noticableFailure,
+		copyOfFailureModeId,
 	}: CreateFailureModeInput): Promise<FailureMode> {
 		const data: Prisma.failureModesCreateInput = {
 			id: newId(),
@@ -70,7 +70,7 @@ export class FailureModeRepository implements IFailureModeRepository {
 			units: { connect: { id: unitId } },
 			manifestations: { connect: { id: manifestationId } },
 			customName,
-			metaData,
+			metaData: metaData as Prisma.InputJsonObject,
 			analysisRemarks,
 			verificationRemarks,
 			maintenanceRemarks,
@@ -104,11 +104,11 @@ export class FailureModeRepository implements IFailureModeRepository {
 			analysisRamsWeightedPriority,
 			verificationRamsWeightedPriority,
 			maintenanceRamsWeightedPriority,
-			// copyOfFailureModeId,
+			failureModes: { connect: { id: copyOfFailureModeId } },
 			surveyScopeId,
 			failureModeType,
 			dataSets_dataSetsTofailureModes_failureMode: { connect: { id: failureMode } },
-			// dataSets_dataSetsTofailureModes_function: { connect: { id: function } },
+			dataSets_dataSetsTofailureModes_function: { connect: { id: purpose } },
 			dataSets_dataSetsTofailureModes_guideword: { connect: { id: guideword } },
 			dataSets_dataSetsTofailureModes_causeOfFailure: { connect: { id: causeOfFailure } },
 			dataSets_dataSetsTofailureModes_sourceOfFailure: { connect: { id: sourceOfFailure } },
@@ -129,10 +129,6 @@ export class FailureModeRepository implements IFailureModeRepository {
 
 	async updateFailureMode({
 		id,
-		surveyId,
-		elementId,
-		unitId,
-		manifestationId,
 		customName,
 		metaData,
 		analysisRemarks,
@@ -171,6 +167,7 @@ export class FailureModeRepository implements IFailureModeRepository {
 		copyOfFailureModeId,
 		surveyScopeId,
 		failureModeType,
+		purpose,
 		guideword,
 		failureMode,
 		causeOfFailure,
@@ -180,7 +177,9 @@ export class FailureModeRepository implements IFailureModeRepository {
 	}: UpdateFailureModeInput): Promise<FailureMode> {
 		const data: Prisma.failureModesUpdateInput = {
 			customName,
-			metaData,
+			metaData: {
+				...metaData,
+			},
 			analysisRemarks,
 			verificationRemarks,
 			maintenanceRemarks,
@@ -211,59 +210,17 @@ export class FailureModeRepository implements IFailureModeRepository {
 			analysisRamsWeightedPriority,
 			verificationRamsWeightedPriority,
 			maintenanceRamsWeightedPriority,
-			surveyScopeId,
 			failureModeType,
+			// copyOfFailureModeId,
+			// surveyScopeId,
+			// purpose,
+			// guideword,
+			// failureMode,
+			// causeOfFailure,
+			// sourceOfFailure,
 			consequenceOfFailure,
 			noticableFailure,
 		};
-
-		if (manifestationId) {
-			data.manifestations = {
-				connect: {
-					id: manifestationId,
-				},
-			};
-		}
-
-		if (defaultFailureModeId) {
-			data.dataSets_dataSetsTofailureModes_failureMode = {
-				connect: {
-					id: defaultFailureModeId,
-				},
-			};
-		}
-		// copyOfFailureModeId,
-		if (guideword) {
-			data.dataSets_dataSetsTofailureModes_guideword = {
-				connect: {
-					id: guideword,
-				},
-			};
-		}
-
-		if (failureMode) {
-			data.dataSets_dataSetsTofailureModes_failureMode = {
-				connect: {
-					id: failureMode,
-				},
-			};
-		}
-
-		if (causeOfFailure) {
-			data.dataSets_dataSetsTofailureModes_causeOfFailure = {
-				connect: {
-					id: causeOfFailure,
-				},
-			};
-		}
-
-		if (sourceOfFailure) {
-			data.dataSets_dataSetsTofailureModes_sourceOfFailure = {
-				connect: {
-					id: sourceOfFailure,
-				},
-			};
-		}
 
 		return this.prisma.failureModes.update({
 			where: { id },

@@ -1,8 +1,6 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { registerSchema } from 'class-validator';
 
-import { AssetModule } from '../asset/asset.module';
 import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { PrismaService } from '../../prisma.service';
@@ -14,10 +12,6 @@ import { FailureModeRepository } from './failure-mode.repository';
 import { UpdateFailureModeHandler } from './commands/update-failure-mode.handler';
 import { FindFailureModesQuery } from './queries/find-failure-modes.query';
 import { FindFailureModesHandler } from './queries/find-failure-modes.handler';
-import { FailureModeMetaData } from './models/failure-mode-meta-data.model';
-
-// @ts-ignore
-registerSchema(FailureModeMetaData);
 
 @Module({
 	providers: [
@@ -30,6 +24,6 @@ registerSchema(FailureModeMetaData);
 		UpdateFailureModeHandler,
 		PrismaService,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })
 export class FailureModeModule {}

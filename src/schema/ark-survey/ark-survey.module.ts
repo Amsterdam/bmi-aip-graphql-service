@@ -13,7 +13,7 @@ import { CreateArkSurveyHandler } from './commands/create-ark-survey.handler';
 import { CreateReachSegmentHandler } from './commands/create-reach-segment.handler';
 import { DeleteArkSurveyHandler } from './commands/delete-ark-survey.handler';
 import { DeleteReachSegmentHandler } from './commands/delete-reach-segment.handler';
-import { FindArkSurveyReachSegmentsHandler } from './commands/find-ark-survey-reach-segments.handler';
+import { FindArkSurveyReachSegmentsHandler } from './queries/find-ark-survey-reach-segments.handler';
 import { SaveArkSurveyHandler } from './commands/save-ark-survey.handler';
 import { UpdateArkSurveyHandler } from './commands/update-ark-survey.handler';
 import { FindArkSurveyHandler } from './queries/find-ark-survey.handler';

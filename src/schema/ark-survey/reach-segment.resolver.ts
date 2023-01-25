@@ -7,11 +7,11 @@ import { ReachSegmentFactory } from './reach-segment.factory';
 import { ReachSegmentService } from './reach-segment.service';
 import { CreateReachSegmentInput } from './dto/create-reach-segment.input';
 import { UpdateReachSegmentInput } from './dto/update-reach-segment.input';
-import { CreateReachSegmentCommand } from './commands/create-reach-segment.command';
 import { UpdateReachSegmentCommand } from './commands/update-reach-segment.command';
 import { ReachSegment as DomainReachSegment } from './types/reach-segment.repository.interface';
 import { DeleteReachSegmentCommand } from './commands/delete-reach-segment.command';
 import { FindReachSegmentsQuery } from './queries/find-reach-segments.query';
+import { CreateReachSegmentCommand } from './commands/create-reach-segment.command';
 
 @Resolver((of) => ReachSegment)
 @Resource(ReachSegment.name)

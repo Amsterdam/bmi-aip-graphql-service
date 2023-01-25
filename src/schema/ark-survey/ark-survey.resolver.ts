@@ -2,8 +2,6 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { ReachSegment } from '../reach-segment/models/reach-segment.model';
-
 import { ArkSurvey } from './models/ark-survey.model';
 import { ArkSurveyFactory } from './ark-survey.factory';
 import { ArkSurveyService } from './ark-survey.service';
@@ -16,6 +14,7 @@ import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { FindArkSurveyReachSegmentsCommand } from './commands/find-ark-survey-reach-segments.command';
 import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.query';
+import { ReachSegment } from './models/reach-segment.model';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)

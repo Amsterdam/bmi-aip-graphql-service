@@ -8,10 +8,10 @@ import { ReachSegmentService } from './reach-segment.service';
 import { ReachSegmentRepository } from './reach-segment.repository';
 import { domainReachSegment, createReachSegmentInput, deletedReachSegment } from './__stubs__';
 import { CreateReachSegmentCommand } from './commands/create-reach-segment.command';
-import { ReachSegment } from './models/reach-segment.model';
-import { UpdateReachSegmentCommand } from './commands/update-reach-segment.command';
 import { DeleteReachSegmentCommand } from './commands/delete-reach-segment.command';
+import { UpdateReachSegmentCommand } from './commands/update-reach-segment.command';
 import { FindReachSegmentsQuery } from './queries/find-reach-segments.query';
+import { ReachSegment } from './models/reach-segment.model';
 
 jest.mock('./reach-segment.service');
 jest.mock('./reach-segment.repository');
@@ -45,7 +45,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const ReachSegmentRepo = new ReachSegmentRepository(prismaServiceMock);
 
-describe('Span Installation / ReachSegment / Resolver', () => {
+describe('ARK / ReachSegment / Resolver', () => {
 	describe('createReachSegment', () => {
 		test('creates and returns an element', async () => {
 			const commandBusMock = getCommandBusMock();

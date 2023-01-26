@@ -1,22 +1,22 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { FailureModeMetaData } from './failure-mode-meta-data.model';
 
 @ObjectType({ description: 'failureMode' })
 export class FailureMode {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => String)
+	@Field((type) => ID)
 	surveyId: string;
 
-	@Field((type) => String)
+	@Field((type) => ID)
 	elementId: string;
 
-	@Field((type) => String)
+	@Field((type) => ID)
 	unitId: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => ID, { nullable: true })
 	manifestationId?: string;
 
 	@Field((type) => String, { nullable: true })
@@ -34,7 +34,7 @@ export class FailureMode {
 	@Field((type) => String, { nullable: true })
 	maintenanceRemarks?: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => ID, { nullable: true })
 	defaultFailureModeId?: string;
 
 	@Field((type) => String, { nullable: true })
@@ -118,7 +118,7 @@ export class FailureMode {
 	@Field((type) => String, { nullable: true })
 	maintenanceRamsWeightedPriority?: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => ID, { nullable: true })
 	copyOfFailureModeId?: string;
 
 	@Field((type) => Number, { nullable: true })

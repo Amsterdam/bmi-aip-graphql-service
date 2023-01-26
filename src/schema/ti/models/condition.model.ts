@@ -1,20 +1,20 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ description: 'condition' })
 export class Condition {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => String)
+	@Field((type) => ID)
 	surveyId: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => ID, { nullable: true })
 	elementId?: string;
 
-	@Field((type) => String)
+	@Field((type) => ID)
 	unitId: string;
 
-	@Field((type) => String, { nullable: true })
+	@Field((type) => ID, { nullable: true })
 	manifestationId?: string;
 
 	@Field((type) => String)

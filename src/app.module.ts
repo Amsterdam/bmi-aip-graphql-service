@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
+import { ConditionModule } from 'src/schema/condition/condition.module';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
@@ -41,6 +42,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		AuthorizationModule,
 		DecompositionModule,
 		MeasureModule,
+		ConditionModule,
 		CyclicMeasureModule,
 		FailureModeModule,
 		SpanInstallationModule,

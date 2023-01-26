@@ -7,16 +7,16 @@ export class FailureMode {
 	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	elementId: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	unitId: string;
 
-	@Field((type) => ID, { nullable: true })
+	@Field((type) => String, { nullable: true })
 	manifestationId?: string;
 
 	@Field((type) => String, { nullable: true })
@@ -34,7 +34,7 @@ export class FailureMode {
 	@Field((type) => String, { nullable: true })
 	maintenanceRemarks?: string;
 
-	@Field((type) => ID, { nullable: true })
+	@Field((type) => String, { nullable: true })
 	defaultFailureModeId?: string;
 
 	@Field((type) => String, { nullable: true })
@@ -118,7 +118,7 @@ export class FailureMode {
 	@Field((type) => String, { nullable: true })
 	maintenanceRamsWeightedPriority?: string;
 
-	@Field((type) => ID, { nullable: true })
+	@Field((type) => String, { nullable: true })
 	copyOfFailureModeId?: string;
 
 	@Field((type) => Number, { nullable: true })

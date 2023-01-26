@@ -5,16 +5,16 @@ export class Condition {
 	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => ID, { nullable: true })
+	@Field((type) => String, { nullable: true })
 	elementId?: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	unitId: string;
 
-	@Field((type) => ID, { nullable: true })
+	@Field((type) => String, { nullable: true })
 	manifestationId?: string;
 
 	@Field((type) => String)

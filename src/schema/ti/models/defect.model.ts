@@ -7,7 +7,7 @@ export class Defect {
 	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => ID)
+	@Field((type) => String)
 	conditionId: string;
 
 	@Field((type) => String, { nullable: true })

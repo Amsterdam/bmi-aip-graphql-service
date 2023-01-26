@@ -6,11 +6,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
-import { ConditionModule } from 'src/schema/condition/condition.module';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
 import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
+import { ConditionModule } from './schema/condition/condition.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
@@ -26,6 +26,8 @@ import { SpanInstallationSurveyModule } from './schema/span-installation-survey/
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
+import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
 import { TiModule } from './schema/ti/ti.module';
 
 @Module({
@@ -61,6 +63,8 @@ import { TiModule } from './schema/ti/ti.module';
 			autoSchemaFile: true,
 		}),
 		TerminusModule,
+		ArkSurveyModule,
+		ReachSegmentModule,
 	],
 	controllers: [HealthController],
 	providers: [

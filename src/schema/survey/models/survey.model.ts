@@ -9,7 +9,7 @@ export class Survey {
 	objectId: string;
 
 	@Field((type) => String)
-	batchId: string;
+	batchId?: string;
 
 	@Field((type) => String)
 	status: string;
@@ -29,6 +29,11 @@ export class Survey {
 	@Field((type) => String)
 	inspectionStandardType: string;
 
+	/**
+	 * The column name is `surveryedOn` in the database.
+	 * This typo is kept in the database for backwards compatibility.
+	 * This model is using the correct spelling `surveyedOn`.
+	 */
 	@Field((type) => String, { nullable: true })
 	surveyedOn?: string;
 
@@ -157,4 +162,18 @@ export class Survey {
 
 	@Field((type) => String, { nullable: true })
 	updated_at?: string;
+}
+
+@ObjectType({ description: 'minimal Survey' })
+export class MinimalSurvey {
+	@Field((type) => String)
+	id: string;
+
+	/**
+	 * The column name is `surveryedOn` in the database.
+	 * This typo is kept in the database for backwards compatibility.
+	 * This model is using the correct spelling `surveyedOn`.
+	 */
+	@Field((type) => String, { nullable: true })
+	surveyedOn?: string;
 }

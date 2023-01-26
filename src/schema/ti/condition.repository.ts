@@ -60,10 +60,12 @@ export class ConditionRepository implements IConditionRepository {
 		return this.prisma.conditions.create({ data });
 	}
 
-	async findConditions(surveyId: string): Promise<Condition[]> {
-		return this.prisma.conditions.findMany({
+	async getCondition(surveyId: string): Promise<Condition | null> {
+		return this.prisma.conditions.findFirst({
 			where: {
-				surveyId,
+				surveys: {
+					id: surveyId,
+				},
 			},
 		});
 	}

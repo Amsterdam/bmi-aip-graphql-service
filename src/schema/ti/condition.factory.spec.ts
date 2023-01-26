@@ -1,4 +1,3 @@
-import { CreateConditionInput } from './dto/create-condition.input';
 import { ConditionFactory } from './condition.factory';
 import { domainCondition } from './__stubs__';
 import { Condition } from './models/condition.model';
@@ -17,13 +16,5 @@ describe('ConditionFactory', () => {
 		delete object.updated_at;
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(Condition);
-	});
-
-	test('CreateConditionInput', () => {
-		const result = ConditionFactory.CreateConditionInput('__UNIT_ID__');
-		expect(result).toEqual({
-			unitId: '__UNIT_ID__',
-		});
-		expect(result).toBeInstanceOf(CreateConditionInput);
 	});
 });

@@ -1,6 +1,6 @@
 import { Condition } from './models/condition.model';
 import { Condition as DomainCondition } from './types/condition.repository.interface';
-import { CreateConditionInput } from './dto/create-condition.input';
+// import { CreateConditionInput } from './dto/create-condition.input';
 
 export class ConditionFactory {
 	static CreateCondition({
@@ -52,14 +52,10 @@ export class ConditionFactory {
 		condition.ramsMaxTotalPriority = ramsMaxTotalPriority;
 		condition.ramsMaxWeightedPriority = ramsMaxWeightedPriority;
 		condition.isFurtherInvestigation = isFurtherInvestigation;
+
 		condition.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		condition.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
-		return condition;
-	}
 
-	static CreateConditionInput(unitId: string): CreateConditionInput {
-		const condition = new CreateConditionInput();
-		condition.unitId = unitId;
 		return condition;
 	}
 }

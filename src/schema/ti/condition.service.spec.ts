@@ -17,11 +17,10 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const repo = new ConditionRepository(prismaServiceMock);
 
 describe('Conditions / Service', () => {
-	test('findConditions returns array of Condition survey', async () => {
+	test('getCondition returns Condition by surveyId', async () => {
 		const service = new ConditionService(repo);
-		const conditions = await service.findConditions('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-		expect(conditions).toBeInstanceOf(Array);
-		expect(conditions[0]).toBeInstanceOf(Condition);
-		expect(conditions).toEqual([domainCondition].map((condition) => ConditionFactory.CreateCondition(condition)));
+		const condition = await service.getCondition('68a95a2c-b909-e77f-4d66-9fd5afef52db');
+		expect(condition).toBeInstanceOf(Condition);
+		expect(condition).toEqual(ConditionFactory.CreateCondition(domainCondition));
 	});
 });

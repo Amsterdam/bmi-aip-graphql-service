@@ -6,7 +6,7 @@ import { PrismaService } from '../../prisma.service';
 import { ConditionResolver } from './condition.resolver';
 import { ConditionService } from './condition.service';
 import { ConditionRepository } from './condition.repository';
-import { domainCondition, condition1, condition2, conditionInput, updateConditionInput } from './__stubs__';
+import { domainCondition, conditionInput, updateConditionInput } from './__stubs__';
 import { CreateConditionCommand } from './commands/create-condition.command';
 import { Condition } from './models/condition.model';
 import { UpdateConditionCommand } from './commands/update-condition.command';
@@ -58,10 +58,20 @@ describe('Decomposition / Condition / Resolver', () => {
 		});
 	});
 
-	test('getSurveyConditions returns an array of condition objects', async () => {
+	test('getSurveyConditions returns an condition object', async () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
-		const conditions = await resolver.getSurveyConditions('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-		expect(conditions).toEqual([condition1, condition2]);
+		const condition = await resolver.getCondition('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const object = {
+			...domainCondition,
+			createdAt: domainCondition.created_at ?? null,
+			updatedAt: domainCondition.updated_at ?? null,
+			craHistoryUnityCheck: 10.2,
+			craInitialUnityCheck: 10.2,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(condition).toBeInstanceOf(Condition);
+		expect(condition).toEqual(object);
 	});
 });

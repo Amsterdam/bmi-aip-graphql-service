@@ -9,7 +9,7 @@ import { domainCondition, conditionInput, updateConditionInput } from './__stubs
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	conditions: {
 		create: jest.fn().mockResolvedValue(domainCondition),
-		findMany: jest.fn().mockResolvedValue([domainCondition]),
+		findFirst: jest.fn().mockResolvedValue(domainCondition),
 		update: jest.fn().mockResolvedValue(domainCondition),
 	},
 	...(<any>{}),
@@ -50,12 +50,8 @@ describe('ConditionRepository', () => {
 		});
 	});
 
-	test('findConditions()', async () => {
-		const conditions = await repo.findConditions('__SURVEY_ID__');
-		expect(prismaServiceMock.conditions.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
-		});
-		expect(conditions).toEqual([domainCondition]);
+	test('getCondition()', async () => {
+		expect(await repo.getCondition(domainCondition.surveyId)).toEqual(domainCondition);
 	});
 
 	test('updateCondition()', async () => {

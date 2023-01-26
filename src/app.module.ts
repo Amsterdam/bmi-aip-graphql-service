@@ -25,6 +25,7 @@ import { SpanInstallationSurveyModule } from './schema/span-installation-survey/
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
+import { TiModule } from './schema/ti/ti.module';
 
 @Module({
 	imports: [
@@ -49,6 +50,7 @@ import { SurveyModule } from './schema/survey/survey.module';
 		BatchModule,
 		CommandModule,
 		SurveyModule,
+		TiModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,

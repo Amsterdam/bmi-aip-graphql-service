@@ -69,8 +69,8 @@ export class Condition {
 	isFurtherInvestigation?: boolean;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	createdAt?: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updatedAt?: string;
 }

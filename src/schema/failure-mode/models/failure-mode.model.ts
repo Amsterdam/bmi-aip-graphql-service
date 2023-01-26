@@ -149,8 +149,8 @@ export class FailureMode {
 	noticableFailure?: string;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	createdAt?: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updatedAt?: string;
 }

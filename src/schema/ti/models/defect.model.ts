@@ -108,10 +108,10 @@ export class Defect {
 	ramsWeightedPriority?: string;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	createdAt?: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updatedAt?: string;
 
 	// TODO Ensure the Condition model can be retrieved as a property
 	// @Field((type) => Condition)

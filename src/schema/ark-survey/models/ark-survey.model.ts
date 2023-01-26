@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -6,7 +6,7 @@ import { ReachSegment } from '../../reach-segment/models/reach-segment.model';
 
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

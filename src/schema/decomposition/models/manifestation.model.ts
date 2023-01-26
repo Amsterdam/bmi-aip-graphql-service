@@ -1,9 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 // @InputType({ isAbstract: true })
 @ObjectType({ description: 'manifestation' })
 export class Manifestation {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String, { nullable: true })

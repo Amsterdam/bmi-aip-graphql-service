@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -14,7 +14,7 @@ import { A11yDetails } from './a11y-details.model';
 
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

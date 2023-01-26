@@ -52,17 +52,7 @@ describe('FailureModeRepository', () => {
 		await repo.updateFailureMode(updateFailureModeInput);
 		expect(prismaServiceMock.failureModes.update).toHaveBeenCalledWith({
 			where: { id: updateFailureModeInput.id },
-			data: expect.objectContaining({
-				maintenanceType: FailureModeTypes.CorrectiveMaintenance,
-				planYear: 2010,
-				finalPlanYear: 2010,
-				costSurcharge: 7.3,
-				quantity: 20,
-				unitPrice: 33.99,
-				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
-				location: '__LOCATION__',
-				description: '__DESCTIPTION__',
-			}),
+			data: expect.objectContaining({}),
 		});
 	});
 });

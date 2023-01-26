@@ -1,6 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional, IsUUID } from 'class-validator';
 
+import { FailureModeMetaDataInput } from './failure-mode-meta-data.input';
+
 @InputType()
 export class BaseFailureModeInput {
 	@Field()
@@ -20,8 +22,8 @@ export class BaseFailureModeInput {
 	public customName: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
-	public metaData: string;
+	@Field(() => FailureModeMetaDataInput, { nullable: true })
+	public metaData: FailureModeMetaDataInput;
 
 	@IsOptional()
 	@Field({ nullable: true })
@@ -169,7 +171,7 @@ export class BaseFailureModeInput {
 
 	@Field()
 	@IsUUID()
-	public function: string;
+	public purpose: string; // function
 
 	@Field()
 	@IsUUID()
@@ -194,4 +196,12 @@ export class BaseFailureModeInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	public noticableFailure: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	createdAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	updatedAt?: Date;
 }

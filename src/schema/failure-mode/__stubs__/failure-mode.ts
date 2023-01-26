@@ -3,6 +3,7 @@ import { CreateFailureModeInput } from '../dto/create-failure-mode.input';
 import { FailureMode as DomainFailureMode } from '../types/failure-mode.repository.interface';
 import { FailureModeFactory } from '../failure-mode.factory';
 import { UpdateFailureModeInput } from '../dto/update-failure-mode.input';
+import { FailureModeMetaData } from '../models/failure-mode-meta-data.model';
 
 const failureMode1 = new FailureMode();
 failureMode1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -16,14 +17,20 @@ failureMode2.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 
 export { failureMode1, failureMode2 };
 
+const failureModeMetaData = new FailureModeMetaData();
+failureModeMetaData.faalOorzaak = null;
+failureModeMetaData.bronVanFalenAnders = null;
+failureModeMetaData.bronVanValen = null;
+failureModeMetaData.faaloorzaakAnders = null;
+failureModeMetaData.gevolgVanFalen = null;
+
 const failureModeRaw: Omit<DomainFailureMode, 'id'> = {
 	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',
 	unitId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
-	function: '',
 	elementId: '',
 	manifestationId: '',
 	customName: '',
-	metaData: '',
+	metaData: JSON.parse(JSON.stringify(failureModeMetaData)),
 	analysisRemarks: '',
 	verificationRemarks: '',
 	maintenanceRemarks: '',
@@ -66,6 +73,7 @@ const failureModeRaw: Omit<DomainFailureMode, 'id'> = {
 	sourceOfFailure: '',
 	consequenceOfFailure: '',
 	noticableFailure: '',
+	function: '',
 };
 
 export const failureModeInput = Object.keys(failureModeRaw).reduce((input, key) => {
@@ -76,6 +84,9 @@ export const failureModeInput = Object.keys(failureModeRaw).reduce((input, key) 
 const updateFailureMode = new UpdateFailureModeInput();
 updateFailureMode.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateFailureModeInput = Object.keys(failureModeRaw).reduce((input, key) => {
+	if (key === 'failureModeMetaData') {
+		input.metaData = failureModeMetaData;
+	}
 	input[key] = failureModeRaw[key];
 	return input;
 }, updateFailureMode);
@@ -87,8 +98,3 @@ export const domainFailureMode: DomainFailureMode = {
 };
 
 export const failureMode = FailureModeFactory.CreateFailureMode(domainFailureMode);
-
-export const deletedFailureMode: DomainFailureMode = {
-	...domainFailureMode,
-	// deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
-};

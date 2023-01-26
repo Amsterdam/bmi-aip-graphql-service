@@ -14,6 +14,7 @@ import { ElementRepository } from './element.repository';
 import { UnitRepository } from './unit.repository';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
 import { Unit } from './models/unit.model';
+import { CloneDecompositionFromPreviousSurveyCommand } from './commands/clone-decomposition-from-previous-survey.command';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
@@ -86,6 +87,37 @@ describe('Decomposition / Resolver', () => {
 			expect(result[0]).toBeInstanceOf(Element);
 			expect(result[1]).toBeInstanceOf(Element);
 			expect(typeof result[0].id).toBe('string');
+		});
+	});
+
+	describe('cloneDecompositionFromPreviousSurvey', () => {
+		test('it runs the CloneDecompositionFromPreviousSurvey command and returns an OK', async () => {
+			const commandBusMock = getCommandBusMock();
+			// const resolver = constructResolver(commandBusMock);
+			// const result = await resolver.cloneDecompositionFromPreviousSurvey('__SURVEY_ID__');
+
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__'),
+			);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__'),
+			);
+		});
+
+		test('an error is returned if the survey already contains decomposition items', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = constructResolver(commandBusMock);
+			const result = await resolver.cloneDecompositionFromPreviousSurvey('__SURVEY_ID__');
+
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__'),
+			);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__'),
+			);
+			expect(result).toEqual({
+				errors: ['Survey already contains decomposition items'],
+			});
 		});
 	});
 });

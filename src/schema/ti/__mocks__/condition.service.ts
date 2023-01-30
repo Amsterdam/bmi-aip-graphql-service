@@ -1,5 +1,5 @@
-import { condition } from '../__stubs__';
+import { condition1, condition2 } from '../__stubs__';
 
 export const ConditionService = jest.fn(() => ({
-	getCondition: jest.fn(() => condition),
+	getConditions: jest.fn(() => [condition1, condition2]),
 }));

@@ -46,7 +46,7 @@ describe('Decomposition / FailureMode / Resolver', () => {
 	});
 
 	describe('updateFailureMode', () => {
-		test('updates and returns an failureMode', async () => {
+		test('should be: "returns a failureMode"', async () => {
 			const commandBusMock = getCommandBusMock();
 			const resolver = new FailureModeResolver(new FailureModeService(failureModeRepo), commandBusMock);
 			const result = await resolver.updateFailureMode(updateFailureModeInput);

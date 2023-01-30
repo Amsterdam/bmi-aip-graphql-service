@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { Condition } from '../ti/models/condition.model';
+
 import { ConditionFactory } from './condition.factory';
 import { ConditionRepository } from './condition.repository';
 
@@ -7,7 +9,9 @@ import { ConditionRepository } from './condition.repository';
 export class ConditionService {
 	public constructor(private readonly conditionRepo: ConditionRepository) {}
 
-	public async getCondition(surveyId: string) {
-		return ConditionFactory.CreateCondition(await this.conditionRepo.getCondition(surveyId));
+	public async getConditions(surveyId: string): Promise<Condition[]> {
+		return (await this.conditionRepo.getConditions(surveyId)).map((condition) =>
+			ConditionFactory.CreateCondition(condition),
+		);
 	}
 }

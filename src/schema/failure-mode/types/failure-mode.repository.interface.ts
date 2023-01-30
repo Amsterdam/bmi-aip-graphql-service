@@ -60,7 +60,6 @@ const failureModes = Prisma.validator<Prisma.failureModesArgs>()({
 export type FailureMode = Prisma.failureModesGetPayload<typeof failureModes>;
 
 export interface IFailureModeRepository {
-	// findFailureModes(surveyId: string): Promise<FailureMode[]>;
 	createFailureMode(input: CreateFailureModeInput): Promise<FailureMode>;
 	updateFailureMode(input: UpdateFailureModeInput): Promise<FailureMode>;
 }

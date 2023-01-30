@@ -1,6 +1,5 @@
 import { Condition } from './models/condition.model';
 import { Condition as DomainCondition } from './types/condition.repository.interface';
-// import { CreateConditionInput } from './dto/create-condition.input';
 
 export class ConditionFactory {
 	static CreateCondition({

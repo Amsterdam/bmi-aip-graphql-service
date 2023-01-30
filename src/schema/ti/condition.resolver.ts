@@ -36,7 +36,7 @@ export class ConditionResolver {
 
 	@Query((returns) => [Condition], { name: 'conditions' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	async getCondition(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.conditionService.getCondition(surveyId);
+	async getConditions(@Args('surveyId', { type: () => String }) surveyId: string) {
+		return this.conditionService.getConditions(surveyId);
 	}
 }

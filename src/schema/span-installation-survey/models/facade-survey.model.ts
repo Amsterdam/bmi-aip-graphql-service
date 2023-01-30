@@ -1,8 +1,8 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ description: 'facadeSurvey' })
 export class FacadeSurvey {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

@@ -1,7 +1,7 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 @ObjectType({ description: 'reachSegment' })
 export class ReachSegment {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

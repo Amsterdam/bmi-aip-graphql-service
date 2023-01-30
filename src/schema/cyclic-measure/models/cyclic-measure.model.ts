@@ -1,11 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
 import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
 
 @ObjectType({ description: 'cyclicMeasure' })
 export class CyclicMeasure {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

@@ -7,9 +7,9 @@ import { GetSurveyByIdQuery } from './get-survey-by-id.query';
 
 @QueryHandler(GetSurveyByIdQuery)
 export class GetSurveyByIdHandler implements IQueryHandler<GetSurveyByIdQuery> {
-	constructor(private repository: SurveyService) {}
+	constructor(private service: SurveyService) {}
 
 	public async execute(command: GetSurveyByIdQuery): Promise<Survey> {
-		return this.repository.getSurvey(command.surveyId);
+		return this.service.getSurvey(command.surveyId);
 	}
 }

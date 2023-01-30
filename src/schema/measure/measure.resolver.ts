@@ -1,6 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
-import { CommandBus } from '@nestjs/cqrs';
+import { QueryBus, CommandBus } from '@nestjs/cqrs';
+
+import { Survey } from '../survey/models/survey.model';
+import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
 
 import { Measure } from './models/measure.model';
 import { MeasureFactory } from './measure.factory';
@@ -15,7 +18,7 @@ import { DeleteMeasureCommand } from './commands/delete-measure.command';
 @Resolver((of) => Measure)
 @Resource(Measure.name)
 export class MeasureResolver {
-	constructor(private measureService: MeasureService, private commandBus: CommandBus) {}
+	constructor(private measureService: MeasureService, private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Mutation(() => Measure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
@@ -48,5 +51,10 @@ export class MeasureResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.measureService.findMeasures(surveyId);
+	}
+
+	@ResolveField()
+	survey(@Parent() { surveyId }: Measure): Promise<Survey> {
+		return this.queryBus.execute<GetSurveyByIdQuery>(new GetSurveyByIdQuery(surveyId));
 	}
 }

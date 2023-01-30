@@ -5,12 +5,13 @@ import { CreateSurveyInput } from '../dto/create-survey.input';
 import { DbSurvey as DomainSurvey } from '../types/survey.repository.interface';
 import { SurveyFactory } from '../survey.factory';
 import { InspectionStandard } from '../types';
+import { SurveyStates } from '../types/surveyStates';
 
 const survey1 = new Survey();
 survey1.id = '0deb07f3-28f5-47e1-b72a-d1b2a19d4670';
 survey1.description = '__DESCRIPTION__';
 survey1.inspectionStandardType = InspectionStandard.spanInstallation;
-survey1.status = '__STATUS__';
+survey1.status = SurveyStates.open;
 
 const survey2 = new Survey();
 survey2.id = 'ab8adf9e-65a0-40aa-9b1c-ea3537d1f8d7';
@@ -23,7 +24,7 @@ export const surveyRaw: Omit<DomainSurvey, 'id'> = {
 	description: '__DESCRIPTION__',
 	condition: '__CONDITION__',
 	inspectionStandardType: InspectionStandard.spanInstallation,
-	status: '__STATUS__',
+	status: SurveyStates.open,
 	surveryedOn: undefined,
 	updatedOn: undefined,
 	batchId: '',
@@ -80,11 +81,6 @@ export const surveyRaw: Omit<DomainSurvey, 'id'> = {
 	legacyFailureMode: false,
 };
 
-export const surveyInput = Object.keys(surveyRaw).reduce((input, key) => {
-	input[key] = surveyRaw[key];
-	return input;
-}, new CreateSurveyInput());
-
 export const domainSurvey: DomainSurvey = {
 	...surveyRaw,
 	id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
@@ -92,5 +88,10 @@ export const domainSurvey: DomainSurvey = {
 	inspectionStandardType: InspectionStandard.spanInstallation,
 	objectId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 };
+
+export const surveyInput = Object.keys(SurveyFactory.CreateSurvey(domainSurvey)).reduce((input, key) => {
+	input[key] = surveyRaw[key];
+	return input;
+}, new CreateSurveyInput());
 
 export const survey = SurveyFactory.CreateSurvey(domainSurvey);

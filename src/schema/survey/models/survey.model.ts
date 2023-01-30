@@ -1,4 +1,5 @@
 import { Field, Int, Float, ObjectType } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType({ description: 'surveys' })
 export class Survey {
@@ -9,7 +10,7 @@ export class Survey {
 	objectId: string;
 
 	@Field((type) => String)
-	batchId: string;
+	batchId?: string;
 
 	@Field((type) => String)
 	status: string;
@@ -29,6 +30,11 @@ export class Survey {
 	@Field((type) => String)
 	inspectionStandardType: string;
 
+	/**
+	 * The column name is `surveryedOn` in the database.
+	 * This typo is kept in the database for backwards compatibility.
+	 * This model is using the correct spelling `surveyedOn`.
+	 */
 	@Field((type) => String, { nullable: true })
 	surveyedOn?: string;
 
@@ -36,7 +42,7 @@ export class Survey {
 	updatedOn?: string;
 
 	@Field((type) => Int, { nullable: true })
-	pointCloudStorageUsed?: number;
+	pointCloudStorageUsed?: bigint;
 
 	@Field((type) => Boolean, { nullable: true })
 	craInitialHistoryIsBuildBetween4074?: boolean;
@@ -128,8 +134,8 @@ export class Survey {
 	@Field((type) => Boolean, { nullable: true })
 	isCraAvailable?: boolean;
 
-	@Field((type) => String, { nullable: true })
-	inspectionStandardData?: any;
+	@Field((type) => GraphQLJSON, { nullable: true })
+	inspectionStandardData?: JSON;
 
 	@Field((type) => String, { nullable: true })
 	legacyFailureMode?: boolean;

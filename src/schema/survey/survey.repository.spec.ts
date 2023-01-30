@@ -5,6 +5,7 @@ import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from './survey.repository';
 import { domainSurvey, survey1, surveyInput } from './__stubs__';
 import { InspectionStandard } from './types';
+import { SurveyStates } from './types/surveyStates';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	surveys: {
@@ -33,7 +34,7 @@ describe('SurveyRepository', () => {
 						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 					},
 				},
-				status: '__STATUS__',
+				status: SurveyStates.open,
 				surveryedOn: undefined,
 				updatedOn: undefined,
 			}),
@@ -46,7 +47,7 @@ describe('SurveyRepository', () => {
 			description: '__DESCRIPTION__',
 			id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 			inspectionStandardType: InspectionStandard.spanInstallation,
-			status: '__STATUS__',
+			status: SurveyStates.open,
 		});
 	});
 });

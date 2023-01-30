@@ -63,6 +63,15 @@ export class UnitRepository implements IUnitRepository {
 		});
 	}
 
+	public async getUnitsBySurveyId(surveyId: string): Promise<Unit[]> {
+		return this.prisma.units.findMany({
+			where: {
+				surveyId,
+				deleted_at: null,
+			},
+		});
+	}
+
 	async updateUnit({
 		id,
 		name,

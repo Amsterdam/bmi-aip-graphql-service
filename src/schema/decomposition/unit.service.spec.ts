@@ -14,6 +14,7 @@ import mocked = jest.mocked;
 jest.mock('./unit.repository');
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
+	getUnitsBySurveyId: jest.fn().mockResolvedValue(domainUnit),
 	...(<any>{}),
 };
 

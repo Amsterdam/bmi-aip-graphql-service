@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
 import { Survey } from '../../survey/models/survey.model';
+import { Unit } from '../../decomposition/models/unit.model';
 
 @ObjectType({ description: 'measure' })
 export class Measure {
@@ -16,6 +17,9 @@ export class Measure {
 
 	@Field((type) => String)
 	unitId: string;
+
+	@Field((type) => [Unit])
+	units: Unit[];
 
 	@Field((type) => Number, { nullable: true })
 	planYear?: number;

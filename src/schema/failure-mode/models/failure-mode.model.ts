@@ -1,10 +1,10 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { FailureModeMetaData } from './failure-mode-meta-data.model';
 
 @ObjectType({ description: 'failureMode' })
 export class FailureMode {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)
@@ -149,8 +149,8 @@ export class FailureMode {
 	noticableFailure?: string;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	createdAt?: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updatedAt?: string;
 }

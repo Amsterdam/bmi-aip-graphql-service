@@ -7,7 +7,7 @@ import { DefectRepository } from './defect.repository';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	defects: {
-		findFirst: jest.fn().mockResolvedValue(domainDefect),
+		findUnique: jest.fn().mockResolvedValue(domainDefect),
 	},
 	...(<any>{}),
 };
@@ -16,6 +16,6 @@ const repo = new DefectRepository(prismaServiceMock);
 
 describe('TI / Defect / Repository', () => {
 	test('getDefect()', async () => {
-		expect(await repo.getDefect(domainDefect.conditionId)).toEqual(domainDefect);
+		expect(await repo.getDefect(domainDefect.id)).toEqual(domainDefect);
 	});
 });

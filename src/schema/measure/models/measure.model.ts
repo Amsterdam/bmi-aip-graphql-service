@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
 import { Survey } from '../../survey/models/survey.model';
+import { Defect } from '../../ti/models/defect.model';
 
 @ObjectType({ description: 'measure' })
 export class Measure {
@@ -52,6 +53,9 @@ export class Measure {
 
 	@Field((type) => String, { nullable: true })
 	defectId?: string;
+
+	@Field((type) => Defect)
+	defect: Defect;
 
 	@Field((type) => String, { nullable: true })
 	surveyScopeId?: string;

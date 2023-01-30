@@ -1,18 +1,6 @@
 import { DbSurvey as DomainSurvey } from '../survey/types/survey.repository.interface';
-// import { PartialBy } from '../../utils/utils';
 
 import { Survey } from './models/survey.model';
-
-// type SurveyType =
-// 	| 'id'
-// 	| 'surveryedOn'
-// 	| 'updatedOn'
-// 	| 'status'
-// 	| 'description'
-// 	| 'dUri'
-// 	| 'summaryAndAdvice'
-// 	| 'operatorCompanyId'
-// 	| 'surveyorCompanyId';
 
 export class SurveyFactory {
 	static CreateSurvey({

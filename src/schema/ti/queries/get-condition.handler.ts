@@ -8,7 +8,7 @@ import { GetConditionQuery } from './get-condition.query';
 export class GetConditionHandler implements IQueryHandler<GetConditionQuery> {
 	constructor(private service: ConditionService) {}
 
-	async execute({ surveyId }: GetConditionQuery) {
-		return this.service.getCondition(surveyId);
+	async execute({ conditionId }: GetConditionQuery) {
+		return this.service.getCondition(conditionId);
 	}
 }

@@ -33,7 +33,7 @@ const conditionRepo = new ConditionRepository(prismaServiceMock);
 
 describe('Decomposition / Condition / Resolver', () => {
 	describe('createCondition', () => {
-		test('creates and returns an condition', async () => {
+		test('creates and returns a condition', async () => {
 			const commandBusMock = getCommandBusMock();
 			const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
 			const result = await resolver.createCondition(conditionInput);
@@ -46,7 +46,7 @@ describe('Decomposition / Condition / Resolver', () => {
 	});
 
 	describe('updateCondition', () => {
-		test('updates and returns an condition', async () => {
+		test('updates and returns a condition', async () => {
 			const commandBusMock = getCommandBusMock();
 			const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
 			const result = await resolver.updateCondition(updateConditionInput);
@@ -75,7 +75,7 @@ describe('Decomposition / Condition / Resolver', () => {
 	// 	expect(conditions).toEqual(object);
 	// });
 
-	test('getSurveyConditions returns an condition object', async () => {
+	test('getConditions returns an array of Condition objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
 		const conditions = await resolver.getConditions('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');

@@ -11,15 +11,15 @@ const conditionMock: MockedObjectDeep<ConditionService> = {
 	...(<any>{}),
 };
 
-const identifier = 'b6bbf83e-da23-4693-9502-e6000015c709';
+const conditionId = 'b6bbf83e-da23-4693-9502-e6000015c709';
 
 describe('getConditionHandler', () => {
 	test('executes command', async () => {
-		const command = new GetConditionQuery(identifier);
+		const command = new GetConditionQuery(conditionId);
 		const result = await new GetConditionHandler(conditionMock).execute(command);
 
 		expect(conditionMock.getCondition).toHaveBeenCalledTimes(1);
-		expect(conditionMock.getCondition).toHaveBeenCalledWith(identifier);
+		expect(conditionMock.getCondition).toHaveBeenCalledWith(conditionId);
 
 		expect(result).toEqual([domainCondition]);
 	});

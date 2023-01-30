@@ -11,15 +11,15 @@ const defectServiceMock: MockedObjectDeep<DefectService> = {
 	...(<any>{}),
 };
 
-const conditionId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
+const defectId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('GetFacadeSurveyHandler', () => {
 	test('executes query', async () => {
-		const command = new GetDefectQuery(conditionId);
+		const command = new GetDefectQuery(defectId);
 		const result = await new GetDefectHandler(defectServiceMock).execute(command);
 
 		expect(defectServiceMock.getDefect).toHaveBeenCalledTimes(1);
-		expect(defectServiceMock.getDefect).toHaveBeenCalledWith(conditionId);
+		expect(defectServiceMock.getDefect).toHaveBeenCalledWith(defectId);
 
 		expect(result).toEqual(defect);
 	});

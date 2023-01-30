@@ -1,3 +1,3 @@
 export class GetConditionQuery {
-	public constructor(public readonly surveyId: string) {}
+	public constructor(public readonly conditionId: string) {}
 }

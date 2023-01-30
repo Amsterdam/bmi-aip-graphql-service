@@ -1,3 +1,3 @@
 export class GetDefectQuery {
-	public constructor(public readonly conditionId: string) {}
+	public constructor(public readonly defectId: string) {}
 }

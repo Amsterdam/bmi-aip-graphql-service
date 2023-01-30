@@ -11,6 +11,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		create: jest.fn().mockResolvedValue(domainCondition),
 		findMany: jest.fn().mockResolvedValue([domainCondition]),
 		update: jest.fn().mockResolvedValue(domainCondition),
+		findUnique: jest.fn().mockResolvedValue(domainCondition),
 	},
 	...(<any>{}),
 };
@@ -48,6 +49,14 @@ describe('ConditionRepository', () => {
 				isFurtherInvestigation: false,
 			}),
 		});
+	});
+
+	test('getCondition()', async () => {
+		const condition = await repo.getCondition('__CONDITION_ID__');
+		expect(prismaServiceMock.conditions.findUnique).toHaveBeenCalledWith({
+			where: { id: '__CONDITION_ID__' },
+		});
+		expect(condition).toEqual(domainCondition);
 	});
 
 	test('getConditions()', async () => {

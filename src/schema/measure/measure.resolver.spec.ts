@@ -87,7 +87,6 @@ describe('Decomposition / Measure / Resolver', () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new MeasureResolver(new MeasureService(measureRepo), commandBusMock, queryBusMock);
 		const measures = await resolver.getSurveyMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-		console.log('🚀 ~ file: measure.resolver.spec.ts:90 ~ test ~ measures', measures);
 		expect(measures).toEqual([measure1, measure2]);
 	});
 });

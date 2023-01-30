@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { RepairAdviceCategory } from '../types';
+import { Condition } from '../models/condition.model';
 
 @ObjectType({ description: 'defect' })
 export class Defect {
@@ -113,7 +114,6 @@ export class Defect {
 	@Field((type) => String, { nullable: true })
 	updatedAt?: string;
 
-	// TODO Ensure the Condition model can be retrieved as a property
-	// @Field((type) => Condition)
-	// condition: Condition
+	@Field((type) => Condition)
+	condition: Condition;
 }

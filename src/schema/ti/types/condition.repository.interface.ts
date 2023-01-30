@@ -34,7 +34,7 @@ const conditions = Prisma.validator<Prisma.conditionsArgs>()({
 export type Condition = Prisma.conditionsGetPayload<typeof conditions>;
 
 export interface IConditionRepository {
-	getCondition(surveyId: string): Promise<Condition | null>;
+	getConditions(surveyId: string): Promise<Condition[]>;
 	createCondition(input: CreateConditionInput): Promise<Condition>;
 	updateCondition(input: UpdateConditionInput): Promise<Condition>;
 }

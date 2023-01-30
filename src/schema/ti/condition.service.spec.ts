@@ -19,8 +19,9 @@ const repo = new ConditionRepository(prismaServiceMock);
 describe('Conditions / Service', () => {
 	test('getCondition returns Condition by surveyId', async () => {
 		const service = new ConditionService(repo);
-		const condition = await service.getCondition('68a95a2c-b909-e77f-4d66-9fd5afef52db');
-		expect(condition).toBeInstanceOf(Condition);
-		expect(condition).toEqual(ConditionFactory.CreateCondition(domainCondition));
+		const conditions = await service.getConditions('68a95a2c-b909-e77f-4d66-9fd5afef52db');
+		expect(conditions).toBeInstanceOf(Array);
+		expect(conditions[0]).toBeInstanceOf(Condition);
+		expect(conditions).toEqual([domainCondition].map((condition) => ConditionFactory.CreateCondition(condition)));
 	});
 });

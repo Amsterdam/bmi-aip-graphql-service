@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
-import { MinimalSurvey } from '../../survey/models/survey.model';
+import { Survey } from '../../survey/models/survey.model';
 
 @ObjectType({ description: 'measure' })
 export class Measure {
@@ -11,8 +11,8 @@ export class Measure {
 	@Field((type) => String)
 	surveyId: string;
 
-	@Field((type) => MinimalSurvey)
-	survey: MinimalSurvey;
+	@Field((type) => Survey)
+	survey: Survey;
 
 	@Field((type) => String)
 	unitId: string;

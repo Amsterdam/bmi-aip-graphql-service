@@ -5,12 +5,10 @@ import { Defect, IDefectRepository } from './types/defect.repository.interface';
 export class DefectRepository implements IDefectRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	public async getDefect(conditionId: string): Promise<Defect | null> {
-		return this.prisma.defects.findFirst({
+	public async getDefect(defectId: string): Promise<Defect | null> {
+		return this.prisma.defects.findUnique({
 			where: {
-				conditions: {
-					id: conditionId,
-				},
+				id: defectId,
 			},
 		});
 	}

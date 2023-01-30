@@ -8,7 +8,7 @@ import { GetDefectQuery } from './get-defect.query';
 export class GetDefectHandler implements IQueryHandler<GetDefectQuery> {
 	constructor(private service: DefectService) {}
 
-	async execute({ conditionId }: GetDefectQuery) {
-		return this.service.getDefect(conditionId);
+	async execute({ defectId }: GetDefectQuery) {
+		return this.service.getDefect(defectId);
 	}
 }

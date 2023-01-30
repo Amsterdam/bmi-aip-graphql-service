@@ -28,6 +28,8 @@ import { DecompositionResolver } from './decomposition.resolver';
 import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
 import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 import { FindUnitManifestationsHandler } from './commands/find-unit-manifestations.handler';
+import { CloneDecompositionFromPreviousSurveyHandler } from './commands/clone-decomposition-from-previous-survey.handler';
+import { DecompositionRepository } from './decomposition.repository';
 
 @Module({
 	providers: [
@@ -54,6 +56,9 @@ import { FindUnitManifestationsHandler } from './commands/find-unit-manifestatio
 		FindSurveyElementsHandler,
 		FindElementUnitsHandler,
 		FindUnitManifestationsHandler,
+		DecompositionResolver,
+		DecompositionRepository,
+		CloneDecompositionFromPreviousSurveyHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

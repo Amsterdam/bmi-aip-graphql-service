@@ -9,6 +9,7 @@ import { UnitService } from './unit.service';
 import { CreateDecompositionCommand } from './commands/create-decomposition.command';
 import { FindSurveyElementsCommand } from './commands/find-survey-elements.command';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
+import { CloneDecompositionFromPreviousSurveyCommand } from './commands/clone-decomposition-from-previous-survey.command';
 
 @Resolver((of) => Element)
 @Resource(Element.name)
@@ -38,5 +39,15 @@ export class DecompositionResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async findSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string): Promise<Element[]> {
 		return this.commandBus.execute<FindSurveyElementsCommand>(new FindSurveyElementsCommand(surveyId));
+	}
+
+	@Mutation((returns) => [Element])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	async cloneDecompositionFromPreviousSurvey(
+		@Args('surveyId', { type: () => String }) surveyId: string,
+	): Promise<Element[]> {
+		return this.commandBus.execute<CloneDecompositionFromPreviousSurveyCommand>(
+			new CloneDecompositionFromPreviousSurveyCommand(surveyId),
+		);
 	}
 }

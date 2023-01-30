@@ -18,8 +18,6 @@ import { ConditionService } from './condition.service';
 import { ConditionRepository } from './condition.repository';
 import { CreateConditionHandler } from './commands/create-condition.handler';
 import { UpdateConditionHandler } from './commands/update-condition.handler';
-import { GetConditionQuery } from './queries/get-condition.query';
-import { GetConditionHandler } from './queries/get-condition.handler';
 
 registerEnumType(RepairAdviceCategory, {
 	name: 'RepairAdviceCategory',

@@ -4,8 +4,10 @@ import { QueryBus, CommandBus } from '@nestjs/cqrs';
 
 import { Survey } from '../survey/models/survey.model';
 import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
+import { Element } from '../decomposition/models/element.model';
 import { Unit } from '../decomposition/models/unit.model';
 import { GetUnitsBySurveyIdQuery } from '../decomposition/queries/get-units-by-survey-id.query';
+import { GetElementsBySurveyIdQuery } from '../decomposition/queries/get-elements-by-survey-id.query';
 import { Defect } from '../ti/models/defect.model';
 import { GetDefectQuery } from '../ti/queries/get-defect.query';
 
@@ -60,6 +62,11 @@ export class MeasureResolver {
 	@ResolveField()
 	survey(@Parent() { surveyId }: Measure): Promise<Survey> {
 		return this.queryBus.execute<GetSurveyByIdQuery>(new GetSurveyByIdQuery(surveyId));
+	}
+
+	@ResolveField()
+	element(@Parent() { surveyId }: Measure): Promise<Element[]> {
+		return this.queryBus.execute<GetElementsBySurveyIdQuery>(new GetElementsBySurveyIdQuery(surveyId));
 	}
 
 	@ResolveField()

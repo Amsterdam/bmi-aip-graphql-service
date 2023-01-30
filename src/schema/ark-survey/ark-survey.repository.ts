@@ -173,13 +173,13 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 			return this.updateArkSurvey(insertData);
 		} else {
-			await this.createArkSurvey(insertData);
+			const newRecord = await this.createArkSurvey(insertData);
 			// Create new reach segments if applicable
 			if (insertData.reachSegments) {
 				const reachSegmentsFormatted =
 					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
 				reachSegmentsFormatted.map((segment) => {
-					segment.arkSurveyId = existingRecord.id;
+					segment.arkSurveyId = newRecord.id;
 					segment.id = newId();
 				});
 

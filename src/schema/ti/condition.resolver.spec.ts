@@ -1,0 +1,77 @@
+import { MockedObjectDeep } from 'ts-jest';
+import { CommandBus } from '@nestjs/cqrs';
+
+import { PrismaService } from '../../prisma.service';
+
+import { ConditionResolver } from './condition.resolver';
+import { ConditionService } from './condition.service';
+import { ConditionRepository } from './condition.repository';
+import { domainCondition, conditionInput, updateConditionInput } from './__stubs__';
+import { CreateConditionCommand } from './commands/create-condition.command';
+import { Condition } from './models/condition.model';
+import { UpdateConditionCommand } from './commands/update-condition.command';
+
+jest.mock('./condition.service');
+jest.mock('./condition.repository');
+
+const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
+	execute: jest.fn((command: any) => {
+		switch (command.constructor.name) {
+			case CreateConditionCommand.name:
+			case UpdateConditionCommand.name:
+				return domainCondition;
+		}
+	}),
+	...(<any>{}),
+});
+
+const prismaServiceMock: MockedObjectDeep<PrismaService> = {
+	...(<any>{}),
+};
+
+const conditionRepo = new ConditionRepository(prismaServiceMock);
+
+describe('Decomposition / Condition / Resolver', () => {
+	describe('createCondition', () => {
+		test('creates and returns an condition', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
+			const result = await resolver.createCondition(conditionInput);
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateConditionCommand(conditionInput));
+
+			expect(result).toBeInstanceOf(Condition);
+			expect(typeof result.id).toBe('string');
+		});
+	});
+
+	describe('updateCondition', () => {
+		test('updates and returns an condition', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
+			const result = await resolver.updateCondition(updateConditionInput);
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateConditionCommand(updateConditionInput));
+
+			expect(result).toBeInstanceOf(Condition);
+			expect(result.id).toBe(updateConditionInput.id);
+		});
+	});
+
+	test('getSurveyConditions returns an condition object', async () => {
+		const commandBusMock = getCommandBusMock();
+		const resolver = new ConditionResolver(new ConditionService(conditionRepo), commandBusMock);
+		const condition = await resolver.getCondition('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const object = {
+			...domainCondition,
+			createdAt: domainCondition.created_at ?? null,
+			updatedAt: domainCondition.updated_at ?? null,
+			craHistoryUnityCheck: 10.2,
+			craInitialUnityCheck: 10.2,
+		};
+		delete object.created_at;
+		delete object.updated_at;
+		expect(condition).toBeInstanceOf(Condition);
+		expect(condition).toEqual(object);
+	});
+});

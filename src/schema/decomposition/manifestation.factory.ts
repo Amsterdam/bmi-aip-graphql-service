@@ -22,7 +22,7 @@ export class ManifestationFactory {
 	}: DomainManifestation): Manifestation {
 		const manifestation = new Manifestation();
 		manifestation.id = id;
-		manifestation.permanentId = id;
+		manifestation.permanentId = permanentId;
 		manifestation.name = name;
 		manifestation.code = code;
 		manifestation.location = location;

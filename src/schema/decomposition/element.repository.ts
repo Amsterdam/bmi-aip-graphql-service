@@ -65,6 +65,14 @@ export class ElementRepository implements IElementRepository {
 		});
 	}
 
+	public async getElementById(id: string): Promise<Element> {
+		return this.prisma.elements.findUnique({
+			where: {
+				id,
+			},
+		});
+	}
+
 	async updateElement({
 		id,
 		name,

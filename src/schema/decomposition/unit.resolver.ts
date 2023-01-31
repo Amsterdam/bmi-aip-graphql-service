@@ -1,5 +1,5 @@
 import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { Unit as DomainUnit } from './types/unit.repository.interface';
@@ -16,7 +16,7 @@ import { FindUnitManifestationsCommand } from './commands/find-unit-manifestatio
 
 @Resolver(() => Unit)
 export class UnitResolver {
-	constructor(private unitService: UnitService, private commandBus: CommandBus) {}
+	constructor(private unitService: UnitService, private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Mutation(() => Unit)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })

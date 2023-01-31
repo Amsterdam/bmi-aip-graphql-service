@@ -13,4 +13,8 @@ export class FailureModeService {
 			FailureModeFactory.CreateFailureMode(failureMode),
 		);
 	}
+
+	async getFailureMode(failureModeId: string) {
+		return FailureModeFactory.CreateFailureMode(await this.failureModeRepo.getFailureMode(failureModeId));
+	}
 }

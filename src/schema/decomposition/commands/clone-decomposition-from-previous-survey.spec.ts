@@ -1,22 +1,20 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { DecompositionRepository } from '../decomposition.repository';
-import { DecompositionCloneResult } from '../types/decomposition-clone-result';
-// import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decomposition-from-previous-survey.command';
-// import { CloneDecompositionFromPreviousSurveyHandler } from './clone-decomposition-from-previous-survey.handler';
+import { domainElement } from '../__stubs__';
+
+import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decomposition-from-previous-survey.command';
 
 const decompositionRepoMock: MockedObjectDeep<DecompositionRepository> = {
-	cloneDecompositionFromPreviousSurvey: jest
-		.fn()
-		.mockResolvedValue({ errors: [], messages: [] } as DecompositionCloneResult),
+	findPreviousSurveyId: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
+	checkIfAlreadyMigrated: jest.fn().mockResolvedValue(false),
+	cloneDecomposition: jest.fn().mockResolvedValue([domainElement, domainElement]),
 	...(<any>{}),
 };
 
 describe('CloneDecompositionFromPreviousSurveyCommand', () => {
 	test('executes command', async () => {
-		//const command = new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__');
-		// const result = await new CloneDecompositionFromPreviousSurveyHandler(decompositionRepoMock).execute(command);
-
+		new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__');
 		expect(decompositionRepoMock.cloneDecomposition).toHaveBeenCalledTimes(1);
 	});
 });

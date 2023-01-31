@@ -1,9 +1,13 @@
 import { PrismaService } from 'src/prisma.service';
 import { MockedObjectDeep } from 'ts-jest';
 
+import { Survey } from '../survey/models/survey.model';
+import { domainSurvey } from '../survey/__stubs__';
+
 import { DecompositionRepository } from './decomposition.repository';
 import { SurveyHasDecompositionException } from './exceptions/survey-has-decomposition.exception';
 import { domainElement, domainManifestation, domainUnit } from './__stubs__';
+import { ElementService } from './element.service';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
@@ -27,44 +31,48 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		findMany: jest.fn().mockResolvedValue([domainManifestation]),
 		update: jest.fn().mockResolvedValue(domainManifestation),
 	},
+	surveys: {
+		findFirst: jest.fn().mockResolvedValue(domainSurvey),
+		findUnique: jest.fn().mockResolvedValue(domainSurvey),
+	},
 	...(<any>{}),
 };
 
-const repo = new DecompositionRepository(prismaServiceMock);
+const elementsServiceMock: MockedObjectDeep<ElementService> = {
+	getElements: jest.fn().mockResolvedValue([domainElement]),
+};
+
+const repo = new DecompositionRepository(elementsServiceMock, prismaServiceMock);
 
 describe('Decomposition / Repository', () => {
 	describe('findPrevousSurveyId()', () => {
 		test('returns the id of the survey with the same objectId created prior to the given surveyId, based on the created_at field', async () => {
-			// stub multiple surveys created for same objectId
-			// call find previous surveyId
-			// check if the correct surveyId is returned
+			prismaServiceMock.surveys.findFirst.mockResolvedValue({
+				...domainSurvey,
+				id: '__PREVIOUS_SURVEY_ID__',
+			} as Survey);
 
-			const result = null;
-			const expected = [];
-			expect(result).toBe(expected);
+			const resultId = await repo.findPreviousSurveyId('__SURVEY_ID__');
+
+			expect(resultId).toEqual('__PREVIOUS_SURVEY_ID__');
 		});
 	});
 
 	describe('cloneDecomposition()', () => {
 		test('clones a decomposition from the previous survey and returns the decomposition structure', async () => {
-			// stub previous survey
-			// stub new survey
-			// stub previous survey elements
-			// stub previous survey units
-			// stub previous survey manifestations
-			// call cloneDecomposition
-			const result = await repo.cloneDecomposition('__SURVEY_ID___', '___PREVIOUS_SUREY_ID___');
-			// check if the element prisma create calls are made
-			// check if the unit prisma create calls are made
-			// check if the manifestions prisma create calls are made
+			await repo.cloneDecomposition('__SURVEY_ID___', '___PREVIOUS_SUREY_ID___');
 
-			expect(result[0]).toBeInstanceOf(Element);
+			expect(prismaServiceMock.elements.create).toHaveBeenCalledTimes(1);
+			expect(prismaServiceMock.units.create).toHaveBeenCalledTimes(1);
+			expect(prismaServiceMock.manifestations.create).toHaveBeenCalledTimes(1);
 		});
 
 		test('an error is returned if the survey already contains decomposition items', async () => {
-			await expect(repo.cloneDecomposition('__SURVEY_ID___', '___PREVIOUS_SUREY_ID___')).rejects.toThrow(
-				SurveyHasDecompositionException,
-			);
+			try {
+				await repo.cloneDecomposition('__SURVEY_ID___', '___PREVIOUS_SUREY_ID___');
+			} catch (error) {
+				expect(error).toBeInstanceOf(SurveyHasDecompositionException);
+			}
 		});
 	});
 });

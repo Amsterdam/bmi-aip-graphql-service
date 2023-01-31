@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { PrismaService } from 'src/prisma.service';
-import { newId } from 'src/utils';
+
+import { newId } from '../../utils/newId';
 
 import { ElementService } from './element.service';
 import { Element } from './models/element.model';

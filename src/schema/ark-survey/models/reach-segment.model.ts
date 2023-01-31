@@ -1,7 +1,9 @@
-import { Field, Float, InputType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+@ObjectType({ description: 'reachSegment' })
+export class ReachSegment {
+	@Field((type) => ID)
+	id: string;
 
-@InputType()
-export class BaseReachSegmentInput {
 	@Field((type) => String)
 	arkSurveyId: string;
 
@@ -27,11 +29,8 @@ export class BaseReachSegmentInput {
 	sortNumber?: number;
 
 	@Field((type) => String, { nullable: true })
-	created_at: string;
+	createdAt: string;
 
 	@Field((type) => String, { nullable: true })
-	updated_at: string;
-
-	@Field((type) => String, { nullable: true })
-	deleted_at: string;
+	updatedAt: string;
 }

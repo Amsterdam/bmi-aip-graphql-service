@@ -23,7 +23,7 @@ describe('CyclicMeasureRepository', () => {
 		await repo.createCyclicMeasure(cyclicMeasureInput);
 		expect(prismaServiceMock.cyclicMeasures.create).toHaveBeenCalledWith({
 			data: expect.objectContaining({
-				maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
+				maintenanceType: CyclicMeasureTypes.DailyMaintenance,
 				surveys: {
 					connect: {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',
@@ -50,10 +50,10 @@ describe('CyclicMeasureRepository', () => {
 		});
 	});
 
-	test('getCyclicMeasures()', async () => {
-		const cyclicMeasures = await repo.getCyclicMeasures('__UNIT_ID__');
+	test('findCyclicMeasures()', async () => {
+		const cyclicMeasures = await repo.findCyclicMeasures('__SURVEY_ID__');
 		expect(prismaServiceMock.cyclicMeasures.findMany).toHaveBeenCalledWith({
-			where: { unitId: '__UNIT_ID__' },
+			where: { surveyId: '__SURVEY_ID__' },
 		});
 		expect(cyclicMeasures).toEqual([domainCyclicMeasure]);
 	});
@@ -63,7 +63,7 @@ describe('CyclicMeasureRepository', () => {
 		expect(prismaServiceMock.cyclicMeasures.update).toHaveBeenCalledWith({
 			where: { id: updateCyclicMeasureInput.id },
 			data: expect.objectContaining({
-				maintenanceType: CyclicMeasureTypes.Dagelijksonderhoud,
+				maintenanceType: CyclicMeasureTypes.DailyMaintenance,
 				planYear: 2010,
 				finalPlanYear: 2010,
 				costSurcharge: 7.3,

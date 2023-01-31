@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -6,7 +6,7 @@ import { SupplierType } from '../types';
 
 @ObjectType({ description: 'luminaire' })
 export class Luminaire {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	// Parent is scoped to supportSystemId, so on this level we don't need that verbosity

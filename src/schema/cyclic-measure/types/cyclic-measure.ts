@@ -1,5 +1,5 @@
 export enum CyclicMeasureTypes {
-	'GrootOnderhoud' = 'GrootOnderhoud',
-	'Dagelijksonderhoud' = 'Dagelijksonderhoud',
-	'Vervangen' = 'Vervangen',
+	'MajorMaintenance' = 'MajorMaintenance', // Previously 'GrootOnderhoud'
+	'DailyMaintenance' = 'DailyMaintenance', // Previously 'Dagelijksonderhoud'
+	'ToReplace' = 'ToReplace', // Previously 'Vervangen'
 }

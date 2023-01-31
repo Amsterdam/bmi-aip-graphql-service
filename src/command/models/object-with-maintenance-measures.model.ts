@@ -5,6 +5,6 @@ export class ObjectWithMaintenanceMeasuresModel {
 	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => String)
+	@Field((type) => String, { nullable: true })
 	code: string;
 }

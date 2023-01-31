@@ -5,6 +5,6 @@ export class Nen2767ObjectWithDecompositionModel {
 	@Field((type) => ID)
 	id: string;
 
-	@Field((type) => String)
+	@Field((type) => String, { nullable: true })
 	code: string;
 }

@@ -17,9 +17,9 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const repo = new CyclicMeasureRepository(prismaServiceMock);
 
 describe('CyclicMeasures / Service', () => {
-	test('getCyclicMeasures returns array of CyclicMeasure unit', async () => {
+	test('findCyclicMeasures returns array of CyclicMeasure survey', async () => {
 		const service = new CyclicMeasureService(repo);
-		const cyclicMeasures = await service.getCyclicMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const cyclicMeasures = await service.findCyclicMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(cyclicMeasures).toBeInstanceOf(Array);
 		expect(cyclicMeasures[0]).toBeInstanceOf(CyclicMeasure);
 		expect(cyclicMeasures).toEqual(

@@ -6,7 +6,7 @@ import { FindCyclicMeasuresQuery } from '../queries/find-cyclic-measures.query';
 import { FindCyclicMeasuresHandler } from '../queries/find-cyclic-measures.handler';
 
 const cyclicMeasureMock: MockedObjectDeep<CyclicMeasureService> = {
-	getCyclicMeasures: jest.fn().mockResolvedValue([domainCyclicMeasure]),
+	findCyclicMeasures: jest.fn().mockResolvedValue([domainCyclicMeasure]),
 	...(<any>{}),
 };
 
@@ -17,8 +17,8 @@ describe('FindMeasuresHandler', () => {
 		const command = new FindCyclicMeasuresQuery(identifier);
 		const result = await new FindCyclicMeasuresHandler(cyclicMeasureMock).execute(command);
 
-		expect(cyclicMeasureMock.getCyclicMeasures).toHaveBeenCalledTimes(1);
-		expect(cyclicMeasureMock.getCyclicMeasures).toHaveBeenCalledWith(identifier);
+		expect(cyclicMeasureMock.findCyclicMeasures).toHaveBeenCalledTimes(1);
+		expect(cyclicMeasureMock.findCyclicMeasures).toHaveBeenCalledWith(identifier);
 
 		expect(result).toEqual([domainCyclicMeasure]);
 	});

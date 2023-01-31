@@ -50,7 +50,7 @@ export class CyclicMeasureResolver {
 
 	@Query((returns) => [CyclicMeasure], { name: 'cyclicMeasures' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	async getSurveyCyclicMeasures(@Args('unitId', { type: () => String }) unitId: string) {
-		return this.cyclicMeasureService.getCyclicMeasures(unitId);
+	async getSurveyCyclicMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
+		return this.cyclicMeasureService.findCyclicMeasures(surveyId);
 	}
 }

@@ -6,6 +6,6 @@ export enum QuantityUnitOfMeasurement {
 }
 
 export enum MeasureTypes {
-	'CorrectiveMaintenance' = 'Correctief onderhoud',
-	'PreventiveMaintenance' = 'Preventief onderhoud',
+	'CorrectiveMaintenance' = 'CorrectiveMaintenance', // Previously 'Correctief onderhoud'
+	'PreventiveMaintenance' = 'PreventiveMaintenance', // Previously 'Preventief onderhoud'
 }

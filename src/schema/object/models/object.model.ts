@@ -1,9 +1,9 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType({ description: 'object' })
 export class ObjectModel {
-	@Field((type) => String)
+	@Field((type) => ID)
 	id: string;
 
 	@Field((type) => String)

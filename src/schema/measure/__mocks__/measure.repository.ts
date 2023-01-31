@@ -2,5 +2,5 @@ import { domainMeasure, measure1 } from '../__stubs__';
 
 export const MeasureRepository = jest.fn(() => ({
 	createMeasure: jest.fn(() => measure1),
-	getMeasures: jest.fn(() => [domainMeasure]),
+	findMeasures: jest.fn(() => [domainMeasure]),
 }));

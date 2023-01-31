@@ -4,6 +4,8 @@ import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 import { newId } from '../utils';
+import { MeasureTypes } from '../schema/measure/types/measure';
+import { CyclicMeasureTypes } from '../schema/cyclic-measure/types/cyclic-measure';
 
 import type { MigrateMaintenanceMeasuresReturnType } from './types';
 
@@ -55,6 +57,30 @@ export class MigrateMaintenanceMeasuresRepository {
 		return !!measuresCount || !!cyclicMeasuresCount;
 	}
 
+	private castMeasureMaintenanceType(maintenanceType: string) {
+		switch (maintenanceType) {
+			case 'Correctief onderhoud':
+				return MeasureTypes.CorrectiveMaintenance;
+			case 'Preventief onderhoud':
+				return MeasureTypes.PreventiveMaintenance;
+			default:
+				return maintenanceType;
+		}
+	}
+
+	private castCyclicMeasureMaintenanceType(maintenanceType: string) {
+		switch (maintenanceType) {
+			case 'Groot onderhoud':
+				return CyclicMeasureTypes.MajorMaintenance;
+			case 'Dagelijksonderhoud':
+				return CyclicMeasureTypes.DailyMaintenance;
+			case 'Vervangen':
+				return CyclicMeasureTypes.ToReplace;
+			default:
+				return maintenanceType;
+		}
+	}
+
 	private async migrateToMeasures(surveyId: string) {
 		const maintenanceMeasures = await this.prisma.maintenanceMeasures.findMany({
 			where: {
@@ -97,7 +123,7 @@ export class MigrateMaintenanceMeasuresRepository {
 								},
 							},
 							description,
-							maintenanceType,
+							maintenanceType: this.castMeasureMaintenanceType(maintenanceType),
 							location,
 							planYear,
 							finalPlanYear,
@@ -277,7 +303,7 @@ export class MigrateMaintenanceMeasuresRepository {
 				planYear,
 				finalPlanYear,
 				costSurcharge,
-				maintenanceType,
+				maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
 				remarks,
 				cycle,
 				unitPrice,
@@ -440,7 +466,7 @@ export class MigrateMaintenanceMeasuresRepository {
 
 		let previousSurveyId: string;
 
-		surveys.forEach(({ id: surveyId }, idx) => {
+		surveys.forEach(({ id: surveyId }) => {
 			queue.add(async () => {
 				try {
 					const alreadyMigrated = await this.checkIfAlreadyMigrated(surveyId);

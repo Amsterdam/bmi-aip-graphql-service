@@ -1,8 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
-import { IsGeometry } from 'src/IsGeometry';
 
+import { IsGeometry } from '../../../utils/IsGeometry';
 @InputType()
 export class BaseArkSurveyInput {
 	@Field((type) => String)

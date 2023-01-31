@@ -4,6 +4,7 @@ import { DecompositionRepository } from '../decomposition.repository';
 import { domainElement } from '../__stubs__';
 
 import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decomposition-from-previous-survey.command';
+import { CloneDecompositionFromPreviousSurveyHandler } from './clone-decomposition-from-previous-survey.handler';
 
 const decompositionRepoMock: MockedObjectDeep<DecompositionRepository> = {
 	findPreviousSurveyId: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
@@ -14,7 +15,9 @@ const decompositionRepoMock: MockedObjectDeep<DecompositionRepository> = {
 
 describe('CloneDecompositionFromPreviousSurveyCommand', () => {
 	test('executes command', async () => {
-		new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__');
+		const command = new CloneDecompositionFromPreviousSurveyCommand('__SURVEY_ID__');
+		await new CloneDecompositionFromPreviousSurveyHandler(decompositionRepoMock).execute(command);
+
 		expect(decompositionRepoMock.cloneDecomposition).toHaveBeenCalledTimes(1);
 	});
 });

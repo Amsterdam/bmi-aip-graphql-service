@@ -127,6 +127,14 @@ export class FailureModeRepository implements IFailureModeRepository {
 		});
 	}
 
+	public async getFailureMode(failureModeId: string): Promise<FailureMode | null> {
+		return this.prisma.failureModes.findUnique({
+			where: {
+				id: failureModeId,
+			},
+		});
+	}
+
 	async updateFailureMode({
 		id,
 		customName,

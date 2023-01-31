@@ -20,11 +20,11 @@ export class Measure {
 	@Field((type) => String)
 	unitId: string;
 
-	@Field((type) => [Element])
-	elements: Element[];
+	@Field((type) => Element)
+	element: Element;
 
-	@Field((type) => [Unit])
-	units: Unit[];
+	@Field((type) => Unit)
+	unit: Unit;
 
 	@Field((type) => Number, { nullable: true })
 	planYear?: number;

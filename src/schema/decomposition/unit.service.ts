@@ -22,7 +22,7 @@ export class UnitService {
 		return UnitFactory.CreateUnit(await this.unitRepo.deleteUnit(unitId));
 	}
 
-	async getUnitsBySurveyId(surveyId: string): Promise<Unit[]> {
-		return (await this.unitRepo.getUnitsBySurveyId(surveyId)).map((unit) => UnitFactory.CreateUnit(unit));
+	async getUnitById(unitId: string): Promise<Unit> {
+		return UnitFactory.CreateUnit(await this.unitRepo.getUnitById(unitId));
 	}
 }

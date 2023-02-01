@@ -15,6 +15,7 @@ export class ReachSegmentInput {
 	@Field((type) => Number, { nullable: true })
 	public riskScore?: number;
 
+	@IsOptional()
 	@Min(1)
 	@Max(16)
 	@Field((type) => Float, { nullable: true })

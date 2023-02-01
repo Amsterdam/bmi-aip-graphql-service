@@ -5,6 +5,7 @@ import { Survey } from '../../survey/models/survey.model';
 import { Element } from '../../decomposition/models/element.model';
 import { Unit } from '../../decomposition/models/unit.model';
 import { Defect } from '../../ti/models/defect.model';
+import { FailureMode } from '../../failure-mode/models/failure-mode.model';
 
 @ObjectType({ description: 'measure' })
 export class Measure {
@@ -58,6 +59,9 @@ export class Measure {
 
 	@Field((type) => String, { nullable: true })
 	failureModeId?: string;
+
+	@Field((type) => FailureMode)
+	failureMode: FailureMode;
 
 	@Field((type) => String, { nullable: true })
 	defectId?: string;

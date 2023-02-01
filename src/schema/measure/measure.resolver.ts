@@ -77,7 +77,7 @@ export class MeasureResolver {
 	}
 
 	@ResolveField()
-	defect(@Parent() { defectId }: Measure): Promise<Defect> {
+	async defect(@Parent() { defectId }: Measure): Promise<Defect> {
 		return this.queryBus.execute<GetDefectQuery>(new GetDefectQuery(defectId));
 	}
 

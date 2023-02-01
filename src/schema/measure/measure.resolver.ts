@@ -72,8 +72,8 @@ export class MeasureResolver {
 	}
 
 	@ResolveField()
-	unit(@Parent() { surveyId }: Measure): Promise<Unit> {
-		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(surveyId));
+	unit(@Parent() { unitId }: Measure): Promise<Unit> {
+		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(unitId));
 	}
 
 	@ResolveField()

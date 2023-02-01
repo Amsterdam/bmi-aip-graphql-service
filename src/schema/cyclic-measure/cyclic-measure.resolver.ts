@@ -1,6 +1,11 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import { Survey } from '../survey/models/survey.model';
+import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
+import { Unit } from '../decomposition/models/unit.model';
+import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
 
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { CyclicMeasureFactory } from './cyclic-measure.factory';
@@ -15,7 +20,11 @@ import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.com
 @Resolver((of) => CyclicMeasure)
 @Resource(CyclicMeasure.name)
 export class CyclicMeasureResolver {
-	constructor(private cyclicMeasureService: CyclicMeasureService, private commandBus: CommandBus) {}
+	constructor(
+		private cyclicMeasureService: CyclicMeasureService,
+		private commandBus: CommandBus,
+		private queryBus: QueryBus,
+	) {}
 
 	@Mutation(() => CyclicMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
@@ -52,5 +61,15 @@ export class CyclicMeasureResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyCyclicMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.cyclicMeasureService.findCyclicMeasures(surveyId);
+	}
+
+	@ResolveField()
+	survey(@Parent() { surveyId }: CyclicMeasure): Promise<Survey> {
+		return this.queryBus.execute<GetSurveyByIdQuery>(new GetSurveyByIdQuery(surveyId));
+	}
+
+	@ResolveField()
+	unit(@Parent() { unitId }: CyclicMeasure): Promise<Unit> {
+		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(unitId));
 	}
 }

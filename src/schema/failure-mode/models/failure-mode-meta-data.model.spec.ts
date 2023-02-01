@@ -4,7 +4,7 @@ describe('FailureMode / Model / FailureModeMetaData', () => {
 	test('constructs a FailureModeMetaData instance', () => {
 		const failureModeMetaData = new FailureModeMetaData();
 		failureModeMetaData.faalOorzaak = null;
-		failureModeMetaData.bronVanValen = null;
+		failureModeMetaData.bronVanFalen = null;
 		failureModeMetaData.gevolgVanFalen = null;
 		failureModeMetaData.faaloorzaakAnders = null;
 		failureModeMetaData.bronVanFalenAnders = null;
@@ -12,7 +12,7 @@ describe('FailureMode / Model / FailureModeMetaData', () => {
 		expect(failureModeMetaData).toBeInstanceOf(FailureModeMetaData);
 		expect(failureModeMetaData).toEqual({
 			faalOorzaak: null,
-			bronVanValen: null,
+			bronVanFalen: null,
 			gevolgVanFalen: null,
 			faaloorzaakAnders: null,
 			bronVanFalenAnders: null,

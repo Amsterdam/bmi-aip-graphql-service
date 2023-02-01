@@ -20,7 +20,7 @@ export { failureMode1, failureMode2 };
 const failureModeMetaData = new FailureModeMetaData();
 failureModeMetaData.faalOorzaak = null;
 failureModeMetaData.bronVanFalenAnders = null;
-failureModeMetaData.bronVanValen = null;
+failureModeMetaData.bronVanFalen = null;
 failureModeMetaData.faaloorzaakAnders = null;
 failureModeMetaData.gevolgVanFalen = null;
 

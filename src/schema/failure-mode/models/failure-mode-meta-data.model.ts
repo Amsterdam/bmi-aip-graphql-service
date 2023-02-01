@@ -6,7 +6,7 @@ export class FailureModeMetaData {
 	public faalOorzaak?: string;
 
 	@Field((type) => String)
-	public bronVanValen?: string;
+	public bronVanFalen?: string;
 
 	@Field((type) => String)
 	public gevolgVanFalen?: string;

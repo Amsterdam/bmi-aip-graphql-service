@@ -44,9 +44,9 @@ describe('Model / FailureMode', () => {
 		failureMode.copyOfFailureModeId = null;
 		failureMode.surveyScopeId = null;
 		failureMode.failureModeType = null;
-		// failureMode.function = null;
+		failureMode.purpose = null;
 		failureMode.guideword = null;
-		// failureMode.failureMode = null;
+		failureMode.failureMode = null;
 		failureMode.causeOfFailure = null;
 		failureMode.sourceOfFailure = null;
 		failureMode.consequenceOfFailure = null;
@@ -95,9 +95,9 @@ describe('Model / FailureMode', () => {
 			copyOfFailureModeId: null,
 			surveyScopeId: null,
 			failureModeType: null,
-			// function: null,
+			purpose: null,
 			guideword: null,
-			// failureMode: null,
+			failureMode: null,
 			causeOfFailure: null,
 			sourceOfFailure: null,
 			consequenceOfFailure: null,

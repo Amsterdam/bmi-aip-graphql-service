@@ -15,6 +15,9 @@ export class Defect {
 	@Field((type) => Condition)
 	condition: Condition;
 
+	@Field((type) => Defect)
+	defect: Defect;
+
 	@Field((type) => String, { nullable: true })
 	name?: string;
 

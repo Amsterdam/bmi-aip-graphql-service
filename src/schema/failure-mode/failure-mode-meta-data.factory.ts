@@ -7,7 +7,7 @@ export class FailureModeMetaDataFactory {
 		const failureModeMetModel = new FailureModeMetaData();
 		const parsedFailureModeMetaData = failureModeMetaData as FailureModeMetaData;
 		failureModeMetModel.faalOorzaak = parsedFailureModeMetaData.faalOorzaak ?? null;
-		failureModeMetModel.bronVanValen = parsedFailureModeMetaData.bronVanValen ?? null;
+		failureModeMetModel.bronVanFalen = parsedFailureModeMetaData.bronVanFalen ?? null;
 		failureModeMetModel.gevolgVanFalen = parsedFailureModeMetaData.gevolgVanFalen ?? null;
 		failureModeMetModel.faaloorzaakAnders = parsedFailureModeMetaData.faaloorzaakAnders ?? null;
 		failureModeMetModel.bronVanFalenAnders = parsedFailureModeMetaData.bronVanFalenAnders ?? null;

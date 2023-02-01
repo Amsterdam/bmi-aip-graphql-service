@@ -11,7 +11,7 @@ export class FailureModeMetaDataInput {
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public bronVanValen?: string;
+	public bronVanFalen?: string;
 
 	@IsOptional()
 	@IsString()

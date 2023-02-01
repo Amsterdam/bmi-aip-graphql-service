@@ -7,7 +7,7 @@ describe('FailureMode / MetaData / Factory', () => {
 		});
 		expect(result).toEqual({
 			faalOorzaak: null,
-			bronVanValen: null,
+			bronVanFalen: null,
 			gevolgVanFalen: null,
 			faaloorzaakAnders: null,
 			bronVanFalenAnders: null,

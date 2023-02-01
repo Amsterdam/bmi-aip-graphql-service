@@ -20,7 +20,6 @@ import { UpdateReachSegmentHandler } from './commands/update-reach-segment.handl
 import { FindReachSegmentsHandler } from './queries/find-reach-segments.handler';
 import { GetArkSurveyBySurveyIdHandler } from './queries/get-ark-survey-by-survey.handler';
 import { ReachSegmentRepository } from './reach-segment.repository';
-import { ReachSegmentResolver } from './reach-segment.resolver';
 import { ReachSegmentService } from './reach-segment.service';
 
 @Module({
@@ -35,7 +34,6 @@ import { ReachSegmentService } from './reach-segment.service';
 		GetArkSurveyBySurveyIdHandler,
 		FindArkSurveyReachSegmentsHandler,
 		PrismaService,
-		ReachSegmentResolver,
 		ReachSegmentService,
 		ReachSegmentRepository,
 		CreateReachSegmentHandler,

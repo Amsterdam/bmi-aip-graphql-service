@@ -7,7 +7,6 @@ import { AuthenticationModule } from '../../authentication/authentication.module
 import { PrismaService } from '../../prisma.service';
 
 import { RepairAdviceCategory } from './types';
-import { DefectResolver } from './defect.resolver';
 import { DefectService } from './defect.service';
 import { DefectRepository } from './defect.repository';
 import { GetDefectQuery } from './queries/get-defect.query';
@@ -26,7 +25,6 @@ registerEnumType(RepairAdviceCategory, {
 
 @Module({
 	providers: [
-		DefectResolver,
 		DefectService,
 		DefectRepository,
 		GetDefectQuery,

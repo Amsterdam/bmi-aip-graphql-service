@@ -4,8 +4,14 @@ import { QueryBus, CommandBus } from '@nestjs/cqrs';
 
 import { Survey } from '../survey/models/survey.model';
 import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
+import { Element } from '../decomposition/models/element.model';
+import { Unit } from '../decomposition/models/unit.model';
+import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
+import { GetElementByIdQuery } from '../decomposition/queries/get-element-by-id.query';
 import { Defect } from '../ti/models/defect.model';
 import { GetDefectQuery } from '../ti/queries/get-defect.query';
+import { FailureMode } from '../failure-mode/models/failure-mode.model';
+import { GetFailureModeByIdQuery } from '../failure-mode/queries/get-failure-mode-by-id.query';
 
 import { Measure } from './models/measure.model';
 import { MeasureFactory } from './measure.factory';
@@ -61,7 +67,22 @@ export class MeasureResolver {
 	}
 
 	@ResolveField()
+	element(@Parent() { surveyId }: Measure): Promise<Element> {
+		return this.queryBus.execute<GetElementByIdQuery>(new GetElementByIdQuery(surveyId));
+	}
+
+	@ResolveField()
+	unit(@Parent() { surveyId }: Measure): Promise<Unit> {
+		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(surveyId));
+	}
+
+	@ResolveField()
 	defect(@Parent() { defectId }: Measure): Promise<Defect> {
 		return this.queryBus.execute<GetDefectQuery>(new GetDefectQuery(defectId));
+	}
+
+	@ResolveField()
+	async failureMode(@Parent() { failureModeId }: Measure): Promise<FailureMode> {
+		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
 	}
 }

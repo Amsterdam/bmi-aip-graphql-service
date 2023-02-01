@@ -22,4 +22,8 @@ export class ElementService {
 
 		return ElementFactory.CreateElement(await this.elementRepo.deleteElement(elementId));
 	}
+
+	async getElementById(elementId: string): Promise<Element> {
+		return ElementFactory.CreateElement(await this.elementRepo.getElementById(elementId));
+	}
 }

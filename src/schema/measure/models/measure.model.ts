@@ -61,8 +61,8 @@ export class Measure {
 	@Field((type) => String, { nullable: true })
 	failureModeId?: string;
 
-	@Field((type) => FailureMode)
-	failureMode: FailureMode;
+	@Field((type) => FailureMode, { nullable: true })
+	failureMode?: FailureMode;
 
 	@Field((type) => String, { nullable: true })
 	defectId?: string;

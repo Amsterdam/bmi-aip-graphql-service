@@ -94,8 +94,11 @@ describe('Decomposition / Measure / Resolver', () => {
 		});
 
 		test('optionally returns defect properties with a field resolver', async () => {
-			const [measureWithDefect] = await resolver.getSurveyMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+			const [measureWithDefect, measureWithoutDefect] = await resolver.getSurveyMeasures(
+				'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+			);
 			expect(measureWithDefect.defect).toEqual(measure1.defect);
+			expect(measureWithoutDefect.defect).toEqual(null);
 		});
 	});
 });

@@ -9,6 +9,7 @@ import { TerminusModule } from '@nestjs/terminus';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
+import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
@@ -25,6 +26,8 @@ import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
+import { TiModule } from './schema/ti/ti.module';
 
 @Module({
 	imports: [
@@ -42,12 +45,14 @@ import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 		DecompositionModule,
 		MeasureModule,
 		CyclicMeasureModule,
+		FailureModeModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		ObjectModule,
 		BatchModule,
 		CommandModule,
 		SurveyModule,
+		TiModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,
@@ -57,6 +62,7 @@ import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 		}),
 		TerminusModule,
 		ArkSurveyModule,
+		ReachSegmentModule,
 	],
 	controllers: [HealthController],
 	providers: [

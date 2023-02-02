@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 import { AssetStatuses } from '../../../types';
 import { Batch } from '../../batch/models/batch.model';
@@ -7,7 +7,7 @@ import { IPassport } from './passport.model';
 
 @ObjectType({ description: 'asset' })
 export class Asset {
-	@Field((type) => ID)
+	@Field((type) => String)
 	public id: string;
 
 	@Field((type) => String)

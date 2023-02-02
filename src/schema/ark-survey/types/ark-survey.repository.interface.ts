@@ -23,7 +23,7 @@ export type ArkSurvey = ArkSurveyWithoutGeography & {
 };
 
 export interface IArkSurveyRepository {
-	getArkSurvey(surveyId: string): Promise<ArkSurvey>;
+	getArkSurveyData(surveyId: string): Promise<ArkSurvey>;
 	createArkSurvey(input: CreateArkSurveyInput): Promise<ArkSurvey>;
 	updateArkSurvey(input: UpdateArkSurveyInput): Promise<ArkSurvey>;
 	deleteArkSurvey(identifier: string): Promise<ArkSurvey>;

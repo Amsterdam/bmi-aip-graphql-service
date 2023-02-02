@@ -1,5 +1,5 @@
 import { Field, Float, InputType } from '@nestjs/graphql';
-import { IsOptional, IsPositive, Max, Min } from 'class-validator';
+import { IsOptional, Max, Min } from 'class-validator';
 @InputType()
 export class ReachSegmentInput {
 	@IsOptional()
@@ -7,7 +7,6 @@ export class ReachSegmentInput {
 	public name?: string;
 
 	@IsOptional()
-	@IsPositive()
 	@Field((type) => Float, { nullable: true })
 	public reachSegmentLength?: number;
 
@@ -15,6 +14,7 @@ export class ReachSegmentInput {
 	@Field((type) => Number, { nullable: true })
 	public riskScore?: number;
 
+	@IsOptional()
 	@Min(1)
 	@Max(16)
 	@Field((type) => Float, { nullable: true })
@@ -35,4 +35,16 @@ export class ReachSegmentInput {
 	@IsOptional()
 	@Field((type) => Float, { nullable: true })
 	public sortNumber?: number;
+
+	@IsOptional()
+	@Field((type) => String, { nullable: true })
+	public created_at: string;
+
+	@IsOptional()
+	@Field((type) => String, { nullable: true })
+	public updated_at: string;
+
+	@IsOptional()
+	@Field((type) => String, { nullable: true })
+	public deleted_at: string;
 }

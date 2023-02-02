@@ -1,4 +1,4 @@
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
@@ -6,7 +6,7 @@ import { A11yDetails } from './a11y-details.model';
 
 @ObjectType({ description: 'junctionBox' })
 export class JunctionBox {
-	@Field((type) => ID)
+	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String)

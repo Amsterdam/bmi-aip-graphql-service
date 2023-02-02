@@ -1,10 +1,11 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Manifestation } from './manifestation.model';
+import { Element } from './element.model';
 
 @ObjectType({ description: 'unit' })
 export class Unit {
-	@Field((type) => ID)
+	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String, { nullable: true })
@@ -69,4 +70,7 @@ export class Unit {
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;
+
+	@Field((type) => Element)
+	element: Element;
 }

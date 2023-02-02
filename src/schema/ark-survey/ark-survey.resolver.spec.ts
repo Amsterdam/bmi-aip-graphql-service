@@ -12,7 +12,7 @@ import { ArkSurvey } from './models/ark-survey.model';
 import { UpdateArkSurveyCommand } from './commands/update-ark-survey.command';
 import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
-import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.query';
+import { FindArkSurveyQuery } from './queries/find-ark-survey.query';
 
 jest.mock('./ark-survey.service');
 jest.mock('./ark-survey.repository');
@@ -34,8 +34,8 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
 	execute: jest.fn((query: any) => {
 		switch (query.constructor.name) {
-			case GetArkSurveyBySurveyIdQuery.name:
-				return domainArkSurvey;
+			case FindArkSurveyQuery.name:
+				return [domainArkSurvey, domainArkSurvey];
 		}
 	}),
 	...(<any>{}),
@@ -100,11 +100,6 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		const queryBusMock = getQueryBusMock();
 		const resolver = new ArkSurveyResolver(new ArkSurveyService(ArkSurveyRepo), commandBusMock, queryBusMock);
 		const elements = await resolver.getArkSurvey('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
-
-		const object = {
-			...domainArkSurvey,
-		};
-
-		expect(elements).toEqual(object);
+		expect(elements).toEqual(domainArkSurvey);
 	});
 });

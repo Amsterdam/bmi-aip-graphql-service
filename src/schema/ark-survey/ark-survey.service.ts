@@ -8,7 +8,7 @@ import { ArkSurvey } from './models/ark-survey.model';
 export class ArkSurveyService {
 	public constructor(private readonly arkSurveyRepository: ArkSurveyRepository) {}
 
-	async getArkSurvey(surveyId: string): Promise<ArkSurvey> {
-		return ArkSurveyFactory.createArkSurvey(await this.arkSurveyRepository.getArkSurvey(surveyId));
+	async getArkSurveyData(surveyId: string): Promise<ArkSurvey> {
+		return ArkSurveyFactory.createArkSurvey(await this.arkSurveyRepository.getArkSurveyData(surveyId));
 	}
 }

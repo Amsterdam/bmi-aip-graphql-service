@@ -1,9 +1,9 @@
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType({ description: 'object' })
 export class ObjectModel {
-	@Field((type) => ID)
+	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String)
@@ -109,13 +109,5 @@ export class ObjectModel {
 	squareMeters?: number;
 
 	@Field((type) => GraphQLJSON, { nullable: true })
-	attributes?: JSONValue;
+	attributes?: JSON;
 }
-
-type JSONValue =
-	// | JSONValuestring
-	// | number
-	// | boolean
-	// | null
-	// | { [x: string]: JSONValue }
-	Array<JSONValue>;

@@ -1,10 +1,10 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Unit } from './unit.model';
 
 @ObjectType({ description: 'element' })
 export class Element {
-	@Field((type) => ID)
+	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String, { nullable: true })

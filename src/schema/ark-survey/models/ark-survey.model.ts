@@ -1,12 +1,12 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
-import { ReachSegment } from './reach-segment.model';
+import { ReachSegment } from '../../reach-segment/models/reach-segment.model';
 
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
-	@Field((type) => ID)
+	@Field((type) => String)
 	id: string;
 
 	@Field((type) => String)
@@ -25,13 +25,13 @@ export class ArkSurvey {
 	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	created_at: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updated_at: string;
 
 	@Field((type) => String, { nullable: true })
-	deletedAt: string;
+	deleted_at: string;
 
 	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })
 	reachSegments: ReachSegment[];

@@ -35,32 +35,32 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			},
 		};
 
-		const arkSurveyRecord = await this.prisma.arkSurveys.create({ data });
+		const arkSurveyGeoRecord = await this.prisma.arkSurveys.create({ data });
 
 		// Work around Prisma not supporting spatial data types
 		if (arkGeographyStart) {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyStart)})
-				WHERE "surveyId" = ${arkSurveyRecord.id}
+				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
 			`;
 		}
 		if (arkGeographyEnd) {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyEnd)})
-				WHERE "surveyId" = ${arkSurveyRecord.id}
+				WHERE "surveyId" = ${arkSurveyGeoRecord.id}
 			`;
 		}
 
 		return {
-			...arkSurveyRecord,
+			...arkSurveyGeoRecord,
 			arkGeographyStart,
 			arkGeographyEnd,
 		};
 	}
 
-	async getArkSurvey(surveyId: string): Promise<ArkSurvey> {
+	async getArkSurveyData(surveyId: string): Promise<ArkSurvey> {
 		const survey = (await this.prisma.arkSurveys.findFirst({
 			where: { surveyId: surveyId },
 		})) as ArkSurvey;
@@ -159,14 +159,15 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 			// Create new reach segments if applicable
 			if (insertData.reachSegments) {
+				const reachSegmentsFormatted =
+					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
+				reachSegmentsFormatted.map((segment) => {
+					segment.arkSurveyId = existingRecord.id;
+					segment.id = newId();
+				});
+
 				await this.prisma.arkSurveyReachSegments.createMany({
-					data: (insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[]).map(
-						(segment) => ({
-							...segment,
-							arkSurveyId: existingRecord.id,
-							id: newId(),
-						}),
-					),
+					data: reachSegmentsFormatted,
 				});
 			}
 
@@ -175,19 +176,22 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			const newRecord = await this.createArkSurvey(insertData);
 			// Create new reach segments if applicable
 			if (insertData.reachSegments) {
+				const reachSegmentsFormatted =
+					insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[];
+				reachSegmentsFormatted.map((segment) => {
+					segment.arkSurveyId = newRecord.id;
+					segment.id = newId();
+				});
+
 				await this.prisma.arkSurveyReachSegments.createMany({
-					data: (insertData.reachSegments as Prisma.arkSurveyReachSegmentsCreateManyInput[]).map(
-						(segment) => ({
-							...segment,
-							arkSurveyId: newRecord.id,
-							id: newId(),
-						}),
-					),
+					data: reachSegmentsFormatted,
 				});
 			}
 
 			// Workaround to make sure created reachSegments are included in response
-			return this.updateArkSurvey(insertData);
+			const updated = await this.updateArkSurvey(insertData);
+
+			return updated;
 		}
 	}
 
@@ -217,5 +221,15 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
+	}
+
+	async hasReachSegments(identifier: string): Promise<boolean> {
+		const segmentCount = await this.prisma.arkSurveyReachSegments.count({
+			where: {
+				arkSurveyId: identifier,
+				deleted_at: null,
+			},
+		});
+		return !!segmentCount;
 	}
 }

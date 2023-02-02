@@ -1,2 +1,1 @@
-export * from './ark-survey-stub';
-export * from './reach-segment-stub';
+export * from './geography-data-stub';

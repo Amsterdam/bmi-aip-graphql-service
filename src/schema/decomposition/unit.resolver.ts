@@ -13,6 +13,8 @@ import { UpdateUnitCommand } from './commands/update-unit.command';
 import { DeleteUnitCommand } from './commands/delete-unit.command';
 import { Manifestation } from './models/manifestation.model';
 import { FindUnitManifestationsCommand } from './commands/find-unit-manifestations.command';
+import { GetElementByIdQuery } from './queries/get-element-by-id.query';
+import { Element } from './models/element.model';
 
 @Resolver(() => Unit)
 export class UnitResolver {
@@ -42,5 +44,10 @@ export class UnitResolver {
 	@ResolveField()
 	async manifestations(@Parent() { id }: Unit): Promise<Manifestation[]> {
 		return this.commandBus.execute<FindUnitManifestationsCommand>(new FindUnitManifestationsCommand(id));
+	}
+
+	@ResolveField()
+	element(@Parent() { elementId }: Unit): Promise<Element> {
+		return this.queryBus.execute<GetElementByIdQuery>(new GetElementByIdQuery(elementId));
 	}
 }

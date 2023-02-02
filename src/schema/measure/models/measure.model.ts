@@ -6,6 +6,7 @@ import { Element } from '../../decomposition/models/element.model';
 import { Unit } from '../../decomposition/models/unit.model';
 import { Defect } from '../../ti/models/defect.model';
 import { FailureMode } from '../../failure-mode/models/failure-mode.model';
+import { Manifestation } from '../../decomposition/models/manifestation.model';
 
 @ObjectType({ description: 'measure' })
 export class Measure {
@@ -21,11 +22,11 @@ export class Measure {
 	@Field((type) => String)
 	unitId: string;
 
-	@Field((type) => Element)
-	element: Element;
-
 	@Field((type) => Unit)
 	unit: Unit;
+
+	@Field((type) => Manifestation, { nullable: true })
+	manifestation?: Manifestation;
 
 	@Field((type) => Number, { nullable: true })
 	planYear?: number;

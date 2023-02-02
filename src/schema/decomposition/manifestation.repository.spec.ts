@@ -9,6 +9,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	manifestations: {
 		create: jest.fn().mockResolvedValue(domainManifestation),
 		findMany: jest.fn().mockResolvedValue([domainManifestation]),
+		findUnique: jest.fn().mockResolvedValue(domainManifestation),
 		update: jest.fn().mockResolvedValue(domainManifestation),
 	},
 	...(<any>{}),
@@ -59,6 +60,16 @@ describe('ManifestationRepository', () => {
 			},
 		});
 		expect(manifestations).toEqual([domainManifestation]);
+	});
+
+	test('getManifestationById()', async () => {
+		const manifestation = await repo.getManifestationById('__MANIFESTATION__ID__');
+		expect(prismaServiceMock.manifestations.findUnique).toHaveBeenCalledWith({
+			where: {
+				id: '__MANIFESTATION__ID__',
+			},
+		});
+		expect(manifestation).toEqual(domainManifestation);
 	});
 
 	test('updateManifestation()', async () => {

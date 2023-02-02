@@ -66,8 +66,8 @@ export class Measure {
 	@Field((type) => String, { nullable: true })
 	defectId?: string;
 
-	@Field((type) => Defect)
-	defect: Defect;
+	@Field((type) => Defect, { nullable: true })
+	defect?: Defect;
 
 	@Field((type) => String, { nullable: true })
 	surveyScopeId?: string;

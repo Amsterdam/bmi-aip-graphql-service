@@ -1,6 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
 import { DefectService } from '../defect.service';
+import { Defect } from '../models/defect.model';
 
 import { GetDefectQuery } from './get-defect.query';
 
@@ -8,7 +9,7 @@ import { GetDefectQuery } from './get-defect.query';
 export class GetDefectHandler implements IQueryHandler<GetDefectQuery> {
 	constructor(private service: DefectService) {}
 
-	async execute({ defectId }: GetDefectQuery) {
-		return this.service.getDefect(defectId);
+	public async execute({ defectId }: GetDefectQuery): Promise<Defect | null> {
+		return defectId ? this.service.getDefect(defectId) : null;
 	}
 }

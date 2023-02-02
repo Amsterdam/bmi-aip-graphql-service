@@ -7,7 +7,6 @@ import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
 import { Element } from '../decomposition/models/element.model';
 import { Unit } from '../decomposition/models/unit.model';
 import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
-import { GetElementByIdQuery } from '../decomposition/queries/get-element-by-id.query';
 import { Defect } from '../ti/models/defect.model';
 import { GetDefectQuery } from '../ti/queries/get-defect.query';
 import { FailureMode } from '../failure-mode/models/failure-mode.model';

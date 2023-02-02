@@ -22,6 +22,7 @@ import { CreateMeasureCommand } from './commands/create-measure.command';
 import { UpdateMeasureCommand } from './commands/update-measure.command';
 import { Measure as DomainMeasure } from './types/measure.repository.interface';
 import { DeleteMeasureCommand } from './commands/delete-measure.command';
+import { FindMeasuresQuery } from './queries/find-measures.query';
 
 @Resolver((of) => Measure)
 @Resource(Measure.name)
@@ -58,7 +59,7 @@ export class MeasureResolver {
 	@Query((returns) => [Measure], { name: 'measures' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.measureService.findMeasures(surveyId);
+		return this.queryBus.execute<FindMeasuresQuery>(new FindMeasuresQuery(surveyId));
 	}
 
 	@ResolveField()

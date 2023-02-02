@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
-import { FailureModeService } from '../../failure-mode/failure-mode.service';
+import { FailureModeService } from '../failure-mode.service';
 
 import { GetFailureModeByIdQuery } from './get-failure-mode-by-id.query';
 
@@ -9,6 +9,6 @@ export class GetFailureModeByIdHandler implements IQueryHandler<GetFailureModeBy
 	constructor(private service: FailureModeService) {}
 
 	async execute({ failureModeId }: GetFailureModeByIdQuery) {
-		return this.service.getFailureMode(failureModeId);
+		return failureModeId ? this.service.getFailureMode(failureModeId) : null;
 	}
 }

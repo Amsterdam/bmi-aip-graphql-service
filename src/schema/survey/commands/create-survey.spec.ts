@@ -3,6 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { SurveyRepository } from '../survey.repository';
 import { surveyInput, domainSurvey } from '../__stubs__';
 import { SurveyService } from '../survey.service';
+import { SurveyFactory } from '../survey.factory';
 
 import { CreateSurveyCommand } from './create-survey.command';
 import { CreateSurveyHandler } from './create-survey.handler';
@@ -22,6 +23,6 @@ describe('CreateSurveyHandler', () => {
 		expect(surveyRepoMock.createSurvey).toHaveBeenCalledTimes(1);
 		expect(surveyRepoMock.createSurvey).toHaveBeenCalledWith(surveyInput);
 
-		expect(result).toEqual(domainSurvey);
+		expect(result).toEqual(SurveyFactory.CreateSurvey(domainSurvey));
 	});
 });

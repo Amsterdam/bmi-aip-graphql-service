@@ -1,5 +1,5 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { CommandBus } from '@nestjs/cqrs';
+import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { Manifestation as DomainManifestation } from './types/manifestation.repository.interface';
@@ -11,10 +11,16 @@ import { ManifestationFactory } from './manifestation.factory';
 import { UpdateManifestationInput } from './dto/update-manifestation.input';
 import { UpdateManifestationCommand } from './commands/update-manifestation.command';
 import { DeleteManifestationCommand } from './commands/delete-manifestation.command';
+import { Unit } from './models/unit.model';
+import { GetUnitByIdQuery } from './queries/get-unit-by-id.query';
 
 @Resolver(() => Manifestation)
 export class ManifestationResolver {
-	constructor(private manifestationService: ManifestationService, private commandBus: CommandBus) {}
+	constructor(
+		private manifestationService: ManifestationService,
+		private commandBus: CommandBus,
+		private queryBus: QueryBus,
+	) {}
 
 	@Mutation(() => Manifestation)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
@@ -47,5 +53,10 @@ export class ManifestationResolver {
 			new DeleteManifestationCommand(identifier),
 		);
 		return ManifestationFactory.CreateManifestation(domainManifestation);
+	}
+
+	@ResolveField()
+	unit(@Parent() { unitId }: Manifestation): Promise<Unit> {
+		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(unitId));
 	}
 }

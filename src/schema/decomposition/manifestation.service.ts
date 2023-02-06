@@ -13,4 +13,10 @@ export class ManifestationService {
 			ManifestationFactory.CreateManifestation(manifestation),
 		);
 	}
+
+	async getManifestationById(manifestationId: string): Promise<Manifestation> {
+		return ManifestationFactory.CreateManifestation(
+			await this.manifestationRepo.getManifestationById(manifestationId),
+		);
+	}
 }

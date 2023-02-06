@@ -4,6 +4,7 @@ import { Measure as DomainMeasure } from '../types/measure.repository.interface'
 import { MeasureFactory } from '../measure.factory';
 import { UpdateMeasureInput } from '../dto/update-measure.input';
 import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
+import { defect1 } from '../../ti/__stubs__';
 
 const measure1 = new Measure();
 measure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -12,6 +13,8 @@ measure1.surveyId = '68a95a2c-b909-e77f-4d66-9fd5afef5adb';
 measure1.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 measure1.location = 'Gehele brug';
 measure1.description = 'Herstellen corrosieschade paal';
+measure1.defectId = defect1.id;
+measure1.defect = defect1;
 
 const measure2 = new Measure();
 measure2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
@@ -20,6 +23,8 @@ measure2.surveyId = '68a95a2c-b909-e77f-4d66-9fd5afef5adb';
 measure2.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 measure2.location = 'Gehele brug';
 measure2.description = 'Conservering overlagen paal (staal)';
+measure2.defectId = null;
+measure2.defect = null;
 
 export { measure1, measure2 };
 

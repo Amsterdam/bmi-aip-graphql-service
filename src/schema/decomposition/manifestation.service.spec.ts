@@ -24,4 +24,11 @@ describe('Decomposition / Manifestations / Service', () => {
 			[domainManifestation].map((manifestation) => ManifestationFactory.CreateManifestation(manifestation)),
 		);
 	});
+
+	test('getManifestationById returns a single manifestation', async () => {
+		const service = new ManifestationService(new ManifestationRepository(prismaServiceMock));
+		const manifestation = await service.getManifestationById('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		expect(manifestation).toBeInstanceOf(Manifestation);
+		expect(manifestation).toEqual(ManifestationFactory.CreateManifestation(domainManifestation));
+	});
 });

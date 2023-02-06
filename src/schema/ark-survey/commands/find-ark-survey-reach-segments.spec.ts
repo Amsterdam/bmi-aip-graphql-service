@@ -6,7 +6,6 @@ import { ReachSegment as reachSegmentStub } from '../../reach-segment/__stubs__'
 import { FindArkSurveyReachSegmentsHandler } from './find-ark-survey-reach-segments.handler';
 import { FindArkSurveyReachSegmentsCommand } from './find-ark-survey-reach-segments.command';
 
-
 const reachSegmentsServiceMock: MockedObjectDeep<ReachSegmentService> = {
 	findReachSegments: jest.fn().mockResolvedValue([reachSegmentStub]),
 	...(<any>{}),

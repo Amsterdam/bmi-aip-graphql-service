@@ -109,13 +109,5 @@ export class ObjectModel {
 	squareMeters?: number;
 
 	@Field((type) => GraphQLJSON, { nullable: true })
-	attributes?: JSONValue;
+	attributes?: JSON;
 }
-
-type JSONValue =
-	// | JSONValuestring
-	// | number
-	// | boolean
-	// | null
-	// | { [x: string]: JSONValue }
-	Array<JSONValue>;

@@ -42,6 +42,14 @@ export class BaseCyclicMeasureInput {
 	@IsUUID()
 	public defaultMaintenanceMeasureId?: string;
 
+	@Field()
+	@IsUUID()
+	public failureModeId?: string;
+
+	@Field()
+	@IsUUID()
+	public defectId?: string;
+
 	@IsOptional()
 	@IsEnum(CyclicMeasureTypes)
 	@MaxLength(128)

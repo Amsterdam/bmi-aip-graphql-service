@@ -32,6 +32,8 @@ const cyclicMeasureRaw: Omit<DomainCyclicMeasure, 'id'> = {
 	cycle: 2.3,
 	unitPrice: 33.99,
 	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
+	failureModeId: '',
+	defectId: '',
 	deleted_at: null,
 };
 

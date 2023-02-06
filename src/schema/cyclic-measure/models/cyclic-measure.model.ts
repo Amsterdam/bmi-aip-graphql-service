@@ -4,6 +4,8 @@ import { CyclicMeasureTypes } from '../types/cyclic-measure';
 import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
 import { Survey } from '../../survey/models/survey.model';
 import { Unit } from '../../decomposition/models/unit.model';
+import { FailureMode } from '../../failure-mode/models/failure-mode.model';
+import { Defect } from '../../ti/models/defect.model';
 
 @ObjectType({ description: 'cyclicMeasure' })
 export class CyclicMeasure {
@@ -48,6 +50,18 @@ export class CyclicMeasure {
 
 	@Field((type) => CyclicMeasureTypes, { nullable: true })
 	maintenanceType?: string;
+
+	@Field((type) => String, { nullable: true })
+	failureModeId?: string;
+
+	@Field((type) => FailureMode, { nullable: true })
+	failureMode?: FailureMode;
+
+	@Field((type) => String, { nullable: true })
+	defectId?: string;
+
+	@Field((type) => Defect, { nullable: true })
+	defect?: Defect;
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;

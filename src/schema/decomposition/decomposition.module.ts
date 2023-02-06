@@ -28,6 +28,8 @@ import { DecompositionResolver } from './decomposition.resolver';
 import { FindSurveyElementsHandler } from './commands/find-survey-elements.handler';
 import { FindElementUnitsHandler } from './commands/find-element-units.handler';
 import { FindUnitManifestationsHandler } from './commands/find-unit-manifestations.handler';
+import { CloneDecompositionFromPreviousSurveyHandler } from './commands/clone-decomposition-from-previous-survey.handler';
+import { DecompositionRepository } from './decomposition.repository';
 import { GetUnitByIdQuery } from './queries/get-unit-by-id.query';
 import { GetUnitByIdHandler } from './queries/get-unit-by-id.handler';
 import { GetElementByIdQuery } from './queries/get-element-by-id.query';
@@ -60,6 +62,8 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		FindSurveyElementsHandler,
 		FindElementUnitsHandler,
 		FindUnitManifestationsHandler,
+		DecompositionRepository,
+		CloneDecompositionFromPreviousSurveyHandler,
 		GetElementByIdQuery,
 		GetElementByIdHandler,
 		GetUnitByIdQuery,

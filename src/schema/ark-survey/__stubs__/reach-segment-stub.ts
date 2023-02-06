@@ -3,8 +3,8 @@ import { Decimal } from '@prisma/client/runtime';
 import { domainSurvey } from '../../survey/__stubs__';
 import { ReachSegment as DomainReachSegment } from '../types/reach-segment.repository.interface';
 import { CreateReachSegmentInput } from '../dto/create-reach-segment.input';
-import { ReachSegmentFactory } from '../reach-segment.factory';
 import { UpdateReachSegmentInput } from '../dto/update-reach-segment.input';
+import { ReachSegmentFactory } from '../reach-segment.factory';
 
 domainSurvey.inspectionStandardType = 'quaywalls';
 

@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { ReachSegmentService } from '../../reach-segment/reach-segment.service';
-import { ReachSegment as reachSegmentStub } from '../../reach-segment/__stubs__';
+import { ReachSegmentService } from '../reach-segment.service';
+import { ReachSegment as reachSegmentStub } from '../__stubs__';
 
 import { FindArkSurveyReachSegmentsHandler } from './find-ark-survey-reach-segments.handler';
 import { FindArkSurveyReachSegmentsCommand } from './find-ark-survey-reach-segments.command';

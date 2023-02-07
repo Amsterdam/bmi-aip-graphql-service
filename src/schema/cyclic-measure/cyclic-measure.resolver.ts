@@ -89,6 +89,7 @@ export class CyclicMeasureResolver {
 		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
 	}
 
+	@ResolveField()
 	defaultMaintenanceMeasure(
 		@Parent() { defaultMaintenanceMeasureId }: CyclicMeasure,
 	): Promise<DefaultMaintenanceMeasure> {

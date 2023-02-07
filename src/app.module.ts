@@ -26,7 +26,6 @@ import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
-import { ReachSegmentModule } from './schema/reach-segment/reach-segment.module';
 import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 

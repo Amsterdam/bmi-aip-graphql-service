@@ -1,4 +1,4 @@
-import { domainReachSegment, ReachSegment } from '../__stubs__';
+import { ReachSegment, domainReachSegment } from '../__stubs__';
 
 export const ReachSegmentRepository = jest.fn(() => ({
 	createReachSegment: jest.fn(() => ReachSegment),

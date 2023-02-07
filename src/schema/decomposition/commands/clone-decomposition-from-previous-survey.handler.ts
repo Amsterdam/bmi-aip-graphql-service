@@ -1,4 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { SurveyRepository } from 'src/schema/survey/survey.repository';
 
 import { DecompositionRepository } from '../decomposition.repository';
 import { Element } from '../models/element.model';
@@ -10,10 +11,10 @@ import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decompositi
 export class CloneDecompositionFromPreviousSurveyHandler
 	implements ICommandHandler<CloneDecompositionFromPreviousSurveyCommand>
 {
-	constructor(private decompositionRepository: DecompositionRepository) {}
+	constructor(private decompositionRepository: DecompositionRepository, private surveyRepository: SurveyRepository) {}
 
 	public async execute(command: CloneDecompositionFromPreviousSurveyCommand): Promise<Element[]> {
-		const previousSurveyId = await this.decompositionRepository.findPreviousSurveyId(command.surveyId);
+		const previousSurveyId = await this.surveyRepository.findPreviousSurveyId(command.surveyId);
 
 		if (await this.decompositionRepository.checkIfAlreadyMigrated(command.surveyId)) {
 			throw new SurveyHasDecompositionException(command.surveyId);

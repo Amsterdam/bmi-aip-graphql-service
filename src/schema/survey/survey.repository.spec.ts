@@ -6,10 +6,13 @@ import { SurveyRepository } from './survey.repository';
 import { domainSurvey, survey1, surveyInput } from './__stubs__';
 import { InspectionStandard } from './types';
 import { SurveyStates } from './types/surveyStates';
+import { Survey } from './models/survey.model';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	surveys: {
 		create: jest.fn().mockResolvedValue(domainSurvey),
+		findFirst: jest.fn().mockResolvedValue(domainSurvey),
+		findUnique: jest.fn().mockResolvedValue(domainSurvey),
 	},
 	...(<any>{}),
 };
@@ -48,6 +51,19 @@ describe('SurveyRepository', () => {
 			id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 			inspectionStandardType: InspectionStandard.spanInstallation,
 			status: SurveyStates.open,
+		});
+	});
+
+	describe('findPrevousSurveyId()', () => {
+		test('returns the id of the survey with the same objectId created prior to the given surveyId, based on the created_at field', async () => {
+			prismaServiceMock.surveys.findFirst.mockResolvedValue({
+				...domainSurvey,
+				id: '__PREVIOUS_SURVEY_ID__',
+			} as Survey);
+
+			const resultId = await repo.findPreviousSurveyId('__SURVEY_ID__');
+
+			expect(resultId).toEqual('__PREVIOUS_SURVEY_ID__');
 		});
 	});
 });

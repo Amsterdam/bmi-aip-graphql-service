@@ -1,7 +1,6 @@
 import { PrismaService } from 'src/prisma.service';
 import { MockedObjectDeep } from 'ts-jest';
 
-import { Survey } from '../survey/models/survey.model';
 import { domainSurvey } from '../survey/__stubs__';
 
 import { DecompositionRepository } from './decomposition.repository';
@@ -45,19 +44,6 @@ const elementsServiceMock: MockedObjectDeep<ElementService> = {
 const repo = new DecompositionRepository(elementsServiceMock, prismaServiceMock);
 
 describe('Decomposition / Repository', () => {
-	describe('findPrevousSurveyId()', () => {
-		test('returns the id of the survey with the same objectId created prior to the given surveyId, based on the created_at field', async () => {
-			prismaServiceMock.surveys.findFirst.mockResolvedValue({
-				...domainSurvey,
-				id: '__PREVIOUS_SURVEY_ID__',
-			} as Survey);
-
-			const resultId = await repo.findPreviousSurveyId('__SURVEY_ID__');
-
-			expect(resultId).toEqual('__PREVIOUS_SURVEY_ID__');
-		});
-	});
-
 	describe('cloneDecomposition()', () => {
 		test('clones a decomposition from the previous survey and returns the decomposition structure', async () => {
 			await repo.cloneDecomposition('__SURVEY_ID___', '___PREVIOUS_SUREY_ID___');

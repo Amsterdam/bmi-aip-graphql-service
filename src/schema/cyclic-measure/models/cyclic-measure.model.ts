@@ -4,6 +4,7 @@ import { CyclicMeasureTypes } from '../types/cyclic-measure';
 import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
 import { Survey } from '../../survey/models/survey.model';
 import { Unit } from '../../decomposition/models/unit.model';
+import { DefaultMaintenanceMeasure } from '../../default-maintenance-measure/models/default-maintenance-measure.model';
 
 @ObjectType({ description: 'cyclicMeasure' })
 export class CyclicMeasure {
@@ -24,6 +25,9 @@ export class CyclicMeasure {
 
 	@Field((type) => String)
 	defaultMaintenanceMeasureId: string;
+
+	@Field((type) => DefaultMaintenanceMeasure)
+	defaultMaintenanceMeasure: DefaultMaintenanceMeasure;
 
 	@Field((type) => String, { nullable: true })
 	remarks?: string;

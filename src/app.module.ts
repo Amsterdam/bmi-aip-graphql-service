@@ -27,6 +27,7 @@ import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 import { TiModule } from './schema/ti/ti.module';
+import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 
 @Module({
 	imports: [
@@ -61,6 +62,8 @@ import { TiModule } from './schema/ti/ti.module';
 		}),
 		TerminusModule,
 		ArkSurveyModule,
+		ReachSegmentModule,
+		DefaultMaintenanceMeasureModule,
 	],
 	controllers: [HealthController],
 	providers: [

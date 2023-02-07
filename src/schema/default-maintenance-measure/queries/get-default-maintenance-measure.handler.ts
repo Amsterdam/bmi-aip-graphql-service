@@ -10,6 +10,6 @@ export class GetDefaultMaintenanceMeasureHandler implements IQueryHandler<GetDef
 	constructor(private service: DefaultMaintenanceMeasureService) {}
 
 	public async execute({ id }: GetDefaultMaintenanceMeasureQuery): Promise<DefaultMaintenanceMeasure> {
-		return id ? this.service.getDefaultMaintenanceMeasure(id) : null;
+		return this.service.getDefaultMaintenanceMeasure(id);
 	}
 }

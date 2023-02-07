@@ -10,6 +10,8 @@ import { GetDefectQuery } from '../ti/queries/get-defect.query';
 import { GetFailureModeByIdQuery } from '../failure-mode/queries/get-failure-mode-by-id.query';
 import { Defect } from '../ti/models/defect.model';
 import { FailureMode } from '../failure-mode/models/failure-mode.model';
+import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models/default-maintenance-measure.model';
+import { GetDefaultMaintenanceMeasureQuery } from '../default-maintenance-measure/queries/get-default-maintenance-measure.query';
 
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { CyclicMeasureFactory } from './cyclic-measure.factory';
@@ -85,5 +87,13 @@ export class CyclicMeasureResolver {
 	@ResolveField()
 	failureMode(@Parent() { failureModeId }: CyclicMeasure): Promise<FailureMode> {
 		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
+	}
+
+	defaultMaintenanceMeasure(
+		@Parent() { defaultMaintenanceMeasureId }: CyclicMeasure,
+	): Promise<DefaultMaintenanceMeasure> {
+		return this.queryBus.execute<GetDefaultMaintenanceMeasureQuery>(
+			new GetDefaultMaintenanceMeasureQuery(defaultMaintenanceMeasureId),
+		);
 	}
 }

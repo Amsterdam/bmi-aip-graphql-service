@@ -6,6 +6,8 @@ import { Survey } from '../survey/models/survey.model';
 import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
 import { Unit } from '../decomposition/models/unit.model';
 import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
+import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models/default-maintenance-measure.model';
+import { GetDefaultMaintenanceMeasureQuery } from '../default-maintenance-measure/queries/get-default-maintenance-measure.query';
 
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { CyclicMeasureFactory } from './cyclic-measure.factory';
@@ -71,5 +73,14 @@ export class CyclicMeasureResolver {
 	@ResolveField()
 	unit(@Parent() { unitId }: CyclicMeasure): Promise<Unit> {
 		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(unitId));
+	}
+
+	@ResolveField()
+	defaultMaintenanceMeasure(
+		@Parent() { defaultMaintenanceMeasureId }: CyclicMeasure,
+	): Promise<DefaultMaintenanceMeasure> {
+		return this.queryBus.execute<GetDefaultMaintenanceMeasureQuery>(
+			new GetDefaultMaintenanceMeasureQuery(defaultMaintenanceMeasureId),
+		);
 	}
 }

@@ -1,17 +1,15 @@
 import { DefaultMaintenanceMeasure } from './default-maintenance-measure.model';
 
-describe('TI / Model / JunctionBox', () => {
+describe('Model / JunctionBox', () => {
 	test('constructs a DefaultMaintenanceMeasure instance', () => {
 		const defaultMaintenanceMeasure = new DefaultMaintenanceMeasure();
 
-		defaultMaintenanceMeasure.description =
-			'Gebreken aan het oppervlak van de materialen waarvan het bouw- of installatiedeel is gemaakt.';
+		defaultMaintenanceMeasure.description = 'Grote revisie hydraulische aandrijving complex';
 		defaultMaintenanceMeasure.createdAt = null;
 		defaultMaintenanceMeasure.updatedAt = null;
 
 		expect(defaultMaintenanceMeasure).toEqual({
-			description:
-				'Gebreken aan het oppervlak van de materialen waarvan het bouw- of installatiedeel is gemaakt.',
+			description: 'Grote revisie hydraulische aandrijving complex',
 			createdAt: null,
 			updatedAt: null,
 		});

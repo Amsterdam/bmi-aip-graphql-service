@@ -18,6 +18,8 @@ export class CyclicMeasureFactory {
 		unitPrice,
 		quantityUnitOfMeasurement,
 		defaultMaintenanceMeasureId,
+		failureModeId,
+		defectId,
 		deleted_at: deletedAt,
 	}: DomainCyclicMeasure): CyclicMeasure {
 		const cyclicMeasure = new CyclicMeasure();
@@ -33,6 +35,8 @@ export class CyclicMeasureFactory {
 		cyclicMeasure.unitPrice = unitPrice;
 		cyclicMeasure.quantityUnitOfMeasurement = QuantityUnitOfMeasurement[quantityUnitOfMeasurement];
 		cyclicMeasure.defaultMaintenanceMeasureId = defaultMaintenanceMeasureId;
+		cyclicMeasure.failureModeId = failureModeId;
+		cyclicMeasure.defectId = defectId;
 		cyclicMeasure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return cyclicMeasure;
 	}

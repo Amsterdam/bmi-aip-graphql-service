@@ -24,6 +24,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		unitPrice,
 		quantityUnitOfMeasurement,
 		defaultMaintenanceMeasureId,
+		defectId,
+		failureModeId,
 	}: CreateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresCreateInput = {
 			id: newId(),
@@ -38,6 +40,16 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasureId } },
+			defects: {
+				connect: {
+					id: defectId,
+				},
+			},
+			failureModes: {
+				connect: {
+					id: failureModeId,
+				},
+			},
 		};
 
 		return this.prisma.cyclicMeasures.create({ data });

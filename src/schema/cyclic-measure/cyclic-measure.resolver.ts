@@ -6,6 +6,10 @@ import { Survey } from '../survey/models/survey.model';
 import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
 import { Unit } from '../decomposition/models/unit.model';
 import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
+import { GetDefectQuery } from '../ti/queries/get-defect.query';
+import { GetFailureModeByIdQuery } from '../failure-mode/queries/get-failure-mode-by-id.query';
+import { Defect } from '../ti/models/defect.model';
+import { FailureMode } from '../failure-mode/models/failure-mode.model';
 import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models/default-maintenance-measure.model';
 import { GetDefaultMaintenanceMeasureQuery } from '../default-maintenance-measure/queries/get-default-maintenance-measure.query';
 
@@ -76,6 +80,15 @@ export class CyclicMeasureResolver {
 	}
 
 	@ResolveField()
+	defect(@Parent() { defectId }: CyclicMeasure): Promise<Defect> {
+		return this.queryBus.execute<GetDefectQuery>(new GetDefectQuery(defectId));
+	}
+
+	@ResolveField()
+	failureMode(@Parent() { failureModeId }: CyclicMeasure): Promise<FailureMode> {
+		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
+	}
+
 	defaultMaintenanceMeasure(
 		@Parent() { defaultMaintenanceMeasureId }: CyclicMeasure,
 	): Promise<DefaultMaintenanceMeasure> {

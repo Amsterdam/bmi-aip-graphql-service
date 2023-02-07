@@ -18,6 +18,8 @@ const cyclicMeasures = Prisma.validator<Prisma.cyclicMeasuresArgs>()({
 		defaultMaintenanceMeasureId: true,
 		deleted_at: true,
 		maintenanceType: true,
+		failureModeId: true,
+		defectId: true,
 	},
 });
 export type CyclicMeasure = Prisma.cyclicMeasuresGetPayload<typeof cyclicMeasures>;

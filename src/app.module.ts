@@ -62,7 +62,6 @@ import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-me
 		}),
 		TerminusModule,
 		ArkSurveyModule,
-		ReachSegmentModule,
 		DefaultMaintenanceMeasureModule,
 	],
 	controllers: [HealthController],

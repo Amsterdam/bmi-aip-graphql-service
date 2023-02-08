@@ -43,7 +43,7 @@ export class SurveyRepository implements ISurveyRepository {
 		});
 	}
 
-	public async findPreviousSurveyId(surveyId: string): Promise<string | null> {
+	public async findIdPreviousSurveyWithNen2767Decomposition(surveyId: string): Promise<string | null> {
 		const current = await this.prisma.surveys.findFirst({
 			where: {
 				id: surveyId,
@@ -59,7 +59,9 @@ export class SurveyRepository implements ISurveyRepository {
 		const previous = await this.prisma.surveys.findFirst({
 			where: {
 				objectId: current.objectId,
-				inspectionStandardType: current.inspectionStandardType,
+				inspectionStandardType: {
+					in: ['nen2767', 'fmeca'],
+				},
 				NOT: [{ id: current.id }, { status: SurveyStates.deleted }],
 			},
 			orderBy: {

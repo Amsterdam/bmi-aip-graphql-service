@@ -14,7 +14,7 @@ const decompositionRepoMock: MockedObjectDeep<DecompositionRepository> = {
 };
 
 const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
-	findPreviousSurveyId: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
+	findIdPreviousSurveyWithNen2767Decomposition: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
 	...(<any>{}),
 };
 

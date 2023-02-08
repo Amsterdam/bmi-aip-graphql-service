@@ -61,7 +61,7 @@ describe('SurveyRepository', () => {
 				id: '__PREVIOUS_SURVEY_ID__',
 			} as Survey);
 
-			const resultId = await repo.findPreviousSurveyId('__SURVEY_ID__');
+			const resultId = await repo.findIdPreviousSurveyWithNen2767Decomposition('__SURVEY_ID__');
 
 			expect(resultId).toEqual('__PREVIOUS_SURVEY_ID__');
 		});

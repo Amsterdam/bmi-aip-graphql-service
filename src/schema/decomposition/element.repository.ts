@@ -7,11 +7,10 @@ import { newId } from '../../utils';
 import { Element, IElementRepository } from './types/element.repository.interface';
 import { CreateElementInput } from './dto/create-element.input';
 import { UpdateElementInput } from './dto/update-element.input';
-import { UnitRepository } from './unit.repository';
 
 @Injectable()
 export class ElementRepository implements IElementRepository {
-	public constructor(private readonly prisma: PrismaService, private readonly unitRepo: UnitRepository) {}
+	public constructor(private readonly prisma: PrismaService) {}
 
 	async createElement({
 		objectId,
@@ -61,6 +60,15 @@ export class ElementRepository implements IElementRepository {
 		return this.prisma.elements.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	public async getElementById(id: string): Promise<Element> {
+		return this.prisma.elements.findUnique({
+			where: {
+				id,
 			},
 		});
 	}
@@ -113,11 +121,19 @@ export class ElementRepository implements IElementRepository {
 			deleted_at: new Date(),
 		};
 
-		await this.unitRepo.deleteUnitsForElement(identifier);
-
 		return this.prisma.elements.update({
 			where: { id: identifier },
 			data,
 		});
+	}
+
+	async hasUnits(identifier: string): Promise<boolean> {
+		const unitCount = await this.prisma.units.count({
+			where: {
+				elementId: identifier,
+				deleted_at: null,
+			},
+		});
+		return !!unitCount;
 	}
 }

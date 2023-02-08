@@ -7,7 +7,9 @@ import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
 
-import { AppController } from './app.controller';
+import { MeasureModule } from './schema/measure/measure.module';
+import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
+import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
 import { PrismaService } from './prisma.service';
@@ -23,6 +25,9 @@ import { SpanInstallationSurveyModule } from './schema/span-installation-survey/
 import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
+import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { TiModule } from './schema/ti/ti.module';
+import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 
 @Module({
 	imports: [
@@ -38,12 +43,16 @@ import { SurveyModule } from './schema/survey/survey.module';
 		}),
 		AuthorizationModule,
 		DecompositionModule,
+		MeasureModule,
+		CyclicMeasureModule,
+		FailureModeModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		ObjectModule,
 		BatchModule,
 		CommandModule,
 		SurveyModule,
+		TiModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			debug: true,
@@ -52,8 +61,10 @@ import { SurveyModule } from './schema/survey/survey.module';
 			autoSchemaFile: true,
 		}),
 		TerminusModule,
+		ArkSurveyModule,
+		DefaultMaintenanceMeasureModule,
 	],
-	controllers: [AppController, HealthController],
+	controllers: [HealthController],
 	providers: [
 		{
 			provide: APP_GUARD,

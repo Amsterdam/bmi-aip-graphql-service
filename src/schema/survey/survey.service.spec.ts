@@ -2,14 +2,14 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { SurveyService } from './survey.service';
 import { SurveyRepository } from './survey.repository';
-import { domainSurvey, survey1 } from './__stubs__';
+import { domainSurvey } from './__stubs__';
 import { SurveyFactory } from './survey.factory';
 import { Survey } from './models/survey.model';
 
 jest.mock('./survey.repository');
 
 const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
-	getSurveyById: jest.fn().mockResolvedValue(survey1),
+	getSurveyById: jest.fn().mockResolvedValue(domainSurvey),
 	...(<any>{}),
 };
 

@@ -6,6 +6,7 @@ import { UpdateManifestationInput } from '../dto/update-manifestation.input';
 const manifestations = Prisma.validator<Prisma.manifestationsArgs>()({
 	select: {
 		id: true,
+		permanentId: true,
 		name: true,
 		code: true,
 		location: true,

@@ -4,6 +4,7 @@ describe('Decomposition / Model / Element', () => {
 	test('constructs an Element instance object', () => {
 		const element = new Element();
 		element.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
+		element.permanentId = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
 		element.code = '113';
 		element.objectId = '55bf8e88-6510-41f1-af52-e4f8c10573b9';
 		element.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -33,6 +34,7 @@ describe('Decomposition / Model / Element', () => {
 			elementGroupName: 'substructure',
 			gisibId: 123,
 			id: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
+			permanentId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 			isArchived: false,
 			isElectrical: true,
 			isElectricalObjectSpecific: false,

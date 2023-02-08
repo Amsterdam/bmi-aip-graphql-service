@@ -1,5 +1,5 @@
 import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
 import { Unit as DomainUnit } from './types/unit.repository.interface';
@@ -13,10 +13,12 @@ import { UpdateUnitCommand } from './commands/update-unit.command';
 import { DeleteUnitCommand } from './commands/delete-unit.command';
 import { Manifestation } from './models/manifestation.model';
 import { FindUnitManifestationsCommand } from './commands/find-unit-manifestations.command';
+import { GetElementByIdQuery } from './queries/get-element-by-id.query';
+import { Element } from './models/element.model';
 
 @Resolver(() => Unit)
 export class UnitResolver {
-	constructor(private unitService: UnitService, private commandBus: CommandBus) {}
+	constructor(private unitService: UnitService, private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Mutation(() => Unit)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
@@ -36,14 +38,16 @@ export class UnitResolver {
 	@Mutation(() => Unit)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteUnit(@Args('identifier') identifier: string): Promise<Unit> {
-		const domainUnit: DomainUnit = await this.commandBus.execute<DeleteUnitCommand>(
-			new DeleteUnitCommand(identifier),
-		);
-		return UnitFactory.CreateUnit(domainUnit);
+		return this.commandBus.execute<DeleteUnitCommand>(new DeleteUnitCommand(identifier));
 	}
 
 	@ResolveField()
 	async manifestations(@Parent() { id }: Unit): Promise<Manifestation[]> {
 		return this.commandBus.execute<FindUnitManifestationsCommand>(new FindUnitManifestationsCommand(id));
+	}
+
+	@ResolveField()
+	element(@Parent() { elementId }: Unit): Promise<Element> {
+		return this.queryBus.execute<GetElementByIdQuery>(new GetElementByIdQuery(elementId));
 	}
 }

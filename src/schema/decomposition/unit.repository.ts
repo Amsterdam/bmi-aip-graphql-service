@@ -7,14 +7,10 @@ import { newId } from '../../utils';
 import { Unit, IUnitRepository } from './types/unit.repository.interface';
 import { CreateUnitInput } from './dto/create-unit.input';
 import { UpdateUnitInput } from './dto/update-unit.input';
-import { ManifestationRepository } from './manifestation.repository';
 
 @Injectable()
 export class UnitRepository implements IUnitRepository {
-	public constructor(
-		private readonly prisma: PrismaService,
-		private readonly manifestationRepo: ManifestationRepository,
-	) {}
+	public constructor(private readonly prisma: PrismaService) {}
 
 	async createUnit({
 		objectId,
@@ -62,6 +58,15 @@ export class UnitRepository implements IUnitRepository {
 		return this.prisma.units.findMany({
 			where: {
 				elementId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	public async getUnitById(id: string): Promise<Unit> {
+		return this.prisma.units.findUnique({
+			where: {
+				id,
 			},
 		});
 	}
@@ -116,20 +121,13 @@ export class UnitRepository implements IUnitRepository {
 		});
 	}
 
-	async deleteUnitsForElement(elementId: string): Promise<void> {
-		const units = await this.prisma.units.findMany({
+	async hasManifestations(identifier: string): Promise<boolean> {
+		const manifestationCount = await this.prisma.manifestations.count({
 			where: {
-				elementId,
-			},
-			select: {
-				id: true,
+				unitId: identifier,
+				deleted_at: null,
 			},
 		});
-		await Promise.all(
-			units.map(async ({ id }) => {
-				await this.manifestationRepo.deleteManifestationsForUnit(id);
-				await this.deleteUnit(id);
-			}),
-		);
+		return !!manifestationCount;
 	}
 }

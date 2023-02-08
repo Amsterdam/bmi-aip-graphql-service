@@ -7,16 +7,18 @@ import { UnitRepository } from './unit.repository';
 import { domainUnit } from './__stubs__';
 import { UnitFactory } from './unit.factory';
 import { Unit } from './models/unit.model';
-import { ManifestationRepository } from './manifestation.repository';
+import { UnitHasManifestationsException } from './exceptions/unit-has-manifestations.exception';
+
+import mocked = jest.mocked;
 
 jest.mock('./unit.repository');
-jest.mock('./manifestation.repository');
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
+	getUnitById: jest.fn().mockResolvedValue(domainUnit),
 	...(<any>{}),
 };
 
-const unitRepo = new UnitRepository(prismaServiceMock, new ManifestationRepository(prismaServiceMock));
+const unitRepo = new UnitRepository(prismaServiceMock);
 
 describe('Decomposition / Units / Service', () => {
 	test('getUnits returns array of Unit objects', async () => {
@@ -25,5 +27,21 @@ describe('Decomposition / Units / Service', () => {
 		expect(units).toBeInstanceOf(Array);
 		expect(units[0]).toBeInstanceOf(Unit);
 		expect(units).toEqual([domainUnit].map((unit) => UnitFactory.CreateUnit(unit)));
+	});
+
+	describe('deleteUnit', () => {
+		test('Throws UnitHasManifestationsException exception if element has units', async () => {
+			mocked(unitRepo.hasManifestations).mockResolvedValue(true);
+			const service = new UnitService(unitRepo);
+			await expect(service.deleteUnit(domainUnit.id)).rejects.toThrow(UnitHasManifestationsException);
+		});
+
+		test('Deletes element and returns it', async () => {
+			mocked(unitRepo.hasManifestations).mockResolvedValue(false);
+			const service = new UnitService(unitRepo);
+			const returnValue = await service.deleteUnit(domainUnit.id);
+			expect(unitRepo.deleteUnit).toHaveBeenCalledWith(domainUnit.id);
+			expect(returnValue).toEqual(UnitFactory.CreateUnit(domainUnit));
+		});
 	});
 });

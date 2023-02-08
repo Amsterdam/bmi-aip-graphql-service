@@ -49,6 +49,15 @@ export class ManifestationRepository implements IManifestationRepository {
 		return this.prisma.manifestations.findMany({
 			where: {
 				unitId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	public async getManifestationById(id: string): Promise<Manifestation> {
+		return this.prisma.manifestations.findUnique({
+			where: {
+				id,
 			},
 		});
 	}

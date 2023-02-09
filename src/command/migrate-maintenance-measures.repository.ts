@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { newId } from '../utils';
 import { MeasureTypes } from '../schema/measure/types/measure';
-import { CyclicMeasureTypes } from '../schema/cyclic-measure/types/cyclic-measure';
+import { CyclicMeasureTypes } from '../schema/measure/types/cyclic-measure';
 
 import type { MigrateMaintenanceMeasuresReturnType } from './types';
 

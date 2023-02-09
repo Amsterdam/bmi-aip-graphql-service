@@ -2,7 +2,8 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
 import { CyclicMeasureService } from '../cyclic-measure.service';
 import { CyclicMeasure } from '../models/cyclic-measure.model';
-import { FindCyclicMeasuresQuery } from '../queries/find-cyclic-measures.query';
+
+import { FindCyclicMeasuresQuery } from './find-cyclic-measures.query';
 
 @QueryHandler(FindCyclicMeasuresQuery)
 export class FindCyclicMeasuresHandler implements IQueryHandler<FindCyclicMeasuresQuery> {

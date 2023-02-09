@@ -15,6 +15,15 @@ import { DeleteMeasureHandler } from './commands/delete-measure.handler';
 import { MeasureTypes, QuantityUnitOfMeasurement } from './types/measure';
 import { FindMeasuresQuery } from './queries/find-measures.query';
 import { FindMeasuresHandler } from './queries/find-measures.handler';
+import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
+import { FindCyclicMeasuresHandler } from './queries/find-cyclic-measures.handler';
+import { CyclicMeasureResolver } from './cyclic-measure.resolver';
+import { CyclicMeasureService } from './cyclic-measure.service';
+import { CyclicMeasureRepository } from './cyclic-measure.repository';
+import { CreateCyclicMeasureHandler } from './commands/create-cyclic-measure.handler';
+import { UpdateCyclicMeasureHandler } from './commands/update-cyclic-measure.handler';
+import { DeleteCyclicMeasureHandler } from './commands/delete-cyclic-measure.handler';
+import { CyclicMeasureTypes } from './types/cyclic-measure';
 
 registerEnumType(MeasureTypes, {
 	name: 'MeasureTypes',
@@ -24,8 +33,15 @@ registerEnumType(QuantityUnitOfMeasurement, {
 	name: 'QuantityUnitOfMeasurement',
 });
 
+registerEnumType(CyclicMeasureTypes, {
+	name: 'CyclicMeasureTypes',
+});
+
 @Module({
 	providers: [
+		PrismaService,
+
+		// Corrective/preventative Measures
 		FindMeasuresQuery,
 		FindMeasuresHandler,
 		MeasureResolver,
@@ -34,7 +50,16 @@ registerEnumType(QuantityUnitOfMeasurement, {
 		CreateMeasureHandler,
 		UpdateMeasureHandler,
 		DeleteMeasureHandler,
-		PrismaService,
+
+		// Cyclic Measures
+		FindCyclicMeasuresQuery,
+		FindCyclicMeasuresHandler,
+		CyclicMeasureResolver,
+		CyclicMeasureService,
+		CyclicMeasureRepository,
+		CreateCyclicMeasureHandler,
+		UpdateCyclicMeasureHandler,
+		DeleteCyclicMeasureHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })

@@ -1,5 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -18,6 +18,7 @@ import { CreateCyclicMeasureCommand } from './commands/create-cyclic-measure.com
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.command';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
+import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
 
 jest.mock('./cyclic-measure.service');
 jest.mock('./cyclic-measure.repository');
@@ -35,6 +36,16 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	...(<any>{}),
 });
 
+const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
+	execute: jest.fn((command: any) => {
+		switch (command.constructor.name) {
+			case FindCyclicMeasuresQuery.name:
+				return [cyclicMeasure1, cyclicMeasure2];
+		}
+	}),
+	...(<any>{}),
+});
+
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
@@ -45,7 +56,11 @@ describe('Decomposition / CyclicMeasure / Resolver', () => {
 	describe('createCyclicMeasure', () => {
 		test('creates and returns an cyclicMeasure', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new CyclicMeasureResolver(new CyclicMeasureService(cyclicMeasureRepo), commandBusMock);
+			const resolver = new CyclicMeasureResolver(
+				new CyclicMeasureService(cyclicMeasureRepo),
+				commandBusMock,
+				getQueryBusMock(),
+			);
 			const result = await resolver.createCyclicMeasure(cyclicMeasureInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateCyclicMeasureCommand(cyclicMeasureInput));
@@ -58,7 +73,11 @@ describe('Decomposition / CyclicMeasure / Resolver', () => {
 	describe('updateCyclicMeasure', () => {
 		test('updates and returns an cyclicMeasure', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new CyclicMeasureResolver(new CyclicMeasureService(cyclicMeasureRepo), commandBusMock);
+			const resolver = new CyclicMeasureResolver(
+				new CyclicMeasureService(cyclicMeasureRepo),
+				commandBusMock,
+				getQueryBusMock(),
+			);
 			const result = await resolver.updateCyclicMeasure(updateCyclicMeasureInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(
@@ -73,7 +92,11 @@ describe('Decomposition / CyclicMeasure / Resolver', () => {
 	describe('deleteCyclicMeasure', () => {
 		test('soft-deletes and returns an cyclicMeasure', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new CyclicMeasureResolver(new CyclicMeasureService(cyclicMeasureRepo), commandBusMock);
+			const resolver = new CyclicMeasureResolver(
+				new CyclicMeasureService(cyclicMeasureRepo),
+				commandBusMock,
+				getQueryBusMock(),
+			);
 			const result = await resolver.deleteCyclicMeasure(domainCyclicMeasure.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteCyclicMeasureCommand(domainCyclicMeasure.id));
@@ -86,7 +109,11 @@ describe('Decomposition / CyclicMeasure / Resolver', () => {
 
 	test('getSurveyCyclicMeasures returns an array of cyclicMeasure objects', async () => {
 		const commandBusMock = getCommandBusMock();
-		const resolver = new CyclicMeasureResolver(new CyclicMeasureService(cyclicMeasureRepo), commandBusMock);
+		const resolver = new CyclicMeasureResolver(
+			new CyclicMeasureService(cyclicMeasureRepo),
+			commandBusMock,
+			getQueryBusMock(),
+		);
 		const cyclicMeasures = await resolver.getSurveyCyclicMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(cyclicMeasures).toEqual([cyclicMeasure1, cyclicMeasure2]);
 	});

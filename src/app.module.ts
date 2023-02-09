@@ -8,7 +8,6 @@ import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
 
 import { MeasureModule } from './schema/measure/measure.module';
-import { CyclicMeasureModule } from './schema/cyclic-measure/cyclic-measure.module';
 import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
 import { AppService } from './app.service';
 import { DecompositionModule } from './schema/decomposition/decomposition.module';
@@ -44,7 +43,6 @@ import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-me
 		AuthorizationModule,
 		DecompositionModule,
 		MeasureModule,
-		CyclicMeasureModule,
 		FailureModeModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,

@@ -11,7 +11,11 @@
  * 		- the DefaultMaintenanceMeasure is updated by an administrator (propagates to cyclicMeasures)
  * - the quantity is always taken from the Unit that  the CyclicMeasure relates to (is generated for)
  */
-export const calculateCostWithSurcharge = (unitPrice: number, quantity: number, costSurcharge: number): number => {
-	if (!unitPrice || !quantity) return 0;
+export const calculateCostWithSurcharge = (
+	unitPrice: number | null,
+	quantity: number | null,
+	costSurcharge: number | null,
+): number => {
+	if (!unitPrice || !quantity || !costSurcharge) return 0;
 	return Number((unitPrice * quantity * costSurcharge).toFixed(2));
 };

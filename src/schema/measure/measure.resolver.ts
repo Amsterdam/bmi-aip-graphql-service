@@ -23,6 +23,8 @@ import { UpdateMeasureCommand } from './commands/update-measure.command';
 import { Measure as DomainMeasure } from './types/measure.repository.interface';
 import { DeleteMeasureCommand } from './commands/delete-measure.command';
 import { FindMeasuresQuery } from './queries/find-measures.query';
+import { CalculateMeasureCostQuery } from './queries/calculate-measure-cost.query';
+import { CalculateMeasureCostWithSurchargeQuery } from './queries/calculate-measure-cost-with-surcharge.query';
 
 @Resolver((of) => Measure)
 @Resource(Measure.name)
@@ -85,5 +87,17 @@ export class MeasureResolver {
 	@ResolveField()
 	failureMode(@Parent() { failureModeId }: Measure): Promise<FailureMode> {
 		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
+	}
+
+	@ResolveField()
+	cost(@Parent() measure: Measure): Promise<Measure> {
+		return this.queryBus.execute<CalculateMeasureCostQuery>(new CalculateMeasureCostQuery(measure));
+	}
+
+	@ResolveField()
+	costWithSurcharge(@Parent() measure: Measure): Promise<Measure> {
+		return this.queryBus.execute<CalculateMeasureCostWithSurchargeQuery>(
+			new CalculateMeasureCostWithSurchargeQuery(measure),
+		);
 	}
 }

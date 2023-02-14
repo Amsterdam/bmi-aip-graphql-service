@@ -5,6 +5,7 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
+import { SurveyRepository } from '../survey/survey.repository';
 
 import { ElementService } from './element.service';
 import { ElementResolver } from './element.resolver';
@@ -70,6 +71,7 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		GetUnitByIdHandler,
 		GetManifestationByIdQuery,
 		GetManifestationByIdHandler,
+		SurveyRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

@@ -1,4 +1,4 @@
-import { Measure } from '../models/measure.model';
+import { Measure } from './measure.model';
 
 describe('Model / Measure', () => {
 	test('constructs an Measure instance object', () => {

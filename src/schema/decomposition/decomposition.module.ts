@@ -72,5 +72,6 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		GetManifestationByIdHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	exports: [UnitService],
 })
 export class DecompositionModule {}

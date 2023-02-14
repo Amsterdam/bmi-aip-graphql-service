@@ -5,6 +5,7 @@ import { registerEnumType } from '@nestjs/graphql';
 import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { PrismaService } from '../../prisma.service';
+import { DecompositionModule } from '../decomposition/decomposition.module';
 
 import { MeasureService } from './measure.service';
 import { MeasureResolver } from './measure.resolver';
@@ -24,6 +25,8 @@ import { DeleteCyclicMeasureHandler } from './commands/delete-cyclic-measure.han
 import { CyclicMeasureTypes } from './types/cyclic-measure';
 import { CalculateMeasureCostHandler } from './queries/calculate-measure-cost.handler';
 import { CalculateMeasureCostWithSurchargeHandler } from './queries/calculate-measure-cost-with-surcharge.handler';
+import { CalculateCyclicMeasureCostHandler } from './queries/calculate-cyclic-measure-cost.handler';
+import { CalculateCyclicMeasureCostWithSurchargeHandler } from './queries/calculate-cyclic-measure-cost-with-surcharge.handler';
 
 registerEnumType(MeasureTypes, {
 	name: 'MeasureTypes',
@@ -60,7 +63,9 @@ registerEnumType(CyclicMeasureTypes, {
 		CreateCyclicMeasureHandler,
 		UpdateCyclicMeasureHandler,
 		DeleteCyclicMeasureHandler,
+		CalculateCyclicMeasureCostHandler,
+		CalculateCyclicMeasureCostWithSurchargeHandler,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, DecompositionModule],
 })
 export class MeasureModule {}

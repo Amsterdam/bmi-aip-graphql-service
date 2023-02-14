@@ -9,7 +9,7 @@
  *   DefaultMaintenanceMeasure record. The unitPrice value is copied from the DefaultMaintenanceMeasure record when:
  * 		- the CyclicMeasure record is being generated for a Unit
  * 		- the DefaultMaintenanceMeasure is updated by an administrator (propagates to cyclicMeasures)
- * - the quantity (always integer) is always taken from the Unit that  the CyclicMeasure relates to (is generated for)
+ * - the quantity (always integer) is always taken from the Unit that the CyclicMeasure relates to (is generated for)
  */
 export const calculateCost = (unitPrice: number | null, quantity: number | null): number => {
 	if (!unitPrice || !quantity) return 0;

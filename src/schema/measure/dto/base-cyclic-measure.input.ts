@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
-import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
+import { QuantityUnitOfMeasurement } from '../types/measure';
 
 @InputType()
 export class BaseCyclicMeasureInput {
@@ -41,6 +41,14 @@ export class BaseCyclicMeasureInput {
 	@Field()
 	@IsUUID()
 	public defaultMaintenanceMeasureId?: string;
+
+	@Field()
+	@IsUUID()
+	public failureModeId?: string;
+
+	@Field()
+	@IsUUID()
+	public defectId?: string;
 
 	@IsOptional()
 	@IsEnum(CyclicMeasureTypes)

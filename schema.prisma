@@ -370,6 +370,7 @@ model defects {
   ramsWeightedPriority      String?               @db.VarChar(1)
   conditions                conditions            @relation(fields: [conditionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defects_conditionid_foreign")
   assets                    assets[]
+  cyclicMeasures            cyclicMeasures[]
   maintenanceMeasures       maintenanceMeasures[]
   measures                  measures[]
 
@@ -556,6 +557,7 @@ model failureModes {
   surveys                                         surveys                      @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_surveyid_foreign")
   units                                           units?                       @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_unitid_foreign")
   assets                                          assets[]
+  cyclicMeasures                                  cyclicMeasures[]
   other_failureModes                              failureModes[]               @relation("failureModesTofailureModes_copyOfFailureModeId")
   findings                                        findings[]
   fmecaFurtherInvestigations                      fmecaFurtherInvestigations[]
@@ -1763,7 +1765,11 @@ model cyclicMeasures {
   updated_at                  DateTime                   @default(now()) @db.Timestamptz(6)
   deleted_at                  DateTime?                  @db.Timestamptz(6)
   surveyId                    String                     @db.Uuid
+  failureModeId               String?                    @db.Uuid
+  defectId                    String?                    @db.Uuid
   defaultMaintenanceMeasures  defaultMaintenanceMeasures @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "cyclicmeasures_defaultmaintenancemeasureid_foreign")
+  defects                     defects?                   @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_defectid_foreign")
+  failureModes                failureModes?              @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_failuremodeid_foreign")
   surveys                     surveys                    @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_surveyid_foreign")
   units                       units                      @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_unitid_foreign")
 

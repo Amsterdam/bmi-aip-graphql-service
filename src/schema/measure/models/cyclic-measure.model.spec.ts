@@ -1,4 +1,4 @@
-import { CyclicMeasure } from '../models/cyclic-measure.model';
+import { CyclicMeasure } from './cyclic-measure.model';
 
 describe('Model / CyclicMeasure', () => {
 	test('constructs an CyclicMeasure instance object', () => {

@@ -1,9 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
-import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
+import { QuantityUnitOfMeasurement } from '../types/measure';
 import { Survey } from '../../survey/models/survey.model';
 import { Unit } from '../../decomposition/models/unit.model';
+import { FailureMode } from '../../failure-mode/models/failure-mode.model';
+import { Defect } from '../../ti/models/defect.model';
 import { DefaultMaintenanceMeasure } from '../../default-maintenance-measure/models/default-maintenance-measure.model';
 
 @ObjectType({ description: 'cyclicMeasure' })
@@ -52,6 +54,18 @@ export class CyclicMeasure {
 
 	@Field((type) => CyclicMeasureTypes, { nullable: true })
 	maintenanceType?: string;
+
+	@Field((type) => String, { nullable: true })
+	failureModeId?: string;
+
+	@Field((type) => FailureMode, { nullable: true })
+	failureMode?: FailureMode;
+
+	@Field((type) => String, { nullable: true })
+	defectId?: string;
+
+	@Field((type) => Defect, { nullable: true })
+	defect?: Defect;
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;

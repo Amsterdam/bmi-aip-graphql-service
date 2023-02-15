@@ -2,8 +2,9 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { domainCyclicMeasure, updateCyclicMeasureInput } from '../__stubs__';
-import { UpdateCyclicMeasureCommand } from '../commands/update-cyclic-measure.command';
-import { UpdateCyclicMeasureHandler } from '../commands/update-cyclic-measure.handler';
+
+import { UpdateCyclicMeasureCommand } from './update-cyclic-measure.command';
+import { UpdateCyclicMeasureHandler } from './update-cyclic-measure.handler';
 
 const cyclicMeasureRepoMock: MockedObjectDeep<CyclicMeasureRepository> = {
 	updateCyclicMeasure: jest.fn().mockResolvedValue(domainCyclicMeasure),

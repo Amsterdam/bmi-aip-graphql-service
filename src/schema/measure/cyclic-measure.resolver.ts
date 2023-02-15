@@ -6,6 +6,10 @@ import { Survey } from '../survey/models/survey.model';
 import { GetSurveyByIdQuery } from '../survey/queries/get-survey-by-id.query';
 import { Unit } from '../decomposition/models/unit.model';
 import { GetUnitByIdQuery } from '../decomposition/queries/get-unit-by-id.query';
+import { GetDefectQuery } from '../ti/queries/get-defect.query';
+import { GetFailureModeByIdQuery } from '../failure-mode/queries/get-failure-mode-by-id.query';
+import { Defect } from '../ti/models/defect.model';
+import { FailureMode } from '../failure-mode/models/failure-mode.model';
 import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models/default-maintenance-measure.model';
 import { GetDefaultMaintenanceMeasureQuery } from '../default-maintenance-measure/queries/get-default-maintenance-measure.query';
 
@@ -18,6 +22,7 @@ import { CreateCyclicMeasureCommand } from './commands/create-cyclic-measure.com
 import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.command';
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
+import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
 
 @Resolver((of) => CyclicMeasure)
 @Resource(CyclicMeasure.name)
@@ -62,7 +67,7 @@ export class CyclicMeasureResolver {
 	@Query((returns) => [CyclicMeasure], { name: 'cyclicMeasures' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyCyclicMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.cyclicMeasureService.findCyclicMeasures(surveyId);
+		return this.queryBus.execute<FindCyclicMeasuresQuery>(new FindCyclicMeasuresQuery(surveyId));
 	}
 
 	@ResolveField()
@@ -73,6 +78,16 @@ export class CyclicMeasureResolver {
 	@ResolveField()
 	unit(@Parent() { unitId }: CyclicMeasure): Promise<Unit> {
 		return this.queryBus.execute<GetUnitByIdQuery>(new GetUnitByIdQuery(unitId));
+	}
+
+	@ResolveField()
+	defect(@Parent() { defectId }: CyclicMeasure): Promise<Defect> {
+		return this.queryBus.execute<GetDefectQuery>(new GetDefectQuery(defectId));
+	}
+
+	@ResolveField()
+	failureMode(@Parent() { failureModeId }: CyclicMeasure): Promise<FailureMode> {
+		return this.queryBus.execute<GetFailureModeByIdQuery>(new GetFailureModeByIdQuery(failureModeId));
 	}
 
 	@ResolveField()

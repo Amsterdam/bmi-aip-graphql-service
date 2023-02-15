@@ -6,6 +6,7 @@ import { newId } from '../../utils';
 
 import { DbSurvey, ISurveyRepository } from './types/survey.repository.interface';
 import { CreateSurveyInput } from './dto/create-survey.input';
+import { SurveyStates } from './types/surveyStates';
 
 @Injectable()
 export class SurveyRepository implements ISurveyRepository {
@@ -40,5 +41,37 @@ export class SurveyRepository implements ISurveyRepository {
 		return this.prisma.surveys.findMany({
 			where: { objectId: objectId },
 		});
+	}
+
+	public async findIdPreviousSurveyWithNen2767Decomposition(surveyId: string): Promise<string | null> {
+		const current = await this.prisma.surveys.findFirst({
+			where: {
+				id: surveyId,
+			},
+
+			select: {
+				id: true,
+				objectId: true,
+				inspectionStandardType: true,
+			},
+		});
+
+		const previous = await this.prisma.surveys.findFirst({
+			where: {
+				objectId: current.objectId,
+				inspectionStandardType: {
+					in: ['nen2767', 'fmeca'],
+				},
+				NOT: [{ id: current.id }, { status: SurveyStates.deleted }],
+			},
+			orderBy: {
+				created_at: 'desc',
+			},
+			select: {
+				id: true,
+			},
+		});
+
+		return previous?.id;
 	}
 }

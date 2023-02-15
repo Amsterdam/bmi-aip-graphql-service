@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SurveyAlreadyHasMeasuresException } from 'src/schema/survey/exceptions/survey-already-has-measures';
 import { SurveyRepository } from 'src/schema/survey/survey.repository';
 
+import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
 import { MeasureFactory } from '../measure.factory';
 import { MeasureRepository } from '../measure.repository';
 import { Measure } from '../models/measure.model';
@@ -23,10 +23,9 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 
 		if (previousSurveyId) {
 			const measuresDb = await this.measureRepository.cloneMeasures(command.surveyId, previousSurveyId);
-			const measures = measuresDb.map((measure) => MeasureFactory.CreateMeasure(measure));
-			return measures;
+			return measuresDb.map((measure) => MeasureFactory.CreateMeasure(measure));
 		}
 
-		return [] as Measure[];
+		return [];
 	}
 }

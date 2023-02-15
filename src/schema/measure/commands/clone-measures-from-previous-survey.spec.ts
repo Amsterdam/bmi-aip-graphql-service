@@ -15,6 +15,7 @@ const measureRepositoryMock: MockedObjectDeep<MeasureRepository> = {
 
 const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
 	findIdPreviousSurveyWithNen2767Decomposition: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
+	containsMeasures: jest.fn().mockResolvedValue(false),
 	...(<any>{}),
 };
 

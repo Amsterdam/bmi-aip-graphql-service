@@ -23,6 +23,8 @@ import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.com
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
 import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
+import { CalculateCyclicMeasureCostQuery } from './queries/calculate-cyclic-measure-cost.query';
+import { CalculateCyclicMeasureCostWithSurchargeQuery } from './queries/calculate-cyclic-measure-cost-with-surcharge.query';
 
 @Resolver((of) => CyclicMeasure)
 @Resource(CyclicMeasure.name)
@@ -96,6 +98,20 @@ export class CyclicMeasureResolver {
 	): Promise<DefaultMaintenanceMeasure> {
 		return this.queryBus.execute<GetDefaultMaintenanceMeasureQuery>(
 			new GetDefaultMaintenanceMeasureQuery(defaultMaintenanceMeasureId),
+		);
+	}
+
+	@ResolveField()
+	cost(@Parent() cyclicMeasure: CyclicMeasure): Promise<CyclicMeasure> {
+		return this.queryBus.execute<CalculateCyclicMeasureCostQuery>(
+			new CalculateCyclicMeasureCostQuery(cyclicMeasure),
+		);
+	}
+
+	@ResolveField()
+	costWithSurcharge(@Parent() cyclicMeasure: CyclicMeasure): Promise<CyclicMeasure> {
+		return this.queryBus.execute<CalculateCyclicMeasureCostWithSurchargeQuery>(
+			new CalculateCyclicMeasureCostWithSurchargeQuery(cyclicMeasure),
 		);
 	}
 }

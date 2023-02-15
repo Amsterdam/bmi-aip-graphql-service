@@ -13,9 +13,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 	constructor(private surveyRepository: SurveyRepository, private measureRepository: MeasureRepository) {}
 
 	public async execute(command: CloneMeasuresFromPreviousSurveyCommand): Promise<Measure[]> {
-		const previousSurveyId = await this.surveyRepository.findIdPreviousSurveyWithNen2767Decomposition(
-			command.surveyId,
-		);
+		const previousSurveyId = await this.surveyRepository.findIdPreviousNen2767OrFmecaSurvey(command.surveyId);
 
 		if (await this.surveyRepository.containsMeasures(command.surveyId)) {
 			throw new SurveyAlreadyHasMeasuresException(command.surveyId);

@@ -43,7 +43,7 @@ export class SurveyRepository implements ISurveyRepository {
 		});
 	}
 
-	public async findIdPreviousSurveyWithNen2767Decomposition(surveyId: string): Promise<string | null> {
+	public async findIdPreviousNen2767OrFmecaSurvey(surveyId: string): Promise<string | null> {
 		const current = await this.prisma.surveys.findFirst({
 			where: {
 				id: surveyId,

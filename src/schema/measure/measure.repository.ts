@@ -197,4 +197,14 @@ export class MeasureRepository implements IMeasureRepository {
 
 		return this.findMeasures(surveyId);
 	}
+
+	async surveyContainsMeasures(surveyId: string): Promise<boolean> {
+		const measures = await this.prisma.measures.findMany({
+			where: {
+				surveyId: surveyId,
+			},
+		});
+
+		return measures.length > 0;
+	}
 }

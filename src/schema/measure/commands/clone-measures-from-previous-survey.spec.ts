@@ -10,12 +10,12 @@ import { CloneMeasuresFromPreviousSurveyHandler } from './clone-measures-from-pr
 const measureRepositoryMock: MockedObjectDeep<MeasureRepository> = {
 	checkIfAlreadyMigrated: jest.fn().mockResolvedValue(false),
 	cloneMeasures: jest.fn().mockResolvedValue([domainMeasure, domainMeasure]),
+	surveyContainsMeasures: jest.fn().mockResolvedValue(false),
 	...(<any>{}),
 };
 
 const surveyRepoMock: MockedObjectDeep<SurveyRepository> = {
 	findIdPreviousNen2767OrFmecaSurvey: jest.fn().mockResolvedValue('__PREVIOUS_SURVEY_ID__'),
-	containsMeasures: jest.fn().mockResolvedValue(false),
 	...(<any>{}),
 };
 

@@ -6,7 +6,6 @@ import { CalculateMeasureCostWithSurchargeHandler } from './calculate-measure-co
 describe('CalculateMeasureCostWithSurchargeQuery', () => {
 	test('executes query', async () => {
 		const query = new CalculateMeasureCostWithSurchargeQuery(measure);
-		const result = await new CalculateMeasureCostWithSurchargeHandler().execute(query);
-		expect(result.costWithSurcharge).toEqual(4962.54);
+		expect(await new CalculateMeasureCostWithSurchargeHandler().execute(query)).toEqual(4962.54);
 	});
 });

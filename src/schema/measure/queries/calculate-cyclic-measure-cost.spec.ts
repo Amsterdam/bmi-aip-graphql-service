@@ -15,7 +15,6 @@ const unitServiceMock: MockedObjectDeep<UnitService> = {
 describe('CalculateCyclicMeasureCostQuery', () => {
 	test('executes query', async () => {
 		const query = new CalculateCyclicMeasureCostQuery(cyclicMeasure);
-		const result = await new CalculateCyclicMeasureCostHandler(unitServiceMock).execute(query);
-		expect(result.cost).toEqual(101.97);
+		expect(await new CalculateCyclicMeasureCostHandler(unitServiceMock).execute(query)).toEqual(101.97);
 	});
 });

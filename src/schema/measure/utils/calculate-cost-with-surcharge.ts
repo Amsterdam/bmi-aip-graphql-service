@@ -16,6 +16,6 @@ export const calculateCostWithSurcharge = (
 	quantity: number | null,
 	costSurcharge: number | null,
 ): number => {
-	if (!unitPrice || !quantity || !costSurcharge) return 0;
-	return Number((unitPrice * quantity * costSurcharge).toFixed(2));
+	if (!unitPrice || !quantity) return 0;
+	return Number((unitPrice * quantity * (costSurcharge || 1)).toFixed(2));
 };

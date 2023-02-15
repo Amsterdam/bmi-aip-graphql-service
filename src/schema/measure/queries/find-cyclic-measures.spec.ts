@@ -2,8 +2,9 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { CyclicMeasureService } from '../cyclic-measure.service';
 import { domainCyclicMeasure } from '../__stubs__';
-import { FindCyclicMeasuresQuery } from '../queries/find-cyclic-measures.query';
-import { FindCyclicMeasuresHandler } from '../queries/find-cyclic-measures.handler';
+
+import { FindCyclicMeasuresQuery } from './find-cyclic-measures.query';
+import { FindCyclicMeasuresHandler } from './find-cyclic-measures.handler';
 
 const cyclicMeasureMock: MockedObjectDeep<CyclicMeasureService> = {
 	findCyclicMeasures: jest.fn().mockResolvedValue([domainCyclicMeasure]),

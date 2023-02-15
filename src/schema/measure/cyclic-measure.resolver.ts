@@ -22,6 +22,7 @@ import { CreateCyclicMeasureCommand } from './commands/create-cyclic-measure.com
 import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.command';
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
+import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
 
 @Resolver((of) => CyclicMeasure)
 @Resource(CyclicMeasure.name)
@@ -66,7 +67,7 @@ export class CyclicMeasureResolver {
 	@Query((returns) => [CyclicMeasure], { name: 'cyclicMeasures' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async getSurveyCyclicMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.cyclicMeasureService.findCyclicMeasures(surveyId);
+		return this.queryBus.execute<FindCyclicMeasuresQuery>(new FindCyclicMeasuresQuery(surveyId));
 	}
 
 	@ResolveField()

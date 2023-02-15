@@ -75,4 +75,10 @@ export class Measure {
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;
+
+	@Field((type) => Number)
+	cost?: number;
+
+	@Field((type) => Number)
+	costWithSurcharge?: number;
 }

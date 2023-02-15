@@ -1,5 +1,4 @@
-import { QuantityUnitOfMeasurement } from '../measure/types/measure';
-
+import { QuantityUnitOfMeasurement } from './types/measure';
 import { CyclicMeasure } from './models/cyclic-measure.model';
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';

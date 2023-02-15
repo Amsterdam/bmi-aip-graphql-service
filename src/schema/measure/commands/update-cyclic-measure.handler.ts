@@ -2,7 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { CyclicMeasure } from '../types/cyclic-measure.repository.interface';
-import { UpdateCyclicMeasureCommand } from '../commands/update-cyclic-measure.command';
+
+import { UpdateCyclicMeasureCommand } from './update-cyclic-measure.command';
 
 @CommandHandler(UpdateCyclicMeasureCommand)
 export class UpdateCyclicMeasureHandler implements ICommandHandler<UpdateCyclicMeasureCommand> {

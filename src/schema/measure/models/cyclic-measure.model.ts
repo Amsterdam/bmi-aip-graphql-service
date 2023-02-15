@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
-import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
+import { QuantityUnitOfMeasurement } from '../types/measure';
 import { Survey } from '../../survey/models/survey.model';
 import { Unit } from '../../decomposition/models/unit.model';
 import { FailureMode } from '../../failure-mode/models/failure-mode.model';

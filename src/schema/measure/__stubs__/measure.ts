@@ -15,6 +15,9 @@ measure1.location = 'Gehele brug';
 measure1.description = 'Herstellen corrosieschade paal';
 measure1.defectId = defect1.id;
 measure1.defect = defect1;
+measure1.quantity = 20;
+measure1.unitPrice = 33.99;
+measure1.costSurcharge = 1.1;
 
 const measure2 = new Measure();
 measure2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';

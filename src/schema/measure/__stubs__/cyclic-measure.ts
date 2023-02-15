@@ -4,7 +4,7 @@ import { CyclicMeasure as DomainCyclicMeasure } from '../types/cyclic-measure.re
 import { CyclicMeasureFactory } from '../cyclic-measure.factory';
 import { UpdateCyclicMeasureInput } from '../dto/update-cyclic-measure.input';
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
-import { QuantityUnitOfMeasurement } from '../../measure/types/measure';
+import { QuantityUnitOfMeasurement } from '../types/measure';
 
 const cyclicMeasure1 = new CyclicMeasure();
 cyclicMeasure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';

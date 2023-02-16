@@ -11,10 +11,20 @@ import {
 export class DefaultMaintenanceMeasureRepository implements IDefaultMaintenanceMeasureRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	public async getDefaultMaintenanceMeasure(defaultMaintenanceMeasureId: string): Promise<DefaultMaintenanceMeasure> {
+	async getDefaultMaintenanceMeasure(defaultMaintenanceMeasureId: string): Promise<DefaultMaintenanceMeasure> {
 		return this.prisma.defaultMaintenanceMeasures.findUnique({
 			where: {
 				id: defaultMaintenanceMeasureId,
+			},
+		});
+	}
+
+	async getDefaultMaintenanceMeasureByObjectTypeUnitCodeId(
+		objectTypeUnitCodeId: string,
+	): Promise<DefaultMaintenanceMeasure[]> {
+		return this.prisma.defaultMaintenanceMeasures.findMany({
+			where: {
+				objectTypeUnitCodeId: objectTypeUnitCodeId,
 			},
 		});
 	}

@@ -19,6 +19,7 @@ import { CyclicMeasure } from './models/cyclic-measure.model';
 import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.command';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
 import { FindCyclicMeasuresQuery } from './queries/find-cyclic-measures.query';
+import { DefaultMaintenanceMeasureService } from './../default-maintenance-measure/default-maintenance-measure.service';
 
 jest.mock('./cyclic-measure.service');
 jest.mock('./cyclic-measure.repository');
@@ -50,7 +51,11 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const cyclicMeasureRepo = new CyclicMeasureRepository(prismaServiceMock);
+const defaultMaintenanceMeasureServiceMock: MockedObjectDeep<DefaultMaintenanceMeasureService> = {
+	...(<any>{}),
+};
+
+const cyclicMeasureRepo = new CyclicMeasureRepository(prismaServiceMock, defaultMaintenanceMeasureServiceMock);
 
 describe('Decomposition / CyclicMeasure / Resolver', () => {
 	describe('createCyclicMeasure', () => {

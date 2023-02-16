@@ -7,13 +7,14 @@ import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
-import { MeasureFactory } from '../measure.factory';
 import { MeasureRepository } from '../measure.repository';
 import { Measure } from '../models/measure.model';
 import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
+import { MeasureService } from '../measure.service';
+import { UnitFactory } from '../../decomposition/unit.factory';
+import { ManifestationFactory } from '../../decomposition/manifestation.factory';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
-
 
 @CommandHandler(CloneMeasuresFromPreviousSurveyCommand)
 export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<CloneMeasuresFromPreviousSurveyCommand> {
@@ -22,6 +23,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		private measureRepository: MeasureRepository,
 		private unitRepository: UnitRepository,
 		private manifestationRepository: ManifestationRepository,
+		private measureService: MeasureService,
 	) {}
 
 	public async execute(command: CloneMeasuresFromPreviousSurveyCommand): Promise<Measure[]> {
@@ -32,15 +34,15 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		}
 
 		if (previousSurveyId) {
-			const measuresDb = await this.cloneMeasures(command.surveyId, previousSurveyId);
-			return measuresDb.map((measure) => MeasureFactory.CreateMeasure(measure));
+			await this.cloneMeasures(command.surveyId, previousSurveyId);
+			return this.measureService.findMeasures(command.surveyId);
 		}
 
 		return [];
 	}
 
 	public async cloneMeasures(surveyId: string, previousSurveyId: string): Promise<Measure[]> {
-		const measures = await this.measureRepository.findMeasures(previousSurveyId);
+		const measures = await this.measureService.findMeasures(previousSurveyId);
 		const queue = new PQueue({ concurrency: 1 });
 
 		measures.forEach((measure) => {
@@ -58,12 +60,13 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 				await this.measureRepository.createMeasure({
 					...measure,
 					surveyId,
+					remarks: '',
 				});
 			});
 		});
 		await queue.onIdle();
 
-		return this.measureRepository.findMeasures(surveyId);
+		return this.measureService.findMeasures(surveyId);
 	}
 
 	async findLastClonedUnit(unitId: string, surveyId: string): Promise<Unit> {
@@ -74,7 +77,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 			throw new DecompositionCloneNotFoundException(surveyId);
 		}
 
-		return lastCreated;
+		return UnitFactory.CreateUnit(lastCreated);
 	}
 
 	async findLastClonedManifestation(manifestationId: string, surveyId: string): Promise<Manifestation> {
@@ -88,6 +91,6 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 			throw new DecompositionCloneNotFoundException(surveyId);
 		}
 
-		return lastCreated;
+		return ManifestationFactory.CreateManifestation(lastCreated);
 	}
 }

@@ -5,6 +5,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { domainManifestation, domainUnit } from '../../decomposition/__stubs__';
 import { MeasureRepository } from '../measure.repository';
+import { MeasureService } from '../measure.service';
 import { domainMeasure } from '../__stubs__';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
@@ -34,6 +35,11 @@ const manifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
 	...(<any>{}),
 };
 
+const measureServiceMock: MockedObjectDeep<MeasureService> = {
+	findMeasures: jest.fn().mockResolvedValue([domainMeasure]),
+	...(<any>{}),
+};
+
 describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 	test('executes command (with unit)', async () => {
 		const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
@@ -42,11 +48,12 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 			measureRepositoryMock,
 			unitRepositoryMock,
 			manifestationRepositoryMock,
+			measureServiceMock,
 		).execute(command);
 
 		expect(measureRepositoryMock.surveyContainsMeasures).toHaveBeenCalledTimes(1);
 		expect(unitRepositoryMock.getLastCreatedForSurvey).toHaveBeenCalledTimes(1);
 		expect(manifestationRepositoryMock.getLastCreatedForSurvey).toHaveBeenCalledTimes(0);
-		expect(measureRepositoryMock.findMeasures).toHaveBeenCalledTimes(2);
+		expect(measureServiceMock.findMeasures).toHaveBeenCalledTimes(3);
 	});
 });

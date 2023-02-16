@@ -6,6 +6,8 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from '../survey/survey.repository';
+import { UnitRepository } from '../decomposition/unit.repository';
+import { ManifestationRepository } from '../decomposition/manifestation.repository';
 
 import { MeasureService } from './measure.service';
 import { MeasureResolver } from './measure.resolver';
@@ -65,6 +67,8 @@ registerEnumType(CyclicMeasureTypes, {
 		CreateCyclicMeasureHandler,
 		UpdateCyclicMeasureHandler,
 		DeleteCyclicMeasureHandler,
+		UnitRepository,
+		ManifestationRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })

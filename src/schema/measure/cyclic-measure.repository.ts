@@ -40,17 +40,31 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasureId } },
-			defects: {
-				connect: {
-					id: defectId,
-				},
-			},
-			failureModes: {
+		};
+
+		if (failureModeId) {
+			data.failureModes = {
 				connect: {
 					id: failureModeId,
 				},
-			},
-		};
+			};
+		}
+
+		if (defectId) {
+			data.defects = {
+				connect: {
+					id: defectId,
+				},
+			};
+		}
+
+		// if (manifestationId) {
+		// 	data.manifestations = {
+		// 		connect: {
+		// 			id: manifestationId,
+		// 		},
+		// 	};
+		// }
 
 		return this.prisma.cyclicMeasures.create({ data });
 	}
@@ -100,5 +114,15 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			where: { id: identifier },
 			data,
 		});
+	}
+
+	async surveyContainsMeasures(surveyId: string): Promise<boolean> {
+		const cyclicMeasures = await this.prisma.cyclicMeasures.findMany({
+			where: {
+				surveyId: surveyId,
+			},
+		});
+
+		return cyclicMeasures.length > 0;
 	}
 }

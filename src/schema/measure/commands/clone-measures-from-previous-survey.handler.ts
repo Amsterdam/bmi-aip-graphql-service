@@ -7,15 +7,18 @@ import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
+import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures';
 import { MeasureRepository } from '../measure.repository';
 import { Measure } from '../models/measure.model';
 import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
 import { MeasureService } from '../measure.service';
 import { UnitFactory } from '../../decomposition/unit.factory';
 import { ManifestationFactory } from '../../decomposition/manifestation.factory';
+import { CyclicMeasure } from '../models/cyclic-measure.model';
+import { CyclicMeasureService } from '../cyclic-measure.service';
+import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
-
 @CommandHandler(CloneMeasuresFromPreviousSurveyCommand)
 export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<CloneMeasuresFromPreviousSurveyCommand> {
 	constructor(
@@ -24,6 +27,8 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		private unitRepository: UnitRepository,
 		private manifestationRepository: ManifestationRepository,
 		private measureService: MeasureService,
+		private cyclicMeasureService: CyclicMeasureService,
+		private cyclicMeasureRepository: CyclicMeasureRepository,
 	) {}
 
 	public async execute(command: CloneMeasuresFromPreviousSurveyCommand): Promise<Measure[]> {
@@ -33,8 +38,14 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 			throw new SurveyAlreadyHasMeasuresException(command.surveyId);
 		}
 
+		if (await this.cyclicMeasureRepository.surveyContainsMeasures(command.surveyId)) {
+			throw new SurveyAlreadyHasCyclicMeasuresException(command.surveyId);
+		}
+
 		if (previousSurveyId) {
 			await this.cloneMeasures(command.surveyId, previousSurveyId);
+			await this.cloneCyclicMeasures(command.surveyId, previousSurveyId);
+
 			return this.measureService.findMeasures(command.surveyId);
 		}
 
@@ -57,11 +68,46 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 				}
 				// Duplicate measure record but with new id and different surveyId
 				await this.measureService.createMeasure(measure, surveyId);
+				await this.measureRepository.createMeasure({
+					...measure,
+					surveyId,
+					remarks: '',
+				});
 			});
 		});
 		await queue.onIdle();
 
 		return this.measureService.findMeasures(surveyId);
+	}
+
+	public async cloneCyclicMeasures(surveyId: string, previousSurveyId: string): Promise<CyclicMeasure[]> {
+		const cyclicMeasures = await this.cyclicMeasureService.findCyclicMeasures(previousSurveyId);
+		const queue = new PQueue({ concurrency: 1 });
+
+		cyclicMeasures.forEach((cyclicMeasure) => {
+			queue.add(async () => {
+				// Find linked units and manifestations ids
+				if (cyclicMeasure.unitId) {
+					const unit = await this.findLastClonedUnit(cyclicMeasure.unitId, surveyId);
+					cyclicMeasure.unitId = unit.id;
+				}
+
+				// if (cyclicMeasure.manifestationId) {
+				// 	const manifestation = await this.findLastClonedManifestation(cyclicMeasure.manifestationId, surveyId);
+				// 	cyclicMeasure.manifestationId = manifestation.id;
+				// }
+
+				// Duplicate measure record but with new id and different surveyId
+				await this.cyclicMeasureRepository.createCyclicMeasure({
+					...cyclicMeasure,
+					surveyId,
+					remarks: cyclicMeasure.remarks ?? '',
+				});
+			});
+		});
+		await queue.onIdle();
+
+		return this.cyclicMeasureService.findCyclicMeasures(surveyId);
 	}
 
 	async findLastClonedUnit(unitId: string, surveyId: string): Promise<Unit> {

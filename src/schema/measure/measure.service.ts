@@ -17,9 +17,6 @@ export class MeasureService {
 			...measure,
 			surveyId,
 			remarks: '',
-			failureModeId: null,
-			manifestationId: null,
-			defectId: null,
 		});
 
 		return MeasureFactory.CreateMeasure(result);

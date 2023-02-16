@@ -34,21 +34,6 @@ export class MeasureRepository implements IMeasureRepository {
 			maintenanceType: maintenanceType,
 			surveys: { connect: { id: surveyId } },
 			units: { connect: { id: unitId } },
-			failureModes: {
-				connect: {
-					id: failureModeId,
-				},
-			},
-			manifestations: {
-				connect: {
-					id: manifestationId,
-				},
-			},
-			defects: {
-				connect: {
-					id: defectId,
-				},
-			},
 			planYear,
 			finalPlanYear,
 			costSurcharge,
@@ -59,6 +44,30 @@ export class MeasureRepository implements IMeasureRepository {
 			quantity,
 			surveyScopeId,
 		};
+
+		if (failureModeId) {
+			data.failureModes = {
+				connect: {
+					id: failureModeId,
+				},
+			};
+		}
+
+		if (defectId) {
+			data.defects = {
+				connect: {
+					id: defectId,
+				},
+			};
+		}
+
+		if (manifestationId) {
+			data.manifestations = {
+				connect: {
+					id: manifestationId,
+				},
+			};
+		}
 
 		return this.prisma.measures.create({ data });
 	}

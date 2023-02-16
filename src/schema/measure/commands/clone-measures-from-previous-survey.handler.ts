@@ -55,13 +55,8 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 					const manifestation = await this.findLastClonedManifestation(measure.manifestationId, surveyId);
 					measure.manifestationId = manifestation.id;
 				}
-
 				// Duplicate measure record but with new id and different surveyId
-				await this.measureRepository.createMeasure({
-					...measure,
-					surveyId,
-					remarks: '',
-				});
+				await this.measureService.createMeasure(measure, surveyId);
 			});
 		});
 		await queue.onIdle();

@@ -20,6 +20,7 @@ import { CyclicMeasureResolver } from './cyclic-measure.resolver';
 import { CyclicMeasureService } from './cyclic-measure.service';
 import { CyclicMeasureRepository } from './cyclic-measure.repository';
 import { CreateCyclicMeasureHandler } from './commands/create-cyclic-measure.handler';
+import { GenerateCyclicMeasuresHandler } from './commands/generate-cyclic-measures.handler';
 import { UpdateCyclicMeasureHandler } from './commands/update-cyclic-measure.handler';
 import { DeleteCyclicMeasureHandler } from './commands/delete-cyclic-measure.handler';
 import { CyclicMeasureTypes } from './types/cyclic-measure';
@@ -61,6 +62,7 @@ registerEnumType(CyclicMeasureTypes, {
 		CyclicMeasureService,
 		CyclicMeasureRepository,
 		CreateCyclicMeasureHandler,
+		GenerateCyclicMeasuresHandler,
 		UpdateCyclicMeasureHandler,
 		DeleteCyclicMeasureHandler,
 		CalculateCyclicMeasureCostHandler,

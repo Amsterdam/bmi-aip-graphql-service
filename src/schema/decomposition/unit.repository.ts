@@ -130,4 +130,16 @@ export class UnitRepository implements IUnitRepository {
 		});
 		return !!manifestationCount;
 	}
+
+	async getLastCreatedForSurvey(identifier: string, surveyId: string): Promise<Unit> {
+		return this.prisma.units.findFirst({
+			where: {
+				//		permanentId: identifier,
+				surveyId: surveyId,
+			},
+			orderBy: {
+				created_at: 'desc',
+			},
+		});
+	}
 }

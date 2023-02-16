@@ -74,5 +74,6 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		SurveyRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	exports: [UnitService],
 })
 export class DecompositionModule {}

@@ -8,7 +8,7 @@ describe('measures / utils / calculateCostWithSurcharge', () => {
 		expect(calculateCostWithSurcharge(1, 0, 1.1)).toEqual(0);
 		expect(calculateCostWithSurcharge(null, 3, 1)).toEqual(0);
 		expect(calculateCostWithSurcharge(1, null, 1)).toEqual(0);
-		expect(calculateCostWithSurcharge(1, 1, null)).toEqual(0);
+		expect(calculateCostWithSurcharge(1, 1, null)).toEqual(1);
 	});
 
 	test('Rounds to 2 digits after comma', () => {

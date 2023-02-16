@@ -91,12 +91,12 @@ export class MeasureResolver {
 	}
 
 	@ResolveField()
-	cost(@Parent() measure: Measure): Promise<Measure> {
+	cost(@Parent() measure: Measure): Promise<number> {
 		return this.queryBus.execute<CalculateMeasureCostQuery>(new CalculateMeasureCostQuery(measure));
 	}
 
 	@ResolveField()
-	costWithSurcharge(@Parent() measure: Measure): Promise<Measure> {
+	costWithSurcharge(@Parent() measure: Measure): Promise<number> {
 		return this.queryBus.execute<CalculateMeasureCostWithSurchargeQuery>(
 			new CalculateMeasureCostWithSurchargeQuery(measure),
 		);

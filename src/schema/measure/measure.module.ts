@@ -8,6 +8,7 @@ import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from '../survey/survey.repository';
 import { UnitRepository } from '../decomposition/unit.repository';
 import { ManifestationRepository } from '../decomposition/manifestation.repository';
+import { DecompositionModule } from '../decomposition/decomposition.module';
 
 import { MeasureService } from './measure.service';
 import { MeasureResolver } from './measure.resolver';
@@ -28,6 +29,8 @@ import { DeleteCyclicMeasureHandler } from './commands/delete-cyclic-measure.han
 import { CyclicMeasureTypes } from './types/cyclic-measure';
 import { CalculateMeasureCostHandler } from './queries/calculate-measure-cost.handler';
 import { CalculateMeasureCostWithSurchargeHandler } from './queries/calculate-measure-cost-with-surcharge.handler';
+import { CalculateCyclicMeasureCostHandler } from './queries/calculate-cyclic-measure-cost.handler';
+import { CalculateCyclicMeasureCostWithSurchargeHandler } from './queries/calculate-cyclic-measure-cost-with-surcharge.handler';
 
 registerEnumType(MeasureTypes, {
 	name: 'MeasureTypes',
@@ -69,7 +72,9 @@ registerEnumType(CyclicMeasureTypes, {
 		DeleteCyclicMeasureHandler,
 		UnitRepository,
 		ManifestationRepository,
+		CalculateCyclicMeasureCostHandler,
+		CalculateCyclicMeasureCostWithSurchargeHandler,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, DecompositionModule],
 })
 export class MeasureModule {}

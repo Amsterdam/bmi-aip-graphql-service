@@ -10,8 +10,8 @@ import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models
 
 import { CyclicMeasure, ICyclicMeasureRepository } from './types/cyclic-measure.repository.interface';
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
-import { GenerateCyclicMeasureInput } from './dto/generate-cyclic-measure.input';
 import { UpdateCyclicMeasureInput } from './dto/update-cyclic-measure.input';
+import { castCyclicMeasureType } from './utils/cast-cyclic-measure-type';
 
 @Injectable()
 export class CyclicMeasureRepository implements ICyclicMeasureRepository {
@@ -71,13 +71,13 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		});
 	}
 
-	async generateCyclicMeasureForUnit({ surveyId }: GenerateCyclicMeasureInput): Promise<CyclicMeasure[]> {
+	async generateCyclicMeasures(surveyId: string): Promise<CyclicMeasure[]> {
 		const cyclicMeasures: CyclicMeasure[] = [];
 		const units: Unit[] = await this.prisma.units.findMany({
 			where: { surveyId },
 		});
 
-		if (!units) {
+		if (units) {
 			for (const unit of units) {
 				const unitCode: ObjectTypeUnitCode = await this.prisma.objectTypeUnitCodes.findFirst({
 					where: { code: unit.code },
@@ -85,7 +85,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 
 				const defaultMaintenanceMeasures: DefaultMaintenanceMeasure[] =
 					await this.defaultMaintenanceMeasureService.getDefaultMaintenanceMeasures(unitCode.id);
-				if (!defaultMaintenanceMeasures) {
+				if (defaultMaintenanceMeasures) {
 					for (const defaultMaintenanceMeasure of defaultMaintenanceMeasures) {
 						const existingCyclicMeasure: CyclicMeasure = await this.prisma.cyclicMeasures.findFirst({
 							where: {
@@ -96,10 +96,13 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 						});
 						if (!existingCyclicMeasure) {
 							const data: Prisma.cyclicMeasuresCreateInput = {
-								...defaultMaintenanceMeasure,
 								id: newId(),
 								surveys: { connect: { id: surveyId } },
 								units: { connect: { id: unit.id } },
+								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
+								cycle: defaultMaintenanceMeasure.cycle,
+								unitPrice: defaultMaintenanceMeasure.unitPrice,
+								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
 								defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasure.id } },
 							};
 							cyclicMeasures.push(await this.prisma.cyclicMeasures.create({ data }));
@@ -110,7 +113,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 								cycle: defaultMaintenanceMeasure.cycle,
 								unitPrice: defaultMaintenanceMeasure.unitPrice,
 								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
-								maintenanceType: defaultMaintenanceMeasure.maintenanceType,
+								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
 							};
 							cyclicMeasures.push(
 								await this.prisma.cyclicMeasures.update({

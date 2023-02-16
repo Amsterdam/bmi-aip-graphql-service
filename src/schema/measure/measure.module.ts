@@ -69,7 +69,6 @@ registerEnumType(CyclicMeasureTypes, {
 		DeleteCyclicMeasureHandler,
 		CalculateCyclicMeasureCostHandler,
 		CalculateCyclicMeasureCostWithSurchargeHandler,
-
 		DefaultMaintenanceMeasureService,
 		DefaultMaintenanceMeasureRepository,
 	],

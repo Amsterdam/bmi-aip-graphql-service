@@ -19,6 +19,7 @@ import { CyclicMeasureService } from './cyclic-measure.service';
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
 import { UpdateCyclicMeasureInput } from './dto/update-cyclic-measure.input';
 import { CreateCyclicMeasureCommand } from './commands/create-cyclic-measure.command';
+import { GenerateCyclicMeasuresCommand } from './commands/generate-cyclic-measures.command';
 import { UpdateCyclicMeasureCommand } from './commands/update-cyclic-measure.command';
 import { CyclicMeasure as DomainCyclicMeasure } from './types/cyclic-measure.repository.interface';
 import { DeleteCyclicMeasureCommand } from './commands/delete-cyclic-measure.command';
@@ -64,6 +65,12 @@ export class CyclicMeasureResolver {
 			new DeleteCyclicMeasureCommand(identifier),
 		);
 		return CyclicMeasureFactory.CreateCyclicMeasure(domainCyclicMeasure);
+	}
+
+	@Mutation(() => [CyclicMeasure])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async generateCyclicMeasures(@Args('surveyId') surveyId: string): Promise<CyclicMeasure[]> {
+		return this.commandBus.execute<GenerateCyclicMeasuresCommand>(new GenerateCyclicMeasuresCommand(surveyId));
 	}
 
 	@Query((returns) => [CyclicMeasure], { name: 'cyclicMeasures' })

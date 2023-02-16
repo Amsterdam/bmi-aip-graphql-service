@@ -38,11 +38,11 @@ export const updateArkSurveyInput = Object.keys(arkSurveyRaw).reduce((input, key
 	return input;
 }, updateArkSurvey);
 
-const saveArkSurveyInput = new SaveArkSurveyInput();
-export const saveArkSurveyInputInput = Object.keys(arkSurveyRaw).reduce((input, key) => {
+const saveArkSurveyInputRaw = new SaveArkSurveyInput();
+export const saveArkSurveyInput = Object.keys(arkSurveyRaw).reduce((input, key) => {
 	input[key] = arkSurveyRaw[key];
 	return input;
-}, saveArkSurveyInput);
+}, saveArkSurveyInputRaw);
 
 export const saveArkSurveyInputWithReachSegmentsInput: UpdateArkSurveyInput = {
 	...updateArkSurvey,

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { ObjectTypeUnitCode } from 'src/schema/object-type-unit-code/types/object-type-unit-code.repository.interface';
 import { Unit } from 'src/schema/decomposition/types/unit.repository.interface';
 
+import { ObjectTypeUnitCode } from '../decomposition/types/object-type-unit-code.repository.interface';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
@@ -12,7 +12,6 @@ import { CyclicMeasure, ICyclicMeasureRepository } from './types/cyclic-measure.
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
 import { GenerateCyclicMeasureInput } from './dto/generate-cyclic-measure.input';
 import { UpdateCyclicMeasureInput } from './dto/update-cyclic-measure.input';
-
 
 @Injectable()
 export class CyclicMeasureRepository implements ICyclicMeasureRepository {

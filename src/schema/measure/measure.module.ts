@@ -6,6 +6,8 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { PrismaService } from '../../prisma.service';
 import { DecompositionModule } from '../decomposition/decomposition.module';
+import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
+import { DefaultMaintenanceMeasureRepository } from '../default-maintenance-measure/default-maintenance-measure.repository';
 
 import { MeasureService } from './measure.service';
 import { MeasureResolver } from './measure.resolver';
@@ -67,6 +69,9 @@ registerEnumType(CyclicMeasureTypes, {
 		DeleteCyclicMeasureHandler,
 		CalculateCyclicMeasureCostHandler,
 		CalculateCyclicMeasureCostWithSurchargeHandler,
+
+		DefaultMaintenanceMeasureService,
+		DefaultMaintenanceMeasureRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, DecompositionModule],
 })

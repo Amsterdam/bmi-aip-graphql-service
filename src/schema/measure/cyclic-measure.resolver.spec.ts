@@ -2,6 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
+import { GenerateCyclicMeasuresCommand } from '../measure/commands/generate-cyclic-measures.command';
 
 import { CyclicMeasureResolver } from './cyclic-measure.resolver';
 import { CyclicMeasureService } from './cyclic-measure.service';
@@ -32,6 +33,8 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 				return domainCyclicMeasure;
 			case DeleteCyclicMeasureCommand.name:
 				return deletedCyclicMeasure;
+			case GenerateCyclicMeasuresCommand.name:
+				return [domainCyclicMeasure];
 		}
 	}),
 	...(<any>{}),
@@ -121,5 +124,21 @@ describe('Decomposition / CyclicMeasure / Resolver', () => {
 		);
 		const cyclicMeasures = await resolver.getSurveyCyclicMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(cyclicMeasures).toEqual([cyclicMeasure1, cyclicMeasure2]);
+	});
+
+	test('generateCyclicMeasures returns an array of cyclicMeasure objects', async () => {
+		const commandBusMock = getCommandBusMock();
+		const resolver = new CyclicMeasureResolver(
+			new CyclicMeasureService(cyclicMeasureRepo),
+			commandBusMock,
+			getQueryBusMock(),
+		);
+		const cyclicMeasures = await resolver.generateCyclicMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		expect(commandBusMock.execute).toHaveBeenCalledWith(
+			new GenerateCyclicMeasuresCommand('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7'),
+		);
+
+		expect(cyclicMeasures).toBeInstanceOf(Array);
+		expect(cyclicMeasures).toEqual([domainCyclicMeasure].map((_cyclicMeasure) => _cyclicMeasure));
 	});
 });

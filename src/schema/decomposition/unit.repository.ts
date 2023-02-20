@@ -134,7 +134,7 @@ export class UnitRepository implements IUnitRepository {
 	async getLastCreatedForSurvey(identifier: string, surveyId: string): Promise<Unit> {
 		return this.prisma.units.findFirst({
 			where: {
-				//		permanentId: identifier,
+				permanentId: identifier,
 				surveyId: surveyId,
 			},
 			orderBy: {

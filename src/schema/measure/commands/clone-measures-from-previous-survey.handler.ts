@@ -5,6 +5,7 @@ import { Unit } from 'src/schema/decomposition/models/unit.model';
 import { ManifestationRepository } from 'src/schema/decomposition/manifestation.repository';
 import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
+import { MeasuresAndCyclicMeasuresCollection } from 'src/types/measuresAndCyclicMeasuresCollection';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
 import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures';
@@ -31,7 +32,9 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		private cyclicMeasureRepository: CyclicMeasureRepository,
 	) {}
 
-	public async execute(command: CloneMeasuresFromPreviousSurveyCommand): Promise<Measure[]> {
+	public async execute(
+		command: CloneMeasuresFromPreviousSurveyCommand,
+	): Promise<MeasuresAndCyclicMeasuresCollection> {
 		const previousSurveyId = await this.surveyRepository.findIdPreviousNen2767OrFmecaSurvey(command.surveyId);
 
 		if (await this.measureRepository.surveyContainsMeasures(command.surveyId)) {
@@ -45,11 +48,12 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		if (previousSurveyId) {
 			await this.cloneMeasures(command.surveyId, previousSurveyId);
 			await this.cloneCyclicMeasures(command.surveyId, previousSurveyId);
-
-			return this.measureService.findMeasures(command.surveyId);
 		}
 
-		return [];
+		return {
+			measures: await this.measureService.findMeasures(command.surveyId),
+			cyclicMeasures: await this.cyclicMeasureService.findCyclicMeasures(command.surveyId),
+		};
 	}
 
 	public async cloneMeasures(surveyId: string, previousSurveyId: string): Promise<Measure[]> {
@@ -91,11 +95,6 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 					const unit = await this.findLastClonedUnit(cyclicMeasure.unitId, surveyId);
 					cyclicMeasure.unitId = unit.id;
 				}
-
-				// if (cyclicMeasure.manifestationId) {
-				// 	const manifestation = await this.findLastClonedManifestation(cyclicMeasure.manifestationId, surveyId);
-				// 	cyclicMeasure.manifestationId = manifestation.id;
-				// }
 
 				// Duplicate measure record but with new id and different surveyId
 				await this.cyclicMeasureRepository.createCyclicMeasure({

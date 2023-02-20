@@ -6,7 +6,15 @@ import { PrismaService } from '../../prisma.service';
 import { MeasureResolver } from './measure.resolver';
 import { MeasureService } from './measure.service';
 import { MeasureRepository } from './measure.repository';
-import { domainMeasure, measure1, measure2, measureInput, updateMeasureInput, deletedMeasure } from './__stubs__';
+import {
+	domainMeasure,
+	measure1,
+	measure2,
+	measureInput,
+	updateMeasureInput,
+	deletedMeasure,
+	cyclicMeasure1,
+} from './__stubs__';
 import { CreateMeasureCommand } from './commands/create-measure.command';
 import { Measure } from './models/measure.model';
 import { UpdateMeasureCommand } from './commands/update-measure.command';
@@ -26,7 +34,7 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 			case DeleteMeasureCommand.name:
 				return deletedMeasure;
 			case CloneMeasuresFromPreviousSurveyCommand.name:
-				return [measure1, measure2];
+				return { measures: [measure1], cyclicMeasures: [cyclicMeasure1] };
 		}
 	}),
 	...(<any>{}),
@@ -112,7 +120,7 @@ describe('Decomposition / Measure / Resolver', () => {
 	});
 
 	describe('cloneMeasuresFromPreviousSurvey', () => {
-		test('clones measures from previous survey', async () => {
+		test('clones measures and cyclic meaures from previous survey', async () => {
 			const commandBusMock = getCommandBusMock();
 			const resolver = new MeasureResolver(new MeasureService(measureRepo), commandBusMock, getQueryBusMock());
 			const result = await resolver.cloneMeasuresFromPreviousSurvey('__SURVEY_ID__');
@@ -121,7 +129,10 @@ describe('Decomposition / Measure / Resolver', () => {
 				new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__'),
 			);
 
-			expect(result).toEqual([measure1, measure2]);
+			expect(result).toEqual({
+				measures: [measure1],
+				cyclicMeasures: [cyclicMeasure1],
+			});
 		});
 	});
 });

@@ -44,6 +44,9 @@ const measureRaw: Omit<DomainMeasure, 'id'> = {
 	unitPrice: 33.99,
 	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
 	surveyScopeId: '',
+	manifestationId: '',
+	failureModeId: '',
+	defectId: '',
 	deleted_at: null,
 };
 

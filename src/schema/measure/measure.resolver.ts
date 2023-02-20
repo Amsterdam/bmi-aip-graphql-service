@@ -26,6 +26,7 @@ import { FindMeasuresQuery } from './queries/find-measures.query';
 import { CloneMeasuresFromPreviousSurveyCommand } from './commands/clone-measures-from-previous-survey.command';
 import { CalculateMeasureCostQuery } from './queries/calculate-measure-cost.query';
 import { CalculateMeasureCostWithSurchargeQuery } from './queries/calculate-measure-cost-with-surcharge.query';
+import { MeasuresAndCyclicMeasuresCollection } from './models/measures-and-cyclic-measures-collection.model';
 
 @Resolver((of) => Measure)
 @Resource(Measure.name)
@@ -102,7 +103,7 @@ export class MeasureResolver {
 		);
 	}
 
-	@Mutation((returns) => [Measure])
+	@Mutation((returns) => MeasuresAndCyclicMeasuresCollection)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	async cloneMeasuresFromPreviousSurvey(
 		@Args('surveyId', { type: () => String }) surveyId: string,

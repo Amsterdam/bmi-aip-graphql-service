@@ -81,6 +81,11 @@ export class MigrateMaintenanceMeasuresRepository {
 		}
 	}
 
+	private castQuantity(quantity: string): number | null {
+		const int = parseInt(quantity);
+		return isNaN(int) ? null : int;
+	}
+
 	private async migrateToMeasures(surveyId: string) {
 		const maintenanceMeasures = await this.prisma.maintenanceMeasures.findMany({
 			where: {
@@ -127,7 +132,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							location,
 							planYear,
 							finalPlanYear,
-							quantity: Number(quantity),
+							quantity: this.castQuantity(quantity),
 							quantityUnitOfMeasurement,
 							unitPrice,
 							costSurcharge,

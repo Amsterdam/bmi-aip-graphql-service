@@ -113,8 +113,17 @@ export class MigrateMaintenanceMeasuresRepository {
 				created_at: createdAt,
 				updated_at: updatedAt,
 			}) => {
-				queue.add(() =>
-					this.prisma.measures.create({
+				queue.add(async () => {
+					let unitIdForManifestation = null;
+					if (unitId === null) {
+						({ unitId: unitIdForManifestation } = await this.prisma.manifestations.findUnique({
+							where: {
+								id: manifestationId,
+							},
+						}));
+					}
+
+					await this.prisma.measures.create({
 						data: {
 							id: newId(),
 							surveys: {
@@ -124,7 +133,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							},
 							units: {
 								connect: {
-									id: unitId,
+									id: unitId || unitIdForManifestation,
 								},
 							},
 							description,
@@ -166,8 +175,8 @@ export class MigrateMaintenanceMeasuresRepository {
 								  }
 								: {}),
 						},
-					}),
-				);
+					});
+				});
 			},
 		);
 		await queue.onIdle();
@@ -268,6 +277,24 @@ export class MigrateMaintenanceMeasuresRepository {
 		await queue.onIdle();
 	}
 
+	private async getCyclicMeasureId(
+		surveyId: string,
+		unitId: string,
+		defaultMaintenanceMeasureId: string,
+	): Promise<string | undefined> {
+		const cyclicMeasure = await this.prisma.cyclicMeasures.findFirst({
+			select: {
+				id: true,
+			},
+			where: {
+				surveyId,
+				unitId,
+				defaultMaintenanceMeasureId,
+			},
+		});
+		return cyclicMeasure?.id;
+	}
+
 	private async createCyclicMeasureFromMaintenanceMeasure(surveyId: string, maintenanceMeasure: MaintenanceMeasure) {
 		const {
 			id,
@@ -287,36 +314,67 @@ export class MigrateMaintenanceMeasuresRepository {
 
 		const newCyclicMeasureId = newId();
 
-		await this.prisma.cyclicMeasures.create({
-			data: {
-				id: newCyclicMeasureId,
-				surveys: {
-					connect: {
-						id: surveyId,
-					},
+		const unitIdMatchingSurveyId = await this.getUnitIdMatchingSurveyId(surveyId, unitId);
+
+		// Before we insert the cyclic measure, we need to check if perhaps a cyclic measure was already created using
+		// the same surveyId/unitId/defaultMaintenanceMeasureId combo (unique constraint)
+		// The newer generated maintenanceMeasure will be considered the relevant one, so we update the existing record
+		const cyclicMeasureMatchingConstraint = await this.getCyclicMeasureId(
+			surveyId,
+			unitIdMatchingSurveyId,
+			defaultMaintenanceMeasureId,
+		);
+
+		if (cyclicMeasureMatchingConstraint) {
+			await this.prisma.cyclicMeasures.update({
+				where: {
+					id: cyclicMeasureMatchingConstraint,
 				},
-				units: {
-					connect: {
-						id: await this.getUnitIdMatchingSurveyId(surveyId, unitId),
-					},
+				data: {
+					planYear,
+					finalPlanYear,
+					costSurcharge,
+					maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
+					remarks,
+					cycle,
+					unitPrice,
+					quantityUnitOfMeasurement,
+					created_at: createdAt,
+					updated_at: updatedAt,
 				},
-				defaultMaintenanceMeasures: {
-					connect: {
-						id: defaultMaintenanceMeasureId,
+			});
+		} else {
+			await this.prisma.cyclicMeasures.create({
+				data: {
+					id: newCyclicMeasureId,
+					surveys: {
+						connect: {
+							id: surveyId,
+						},
 					},
+					units: {
+						connect: {
+							id: unitIdMatchingSurveyId,
+						},
+					},
+					defaultMaintenanceMeasures: {
+						connect: {
+							id: defaultMaintenanceMeasureId,
+						},
+					},
+					planYear,
+					finalPlanYear,
+					costSurcharge,
+					maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
+					remarks,
+					cycle,
+					unitPrice,
+					quantityUnitOfMeasurement,
+					created_at: createdAt,
+					updated_at: updatedAt,
 				},
-				planYear,
-				finalPlanYear,
-				costSurcharge,
-				maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
-				remarks,
-				cycle,
-				unitPrice,
-				quantityUnitOfMeasurement,
-				created_at: createdAt,
-				updated_at: updatedAt,
-			},
-		});
+			});
+		}
 
 		// Ensure we can determine what maintenanceMeasure record each cyclicMeasure was created from
 		this.cyclicMeasureRegistry[newCyclicMeasureId] = id;

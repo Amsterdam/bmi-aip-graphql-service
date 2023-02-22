@@ -82,7 +82,7 @@ export class MigrateMaintenanceMeasuresRepository {
 	}
 
 	private castQuantity(quantity: string): number | null {
-		const int = parseInt(quantity);
+		const int = parseInt(quantity, 10);
 		return isNaN(int) ? null : int;
 	}
 

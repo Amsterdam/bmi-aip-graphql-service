@@ -5,7 +5,6 @@ import { Unit } from 'src/schema/decomposition/models/unit.model';
 import { ManifestationRepository } from 'src/schema/decomposition/manifestation.repository';
 import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
-import { MeasuresAndCyclicMeasuresCollection } from 'src/types/measuresAndCyclicMeasuresCollection';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
 import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures';
@@ -18,6 +17,7 @@ import { ManifestationFactory } from '../../decomposition/manifestation.factory'
 import { CyclicMeasure } from '../models/cyclic-measure.model';
 import { CyclicMeasureService } from '../cyclic-measure.service';
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
+import { MeasuresAndCyclicMeasuresCollection } from '../models/measures-and-cyclic-measures-collection.model';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
 @CommandHandler(CloneMeasuresFromPreviousSurveyCommand)
@@ -127,7 +127,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 			surveyId,
 		);
 
-		if (lastCreated == null) {
+		if (lastCreated === null) {
 			throw new DecompositionCloneNotFoundException(surveyId);
 		}
 

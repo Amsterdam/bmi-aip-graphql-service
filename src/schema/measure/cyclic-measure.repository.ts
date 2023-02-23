@@ -58,14 +58,6 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			};
 		}
 
-		// if (manifestationId) {
-		// 	data.manifestations = {
-		// 		connect: {
-		// 			id: manifestationId,
-		// 		},
-		// 	};
-		// }
-
 		return this.prisma.cyclicMeasures.create({ data });
 	}
 

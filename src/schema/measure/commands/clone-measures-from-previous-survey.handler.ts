@@ -20,6 +20,7 @@ import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { MeasuresAndCyclicMeasuresCollection } from '../models/measures-and-cyclic-measures-collection.model';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
+
 @CommandHandler(CloneMeasuresFromPreviousSurveyCommand)
 export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<CloneMeasuresFromPreviousSurveyCommand> {
 	constructor(

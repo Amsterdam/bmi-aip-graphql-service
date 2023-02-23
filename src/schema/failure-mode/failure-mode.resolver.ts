@@ -34,9 +34,9 @@ export class FailureModeResolver {
 		return FailureModeFactory.CreateFailureMode(domainFailureMode);
 	}
 
-	@Query((returns) => [FailureMode], { name: 'failureMode' })
+	@Query((returns) => [FailureMode], { name: 'failureModes' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	async getSurveyFailureModes(@Args('surveyId', { type: () => String }) surveyId: string) {
+	async failureModes(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.failureModeService.findFailureModes(surveyId);
 	}
 }

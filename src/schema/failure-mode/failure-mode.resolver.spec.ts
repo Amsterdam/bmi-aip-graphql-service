@@ -61,7 +61,7 @@ describe('Decomposition / FailureMode / Resolver', () => {
 	test('getSurveyFailureModes returns an array of failureMode objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new FailureModeResolver(new FailureModeService(failureModeRepo), commandBusMock);
-		const failureModes = await resolver.getSurveyFailureModes('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const failureModes = await resolver.failureModes('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(failureModes).toEqual([failureMode1, failureMode2]);
 	});
 });

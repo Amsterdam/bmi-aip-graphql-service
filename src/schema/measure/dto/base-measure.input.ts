@@ -49,6 +49,7 @@ export class BaseMeasureInput {
 
 	@Field()
 	@IsUUID()
+	@IsOptional()
 	public manifestationId?: string;
 
 	@Field()
@@ -57,6 +58,7 @@ export class BaseMeasureInput {
 
 	@Field()
 	@IsUUID()
+	@IsOptional()
 	public defectId?: string;
 
 	@Field()

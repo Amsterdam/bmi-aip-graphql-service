@@ -114,7 +114,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		const unit = await this.unitRepository.getUnitById(unitId);
 		const lastCreated = await this.unitRepository.getLastCreatedForSurvey(unit.permanentId ?? unit.id, surveyId);
 
-		if (lastCreated == null) {
+		if (lastCreated === null) {
 			throw new DecompositionCloneNotFoundException(surveyId);
 		}
 

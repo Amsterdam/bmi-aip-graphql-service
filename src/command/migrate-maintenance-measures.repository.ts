@@ -310,6 +310,7 @@ export class MigrateMaintenanceMeasuresRepository {
 			defaultMaintenanceMeasureId,
 			created_at: createdAt,
 			updated_at: updatedAt,
+			failureModeId,
 		} = maintenanceMeasure;
 
 		const newCyclicMeasureId = newId();
@@ -318,7 +319,8 @@ export class MigrateMaintenanceMeasuresRepository {
 
 		// Before we insert the cyclic measure, we need to check if perhaps a cyclic measure was already created using
 		// the same surveyId/unitId/defaultMaintenanceMeasureId combo (unique constraint)
-		// The newer generated maintenanceMeasure will be considered the relevant one, so we update the existing record
+		// The newer generated maintenanceMeasure will be considered the relevant one, so we remove the existing record
+		// and insert a new one
 		const cyclicMeasureMatchingConstraint = await this.getCyclicMeasureId(
 			surveyId,
 			unitIdMatchingSurveyId,
@@ -326,55 +328,52 @@ export class MigrateMaintenanceMeasuresRepository {
 		);
 
 		if (cyclicMeasureMatchingConstraint) {
-			await this.prisma.cyclicMeasures.update({
+			await this.prisma.cyclicMeasures.delete({
 				where: {
 					id: cyclicMeasureMatchingConstraint,
 				},
-				data: {
-					planYear,
-					finalPlanYear,
-					costSurcharge,
-					maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
-					remarks,
-					cycle,
-					unitPrice,
-					quantityUnitOfMeasurement,
-					created_at: createdAt,
-					updated_at: updatedAt,
-				},
-			});
-		} else {
-			await this.prisma.cyclicMeasures.create({
-				data: {
-					id: newCyclicMeasureId,
-					surveys: {
-						connect: {
-							id: surveyId,
-						},
-					},
-					units: {
-						connect: {
-							id: unitIdMatchingSurveyId,
-						},
-					},
-					defaultMaintenanceMeasures: {
-						connect: {
-							id: defaultMaintenanceMeasureId,
-						},
-					},
-					planYear,
-					finalPlanYear,
-					costSurcharge,
-					maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
-					remarks,
-					cycle,
-					unitPrice,
-					quantityUnitOfMeasurement,
-					created_at: createdAt,
-					updated_at: updatedAt,
-				},
 			});
 		}
+
+		await this.prisma.cyclicMeasures.create({
+			data: {
+				id: newCyclicMeasureId,
+				surveys: {
+					connect: {
+						id: surveyId,
+					},
+				},
+				units: {
+					connect: {
+						id: unitIdMatchingSurveyId,
+					},
+				},
+				defaultMaintenanceMeasures: {
+					connect: {
+						id: defaultMaintenanceMeasureId,
+					},
+				},
+				...(failureModeId
+					? {
+							failureModes: {
+								connect: {
+									id: failureModeId,
+								},
+							},
+					  }
+					: {}),
+				planYear,
+				finalPlanYear,
+				costSurcharge,
+				maintenanceType: this.castCyclicMeasureMaintenanceType(maintenanceType),
+				remarks,
+				cycle,
+				unitPrice,
+				quantityUnitOfMeasurement,
+				created_at: createdAt,
+				updated_at: updatedAt,
+			},
+		});
 
 		// Ensure we can determine what maintenanceMeasure record each cyclicMeasure was created from
 		this.cyclicMeasureRegistry[newCyclicMeasureId] = id;

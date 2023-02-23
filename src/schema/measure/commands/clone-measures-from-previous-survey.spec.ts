@@ -114,9 +114,8 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 			...(<any>{}),
 		};
 
-		const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
-
 		try {
+			const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
 			await new CloneMeasuresFromPreviousSurveyHandler(
 				surveyRepoMock,
 				measureRepositoryMock,
@@ -127,6 +126,7 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 				cyclicMeasureRepositoryMock,
 			).execute(command);
 		} catch (exception) {
+			console.log(exception);
 			expect(exception).toBe(DecompositionCloneNotFoundException);
 		}
 	});

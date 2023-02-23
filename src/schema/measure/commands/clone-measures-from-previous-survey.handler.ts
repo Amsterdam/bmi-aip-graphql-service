@@ -6,8 +6,8 @@ import { ManifestationRepository } from 'src/schema/decomposition/manifestation.
 import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
 
-import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures';
-import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures';
+import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures.exception';
+import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures.exception';
 import { MeasureRepository } from '../measure.repository';
 import { Measure } from '../models/measure.model';
 import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';

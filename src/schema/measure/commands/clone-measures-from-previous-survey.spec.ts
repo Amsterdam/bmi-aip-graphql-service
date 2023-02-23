@@ -3,6 +3,8 @@ import { UnitRepository } from 'src/schema/decomposition/unit.repository';
 import { SurveyRepository } from 'src/schema/survey/survey.repository';
 import { MockedObjectDeep } from 'ts-jest';
 
+import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures.exception';
+import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
 import { domainManifestation, domainUnit } from '../../decomposition/__stubs__';
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { CyclicMeasureService } from '../cyclic-measure.service';
@@ -74,5 +76,58 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 		expect(unitRepositoryMock.getLastCreatedForSurvey).toHaveBeenCalledTimes(2);
 		expect(manifestationRepositoryMock.getLastCreatedForSurvey).toHaveBeenCalledTimes(0);
 		expect(measureServiceMock.findMeasures).toHaveBeenCalledTimes(3);
+	});
+
+	test('an exception is thrown when data has already been cloned', async () => {
+		const clonedMeasureRepositoryMock: MockedObjectDeep<MeasureRepository> = {
+			createMeasure: jest.fn().mockResolvedValue(domainMeasure),
+			checkIfAlreadyMigrated: jest.fn().mockResolvedValue(true),
+			surveyContainsMeasures: jest.fn().mockResolvedValue(true),
+			findMeasures: jest.fn().mockResolvedValue([domainMeasure]),
+			...(<any>{}),
+		};
+
+		const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
+
+		expect(measureRepositoryMock.surveyContainsMeasures).toHaveBeenCalledTimes(1);
+		await expect(
+			new CloneMeasuresFromPreviousSurveyHandler(
+				surveyRepoMock,
+				clonedMeasureRepositoryMock,
+				unitRepositoryMock,
+				manifestationRepositoryMock,
+				measureServiceMock,
+				cyclicMeasureServiceMock,
+				cyclicMeasureRepositoryMock,
+			).execute(command),
+		).rejects.toThrow(SurveyAlreadyHasMeasuresException);
+	});
+
+	test('an exception is thrown when no decomposition data is found', async () => {
+		const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
+			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+			getUnitById: jest.fn().mockResolvedValue(domainUnit),
+			...(<any>{}),
+		};
+		const emptyManifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
+			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+			...(<any>{}),
+		};
+
+		const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
+
+		try {
+			await new CloneMeasuresFromPreviousSurveyHandler(
+				surveyRepoMock,
+				measureRepositoryMock,
+				emptyUnitRepositoryMock,
+				emptyManifestationRepositoryMock,
+				measureServiceMock,
+				cyclicMeasureServiceMock,
+				cyclicMeasureRepositoryMock,
+			).execute(command);
+		} catch (exception) {
+			expect(exception).toBe(DecompositionCloneNotFoundException);
+		}
 	});
 });

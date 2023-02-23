@@ -115,8 +115,8 @@ export class ManifestationRepository implements IManifestationRepository {
 	async getLastCreatedForSurvey(permanentId: string, surveyId: string): Promise<Manifestation> {
 		return this.prisma.manifestations.findFirst({
 			where: {
-				permanentId: permanentId,
-				surveyId: surveyId,
+				permanentId,
+				surveyId,
 			},
 			orderBy: {
 				created_at: 'desc',

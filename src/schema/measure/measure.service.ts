@@ -16,7 +16,6 @@ export class MeasureService {
 		const result = await this.measureRepo.createMeasure({
 			...measure,
 			surveyId,
-			remarks: '',
 		});
 
 		return MeasureFactory.CreateMeasure(result);

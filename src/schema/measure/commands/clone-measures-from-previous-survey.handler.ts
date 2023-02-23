@@ -76,7 +76,6 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 				await this.measureRepository.createMeasure({
 					...measure,
 					surveyId,
-					remarks: '',
 				});
 			});
 		});

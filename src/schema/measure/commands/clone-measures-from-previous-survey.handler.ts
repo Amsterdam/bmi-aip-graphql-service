@@ -101,7 +101,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 				await this.cyclicMeasureRepository.createCyclicMeasure({
 					...cyclicMeasure,
 					surveyId,
-					remarks: cyclicMeasure.remarks ?? '',
+					remarks: cyclicMeasure.remarks,
 				});
 			});
 		});

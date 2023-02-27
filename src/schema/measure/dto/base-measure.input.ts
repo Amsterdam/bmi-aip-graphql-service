@@ -64,4 +64,8 @@ export class BaseMeasureInput {
 	@Field()
 	@IsUUID()
 	public surveyScopeId?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	public remarks?: string;
 }

@@ -6,9 +6,6 @@ import { BaseMeasureInput } from '../dto/base-measure.input';
 @InputType()
 export class CreateMeasureInput extends BaseMeasureInput {
 	@Field()
-	public remarks: string;
-
-	@Field()
 	@IsUUID()
 	public unitId: string;
 

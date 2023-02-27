@@ -14,9 +14,7 @@ export class CloneDecompositionFromPreviousSurveyHandler
 	constructor(private decompositionRepository: DecompositionRepository, private surveyRepository: SurveyRepository) {}
 
 	public async execute(command: CloneDecompositionFromPreviousSurveyCommand): Promise<Element[]> {
-		const previousSurveyId = await this.surveyRepository.findIdPreviousSurveyWithNen2767Decomposition(
-			command.surveyId,
-		);
+		const previousSurveyId = await this.surveyRepository.findIdPreviousNen2767OrFmecaSurvey(command.surveyId);
 
 		if (await this.decompositionRepository.checkIfAlreadyMigrated(command.surveyId)) {
 			throw new SurveyHasDecompositionException(command.surveyId);

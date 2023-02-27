@@ -45,10 +45,10 @@ const measureRaw: Omit<DomainMeasure, 'id'> = {
 	quantity: 20,
 	unitPrice: 33.99,
 	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
+	surveyScopeId: '',
 	manifestationId: '',
 	failureModeId: '',
 	defectId: '',
-	surveyScopeId: '',
 	deleted_at: null,
 	remarks: '__REMARKS__',
 };
@@ -76,4 +76,11 @@ export const measure = MeasureFactory.CreateMeasure(domainMeasure);
 export const deletedMeasure: DomainMeasure = {
 	...domainMeasure,
 	deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
+};
+
+export const measureInputWithOptionalFields = {
+	...measureInput,
+	manifestationId: '__MANIFESTATION_ID__',
+	failureModeId: '__FAILURE_MODE_ID__',
+	defectId: '__DEFECT_ID__',
 };

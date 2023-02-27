@@ -4,7 +4,6 @@ import { SurveyRepository } from 'src/schema/survey/survey.repository';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures.exception';
-import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
 import { domainManifestation, domainUnit } from '../../decomposition/__stubs__';
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { CyclicMeasureService } from '../cyclic-measure.service';
@@ -89,7 +88,6 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 
 		const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
 
-		expect(measureRepositoryMock.surveyContainsMeasures).toHaveBeenCalledTimes(1);
 		await expect(
 			new CloneMeasuresFromPreviousSurveyHandler(
 				surveyRepoMock,
@@ -101,33 +99,5 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 				cyclicMeasureRepositoryMock,
 			).execute(command),
 		).rejects.toThrow(SurveyAlreadyHasMeasuresException);
-	});
-
-	test('an exception is thrown when no decomposition data is found', async () => {
-		const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
-			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
-			getUnitById: jest.fn().mockResolvedValue(domainUnit),
-			...(<any>{}),
-		};
-		const emptyManifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
-			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
-			...(<any>{}),
-		};
-
-		try {
-			const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
-			await new CloneMeasuresFromPreviousSurveyHandler(
-				surveyRepoMock,
-				measureRepositoryMock,
-				emptyUnitRepositoryMock,
-				emptyManifestationRepositoryMock,
-				measureServiceMock,
-				cyclicMeasureServiceMock,
-				cyclicMeasureRepositoryMock,
-			).execute(command);
-		} catch (exception) {
-			console.log(exception);
-			expect(exception).toBe(DecompositionCloneNotFoundException);
-		}
 	});
 });

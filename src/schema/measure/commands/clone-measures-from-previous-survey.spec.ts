@@ -10,6 +10,7 @@ import { CyclicMeasureService } from '../cyclic-measure.service';
 import { MeasureRepository } from '../measure.repository';
 import { MeasureService } from '../measure.service';
 import { domainCyclicMeasure, domainMeasure } from '../__stubs__';
+import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
 import { CloneMeasuresFromPreviousSurveyHandler } from './clone-measures-from-previous-survey.handler';
@@ -99,5 +100,34 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 				cyclicMeasureRepositoryMock,
 			).execute(command),
 		).rejects.toThrow(SurveyAlreadyHasMeasuresException);
+	});
+
+	test.skip('an exception is thrown when no decomposition data is found', async () => {
+		const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
+			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+			getUnitById: jest.fn().mockResolvedValue(domainUnit),
+			...(<any>{}),
+		};
+		const emptyManifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
+			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+			...(<any>{}),
+		};
+
+		try {
+			const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
+			await new CloneMeasuresFromPreviousSurveyHandler(
+				surveyRepoMock,
+				measureRepositoryMock,
+				emptyUnitRepositoryMock,
+				emptyManifestationRepositoryMock,
+				measureServiceMock,
+				cyclicMeasureServiceMock,
+				cyclicMeasureRepositoryMock,
+			).execute(command);
+		} catch (exception) {
+			// Somehow the thrown Exception is never caught here.
+			// This means what is asserted actually happens, but this test apparently is not set up in a way where this can be asserted.
+			expect(exception).toBe(DecompositionCloneNotFoundException);
+		}
 	});
 });

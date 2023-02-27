@@ -4,6 +4,11 @@ import { FailureModeMetaData } from './models/failure-mode-meta-data.model';
 
 export class FailureModeMetaDataFactory {
 	static CreateFailureModeMetaDataFromJSONB(failureModeMetaData: Prisma.JsonValue): FailureModeMetaData {
+		// Can be null
+		if (!failureModeMetaData) {
+			return null;
+		}
+
 		const failureModeMetModel = new FailureModeMetaData();
 		const parsedFailureModeMetaData = failureModeMetaData as FailureModeMetaData;
 		failureModeMetModel.faalOorzaak = parsedFailureModeMetaData.faalOorzaak ?? null;

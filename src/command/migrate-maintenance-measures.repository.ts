@@ -81,6 +81,11 @@ export class MigrateMaintenanceMeasuresRepository {
 		}
 	}
 
+	private castQuantity(quantity: string): number | null {
+		const int = parseInt(quantity, 10);
+		return isNaN(int) ? null : int;
+	}
+
 	private async migrateToMeasures(surveyId: string) {
 		const maintenanceMeasures = await this.prisma.maintenanceMeasures.findMany({
 			where: {
@@ -108,8 +113,17 @@ export class MigrateMaintenanceMeasuresRepository {
 				created_at: createdAt,
 				updated_at: updatedAt,
 			}) => {
-				queue.add(() =>
-					this.prisma.measures.create({
+				queue.add(async () => {
+					let unitIdForManifestation = null;
+					if (unitId === null) {
+						({ unitId: unitIdForManifestation } = await this.prisma.manifestations.findUnique({
+							where: {
+								id: manifestationId,
+							},
+						}));
+					}
+
+					await this.prisma.measures.create({
 						data: {
 							id: newId(),
 							surveys: {
@@ -119,7 +133,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							},
 							units: {
 								connect: {
-									id: unitId,
+									id: unitId || unitIdForManifestation,
 								},
 							},
 							description,
@@ -127,7 +141,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							location,
 							planYear,
 							finalPlanYear,
-							quantity: Number(quantity),
+							quantity: this.castQuantity(quantity),
 							quantityUnitOfMeasurement,
 							unitPrice,
 							costSurcharge,
@@ -161,8 +175,8 @@ export class MigrateMaintenanceMeasuresRepository {
 								  }
 								: {}),
 						},
-					}),
-				);
+					});
+				});
 			},
 		);
 		await queue.onIdle();
@@ -263,6 +277,24 @@ export class MigrateMaintenanceMeasuresRepository {
 		await queue.onIdle();
 	}
 
+	private async getCyclicMeasureId(
+		surveyId: string,
+		unitId: string,
+		defaultMaintenanceMeasureId: string,
+	): Promise<string | undefined> {
+		const cyclicMeasure = await this.prisma.cyclicMeasures.findFirst({
+			select: {
+				id: true,
+			},
+			where: {
+				surveyId,
+				unitId,
+				defaultMaintenanceMeasureId,
+			},
+		});
+		return cyclicMeasure?.id;
+	}
+
 	private async createCyclicMeasureFromMaintenanceMeasure(surveyId: string, maintenanceMeasure: MaintenanceMeasure) {
 		const {
 			id,
@@ -278,9 +310,30 @@ export class MigrateMaintenanceMeasuresRepository {
 			defaultMaintenanceMeasureId,
 			created_at: createdAt,
 			updated_at: updatedAt,
+			failureModeId,
 		} = maintenanceMeasure;
 
 		const newCyclicMeasureId = newId();
+
+		const unitIdMatchingSurveyId = await this.getUnitIdMatchingSurveyId(surveyId, unitId);
+
+		// Before we insert the cyclic measure, we need to check if perhaps a cyclic measure was already created using
+		// the same surveyId/unitId/defaultMaintenanceMeasureId combo (unique constraint)
+		// The newer generated maintenanceMeasure will be considered the relevant one, so we remove the existing record
+		// and insert a new one
+		const cyclicMeasureMatchingConstraint = await this.getCyclicMeasureId(
+			surveyId,
+			unitIdMatchingSurveyId,
+			defaultMaintenanceMeasureId,
+		);
+
+		if (cyclicMeasureMatchingConstraint) {
+			await this.prisma.cyclicMeasures.delete({
+				where: {
+					id: cyclicMeasureMatchingConstraint,
+				},
+			});
+		}
 
 		await this.prisma.cyclicMeasures.create({
 			data: {
@@ -292,7 +345,7 @@ export class MigrateMaintenanceMeasuresRepository {
 				},
 				units: {
 					connect: {
-						id: await this.getUnitIdMatchingSurveyId(surveyId, unitId),
+						id: unitIdMatchingSurveyId,
 					},
 				},
 				defaultMaintenanceMeasures: {
@@ -300,6 +353,15 @@ export class MigrateMaintenanceMeasuresRepository {
 						id: defaultMaintenanceMeasureId,
 					},
 				},
+				...(failureModeId
+					? {
+							failureModes: {
+								connect: {
+									id: failureModeId,
+								},
+							},
+					  }
+					: {}),
 				planYear,
 				finalPlanYear,
 				costSurcharge,

@@ -62,7 +62,7 @@ export class FailureModeFactory {
 		fMode.unitId = unitId;
 		fMode.manifestationId = manifestationId;
 		fMode.customName = customName;
-		fMode.metaData = FailureModeMetaDataFactory.CreateFailureModeMetaDataFromJSONB(metaData as string);
+		fMode.metaData = FailureModeMetaDataFactory.CreateFailureModeMetaDataFromJSONB(metaData);
 		fMode.analysisRemarks = analysisRemarks;
 		fMode.verificationRemarks = verificationRemarks;
 		fMode.maintenanceRemarks = maintenanceRemarks;

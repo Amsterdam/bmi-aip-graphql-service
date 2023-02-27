@@ -110,6 +110,7 @@ export class MigrateMaintenanceMeasuresRepository {
 				quantityUnitOfMeasurement,
 				unitPrice,
 				costSurcharge,
+				remarks,
 				created_at: createdAt,
 				updated_at: updatedAt,
 			}) => {
@@ -145,6 +146,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							quantityUnitOfMeasurement,
 							unitPrice,
 							costSurcharge,
+							remarks,
 							created_at: createdAt,
 							updated_at: updatedAt,
 							...(manifestationId

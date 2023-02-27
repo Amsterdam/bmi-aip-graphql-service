@@ -22,6 +22,7 @@ const measures = Prisma.validator<Prisma.measuresArgs>()({
 		location: true,
 		quantity: true,
 		deleted_at: true,
+		remarks: true,
 	},
 });
 export type Measure = Prisma.measuresGetPayload<typeof measures>;

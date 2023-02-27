@@ -111,4 +111,16 @@ export class ManifestationRepository implements IManifestationRepository {
 		});
 		await Promise.all(manifestations.map(({ id }) => this.deleteManifestation(id)));
 	}
+
+	async getLastCreatedForSurvey(permanentId: string, surveyId: string): Promise<Manifestation> {
+		return this.prisma.manifestations.findFirst({
+			where: {
+				permanentId,
+				surveyId,
+			},
+			orderBy: {
+				created_at: 'desc',
+			},
+		});
+	}
 }

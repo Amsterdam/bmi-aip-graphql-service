@@ -49,11 +49,6 @@ export class BaseMeasureInput {
 
 	@Field()
 	@IsUUID()
-	@IsOptional()
-	public manifestationId?: string;
-
-	@Field()
-	@IsUUID()
 	public failureModeId?: string;
 
 	@Field()
@@ -63,6 +58,7 @@ export class BaseMeasureInput {
 
 	@Field()
 	@IsUUID()
+	@IsOptional()
 	public surveyScopeId?: string;
 
 	@IsOptional()

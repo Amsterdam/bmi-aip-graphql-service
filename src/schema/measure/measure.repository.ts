@@ -39,11 +39,6 @@ export class MeasureRepository implements IMeasureRepository {
 					id: failureModeId,
 				},
 			},
-			manifestations: {
-				connect: {
-					id: manifestationId,
-				},
-			},
 			defects: {
 				connect: {
 					id: defectId,
@@ -57,8 +52,16 @@ export class MeasureRepository implements IMeasureRepository {
 			description,
 			location,
 			quantity,
-			surveyScopeId,
+			surveyScopeId: surveyScopeId ?? null,
 		};
+
+		if (manifestationId) {
+			data.manifestations = {
+				connect: {
+					id: manifestationId,
+				},
+			};
+		}
 
 		return this.prisma.measures.create({ data });
 	}

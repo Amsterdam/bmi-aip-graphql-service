@@ -102,6 +102,9 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 		).rejects.toThrow(SurveyAlreadyHasMeasuresException);
 	});
 
+	// This tests seems to crash on the exception it is supposed to assert
+	// Skipping for now.. TODO: fix this
+
 	test.skip('an exception is thrown when no decomposition data is found', async () => {
 		const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
 			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
@@ -113,9 +116,9 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 			...(<any>{}),
 		};
 
-		try {
+		const wrapper = () => {
 			const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
-			await new CloneMeasuresFromPreviousSurveyHandler(
+			new CloneMeasuresFromPreviousSurveyHandler(
 				surveyRepoMock,
 				measureRepositoryMock,
 				emptyUnitRepositoryMock,
@@ -124,10 +127,7 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 				cyclicMeasureServiceMock,
 				cyclicMeasureRepositoryMock,
 			).execute(command);
-		} catch (exception) {
-			// Somehow the thrown Exception is never caught here.
-			// This means what is asserted actually happens, but this test apparently is not set up in a way where this can be asserted.
-			expect(exception).toBe(DecompositionCloneNotFoundException);
-		}
+		};
+		expect(wrapper).toThrow(DecompositionCloneNotFoundException);
 	});
 });

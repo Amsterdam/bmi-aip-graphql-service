@@ -27,6 +27,7 @@ export class MeasureRepository implements IMeasureRepository {
 		description,
 		location,
 		quantity,
+		remarks,
 		surveyScopeId,
 	}: CreateMeasureInput): Promise<Measure> {
 		const data: Prisma.measuresCreateInput = {
@@ -44,6 +45,10 @@ export class MeasureRepository implements IMeasureRepository {
 			quantity,
 			surveyScopeId,
 		};
+
+		if (remarks) {
+			data.remarks = remarks;
+		}
 
 		if (failureModeId) {
 			data.failureModes = {
@@ -91,6 +96,7 @@ export class MeasureRepository implements IMeasureRepository {
 		description,
 		location,
 		quantity,
+		remarks,
 		surveyScopeId,
 	}: UpdateMeasureInput): Promise<Measure> {
 		const data: Prisma.measuresUpdateInput = {
@@ -105,6 +111,10 @@ export class MeasureRepository implements IMeasureRepository {
 			quantity,
 			surveyScopeId,
 		};
+
+		if (remarks) {
+			data.remarks = remarks;
+		}
 
 		return this.prisma.measures.update({
 			where: { id },

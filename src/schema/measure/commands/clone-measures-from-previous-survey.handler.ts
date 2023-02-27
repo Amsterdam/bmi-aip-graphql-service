@@ -33,27 +33,27 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 		private cyclicMeasureRepository: CyclicMeasureRepository,
 	) {}
 
-	public async execute(
-		command: CloneMeasuresFromPreviousSurveyCommand,
-	): Promise<MeasuresAndCyclicMeasuresCollection> {
-		const previousSurveyId = await this.surveyRepository.findIdPreviousNen2767OrFmecaSurvey(command.surveyId);
+	public async execute({
+		surveyId,
+	}: CloneMeasuresFromPreviousSurveyCommand): Promise<MeasuresAndCyclicMeasuresCollection> {
+		const previousSurveyId = await this.surveyRepository.findIdPreviousNen2767OrFmecaSurvey(surveyId);
 
-		if (await this.measureRepository.surveyContainsMeasures(command.surveyId)) {
-			throw new SurveyAlreadyHasMeasuresException(command.surveyId);
+		if (await this.measureRepository.surveyContainsMeasures(surveyId)) {
+			throw new SurveyAlreadyHasMeasuresException(surveyId);
 		}
 
-		if (await this.cyclicMeasureRepository.surveyContainsMeasures(command.surveyId)) {
-			throw new SurveyAlreadyHasCyclicMeasuresException(command.surveyId);
+		if (await this.cyclicMeasureRepository.surveyContainsMeasures(surveyId)) {
+			throw new SurveyAlreadyHasCyclicMeasuresException(surveyId);
 		}
 
 		if (previousSurveyId) {
-			await this.cloneMeasures(command.surveyId, previousSurveyId);
-			await this.cloneCyclicMeasures(command.surveyId, previousSurveyId);
+			await this.cloneMeasures(surveyId, previousSurveyId);
+			await this.cloneCyclicMeasures(surveyId, previousSurveyId);
 		}
 
 		return {
-			measures: await this.measureService.findMeasures(command.surveyId),
-			cyclicMeasures: await this.cyclicMeasureService.findCyclicMeasures(command.surveyId),
+			measures: await this.measureService.findMeasures(surveyId),
+			cyclicMeasures: await this.cyclicMeasureService.findCyclicMeasures(surveyId),
 		};
 	}
 

@@ -16,7 +16,7 @@ export class CreateMeasureInput extends BaseMeasureInput {
 	@IsUUID()
 	public surveyId: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@IsUUID()
 	@IsOptional()
 	public manifestationId?: string;

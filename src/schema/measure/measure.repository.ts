@@ -35,16 +35,6 @@ export class MeasureRepository implements IMeasureRepository {
 			maintenanceType: maintenanceType,
 			surveys: { connect: { id: surveyId } },
 			units: { connect: { id: unitId } },
-			failureModes: {
-				connect: {
-					id: failureModeId,
-				},
-			},
-			defects: {
-				connect: {
-					id: defectId,
-				},
-			},
 			planYear,
 			finalPlanYear,
 			costSurcharge,

@@ -38,8 +38,8 @@ export class MeasureFactory {
 		measure.quantity = quantity;
 		measure.quantityUnitOfMeasurement = QuantityUnitOfMeasurement[quantityUnitOfMeasurement];
 		measure.surveyScopeId = surveyScopeId ?? null;
-		measure.failureModeId = failureModeId;
-		measure.defectId = defectId;
+		measure.failureModeId = failureModeId ?? null;
+		measure.defectId = defectId ?? null;
 		measure.manifestationId = manifestationId ?? null;
 		measure.remarks = remarks;
 		measure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

@@ -47,16 +47,17 @@ export class BaseMeasureInput {
 	@Field({ nullable: true })
 	public maintenanceType?: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@IsUUID()
+	@IsOptional()
 	public failureModeId?: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@IsUUID()
 	@IsOptional()
 	public defectId?: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@IsUUID()
 	@IsOptional()
 	public surveyScopeId?: string;

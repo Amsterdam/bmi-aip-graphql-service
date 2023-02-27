@@ -1,24 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { Unit } from 'src/schema/decomposition/types/unit.repository.interface';
 
-import { ObjectTypeUnitCode } from '../decomposition/types/object-type-unit-code.repository.interface';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
-import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
-import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models/default-maintenance-measure.model';
 
 import { CyclicMeasure, ICyclicMeasureRepository } from './types/cyclic-measure.repository.interface';
 import { CreateCyclicMeasureInput } from './dto/create-cyclic-measure.input';
 import { UpdateCyclicMeasureInput } from './dto/update-cyclic-measure.input';
-import { castCyclicMeasureType } from './utils/cast-cyclic-measure-type';
 
 @Injectable()
 export class CyclicMeasureRepository implements ICyclicMeasureRepository {
-	public constructor(
-		private readonly prisma: PrismaService,
-		private defaultMaintenanceMeasureService: DefaultMaintenanceMeasureService,
-	) {}
+	public constructor(private readonly prisma: PrismaService) {}
 
 	async createCyclicMeasure({
 		maintenanceType,
@@ -71,62 +63,18 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		});
 	}
 
-	async generateCyclicMeasures(surveyId: string): Promise<CyclicMeasure[]> {
-		const cyclicMeasures: CyclicMeasure[] = [];
-		const units: Unit[] = await this.prisma.units.findMany({
-			where: { surveyId },
+	async findExistingCyclicMeasure(
+		surveyId: string,
+		unitId: string,
+		defaultMaintenanceMeasureId: string,
+	): Promise<CyclicMeasure> {
+		return this.prisma.cyclicMeasures.findFirst({
+			where: {
+				surveyId,
+				unitId,
+				defaultMaintenanceMeasureId,
+			},
 		});
-
-		if (units) {
-			for (const unit of units) {
-				const unitCode: ObjectTypeUnitCode = await this.prisma.objectTypeUnitCodes.findFirst({
-					where: { code: unit.code },
-				});
-
-				const defaultMaintenanceMeasures: DefaultMaintenanceMeasure[] =
-					await this.defaultMaintenanceMeasureService.getDefaultMaintenanceMeasures(unitCode.id);
-				if (defaultMaintenanceMeasures) {
-					for (const defaultMaintenanceMeasure of defaultMaintenanceMeasures) {
-						const existingCyclicMeasure: CyclicMeasure = await this.prisma.cyclicMeasures.findFirst({
-							where: {
-								surveyId,
-								unitId: unit.id,
-								defaultMaintenanceMeasureId: defaultMaintenanceMeasure.id,
-							},
-						});
-						if (!existingCyclicMeasure) {
-							const data: Prisma.cyclicMeasuresCreateInput = {
-								id: newId(),
-								surveys: { connect: { id: surveyId } },
-								units: { connect: { id: unit.id } },
-								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
-								cycle: defaultMaintenanceMeasure.cycle,
-								unitPrice: defaultMaintenanceMeasure.unitPrice,
-								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
-								defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasure.id } },
-							};
-							cyclicMeasures.push(await this.prisma.cyclicMeasures.create({ data }));
-						} else {
-							const id = existingCyclicMeasure.id;
-							const data: Prisma.cyclicMeasuresUpdateInput = {
-								...existingCyclicMeasure,
-								cycle: defaultMaintenanceMeasure.cycle,
-								unitPrice: defaultMaintenanceMeasure.unitPrice,
-								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
-								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
-							};
-							cyclicMeasures.push(
-								await this.prisma.cyclicMeasures.update({
-									data,
-									where: { id },
-								}),
-							);
-						}
-					}
-				}
-			}
-		}
-		return cyclicMeasures;
 	}
 
 	async updateCyclicMeasure({

@@ -4,4 +4,5 @@ export const CyclicMeasureRepository = jest.fn(() => ({
 	createCyclicMeasure: jest.fn(() => cyclicMeasure1),
 	generateCyclicMeasures: jest.fn(() => [cyclicMeasure1]),
 	findCyclicMeasures: jest.fn(() => [domainCyclicMeasure]),
+	findExistingCyclicMeasure: jest.fn(() => cyclicMeasure1),
 }));

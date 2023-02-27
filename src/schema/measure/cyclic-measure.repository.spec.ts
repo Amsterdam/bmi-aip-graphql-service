@@ -1,7 +1,6 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
-import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
 
 import { QuantityUnitOfMeasurement } from './types/measure';
 import { CyclicMeasureRepository } from './cyclic-measure.repository';
@@ -17,11 +16,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
-const defaultMaintenanceMeasureServiceMock: MockedObjectDeep<DefaultMaintenanceMeasureService> = {
-	...(<any>{}),
-};
-
-const repo = new CyclicMeasureRepository(prismaServiceMock, defaultMaintenanceMeasureServiceMock);
+const repo = new CyclicMeasureRepository(prismaServiceMock);
 
 describe('CyclicMeasureRepository', () => {
 	test('createCyclicMeasure()', async () => {

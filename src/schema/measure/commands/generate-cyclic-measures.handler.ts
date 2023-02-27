@@ -64,9 +64,9 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 							};
 
 							cyclicMeasures.push(
-								(await this.cyclicMeasureRepository.createCyclicMeasure(
-									CyclicMeasureFactory.CreateCyclicMeasure(data),
-								)) as unknown as CyclicMeasure,
+								CyclicMeasureFactory.CreateCyclicMeasure(
+									await this.cyclicMeasureRepository.createCyclicMeasure(data),
+								),
 							);
 						} else {
 							const data: DomainCyclicMeasure = {
@@ -78,9 +78,9 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 							};
 
 							cyclicMeasures.push(
-								(await this.cyclicMeasureRepository.updateCyclicMeasure(
-									CyclicMeasureFactory.CreateCyclicMeasure(data),
-								)) as unknown as CyclicMeasure,
+								CyclicMeasureFactory.CreateCyclicMeasure(
+									await this.cyclicMeasureRepository.updateCyclicMeasure(data),
+								),
 							);
 						}
 					}

@@ -42,8 +42,10 @@ describe('GenerateCyclicMeasuresHandler', () => {
 			defaultMaintenanceMeasureRepositoryMock,
 			objectTypeUnitCodeRepositoryMock,
 		).execute(command);
+		const object = { ...domainCyclicMeasure, deletedAt: domainCyclicMeasure.deleted_at };
+		delete object.deleted_at;
 
 		expect(cyclicMeasureRepositoryMock.createCyclicMeasure).toHaveBeenCalledTimes(0);
-		expect(result).toEqual([domainCyclicMeasure]);
+		expect(result).toEqual([object]);
 	});
 });

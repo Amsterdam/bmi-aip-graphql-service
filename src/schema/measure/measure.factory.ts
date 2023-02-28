@@ -37,10 +37,10 @@ export class MeasureFactory {
 		measure.unitPrice = unitPrice;
 		measure.quantity = quantity;
 		measure.quantityUnitOfMeasurement = QuantityUnitOfMeasurement[quantityUnitOfMeasurement];
-		measure.surveyScopeId = surveyScopeId ?? null;
-		measure.failureModeId = failureModeId ?? null;
-		measure.defectId = defectId ?? null;
-		measure.manifestationId = manifestationId ?? null;
+		measure.surveyScopeId = surveyScopeId;
+		measure.failureModeId = failureModeId;
+		measure.defectId = defectId;
+		measure.manifestationId = manifestationId;
 		measure.remarks = remarks;
 		measure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return measure;

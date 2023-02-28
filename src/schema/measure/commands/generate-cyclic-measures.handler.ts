@@ -2,16 +2,17 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { CyclicMeasure } from '../models/cyclic-measure.model';
-import { GenerateCyclicMeasuresCommand } from '../commands/generate-cyclic-measures.command';
 import { CyclicMeasureFactory } from '../cyclic-measure.factory';
 import { Unit } from '../../decomposition/types/unit.repository.interface';
 import { ObjectTypeUnitCode } from '../../decomposition/types/object-type-unit-code.repository.interface';
 import { DefaultMaintenanceMeasure } from '../../default-maintenance-measure/models/default-maintenance-measure.model';
 import { castCyclicMeasureType } from '../utils/cast-cyclic-measure-type';
-import { UnitRepository } from '../../decomposition/unit.Repository';
 import { ObjectTypeUnitCodeRepository } from '../../decomposition/object-type-unit-code.repository';
 import { DefaultMaintenanceMeasureRepository } from '../../default-maintenance-measure/default-maintenance-measure.repository';
 import { CyclicMeasure as DomainCyclicMeasure } from '../types/cyclic-measure.repository.interface';
+import { UnitRepository } from '../../decomposition/unit.repository';
+
+import { GenerateCyclicMeasuresCommand } from './generate-cyclic-measures.command';
 
 @CommandHandler(GenerateCyclicMeasuresCommand)
 export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCyclicMeasuresCommand> {

@@ -37,6 +37,7 @@ import { GetElementByIdQuery } from './queries/get-element-by-id.query';
 import { GetElementByIdHandler } from './queries/get-element-by-id.handler';
 import { GetManifestationByIdQuery } from './queries/get-manifestation-by-id.query';
 import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.handler';
+import { ObjectTypeUnitCodeRepository } from './object-type-unit-code.repository';
 
 @Module({
 	providers: [
@@ -72,8 +73,9 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		GetManifestationByIdQuery,
 		GetManifestationByIdHandler,
 		SurveyRepository,
+		ObjectTypeUnitCodeRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
-	exports: [UnitService],
+	exports: [UnitService, UnitRepository, ObjectTypeUnitCodeRepository],
 })
 export class DecompositionModule {}

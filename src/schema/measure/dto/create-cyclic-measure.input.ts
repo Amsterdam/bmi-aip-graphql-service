@@ -6,9 +6,6 @@ import { BaseCyclicMeasureInput } from './base-cyclic-measure.input';
 @InputType()
 export class CreateCyclicMeasureInput extends BaseCyclicMeasureInput {
 	@Field()
-	public remarks: string;
-
-	@Field()
 	@IsUUID()
 	public unitId: string;
 

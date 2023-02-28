@@ -69,6 +69,20 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		});
 	}
 
+	async findExistingCyclicMeasure(
+		surveyId: string,
+		unitId: string,
+		defaultMaintenanceMeasureId: string,
+	): Promise<CyclicMeasure> {
+		return this.prisma.cyclicMeasures.findFirst({
+			where: {
+				surveyId,
+				unitId,
+				defaultMaintenanceMeasureId,
+			},
+		});
+	}
+
 	async updateCyclicMeasure({
 		id,
 		planYear,

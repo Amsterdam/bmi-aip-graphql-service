@@ -43,12 +43,9 @@ export class MeasureRepository implements IMeasureRepository {
 			description,
 			location,
 			quantity,
-			surveyScopeId: surveyScopeId ?? null,
+			remarks,
+			surveyScopeId,
 		};
-
-		if (remarks) {
-			data.remarks = remarks;
-		}
 
 		if (failureModeId) {
 			data.failureModes = {

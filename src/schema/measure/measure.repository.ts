@@ -27,6 +27,7 @@ export class MeasureRepository implements IMeasureRepository {
 		description,
 		location,
 		quantity,
+		remarks,
 		surveyScopeId,
 	}: CreateMeasureInput): Promise<Measure> {
 		const data: Prisma.measuresCreateInput = {
@@ -34,21 +35,6 @@ export class MeasureRepository implements IMeasureRepository {
 			maintenanceType: maintenanceType,
 			surveys: { connect: { id: surveyId } },
 			units: { connect: { id: unitId } },
-			failureModes: {
-				connect: {
-					id: failureModeId,
-				},
-			},
-			manifestations: {
-				connect: {
-					id: manifestationId,
-				},
-			},
-			defects: {
-				connect: {
-					id: defectId,
-				},
-			},
 			planYear,
 			finalPlanYear,
 			costSurcharge,
@@ -57,8 +43,33 @@ export class MeasureRepository implements IMeasureRepository {
 			description,
 			location,
 			quantity,
+			remarks,
 			surveyScopeId,
 		};
+
+		if (failureModeId) {
+			data.failureModes = {
+				connect: {
+					id: failureModeId,
+				},
+			};
+		}
+
+		if (defectId) {
+			data.defects = {
+				connect: {
+					id: defectId,
+				},
+			};
+		}
+
+		if (manifestationId) {
+			data.manifestations = {
+				connect: {
+					id: manifestationId,
+				},
+			};
+		}
 
 		return this.prisma.measures.create({ data });
 	}
@@ -82,6 +93,7 @@ export class MeasureRepository implements IMeasureRepository {
 		description,
 		location,
 		quantity,
+		remarks,
 		surveyScopeId,
 		failureModeId,
 		defectId,
@@ -98,6 +110,10 @@ export class MeasureRepository implements IMeasureRepository {
 			quantity,
 			surveyScopeId,
 		};
+
+		if (remarks) {
+			data.remarks = remarks;
+		}
 
 		if (failureModeId) {
 			data.failureModes = {
@@ -130,5 +146,15 @@ export class MeasureRepository implements IMeasureRepository {
 			where: { id: identifier },
 			data,
 		});
+	}
+
+	async surveyContainsMeasures(surveyId: string): Promise<boolean> {
+		const measures = await this.prisma.measures.findMany({
+			where: {
+				surveyId: surveyId,
+			},
+		});
+
+		return measures.length > 0;
 	}
 }

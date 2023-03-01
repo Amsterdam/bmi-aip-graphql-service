@@ -1,13 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 import { BaseMeasureInput } from '../dto/base-measure.input';
 
 @InputType()
 export class CreateMeasureInput extends BaseMeasureInput {
-	@Field()
-	public remarks: string;
-
 	@Field()
 	@IsUUID()
 	public unitId: string;
@@ -15,4 +12,9 @@ export class CreateMeasureInput extends BaseMeasureInput {
 	@Field()
 	@IsUUID()
 	public surveyId: string;
+
+	@Field({ nullable: true })
+	@IsUUID()
+	@IsOptional()
+	public manifestationId?: string;
 }

@@ -3,7 +3,13 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { MeasureRepository } from './measure.repository';
-import { deletedMeasure, domainMeasure, measureInput, updateMeasureInput } from './__stubs__';
+import {
+	deletedMeasure,
+	domainMeasure,
+	measureInput,
+	measureInputWithOptionalFields,
+	updateMeasureInput,
+} from './__stubs__';
 import { MeasureTypes, QuantityUnitOfMeasurement } from './types/measure';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -33,19 +39,45 @@ describe('MeasureRepository', () => {
 						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 					},
 				},
+				planYear: 2010,
+				finalPlanYear: 2010,
+				costSurcharge: 7.3,
+				quantity: 20,
+				unitPrice: 33.99,
+				quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
+				location: '__LOCATION__',
+				description: '__DESCTIPTION__',
+			}),
+		});
+	});
+	test('createMeasure() with optional fields', async () => {
+		await repo.createMeasure(measureInputWithOptionalFields);
+		expect(prismaServiceMock.measures.create).toHaveBeenCalledWith({
+			data: expect.objectContaining({
+				maintenanceType: MeasureTypes.CorrectiveMaintenance,
+				surveys: {
+					connect: {
+						id: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',
+					},
+				},
+				units: {
+					connect: {
+						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+					},
+				},
 				failureModes: {
 					connect: {
-						id: '',
+						id: '__FAILURE_MODE_ID__',
 					},
 				},
 				manifestations: {
 					connect: {
-						id: '',
+						id: '__MANIFESTATION_ID__',
 					},
 				},
 				defects: {
 					connect: {
-						id: '',
+						id: '__DEFECT_ID__',
 					},
 				},
 				planYear: 2010,

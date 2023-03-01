@@ -11,4 +11,13 @@ export class MeasureService {
 	async findMeasures(surveyId: string): Promise<Measure[]> {
 		return (await this.measureRepo.findMeasures(surveyId)).map((measure) => MeasureFactory.CreateMeasure(measure));
 	}
+
+	async createMeasure(measure: Measure, surveyId: string): Promise<Measure> {
+		const result = await this.measureRepo.createMeasure({
+			...measure,
+			surveyId,
+		});
+
+		return MeasureFactory.CreateMeasure(result);
+	}
 }

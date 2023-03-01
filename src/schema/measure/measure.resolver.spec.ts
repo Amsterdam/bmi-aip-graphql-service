@@ -6,12 +6,21 @@ import { PrismaService } from '../../prisma.service';
 import { MeasureResolver } from './measure.resolver';
 import { MeasureService } from './measure.service';
 import { MeasureRepository } from './measure.repository';
-import { domainMeasure, measure1, measure2, measureInput, updateMeasureInput, deletedMeasure } from './__stubs__';
+import {
+	domainMeasure,
+	measure1,
+	measure2,
+	measureInput,
+	updateMeasureInput,
+	deletedMeasure,
+	cyclicMeasure1,
+} from './__stubs__';
 import { CreateMeasureCommand } from './commands/create-measure.command';
 import { Measure } from './models/measure.model';
 import { UpdateMeasureCommand } from './commands/update-measure.command';
 import { DeleteMeasureCommand } from './commands/delete-measure.command';
 import { FindMeasuresQuery } from './queries/find-measures.query';
+import { CloneMeasuresFromPreviousSurveyCommand } from './commands/clone-measures-from-previous-survey.command';
 
 jest.mock('./measure.service');
 jest.mock('./measure.repository');
@@ -24,6 +33,8 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 				return domainMeasure;
 			case DeleteMeasureCommand.name:
 				return deletedMeasure;
+			case CloneMeasuresFromPreviousSurveyCommand.name:
+				return { measures: [measure1], cyclicMeasures: [cyclicMeasure1] };
 		}
 	}),
 	...(<any>{}),
@@ -105,6 +116,23 @@ describe('Decomposition / Measure / Resolver', () => {
 			);
 			expect(measureWithDefect.defect).toEqual(measure1.defect);
 			expect(measureWithoutDefect.defect).toEqual(null);
+		});
+	});
+
+	describe('cloneMeasuresFromPreviousSurvey', () => {
+		test('clones measures and cyclic meaures from previous survey', async () => {
+			const commandBusMock = getCommandBusMock();
+			const resolver = new MeasureResolver(new MeasureService(measureRepo), commandBusMock, getQueryBusMock());
+			const result = await resolver.cloneMeasuresFromPreviousSurvey('__SURVEY_ID__');
+			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+			expect(commandBusMock.execute).toHaveBeenCalledWith(
+				new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__'),
+			);
+
+			expect(result).toEqual({
+				measures: [measure1],
+				cyclicMeasures: [cyclicMeasure1],
+			});
 		});
 	});
 });

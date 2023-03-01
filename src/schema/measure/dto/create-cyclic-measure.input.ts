@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 import { BaseCyclicMeasureInput } from './base-cyclic-measure.input';
 
@@ -12,4 +12,9 @@ export class CreateCyclicMeasureInput extends BaseCyclicMeasureInput {
 	@Field()
 	@IsUUID()
 	public surveyId: string;
+
+	@Field()
+	@IsUUID()
+	@IsOptional()
+	public manifestationId?: string;
 }

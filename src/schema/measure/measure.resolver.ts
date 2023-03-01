@@ -23,8 +23,10 @@ import { UpdateMeasureCommand } from './commands/update-measure.command';
 import { Measure as DomainMeasure } from './types/measure.repository.interface';
 import { DeleteMeasureCommand } from './commands/delete-measure.command';
 import { FindMeasuresQuery } from './queries/find-measures.query';
+import { CloneMeasuresFromPreviousSurveyCommand } from './commands/clone-measures-from-previous-survey.command';
 import { CalculateMeasureCostQuery } from './queries/calculate-measure-cost.query';
 import { CalculateMeasureCostWithSurchargeQuery } from './queries/calculate-measure-cost-with-surcharge.query';
+import { MeasuresAndCyclicMeasuresCollection } from './models/measures-and-cyclic-measures-collection.model';
 
 @Resolver((of) => Measure)
 @Resource(Measure.name)
@@ -98,6 +100,16 @@ export class MeasureResolver {
 	costWithSurcharge(@Parent() measure: Measure): Promise<number> {
 		return this.queryBus.execute<CalculateMeasureCostWithSurchargeQuery>(
 			new CalculateMeasureCostWithSurchargeQuery(measure),
+		);
+	}
+
+	@Mutation((returns) => MeasuresAndCyclicMeasuresCollection)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	async cloneMeasuresFromPreviousSurvey(
+		@Args('surveyId', { type: () => String }) surveyId: string,
+	): Promise<Measure[]> {
+		return this.commandBus.execute<CloneMeasuresFromPreviousSurveyCommand>(
+			new CloneMeasuresFromPreviousSurveyCommand(surveyId),
 		);
 	}
 }

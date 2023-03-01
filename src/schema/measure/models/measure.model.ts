@@ -81,4 +81,7 @@ export class Measure {
 
 	@Field((type) => Number)
 	costWithSurcharge?: number;
+
+	@Field((type) => String, { nullable: true })
+	remarks?: string;
 }

@@ -111,10 +111,6 @@ export class MeasureRepository implements IMeasureRepository {
 			surveyScopeId,
 		};
 
-		if (remarks) {
-			data.remarks = remarks;
-		}
-
 		if (failureModeId) {
 			data.failureModes = {
 				connect: {
@@ -129,6 +125,10 @@ export class MeasureRepository implements IMeasureRepository {
 					id: defectId,
 				},
 			};
+		}
+
+		if (remarks) {
+			data.remarks = remarks;
 		}
 
 		return this.prisma.measures.update({

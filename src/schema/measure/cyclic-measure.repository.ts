@@ -65,6 +65,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		return this.prisma.cyclicMeasures.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		});
 	}
@@ -79,6 +80,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 				surveyId,
 				unitId,
 				defaultMaintenanceMeasureId,
+				deleted_at: null,
 			},
 		});
 	}
@@ -144,6 +146,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		const cyclicMeasures = await this.prisma.cyclicMeasures.findMany({
 			where: {
 				surveyId: surveyId,
+				deleted_at: null,
 			},
 		});
 

@@ -78,6 +78,7 @@ export class MeasureRepository implements IMeasureRepository {
 		return this.prisma.measures.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		});
 	}
@@ -152,6 +153,7 @@ export class MeasureRepository implements IMeasureRepository {
 		const measures = await this.prisma.measures.findMany({
 			where: {
 				surveyId: surveyId,
+				deleted_at: null,
 			},
 		});
 

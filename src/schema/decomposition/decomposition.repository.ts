@@ -3,7 +3,6 @@ import PQueue from 'p-queue';
 import { PrismaService } from 'src/prisma.service';
 
 import { newId } from '../../utils/newId';
-import { SurveyStates } from '../survey/types/surveyStates';
 
 import { ElementService } from './element.service';
 import { Element } from './models/element.model';
@@ -99,36 +98,6 @@ export class DecompositionRepository {
 		await queue.onIdle();
 
 		return this.elementService.getElements(surveyId);
-	}
-
-	public async findPreviousSurveyId(surveyId: string): Promise<string | null> {
-		const current = await this.prisma.surveys.findFirst({
-			where: {
-				id: surveyId,
-			},
-
-			select: {
-				id: true,
-				objectId: true,
-				inspectionStandardType: true,
-			},
-		});
-
-		const previous = await this.prisma.surveys.findFirst({
-			where: {
-				objectId: current.objectId,
-				inspectionStandardType: current.inspectionStandardType,
-				NOT: [{ id: current.id }, { status: SurveyStates.deleted }],
-			},
-			orderBy: {
-				created_at: 'desc',
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		return previous?.id;
 	}
 
 	public async checkIfAlreadyMigrated(surveyId: string): Promise<boolean> {

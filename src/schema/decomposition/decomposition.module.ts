@@ -5,6 +5,7 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
+import { SurveyRepository } from '../survey/survey.repository';
 
 import { ElementService } from './element.service';
 import { ElementResolver } from './element.resolver';
@@ -36,6 +37,7 @@ import { GetElementByIdQuery } from './queries/get-element-by-id.query';
 import { GetElementByIdHandler } from './queries/get-element-by-id.handler';
 import { GetManifestationByIdQuery } from './queries/get-manifestation-by-id.query';
 import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.handler';
+import { ObjectTypeUnitCodeRepository } from './object-type-unit-code.repository';
 
 @Module({
 	providers: [
@@ -70,7 +72,10 @@ import { GetManifestationByIdHandler } from './queries/get-manifestation-by-id.h
 		GetUnitByIdHandler,
 		GetManifestationByIdQuery,
 		GetManifestationByIdHandler,
+		SurveyRepository,
+		ObjectTypeUnitCodeRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	exports: [UnitService, UnitRepository, ObjectTypeUnitCodeRepository],
 })
 export class DecompositionModule {}

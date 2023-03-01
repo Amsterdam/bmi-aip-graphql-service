@@ -15,6 +15,10 @@ measure1.location = 'Gehele brug';
 measure1.description = 'Herstellen corrosieschade paal';
 measure1.defectId = defect1.id;
 measure1.defect = defect1;
+measure1.quantity = 20;
+measure1.unitPrice = 33.99;
+measure1.costSurcharge = 1.1;
+measure1.remarks = '__REMARKS_1__';
 
 const measure2 = new Measure();
 measure2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
@@ -25,6 +29,7 @@ measure2.location = 'Gehele brug';
 measure2.description = 'Conservering overlagen paal (staal)';
 measure2.defectId = null;
 measure2.defect = null;
+measure2.remarks = '__REMARKS_2__';
 
 export { measure1, measure2 };
 
@@ -40,11 +45,12 @@ const measureRaw: Omit<DomainMeasure, 'id'> = {
 	quantity: 20,
 	unitPrice: 33.99,
 	quantityUnitOfMeasurement: QuantityUnitOfMeasurement.m2,
+	surveyScopeId: '',
 	manifestationId: '',
 	failureModeId: '',
 	defectId: '',
-	surveyScopeId: '',
 	deleted_at: null,
+	remarks: '__REMARKS__',
 };
 
 export const measureInput = Object.keys(measureRaw).reduce((input, key) => {
@@ -70,4 +76,11 @@ export const measure = MeasureFactory.CreateMeasure(domainMeasure);
 export const deletedMeasure: DomainMeasure = {
 	...domainMeasure,
 	deleted_at: new Date('Thu, 09 Jun 2022 15:03:22 GMT'),
+};
+
+export const measureInputWithOptionalFields = {
+	...measureInput,
+	manifestationId: '__MANIFESTATION_ID__',
+	failureModeId: '__FAILURE_MODE_ID__',
+	defectId: '__DEFECT_ID__',
 };

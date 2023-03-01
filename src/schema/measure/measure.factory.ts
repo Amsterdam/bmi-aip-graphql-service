@@ -21,6 +21,7 @@ export class MeasureFactory {
 		manifestationId,
 		surveyScopeId,
 		failureModeId,
+		remarks,
 		deleted_at: deletedAt,
 	}: DomainMeasure): Measure {
 		const measure = new Measure();
@@ -40,6 +41,7 @@ export class MeasureFactory {
 		measure.failureModeId = failureModeId;
 		measure.defectId = defectId;
 		measure.manifestationId = manifestationId;
+		measure.remarks = remarks;
 		measure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return measure;
 	}

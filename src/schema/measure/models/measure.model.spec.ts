@@ -1,4 +1,4 @@
-import { Measure } from '../models/measure.model';
+import { Measure } from './measure.model';
 
 describe('Model / Measure', () => {
 	test('constructs an Measure instance object', () => {
@@ -18,6 +18,7 @@ describe('Model / Measure', () => {
 		measure.failureModeId = '';
 		measure.defectId = '';
 		measure.surveyScopeId = '';
+		measure.remarks = '__REMARKS__';
 
 		expect(measure).toBeInstanceOf(Measure);
 		expect(measure).toEqual({
@@ -36,6 +37,7 @@ describe('Model / Measure', () => {
 			failureModeId: '',
 			defectId: '',
 			surveyScopeId: '',
+			remarks: '__REMARKS__',
 		});
 	});
 });

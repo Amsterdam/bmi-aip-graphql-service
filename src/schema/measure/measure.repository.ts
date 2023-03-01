@@ -83,6 +83,8 @@ export class MeasureRepository implements IMeasureRepository {
 		location,
 		quantity,
 		surveyScopeId,
+		failureModeId,
+		defectId,
 	}: UpdateMeasureInput): Promise<Measure> {
 		const data: Prisma.measuresUpdateInput = {
 			planYear,
@@ -96,6 +98,22 @@ export class MeasureRepository implements IMeasureRepository {
 			quantity,
 			surveyScopeId,
 		};
+
+		if (failureModeId) {
+			data.failureModes = {
+				connect: {
+					id: failureModeId,
+				},
+			};
+		}
+
+		if (defectId) {
+			data.defects = {
+				connect: {
+					id: defectId,
+				},
+			};
+		}
 
 		return this.prisma.measures.update({
 			where: { id },

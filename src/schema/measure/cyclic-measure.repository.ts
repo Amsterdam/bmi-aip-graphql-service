@@ -87,6 +87,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		unitPrice,
 		quantityUnitOfMeasurement,
 		maintenanceType,
+		defectId,
+		failureModeId,
 	}: UpdateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresUpdateInput = {
 			planYear,
@@ -98,6 +100,22 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			quantityUnitOfMeasurement,
 			maintenanceType,
 		};
+
+		if (failureModeId) {
+			data.failureModes = {
+				connect: {
+					id: failureModeId,
+				},
+			};
+		}
+
+		if (defectId) {
+			data.defects = {
+				connect: {
+					id: defectId,
+				},
+			};
+		}
 
 		return this.prisma.cyclicMeasures.update({
 			where: { id },

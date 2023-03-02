@@ -50,7 +50,7 @@
 		"graphql": "^16.6.0",
 		"graphql-geojson-scalar-types": "^0.1.0",
 		"graphql-type-json": "^0.3.2",
-		"keycloak-connect": "^18.0.2",
+		"keycloak-connect": "^21.0.1",
 		"nest-keycloak-connect": "^1.9.0",
 		"p-queue": "^6.6.2",
 		"reflect-metadata": "^0.1.13",

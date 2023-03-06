@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsDate, IsOptional, MaxLength, IsUUID } from 'class-validator';
 
 @InputType()
-export class BaseFacadeSurveyInput {
+export class BaseFacadeFollowUpSurveyInput {
 	@Field((type) => String)
 	@IsUUID()
 	surveyId: string;

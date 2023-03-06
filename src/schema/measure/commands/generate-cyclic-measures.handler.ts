@@ -34,8 +34,10 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 				);
 
 				const defaultMaintenanceMeasures: DefaultMaintenanceMeasure[] =
-					await this.defaultMaintenanceMeasureRepository.getDefaultMaintenanceMeasureByObjectTypeUnitCodeId(
+					await this.defaultMaintenanceMeasureRepository.findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId(
 						objectTypeUnitCode.id,
+						unit.material,
+						unit.quantityUnitOfMeasurement,
 					);
 				if (defaultMaintenanceMeasures) {
 					for (const defaultMaintenanceMeasure of defaultMaintenanceMeasures) {

@@ -1,3 +1,3 @@
-export class DeleteFacadeSurveyCommand {
+export class DeleteFacadeFollowUpSurveyCommand {
 	public constructor(public readonly surveyId: string) {}
 }

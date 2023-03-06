@@ -1,3 +1,3 @@
-export class GetFacadeSurveyBySurveyIdQuery {
+export class GetFacadeFollowUpSurveyBySurveyIdQuery {
 	public constructor(public readonly surveyId: string) {}
 }

@@ -1,7 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 
-@ObjectType({ description: 'facadeSurvey' })
-export class FacadeSurvey {
+@ObjectType({ description: 'facadeFollowUpSurvey' })
+export class FacadeFollowUpSurvey {
 	@Field((type) => String)
 	id: string;
 

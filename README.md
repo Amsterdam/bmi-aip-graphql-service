@@ -64,4 +64,3 @@ npm run generate:gisib-api-types
 ## License
 
 MPL-2.0. See `./LICENSE`
-..

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsNumber, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 import { MeasureTypes, QuantityUnitOfMeasurement } from '../types/measure';
 
@@ -16,7 +16,7 @@ export class BaseMeasureInput {
 	public finalPlanYear?: number;
 
 	@IsOptional()
-	@IsInt()
+	@IsNumber()
 	@Field({ nullable: true })
 	public costSurcharge?: number;
 

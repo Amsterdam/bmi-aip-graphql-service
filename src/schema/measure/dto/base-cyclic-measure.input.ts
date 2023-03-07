@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsNumber, IsOptional, IsUUID, MaxLength } from 'class-validator';
 
 import { CyclicMeasureTypes } from '../types/cyclic-measure';
 import { QuantityUnitOfMeasurement } from '../types/measure';
@@ -17,7 +17,7 @@ export class BaseCyclicMeasureInput {
 	public finalPlanYear?: number;
 
 	@IsOptional()
-	@IsInt()
+	@IsNumber()
 	@Field({ nullable: true })
 	public costSurcharge?: number;
 

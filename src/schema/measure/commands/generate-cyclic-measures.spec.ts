@@ -24,7 +24,9 @@ const unitRepoMock: MockedObjectDeep<UnitRepository> = {
 };
 
 const defaultMaintenanceMeasureRepositoryMock: MockedObjectDeep<DefaultMaintenanceMeasureRepository> = {
-	getDefaultMaintenanceMeasureByObjectTypeUnitCodeId: jest.fn().mockResolvedValue([domainDefaultMaintenanceMeasure]),
+	findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId: jest
+		.fn()
+		.mockResolvedValue([domainDefaultMaintenanceMeasure]),
 	...(<any>{}),
 };
 

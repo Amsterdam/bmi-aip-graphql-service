@@ -28,4 +28,8 @@ export class SurveyService {
 			SurveyFactory.CreateSurvey(survey),
 		);
 	}
+
+	public async findInspectionStandardDataById(id: string): Promise<JSON> {
+		return JSON.parse(JSON.stringify((await this.surveyRepo.getSurveyById(id)).inspectionStandardData));
+	}
 }

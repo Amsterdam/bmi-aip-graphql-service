@@ -1,14 +1,15 @@
-import { Args, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import { Survey } from '../survey/models/survey.model';
+import { FindInspectionStandardDataByIdCommand } from '../survey/commands/find-inspection-standard-data-by-id.command';
 
 import { FacadeFollowUpSurvey } from './models/facade-follow-up-survey.model';
 import { FacadeFollowUpSurveyFactory } from './facade-follow-up-survey.factory';
 import { FacadeFollowUpSurveyService } from './facade-follow-up-survey.service';
-import { CreateFacadeFollowUpSurveyInput } from './dto/create-facade-follow-up-survey.input';
-import { UpdateFacadeFollowUpSurveyInput } from './dto/update-facade-follow-up-survey.input';
-import { CreateFacadeFollowUpSurveyCommand } from './commands/create-facade-follow-up-survey.command';
-import { UpdateFacadeFollowUpSurveyCommand } from './commands/update-facade-follow-up-survey.command';
+import { SaveFacadeFollowUpSurveyInput } from './dto/save-facade-follow-up-survey.input';
+import { SaveFacadeFollowUpSurveyCommand } from './commands/save-facade-follow-up-survey.command';
 import { DeleteFacadeFollowUpSurveyCommand } from './commands/delete-facade-follow-up-survey.command';
 import { FacadeFollowUpSurvey as DomainFacadeFollowUpSurvey } from './types/facade-follow-up-survey.repository.interface';
 import { GetFacadeFollowUpSurveyBySurveyIdQuery } from './queries/get-facade-follow-up-survey-by-survey.query';
@@ -61,5 +62,12 @@ export class FacadeFollowUpSurveyResolver {
 				new DeleteFacadeFollowUpSurveyCommand(surveyId),
 			);
 		return FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
+	}
+
+	@ResolveField()
+	async remarks(@Parent() { id }: Survey): Promise<JSON> {
+		return this.queryBus.execute<FindInspectionStandardDataByIdCommand>(
+			new FindInspectionStandardDataByIdCommand(id),
+		);
 	}
 }

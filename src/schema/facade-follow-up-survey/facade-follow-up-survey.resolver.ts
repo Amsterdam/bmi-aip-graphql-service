@@ -3,7 +3,7 @@ import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { Survey } from '../survey/models/survey.model';
-import { FindInspectionStandardDataByIdCommand } from '../survey/commands/find-inspection-standard-data-by-id.command';
+import { FindInspectionStandardDataByIdQuery } from '../survey/queries/find-inspection-standard-data-by-id.query';
 
 import { FacadeFollowUpSurvey } from './models/facade-follow-up-survey.model';
 import { FacadeFollowUpSurveyFactory } from './facade-follow-up-survey.factory';
@@ -42,6 +42,7 @@ export class FacadeFollowUpSurveyResolver {
 	}
 
 	@Mutation(() => FacadeFollowUpSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteFacadeFollowUpSurvey(@Args('surveyId') surveyId: string): Promise<FacadeFollowUpSurvey> {
 		const domainFacadeFollowUpSurvey: DomainFacadeFollowUpSurvey =
 			await this.commandBus.execute<DeleteFacadeFollowUpSurveyCommand>(
@@ -51,9 +52,9 @@ export class FacadeFollowUpSurveyResolver {
 	}
 
 	@ResolveField()
-	async remarks(@Parent() { id }: Survey): Promise<JSON> {
-		return this.queryBus.execute<FindInspectionStandardDataByIdCommand>(
-			new FindInspectionStandardDataByIdCommand(id),
+	async remarks(@Parent() { surveyId }: FacadeFollowUpSurvey): Promise<JSON> {
+		return this.queryBus.execute<FindInspectionStandardDataByIdQuery>(
+			new FindInspectionStandardDataByIdQuery(surveyId),
 		);
 	}
 }

@@ -228,6 +228,206 @@ export class Nen2767MigrateDecompositionRepository {
 		return !!count;
 	}
 
+	private async getElementIdForPermanentId(elementId: string, surveyId: string): Promise<string | null> {
+		const element = await this.prisma.elements.findFirst({
+			where: {
+				permanentId: elementId,
+				surveyId,
+			},
+		});
+		return element?.id ?? null;
+	}
+
+	private async getUnitIdForPermanentId(unitId: string, surveyId: string): Promise<string | null> {
+		const unit = await this.prisma.units.findFirst({
+			where: {
+				permanentId: unitId,
+				surveyId,
+			},
+		});
+		return unit?.id ?? null;
+	}
+
+	private async getManifestationIdForPermanentId(manifestationId: string, surveyId: string): Promise<string | null> {
+		const manifestation = await this.prisma.manifestations.findFirst({
+			where: {
+				permanentId: manifestationId,
+				surveyId,
+			},
+		});
+		return manifestation?.id ?? null;
+	}
+
+	private async reAttachEntitiesOfType(
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore There appears no way to meaningfully type a generic with one or other prisma model
+		prismaEntity: any,
+		surveyId: string,
+		options: {
+			elements?: boolean | [boolean, string];
+			units?: boolean | [boolean, string];
+			manifestations?: boolean | [boolean, string];
+		},
+	) {
+		const entities = await prismaEntity.findMany({
+			where: {
+				surveyId,
+			},
+		});
+
+		const elements = Array.isArray(options?.elements) ? options?.elements[0] : options?.elements;
+		const units = Array.isArray(options?.units) ? options?.units[0] : options?.units;
+		const manifestations = Array.isArray(options?.manifestations)
+			? options?.manifestations[0]
+			: options?.manifestations;
+
+		await Promise.all(
+			entities.map(async (entity) => {
+				if (elements === true) {
+					const newElementId = await this.getElementIdForPermanentId(entity.elementId, surveyId);
+					if (entity.elementId && !newElementId) {
+						throw new Error(
+							`Failed to find element matching surveyId "${surveyId}" and elementId "${entity.elementId}"`,
+						);
+					}
+
+					if (newElementId) {
+						await prismaEntity.update({
+							data: {
+								// Foreign key relations are not consistently named in the prisma schema
+								[options?.elements?.[1] ?? 'elements']: {
+									connect: {
+										id: newElementId,
+									},
+								},
+							},
+							where: {
+								id: entity.id,
+							},
+						});
+					}
+				}
+
+				if (units === true) {
+					const newUnitId = await this.getUnitIdForPermanentId(entity.unitId, surveyId);
+
+					if (entity.unitId && !newUnitId) {
+						throw new Error(
+							`Failed to find unit matching surveyId "${surveyId}" and unitId "${entity.unitId}"`,
+						);
+					}
+
+					if (newUnitId) {
+						await prismaEntity.update({
+							data: {
+								// Foreign key relations are not consistently named in the prisma schema
+								[options?.units?.[1] ?? 'units']: {
+									connect: {
+										id: newUnitId,
+									},
+								},
+							},
+							where: {
+								id: entity.id,
+							},
+						});
+					}
+				}
+
+				if (manifestations === true) {
+					const newManifestationId = await this.getManifestationIdForPermanentId(
+						entity.manifestationId,
+						surveyId,
+					);
+
+					if (entity.manifestationId && !newManifestationId) {
+						throw new Error(
+							`Failed to find manifestation matching surveyId "${surveyId}" and manifestationId "${entity.manifestationId}"`,
+						);
+					}
+
+					if (newManifestationId) {
+						await prismaEntity.update({
+							data: {
+								// Foreign key relations are not consistently named in the prisma schema
+								[options?.manifestations?.[1] ?? 'manifestations']: {
+									connect: {
+										id: newManifestationId,
+									},
+								},
+							},
+							where: {
+								id: entity.id,
+							},
+						});
+					}
+				}
+			}),
+		);
+	}
+
+	private async reAttachRelatedEntities(surveyId: string) {
+		await this.reAttachEntitiesOfType(this.prisma.assets, surveyId, {
+			elements: true,
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.utProjects, surveyId, {
+			elements: true,
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.failureModes, surveyId, {
+			elements: true,
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.observationPoints, surveyId, {
+			elements: [true, 'elements_elementsToobservationPoints_elementId'],
+			units: [true, 'units_observationPoints_unitIdTounits'],
+			manifestations: [true, 'manifestations_manifestationsToobservationPoints_manifestationId'],
+		});
+		await this.reAttachEntitiesOfType(this.prisma.elementRemarks, surveyId, {
+			elements: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.surveyElements, surveyId, {
+			elements: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.conditions, surveyId, {
+			elements: [true, 'elements_conditions_elementIdToelements'],
+			units: [true, 'units_conditions_unitIdTounits'],
+			manifestations: [true, 'manifestations_conditions_manifestationIdTomanifestations'],
+		});
+		await this.reAttachEntitiesOfType(this.prisma.derivedConditionScores, surveyId, {
+			elements: true,
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.unitRemarks, surveyId, {
+			units: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.fmecaFurtherInvestigations, surveyId, {
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.surveyUnits, surveyId, {
+			units: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.inspectionPlans, surveyId, {
+			units: true,
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.inspectionFindings, surveyId, {
+			units: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.surveyManifestations, surveyId, {
+			manifestations: true,
+		});
+		await this.reAttachEntitiesOfType(this.prisma.manifestationRemarks, surveyId, {
+			manifestations: true,
+		});
+	}
+
 	async migrateNen2767Decomposition(objectId: string): Promise<Nen2767MigrateDecompositionReturnType> {
 		const errors = [];
 		const log = [];
@@ -286,7 +486,11 @@ export class Nen2767MigrateDecompositionRepository {
 						// Newer surveys get a clone of the decomposition
 						await this.cloneDecompositionFromPreviousSurvey(surveyId, previousSurveyId);
 						log.push(`Cloned decomposition for "${objectCode}" to survey with id "${surveyId}"`);
+
+						// Re-attach related entities to new element/unit/manifestation id's
+						await this.reAttachRelatedEntities(surveyId);
 					}
+
 					successSurveyIds.push(surveyId);
 				} catch (err) {
 					failedSurveyIds.push(surveyId);

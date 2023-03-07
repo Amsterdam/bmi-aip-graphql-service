@@ -13,4 +13,13 @@ export class CyclicMeasureService {
 			CyclicMeasureFactory.CreateCyclicMeasure(cyclicMeasure),
 		);
 	}
+
+	async deleteCyclicMeasuresForUnit(unitId: string): Promise<boolean> {
+		const measures = await this.cyclicMeasureRepo.findCyclicMeasuresByUnit(unitId);
+		measures.map(async (cyclicMeasure) => {
+			await this.cyclicMeasureRepo.deleteCyclicMeasure(cyclicMeasure.id);
+		});
+
+		return true;
+	}
 }

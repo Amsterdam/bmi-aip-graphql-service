@@ -152,4 +152,35 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 
 		return cyclicMeasures.length > 0;
 	}
+
+	async unitHasMeasures(unitId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				unitId: unitId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
+	}
+
+	async findCyclicMeasuresByUnit(unitId: string): Promise<CyclicMeasure[]> {
+		return this.prisma.cyclicMeasures.findMany({
+			where: {
+				unitId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	async manifestationHasMeasures(manifestationId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				manifestationId: manifestationId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
+	}
 }

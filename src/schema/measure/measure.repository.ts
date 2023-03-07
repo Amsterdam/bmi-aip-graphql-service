@@ -83,6 +83,15 @@ export class MeasureRepository implements IMeasureRepository {
 		});
 	}
 
+	async findMeasuresByUnit(unitId: string): Promise<Measure[]> {
+		return this.prisma.measures.findMany({
+			where: {
+				unitId,
+				deleted_at: null,
+			},
+		});
+	}
+
 	async updateMeasure({
 		id,
 		planYear,
@@ -158,5 +167,27 @@ export class MeasureRepository implements IMeasureRepository {
 		});
 
 		return measures.length > 0;
+	}
+
+	async unitHasMeasures(unitId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				unitId: unitId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
+	}
+
+	async manifestationHasMeasures(manifestationId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				manifestationId: manifestationId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
 	}
 }

@@ -82,5 +82,6 @@ registerEnumType(CyclicMeasureTypes, {
 		DefaultMaintenanceMeasureRepository,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, DecompositionModule],
+	exports: [MeasureService, CyclicMeasureService],
 })
 export class MeasureModule {}

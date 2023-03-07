@@ -45,19 +45,19 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 		if (insertData.remarks) {
 			await this.prisma.surveys.update({
 				where: {
-					id: existingRecord.surveyId,
+					id: surveyId,
 				},
 				data: {
-					inspectionStandardData: JSON.parse(JSON.stringify(remarks)),
+					inspectionStandardData: { remarks: remarks },
 				},
 			});
 		} else {
 			await this.prisma.surveys.update({
 				where: {
-					id: existingRecord.surveyId,
+					id: surveyId,
 				},
 				data: {
-					inspectionStandardData: JSON.parse(''),
+					inspectionStandardData: {},
 				},
 			});
 		}

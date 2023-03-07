@@ -17,6 +17,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		create: jest.fn().mockResolvedValue(domainMeasure),
 		findMany: jest.fn().mockResolvedValue([domainMeasure]),
 		update: jest.fn().mockResolvedValue(domainMeasure),
+		delete: jest.fn().mockResolvedValue(deletedMeasure),
 	},
 	...(<any>{}),
 };

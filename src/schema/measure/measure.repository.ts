@@ -148,8 +148,13 @@ export class MeasureRepository implements IMeasureRepository {
 	}
 
 	async deleteMeasure(identifier: string): Promise<Measure> {
-		return this.prisma.measures.delete({
+		const data: Prisma.measuresUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.measures.update({
 			where: { id: identifier },
+			data,
 		});
 	}
 

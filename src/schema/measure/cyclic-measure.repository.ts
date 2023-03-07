@@ -132,8 +132,13 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 	}
 
 	async deleteCyclicMeasure(identifier: string): Promise<CyclicMeasure> {
-		return this.prisma.cyclicMeasures.delete({
+		const data: Prisma.cyclicMeasuresUpdateInput = {
+			deleted_at: new Date(),
+		};
+
+		return this.prisma.cyclicMeasures.update({
 			where: { id: identifier },
+			data,
 		});
 	}
 

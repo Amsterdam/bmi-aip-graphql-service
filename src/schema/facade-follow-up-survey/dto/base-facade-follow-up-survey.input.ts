@@ -28,6 +28,7 @@ export class BaseFacadeFollowUpSurveyInput {
 	verifiedDate?: Date;
 
 	@IsOptional()
-	@Field({ nullable: true })
-	remarks?: string;
+	@MaxLength(255)
+	@Field((type) => String, { nullable: true })
+	remarks?: any;
 }

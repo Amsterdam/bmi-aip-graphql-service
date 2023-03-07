@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-import { CreateFacadeFollowUpSurveyInput } from '../dto/create-facade-follow-up-survey.input';
-import { UpdateFacadeFollowUpSurveyInput } from '../dto/update-facade-follow-up-survey.input';
+import { SaveFacadeFollowUpSurveyInput } from '../dto/save-facade-follow-up-survey.input';
 
 const facadeFollowUpSurvey = Prisma.validator<Prisma.facadeFollowUpSurveysArgs>()({
 	select: {
@@ -21,7 +20,7 @@ export type FacadeFollowUpSurvey = Prisma.facadeFollowUpSurveysGetPayload<typeof
 
 export interface IFacadeFollowUpSurveyRepository {
 	getFacadeFollowUpSurvey(surveyId: string): Promise<FacadeFollowUpSurvey>;
-	createFacadeFollowUpSurvey(input: CreateFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey>;
-	updateFacadeFollowUpSurvey(input: UpdateFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey>;
+	createFacadeFollowUpSurvey(input: SaveFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey>;
+	updateFacadeFollowUpSurvey(input: SaveFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey>;
 	deleteFacadeFollowUpSurvey(identifier: string): Promise<FacadeFollowUpSurvey>;
 }

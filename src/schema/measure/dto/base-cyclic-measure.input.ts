@@ -38,14 +38,12 @@ export class BaseCyclicMeasureInput {
 	@Field({ nullable: true })
 	public quantityUnitOfMeasurement?: string;
 
-	@Field()
-	@IsUUID()
-	public defaultMaintenanceMeasureId?: string;
-
+	@IsOptional()
 	@Field()
 	@IsUUID()
 	public failureModeId?: string;
 
+	@IsOptional()
 	@Field()
 	@IsUUID()
 	public defectId?: string;

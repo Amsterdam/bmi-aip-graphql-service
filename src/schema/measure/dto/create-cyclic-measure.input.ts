@@ -17,4 +17,8 @@ export class CreateCyclicMeasureInput extends BaseCyclicMeasureInput {
 	@IsUUID()
 	@IsOptional()
 	public manifestationId?: string;
+
+	@Field()
+	@IsUUID()
+	public defaultMaintenanceMeasureId: string;
 }

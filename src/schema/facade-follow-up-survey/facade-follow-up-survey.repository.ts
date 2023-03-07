@@ -7,12 +7,71 @@ import {
 	FacadeFollowUpSurvey,
 	IFacadeFollowUpSurveyRepository,
 } from './types/facade-follow-up-survey.repository.interface';
-import { CreateFacadeFollowUpSurveyInput } from './dto/create-facade-follow-up-survey.input';
-import { UpdateFacadeFollowUpSurveyInput } from './dto/update-facade-follow-up-survey.input';
+import { SaveFacadeFollowUpSurveyInput } from './dto/save-facade-follow-up-survey.input';
 
 @Injectable()
 export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepository {
 	public constructor(private readonly prisma: PrismaService) {}
+
+	// combine create and save
+	async saveFacadeFollowUpSurvey({
+		surveyId,
+		preparedAuthor,
+		preparedDate,
+		verifiedAuthor,
+		verifiedDate,
+		remarks,
+	}: SaveFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
+		// Find existing record
+		const existingRecord = await this.prisma.facadeFollowUpSurveys.findFirst({
+			where: {
+				surveyId,
+			},
+		});
+
+		const insertData = {
+			surveyId,
+			preparedAuthor,
+			preparedDate,
+			verifiedAuthor,
+			verifiedDate,
+			remarks,
+			created_at: null,
+			updated_at: null,
+			deleted_at: null,
+		};
+
+		// Update inspectionStandardData field in survey table
+		if (insertData.remarks) {
+			await this.prisma.surveys.update({
+				where: {
+					id: existingRecord.surveyId,
+				},
+				data: {
+					inspectionStandardData: JSON.parse(JSON.stringify(remarks)),
+				},
+			});
+		} else {
+			await this.prisma.surveys.update({
+				where: {
+					id: existingRecord.surveyId,
+				},
+				data: {
+					inspectionStandardData: JSON.parse(''),
+				},
+			});
+		}
+
+		// Update or Create facade follow up survey
+		if (existingRecord) {
+			return this.updateFacadeFollowUpSurvey(insertData);
+		} else {
+			// Workaround to make sure created reachSegments are included in response
+			// const updated = await this.updateFacadeFollowUpSurvey(insertData);
+
+			return this.createFacadeFollowUpSurvey(insertData);
+		}
+	}
 
 	async createFacadeFollowUpSurvey({
 		surveyId,
@@ -20,7 +79,7 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 		preparedDate,
 		verifiedAuthor,
 		verifiedDate,
-	}: CreateFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
+	}: SaveFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
 		return this.prisma.facadeFollowUpSurveys.create({
 			data: {
 				id: newId(),
@@ -43,7 +102,7 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 		preparedDate,
 		verifiedAuthor,
 		verifiedDate,
-	}: UpdateFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
+	}: SaveFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
 		return this.prisma.facadeFollowUpSurveys.update({
 			where: {
 				surveyId,
@@ -58,6 +117,17 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 	}
 
 	async deleteFacadeFollowUpSurvey(surveyId: string): Promise<FacadeFollowUpSurvey> {
+		//Remove inspectionStandardData field in survey table
+		await this.prisma.surveys.update({
+			where: {
+				id: surveyId,
+			},
+			data: {
+				inspectionStandardData: JSON.parse(''),
+			},
+		});
+
+		// Remove facade follow up survey
 		return this.prisma.facadeFollowUpSurveys.delete({
 			where: { surveyId: surveyId },
 		});

@@ -33,25 +33,11 @@ export class FacadeFollowUpSurveyResolver {
 
 	@Mutation(() => FacadeFollowUpSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async createFacadeFollowUpSurvey(
-		@Args('createFacadeFollowUpSurvey') input: CreateFacadeFollowUpSurveyInput,
+	public async saveFacadeFollowUpSurvey(
+		@Args('saveFacadeFollowUpSurvey') input: SaveFacadeFollowUpSurveyInput,
 	): Promise<FacadeFollowUpSurvey> {
 		const domainFacadeFollowUpSurvey: DomainFacadeFollowUpSurvey =
-			await this.commandBus.execute<CreateFacadeFollowUpSurveyCommand>(
-				new CreateFacadeFollowUpSurveyCommand(input),
-			);
-		return FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
-	}
-
-	@Mutation(() => FacadeFollowUpSurvey)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async updateFacadeFollowUpSurvey(
-		@Args('updateFacadeFollowUpSurvey') input: UpdateFacadeFollowUpSurveyInput,
-	): Promise<FacadeFollowUpSurvey> {
-		const domainFacadeFollowUpSurvey: DomainFacadeFollowUpSurvey =
-			await this.commandBus.execute<UpdateFacadeFollowUpSurveyCommand>(
-				new UpdateFacadeFollowUpSurveyCommand(input),
-			);
+			await this.commandBus.execute<SaveFacadeFollowUpSurveyCommand>(new SaveFacadeFollowUpSurveyCommand(input));
 		return FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
 	}
 

@@ -14,7 +14,7 @@ export class CyclicMeasureService {
 		);
 	}
 
-	async deleteCylicMeasuresForUnit(unitId: string): Promise<boolean> {
+	async deleteCyclicMeasuresForUnit(unitId: string): Promise<boolean> {
 		const measures = await this.cyclicMeasureRepo.findCyclicMeasuresByUnit(unitId);
 		measures.map(async (cyclicMeasure) => {
 			await this.cyclicMeasureRepo.deleteCyclicMeasure(cyclicMeasure.id);

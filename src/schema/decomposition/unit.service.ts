@@ -28,7 +28,7 @@ export class UnitService {
 		}
 
 		await this.measuresService.deleteMeasuresForUnit(unitId);
-		await this.cyclicMeasuresService.deleteCylicMeasuresForUnit(unitId);
+		await this.cyclicMeasuresService.deleteCyclicMeasuresForUnit(unitId);
 
 		return UnitFactory.CreateUnit(await this.unitRepo.deleteUnit(unitId));
 	}

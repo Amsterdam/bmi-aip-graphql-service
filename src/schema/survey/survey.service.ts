@@ -30,6 +30,12 @@ export class SurveyService {
 	}
 
 	public async findInspectionStandardDataById(id: string): Promise<JSON> {
-		return JSON.parse(JSON.stringify((await this.surveyRepo.getSurveyById(id)).inspectionStandardData));
+		const survey = await this.surveyRepo.getSurveyById(id);
+
+		if (!survey) {
+			throw new NotFoundException(`Unable to find survey with id: ${id}`);
+		}
+
+		return JSON.parse(JSON.stringify(survey.inspectionStandardData));
 	}
 }

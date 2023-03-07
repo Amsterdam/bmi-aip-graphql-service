@@ -1,4 +1,5 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType({ description: 'facadeFollowUpSurvey' })
 export class FacadeFollowUpSurvey {
@@ -20,8 +21,8 @@ export class FacadeFollowUpSurvey {
 	@Field((type) => Date, { nullable: true })
 	verifiedDate?: Date;
 
-	@Field((type) => String, { nullable: true })
-	remarks?: string;
+	@Field((type) => GraphQLJSON, { nullable: true })
+	remarks?: JSON;
 
 	@Field((type) => String, { nullable: true })
 	created_at: string;

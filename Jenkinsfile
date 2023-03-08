@@ -145,7 +145,6 @@ pipeline {
         sh 'docker rm service-base || true'
         sh "docker rmi ${DOCKER_IMAGE_URL}:${BUILD_NUMBER} || true"
         sh 'docker network rm $(docker network ls -f name="bmi_default" -q) || true'
-        sh 'docker network rm 059ed89fedd6d1ec842a1e4a0082b2a52589cdde95c9702779cefa4b5681aeed || true'
       }
     }
   }

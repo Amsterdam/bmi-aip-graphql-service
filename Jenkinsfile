@@ -138,9 +138,13 @@ pipeline {
       script {
         // delete original image built on the build server
         sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:base) || true'
+        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:build) || true'
+        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:latest) || true'
         sh 'docker rm bmi-service-base-1 || true'
+        sh 'docker rm service-base || true'
         sh "docker rmi ${DOCKER_IMAGE_URL}:${BUILD_NUMBER} || true"
         sh 'docker network rm $(docker network ls -f name="bmi_default" -q) || true'
+        sh 'docker network rm 059ed89fedd6d1ec842a1e4a0082b2a52589cdde95c9702779cefa4b5681aeed || true'
         sh "bin/run-build-container rm -rf node_modules"
       }
     }

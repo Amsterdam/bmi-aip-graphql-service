@@ -64,17 +64,21 @@ export class UnitRepository implements IUnitRepository {
 	}
 
 	public async getUnitById(id: string): Promise<Unit> {
-		return this.prisma.units.findFirst({
+		const result = await this.prisma.units.findFirst({
 			where: {
 				id,
 				deleted_at: null,
 			},
 		});
+		return result;
 	}
 
 	public async getUnitsBySurveyId(surveyId: string): Promise<Unit[]> {
 		return this.prisma.units.findMany({
-			where: { surveyId },
+			where: {
+				surveyId,
+				deleted_at: null,
+			},
 		});
 	}
 

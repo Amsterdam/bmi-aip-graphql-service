@@ -145,6 +145,7 @@ pipeline {
         sh 'docker rm service-base || true'
         sh "docker rmi ${DOCKER_IMAGE_URL}:${BUILD_NUMBER} || true"
         sh 'docker network rm $(docker network ls -f name="bmi_default" -q) || true'
+        sh 'docker-compose -p bmi down --remove-orphans || true'
       }
     }
   }

@@ -137,7 +137,7 @@ pipeline {
     always {
       script {
         // delete original image built on the build server
-        sh 'docker rm service-base || true'
+        sh 'docker rm bmi-service-base-1 || true'
         sh "docker rmi ${DOCKER_IMAGE_URL}:${BUILD_NUMBER} || true"
         sh "bin/run-build-container rm -rf node_modules"
       }

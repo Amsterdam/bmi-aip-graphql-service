@@ -66,9 +66,6 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 		if (existingRecord) {
 			return this.updateFacadeFollowUpSurvey(insertData);
 		} else {
-			// Workaround to make sure created reachSegments are included in response
-			// const updated = await this.updateFacadeFollowUpSurvey(insertData);
-
 			return this.createFacadeFollowUpSurvey(insertData);
 		}
 	}

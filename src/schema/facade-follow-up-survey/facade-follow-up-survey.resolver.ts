@@ -17,11 +17,7 @@ import { GetFacadeFollowUpSurveyBySurveyIdQuery } from './queries/get-facade-fol
 @Resolver((of) => FacadeFollowUpSurvey)
 @Resource(FacadeFollowUpSurvey.name)
 export class FacadeFollowUpSurveyResolver {
-	constructor(
-		// private facadeFollowUpSurveyService: FacadeFollowUpSurveyService,
-		private commandBus: CommandBus,
-		private queryBus: QueryBus,
-	) {}
+	constructor(private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Query(() => FacadeFollowUpSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })

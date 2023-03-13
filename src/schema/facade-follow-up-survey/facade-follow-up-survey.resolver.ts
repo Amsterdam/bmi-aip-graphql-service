@@ -13,7 +13,6 @@ import { FacadeFollowUpSurvey } from './models/facade-follow-up-survey.model';
 import { FacadeFollowUpSurveyFactory } from './facade-follow-up-survey.factory';
 import { UpdateFacadeFollowUpSurveyInput } from './dto/update-facade-follow-up-survey.input';
 import { UpdateFacadeFollowUpSurveyCommand } from './commands/update-facade-follow-up-survey.command';
-// import { DeleteFacadeFollowUpSurveyCommand } from './commands/delete-facade-follow-up-survey.command';
 import { FacadeFollowUpSurvey as DomainFacadeFollowUpSurvey } from './types/facade-follow-up-survey.repository.interface';
 
 @Resolver((of) => FacadeFollowUpSurvey)

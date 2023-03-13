@@ -13,6 +13,10 @@ import { CreateSurveyHandler } from './commands/create-survey.handler';
 import { GetSurveyByIdHandler } from './queries/get-survey-by-id.handler';
 import { GetSurveysByObjectIdHandler } from './queries/get-surveys-by-object-id.handler';
 import { FindInspectionStandardDataByIdHandler } from './queries/find-inspection-standard-data-by-id.handler';
+import { FindVerifiedDateByIdHandler } from './queries/find-verified-date-by-id.handler';
+import { FindVerifiedAuthorByIdHandler } from './queries/find-verified-author-by-id.handler';
+import { FindPreparedDateByIdHandler } from './queries/find-prepared-date-by-id.handler';
+import { FindPreparedAuthorByIdHandler } from './queries/find-prepared-author-by-id.handler';
 
 @Module({
 	providers: [
@@ -25,6 +29,10 @@ import { FindInspectionStandardDataByIdHandler } from './queries/find-inspection
 		GetSurveyByIdHandler,
 		GetSurveysByObjectIdHandler,
 		FindInspectionStandardDataByIdHandler,
+		FindPreparedAuthorByIdHandler,
+		FindPreparedDateByIdHandler,
+		FindVerifiedAuthorByIdHandler,
+		FindVerifiedDateByIdHandler,
 	],
 	exports: [SurveyService],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => SurveyModule)],

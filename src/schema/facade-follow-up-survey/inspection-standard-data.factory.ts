@@ -7,7 +7,7 @@ export class InspectionStandardDataFactory {
 		const inspectionStandardDataModel = new InspectionStandardData();
 		const parsedinspectionStandardData = inspectionStandardData as InspectionStandardData;
 
-		inspectionStandardDataModel.remarks = parsedinspectionStandardData?.remarks ?? '';
+		inspectionStandardDataModel.remarks = parsedinspectionStandardData?.remarks;
 
 		return inspectionStandardDataModel;
 	}

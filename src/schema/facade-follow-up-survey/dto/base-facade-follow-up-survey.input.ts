@@ -1,34 +1,35 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsDate, IsOptional, MaxLength, IsUUID } from 'class-validator';
 
+import { InspectionStandardDataInput } from './inspection-standard-data.input';
+
 @InputType()
 export class BaseFacadeFollowUpSurveyInput {
 	@Field((type) => String)
 	@IsUUID()
-	surveyId: string;
+	public surveyId: string;
 
 	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
-	preparedAuthor?: string;
+	public preparedAuthor?: string;
 
 	@IsOptional()
 	@IsDate()
 	@Field({ nullable: true })
-	preparedDate?: Date;
+	public preparedDate?: Date;
 
 	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
-	verifiedAuthor?: string;
+	public verifiedAuthor?: string;
 
 	@IsOptional()
 	@IsDate()
 	@Field({ nullable: true })
-	verifiedDate?: Date;
+	public verifiedDate?: Date;
 
 	@IsOptional()
-	@MaxLength(255)
-	@Field((type) => String, { nullable: true })
-	remarks?: any;
+	@Field((type) => InspectionStandardDataInput, { nullable: true })
+	public inspectionStandardData?: InspectionStandardDataInput;
 }

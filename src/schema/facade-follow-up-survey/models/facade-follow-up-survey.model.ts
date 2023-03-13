@@ -1,13 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import GraphQLJSON from 'graphql-type-json';
+
+// import GraphQLJSON from 'graphql-type-json';
+import { InspectionStandardData } from './inspection-standard-data.model';
 
 @ObjectType({ description: 'facadeFollowUpSurvey' })
 export class FacadeFollowUpSurvey {
 	@Field((type) => String)
 	id: string;
-
-	@Field((type) => String)
-	surveyId: string;
 
 	@Field((type) => String, { nullable: true })
 	preparedAuthor?: string;
@@ -21,15 +20,6 @@ export class FacadeFollowUpSurvey {
 	@Field((type) => Date, { nullable: true })
 	verifiedDate?: Date;
 
-	@Field((type) => GraphQLJSON, { nullable: true })
-	remarks?: JSON;
-
-	@Field((type) => String, { nullable: true })
-	created_at: string;
-
-	@Field((type) => String, { nullable: true })
-	updated_at: string;
-
-	@Field((type) => String, { nullable: true })
-	deleted_at: string;
+	@Field((type) => InspectionStandardData, { nullable: true })
+	inspectionStandardData?: InspectionStandardData;
 }

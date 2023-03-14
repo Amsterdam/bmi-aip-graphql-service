@@ -271,6 +271,8 @@ export class MigrateMaintenanceMeasuresRepository {
 						id: newId(),
 						unitId,
 						manifestationId,
+						defectId: null,
+						failureModeId: null,
 					},
 				});
 			});

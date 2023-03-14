@@ -7,6 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model admin_event_entity {
+  id               String  @id(map: "constraint_admin_event_entity") @db.VarChar(36)
+  admin_event_time BigInt?
+  realm_id         String? @db.VarChar(255)
+  operation_type   String? @db.VarChar(255)
+  auth_realm_id    String? @db.VarChar(255)
+  auth_client_id   String? @db.VarChar(255)
+  auth_user_id     String? @db.VarChar(255)
+  ip_address       String? @db.VarChar(255)
+  resource_path    String? @db.VarChar(2550)
+  representation   String?
+  error            String? @db.VarChar(255)
+  resource_type    String? @db.VarChar(64)
+}
+
+model arkSurveyReachSegments {
+  id                 String     @id @unique(map: "arksurveyreachsegments_id_unique") @db.Uuid
+  name               String     @db.VarChar(255)
+  arkSurveyId        String     @db.Uuid
+  reachSegmentLength Decimal?   @db.Decimal(8, 2)
+  riskScore          Int?
+  riskScoreDigit     Decimal?   @db.Decimal(3, 1)
+  failureModeScore   Decimal?   @db.Decimal(3, 1)
+  consequenceScore   Decimal?   @db.Decimal(3, 1)
+  sortNumber         Int?       @db.SmallInt
+  created_at         DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime   @default(now()) @db.Timestamptz(6)
+  arkSurveys         arkSurveys @relation(fields: [arkSurveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveyreachsegments_arksurveyid_foreign")
+}
+
+model arkSurveys {
+  id                     String                    @id(map: "arkSurveyGeographyData_pkey") @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
+  surveyId               String                    @unique(map: "arksurveygeographydata_surveyid_unique") @db.Uuid
+  arkGeographyStart      Unsupported("geography")?
+  arkGeographyEnd        Unsupported("geography")?
+  arkGeographyRDStart    Json?
+  arkGeographyRDEnd      Json?
+  created_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  deleted_at             DateTime?                 @db.Timestamptz(6)
+  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
+  arkSurveyReachSegments arkSurveyReachSegments[]
+}
+
 model assetRemarks {
   id         String    @id @unique(map: "assetremarks_id_unique") @db.Uuid
   text       String
@@ -83,6 +127,16 @@ model assets {
   @@index([unitId])
 }
 
+model associated_policy {
+  policy_id                                                                             String                 @db.VarChar(36)
+  associated_policy_id                                                                  String                 @db.VarChar(36)
+  resource_server_policy_associated_policy_associated_policy_idToresource_server_policy resource_server_policy @relation("associated_policy_associated_policy_idToresource_server_policy", fields: [associated_policy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_frsr5s213xcx4wnkog82ssrfy")
+  resource_server_policy_associated_policy_policy_idToresource_server_policy            resource_server_policy @relation("associated_policy_policy_idToresource_server_policy", fields: [policy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_frsrpas14xcx4wnkog82ssrfy")
+
+  @@id([policy_id, associated_policy_id], map: "constraint_farsrpap")
+  @@index([associated_policy_id], map: "idx_assoc_pol_assoc_pol_id")
+}
+
 model auditEvents {
   id                String    @id @unique(map: "auditevents_id_unique") @db.Uuid
   userId            String    @db.Uuid
@@ -98,6 +152,55 @@ model auditEvents {
   companies         companies @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_companyid_foreign")
   objects           objects?  @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_objectid_foreign")
   surveys           surveys?  @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auditevents_surveyid_foreign")
+}
+
+model authentication_execution {
+  id                  String               @id(map: "constraint_auth_exec_pk") @db.VarChar(36)
+  alias               String?              @db.VarChar(255)
+  authenticator       String?              @db.VarChar(36)
+  realm_id            String?              @db.VarChar(36)
+  flow_id             String?              @db.VarChar(36)
+  requirement         Int?
+  priority            Int?
+  authenticator_flow  Boolean              @default(false)
+  auth_flow_id        String?              @db.VarChar(36)
+  auth_config         String?              @db.VarChar(36)
+  authentication_flow authentication_flow? @relation(fields: [flow_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_exec_flow")
+  realm               realm?               @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_exec_realm")
+
+  @@index([flow_id], map: "idx_auth_exec_flow")
+  @@index([realm_id, flow_id], map: "idx_auth_exec_realm_flow")
+}
+
+model authentication_flow {
+  id                       String                     @id(map: "constraint_auth_flow_pk") @db.VarChar(36)
+  alias                    String?                    @db.VarChar(255)
+  description              String?                    @db.VarChar(255)
+  realm_id                 String?                    @db.VarChar(36)
+  provider_id              String                     @default("basic-flow") @db.VarChar(36)
+  top_level                Boolean                    @default(false)
+  built_in                 Boolean                    @default(false)
+  realm                    realm?                     @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_flow_realm")
+  authentication_execution authentication_execution[]
+
+  @@index([realm_id], map: "idx_auth_flow_realm")
+}
+
+model authenticator_config {
+  id       String  @id(map: "constraint_auth_pk") @db.VarChar(36)
+  alias    String? @db.VarChar(255)
+  realm_id String? @db.VarChar(36)
+  realm    realm?  @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_realm")
+
+  @@index([realm_id], map: "idx_auth_config_realm")
+}
+
+model authenticator_config_entry {
+  authenticator_id String  @db.VarChar(36)
+  value            String?
+  name             String  @db.VarChar(255)
+
+  @@id([authenticator_id, name], map: "constraint_auth_cfg_pk")
 }
 
 model batchDocuments {
@@ -162,6 +265,203 @@ model batchObjects {
 
   @@index([batchId])
   @@index([objectId])
+}
+
+model broker_link {
+  identity_provider   String  @db.VarChar(255)
+  storage_provider_id String? @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  broker_user_id      String? @db.VarChar(255)
+  broker_username     String? @db.VarChar(255)
+  token               String?
+  user_id             String  @db.VarChar(255)
+
+  @@id([identity_provider, user_id], map: "constr_broker_link_pk")
+}
+
+model client {
+  id                           String                      @id(map: "constraint_7") @db.VarChar(36)
+  enabled                      Boolean                     @default(false)
+  full_scope_allowed           Boolean                     @default(false)
+  client_id                    String?                     @db.VarChar(255)
+  not_before                   Int?
+  public_client                Boolean                     @default(false)
+  secret                       String?                     @db.VarChar(255)
+  base_url                     String?                     @db.VarChar(255)
+  bearer_only                  Boolean                     @default(false)
+  management_url               String?                     @db.VarChar(255)
+  surrogate_auth_required      Boolean                     @default(false)
+  realm_id                     String?                     @db.VarChar(36)
+  protocol                     String?                     @db.VarChar(255)
+  node_rereg_timeout           Int?                        @default(0)
+  frontchannel_logout          Boolean                     @default(false)
+  consent_required             Boolean                     @default(false)
+  name                         String?                     @db.VarChar(255)
+  service_accounts_enabled     Boolean                     @default(false)
+  client_authenticator_type    String?                     @db.VarChar(255)
+  root_url                     String?                     @db.VarChar(255)
+  description                  String?                     @db.VarChar(255)
+  registration_token           String?                     @db.VarChar(255)
+  standard_flow_enabled        Boolean                     @default(true)
+  implicit_flow_enabled        Boolean                     @default(false)
+  direct_access_grants_enabled Boolean                     @default(false)
+  always_display_in_console    Boolean                     @default(false)
+  client_attributes            client_attributes[]
+  client_node_registrations    client_node_registrations[]
+  protocol_mapper              protocol_mapper[]
+  redirect_uris                redirect_uris[]
+  scope_mapping                scope_mapping[]
+  web_origins                  web_origins[]
+
+  @@unique([realm_id, client_id], map: "uk_b71cjlbenv945rb6gcon438at")
+  @@index([client_id], map: "idx_client_id")
+}
+
+model client_attributes {
+  client_id String  @db.VarChar(36)
+  value     String? @db.VarChar(4000)
+  name      String  @db.VarChar(255)
+  client    client  @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk3c47c64beacca966")
+
+  @@id([client_id, name], map: "constraint_3c")
+  @@index([name, value], map: "idx_client_att_by_name_value")
+}
+
+model client_auth_flow_bindings {
+  client_id    String  @db.VarChar(36)
+  flow_id      String? @db.VarChar(36)
+  binding_name String  @db.VarChar(255)
+
+  @@id([client_id, binding_name], map: "c_cli_flow_bind")
+}
+
+model client_initial_access {
+  id              String @id(map: "cnstr_client_init_acc_pk") @db.VarChar(36)
+  realm_id        String @db.VarChar(36)
+  timestamp       Int?
+  expiration      Int?
+  count           Int?
+  remaining_count Int?
+  realm           realm  @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_client_init_acc_realm")
+
+  @@index([realm_id], map: "idx_client_init_acc_realm")
+}
+
+model client_node_registrations {
+  client_id String @db.VarChar(36)
+  value     Int?
+  name      String @db.VarChar(255)
+  client    client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk4129723ba992f594")
+
+  @@id([client_id, name], map: "constraint_84")
+}
+
+model client_scope {
+  id                        String                      @id(map: "pk_cli_template") @db.VarChar(36)
+  name                      String?                     @db.VarChar(255)
+  realm_id                  String?                     @db.VarChar(36)
+  description               String?                     @db.VarChar(255)
+  protocol                  String?                     @db.VarChar(255)
+  client_scope_attributes   client_scope_attributes[]
+  client_scope_role_mapping client_scope_role_mapping[]
+  protocol_mapper           protocol_mapper[]
+
+  @@unique([realm_id, name], map: "uk_cli_scope")
+  @@index([realm_id], map: "idx_realm_clscope")
+}
+
+model client_scope_attributes {
+  scope_id     String       @db.VarChar(36)
+  value        String?      @db.VarChar(2048)
+  name         String       @db.VarChar(255)
+  client_scope client_scope @relation(fields: [scope_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_scope_attr_scope")
+
+  @@id([scope_id, name], map: "pk_cl_tmpl_attr")
+  @@index([scope_id], map: "idx_clscope_attrs")
+}
+
+model client_scope_client {
+  client_id     String  @db.VarChar(255)
+  scope_id      String  @db.VarChar(255)
+  default_scope Boolean @default(false)
+
+  @@id([client_id, scope_id], map: "c_cli_scope_bind")
+  @@index([scope_id], map: "idx_cl_clscope")
+  @@index([client_id], map: "idx_clscope_cl")
+}
+
+model client_scope_role_mapping {
+  scope_id     String       @db.VarChar(36)
+  role_id      String       @db.VarChar(36)
+  client_scope client_scope @relation(fields: [scope_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_scope_rm_scope")
+
+  @@id([scope_id, role_id], map: "pk_template_scope")
+  @@index([scope_id], map: "idx_clscope_role")
+  @@index([role_id], map: "idx_role_clscope")
+}
+
+model client_session {
+  id                         String                       @id(map: "constraint_8") @db.VarChar(36)
+  client_id                  String?                      @db.VarChar(36)
+  redirect_uri               String?                      @db.VarChar(255)
+  state                      String?                      @db.VarChar(255)
+  timestamp                  Int?
+  session_id                 String?                      @db.VarChar(36)
+  auth_method                String?                      @db.VarChar(255)
+  realm_id                   String?                      @db.VarChar(255)
+  auth_user_id               String?                      @db.VarChar(36)
+  current_action             String?                      @db.VarChar(36)
+  user_session               user_session?                @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_b4ao2vcvat6ukau74wbwtfqo1")
+  client_session_auth_status client_session_auth_status[]
+  client_session_note        client_session_note[]
+  client_session_prot_mapper client_session_prot_mapper[]
+  client_session_role        client_session_role[]
+  client_user_session_note   client_user_session_note[]
+
+  @@index([session_id], map: "idx_client_session_session")
+}
+
+model client_session_auth_status {
+  authenticator                                             String         @db.VarChar(36)
+  status                                                    Int?
+  client_session                                            String         @db.VarChar(36)
+  client_session_client_sessionToclient_session_auth_status client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_status_constraint")
+
+  @@id([client_session, authenticator], map: "constraint_auth_status_pk")
+}
+
+model client_session_note {
+  name                                               String         @db.VarChar(255)
+  value                                              String?        @db.VarChar(255)
+  client_session                                     String         @db.VarChar(36)
+  client_session_client_sessionToclient_session_note client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk5edfb00ff51c2736")
+
+  @@id([client_session, name], map: "constraint_5e")
+}
+
+model client_session_prot_mapper {
+  protocol_mapper_id                                        String         @db.VarChar(36)
+  client_session                                            String         @db.VarChar(36)
+  client_session_client_sessionToclient_session_prot_mapper client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_33a8sgqw18i532811v7o2dk89")
+
+  @@id([client_session, protocol_mapper_id], map: "constraint_cs_pmp_pk")
+}
+
+model client_session_role {
+  role_id                                            String         @db.VarChar(255)
+  client_session                                     String         @db.VarChar(36)
+  client_session_client_sessionToclient_session_role client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_11b7sgqw18i532811v7o2dv76")
+
+  @@id([client_session, role_id], map: "constraint_5")
+}
+
+model client_user_session_note {
+  name                                                    String         @db.VarChar(255)
+  value                                                   String?        @db.VarChar(2048)
+  client_session                                          String         @db.VarChar(36)
+  client_session_client_sessionToclient_user_session_note client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_usr_ses_note")
+
+  @@id([client_session, name], map: "constr_cl_usr_ses_note")
 }
 
 model companies {
@@ -232,6 +532,42 @@ model companyUsages {
   @@unique([companyId, createdOn], map: "companyusages_companyid_createdon_unique")
 }
 
+model component {
+  id               String             @id(map: "constr_component_pk") @db.VarChar(36)
+  name             String?            @db.VarChar(255)
+  parent_id        String?            @db.VarChar(36)
+  provider_id      String?            @db.VarChar(36)
+  provider_type    String?            @db.VarChar(255)
+  realm_id         String?            @db.VarChar(36)
+  sub_type         String?            @db.VarChar(255)
+  realm            realm?             @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_component_realm")
+  component_config component_config[]
+
+  @@index([provider_type], map: "idx_component_provider_type")
+  @@index([realm_id], map: "idx_component_realm")
+}
+
+model component_config {
+  id           String    @id(map: "constr_component_config_pk") @db.VarChar(36)
+  component_id String    @db.VarChar(36)
+  name         String    @db.VarChar(255)
+  value        String?   @db.VarChar(4000)
+  component    component @relation(fields: [component_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_component_config")
+
+  @@index([component_id], map: "idx_compo_config_compo")
+}
+
+model composite_role {
+  composite                                              String        @db.VarChar(36)
+  child_role                                             String        @db.VarChar(36)
+  keycloak_role_composite_role_child_roleTokeycloak_role keycloak_role @relation("composite_role_child_roleTokeycloak_role", fields: [child_role], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gr7thllb9lu8q4vqa4524jjy8")
+  keycloak_role_composite_role_compositeTokeycloak_role  keycloak_role @relation("composite_role_compositeTokeycloak_role", fields: [composite], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_a63wvekftu8jo1pnj81e7mce2")
+
+  @@id([composite, child_role], map: "constraint_composite_role")
+  @@index([composite], map: "idx_composite")
+  @@index([child_role], map: "idx_composite_child")
+}
+
 model conditions {
   id                                                        String           @id @unique(map: "conditions_id_unique") @db.Uuid
   advice                                                    String
@@ -291,6 +627,78 @@ model contracts {
   tranches               tranches[]
 }
 
+model credential {
+  id              String       @id(map: "constraint_f") @db.VarChar(36)
+  salt            Bytes?
+  type            String?      @db.VarChar(255)
+  user_id         String?      @db.VarChar(36)
+  created_date    BigInt?
+  user_label      String?      @db.VarChar(255)
+  secret_data     String?
+  credential_data String?
+  priority        Int?
+  user_entity     user_entity? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pfyr0glasqyl0dei3kl69r6v0")
+
+  @@index([user_id], map: "idx_user_credential")
+}
+
+model cyclicMeasures {
+  id                          String                     @id @unique(map: "cyclicmeasures_id_unique") @db.Uuid
+  unitId                      String                     @db.Uuid
+  planYear                    Int?
+  finalPlanYear               Int?
+  costSurcharge               Float?
+  maintenanceType             String?                    @db.VarChar(128)
+  remarks                     String?
+  cycle                       Float?
+  unitPrice                   Float?
+  quantityUnitOfMeasurement   String?                    @db.VarChar(8)
+  defaultMaintenanceMeasureId String                     @db.Uuid
+  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  deleted_at                  DateTime?                  @db.Timestamptz(6)
+  surveyId                    String                     @db.Uuid
+  failureModeId               String?                    @db.Uuid
+  defectId                    String?                    @db.Uuid
+  defaultMaintenanceMeasures  defaultMaintenanceMeasures @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "cyclicmeasures_defaultmaintenancemeasureid_foreign")
+  defects                     defects?                   @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_defectid_foreign")
+  failureModes                failureModes?              @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_failuremodeid_foreign")
+  surveys                     surveys                    @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_surveyid_foreign")
+  units                       units                      @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_unitid_foreign")
+
+  @@unique([surveyId, unitId, defaultMaintenanceMeasureId], map: "cyclicmeasures_surveyid_unitid_defaultmaintenancemeasureid_uniq")
+  @@index([deleted_at], map: "cyclicmeasures_deleted_at_index")
+  @@index([surveyId], map: "cyclicmeasures_surveyid_index")
+  @@index([unitId], map: "cyclicmeasures_unitid_index")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model databasechangelog {
+  id            String   @db.VarChar(255)
+  author        String   @db.VarChar(255)
+  filename      String   @db.VarChar(255)
+  dateexecuted  DateTime @db.Timestamp(6)
+  orderexecuted Int
+  exectype      String   @db.VarChar(10)
+  md5sum        String?  @db.VarChar(35)
+  description   String?  @db.VarChar(255)
+  comments      String?  @db.VarChar(255)
+  tag           String?  @db.VarChar(255)
+  liquibase     String?  @db.VarChar(20)
+  contexts      String?  @db.VarChar(255)
+  labels        String?  @db.VarChar(255)
+  deployment_id String?  @db.VarChar(10)
+
+  @@ignore
+}
+
+model databasechangeloglock {
+  id          Int       @id(map: "pk_databasechangeloglock")
+  locked      Boolean
+  lockgranted DateTime? @db.Timestamp(6)
+  lockedby    String?   @db.VarChar(255)
+}
+
 model dataSets {
   id                                                  String         @id @unique(map: "datasets_id_unique") @db.Uuid
   dataType                                            String?        @db.VarChar(32)
@@ -300,6 +708,17 @@ model dataSets {
   failureModes_dataSetsTofailureModes_function        failureModes[] @relation("dataSetsTofailureModes_function")
   failureModes_dataSetsTofailureModes_guideword       failureModes[] @relation("dataSetsTofailureModes_guideword")
   failureModes_dataSetsTofailureModes_sourceOfFailure failureModes[] @relation("dataSetsTofailureModes_sourceOfFailure")
+}
+
+model default_client_scope {
+  realm_id      String  @db.VarChar(36)
+  scope_id      String  @db.VarChar(36)
+  default_scope Boolean @default(false)
+  realm         realm   @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_r_def_cli_scope_realm")
+
+  @@id([realm_id, scope_id], map: "r_def_cli_scope_bind")
+  @@index([realm_id], map: "idx_defcls_realm")
+  @@index([scope_id], map: "idx_defcls_scope")
 }
 
 model defaultFailureModes {
@@ -479,12 +898,27 @@ model elements {
   @@index([categoryId])
   @@index([code])
   @@index([conditionId])
+  @@index([deleted_at], map: "elements_deleted_at_index")
   @@index([name])
   @@index([objectId])
   @@index([observationPointId])
   @@index([surveyId])
   @@index([surveyId, objectId])
-  @@index([deleted_at], map: "elements_deleted_at_index")
+}
+
+model event_entity {
+  id           String  @id(map: "constraint_4") @db.VarChar(36)
+  client_id    String? @db.VarChar(255)
+  details_json String? @db.VarChar(2550)
+  error        String? @db.VarChar(255)
+  ip_address   String? @db.VarChar(255)
+  realm_id     String? @db.VarChar(255)
+  session_id   String? @db.VarChar(255)
+  event_time   BigInt?
+  type         String? @db.VarChar(255)
+  user_id      String? @db.VarChar(255)
+
+  @@index([realm_id, event_time], map: "idx_event_time")
 }
 
 model failureModeDocuments {
@@ -573,6 +1007,110 @@ model failureModes {
   @@index([unitId])
 }
 
+model federated_identity {
+  identity_provider  String      @db.VarChar(255)
+  realm_id           String?     @db.VarChar(36)
+  federated_user_id  String?     @db.VarChar(255)
+  federated_username String?     @db.VarChar(255)
+  token              String?
+  user_id            String      @db.VarChar(36)
+  user_entity        user_entity @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk404288b92ef007a6")
+
+  @@id([identity_provider, user_id], map: "constraint_40")
+  @@index([federated_user_id], map: "idx_fedidentity_feduser")
+  @@index([user_id], map: "idx_fedidentity_user")
+}
+
+model federated_user {
+  id                  String  @id(map: "constr_federated_user") @db.VarChar(255)
+  storage_provider_id String? @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+}
+
+model fed_user_attribute {
+  id                  String  @id(map: "constr_fed_user_attr_pk") @db.VarChar(36)
+  name                String  @db.VarChar(255)
+  user_id             String  @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  storage_provider_id String? @db.VarChar(36)
+  value               String? @db.VarChar(2024)
+
+  @@index([user_id, realm_id, name], map: "idx_fu_attribute")
+}
+
+model fed_user_consent {
+  id                      String  @id(map: "constr_fed_user_consent_pk") @db.VarChar(36)
+  client_id               String? @db.VarChar(255)
+  user_id                 String  @db.VarChar(255)
+  realm_id                String  @db.VarChar(36)
+  storage_provider_id     String? @db.VarChar(36)
+  created_date            BigInt?
+  last_updated_date       BigInt?
+  client_storage_provider String? @db.VarChar(36)
+  external_client_id      String? @db.VarChar(255)
+
+  @@index([user_id, client_storage_provider, external_client_id], map: "idx_fu_cnsnt_ext")
+  @@index([user_id, client_id], map: "idx_fu_consent")
+  @@index([realm_id, user_id], map: "idx_fu_consent_ru")
+}
+
+model fed_user_consent_cl_scope {
+  user_consent_id String @db.VarChar(36)
+  scope_id        String @db.VarChar(36)
+
+  @@id([user_consent_id, scope_id], map: "constraint_fgrntcsnt_clsc_pm")
+}
+
+model fed_user_credential {
+  id                  String  @id(map: "constr_fed_user_cred_pk") @db.VarChar(36)
+  salt                Bytes?
+  type                String? @db.VarChar(255)
+  created_date        BigInt?
+  user_id             String  @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  storage_provider_id String? @db.VarChar(36)
+  user_label          String? @db.VarChar(255)
+  secret_data         String?
+  credential_data     String?
+  priority            Int?
+
+  @@index([user_id, type], map: "idx_fu_credential")
+  @@index([realm_id, user_id], map: "idx_fu_credential_ru")
+}
+
+model fed_user_group_membership {
+  group_id            String  @db.VarChar(36)
+  user_id             String  @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  storage_provider_id String? @db.VarChar(36)
+
+  @@id([group_id, user_id], map: "constr_fed_user_group")
+  @@index([user_id, group_id], map: "idx_fu_group_membership")
+  @@index([realm_id, user_id], map: "idx_fu_group_membership_ru")
+}
+
+model fed_user_required_action {
+  required_action     String  @default(" ") @db.VarChar(255)
+  user_id             String  @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  storage_provider_id String? @db.VarChar(36)
+
+  @@id([required_action, user_id], map: "constr_fed_required_action")
+  @@index([user_id, required_action], map: "idx_fu_required_action")
+  @@index([realm_id, user_id], map: "idx_fu_required_action_ru")
+}
+
+model fed_user_role_mapping {
+  role_id             String  @db.VarChar(36)
+  user_id             String  @db.VarChar(255)
+  realm_id            String  @db.VarChar(36)
+  storage_provider_id String? @db.VarChar(36)
+
+  @@id([role_id, user_id], map: "constr_fed_user_role")
+  @@index([user_id, role_id], map: "idx_fu_role_mapping")
+  @@index([realm_id, user_id], map: "idx_fu_role_mapping_ru")
+}
+
 model findings {
   id            String       @id @unique(map: "findings_id_unique") @db.Uuid
   failureModeId String       @db.Uuid
@@ -634,6 +1172,76 @@ model fmecaFurtherInvestigations {
   units           units           @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fmecafurtherinvestigations_unitid_foreign")
 
   @@unique([surveyId, surveyScopeId], map: "fmecafurtherinvestigations_surveyid_surveyscopeid_unique")
+}
+
+model group_attribute {
+  id             String         @id(map: "constraint_group_attribute_pk") @default("sybase-needs-something-here") @db.VarChar(36)
+  name           String         @db.VarChar(255)
+  value          String?        @db.VarChar(255)
+  group_id       String         @db.VarChar(36)
+  keycloak_group keycloak_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_attribute_group")
+
+  @@index([group_id], map: "idx_group_attr_group")
+}
+
+model group_role_mapping {
+  role_id        String         @db.VarChar(36)
+  group_id       String         @db.VarChar(36)
+  keycloak_group keycloak_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_role_group")
+
+  @@id([role_id, group_id], map: "constraint_group_role")
+  @@index([group_id], map: "idx_group_role_mapp_group")
+}
+
+model identity_provider {
+  internal_id                String                     @id(map: "constraint_2b") @db.VarChar(36)
+  enabled                    Boolean                    @default(false)
+  provider_alias             String?                    @db.VarChar(255)
+  provider_id                String?                    @db.VarChar(255)
+  store_token                Boolean                    @default(false)
+  authenticate_by_default    Boolean                    @default(false)
+  realm_id                   String?                    @db.VarChar(36)
+  add_token_role             Boolean                    @default(true)
+  trust_email                Boolean                    @default(false)
+  first_broker_login_flow_id String?                    @db.VarChar(36)
+  post_broker_login_flow_id  String?                    @db.VarChar(36)
+  provider_display_name      String?                    @db.VarChar(255)
+  link_only                  Boolean                    @default(false)
+  realm                      realm?                     @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk2b4ebc52ae5c3b34")
+  identity_provider_config   identity_provider_config[]
+
+  @@unique([provider_alias, realm_id], map: "uk_2daelwnibji49avxsrtuf6xj33")
+  @@index([realm_id], map: "idx_ident_prov_realm")
+}
+
+model identity_provider_config {
+  identity_provider_id String            @db.VarChar(36)
+  value                String?
+  name                 String            @db.VarChar(255)
+  identity_provider    identity_provider @relation(fields: [identity_provider_id], references: [internal_id], onDelete: NoAction, onUpdate: NoAction, map: "fkdc4897cf864c4e43")
+
+  @@id([identity_provider_id, name], map: "constraint_d")
+}
+
+model identity_provider_mapper {
+  id                String              @id(map: "constraint_idpm") @db.VarChar(36)
+  name              String              @db.VarChar(255)
+  idp_alias         String              @db.VarChar(255)
+  idp_mapper_name   String              @db.VarChar(255)
+  realm_id          String              @db.VarChar(36)
+  realm             realm               @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_idpm_realm")
+  idp_mapper_config idp_mapper_config[]
+
+  @@index([realm_id], map: "idx_id_prov_mapp_realm")
+}
+
+model idp_mapper_config {
+  idp_mapper_id            String                   @db.VarChar(36)
+  value                    String?
+  name                     String                   @db.VarChar(255)
+  identity_provider_mapper identity_provider_mapper @relation(fields: [idp_mapper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_idpmconfig")
+
+  @@id([idp_mapper_id, name], map: "constraint_idpmconfig")
 }
 
 model imageMeasurements {
@@ -724,6 +1332,36 @@ model jobs {
   surveys           surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_surveyid_foreign")
 }
 
+model keycloak_group {
+  id                 String               @id(map: "constraint_group") @db.VarChar(36)
+  name               String?              @db.VarChar(255)
+  parent_group       String               @db.VarChar(36)
+  realm_id           String?              @db.VarChar(36)
+  group_attribute    group_attribute[]
+  group_role_mapping group_role_mapping[]
+
+  @@unique([realm_id, parent_group, name], map: "sibling_names")
+}
+
+model keycloak_role {
+  id                                                      String           @id(map: "constraint_a") @db.VarChar(36)
+  client_realm_constraint                                 String?          @db.VarChar(255)
+  client_role                                             Boolean          @default(false)
+  description                                             String?          @db.VarChar(255)
+  name                                                    String?          @db.VarChar(255)
+  realm_id                                                String?          @db.VarChar(255)
+  client                                                  String?          @db.VarChar(36)
+  realm                                                   String?          @db.VarChar(36)
+  realm_keycloak_roleTorealm                              realm?           @relation(fields: [realm], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_6vyqfe4cn4wlq8r6kt5vdsj5c")
+  composite_role_composite_role_child_roleTokeycloak_role composite_role[] @relation("composite_role_child_roleTokeycloak_role")
+  composite_role_composite_role_compositeTokeycloak_role  composite_role[] @relation("composite_role_compositeTokeycloak_role")
+  role_attribute                                          role_attribute[]
+
+  @@unique([name, client_realm_constraint], map: "UK_J3RWUVD56ONTGSUHOGM184WW2-2")
+  @@index([client], map: "idx_keycloak_role_client")
+  @@index([realm], map: "idx_keycloak_role_realm")
+}
+
 model knex_migrations {
   id             Int       @id @default(autoincrement())
   name           String?   @db.VarChar(255)
@@ -731,12 +1369,9 @@ model knex_migrations {
   migration_time DateTime? @db.Timestamptz(6)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model knex_migrations_lock {
   index     Int  @id @default(autoincrement())
   is_locked Int?
-
-  @@ignore
 }
 
 model languages {
@@ -875,11 +1510,11 @@ model manifestations {
   utProjects                                                             utProjects[]
 
   @@index([conditionId])
+  @@index([deleted_at], map: "manifestations_deleted_at_index")
   @@index([elementId])
   @@index([observationPointId])
   @@index([surveyId, unitId])
   @@index([unitId])
-  @@index([deleted_at], map: "manifestations_deleted_at_index")
 }
 
 model measurementCandidates {
@@ -912,6 +1547,48 @@ model measurements {
   measurementCandidates measurementCandidates[]
 
   @@index([flightId])
+}
+
+model measures {
+  id                        String          @id @unique(map: "measures_id_unique") @db.Uuid
+  unitId                    String          @db.Uuid
+  manifestationId           String?         @db.Uuid
+  failureModeId             String?         @db.Uuid
+  defectId                  String?         @db.Uuid
+  surveyScopeId             String?         @db.Uuid
+  description               String?
+  maintenanceType           String?         @db.VarChar(128)
+  location                  String?         @db.VarChar(256)
+  planYear                  Int?
+  finalPlanYear             Int?
+  quantity                  Int?
+  quantityUnitOfMeasurement String?         @db.VarChar(8)
+  unitPrice                 Float?
+  costSurcharge             Float?
+  created_at                DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime        @default(now()) @db.Timestamptz(6)
+  deleted_at                DateTime?       @db.Timestamptz(6)
+  surveyId                  String          @db.Uuid
+  remarks                   String?
+  defects                   defects?        @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_defectid_foreign")
+  failureModes              failureModes?   @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_failuremodeid_foreign")
+  manifestations            manifestations? @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_manifestationid_foreign")
+  surveys                   surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_surveyid_foreign")
+  units                     units           @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_unitid_foreign")
+
+  @@index([defectId], map: "measures_defectid_index")
+  @@index([deleted_at], map: "measures_deleted_at_index")
+  @@index([manifestationId], map: "measures_manifestationid_index")
+  @@index([surveyId], map: "measures_surveyid_index")
+  @@index([unitId], map: "measures_unitid_index")
+}
+
+model migration_model {
+  id          String  @id(map: "constraint_migmod") @db.VarChar(36)
+  version     String? @db.VarChar(36)
+  update_time BigInt  @default(0)
+
+  @@index([update_time], map: "idx_update_time")
 }
 
 model mutationQueue {
@@ -1156,6 +1833,36 @@ model observationPoints {
   @@index([unitId])
 }
 
+model offline_client_session {
+  user_session_id         String  @db.VarChar(36)
+  client_id               String  @db.VarChar(255)
+  offline_flag            String  @db.VarChar(4)
+  timestamp               Int?
+  data                    String?
+  client_storage_provider String  @default("local") @db.VarChar(36)
+  external_client_id      String  @default("local") @db.VarChar(255)
+
+  @@id([user_session_id, client_id, client_storage_provider, external_client_id, offline_flag], map: "constraint_offl_cl_ses_pk3")
+  @@index([client_id, offline_flag], map: "idx_offline_css_preload")
+  @@index([user_session_id], map: "idx_us_sess_id_on_cl_sess")
+}
+
+model offline_user_session {
+  user_session_id      String  @db.VarChar(36)
+  user_id              String  @db.VarChar(255)
+  realm_id             String  @db.VarChar(36)
+  created_on           Int
+  offline_flag         String  @db.VarChar(4)
+  data                 String?
+  last_session_refresh Int     @default(0)
+
+  @@id([user_session_id, offline_flag], map: "constraint_offl_us_ses_pk2")
+  @@index([user_id, realm_id, offline_flag], map: "idx_offline_uss_by_user")
+  @@index([realm_id, offline_flag, user_session_id], map: "idx_offline_uss_by_usersess")
+  @@index([created_on], map: "idx_offline_uss_createdon")
+  @@index([offline_flag, created_on, user_session_id], map: "idx_offline_uss_preload")
+}
+
 model poleLabResults {
   id                         String          @id @unique(map: "polelabresults_id_unique") @db.Uuid
   surveyId                   String          @db.Uuid
@@ -1217,1248 +1924,6 @@ model poleLabResults {
   created_at                 DateTime?       @db.Timestamptz(6)
   updated_at                 DateTime?       @db.Timestamptz(6)
   surveys                    surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "polelabresults_surveyid_foreign")
-}
-
-model registrations {
-  emailAddress String    @id @unique(map: "registrations_emailaddress_unique")
-  firstName    String?
-  lastName     String?
-  phoneNumber  String?
-  created_at   DateTime? @db.Timestamptz(6)
-  updated_at   DateTime? @db.Timestamptz(6)
-}
-
-model session {
-  sid    String   @id @db.VarChar
-  sess   Json     @db.Json
-  expire DateTime @db.Timestamp(6)
-}
-
-model sites {
-  id              String     @id @unique(map: "sites_id_unique") @db.Uuid
-  name            String     @db.VarChar(255)
-  ownerCompanyId  String?    @db.Uuid
-  image           String?    @db.VarChar(255)
-  imageMap        String?
-  customerVersion String?    @default("all") @db.VarChar(255)
-  created_at      DateTime?  @db.Timestamptz(6)
-  updated_at      DateTime?  @db.Timestamptz(6)
-  companies       companies? @relation(fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "sites_ownercompanyid_foreign")
-  objects         objects[]
-
-  @@index([ownerCompanyId])
-}
-
-model spatial_ref_sys {
-  srid      Int     @id
-  auth_name String? @db.VarChar(256)
-  auth_srid Int?
-  srtext    String? @db.VarChar(2048)
-  proj4text String? @db.VarChar(2048)
-}
-
-model surveyElementGroups {
-  id                     String    @id @unique(map: "surveyelementgroups_id_unique") @db.Uuid
-  surveyId               String    @db.Uuid
-  name                   String    @db.VarChar(255)
-  created_at             DateTime? @db.Timestamptz(6)
-  updated_at             DateTime? @db.Timestamptz(6)
-  initialRemarks         String?
-  inspectionRemarks      String?
-  craMaxInitialScore     Int?
-  craMaxHistoryScore     Int?
-  craMaxInspectionScore  Int?
-  inspectionStandardData Json      @default("{}")
-  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveyelementgroups_surveyid_foreign")
-
-  @@unique([surveyId, name], map: "surveyelementgroups _surveyid_name_unique")
-}
-
-model surveyElements {
-  id                     String    @id @unique(map: "surveyelements_id_unique") @db.Uuid
-  surveyId               String    @db.Uuid
-  elementId              String    @db.Uuid
-  inspectionStandardData Json      @default("{}")
-  created_at             DateTime? @db.Timestamptz(6)
-  updated_at             DateTime? @db.Timestamptz(6)
-  elements               elements  @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_elementid_foreign")
-  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_surveyid_foreign")
-}
-
-model surveyManifestations {
-  id                     String         @id @unique(map: "surveymanifestations_id_unique") @db.Uuid
-  surveyId               String         @db.Uuid
-  manifestationId        String         @db.Uuid
-  inspectionStandardData Json           @default("{}")
-  created_at             DateTime?      @db.Timestamptz(6)
-  updated_at             DateTime?      @db.Timestamptz(6)
-  manifestations         manifestations @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_manifestationid_foreign")
-  surveys                surveys        @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_surveyid_foreign")
-}
-
-model surveyModifications {
-  id          String    @id @unique(map: "surveymodifications_id_unique") @db.Uuid
-  version     Int
-  description String
-  surveryedOn DateTime  @db.Timestamptz(6)
-  surveyId    String    @db.Uuid
-  objectId    String    @db.Uuid
-  created_at  DateTime? @db.Timestamptz(6)
-  updated_at  DateTime? @db.Timestamptz(6)
-  objects     objects   @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_objectid_foreign")
-  surveys     surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_surveyid_foreign")
-}
-
-model surveys {
-  id                                                   String                       @id @unique(map: "surveys_id_unique") @db.Uuid
-  surveryedOn                                          DateTime                     @db.Timestamptz(6)
-  updatedOn                                            DateTime                     @db.Timestamptz(6)
-  status                                               String?
-  description                                          String?
-  dUri                                                 String?                      @map("3dUri") @db.VarChar(255)
-  summaryAndAdvice                                     String?
-  operatorCompanyId                                    String?                      @db.Uuid
-  surveyorCompanyId                                    String?                      @db.Uuid
-  objectId                                             String                       @db.Uuid
-  created_at                                           DateTime?                    @db.Timestamptz(6)
-  updated_at                                           DateTime?                    @db.Timestamptz(6)
-  condition                                            String?                      @db.VarChar(1)
-  storageUsed                                          BigInt?
-  material                                             String?                      @db.VarChar(255)
-  isDOMLight                                           Boolean?
-  pointCloudStorageUsed                                BigInt                       @default(0)
-  isAssetDescriptionVisible                            Boolean?
-  isAnnotationsDefaultVisible                          Boolean?                     @default(true)
-  isVideoDownloadVisible                               Boolean?                     @default(true)
-  projectNumber                                        String?                      @db.VarChar(255)
-  inspectionStandardType                               String?                      @db.VarChar(255)
-  dUriGeo                                              String?                      @map("3dUriGeo") @db.VarChar(255)
-  dUriMultiBeam                                        String?                      @map("3dUriMultiBeam") @db.VarChar(255)
-  careCondition                                        String?                      @db.VarChar(1)
-  scanLineCoordinates                                  Json?
-  shapesInModel                                        Json?
-  isFmecaAvailable                                     Boolean                      @default(false)
-  isCraAvailable                                       Boolean                      @default(false)
-  craInitialHistoryIsBuildBetween4074                  Boolean                      @default(false)
-  craInitialHistoryIsStaticallyIndeterminate           Boolean                      @default(false)
-  craInitialHistoryBuildBetween4074Remarks             String?
-  craInitialHistoryStaticallyIndeterminateRemarks      String?
-  craInspectionIsBuildBetween4074                      Boolean                      @default(false)
-  craInspectionIsStaticallyIndeterminate               Boolean                      @default(false)
-  craInspectionBuildBetween4074Remarks                 String?
-  craInspectionStaticallyIndeterminateRemarks          String?
-  craInitialHistoryRemarks                             String?
-  craInspectionRemarks                                 String?
-  craInitialHistoryScore                               Decimal?                     @db.Decimal(15, 6)
-  craInspectionScore                                   Decimal?                     @db.Decimal(15, 6)
-  craInitialHistoryCondition                           Int                          @default(0)
-  craInspectionCondition                               Int                          @default(0)
-  craInitialHistoryConditionWithoutFactor              Int                          @default(0)
-  craInspectionConditionWithoutFactor                  Int                          @default(0)
-  preparedAuthor                                       String?                      @db.VarChar(255)
-  preparedDate                                         DateTime?                    @db.Timestamptz(6)
-  verifiedAuthor                                       String?                      @db.VarChar(255)
-  verifiedDate                                         DateTime?                    @db.Timestamptz(6)
-  craInitialHistoryConditionScoreWithoutFactor         Int?
-  craInspectionConditionScoreWithoutFactor             Int?
-  craInitialHistoryConditionScore                      Int?
-  craInspectionConditionScore                          Int?
-  batchId                                              String?                      @db.Uuid
-  inspectionStandardData                               Json                         @default("{}")
-  craInitialHistoryIsBuildBetween4074IsRelevant        Boolean                      @default(false)
-  craInitialHistoryIsStaticallyIndeterminateIsRelevant Boolean                      @default(false)
-  craInspectionIsBuildBetween4074IsRelevant            Boolean                      @default(false)
-  craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                      @default(false)
-  legacyFailureMode                                    Boolean?
-  ARBCraInspectionScore                                Int?
-  ARBCraInitialFlagScore                               Int?
-  ARBCraInspectionSummary                              String?
-  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
-  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
-  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
-  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
-  arkSurveys                                           arkSurveys?
-  assets                                               assets[]
-  auditEvents                                          auditEvents[]
-  conditions                                           conditions[]
-  cyclicMeasures                                       cyclicMeasures[]
-  derivedConditionScores                               derivedConditionScores[]
-  elementRemarks                                       elementRemarks[]
-  elements                                             elements[]
-  facadeFollowUpSurveys                                facadeFollowUpSurveys?
-  failureModes                                         failureModes[]
-  findings                                             findings[]
-  fmecaFurtherInvestigations                           fmecaFurtherInvestigations[]
-  inspectionFindings                                   inspectionFindings[]
-  inspectionPlans                                      inspectionPlans[]
-  jobs                                                 jobs[]
-  maintenanceMeasures                                  maintenanceMeasures[]
-  manifestationRemarks                                 manifestationRemarks[]
-  manifestations                                       manifestations[]
-  measures                                             measures[]
-  observationPoints                                    observationPoints[]
-  poleLabResults                                       poleLabResults[]
-  spanJunctionBoxes                                    spanJunctionBoxes[]
-  spanSupportSystems                                   spanSupportSystems[]
-  surveyElementGroups                                  surveyElementGroups[]
-  surveyElements                                       surveyElements[]
-  surveyManifestations                                 surveyManifestations[]
-  surveyModifications                                  surveyModifications[]
-  surveyUnits                                          surveyUnits[]
-  unitRemarks                                          unitRemarks[]
-  units                                                units[]
-  utProjects                                           utProjects[]
-
-  @@index([batchId])
-  @@index([objectId])
-  @@index([operatorCompanyId])
-  @@index([surveryedOn])
-  @@index([surveyorCompanyId])
-}
-
-model surveyUnits {
-  id                     String    @id @unique(map: "surveyunits_id_unique") @db.Uuid
-  surveyId               String    @db.Uuid
-  unitId                 String    @db.Uuid
-  inspectionStandardData Json      @default("{}")
-  created_at             DateTime? @db.Timestamptz(6)
-  updated_at             DateTime? @db.Timestamptz(6)
-  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_surveyid_foreign")
-  units                  units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_unitid_foreign")
-}
-
-model tranches {
-  id               String    @id @unique(map: "tranches_id_unique") @db.Uuid
-  contractId       String    @db.Uuid
-  name             String    @db.VarChar(255)
-  status           String?   @default("open") @db.VarChar(255)
-  plannedStartDate DateTime? @db.Timestamptz(6)
-  plannedEndDate   DateTime? @db.Timestamptz(6)
-  startDate        DateTime? @db.Timestamptz(6)
-  endDate          DateTime? @db.Timestamptz(6)
-  created_at       DateTime? @db.Timestamptz(6)
-  updated_at       DateTime? @db.Timestamptz(6)
-  contracts        contracts @relation(fields: [contractId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tranches_contractid_foreign")
-  batches          batches[]
-}
-
-model unitRemarks {
-  id         String    @id @unique(map: "unitremarks_id_unique") @db.Uuid
-  text       String
-  remarkedOn DateTime  @db.Timestamptz(6)
-  unitId     String    @db.Uuid
-  surveyId   String    @db.Uuid
-  created_at DateTime? @db.Timestamptz(6)
-  updated_at DateTime? @db.Timestamptz(6)
-  remarkedBy String    @db.VarChar(255)
-  surveys    surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_surveyid_foreign")
-  units      units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_unitid_foreign")
-
-  @@index([surveyId])
-  @@index([unitId])
-}
-
-model units {
-  id                                                            String                       @id @unique(map: "units_id_unique") @db.Uuid
-  name                                                          String                       @db.VarChar(255)
-  code                                                          String?                      @db.VarChar(255)
-  location                                                      String?                      @db.VarChar(255)
-  elementId                                                     String                       @db.Uuid
-  conditionId                                                   String?                      @db.Uuid
-  observationPointId                                            String?                      @db.Uuid
-  created_at                                                    DateTime?                    @db.Timestamptz(6)
-  updated_at                                                    DateTime?                    @db.Timestamptz(6)
-  material                                                      String?                      @db.VarChar(255)
-  quantity                                                      Int?
-  quantityUnitOfMeasurement                                     String?                      @db.VarChar(255)
-  isArchived                                                    Boolean                      @default(false)
-  constructionYear                                              Int?
-  objectId                                                      String                       @db.Uuid
-  isStructural                                                  Boolean                      @default(false)
-  isElectrical                                                  Boolean                      @default(false)
-  isStructuralObjectSpecific                                    Boolean                      @default(false)
-  isElectricalObjectSpecific                                    Boolean                      @default(false)
-  isRelevant                                                    Boolean                      @default(false)
-  surveyId                                                      String?                      @db.Uuid
-  deleted_at                                                    DateTime?                    @db.Timestamptz(6)
-  gisibId                                                       Int?
-  permanentId                                                   String?                      @db.Uuid
-  conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
-  elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
-  objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
-  observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
-  surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
-  assets                                                        assets[]
-  conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
-  cyclicMeasures                                                cyclicMeasures[]
-  derivedConditionScores                                        derivedConditionScores[]
-  failureModes                                                  failureModes[]
-  fmecaFurtherInvestigations                                    fmecaFurtherInvestigations[]
-  inspectionFindings                                            inspectionFindings[]
-  inspectionPlans                                               inspectionPlans[]
-  maintenanceMeasures                                           maintenanceMeasures[]
-  manifestations                                                manifestations[]
-  measures                                                      measures[]
-  observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
-  surveyUnits                                                   surveyUnits[]
-  unitRemarks                                                   unitRemarks[]
-  utProjects                                                    utProjects[]
-
-  @@index([code])
-  @@index([conditionId])
-  @@index([elementId])
-  @@index([name])
-  @@index([observationPointId])
-  @@index([surveyId, elementId])
-  @@index([deleted_at], map: "units_deleted_at_index")
-}
-
-model userContracts {
-  userId     String @db.Uuid
-  contractId String @db.Uuid
-
-  @@id([userId, contractId])
-}
-
-model users {
-  id                     String    @id @unique(map: "users_id_unique") @db.Uuid
-  firstName              String?   @db.VarChar(255)
-  lastName               String    @db.VarChar(255)
-  emailAddress           String    @db.VarChar(255)
-  mobileNumber           String?   @db.VarChar(255)
-  officeNumber           String?   @db.VarChar(255)
-  password               String    @db.VarChar(255)
-  salt                   String    @db.VarChar(255)
-  lastLoginOn            DateTime? @db.Timestamptz(6)
-  status                 String?
-  language               String    @db.VarChar(255)
-  companyId              String    @db.Uuid
-  created_at             DateTime? @db.Timestamptz(6)
-  updated_at             DateTime? @db.Timestamptz(6)
-  loginAttempts          Int?      @default(0)
-  isReadOnly             Boolean?  @default(false)
-  isAccountManager       Boolean?  @default(false)
-  isConfigurationManager Boolean?  @default(false)
-  isWebGL1User           Boolean?  @default(false)
-  passwordChangeDate     DateTime? @db.Date
-  isDeleted              Boolean   @default(false)
-  usePointCloud          Boolean   @default(true)
-  isContractManager      Boolean?  @default(false)
-  source                 String    @default("local")
-  companies              companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_companyid_foreign")
-  assets                 assets[]
-
-  @@index([companyId])
-  @@index([emailAddress])
-  @@index([updated_at])
-}
-
-model utProjects {
-  id                      String          @id(map: "projects_pkey") @unique(map: "projects_id_unique") @db.Uuid
-  name                    String          @db.VarChar(255)
-  clientName              String          @db.VarChar(255)
-  description             String?         @db.VarChar(255)
-  maxScanLines            Int?
-  maxScanLinePositions    Int?
-  startedOnDate           DateTime?       @db.Date
-  endedOnDate             DateTime?       @db.Date
-  updatedOnDateTime       DateTime        @db.Timestamptz(6)
-  createdOnDateTime       DateTime        @db.Timestamptz(6)
-  useScanLines            Boolean         @default(false)
-  isSavedInTheCloud       Boolean         @default(false)
-  maxPositionMeasurements Int             @default(1)
-  clientCompanyId         String          @db.Uuid
-  elementId               String?         @db.Uuid
-  unitId                  String?         @db.Uuid
-  manifestationId         String?         @db.Uuid
-  objectId                String?         @db.Uuid
-  surveyId                String?         @db.Uuid
-  companies               companies       @relation(fields: [clientCompanyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "projects_companyid_foreign")
-  elements                elements?       @relation(fields: [elementId], references: [id], onUpdate: NoAction, map: "projects_elementid_foreign")
-  manifestations          manifestations? @relation(fields: [manifestationId], references: [id], onUpdate: NoAction, map: "projects_manifestationid_foreign")
-  objects                 objects?        @relation(fields: [objectId], references: [id], onUpdate: NoAction, map: "projects_objectid_foreign")
-  surveys                 surveys?        @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "projects_surveyid_foreign")
-  units                   units?          @relation(fields: [unitId], references: [id], onUpdate: NoAction, map: "projects_unitid_foreign")
-  flights                 flights[]
-
-  @@index([clientCompanyId])
-  @@index([elementId])
-  @@index([manifestationId])
-  @@index([objectId])
-  @@index([surveyId])
-  @@index([unitId])
-}
-
-model spanJunctionBoxes {
-  id                     String                    @id @unique(map: "spanjunctionboxes_id_unique") @db.Uuid
-  objectId               String                    @db.Uuid
-  surveyId               String                    @db.Uuid
-  name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(10, 3)
-  location               String?                   @db.VarChar(255)
-  locationIndication     String?                   @db.VarChar(255)
-  riserTubeVisible       Boolean?
-  remarks                String?
-  geography              Unsupported("geography")?
-  created_at             DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at             DateTime?                 @db.Timestamptz(6)
-  installationHeight     Decimal?                  @db.Decimal(8, 2)
-  a11yDetails            Json                      @default("{}")
-  geographyRD            Json?                     @default("{}")
-  objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
-  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
-  spanJunctionBoxSurveys spanJunctionBoxSurveys?
-
-  @@index([deleted_at], map: "spanjunctionboxes_deleted_at_index")
-}
-
-model spanLuminaires {
-  id                      String                    @id @unique(map: "spanluminaires_id_unique") @db.Uuid
-  supportSystemId         String                    @db.Uuid
-  name                    String                    @db.VarChar(128)
-  location                String?                   @db.VarChar(255)
-  constructionYear        Int?
-  supplierType            String?                   @db.VarChar(32)
-  manufacturer            String?                   @db.VarChar(255)
-  geography               Unsupported("geography")?
-  remarks                 String?
-  driverSupplierType      String?                   @db.VarChar(32)
-  driverCommissioningDate DateTime?                 @db.Date
-  lightSupplierType       String?                   @db.VarChar(32)
-  lightCommissioningDate  DateTime?                 @db.Date
-  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at              DateTime?                 @db.Timestamptz(6)
-  hasLED                  Boolean?
-  geographyRD             Json?                     @default("{}")
-  spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
-  spanLuminaireSurveys    spanLuminaireSurveys?
-
-  @@index([deleted_at], map: "spanluminaires_deleted_at_index")
-}
-
-model spanSupportSystems {
-  id                                  String                               @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
-  objectId                            String                               @db.Uuid
-  surveyId                            String                               @db.Uuid
-  name                                String                               @db.VarChar(128)
-  type                                String                               @db.VarChar(32)
-  location                            String?                              @db.VarChar(255)
-  locationIndication                  String?                              @db.VarChar(255)
-  constructionYear                    Int?
-  remarks                             String?
-  geography                           Unsupported("geography")?
-  houseNumber                         String?                              @db.VarChar(32)
-  created_at                          DateTime                             @default(now()) @db.Timestamptz(6)
-  updated_at                          DateTime                             @default(now()) @db.Timestamptz(6)
-  deleted_at                          DateTime?                            @db.Timestamptz(6)
-  installationHeight                  Decimal?                             @db.Decimal(8, 2)
-  typeDetailed                        String?                              @db.VarChar(64)
-  a11yDetails                         Json                                 @default("{}")
-  geographyRD                         Json?                                @default("{}")
-  objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
-  surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
-  spanLuminaires                      spanLuminaires[]
-  spanSupportSystemFacadeSurveys      spanSupportSystemFacadeSurveys?
-  spanSupportSystemMastSurveys        spanSupportSystemMastSurveys?
-  spanSupportSystemNodeSurveys        spanSupportSystemNodeSurveys?
-  spanSupportSystemTensionWireSurveys spanSupportSystemTensionWireSurveys?
-
-  @@index([deleted_at], map: "spansupportsystems_deleted_at_index")
-}
-
-model spanLuminaireSurveys {
-  id              String         @id @unique(map: "spanluminairesurveys_id_unique") @db.Uuid
-  luminaireId     String         @unique(map: "spanluminairesurveys_luminaireid_unique") @db.Uuid
-  luminaireDamage Boolean?
-  remarks         String?
-  created_at      DateTime       @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime       @default(now()) @db.Timestamptz(6)
-  spanLuminaires  spanLuminaires @relation(fields: [luminaireId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminairesurveys_luminaireid_foreign")
-}
-
-model spanSupportSystemFacadeSurveys {
-  id                                        String             @id @unique(map: "spansupportsystemfacadesurveys_id_unique") @db.Uuid
-  supportSystemId                           String             @unique(map: "spansupportsystemfacadesurveys_supportsystemid_unique") @db.Uuid
-  facadeDamageWithin1m                      Boolean?
-  hinderingVegetation                       Boolean?
-  wallPlateDamage                           Boolean?
-  faultyMontage                             Boolean?
-  nutNotFullyOverThreadedRod                Boolean?
-  missingFasteners                          Boolean?
-  measuredPreload                           Int?
-  appliedAdditionalTraction                 Int?
-  facadeConnectionFailureAdditionalTraction Int?
-  remarks                                   String?
-  created_at                                DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at                                DateTime           @default(now()) @db.Timestamptz(6)
-  facadeConnectionFailed                    Boolean?
-  spanSupportSystems                        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemfacadesurveys_supportsystemid_foreign")
-}
-
-model spanSupportSystemMastSurveys {
-  id                      String             @id @unique(map: "spansupportsystemmastsurveys_id_unique") @db.Uuid
-  supportSystemId         String             @unique(map: "spansupportsystemmastsurveys_supportsystemid_unique") @db.Uuid
-  mastDamage              Boolean?
-  mastMissingParts        Boolean?
-  tensionMastAngle        Int?
-  mastAttachmentDamage    Boolean?
-  mastBracketMissingParts Boolean?
-  mastBracketDamage       Boolean?
-  remarks                 String?
-  created_at              DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime           @default(now()) @db.Timestamptz(6)
-  spanSupportSystems      spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemmastsurveys_supportsystemid_foreign")
-}
-
-model spanSupportSystemNodeSurveys {
-  id                 String             @id @unique(map: "spansupportsystemnodesurveys_id_unique") @db.Uuid
-  supportSystemId    String             @unique(map: "spansupportsystemnodesurveys_supportsystemid_unique") @db.Uuid
-  nodeDamage         Boolean?
-  remarks            String?
-  created_at         DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
-  spanSupportSystems spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemnodesurveys_supportsystemid_foreign")
-}
-
-model spanSupportSystemTensionWireSurveys {
-  id                        String             @id @unique(map: "spansupportsystemtensionwiresurveys_id_unique") @db.Uuid
-  supportSystemId           String             @unique(map: "spansupportsystemtensionwiresurveys_supportsystemid_unique") @db.Uuid
-  tensionWireDamage         Boolean?
-  thirdPartyObjectsAttached Boolean?
-  gaffTerminalDamage        Boolean?
-  gaffTerminalMissingParts  Boolean?
-  faultyMontage             Boolean?
-  tensionWireClampDamage    Boolean?
-  remarks                   String?
-  created_at                DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime           @default(now()) @db.Timestamptz(6)
-  spanSupportSystems        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemtensionwiresurveys_supportsystemid_foreign")
-}
-
-model spanJunctionBoxSurveys {
-  id                       String            @id(map: "spanJunctionBoxesSurveys_pkey") @unique(map: "spanjunctionboxessurveys_id_unique") @db.Uuid
-  junctionBoxId            String            @unique(map: "spanjunctionboxsurveys_junctionboxid_unique") @db.Uuid
-  cableDamage              Boolean?
-  faultyMontageTensionWire Boolean?
-  faultyMontageFacade      Boolean?
-  junctionBoxDamage        Boolean?
-  stickerNotReadable       Boolean?
-  remarks                  String?
-  created_at               DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime          @default(now()) @db.Timestamptz(6)
-  spanJunctionBoxes        spanJunctionBoxes @relation(fields: [junctionBoxId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxessurveys_junctionboxid_foreign")
-}
-
-model cyclicMeasures {
-  id                          String                     @id @unique(map: "cyclicmeasures_id_unique") @db.Uuid
-  unitId                      String                     @db.Uuid
-  planYear                    Int?
-  finalPlanYear               Int?
-  costSurcharge               Float?
-  maintenanceType             String?                    @db.VarChar(128)
-  remarks                     String?
-  cycle                       Float?
-  unitPrice                   Float?
-  quantityUnitOfMeasurement   String?                    @db.VarChar(8)
-  defaultMaintenanceMeasureId String                     @db.Uuid
-  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
-  updated_at                  DateTime                   @default(now()) @db.Timestamptz(6)
-  deleted_at                  DateTime?                  @db.Timestamptz(6)
-  surveyId                    String                     @db.Uuid
-  failureModeId               String?                    @db.Uuid
-  defectId                    String?                    @db.Uuid
-  defaultMaintenanceMeasures  defaultMaintenanceMeasures @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "cyclicmeasures_defaultmaintenancemeasureid_foreign")
-  defects                     defects?                   @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_defectid_foreign")
-  failureModes                failureModes?              @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_failuremodeid_foreign")
-  surveys                     surveys                    @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_surveyid_foreign")
-  units                       units                      @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cyclicmeasures_unitid_foreign")
-
-  @@unique([surveyId, unitId, defaultMaintenanceMeasureId], map: "cyclicmeasures_surveyid_unitid_defaultmaintenancemeasureid_uniq")
-  @@index([deleted_at], map: "cyclicmeasures_deleted_at_index")
-  @@index([unitId], map: "cyclicmeasures_unitid_index")
-  @@index([surveyId], map: "cyclicmeasures_surveyid_index")
-}
-
-model measures {
-  id                        String          @id @unique(map: "measures_id_unique") @db.Uuid
-  unitId                    String          @db.Uuid
-  manifestationId           String?         @db.Uuid
-  failureModeId             String?         @db.Uuid
-  defectId                  String?         @db.Uuid
-  surveyScopeId             String?         @db.Uuid
-  description               String?
-  maintenanceType           String?         @db.VarChar(128)
-  location                  String?         @db.VarChar(256)
-  planYear                  Int?
-  finalPlanYear             Int?
-  quantity                  Int?
-  quantityUnitOfMeasurement String?         @db.VarChar(8)
-  unitPrice                 Float?
-  costSurcharge             Float?
-  created_at                DateTime        @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime        @default(now()) @db.Timestamptz(6)
-  deleted_at                DateTime?       @db.Timestamptz(6)
-  surveyId                  String          @db.Uuid
-  remarks                   String?
-  defects                   defects?        @relation(fields: [defectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_defectid_foreign")
-  failureModes              failureModes?   @relation(fields: [failureModeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_failuremodeid_foreign")
-  manifestations            manifestations? @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_manifestationid_foreign")
-  surveys                   surveys         @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_surveyid_foreign")
-  units                     units           @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "measures_unitid_foreign")
-
-  @@index([deleted_at], map: "measures_deleted_at_index")
-  @@index([defectId], map: "measures_defectid_index")
-  @@index([manifestationId], map: "measures_manifestationid_index")
-  @@index([unitId], map: "measures_unitid_index")
-  @@index([surveyId], map: "measures_surveyid_index")
-}
-
-model arkSurveyReachSegments {
-  id                 String     @id @unique(map: "arksurveyreachsegments_id_unique") @db.Uuid
-  name               String     @db.VarChar(255)
-  arkSurveyId        String     @db.Uuid
-  reachSegmentLength Decimal?   @db.Decimal(8, 2)
-  riskScore          Int?
-  riskScoreDigit     Decimal?   @db.Decimal(3, 1)
-  failureModeScore   Decimal?   @db.Decimal(3, 1)
-  consequenceScore   Decimal?   @db.Decimal(3, 1)
-  sortNumber         Int?       @db.SmallInt
-  created_at         DateTime   @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime   @default(now()) @db.Timestamptz(6)
-  arkSurveys         arkSurveys @relation(fields: [arkSurveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveyreachsegments_arksurveyid_foreign")
-}
-
-model arkSurveys {
-  id                  String                    @id(map: "arkSurveyGeographyData_pkey") @unique(map: "arksurveygeographydata_id_unique") @db.Uuid
-  surveyId            String                    @unique(map: "arksurveygeographydata_surveyid_unique") @db.Uuid
-  arkGeographyStart   Unsupported("geography")?
-  arkGeographyEnd     Unsupported("geography")?
-  arkGeographyRDStart Json?
-  arkGeographyRDEnd   Json?
-  created_at          DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at          DateTime                  @default(now()) @db.Timestamptz(6)
-  deleted_at          DateTime?                 @db.Timestamptz(6)
-  surveys             surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
-  reachSegments       arkSurveyReachSegments[]
-}
-
-model admin_event_entity {
-  id               String  @id(map: "constraint_admin_event_entity") @db.VarChar(36)
-  admin_event_time BigInt?
-  realm_id         String? @db.VarChar(255)
-  operation_type   String? @db.VarChar(255)
-  auth_realm_id    String? @db.VarChar(255)
-  auth_client_id   String? @db.VarChar(255)
-  auth_user_id     String? @db.VarChar(255)
-  ip_address       String? @db.VarChar(255)
-  resource_path    String? @db.VarChar(2550)
-  representation   String?
-  error            String? @db.VarChar(255)
-  resource_type    String? @db.VarChar(64)
-}
-
-model associated_policy {
-  policy_id                                                                             String                 @db.VarChar(36)
-  associated_policy_id                                                                  String                 @db.VarChar(36)
-  resource_server_policy_associated_policy_associated_policy_idToresource_server_policy resource_server_policy @relation("associated_policy_associated_policy_idToresource_server_policy", fields: [associated_policy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_frsr5s213xcx4wnkog82ssrfy")
-  resource_server_policy_associated_policy_policy_idToresource_server_policy            resource_server_policy @relation("associated_policy_policy_idToresource_server_policy", fields: [policy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_frsrpas14xcx4wnkog82ssrfy")
-
-  @@id([policy_id, associated_policy_id], map: "constraint_farsrpap")
-  @@index([associated_policy_id], map: "idx_assoc_pol_assoc_pol_id")
-}
-
-model authentication_execution {
-  id                  String               @id(map: "constraint_auth_exec_pk") @db.VarChar(36)
-  alias               String?              @db.VarChar(255)
-  authenticator       String?              @db.VarChar(36)
-  realm_id            String?              @db.VarChar(36)
-  flow_id             String?              @db.VarChar(36)
-  requirement         Int?
-  priority            Int?
-  authenticator_flow  Boolean              @default(false)
-  auth_flow_id        String?              @db.VarChar(36)
-  auth_config         String?              @db.VarChar(36)
-  authentication_flow authentication_flow? @relation(fields: [flow_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_exec_flow")
-  realm               realm?               @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_exec_realm")
-
-  @@index([flow_id], map: "idx_auth_exec_flow")
-  @@index([realm_id, flow_id], map: "idx_auth_exec_realm_flow")
-}
-
-model authentication_flow {
-  id                       String                     @id(map: "constraint_auth_flow_pk") @db.VarChar(36)
-  alias                    String?                    @db.VarChar(255)
-  description              String?                    @db.VarChar(255)
-  realm_id                 String?                    @db.VarChar(36)
-  provider_id              String                     @default("basic-flow") @db.VarChar(36)
-  top_level                Boolean                    @default(false)
-  built_in                 Boolean                    @default(false)
-  realm                    realm?                     @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_flow_realm")
-  authentication_execution authentication_execution[]
-
-  @@index([realm_id], map: "idx_auth_flow_realm")
-}
-
-model authenticator_config {
-  id       String  @id(map: "constraint_auth_pk") @db.VarChar(36)
-  alias    String? @db.VarChar(255)
-  realm_id String? @db.VarChar(36)
-  realm    realm?  @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_auth_realm")
-
-  @@index([realm_id], map: "idx_auth_config_realm")
-}
-
-model authenticator_config_entry {
-  authenticator_id String  @db.VarChar(36)
-  value            String?
-  name             String  @db.VarChar(255)
-
-  @@id([authenticator_id, name], map: "constraint_auth_cfg_pk")
-}
-
-model broker_link {
-  identity_provider   String  @db.VarChar(255)
-  storage_provider_id String? @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  broker_user_id      String? @db.VarChar(255)
-  broker_username     String? @db.VarChar(255)
-  token               String?
-  user_id             String  @db.VarChar(255)
-
-  @@id([identity_provider, user_id], map: "constr_broker_link_pk")
-}
-
-model client {
-  id                           String                      @id(map: "constraint_7") @db.VarChar(36)
-  enabled                      Boolean                     @default(false)
-  full_scope_allowed           Boolean                     @default(false)
-  client_id                    String?                     @db.VarChar(255)
-  not_before                   Int?
-  public_client                Boolean                     @default(false)
-  secret                       String?                     @db.VarChar(255)
-  base_url                     String?                     @db.VarChar(255)
-  bearer_only                  Boolean                     @default(false)
-  management_url               String?                     @db.VarChar(255)
-  surrogate_auth_required      Boolean                     @default(false)
-  realm_id                     String?                     @db.VarChar(36)
-  protocol                     String?                     @db.VarChar(255)
-  node_rereg_timeout           Int?                        @default(0)
-  frontchannel_logout          Boolean                     @default(false)
-  consent_required             Boolean                     @default(false)
-  name                         String?                     @db.VarChar(255)
-  service_accounts_enabled     Boolean                     @default(false)
-  client_authenticator_type    String?                     @db.VarChar(255)
-  root_url                     String?                     @db.VarChar(255)
-  description                  String?                     @db.VarChar(255)
-  registration_token           String?                     @db.VarChar(255)
-  standard_flow_enabled        Boolean                     @default(true)
-  implicit_flow_enabled        Boolean                     @default(false)
-  direct_access_grants_enabled Boolean                     @default(false)
-  always_display_in_console    Boolean                     @default(false)
-  client_attributes            client_attributes[]
-  client_node_registrations    client_node_registrations[]
-  protocol_mapper              protocol_mapper[]
-  redirect_uris                redirect_uris[]
-  scope_mapping                scope_mapping[]
-  web_origins                  web_origins[]
-
-  @@unique([realm_id, client_id], map: "uk_b71cjlbenv945rb6gcon438at")
-  @@index([client_id], map: "idx_client_id")
-}
-
-model client_attributes {
-  client_id String  @db.VarChar(36)
-  value     String? @db.VarChar(4000)
-  name      String  @db.VarChar(255)
-  client    client  @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk3c47c64beacca966")
-
-  @@id([client_id, name], map: "constraint_3c")
-  @@index([name, value], map: "idx_client_att_by_name_value")
-}
-
-model client_auth_flow_bindings {
-  client_id    String  @db.VarChar(36)
-  flow_id      String? @db.VarChar(36)
-  binding_name String  @db.VarChar(255)
-
-  @@id([client_id, binding_name], map: "c_cli_flow_bind")
-}
-
-model client_initial_access {
-  id              String @id(map: "cnstr_client_init_acc_pk") @db.VarChar(36)
-  realm_id        String @db.VarChar(36)
-  timestamp       Int?
-  expiration      Int?
-  count           Int?
-  remaining_count Int?
-  realm           realm  @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_client_init_acc_realm")
-
-  @@index([realm_id], map: "idx_client_init_acc_realm")
-}
-
-model client_node_registrations {
-  client_id String @db.VarChar(36)
-  value     Int?
-  name      String @db.VarChar(255)
-  client    client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk4129723ba992f594")
-
-  @@id([client_id, name], map: "constraint_84")
-}
-
-model client_scope {
-  id                        String                      @id(map: "pk_cli_template") @db.VarChar(36)
-  name                      String?                     @db.VarChar(255)
-  realm_id                  String?                     @db.VarChar(36)
-  description               String?                     @db.VarChar(255)
-  protocol                  String?                     @db.VarChar(255)
-  client_scope_attributes   client_scope_attributes[]
-  client_scope_role_mapping client_scope_role_mapping[]
-  protocol_mapper           protocol_mapper[]
-
-  @@unique([realm_id, name], map: "uk_cli_scope")
-  @@index([realm_id], map: "idx_realm_clscope")
-}
-
-model client_scope_attributes {
-  scope_id     String       @db.VarChar(36)
-  value        String?      @db.VarChar(2048)
-  name         String       @db.VarChar(255)
-  client_scope client_scope @relation(fields: [scope_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_scope_attr_scope")
-
-  @@id([scope_id, name], map: "pk_cl_tmpl_attr")
-  @@index([scope_id], map: "idx_clscope_attrs")
-}
-
-model client_scope_client {
-  client_id     String  @db.VarChar(255)
-  scope_id      String  @db.VarChar(255)
-  default_scope Boolean @default(false)
-
-  @@id([client_id, scope_id], map: "c_cli_scope_bind")
-  @@index([scope_id], map: "idx_cl_clscope")
-  @@index([client_id], map: "idx_clscope_cl")
-}
-
-model client_scope_role_mapping {
-  scope_id     String       @db.VarChar(36)
-  role_id      String       @db.VarChar(36)
-  client_scope client_scope @relation(fields: [scope_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_scope_rm_scope")
-
-  @@id([scope_id, role_id], map: "pk_template_scope")
-  @@index([scope_id], map: "idx_clscope_role")
-  @@index([role_id], map: "idx_role_clscope")
-}
-
-model client_session {
-  id                         String                       @id(map: "constraint_8") @db.VarChar(36)
-  client_id                  String?                      @db.VarChar(36)
-  redirect_uri               String?                      @db.VarChar(255)
-  state                      String?                      @db.VarChar(255)
-  timestamp                  Int?
-  session_id                 String?                      @db.VarChar(36)
-  auth_method                String?                      @db.VarChar(255)
-  realm_id                   String?                      @db.VarChar(255)
-  auth_user_id               String?                      @db.VarChar(36)
-  current_action             String?                      @db.VarChar(36)
-  user_session               user_session?                @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_b4ao2vcvat6ukau74wbwtfqo1")
-  client_session_auth_status client_session_auth_status[]
-  client_session_note        client_session_note[]
-  client_session_prot_mapper client_session_prot_mapper[]
-  client_session_role        client_session_role[]
-  client_user_session_note   client_user_session_note[]
-
-  @@index([session_id], map: "idx_client_session_session")
-}
-
-model client_session_auth_status {
-  authenticator                                             String         @db.VarChar(36)
-  status                                                    Int?
-  client_session                                            String         @db.VarChar(36)
-  client_session_client_sessionToclient_session_auth_status client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_status_constraint")
-
-  @@id([client_session, authenticator], map: "constraint_auth_status_pk")
-}
-
-model client_session_note {
-  name                                               String         @db.VarChar(255)
-  value                                              String?        @db.VarChar(255)
-  client_session                                     String         @db.VarChar(36)
-  client_session_client_sessionToclient_session_note client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk5edfb00ff51c2736")
-
-  @@id([client_session, name], map: "constraint_5e")
-}
-
-model client_session_prot_mapper {
-  protocol_mapper_id                                        String         @db.VarChar(36)
-  client_session                                            String         @db.VarChar(36)
-  client_session_client_sessionToclient_session_prot_mapper client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_33a8sgqw18i532811v7o2dk89")
-
-  @@id([client_session, protocol_mapper_id], map: "constraint_cs_pmp_pk")
-}
-
-model client_session_role {
-  role_id                                            String         @db.VarChar(255)
-  client_session                                     String         @db.VarChar(36)
-  client_session_client_sessionToclient_session_role client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_11b7sgqw18i532811v7o2dv76")
-
-  @@id([client_session, role_id], map: "constraint_5")
-}
-
-model client_user_session_note {
-  name                                                    String         @db.VarChar(255)
-  value                                                   String?        @db.VarChar(2048)
-  client_session                                          String         @db.VarChar(36)
-  client_session_client_sessionToclient_user_session_note client_session @relation(fields: [client_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cl_usr_ses_note")
-
-  @@id([client_session, name], map: "constr_cl_usr_ses_note")
-}
-
-model component {
-  id               String             @id(map: "constr_component_pk") @db.VarChar(36)
-  name             String?            @db.VarChar(255)
-  parent_id        String?            @db.VarChar(36)
-  provider_id      String?            @db.VarChar(36)
-  provider_type    String?            @db.VarChar(255)
-  realm_id         String?            @db.VarChar(36)
-  sub_type         String?            @db.VarChar(255)
-  realm            realm?             @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_component_realm")
-  component_config component_config[]
-
-  @@index([provider_type], map: "idx_component_provider_type")
-  @@index([realm_id], map: "idx_component_realm")
-}
-
-model component_config {
-  id           String    @id(map: "constr_component_config_pk") @db.VarChar(36)
-  component_id String    @db.VarChar(36)
-  name         String    @db.VarChar(255)
-  value        String?   @db.VarChar(4000)
-  component    component @relation(fields: [component_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_component_config")
-
-  @@index([component_id], map: "idx_compo_config_compo")
-}
-
-model composite_role {
-  composite                                              String        @db.VarChar(36)
-  child_role                                             String        @db.VarChar(36)
-  keycloak_role_composite_role_child_roleTokeycloak_role keycloak_role @relation("composite_role_child_roleTokeycloak_role", fields: [child_role], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gr7thllb9lu8q4vqa4524jjy8")
-  keycloak_role_composite_role_compositeTokeycloak_role  keycloak_role @relation("composite_role_compositeTokeycloak_role", fields: [composite], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_a63wvekftu8jo1pnj81e7mce2")
-
-  @@id([composite, child_role], map: "constraint_composite_role")
-  @@index([composite], map: "idx_composite")
-  @@index([child_role], map: "idx_composite_child")
-}
-
-model credential {
-  id              String       @id(map: "constraint_f") @db.VarChar(36)
-  salt            Bytes?
-  type            String?      @db.VarChar(255)
-  user_id         String?      @db.VarChar(36)
-  created_date    BigInt?
-  user_label      String?      @db.VarChar(255)
-  secret_data     String?
-  credential_data String?
-  priority        Int?
-  user_entity     user_entity? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pfyr0glasqyl0dei3kl69r6v0")
-
-  @@index([user_id], map: "idx_user_credential")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model databasechangelog {
-  id            String   @db.VarChar(255)
-  author        String   @db.VarChar(255)
-  filename      String   @db.VarChar(255)
-  dateexecuted  DateTime @db.Timestamp(6)
-  orderexecuted Int
-  exectype      String   @db.VarChar(10)
-  md5sum        String?  @db.VarChar(35)
-  description   String?  @db.VarChar(255)
-  comments      String?  @db.VarChar(255)
-  tag           String?  @db.VarChar(255)
-  liquibase     String?  @db.VarChar(20)
-  contexts      String?  @db.VarChar(255)
-  labels        String?  @db.VarChar(255)
-  deployment_id String?  @db.VarChar(10)
-
-  @@ignore
-}
-
-model databasechangeloglock {
-  id          Int       @id(map: "pk_databasechangeloglock")
-  locked      Boolean
-  lockgranted DateTime? @db.Timestamp(6)
-  lockedby    String?   @db.VarChar(255)
-}
-
-model default_client_scope {
-  realm_id      String  @db.VarChar(36)
-  scope_id      String  @db.VarChar(36)
-  default_scope Boolean @default(false)
-  realm         realm   @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_r_def_cli_scope_realm")
-
-  @@id([realm_id, scope_id], map: "r_def_cli_scope_bind")
-  @@index([realm_id], map: "idx_defcls_realm")
-  @@index([scope_id], map: "idx_defcls_scope")
-}
-
-model event_entity {
-  id           String  @id(map: "constraint_4") @db.VarChar(36)
-  client_id    String? @db.VarChar(255)
-  details_json String? @db.VarChar(2550)
-  error        String? @db.VarChar(255)
-  ip_address   String? @db.VarChar(255)
-  realm_id     String? @db.VarChar(255)
-  session_id   String? @db.VarChar(255)
-  event_time   BigInt?
-  type         String? @db.VarChar(255)
-  user_id      String? @db.VarChar(255)
-
-  @@index([realm_id, event_time], map: "idx_event_time")
-}
-
-model federated_identity {
-  identity_provider  String      @db.VarChar(255)
-  realm_id           String?     @db.VarChar(36)
-  federated_user_id  String?     @db.VarChar(255)
-  federated_username String?     @db.VarChar(255)
-  token              String?
-  user_id            String      @db.VarChar(36)
-  user_entity        user_entity @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk404288b92ef007a6")
-
-  @@id([identity_provider, user_id], map: "constraint_40")
-  @@index([federated_user_id], map: "idx_fedidentity_feduser")
-  @@index([user_id], map: "idx_fedidentity_user")
-}
-
-model federated_user {
-  id                  String  @id(map: "constr_federated_user") @db.VarChar(255)
-  storage_provider_id String? @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-}
-
-model fed_user_attribute {
-  id                  String  @id(map: "constr_fed_user_attr_pk") @db.VarChar(36)
-  name                String  @db.VarChar(255)
-  user_id             String  @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  storage_provider_id String? @db.VarChar(36)
-  value               String? @db.VarChar(2024)
-
-  @@index([user_id, realm_id, name], map: "idx_fu_attribute")
-}
-
-model fed_user_consent {
-  id                      String  @id(map: "constr_fed_user_consent_pk") @db.VarChar(36)
-  client_id               String? @db.VarChar(255)
-  user_id                 String  @db.VarChar(255)
-  realm_id                String  @db.VarChar(36)
-  storage_provider_id     String? @db.VarChar(36)
-  created_date            BigInt?
-  last_updated_date       BigInt?
-  client_storage_provider String? @db.VarChar(36)
-  external_client_id      String? @db.VarChar(255)
-
-  @@index([user_id, client_storage_provider, external_client_id], map: "idx_fu_cnsnt_ext")
-  @@index([user_id, client_id], map: "idx_fu_consent")
-  @@index([realm_id, user_id], map: "idx_fu_consent_ru")
-}
-
-model fed_user_consent_cl_scope {
-  user_consent_id String @db.VarChar(36)
-  scope_id        String @db.VarChar(36)
-
-  @@id([user_consent_id, scope_id], map: "constraint_fgrntcsnt_clsc_pm")
-}
-
-model fed_user_credential {
-  id                  String  @id(map: "constr_fed_user_cred_pk") @db.VarChar(36)
-  salt                Bytes?
-  type                String? @db.VarChar(255)
-  created_date        BigInt?
-  user_id             String  @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  storage_provider_id String? @db.VarChar(36)
-  user_label          String? @db.VarChar(255)
-  secret_data         String?
-  credential_data     String?
-  priority            Int?
-
-  @@index([user_id, type], map: "idx_fu_credential")
-  @@index([realm_id, user_id], map: "idx_fu_credential_ru")
-}
-
-model fed_user_group_membership {
-  group_id            String  @db.VarChar(36)
-  user_id             String  @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  storage_provider_id String? @db.VarChar(36)
-
-  @@id([group_id, user_id], map: "constr_fed_user_group")
-  @@index([user_id, group_id], map: "idx_fu_group_membership")
-  @@index([realm_id, user_id], map: "idx_fu_group_membership_ru")
-}
-
-model fed_user_required_action {
-  required_action     String  @default(" ") @db.VarChar(255)
-  user_id             String  @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  storage_provider_id String? @db.VarChar(36)
-
-  @@id([required_action, user_id], map: "constr_fed_required_action")
-  @@index([user_id, required_action], map: "idx_fu_required_action")
-  @@index([realm_id, user_id], map: "idx_fu_required_action_ru")
-}
-
-model fed_user_role_mapping {
-  role_id             String  @db.VarChar(36)
-  user_id             String  @db.VarChar(255)
-  realm_id            String  @db.VarChar(36)
-  storage_provider_id String? @db.VarChar(36)
-
-  @@id([role_id, user_id], map: "constr_fed_user_role")
-  @@index([user_id, role_id], map: "idx_fu_role_mapping")
-  @@index([realm_id, user_id], map: "idx_fu_role_mapping_ru")
-}
-
-model group_attribute {
-  id             String         @id(map: "constraint_group_attribute_pk") @default("sybase-needs-something-here") @db.VarChar(36)
-  name           String         @db.VarChar(255)
-  value          String?        @db.VarChar(255)
-  group_id       String         @db.VarChar(36)
-  keycloak_group keycloak_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_attribute_group")
-
-  @@index([group_id], map: "idx_group_attr_group")
-}
-
-model group_role_mapping {
-  role_id        String         @db.VarChar(36)
-  group_id       String         @db.VarChar(36)
-  keycloak_group keycloak_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_role_group")
-
-  @@id([role_id, group_id], map: "constraint_group_role")
-  @@index([group_id], map: "idx_group_role_mapp_group")
-}
-
-model identity_provider {
-  internal_id                String                     @id(map: "constraint_2b") @db.VarChar(36)
-  enabled                    Boolean                    @default(false)
-  provider_alias             String?                    @db.VarChar(255)
-  provider_id                String?                    @db.VarChar(255)
-  store_token                Boolean                    @default(false)
-  authenticate_by_default    Boolean                    @default(false)
-  realm_id                   String?                    @db.VarChar(36)
-  add_token_role             Boolean                    @default(true)
-  trust_email                Boolean                    @default(false)
-  first_broker_login_flow_id String?                    @db.VarChar(36)
-  post_broker_login_flow_id  String?                    @db.VarChar(36)
-  provider_display_name      String?                    @db.VarChar(255)
-  link_only                  Boolean                    @default(false)
-  realm                      realm?                     @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk2b4ebc52ae5c3b34")
-  identity_provider_config   identity_provider_config[]
-
-  @@unique([provider_alias, realm_id], map: "uk_2daelwnibji49avxsrtuf6xj33")
-  @@index([realm_id], map: "idx_ident_prov_realm")
-}
-
-model identity_provider_config {
-  identity_provider_id String            @db.VarChar(36)
-  value                String?
-  name                 String            @db.VarChar(255)
-  identity_provider    identity_provider @relation(fields: [identity_provider_id], references: [internal_id], onDelete: NoAction, onUpdate: NoAction, map: "fkdc4897cf864c4e43")
-
-  @@id([identity_provider_id, name], map: "constraint_d")
-}
-
-model identity_provider_mapper {
-  id                String              @id(map: "constraint_idpm") @db.VarChar(36)
-  name              String              @db.VarChar(255)
-  idp_alias         String              @db.VarChar(255)
-  idp_mapper_name   String              @db.VarChar(255)
-  realm_id          String              @db.VarChar(36)
-  realm             realm               @relation(fields: [realm_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_idpm_realm")
-  idp_mapper_config idp_mapper_config[]
-
-  @@index([realm_id], map: "idx_id_prov_mapp_realm")
-}
-
-model idp_mapper_config {
-  idp_mapper_id            String                   @db.VarChar(36)
-  value                    String?
-  name                     String                   @db.VarChar(255)
-  identity_provider_mapper identity_provider_mapper @relation(fields: [idp_mapper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_idpmconfig")
-
-  @@id([idp_mapper_id, name], map: "constraint_idpmconfig")
-}
-
-model keycloak_group {
-  id                 String               @id(map: "constraint_group") @db.VarChar(36)
-  name               String?              @db.VarChar(255)
-  parent_group       String               @db.VarChar(36)
-  realm_id           String?              @db.VarChar(36)
-  group_attribute    group_attribute[]
-  group_role_mapping group_role_mapping[]
-
-  @@unique([realm_id, parent_group, name], map: "sibling_names")
-}
-
-model keycloak_role {
-  id                                                      String           @id(map: "constraint_a") @db.VarChar(36)
-  client_realm_constraint                                 String?          @db.VarChar(255)
-  client_role                                             Boolean          @default(false)
-  description                                             String?          @db.VarChar(255)
-  name                                                    String?          @db.VarChar(255)
-  realm_id                                                String?          @db.VarChar(255)
-  client                                                  String?          @db.VarChar(36)
-  realm                                                   String?          @db.VarChar(36)
-  realm_keycloak_roleTorealm                              realm?           @relation(fields: [realm], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_6vyqfe4cn4wlq8r6kt5vdsj5c")
-  composite_role_composite_role_child_roleTokeycloak_role composite_role[] @relation("composite_role_child_roleTokeycloak_role")
-  composite_role_composite_role_compositeTokeycloak_role  composite_role[] @relation("composite_role_compositeTokeycloak_role")
-  role_attribute                                          role_attribute[]
-
-  @@unique([name, client_realm_constraint], map: "UK_J3RWUVD56ONTGSUHOGM184WW2-2")
-  @@index([client], map: "idx_keycloak_role_client")
-  @@index([realm], map: "idx_keycloak_role_realm")
-}
-
-model migration_model {
-  id          String  @id(map: "constraint_migmod") @db.VarChar(36)
-  version     String? @db.VarChar(36)
-  update_time BigInt  @default(0)
-
-  @@index([update_time], map: "idx_update_time")
-}
-
-model offline_client_session {
-  user_session_id         String  @db.VarChar(36)
-  client_id               String  @db.VarChar(255)
-  offline_flag            String  @db.VarChar(4)
-  timestamp               Int?
-  data                    String?
-  client_storage_provider String  @default("local") @db.VarChar(36)
-  external_client_id      String  @default("local") @db.VarChar(255)
-
-  @@id([user_session_id, client_id, client_storage_provider, external_client_id, offline_flag], map: "constraint_offl_cl_ses_pk3")
-  @@index([client_id, offline_flag], map: "idx_offline_css_preload")
-  @@index([user_session_id], map: "idx_us_sess_id_on_cl_sess")
-}
-
-model offline_user_session {
-  user_session_id      String  @db.VarChar(36)
-  user_id              String  @db.VarChar(255)
-  realm_id             String  @db.VarChar(36)
-  created_on           Int
-  offline_flag         String  @db.VarChar(4)
-  data                 String?
-  last_session_refresh Int     @default(0)
-
-  @@id([user_session_id, offline_flag], map: "constraint_offl_us_ses_pk2")
-  @@index([user_id, realm_id, offline_flag], map: "idx_offline_uss_by_user")
-  @@index([realm_id, offline_flag, user_session_id], map: "idx_offline_uss_by_usersess")
-  @@index([created_on], map: "idx_offline_uss_createdon")
-  @@index([offline_flag, created_on, user_session_id], map: "idx_offline_uss_preload")
 }
 
 model policy_config {
@@ -2654,6 +2119,15 @@ model redirect_uris {
   @@index([client_id], map: "idx_redir_uri_client")
 }
 
+model registrations {
+  emailAddress String    @id @unique(map: "registrations_emailaddress_unique")
+  firstName    String?
+  lastName     String?
+  phoneNumber  String?
+  created_at   DateTime? @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+}
+
 model required_action_config {
   required_action_id String  @db.VarChar(36)
   value              String?
@@ -2826,6 +2300,452 @@ model scope_policy {
   @@index([policy_id], map: "idx_scope_policy_policy")
 }
 
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+}
+
+model sites {
+  id              String     @id @unique(map: "sites_id_unique") @db.Uuid
+  name            String     @db.VarChar(255)
+  ownerCompanyId  String?    @db.Uuid
+  image           String?    @db.VarChar(255)
+  imageMap        String?
+  customerVersion String?    @default("all") @db.VarChar(255)
+  created_at      DateTime?  @db.Timestamptz(6)
+  updated_at      DateTime?  @db.Timestamptz(6)
+  companies       companies? @relation(fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "sites_ownercompanyid_foreign")
+  objects         objects[]
+
+  @@index([ownerCompanyId])
+}
+
+model spanJunctionBoxes {
+  id                     String                    @id @unique(map: "spanjunctionboxes_id_unique") @db.Uuid
+  objectId               String                    @db.Uuid
+  surveyId               String                    @db.Uuid
+  name                   String                    @db.VarChar(128)
+  mastNumber             Decimal?                  @db.Decimal(10, 3)
+  location               String?                   @db.VarChar(255)
+  locationIndication     String?                   @db.VarChar(255)
+  riserTubeVisible       Boolean?
+  remarks                String?
+  geography              Unsupported("geography")?
+  created_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
+  deleted_at             DateTime?                 @db.Timestamptz(6)
+  installationHeight     Decimal?                  @db.Decimal(8, 2)
+  a11yDetails            Json                      @default("{}")
+  geographyRD            Json?                     @default("{}")
+  objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
+  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
+  spanJunctionBoxSurveys spanJunctionBoxSurveys?
+
+  @@index([deleted_at], map: "spanjunctionboxes_deleted_at_index")
+}
+
+model spanJunctionBoxSurveys {
+  id                       String            @id(map: "spanJunctionBoxesSurveys_pkey") @unique(map: "spanjunctionboxessurveys_id_unique") @db.Uuid
+  junctionBoxId            String            @unique(map: "spanjunctionboxsurveys_junctionboxid_unique") @db.Uuid
+  cableDamage              Boolean?
+  faultyMontageTensionWire Boolean?
+  faultyMontageFacade      Boolean?
+  junctionBoxDamage        Boolean?
+  stickerNotReadable       Boolean?
+  remarks                  String?
+  created_at               DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime          @default(now()) @db.Timestamptz(6)
+  spanJunctionBoxes        spanJunctionBoxes @relation(fields: [junctionBoxId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxessurveys_junctionboxid_foreign")
+}
+
+model spanLuminaires {
+  id                      String                    @id @unique(map: "spanluminaires_id_unique") @db.Uuid
+  supportSystemId         String                    @db.Uuid
+  name                    String                    @db.VarChar(128)
+  location                String?                   @db.VarChar(255)
+  constructionYear        Int?
+  supplierType            String?                   @db.VarChar(32)
+  manufacturer            String?                   @db.VarChar(255)
+  geography               Unsupported("geography")?
+  remarks                 String?
+  driverSupplierType      String?                   @db.VarChar(32)
+  driverCommissioningDate DateTime?                 @db.Date
+  lightSupplierType       String?                   @db.VarChar(32)
+  lightCommissioningDate  DateTime?                 @db.Date
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  deleted_at              DateTime?                 @db.Timestamptz(6)
+  hasLED                  Boolean?
+  geographyRD             Json?                     @default("{}")
+  spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
+  spanLuminaireSurveys    spanLuminaireSurveys?
+
+  @@index([deleted_at], map: "spanluminaires_deleted_at_index")
+}
+
+model spanLuminaireSurveys {
+  id              String         @id @unique(map: "spanluminairesurveys_id_unique") @db.Uuid
+  luminaireId     String         @unique(map: "spanluminairesurveys_luminaireid_unique") @db.Uuid
+  luminaireDamage Boolean?
+  remarks         String?
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime       @default(now()) @db.Timestamptz(6)
+  spanLuminaires  spanLuminaires @relation(fields: [luminaireId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminairesurveys_luminaireid_foreign")
+}
+
+model spanSupportSystemFacadeSurveys {
+  id                                        String             @id @unique(map: "spansupportsystemfacadesurveys_id_unique") @db.Uuid
+  supportSystemId                           String             @unique(map: "spansupportsystemfacadesurveys_supportsystemid_unique") @db.Uuid
+  facadeDamageWithin1m                      Boolean?
+  hinderingVegetation                       Boolean?
+  wallPlateDamage                           Boolean?
+  faultyMontage                             Boolean?
+  nutNotFullyOverThreadedRod                Boolean?
+  missingFasteners                          Boolean?
+  measuredPreload                           Int?
+  appliedAdditionalTraction                 Int?
+  facadeConnectionFailureAdditionalTraction Int?
+  remarks                                   String?
+  created_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                                DateTime           @default(now()) @db.Timestamptz(6)
+  facadeConnectionFailed                    Boolean?
+  spanSupportSystems                        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemfacadesurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystemMastSurveys {
+  id                      String             @id @unique(map: "spansupportsystemmastsurveys_id_unique") @db.Uuid
+  supportSystemId         String             @unique(map: "spansupportsystemmastsurveys_supportsystemid_unique") @db.Uuid
+  mastDamage              Boolean?
+  mastMissingParts        Boolean?
+  tensionMastAngle        Int?
+  mastAttachmentDamage    Boolean?
+  mastBracketMissingParts Boolean?
+  mastBracketDamage       Boolean?
+  remarks                 String?
+  created_at              DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems      spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemmastsurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystemNodeSurveys {
+  id                 String             @id @unique(map: "spansupportsystemnodesurveys_id_unique") @db.Uuid
+  supportSystemId    String             @unique(map: "spansupportsystemnodesurveys_supportsystemid_unique") @db.Uuid
+  nodeDamage         Boolean?
+  remarks            String?
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemnodesurveys_supportsystemid_foreign")
+}
+
+model spanSupportSystems {
+  id                                  String                               @id @unique(map: "spansupportsystems_id_unique") @db.Uuid
+  objectId                            String                               @db.Uuid
+  surveyId                            String                               @db.Uuid
+  name                                String                               @db.VarChar(128)
+  type                                String                               @db.VarChar(32)
+  location                            String?                              @db.VarChar(255)
+  locationIndication                  String?                              @db.VarChar(255)
+  constructionYear                    Int?
+  remarks                             String?
+  geography                           Unsupported("geography")?
+  houseNumber                         String?                              @db.VarChar(32)
+  created_at                          DateTime                             @default(now()) @db.Timestamptz(6)
+  updated_at                          DateTime                             @default(now()) @db.Timestamptz(6)
+  deleted_at                          DateTime?                            @db.Timestamptz(6)
+  installationHeight                  Decimal?                             @db.Decimal(8, 2)
+  typeDetailed                        String?                              @db.VarChar(64)
+  a11yDetails                         Json                                 @default("{}")
+  geographyRD                         Json?                                @default("{}")
+  objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
+  surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
+  spanLuminaires                      spanLuminaires[]
+  spanSupportSystemFacadeSurveys      spanSupportSystemFacadeSurveys?
+  spanSupportSystemMastSurveys        spanSupportSystemMastSurveys?
+  spanSupportSystemNodeSurveys        spanSupportSystemNodeSurveys?
+  spanSupportSystemTensionWireSurveys spanSupportSystemTensionWireSurveys?
+
+  @@index([deleted_at], map: "spansupportsystems_deleted_at_index")
+}
+
+model spanSupportSystemTensionWireSurveys {
+  id                        String             @id @unique(map: "spansupportsystemtensionwiresurveys_id_unique") @db.Uuid
+  supportSystemId           String             @unique(map: "spansupportsystemtensionwiresurveys_supportsystemid_unique") @db.Uuid
+  tensionWireDamage         Boolean?
+  thirdPartyObjectsAttached Boolean?
+  gaffTerminalDamage        Boolean?
+  gaffTerminalMissingParts  Boolean?
+  faultyMontage             Boolean?
+  tensionWireClampDamage    Boolean?
+  remarks                   String?
+  created_at                DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime           @default(now()) @db.Timestamptz(6)
+  spanSupportSystems        spanSupportSystems @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystemtensionwiresurveys_supportsystemid_foreign")
+}
+
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model surveyElementGroups {
+  id                     String    @id @unique(map: "surveyelementgroups_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  name                   String    @db.VarChar(255)
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  initialRemarks         String?
+  inspectionRemarks      String?
+  craMaxInitialScore     Int?
+  craMaxHistoryScore     Int?
+  craMaxInspectionScore  Int?
+  inspectionStandardData Json      @default("{}")
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveyelementgroups_surveyid_foreign")
+
+  @@unique([surveyId, name], map: "surveyelementgroups _surveyid_name_unique")
+}
+
+model surveyElements {
+  id                     String    @id @unique(map: "surveyelements_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  elementId              String    @db.Uuid
+  inspectionStandardData Json      @default("{}")
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  elements               elements  @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_elementid_foreign")
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyelements_surveyid_foreign")
+}
+
+model surveyManifestations {
+  id                     String         @id @unique(map: "surveymanifestations_id_unique") @db.Uuid
+  surveyId               String         @db.Uuid
+  manifestationId        String         @db.Uuid
+  inspectionStandardData Json           @default("{}")
+  created_at             DateTime?      @db.Timestamptz(6)
+  updated_at             DateTime?      @db.Timestamptz(6)
+  manifestations         manifestations @relation(fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_manifestationid_foreign")
+  surveys                surveys        @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymanifestations_surveyid_foreign")
+}
+
+model surveyModifications {
+  id          String    @id @unique(map: "surveymodifications_id_unique") @db.Uuid
+  version     Int
+  description String
+  surveryedOn DateTime  @db.Timestamptz(6)
+  surveyId    String    @db.Uuid
+  objectId    String    @db.Uuid
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  objects     objects   @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_objectid_foreign")
+  surveys     surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveymodifications_surveyid_foreign")
+}
+
+model surveys {
+  id                                                   String                       @id @unique(map: "surveys_id_unique") @db.Uuid
+  surveryedOn                                          DateTime                     @db.Timestamptz(6)
+  updatedOn                                            DateTime                     @db.Timestamptz(6)
+  status                                               String?
+  description                                          String?
+  dUri                                                 String?                      @map("3dUri") @db.VarChar(255)
+  summaryAndAdvice                                     String?
+  operatorCompanyId                                    String?                      @db.Uuid
+  surveyorCompanyId                                    String?                      @db.Uuid
+  objectId                                             String                       @db.Uuid
+  created_at                                           DateTime?                    @db.Timestamptz(6)
+  updated_at                                           DateTime?                    @db.Timestamptz(6)
+  condition                                            String?                      @db.VarChar(1)
+  storageUsed                                          BigInt?
+  material                                             String?                      @db.VarChar(255)
+  isDOMLight                                           Boolean?
+  pointCloudStorageUsed                                BigInt                       @default(0)
+  isAssetDescriptionVisible                            Boolean?
+  isAnnotationsDefaultVisible                          Boolean?                     @default(true)
+  isVideoDownloadVisible                               Boolean?                     @default(true)
+  projectNumber                                        String?                      @db.VarChar(255)
+  inspectionStandardType                               String?                      @db.VarChar(255)
+  dUriGeo                                              String?                      @map("3dUriGeo") @db.VarChar(255)
+  dUriMultiBeam                                        String?                      @map("3dUriMultiBeam") @db.VarChar(255)
+  careCondition                                        String?                      @db.VarChar(1)
+  scanLineCoordinates                                  Json?
+  shapesInModel                                        Json?
+  isFmecaAvailable                                     Boolean                      @default(false)
+  isCraAvailable                                       Boolean                      @default(false)
+  craInitialHistoryIsBuildBetween4074                  Boolean                      @default(false)
+  craInitialHistoryIsStaticallyIndeterminate           Boolean                      @default(false)
+  craInitialHistoryBuildBetween4074Remarks             String?
+  craInitialHistoryStaticallyIndeterminateRemarks      String?
+  craInspectionIsBuildBetween4074                      Boolean                      @default(false)
+  craInspectionIsStaticallyIndeterminate               Boolean                      @default(false)
+  craInspectionBuildBetween4074Remarks                 String?
+  craInspectionStaticallyIndeterminateRemarks          String?
+  craInitialHistoryRemarks                             String?
+  craInspectionRemarks                                 String?
+  craInitialHistoryScore                               Decimal?                     @db.Decimal(15, 6)
+  craInspectionScore                                   Decimal?                     @db.Decimal(15, 6)
+  craInitialHistoryCondition                           Int                          @default(0)
+  craInspectionCondition                               Int                          @default(0)
+  craInitialHistoryConditionWithoutFactor              Int                          @default(0)
+  craInspectionConditionWithoutFactor                  Int                          @default(0)
+  preparedAuthor                                       String?                      @db.VarChar(255)
+  preparedDate                                         DateTime?                    @db.Timestamptz(6)
+  verifiedAuthor                                       String?                      @db.VarChar(255)
+  verifiedDate                                         DateTime?                    @db.Timestamptz(6)
+  craInitialHistoryConditionScoreWithoutFactor         Int?
+  craInspectionConditionScoreWithoutFactor             Int?
+  craInitialHistoryConditionScore                      Int?
+  craInspectionConditionScore                          Int?
+  batchId                                              String?                      @db.Uuid
+  inspectionStandardData                               Json                         @default("{}")
+  craInitialHistoryIsBuildBetween4074IsRelevant        Boolean                      @default(false)
+  craInitialHistoryIsStaticallyIndeterminateIsRelevant Boolean                      @default(false)
+  craInspectionIsBuildBetween4074IsRelevant            Boolean                      @default(false)
+  craInspectionIsStaticallyIndeterminateIsRelevant     Boolean                      @default(false)
+  legacyFailureMode                                    Boolean?
+  ARBCraInspectionScore                                Int?
+  ARBCraInitialFlagScore                               Int?
+  ARBCraInspectionSummary                              String?
+  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
+  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
+  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
+  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
+  arkSurveys                                           arkSurveys?
+  assets                                               assets[]
+  auditEvents                                          auditEvents[]
+  conditions                                           conditions[]
+  cyclicMeasures                                       cyclicMeasures[]
+  derivedConditionScores                               derivedConditionScores[]
+  elementRemarks                                       elementRemarks[]
+  elements                                             elements[]
+  failureModes                                         failureModes[]
+  findings                                             findings[]
+  fmecaFurtherInvestigations                           fmecaFurtherInvestigations[]
+  inspectionFindings                                   inspectionFindings[]
+  inspectionPlans                                      inspectionPlans[]
+  jobs                                                 jobs[]
+  maintenanceMeasures                                  maintenanceMeasures[]
+  manifestationRemarks                                 manifestationRemarks[]
+  manifestations                                       manifestations[]
+  measures                                             measures[]
+  observationPoints                                    observationPoints[]
+  poleLabResults                                       poleLabResults[]
+  spanJunctionBoxes                                    spanJunctionBoxes[]
+  spanSupportSystems                                   spanSupportSystems[]
+  surveyElementGroups                                  surveyElementGroups[]
+  surveyElements                                       surveyElements[]
+  surveyManifestations                                 surveyManifestations[]
+  surveyModifications                                  surveyModifications[]
+  surveyUnits                                          surveyUnits[]
+  unitRemarks                                          unitRemarks[]
+  units                                                units[]
+  utProjects                                           utProjects[]
+
+  @@index([batchId])
+  @@index([objectId])
+  @@index([operatorCompanyId])
+  @@index([surveryedOn])
+  @@index([surveyorCompanyId])
+}
+
+model surveyUnits {
+  id                     String    @id @unique(map: "surveyunits_id_unique") @db.Uuid
+  surveyId               String    @db.Uuid
+  unitId                 String    @db.Uuid
+  inspectionStandardData Json      @default("{}")
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  surveys                surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_surveyid_foreign")
+  units                  units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surveyunits_unitid_foreign")
+}
+
+model tranches {
+  id               String    @id @unique(map: "tranches_id_unique") @db.Uuid
+  contractId       String    @db.Uuid
+  name             String    @db.VarChar(255)
+  status           String?   @default("open") @db.VarChar(255)
+  plannedStartDate DateTime? @db.Timestamptz(6)
+  plannedEndDate   DateTime? @db.Timestamptz(6)
+  startDate        DateTime? @db.Timestamptz(6)
+  endDate          DateTime? @db.Timestamptz(6)
+  created_at       DateTime? @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+  contracts        contracts @relation(fields: [contractId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tranches_contractid_foreign")
+  batches          batches[]
+}
+
+model unitRemarks {
+  id         String    @id @unique(map: "unitremarks_id_unique") @db.Uuid
+  text       String
+  remarkedOn DateTime  @db.Timestamptz(6)
+  unitId     String    @db.Uuid
+  surveyId   String    @db.Uuid
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  remarkedBy String    @db.VarChar(255)
+  surveys    surveys   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_surveyid_foreign")
+  units      units     @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "unitremarks_unitid_foreign")
+
+  @@index([surveyId])
+  @@index([unitId])
+}
+
+model units {
+  id                                                            String                       @id @unique(map: "units_id_unique") @db.Uuid
+  name                                                          String                       @db.VarChar(255)
+  code                                                          String?                      @db.VarChar(255)
+  location                                                      String?                      @db.VarChar(255)
+  elementId                                                     String                       @db.Uuid
+  conditionId                                                   String?                      @db.Uuid
+  observationPointId                                            String?                      @db.Uuid
+  created_at                                                    DateTime?                    @db.Timestamptz(6)
+  updated_at                                                    DateTime?                    @db.Timestamptz(6)
+  material                                                      String?                      @db.VarChar(255)
+  quantity                                                      Int?
+  quantityUnitOfMeasurement                                     String?                      @db.VarChar(255)
+  isArchived                                                    Boolean                      @default(false)
+  constructionYear                                              Int?
+  objectId                                                      String                       @db.Uuid
+  isStructural                                                  Boolean                      @default(false)
+  isElectrical                                                  Boolean                      @default(false)
+  isStructuralObjectSpecific                                    Boolean                      @default(false)
+  isElectricalObjectSpecific                                    Boolean                      @default(false)
+  isRelevant                                                    Boolean                      @default(false)
+  surveyId                                                      String?                      @db.Uuid
+  deleted_at                                                    DateTime?                    @db.Timestamptz(6)
+  gisibId                                                       Int?
+  permanentId                                                   String?                      @db.Uuid
+  conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
+  elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
+  objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
+  observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
+  surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
+  assets                                                        assets[]
+  conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
+  cyclicMeasures                                                cyclicMeasures[]
+  derivedConditionScores                                        derivedConditionScores[]
+  failureModes                                                  failureModes[]
+  fmecaFurtherInvestigations                                    fmecaFurtherInvestigations[]
+  inspectionFindings                                            inspectionFindings[]
+  inspectionPlans                                               inspectionPlans[]
+  maintenanceMeasures                                           maintenanceMeasures[]
+  manifestations                                                manifestations[]
+  measures                                                      measures[]
+  observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
+  surveyUnits                                                   surveyUnits[]
+  unitRemarks                                                   unitRemarks[]
+  utProjects                                                    utProjects[]
+
+  @@index([code])
+  @@index([conditionId])
+  @@index([deleted_at], map: "units_deleted_at_index")
+  @@index([elementId])
+  @@index([name])
+  @@index([observationPointId])
+  @@index([surveyId, elementId])
+}
+
 model user_attribute {
   name        String      @db.VarChar(255)
   value       String?     @db.VarChar(255)
@@ -2859,6 +2779,13 @@ model user_consent_client_scope {
 
   @@id([user_consent_id, scope_id], map: "constraint_grntcsnt_clsc_pm")
   @@index([user_consent_id], map: "idx_usconsent_clscope")
+}
+
+model userContracts {
+  userId     String @db.Uuid
+  contractId String @db.Uuid
+
+  @@id([userId, contractId])
 }
 
 model user_entity {
@@ -2974,6 +2901,39 @@ model user_role_mapping {
   @@index([user_id], map: "idx_user_role_mapping")
 }
 
+model users {
+  id                     String    @id @unique(map: "users_id_unique") @db.Uuid
+  firstName              String?   @db.VarChar(255)
+  lastName               String    @db.VarChar(255)
+  emailAddress           String    @db.VarChar(255)
+  mobileNumber           String?   @db.VarChar(255)
+  officeNumber           String?   @db.VarChar(255)
+  password               String    @db.VarChar(255)
+  salt                   String    @db.VarChar(255)
+  lastLoginOn            DateTime? @db.Timestamptz(6)
+  status                 String?
+  language               String    @db.VarChar(255)
+  companyId              String    @db.Uuid
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  loginAttempts          Int?      @default(0)
+  isReadOnly             Boolean?  @default(false)
+  isAccountManager       Boolean?  @default(false)
+  isConfigurationManager Boolean?  @default(false)
+  isWebGL1User           Boolean?  @default(false)
+  passwordChangeDate     DateTime? @db.Date
+  isDeleted              Boolean   @default(false)
+  usePointCloud          Boolean   @default(true)
+  isContractManager      Boolean?  @default(false)
+  source                 String    @default("local")
+  companies              companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_companyid_foreign")
+  assets                 assets[]
+
+  @@index([companyId])
+  @@index([emailAddress])
+  @@index([updated_at])
+}
+
 model user_session {
   id                   String              @id(map: "constraint_57") @db.VarChar(36)
   auth_method          String?             @db.VarChar(255)
@@ -2998,6 +2958,42 @@ model user_session_note {
   user_session_user_sessionTouser_session_note user_session @relation(fields: [user_session], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk5edfb00ff51d3472")
 
   @@id([user_session, name], map: "constraint_usn_pk")
+}
+
+model utProjects {
+  id                      String          @id(map: "projects_pkey") @unique(map: "projects_id_unique") @db.Uuid
+  name                    String          @db.VarChar(255)
+  clientName              String          @db.VarChar(255)
+  description             String?         @db.VarChar(255)
+  maxScanLines            Int?
+  maxScanLinePositions    Int?
+  startedOnDate           DateTime?       @db.Date
+  endedOnDate             DateTime?       @db.Date
+  updatedOnDateTime       DateTime        @db.Timestamptz(6)
+  createdOnDateTime       DateTime        @db.Timestamptz(6)
+  useScanLines            Boolean         @default(false)
+  isSavedInTheCloud       Boolean         @default(false)
+  maxPositionMeasurements Int             @default(1)
+  clientCompanyId         String          @db.Uuid
+  elementId               String?         @db.Uuid
+  unitId                  String?         @db.Uuid
+  manifestationId         String?         @db.Uuid
+  objectId                String?         @db.Uuid
+  surveyId                String?         @db.Uuid
+  companies               companies       @relation(fields: [clientCompanyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "projects_companyid_foreign")
+  elements                elements?       @relation(fields: [elementId], references: [id], onUpdate: NoAction, map: "projects_elementid_foreign")
+  manifestations          manifestations? @relation(fields: [manifestationId], references: [id], onUpdate: NoAction, map: "projects_manifestationid_foreign")
+  objects                 objects?        @relation(fields: [objectId], references: [id], onUpdate: NoAction, map: "projects_objectid_foreign")
+  surveys                 surveys?        @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "projects_surveyid_foreign")
+  units                   units?          @relation(fields: [unitId], references: [id], onUpdate: NoAction, map: "projects_unitid_foreign")
+  flights                 flights[]
+
+  @@index([clientCompanyId])
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([objectId])
+  @@index([surveyId])
+  @@index([unitId])
 }
 
 model web_origins {

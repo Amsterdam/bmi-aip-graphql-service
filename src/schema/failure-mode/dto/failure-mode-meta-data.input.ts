@@ -6,25 +6,25 @@ export class FailureModeMetaDataInput {
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public faalOorzaak?: string;
+	public Faaloorzaak?: string;
 
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public bronVanFalen?: string;
+	public BronVanFalen?: string;
 
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public gevolgVanFalen?: string;
+	public GevolgVanFalen?: string;
 
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public faaloorzaakAnders?: string;
+	public FaaloorzaakAnders?: string;
 
 	@IsOptional()
 	@IsString()
 	@Field({ nullable: true })
-	public bronVanFalenAnders?: string;
+	public BronVanFalenAnders?: string;
 }

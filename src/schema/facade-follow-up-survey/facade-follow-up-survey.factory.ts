@@ -11,15 +11,15 @@ export class FacadeFollowUpSurveyFactory {
 		verifiedDate,
 		inspectionStandardData,
 	}: DomainFacadeFollowUpSurvey): FacadeFollowUpSurvey {
-		const followUpFacadeSurvey = new FacadeFollowUpSurvey();
-		followUpFacadeSurvey.id = id;
-		followUpFacadeSurvey.preparedAuthor = preparedAuthor;
-		followUpFacadeSurvey.preparedDate = preparedDate;
-		followUpFacadeSurvey.verifiedAuthor = verifiedAuthor;
-		followUpFacadeSurvey.verifiedDate = verifiedDate;
-		followUpFacadeSurvey.inspectionStandardData =
+		const facadeFollowUpSurvey = new FacadeFollowUpSurvey();
+		facadeFollowUpSurvey.id = id;
+		facadeFollowUpSurvey.preparedAuthor = preparedAuthor;
+		facadeFollowUpSurvey.preparedDate = preparedDate;
+		facadeFollowUpSurvey.verifiedAuthor = verifiedAuthor;
+		facadeFollowUpSurvey.verifiedDate = verifiedDate;
+		facadeFollowUpSurvey.inspectionStandardData =
 			InspectionStandardDataFactory.createInspectionStandardDataFromJSONB(inspectionStandardData);
 
-		return followUpFacadeSurvey;
+		return facadeFollowUpSurvey;
 	}
 }

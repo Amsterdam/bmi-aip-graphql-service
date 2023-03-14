@@ -7,7 +7,7 @@ import { UpdateFacadeFollowUpSurveyCommand } from './update-facade-follow-up-sur
 import { UpdateFacadeFollowUpSurveyHandler } from './update-facade-follow-up-survey.handler';
 
 const FacadeFollowUpSurveyRepoMock: MockedObjectDeep<FacadeFollowUpSurveyRepository> = {
-	createArkSurvey: jest.fn().mockResolvedValue(FacadeFollowUpSurvey),
+	updateFacadeFollowUpSurvey: jest.fn().mockResolvedValue(FacadeFollowUpSurvey),
 	...(<any>{}),
 };
 

@@ -4,6 +4,7 @@ import { SurveyRepository } from './survey.repository';
 import { Survey } from './models/survey.model';
 import { CreateSurveyInput } from './dto/create-survey.input';
 import { SurveyFactory } from './survey.factory';
+import { SurveyDataFieldType } from './types/surveyDataFieldType';
 
 @Injectable()
 export class SurveyService {
@@ -77,5 +78,15 @@ export class SurveyService {
 		}
 
 		return survey.verifiedDate;
+	}
+
+	public async findSurveyDataByFieldAndId(id: string, field: SurveyDataFieldType): Promise<any> {
+		const survey = await this.surveyRepo.getSurveyById(id);
+
+		if (!survey) {
+			throw new NotFoundException(`Unable to find survey with id: ${id}`);
+		}
+
+		return survey[`${field}`];
 	}
 }

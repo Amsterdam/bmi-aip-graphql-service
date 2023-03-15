@@ -1,10 +1,8 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { PrismaService } from 'src/prisma.service';
-
-import { AssetModule } from '../asset/asset.module';
 
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
 import { FacadeFollowUpSurveyResolver } from './facade-follow-up-survey.resolver';
@@ -21,6 +19,6 @@ import { GetFacadeFollowUpSurveyBySurveyIdHandler } from './queries/get-facade-f
 		GetFacadeFollowUpSurveyBySurveyIdHandler,
 		PrismaService,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })
 export class FacadeFollowUpSurveyModule {}

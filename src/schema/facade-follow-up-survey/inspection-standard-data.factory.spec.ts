@@ -5,7 +5,7 @@ import {
 	facadeFollowUpSurveyRaw,
 } from './__stubs__/facade-follow-up-survey-stub';
 
-describe('Facade / InspectionStandardData Factory', () => {
+describe('Inspection standard data / Factory', () => {
 	test('createInspectionStandardDataFromJSONB() constructs an instance of a InspectionStandardData GraphQL model', () => {
 		const result = InspectionStandardDataFactory.createInspectionStandardDataFromJSONB(
 			facadeFollowUpSurveyRaw.inspectionStandardData,

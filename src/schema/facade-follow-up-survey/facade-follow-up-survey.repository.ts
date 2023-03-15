@@ -23,32 +23,26 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 		inspectionStandardData,
 	}: UpdateFacadeFollowUpSurveyInput): Promise<FacadeFollowUpSurvey> {
 		// Find existing record in survey table
-		const existingRecord = (await this.prisma.surveys.findFirst({
+		const existingRecord = await this.prisma.surveys.findFirst({
 			where: { id: surveyId },
-		})) as DbSurvey;
+		});
+
+		if (!existingRecord) throw new Error('No survey found.');
 
 		//Update data in survey table
-		if (existingRecord) {
-			const survey = await this.prisma.surveys.update({
-				where: {
-					id: surveyId,
-				},
-				data: {
-					preparedAuthor: preparedAuthor ?? existingRecord.preparedAuthor,
-					preparedDate: preparedDate ?? existingRecord.preparedDate,
-					verifiedAuthor: verifiedAuthor ?? existingRecord.verifiedAuthor,
-					verifiedDate: verifiedDate ?? existingRecord.verifiedDate,
-					inspectionStandardData:
-						(inspectionStandardData as Prisma.InputJsonObject) ?? existingRecord.inspectionStandardData,
-				},
-			});
-
-			return survey;
-		} else {
-			if (!existingRecord) {
-				throw new Error('No survey found.');
-			}
-		}
+		return this.prisma.surveys.update({
+			where: {
+				id: surveyId,
+			},
+			data: {
+				preparedAuthor: preparedAuthor ?? existingRecord.preparedAuthor,
+				preparedDate: preparedDate ?? existingRecord.preparedDate,
+				verifiedAuthor: verifiedAuthor ?? existingRecord.verifiedAuthor,
+				verifiedDate: verifiedDate ?? existingRecord.verifiedDate,
+				inspectionStandardData:
+					(inspectionStandardData as Prisma.InputJsonObject) ?? existingRecord.inspectionStandardData,
+			},
+		});
 	}
 
 	async getFacadeFollowUpSurvey(surveyId: string): Promise<FacadeFollowUpSurvey> {

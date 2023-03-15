@@ -37,7 +37,7 @@ let queryBusMock: any;
 let commandBusMock: any;
 let resolver: FacadeFollowUpSurveyResolver;
 
-describe('Facade/ FacadeFollowUpSurvey/ Resolver', () => {
+describe('Facade follow up survey / Resolver', () => {
 	beforeEach(() => {
 		commandBusMock = getCommandBusMock();
 		queryBusMock = getQueryBusMock();

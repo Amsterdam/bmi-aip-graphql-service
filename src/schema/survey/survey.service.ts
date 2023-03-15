@@ -79,4 +79,14 @@ export class SurveyService {
 
 		return survey.verifiedDate;
 	}
+
+	public async findSurveyDataByFieldAndId(id: string, field: SurveyDataFieldType): Promise<any> {
+		const survey = await this.surveyRepo.getSurveyById(id);
+
+		if (!survey) {
+			throw new NotFoundException(`Unable to find survey with id: ${id}`);
+		}
+
+		return survey[`${field}`];
+	}
 }

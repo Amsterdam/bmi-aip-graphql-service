@@ -1,11 +1,13 @@
 import { Prisma } from '.prisma/client';
 
-import { InspectionStandardData } from './models/inspection-standard-data.model';
+import { FacadeInspectionStandardData } from './models/facade-inspection-standard-data.model';
 
 export class InspectionStandardDataFactory {
-	static createInspectionStandardDataFromJSONB(inspectionStandardData: Prisma.JsonValue): InspectionStandardData {
-		const inspectionStandardDataModel = new InspectionStandardData();
-		const parsedinspectionStandardData = inspectionStandardData as InspectionStandardData;
+	static createInspectionStandardDataFromJSONB(
+		inspectionStandardData: Prisma.JsonValue,
+	): FacadeInspectionStandardData {
+		const inspectionStandardDataModel = new FacadeInspectionStandardData();
+		const parsedinspectionStandardData = inspectionStandardData as FacadeInspectionStandardData;
 
 		inspectionStandardDataModel.remarks = parsedinspectionStandardData?.remarks;
 

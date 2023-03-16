@@ -19,7 +19,7 @@ failureMode2.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 export { failureMode1, failureMode2 };
 
 const failureModeMetaData = new FailureModeMetaDataInput();
-failureModeMetaData.Faaloorzaak = null;
+failureModeMetaData.failureCause = null;
 
 const failureModeRaw: Omit<DomainFailureMode, 'id'> = {
 	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',

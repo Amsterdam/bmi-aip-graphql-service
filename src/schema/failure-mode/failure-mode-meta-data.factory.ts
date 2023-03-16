@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 
 import { FailureModeMetaData } from './models/failure-mode-meta-data.model';
-import { FailureModeMetaDataInput } from './dto/failure-mode-meta-data.input';
 
 export class FailureModeMetaDataFactory {
 	static CreateFailureModeMetaDataFromJSONB(failureModeMetaData: Prisma.JsonValue): FailureModeMetaData {
@@ -11,12 +10,13 @@ export class FailureModeMetaDataFactory {
 		}
 
 		const failureModeMetModel = new FailureModeMetaData();
-		const parsedFailureModeMetaData = failureModeMetaData as FailureModeMetaDataInput;
-		failureModeMetModel.failureCause = parsedFailureModeMetaData?.Faaloorzaak ?? '';
-		failureModeMetModel.sourceOfFailure = parsedFailureModeMetaData?.['Bron van falen'] ?? '';
-		failureModeMetModel.consequenceOfFailure = parsedFailureModeMetaData?.['Gevolg van falen'] ?? '';
-		failureModeMetModel.causeOfFailureOther = parsedFailureModeMetaData?.['Faaloorzaak anders'] ?? '';
-		failureModeMetModel.sourceOfFailureOther = parsedFailureModeMetaData?.['Bron van falen anders'] ?? '';
+
+		// eslint-disable-next-line
+		failureModeMetModel.failureCause = failureModeMetaData?.['Faaloorzaak'] ?? '';
+		failureModeMetModel.sourceOfFailure = failureModeMetaData?.['Bron van falen'] ?? '';
+		failureModeMetModel.consequenceOfFailure = failureModeMetaData?.['Gevolg van falen'] ?? '';
+		failureModeMetModel.causeOfFailureOther = failureModeMetaData?.['Faaloorzaak anders'] ?? '';
+		failureModeMetModel.sourceOfFailureOther = failureModeMetaData?.['Bron van falen anders'] ?? '';
 		return failureModeMetModel;
 	}
 }

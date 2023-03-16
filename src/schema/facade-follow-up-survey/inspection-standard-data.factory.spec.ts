@@ -1,5 +1,5 @@
 import { InspectionStandardDataFactory } from './inspection-standard-data.factory';
-import { InspectionStandardData } from './models/inspection-standard-data.model';
+import { FacadeInspectionStandardData } from './models/facade-inspection-standard-data.model';
 import {
 	FacadeFollowUpSurvey as domainFacadeFollowUpSurvey,
 	facadeFollowUpSurveyRaw,
@@ -15,6 +15,6 @@ describe('Inspection standard data / Factory', () => {
 		};
 
 		expect(result).toEqual(expect.objectContaining(object));
-		expect(result).toBeInstanceOf(InspectionStandardData);
+		expect(result).toBeInstanceOf(FacadeInspectionStandardData);
 	});
 });

@@ -30,56 +30,6 @@ export class SurveyService {
 		);
 	}
 
-	public async findInspectionStandardDataById(id: string): Promise<JSON> {
-		const survey = await this.surveyRepo.getSurveyById(id);
-
-		if (!survey) {
-			throw new NotFoundException(`Unable to find survey with id: ${id}`);
-		}
-
-		return JSON.parse(JSON.stringify(survey.inspectionStandardData));
-	}
-
-	public async findPreparedAuthorById(id: string): Promise<string> {
-		const survey = await this.surveyRepo.getSurveyById(id);
-
-		if (!survey) {
-			throw new NotFoundException(`Unable to find survey with id: ${id}`);
-		}
-
-		return survey.preparedAuthor;
-	}
-
-	public async findPreparedDateById(id: string): Promise<Date> {
-		const survey = await this.surveyRepo.getSurveyById(id);
-
-		if (!survey) {
-			throw new NotFoundException(`Unable to find survey with id: ${id}`);
-		}
-
-		return survey.preparedDate;
-	}
-
-	public async findVerifiedAuthorById(id: string): Promise<string> {
-		const survey = await this.surveyRepo.getSurveyById(id);
-
-		if (!survey) {
-			throw new NotFoundException(`Unable to find survey with id: ${id}`);
-		}
-
-		return survey.verifiedAuthor;
-	}
-
-	public async findVerifiedDateById(id: string): Promise<Date> {
-		const survey = await this.surveyRepo.getSurveyById(id);
-
-		if (!survey) {
-			throw new NotFoundException(`Unable to find survey with id: ${id}`);
-		}
-
-		return survey.verifiedDate;
-	}
-
 	public async findSurveyDataByFieldAndId(id: string, field: SurveyDataFieldType): Promise<any> {
 		const survey = await this.surveyRepo.getSurveyById(id);
 

@@ -29,14 +29,14 @@ const arkSurveyRaw: Omit<DomainArkSurvey, 'id'> = {
 	deleted_at: null,
 };
 
-const surveyRaw: Pick<
+export const surveyRaw: Pick<
 	DbSurvey,
 	'preparedAuthor' | 'preparedDate' | 'verifiedAuthor' | 'verifiedDate' | 'inspectionStandardData'
 > = {
 	preparedAuthor: '__AUTHOR_01__',
-	preparedDate: undefined,
+	preparedDate: new Date('2023-02-01 18:04:24.621 +0100'),
 	verifiedAuthor: '__VERIVIER_01__',
-	verifiedDate: undefined,
+	verifiedDate: new Date('2023-02-01 18:04:24.621 +0100'),
 	inspectionStandardData: { remarks: '__TEST__' },
 };
 

@@ -23,9 +23,9 @@ describe('ARKSurvey Geography data', () => {
 		};
 		arkSurveyModel.id = '9c612187-581b-4be3-902c-9e8035d1d3b7';
 		arkSurveyModel.preparedAuthor = '__AUTHOR_01__';
-		arkSurveyModel.preparedDate = undefined;
+		arkSurveyModel.preparedDate = null;
 		arkSurveyModel.verifiedAuthor = '__VERIVIER_01__';
-		arkSurveyModel.verifiedDate = undefined;
+		arkSurveyModel.verifiedDate = null;
 		arkSurveyModel.inspectionStandardData = { remarks: '__TEST__' };
 		expect(arkSurveyModel).toBeInstanceOf(ArkSurvey);
 	});

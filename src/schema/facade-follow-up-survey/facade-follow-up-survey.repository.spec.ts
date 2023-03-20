@@ -1,6 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
+import { surveyRaw } from '../ark-survey/__stubs__';
 
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
 import {
@@ -27,13 +28,7 @@ describe('Facade follow up survey / Repository', () => {
 		);
 		expect(prismaServiceMock.surveys.update).toHaveBeenCalledWith({
 			where: { id: updateFacadeFollowUpSurveyInput.surveyId },
-			data: {
-				preparedAuthor: '__AUTHOR_01__',
-				preparedDate: undefined,
-				verifiedAuthor: '__VERIVIER_01__',
-				verifiedDate: undefined,
-				inspectionStandardData: { remarks: '__TEST__' },
-			},
+			data: surveyRaw,
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({

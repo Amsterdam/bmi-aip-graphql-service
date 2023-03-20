@@ -2,6 +2,8 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { FindSurveyDataByFieldAndIdQuery } from '../survey/queries/find-survey-data-by-field-and-id.query';
+
 import { ReachSegment } from './models/reach-segment.model';
 import { ArkSurvey } from './models/ark-survey.model';
 import { ArkSurveyFactory } from './ark-survey.factory';
@@ -70,5 +72,40 @@ export class ArkSurveyResolver {
 	@ResolveField()
 	async reachSegments(@Parent() { id }: ArkSurvey): Promise<ReachSegment[]> {
 		return this.queryBus.execute<FindArkSurveyReachSegmentsQuery>(new FindArkSurveyReachSegmentsQuery(id));
+	}
+
+	@ResolveField()
+	async preparedAuthor(@Parent() { surveyId }: ArkSurvey): Promise<string> {
+		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
+			new FindSurveyDataByFieldAndIdQuery(surveyId, 'preparedAuthor'),
+		);
+	}
+
+	@ResolveField()
+	async preparedDate(@Parent() { surveyId }: ArkSurvey): Promise<Date> {
+		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
+			new FindSurveyDataByFieldAndIdQuery(surveyId, 'preparedDate'),
+		);
+	}
+
+	@ResolveField()
+	async verifiedAuthor(@Parent() { surveyId }: ArkSurvey): Promise<string> {
+		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
+			new FindSurveyDataByFieldAndIdQuery(surveyId, 'verifiedAuthor'),
+		);
+	}
+
+	@ResolveField()
+	async verifiedDate(@Parent() { surveyId }: ArkSurvey): Promise<Date> {
+		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
+			new FindSurveyDataByFieldAndIdQuery(surveyId, 'verifiedDate'),
+		);
+	}
+
+	@ResolveField()
+	async inspectionStandardData(@Parent() { surveyId }: ArkSurvey): Promise<JSON> {
+		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
+			new FindSurveyDataByFieldAndIdQuery(surveyId, 'inspectionStandardData'),
+		);
 	}
 }

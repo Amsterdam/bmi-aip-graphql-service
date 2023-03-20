@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ArkSurveyRepository } from './ark-survey.repository';
-import { domainArkSurvey, createArkSurveyInput, updateSurveyInput, domainSurvey } from './__stubs__';
+import { domainArkSurvey, createArkSurveyInput, updateSurveyInput, domainSurvey, surveyRaw } from './__stubs__';
 
 jest.mock('./types/ark-survey.repository.interface');
 
@@ -51,13 +51,7 @@ describe('ARK/ ArkSurvey / Repository', () => {
 	test('updateSurvey()', async () => {
 		const returnValue = await repository.updateSurvey(updateSurveyInput);
 		const survey = prismaServiceMock.surveys.update.mock.calls[0][0].data;
-		expect(survey).toEqual({
-			preparedAuthor: '__AUTHOR_01__',
-			preparedDate: undefined,
-			verifiedAuthor: '__VERIVIER_01__',
-			verifiedDate: undefined,
-			inspectionStandardData: { remarks: '__TEST__' },
-		});
+		expect(survey).toEqual(surveyRaw);
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...updateSurveyInput,

@@ -168,18 +168,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		inspectionStandardData,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Update Survey
-		const insertSurveyData = {
+		this.updateSurvey({
 			surveyId,
 			preparedAuthor,
 			preparedDate,
 			verifiedAuthor,
 			verifiedDate,
 			inspectionStandardData,
-		};
-
-		if (insertSurveyData) {
-			this.updateSurvey(insertSurveyData);
-		}
+		});
 
 		// Create or update arkSurvey and reachSegments
 		const insertData = {

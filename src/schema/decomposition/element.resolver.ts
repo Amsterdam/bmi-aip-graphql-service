@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 // import { UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
@@ -16,6 +16,9 @@ import { CreateElementCommand } from './commands/create-element.command';
 import { UpdateElementCommand } from './commands/update-element.command';
 import { Element as DomainElement } from './types/element.repository.interface';
 import { DeleteElementCommand } from './commands/delete-element.command';
+import { FindSurveyElementsCommand } from './commands/find-survey-elements.command';
+import { Unit } from './models/unit.model';
+import { FindElementUnitsCommand } from './commands/find-element-units.command';
 
 @Resolver((of) => Element)
 @Resource(Element.name)
@@ -41,15 +44,20 @@ export class ElementResolver {
 	}
 
 	@Mutation(() => Element)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteElement(@Args('identifier') identifier: string): Promise<Element> {
 		return this.commandBus.execute<DeleteElementCommand>(new DeleteElementCommand(identifier));
 	}
 
-	@Query((returns) => [Element], { name: 'decompositionElements' })
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
-	async getSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string) {
-		return this.elementService.getElements(surveyId);
+	@Query((returns) => [Element], { name: 'elements' })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	async findSurveyElements(@Args('surveyId', { type: () => String }) surveyId: string) {
+		return this.commandBus.execute<FindSurveyElementsCommand>(new FindSurveyElementsCommand(surveyId));
+	}
+
+	@ResolveField()
+	async units(@Parent() { id }: Element): Promise<Unit[]> {
+		return this.commandBus.execute<FindElementUnitsCommand>(new FindElementUnitsCommand(id));
 	}
 
 	// Leaving this here on purpose to illustrate usage of the PoliciesGuard

@@ -17,7 +17,7 @@ export class ConditionResolver {
 	constructor(private conditionService: ConditionService, private commandBus: CommandBus) {}
 
 	@Mutation(() => Condition)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createCondition(@Args('createCondition') input: CreateConditionInput): Promise<Condition> {
 		const domainCondition: DomainCondition = await this.commandBus.execute<CreateConditionCommand>(
 			new CreateConditionCommand(input),
@@ -26,7 +26,7 @@ export class ConditionResolver {
 	}
 
 	@Mutation(() => Condition)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateCondition(@Args('updateCondition') input: UpdateConditionInput): Promise<Condition> {
 		const domainCondition: DomainCondition = await this.commandBus.execute<UpdateConditionCommand>(
 			new UpdateConditionCommand(input),
@@ -35,7 +35,7 @@ export class ConditionResolver {
 	}
 
 	@Query((returns) => [Condition], { name: 'conditions' })
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getConditions(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.conditionService.getConditions(surveyId);
 	}

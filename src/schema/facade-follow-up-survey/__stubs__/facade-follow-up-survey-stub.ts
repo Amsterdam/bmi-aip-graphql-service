@@ -2,12 +2,11 @@ import { UpdateFacadeFollowUpSurveyInput } from '../dto/update-facade-follow-up-
 import { FacadeFollowUpSurveyFactory } from '../facade-follow-up-survey.factory';
 import { FacadeFollowUpSurvey as DomainFacadeFollowUpSurvey } from '../types/facade-follow-up-survey.repository.interface';
 
-export const facadeFollowUpSurveyRaw: DomainFacadeFollowUpSurvey = {
-	id: '9c612187-581b-4be3-902c-9e8035d1d3b7',
+export const facadeFollowUpSurveyRaw: Omit<DomainFacadeFollowUpSurvey, 'id'> = {
 	preparedAuthor: '__AUTHOR_01__',
-	preparedDate: undefined,
+	preparedDate: new Date('2023-02-01 18:04:24.621 +0100'),
 	verifiedAuthor: '__VERIVIER_01__',
-	verifiedDate: undefined,
+	verifiedDate: new Date('2023-02-01 18:04:24.621 +0100'),
 	inspectionStandardData: { remarks: '__TEST__' },
 };
 
@@ -18,4 +17,9 @@ export const updateFacadeFollowUpSurveyInput = Object.keys(facadeFollowUpSurveyR
 	return input;
 }, updateFacadeFollowUpSurveyInputRaw);
 
-export const FacadeFollowUpSurvey = FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(facadeFollowUpSurveyRaw);
+export const domainFacadeFollowUpSurvey: DomainFacadeFollowUpSurvey = {
+	id: '9c612187-581b-4be3-902c-9e8035d1d3b7',
+	...facadeFollowUpSurveyRaw,
+};
+
+export const FacadeFollowUpSurvey = FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);

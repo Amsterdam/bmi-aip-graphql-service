@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker-compose \
+    -p bmi \
+    up --remove-orphans --build --force-recreate -d

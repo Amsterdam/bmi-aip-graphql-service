@@ -25,6 +25,7 @@ import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
+import { FacadeFollowUpSurveyModule } from './schema/facade-follow-up-survey/facade-follow-up-survey.module';
 import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 
@@ -60,6 +61,7 @@ import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-me
 		}),
 		TerminusModule,
 		ArkSurveyModule,
+		FacadeFollowUpSurveyModule,
 		DefaultMaintenanceMeasureModule,
 	],
 	controllers: [HealthController],

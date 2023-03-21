@@ -39,13 +39,13 @@ export class BaseCyclicMeasureInput {
 	public quantityUnitOfMeasurement?: string;
 
 	@IsOptional()
-	@Field()
 	@IsUUID()
+	@Field({ nullable: true })
 	public failureModeId?: string;
 
 	@IsOptional()
-	@Field()
 	@IsUUID()
+	@Field({ nullable: true })
 	public defectId?: string;
 
 	@IsOptional()

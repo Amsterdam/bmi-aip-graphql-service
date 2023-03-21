@@ -12,6 +12,7 @@ import { CreateSurveyCommand } from './commands/create-survey.command';
 import { CreateSurveyHandler } from './commands/create-survey.handler';
 import { GetSurveyByIdHandler } from './queries/get-survey-by-id.handler';
 import { GetSurveysByObjectIdHandler } from './queries/get-surveys-by-object-id.handler';
+import { FindSurveyDataByFieldAndIdHandler } from './queries/find-survey-data-by-field-and-id.handler';
 
 @Module({
 	providers: [
@@ -23,6 +24,7 @@ import { GetSurveysByObjectIdHandler } from './queries/get-surveys-by-object-id.
 		CreateSurveyHandler,
 		GetSurveyByIdHandler,
 		GetSurveysByObjectIdHandler,
+		FindSurveyDataByFieldAndIdHandler,
 	],
 	exports: [SurveyService],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => SurveyModule)],

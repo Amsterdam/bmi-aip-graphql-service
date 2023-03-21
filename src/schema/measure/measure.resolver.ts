@@ -34,7 +34,7 @@ export class MeasureResolver {
 	constructor(private measureService: MeasureService, private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Mutation(() => Measure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createMeasure(@Args('createMeasure') input: CreateMeasureInput): Promise<Measure> {
 		const domainMeasure: DomainMeasure = await this.commandBus.execute<CreateMeasureCommand>(
 			new CreateMeasureCommand(input),
@@ -43,7 +43,7 @@ export class MeasureResolver {
 	}
 
 	@Mutation(() => Measure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateMeasure(@Args('updateMeasure') input: UpdateMeasureInput): Promise<Measure> {
 		const domainMeasure: DomainMeasure = await this.commandBus.execute<UpdateMeasureCommand>(
 			new UpdateMeasureCommand(input),
@@ -52,7 +52,7 @@ export class MeasureResolver {
 	}
 
 	@Mutation(() => Measure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteMeasure(@Args('identifier') identifier: string): Promise<Measure> {
 		const domainMeasure: DomainMeasure = await this.commandBus.execute<DeleteMeasureCommand>(
 			new DeleteMeasureCommand(identifier),
@@ -61,7 +61,7 @@ export class MeasureResolver {
 	}
 
 	@Query((returns) => [Measure], { name: 'measures' })
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveyMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.queryBus.execute<FindMeasuresQuery>(new FindMeasuresQuery(surveyId));
 	}
@@ -104,7 +104,7 @@ export class MeasureResolver {
 	}
 
 	@Mutation((returns) => MeasuresAndCyclicMeasuresCollection)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async cloneMeasuresFromPreviousSurvey(
 		@Args('surveyId', { type: () => String }) surveyId: string,
 	): Promise<Measure[]> {

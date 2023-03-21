@@ -1,12 +1,12 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { PrismaService } from '../../prisma.service';
-import { surveyRaw } from '../ark-survey/__stubs__';
 
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
 import {
 	updateFacadeFollowUpSurveyInput,
 	FacadeFollowUpSurvey as domainFacadeFollowUpSurvey,
+	facadeFollowUpSurveyRaw,
 } from './__stubs__/facade-follow-up-survey-stub';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -28,7 +28,7 @@ describe('Facade follow up survey / Repository', () => {
 		);
 		expect(prismaServiceMock.surveys.update).toHaveBeenCalledWith({
 			where: { id: updateFacadeFollowUpSurveyInput.surveyId },
-			data: surveyRaw,
+			data: facadeFollowUpSurveyRaw,
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({

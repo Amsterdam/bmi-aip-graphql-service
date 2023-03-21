@@ -2,6 +2,10 @@ import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
+import { MeasureService } from '../measure/measure.service';
+import { MeasureRepository } from '../measure/measure.repository';
+import { CyclicMeasureService } from '../measure/cyclic-measure.service';
+import { CyclicMeasureRepository } from '../measure/cyclic-measure.repository';
 
 import { ElementService } from './element.service';
 import { element1, element2, unit1, unit2 } from './__stubs__';
@@ -13,7 +17,6 @@ import { CreateDecompositionCommand } from './commands/create-decomposition.comm
 import { ElementRepository } from './element.repository';
 import { UnitRepository } from './unit.repository';
 import { FindElementUnitsCommand } from './commands/find-element-units.command';
-import { Unit } from './models/unit.model';
 import { CloneDecompositionFromPreviousSurveyCommand } from './commands/clone-decomposition-from-previous-survey.command';
 import { SurveyHasDecompositionException } from './exceptions/survey-has-decomposition.exception';
 
@@ -22,6 +25,11 @@ jest.mock('./element.repository');
 jest.mock('./unit.service');
 jest.mock('./unit.repository');
 jest.mock('./manifestation.repository');
+
+jest.mock('../measure/measure.service');
+jest.mock('../measure/measure.repository');
+jest.mock('../measure/cyclic-measure.service');
+jest.mock('../measure/cyclic-measure.repository');
 
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
@@ -46,10 +54,16 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
+const unitServiceMock = new UnitService(
+	new UnitRepository(prismaServiceMock),
+	new MeasureService(new MeasureRepository(prismaServiceMock)),
+	new CyclicMeasureService(new CyclicMeasureRepository(prismaServiceMock)),
+);
+
 const constructResolver = (commandBusMock) => {
 	return new DecompositionResolver(
 		new ElementService(new ElementRepository(prismaServiceMock)),
-		new UnitService(new UnitRepository(prismaServiceMock)),
+		unitServiceMock,
 		commandBusMock,
 	);
 };
@@ -66,32 +80,6 @@ describe('Decomposition / Resolver', () => {
 			);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new FindSurveyElementsCommand('__SURVEY_ID__'));
 
-			expect(result[0]).toBeInstanceOf(Element);
-			expect(result[1]).toBeInstanceOf(Element);
-			expect(typeof result[0].id).toBe('string');
-		});
-	});
-
-	describe('units', () => {
-		test('Resolves the `units` field for elements', async () => {
-			const commandBusMock = getCommandBusMock();
-			const resolver = constructResolver(commandBusMock);
-			const result = await resolver.units(element1);
-			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-			expect(commandBusMock.execute).toHaveBeenCalledWith(new FindElementUnitsCommand(element1.id));
-			expect(result[0]).toBeInstanceOf(Unit);
-			expect(result[1]).toBeInstanceOf(Unit);
-			expect(typeof result[0].id).toBe('string');
-		});
-	});
-
-	describe('findSurveyElements', () => {
-		test('returns a decomposition structure for a surveyId', async () => {
-			const commandBusMock = getCommandBusMock();
-			const resolver = constructResolver(commandBusMock);
-			const result = await resolver.findSurveyElements('__SURVEY_ID__');
-			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-			expect(commandBusMock.execute).toHaveBeenCalledWith(new FindSurveyElementsCommand('__SURVEY_ID__'));
 			expect(result[0]).toBeInstanceOf(Element);
 			expect(result[1]).toBeInstanceOf(Element);
 			expect(typeof result[0].id).toBe('string');

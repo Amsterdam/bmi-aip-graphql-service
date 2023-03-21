@@ -2,6 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { UnitRepository } from '../unit.repository';
 import { unitInput, domainUnit } from '../__stubs__';
+import { UnitFactory } from '../unit.factory';
 
 import { CreateUnitCommand } from './create-unit.command';
 import { CreateUnitHandler } from './create-unit.handler';
@@ -19,6 +20,6 @@ describe('CreateUnitHandler', () => {
 		expect(unitRepoMock.createUnit).toHaveBeenCalledTimes(1);
 		expect(unitRepoMock.createUnit).toHaveBeenCalledWith(unitInput);
 
-		expect(result).toEqual(domainUnit);
+		expect(result).toEqual(UnitFactory.CreateUnit(domainUnit));
 	});
 });

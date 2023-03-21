@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { ManifestationRepository } from '../manifestation.repository';
-import { Manifestation } from '../types/manifestation.repository.interface';
+import { ManifestationFactory } from '../manifestation.factory';
+import { Manifestation } from '../models/manifestation.model';
 
 import { CreateManifestationCommand } from './create-manifestation.command';
 
@@ -10,6 +11,6 @@ export class CreateManifestationHandler implements ICommandHandler<CreateManifes
 	constructor(private repository: ManifestationRepository) {}
 
 	public async execute(command: CreateManifestationCommand): Promise<Manifestation> {
-		return this.repository.createManifestation(command.data);
+		return ManifestationFactory.CreateManifestation(await this.repository.createManifestation(command.data));
 	}
 }

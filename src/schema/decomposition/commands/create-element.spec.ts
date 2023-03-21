@@ -2,6 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { ElementRepository } from '../element.repository';
 import { elementInput, domainElement } from '../__stubs__';
+import { ElementFactory } from '../element.factory';
 
 import { CreateElementCommand } from './create-element.command';
 import { CreateElementHandler } from './create-element.handler';
@@ -19,6 +20,6 @@ describe('CreateElementHandler', () => {
 		expect(elementRepoMock.createElement).toHaveBeenCalledTimes(1);
 		expect(elementRepoMock.createElement).toHaveBeenCalledWith(elementInput);
 
-		expect(result).toEqual(domainElement);
+		expect(result).toEqual(ElementFactory.CreateElement(domainElement));
 	});
 });

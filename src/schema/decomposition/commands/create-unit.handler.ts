@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { UnitRepository } from '../unit.repository';
-import { Unit } from '../types/unit.repository.interface';
+import { UnitFactory } from '../unit.factory';
+import { Unit } from '../models/unit.model';
 
 import { CreateUnitCommand } from './create-unit.command';
 
@@ -10,6 +11,6 @@ export class CreateUnitHandler implements ICommandHandler<CreateUnitCommand> {
 	constructor(private repository: UnitRepository) {}
 
 	public async execute(command: CreateUnitCommand): Promise<Unit> {
-		return this.repository.createUnit(command.data);
+		return UnitFactory.CreateUnit(await this.repository.createUnit(command.data));
 	}
 }

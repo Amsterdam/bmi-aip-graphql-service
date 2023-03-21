@@ -18,7 +18,7 @@ export class FacadeFollowUpSurveyFactory {
 		facadeFollowUpSurvey.verifiedAuthor = verifiedAuthor;
 		facadeFollowUpSurvey.verifiedDate = verifiedDate;
 		facadeFollowUpSurvey.inspectionStandardData =
-			InspectionStandardDataFactory.createInspectionStandardDataFromJSONB(inspectionStandardData);
+			InspectionStandardDataFactory.CreateInspectionStandardDataFromJSONB(inspectionStandardData);
 
 		return facadeFollowUpSurvey;
 	}

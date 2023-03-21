@@ -53,4 +53,16 @@ export class BaseCyclicMeasureInput {
 	@MaxLength(128)
 	@Field({ nullable: true })
 	public maintenanceType?: string;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	createdAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	updatedAt?: Date;
+
+	@IsOptional()
+	@Field({ nullable: true })
+	deletedAt?: Date;
 }

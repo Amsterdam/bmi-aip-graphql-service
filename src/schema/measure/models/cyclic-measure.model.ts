@@ -67,12 +67,18 @@ export class CyclicMeasure {
 	@Field((type) => Defect, { nullable: true })
 	defect?: Defect;
 
-	@Field((type) => String, { nullable: true })
-	deletedAt: string;
-
 	@Field((type) => Number)
 	cost?: number;
 
 	@Field((type) => Number)
 	costWithSurcharge?: number;
+
+	@Field((type) => String, { nullable: true })
+	createdAt: string;
+
+	@Field((type) => String, { nullable: true })
+	updatedAt: string;
+
+	@Field((type) => String, { nullable: true })
+	deletedAt: string;
 }

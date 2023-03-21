@@ -35,6 +35,8 @@ const cyclicMeasureRaw: Omit<DomainCyclicMeasure, 'id'> = {
 	failureModeId: '',
 	defectId: '',
 	deleted_at: null,
+	created_at: undefined,
+	updated_at: undefined,
 };
 
 export const cyclicMeasureInput = Object.keys(cyclicMeasureRaw).reduce((input, key) => {
@@ -56,6 +58,8 @@ export const domainCyclicMeasure: DomainCyclicMeasure = {
 	defaultMaintenanceMeasureId: null,
 	planYear: null,
 	finalPlanYear: null,
+	// created_at: null,
+	// updated_at: null,
 	deleted_at: null,
 };
 

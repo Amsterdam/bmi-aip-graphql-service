@@ -44,7 +44,12 @@ describe('GenerateCyclicMeasuresHandler', () => {
 			defaultMaintenanceMeasureRepositoryMock,
 			objectTypeUnitCodeRepositoryMock,
 		).execute(command);
-		const object = { ...domainCyclicMeasure, deletedAt: domainCyclicMeasure.deleted_at };
+		const object = {
+			...domainCyclicMeasure,
+			createdAt: null,
+			updatedAt: null,
+			deletedAt: domainCyclicMeasure.deleted_at,
+		};
 		delete object.deleted_at;
 
 		expect(cyclicMeasureRepositoryMock.createCyclicMeasure).toHaveBeenCalledTimes(0);

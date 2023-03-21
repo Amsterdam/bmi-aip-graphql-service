@@ -12,6 +12,7 @@ import { Element } from './models/element.model';
 import { UpdateElementCommand } from './commands/update-element.command';
 import { DeleteElementCommand } from './commands/delete-element.command';
 import { ElementFactory } from './element.factory';
+import { FindSurveyElementsCommand } from './commands/find-survey-elements.command';
 
 jest.mock('./element.service');
 jest.mock('./element.repository');
@@ -21,9 +22,11 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 		switch (command.constructor.name) {
 			case CreateElementCommand.name:
 			case UpdateElementCommand.name:
-				return domainElement;
+				return ElementFactory.CreateElement(domainElement);
 			case DeleteElementCommand.name:
 				return ElementFactory.CreateElement(deletedElement);
+			case FindSurveyElementsCommand.name:
+				return [element1, element2];
 		}
 	}),
 	...(<any>{}),
@@ -79,7 +82,7 @@ describe('Decomposition / Element / Resolver', () => {
 	test('getSurveyElements returns an array of element objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const resolver = new ElementResolver(new ElementService(elementRepo), commandBusMock);
-		const elements = await resolver.getSurveyElements('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const elements = await resolver.findSurveyElements('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([element1, element2]);
 	});
 });

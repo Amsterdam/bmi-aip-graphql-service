@@ -40,9 +40,7 @@ export class ManifestationResolver {
 	@Mutation(() => Manifestation)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteManifestation(@Args('identifier') identifier: string): Promise<Manifestation> {
-		return ManifestationFactory.CreateManifestation(
-			await this.commandBus.execute<DeleteManifestationCommand>(new DeleteManifestationCommand(identifier)),
-		);
+		return this.commandBus.execute<DeleteManifestationCommand>(new DeleteManifestationCommand(identifier));
 	}
 
 	@ResolveField()

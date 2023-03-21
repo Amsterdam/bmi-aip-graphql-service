@@ -3,7 +3,7 @@ import { FacadeFollowUpSurvey } from './models/facade-follow-up-survey.model';
 import { FacadeFollowUpSurvey as DomainFacadeFollowUpSurvey } from './types/facade-follow-up-survey.repository.interface';
 
 export class FacadeFollowUpSurveyFactory {
-	static createFacadeFollowUpSurvey({
+	static CreateFacadeFollowUpSurvey({
 		id,
 		preparedAuthor,
 		preparedDate,

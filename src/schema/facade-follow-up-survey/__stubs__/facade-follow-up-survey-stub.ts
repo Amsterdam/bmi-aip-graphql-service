@@ -22,4 +22,4 @@ export const domainFacadeFollowUpSurvey: DomainFacadeFollowUpSurvey = {
 	...facadeFollowUpSurveyRaw,
 };
 
-export const FacadeFollowUpSurvey = FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
+export const FacadeFollowUpSurvey = FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);

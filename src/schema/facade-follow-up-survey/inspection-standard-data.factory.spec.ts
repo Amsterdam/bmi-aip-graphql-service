@@ -7,7 +7,7 @@ import {
 
 describe('Inspection standard data / Factory', () => {
 	test('createInspectionStandardDataFromJSONB() constructs an instance of a InspectionStandardData GraphQL model', () => {
-		const result = InspectionStandardDataFactory.createInspectionStandardDataFromJSONB(
+		const result = InspectionStandardDataFactory.CreateInspectionStandardDataFromJSONB(
 			facadeFollowUpSurveyRaw.inspectionStandardData,
 		);
 		const object = {

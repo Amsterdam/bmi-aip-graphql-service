@@ -26,6 +26,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		defaultMaintenanceMeasureId,
 		defectId,
 		failureModeId,
+		createdAt,
+		updatedAt,
 	}: CreateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresCreateInput = {
 			id: newId(),
@@ -40,6 +42,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasureId } },
+			created_at: createdAt,
+			updated_at: updatedAt,
 		};
 
 		if (failureModeId) {
@@ -80,7 +84,6 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 				surveyId,
 				unitId,
 				defaultMaintenanceMeasureId,
-				deleted_at: null,
 			},
 		});
 	}
@@ -97,6 +100,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		maintenanceType,
 		defectId,
 		failureModeId,
+		updatedAt,
+		deletedAt,
 	}: UpdateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresUpdateInput = {
 			planYear,
@@ -107,6 +112,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement,
 			maintenanceType,
+			updated_at: updatedAt,
+			deleted_at: deletedAt ?? null,
 		};
 
 		if (failureModeId) {

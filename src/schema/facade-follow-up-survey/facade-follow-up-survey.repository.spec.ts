@@ -6,6 +6,7 @@ import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.reposi
 import {
 	updateFacadeFollowUpSurveyInput,
 	FacadeFollowUpSurvey as domainFacadeFollowUpSurvey,
+	facadeFollowUpSurveyRaw,
 } from './__stubs__/facade-follow-up-survey-stub';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -27,13 +28,7 @@ describe('Facade follow up survey / Repository', () => {
 		);
 		expect(prismaServiceMock.surveys.update).toHaveBeenCalledWith({
 			where: { id: updateFacadeFollowUpSurveyInput.surveyId },
-			data: {
-				preparedAuthor: '__AUTHOR_01__',
-				preparedDate: undefined,
-				verifiedAuthor: '__VERIVIER_01__',
-				verifiedDate: undefined,
-				inspectionStandardData: { remarks: '__TEST__' },
-			},
+			data: facadeFollowUpSurveyRaw,
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({

@@ -4,7 +4,7 @@ import { PrismaService } from '../../prisma.service';
 
 import { FacadeFollowUpSurveyService } from './facade-follow-up-survey.service';
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
-import { facadeFollowUpSurveyRaw } from './__stubs__/facade-follow-up-survey-stub';
+import { domainFacadeFollowUpSurvey } from './__stubs__/facade-follow-up-survey-stub';
 import { FacadeFollowUpSurveyFactory } from './facade-follow-up-survey.factory';
 import { FacadeFollowUpSurvey } from './models/facade-follow-up-survey.model';
 
@@ -24,7 +24,7 @@ describe('Facade follow up survey / Service', () => {
 		);
 		expect(FacadeFollowUpSurveyResults).toBeInstanceOf(FacadeFollowUpSurvey);
 		expect(FacadeFollowUpSurveyResults).toEqual(
-			FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(facadeFollowUpSurveyRaw),
+			FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(domainFacadeFollowUpSurvey),
 		);
 	});
 });

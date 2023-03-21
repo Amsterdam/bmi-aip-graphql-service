@@ -3,6 +3,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
 import { ReachSegment } from './reach-segment.model';
+import { ArkInspectionStandardData } from './ark-inspection-standard-data.model';
 
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
@@ -35,4 +36,19 @@ export class ArkSurvey {
 
 	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })
 	reachSegments: ReachSegment[];
+
+	@Field((type) => String, { nullable: true })
+	preparedAuthor: string;
+
+	@Field((type) => Date, { nullable: true })
+	preparedDate: Date;
+
+	@Field((type) => String, { nullable: true })
+	verifiedAuthor: string;
+
+	@Field((type) => Date, { nullable: true })
+	verifiedDate: Date;
+
+	@Field((type) => ArkInspectionStandardData, { nullable: true })
+	inspectionStandardData?: ArkInspectionStandardData;
 }

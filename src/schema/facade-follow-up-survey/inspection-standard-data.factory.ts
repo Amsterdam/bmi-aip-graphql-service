@@ -3,7 +3,7 @@ import { Prisma } from '.prisma/client';
 import { FacadeInspectionStandardData } from './models/facade-inspection-standard-data.model';
 
 export class InspectionStandardDataFactory {
-	static createInspectionStandardDataFromJSONB(
+	static CreateInspectionStandardDataFromJSONB(
 		inspectionStandardData: Prisma.JsonValue,
 	): FacadeInspectionStandardData {
 		const inspectionStandardDataModel = new FacadeInspectionStandardData();

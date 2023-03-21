@@ -9,7 +9,7 @@ export class FacadeFollowUpSurveyService {
 	public constructor(private readonly facadeFollowUpSurveyRepository: FacadeFollowUpSurveyRepository) {}
 
 	async getFacadeFollowUpSurvey(surveyId: string): Promise<FacadeFollowUpSurvey> {
-		return FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(
+		return FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(
 			await this.facadeFollowUpSurveyRepository.getFacadeFollowUpSurvey(surveyId),
 		);
 	}

@@ -26,7 +26,7 @@ export class FacadeFollowUpSurveyResolver {
 	public async updateFacadeFollowUpSurvey(
 		@Args('updateFacadeFollowUpSurvey') input: UpdateFacadeFollowUpSurveyInput,
 	): Promise<FacadeFollowUpSurvey> {
-		return FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(
+		return FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(
 			await this.commandBus.execute<UpdateFacadeFollowUpSurveyCommand>(
 				new UpdateFacadeFollowUpSurveyCommand(input),
 			),

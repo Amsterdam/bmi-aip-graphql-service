@@ -37,7 +37,7 @@ export class CyclicMeasureResolver {
 	) {}
 
 	@Mutation(() => CyclicMeasure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createCyclicMeasure(
 		@Args('createCyclicMeasure') input: CreateCyclicMeasureInput,
 	): Promise<CyclicMeasure> {
@@ -48,7 +48,7 @@ export class CyclicMeasureResolver {
 	}
 
 	@Mutation(() => CyclicMeasure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateCyclicMeasure(
 		@Args('updateCyclicMeasure') input: UpdateCyclicMeasureInput,
 	): Promise<CyclicMeasure> {
@@ -59,7 +59,7 @@ export class CyclicMeasureResolver {
 	}
 
 	@Mutation(() => CyclicMeasure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteCyclicMeasure(@Args('identifier') identifier: string): Promise<CyclicMeasure> {
 		const domainCyclicMeasure: DomainCyclicMeasure = await this.commandBus.execute<DeleteCyclicMeasureCommand>(
 			new DeleteCyclicMeasureCommand(identifier),
@@ -68,13 +68,13 @@ export class CyclicMeasureResolver {
 	}
 
 	@Mutation(() => [CyclicMeasure])
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async generateCyclicMeasures(@Args('surveyId') surveyId: string): Promise<CyclicMeasure[]> {
 		return this.commandBus.execute<GenerateCyclicMeasuresCommand>(new GenerateCyclicMeasuresCommand(surveyId));
 	}
 
 	@Query((returns) => [CyclicMeasure], { name: 'cyclicMeasures' })
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveyCyclicMeasures(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.queryBus.execute<FindCyclicMeasuresQuery>(new FindCyclicMeasuresQuery(surveyId));
 	}

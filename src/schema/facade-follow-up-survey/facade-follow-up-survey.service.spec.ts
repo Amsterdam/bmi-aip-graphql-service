@@ -24,7 +24,7 @@ describe('Facade follow up survey / Service', () => {
 		);
 		expect(FacadeFollowUpSurveyResults).toBeInstanceOf(FacadeFollowUpSurvey);
 		expect(FacadeFollowUpSurveyResults).toEqual(
-			FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey),
+			FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(domainFacadeFollowUpSurvey),
 		);
 	});
 });

@@ -4,7 +4,7 @@ import { domainFacadeFollowUpSurvey } from './__stubs__/facade-follow-up-survey-
 
 describe('Facade follow up survey / Factory', () => {
 	test('CreateFacadeFollowUpSurvey() constructs an instance of a FacadeFollowUpSurvey GraphQL model', () => {
-		const result = FacadeFollowUpSurveyFactory.createFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
+		const result = FacadeFollowUpSurveyFactory.CreateFacadeFollowUpSurvey(domainFacadeFollowUpSurvey);
 		const object = {
 			...domainFacadeFollowUpSurvey,
 		};

@@ -46,8 +46,6 @@ describe('GenerateCyclicMeasuresHandler', () => {
 		).execute(command);
 		const object = {
 			...domainCyclicMeasure,
-			createdAt: null,
-			updatedAt: null,
 			deletedAt: domainCyclicMeasure.deleted_at,
 		};
 		delete object.deleted_at;

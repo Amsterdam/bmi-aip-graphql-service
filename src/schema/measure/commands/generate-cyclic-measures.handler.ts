@@ -47,7 +47,7 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 							defaultMaintenanceMeasure.id,
 						);
 
-						if (!existingCyclicMeasure && !existingCyclicMeasure.deleted_at) {
+						if (!existingCyclicMeasure && !existingCyclicMeasure?.deleted_at) {
 							const data: DomainCyclicMeasure = {
 								id: '',
 								surveyId: command.surveyId,

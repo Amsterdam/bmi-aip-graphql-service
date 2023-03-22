@@ -19,8 +19,6 @@ export class CyclicMeasureFactory {
 		defaultMaintenanceMeasureId,
 		failureModeId,
 		defectId,
-		created_at: createdAt,
-		updated_at: updatedAt,
 		deleted_at: deletedAt,
 	}: DomainCyclicMeasure): CyclicMeasure {
 		const cyclicMeasure = new CyclicMeasure();
@@ -38,8 +36,6 @@ export class CyclicMeasureFactory {
 		cyclicMeasure.defaultMaintenanceMeasureId = defaultMaintenanceMeasureId;
 		cyclicMeasure.failureModeId = failureModeId;
 		cyclicMeasure.defectId = defectId;
-		cyclicMeasure.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
-		cyclicMeasure.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		cyclicMeasure.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
 		return cyclicMeasure;
 	}

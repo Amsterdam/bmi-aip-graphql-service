@@ -36,9 +36,9 @@ export class FacadeFollowUpSurveyRepository implements IFacadeFollowUpSurveyRepo
 			},
 			data: {
 				preparedAuthor: preparedAuthor ?? existingRecord.preparedAuthor,
-				preparedDate: preparedDate ?? existingRecord.preparedDate,
+				preparedDate: preparedDate === null ? null : preparedDate ?? existingRecord.preparedDate,
 				verifiedAuthor: verifiedAuthor ?? existingRecord.verifiedAuthor,
-				verifiedDate: verifiedDate ?? existingRecord.verifiedDate,
+				verifiedDate: verifiedDate === null ? null : verifiedDate ?? existingRecord.verifiedDate,
 				inspectionStandardData:
 					(inspectionStandardData as Prisma.InputJsonObject) ?? existingRecord.inspectionStandardData,
 			},

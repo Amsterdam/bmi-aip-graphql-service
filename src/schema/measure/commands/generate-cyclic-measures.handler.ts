@@ -27,7 +27,7 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 		const cyclicMeasures: CyclicMeasure[] = [];
 		const units: Unit[] = await this.unitRepository.getUnitsBySurveyId(command.surveyId);
 
-		if (units) return [];
+		if (!units) return [];
 		for (const unit of units) {
 			const objectTypeUnitCode: ObjectTypeUnitCode = await this.objectTypeUnitCodeRepository.findByCode(
 				unit.code,

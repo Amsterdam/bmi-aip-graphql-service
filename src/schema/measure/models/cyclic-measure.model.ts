@@ -74,11 +74,5 @@ export class CyclicMeasure {
 	costWithSurcharge?: number;
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
-
-	@Field((type) => String, { nullable: true })
-	updatedAt: string;
-
-	@Field((type) => String, { nullable: true })
 	deletedAt: string;
 }

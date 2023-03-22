@@ -2,4 +2,4 @@
 
 docker-compose \
     -p bmi \
-    up --remove-orphans --build --force-recreate -d
+    up --build --force-recreate -d

@@ -47,7 +47,7 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 							defaultMaintenanceMeasure.id,
 						);
 
-						if (!existingCyclicMeasure) {
+						if (!existingCyclicMeasure && !existingCyclicMeasure.deleted_at) {
 							const data: DomainCyclicMeasure = {
 								id: '',
 								surveyId: command.surveyId,
@@ -64,6 +64,8 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 								remarks: '',
 								failureModeId: '',
 								defectId: '',
+								created_at: undefined,
+								updated_at: undefined,
 							};
 
 							cyclicMeasures.push(
@@ -74,6 +76,7 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 						} else {
 							const data: DomainCyclicMeasure = {
 								...existingCyclicMeasure,
+								deleted_at: undefined,
 								cycle: defaultMaintenanceMeasure.cycle,
 								unitPrice: defaultMaintenanceMeasure.unitPrice,
 								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,

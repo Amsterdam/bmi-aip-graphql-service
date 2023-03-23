@@ -3,14 +3,14 @@ import { FailureModeMetaDataFactory } from './failure-mode-meta-data.factory';
 describe('FailureMode / MetaData / Factory', () => {
 	test('CreateFailureMode() constructs an instance of a FailureMode GraphQL model', () => {
 		const result = FailureModeMetaDataFactory.CreateFailureModeMetaDataFromJSONB({
-			faalOorzaak: null,
+			faaloorzaak: '',
 		});
 		expect(result).toEqual({
-			faalOorzaak: null,
-			bronVanFalen: null,
-			gevolgVanFalen: null,
-			faaloorzaakAnders: null,
-			bronVanFalenAnders: null,
+			causeOfFailureOther: '',
+			consequenceOfFailure: '',
+			failureCause: '',
+			sourceOfFailure: '',
+			sourceOfFailureOther: '',
 		});
 	});
 });

@@ -2,6 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { ManifestationRepository } from '../manifestation.repository';
 import { domainManifestation, updateManifestationInput } from '../__stubs__';
+import { ManifestationFactory } from '../manifestation.factory';
 
 import { UpdateManifestationCommand } from './update-manifestation.command';
 import { UpdateManifestationHandler } from './update-manifestation.handler';
@@ -19,6 +20,6 @@ describe('UpdateManifestationHandler', () => {
 		expect(manifestationRepoMock.updateManifestation).toHaveBeenCalledTimes(1);
 		expect(manifestationRepoMock.updateManifestation).toHaveBeenCalledWith(updateManifestationInput);
 
-		expect(result).toEqual(domainManifestation);
+		expect(result).toEqual(ManifestationFactory.CreateManifestation(domainManifestation));
 	});
 });

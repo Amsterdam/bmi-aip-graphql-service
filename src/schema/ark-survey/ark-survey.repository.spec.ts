@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { ArkSurveyRepository } from './ark-survey.repository';
-import { domainArkSurvey, createArkSurveyInput } from './__stubs__';
+import { domainArkSurvey, createArkSurveyInput, updateSurveyInput, domainSurvey, surveyRaw } from './__stubs__';
 
 jest.mock('./types/ark-survey.repository.interface');
 
@@ -12,6 +12,10 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		create: jest.fn().mockResolvedValue(domainArkSurvey),
 		findMany: jest.fn().mockResolvedValue([domainArkSurvey]),
 		update: jest.fn().mockResolvedValue(domainArkSurvey),
+	},
+	surveys: {
+		findFirst: jest.fn().mockResolvedValue([domainSurvey]),
+		update: jest.fn().mockResolvedValue(domainSurvey),
 	},
 	$executeRaw: jest.fn(),
 	$queryRaw: jest.fn(),
@@ -41,6 +45,16 @@ describe('ARK/ ArkSurvey / Repository', () => {
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...createArkSurveyInput,
+			}),
+		);
+	});
+	test('updateSurvey()', async () => {
+		const returnValue = await repository.updateSurvey(updateSurveyInput);
+		const survey = prismaServiceMock.surveys.update.mock.calls[0][0].data;
+		expect(survey).toEqual(surveyRaw);
+		expect(returnValue).toEqual(
+			expect.objectContaining({
+				...updateSurveyInput,
 			}),
 		);
 	});

@@ -2,6 +2,10 @@ import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
+import { MeasureService } from '../measure/measure.service';
+import { MeasureRepository } from '../measure/measure.repository';
+import { CyclicMeasureService } from '../measure/cyclic-measure.service';
+import { CyclicMeasureRepository } from '../measure/cyclic-measure.repository';
 
 import { UnitResolver } from './unit.resolver';
 import { UnitService } from './unit.service';
@@ -17,12 +21,17 @@ import { GetUnitByIdQuery } from './queries/get-unit-by-id.query';
 jest.mock('./unit.service');
 jest.mock('./unit.repository');
 
+jest.mock('../measure/measure.service');
+jest.mock('../measure/measure.repository');
+jest.mock('../measure/cyclic-measure.service');
+jest.mock('../measure/cyclic-measure.repository');
+
 const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
 		switch (command.constructor.name) {
 			case CreateUnitCommand.name:
 			case UpdateUnitCommand.name:
-				return domainUnit;
+				return UnitFactory.CreateUnit(domainUnit);
 			case DeleteUnitCommand.name:
 				return UnitFactory.CreateUnit(deletedUnit);
 		}
@@ -45,13 +54,18 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 };
 
 const unitRepo = new UnitRepository(prismaServiceMock);
+const unitService = new UnitService(
+	unitRepo,
+	new MeasureService(new MeasureRepository(prismaServiceMock)),
+	new CyclicMeasureService(new CyclicMeasureRepository(prismaServiceMock)),
+);
 
 describe('Decomposition / Unit / Resolver', () => {
 	describe('createUnit', () => {
 		test('creates and returns a unit', async () => {
 			const commandBusMock = getCommandBusMock();
 			const queryBusMock = getQueryBusMock();
-			const resolver = new UnitResolver(new UnitService(unitRepo), commandBusMock, queryBusMock);
+			const resolver = new UnitResolver(unitService, commandBusMock, queryBusMock);
 			const result = await resolver.createUnit(unitInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateUnitCommand(unitInput));
@@ -65,7 +79,7 @@ describe('Decomposition / Unit / Resolver', () => {
 		test('updates and returns a unit', async () => {
 			const commandBusMock = getCommandBusMock();
 			const queryBusMock = getQueryBusMock();
-			const resolver = new UnitResolver(new UnitService(unitRepo), commandBusMock, queryBusMock);
+			const resolver = new UnitResolver(unitService, commandBusMock, queryBusMock);
 			const result = await resolver.updateUnit(updateUnitInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateUnitCommand(updateUnitInput));
@@ -79,7 +93,7 @@ describe('Decomposition / Unit / Resolver', () => {
 		test('soft-deletes and returns a unit', async () => {
 			const commandBusMock = getCommandBusMock();
 			const queryBusMock = getQueryBusMock();
-			const resolver = new UnitResolver(new UnitService(unitRepo), commandBusMock, queryBusMock);
+			const resolver = new UnitResolver(unitService, commandBusMock, queryBusMock);
 			const result = await resolver.deleteUnit(domainUnit.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteUnitCommand(domainUnit.id));

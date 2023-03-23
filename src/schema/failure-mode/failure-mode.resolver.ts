@@ -17,7 +17,7 @@ export class FailureModeResolver {
 	constructor(private failureModeService: FailureModeService, private commandBus: CommandBus) {}
 
 	@Mutation(() => FailureMode)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createFailureMode(@Args('createFailureMode') input: CreateFailureModeInput): Promise<FailureMode> {
 		const domainFailureMode: DomainFailureMode = await this.commandBus.execute<CreateFailureModeCommand>(
 			new CreateFailureModeCommand(input),
@@ -26,7 +26,7 @@ export class FailureModeResolver {
 	}
 
 	@Mutation(() => FailureMode)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateFailureMode(@Args('updateFailureMode') input: UpdateFailureModeInput): Promise<FailureMode> {
 		const domainFailureMode: DomainFailureMode = await this.commandBus.execute<UpdateFailureModeCommand>(
 			new UpdateFailureModeCommand(input),
@@ -35,7 +35,7 @@ export class FailureModeResolver {
 	}
 
 	@Query((returns) => [FailureMode], { name: 'failureModes' })
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async failureModes(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.failureModeService.findFailureModes(surveyId);
 	}

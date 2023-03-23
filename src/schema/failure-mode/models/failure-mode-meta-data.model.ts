@@ -3,17 +3,17 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType({ description: 'failureModeMetaData' })
 export class FailureModeMetaData {
 	@Field((type) => String)
-	public faalOorzaak?: string;
+	public failureCause?: string; //faalOorzaak
 
 	@Field((type) => String)
-	public bronVanFalen?: string;
+	public sourceOfFailure?: string; //bronVanFalen
 
 	@Field((type) => String)
-	public gevolgVanFalen?: string;
+	public consequenceOfFailure?: string; //gevolgVanFalen
 
 	@Field((type) => String)
-	public faaloorzaakAnders?: string;
+	public causeOfFailureOther?: string; //faaloorzaakAnders
 
 	@Field((type) => String)
-	public bronVanFalenAnders?: string;
+	public sourceOfFailureOther?: string; //bronVanFalenAnders
 }

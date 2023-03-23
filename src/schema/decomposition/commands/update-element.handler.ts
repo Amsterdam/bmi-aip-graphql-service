@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { ElementRepository } from '../element.repository';
-import { Element } from '../types/element.repository.interface';
+import { ElementFactory } from '../element.factory';
+import { Element } from '../models/element.model';
 
 import { UpdateElementCommand } from './update-element.command';
 
@@ -10,6 +11,6 @@ export class UpdateElementHandler implements ICommandHandler<UpdateElementComman
 	constructor(private repository: ElementRepository) {}
 
 	public async execute(command: UpdateElementCommand): Promise<Element> {
-		return this.repository.updateElement(command.data);
+		return ElementFactory.CreateElement(await this.repository.updateElement(command.data));
 	}
 }

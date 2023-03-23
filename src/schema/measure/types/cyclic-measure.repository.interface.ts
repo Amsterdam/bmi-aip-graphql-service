@@ -16,6 +16,8 @@ const cyclicMeasures = Prisma.validator<Prisma.cyclicMeasuresArgs>()({
 		unitPrice: true,
 		quantityUnitOfMeasurement: true,
 		defaultMaintenanceMeasureId: true,
+		created_at: true,
+		updated_at: true,
 		deleted_at: true,
 		maintenanceType: true,
 		failureModeId: true,

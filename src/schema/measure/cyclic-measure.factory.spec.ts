@@ -6,8 +6,14 @@ import { CyclicMeasure } from './models/cyclic-measure.model';
 describe('CyclicMeasureFactory', () => {
 	test('CreateCyclicMeasure() constructs an instance of an CyclicMeasure GraphQL model', () => {
 		const result = CyclicMeasureFactory.CreateCyclicMeasure(domainCyclicMeasure);
-		const object = { ...domainCyclicMeasure, deletedAt: domainCyclicMeasure.deleted_at };
+		const object = {
+			...domainCyclicMeasure,
+			deletedAt: domainCyclicMeasure.deleted_at,
+		};
+		delete object.created_at;
+		delete object.updated_at;
 		delete object.deleted_at;
+
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(CyclicMeasure);
 	});

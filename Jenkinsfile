@@ -138,9 +138,9 @@ pipeline {
       script {
         // delete original image built on the build server
         sh "docker-compose -p bmi down --remove-orphans"
-        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:base) || true'
-        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:build) || true'
         sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:latest) || true'
+        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:build) || true'
+        sh 'docker rm $(docker ps -aq --filter ancestor=bmi/bmiaip-api:base) || true'
         sh "docker rmi ${DOCKER_IMAGE_URL}:${BUILD_NUMBER} || true"
         sh "bin/run-build-container rm -rf node_modules"
       }

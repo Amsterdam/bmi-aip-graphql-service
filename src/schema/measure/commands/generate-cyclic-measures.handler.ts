@@ -27,69 +27,72 @@ export class GenerateCyclicMeasuresHandler implements ICommandHandler<GenerateCy
 		const cyclicMeasures: CyclicMeasure[] = [];
 		const units: Unit[] = await this.unitRepository.getUnitsBySurveyId(command.surveyId);
 
-		if (units) {
-			for (const unit of units) {
-				const objectTypeUnitCode: ObjectTypeUnitCode = await this.objectTypeUnitCodeRepository.findByCode(
-					unit.code,
+		if (!units) return [];
+		for (const unit of units) {
+			const objectTypeUnitCode: ObjectTypeUnitCode = await this.objectTypeUnitCodeRepository.findByCode(
+				unit.code,
+			);
+
+			const defaultMaintenanceMeasures: DefaultMaintenanceMeasure[] =
+				await this.defaultMaintenanceMeasureRepository.findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId(
+					objectTypeUnitCode.id,
+					unit.material,
+					unit.quantityUnitOfMeasurement,
 				);
 
-				const defaultMaintenanceMeasures: DefaultMaintenanceMeasure[] =
-					await this.defaultMaintenanceMeasureRepository.findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId(
-						objectTypeUnitCode.id,
-						unit.material,
-						unit.quantityUnitOfMeasurement,
+			if (!defaultMaintenanceMeasures) return [];
+			for (const defaultMaintenanceMeasure of defaultMaintenanceMeasures) {
+				const existingCyclicMeasure = await this.cyclicMeasureRepository.findExistingCyclicMeasure(
+					command.surveyId,
+					unit.id,
+					defaultMaintenanceMeasure.id,
+				);
+
+				if (!existingCyclicMeasure && !existingCyclicMeasure?.deleted_at) {
+					const data: DomainCyclicMeasure = {
+						id: '',
+						surveyId: command.surveyId,
+						unitId: unit.id,
+						maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
+						cycle: defaultMaintenanceMeasure.cycle,
+						unitPrice: defaultMaintenanceMeasure.unitPrice,
+						quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
+						defaultMaintenanceMeasureId: defaultMaintenanceMeasure.id,
+						deleted_at: undefined,
+						planYear: 0,
+						finalPlanYear: 0,
+						costSurcharge: 0,
+						remarks: '',
+						failureModeId: '',
+						defectId: '',
+						created_at: undefined,
+						updated_at: undefined,
+					};
+
+					cyclicMeasures.push(
+						CyclicMeasureFactory.CreateCyclicMeasure(
+							await this.cyclicMeasureRepository.createCyclicMeasure(data),
+						),
 					);
-				if (defaultMaintenanceMeasures) {
-					for (const defaultMaintenanceMeasure of defaultMaintenanceMeasures) {
-						const existingCyclicMeasure = await this.cyclicMeasureRepository.findExistingCyclicMeasure(
-							command.surveyId,
-							unit.id,
-							defaultMaintenanceMeasure.id,
-						);
+				} else {
+					const data: DomainCyclicMeasure = {
+						...existingCyclicMeasure,
+						deleted_at: undefined,
+						cycle: defaultMaintenanceMeasure.cycle,
+						unitPrice: defaultMaintenanceMeasure.unitPrice,
+						quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
+						maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
+					};
 
-						if (!existingCyclicMeasure) {
-							const data: DomainCyclicMeasure = {
-								id: '',
-								surveyId: command.surveyId,
-								unitId: unit.id,
-								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
-								cycle: defaultMaintenanceMeasure.cycle,
-								unitPrice: defaultMaintenanceMeasure.unitPrice,
-								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
-								defaultMaintenanceMeasureId: defaultMaintenanceMeasure.id,
-								deleted_at: undefined,
-								planYear: 0,
-								finalPlanYear: 0,
-								costSurcharge: 0,
-								remarks: '',
-								failureModeId: '',
-								defectId: '',
-							};
-
-							cyclicMeasures.push(
-								CyclicMeasureFactory.CreateCyclicMeasure(
-									await this.cyclicMeasureRepository.createCyclicMeasure(data),
-								),
-							);
-						} else {
-							const data: DomainCyclicMeasure = {
-								...existingCyclicMeasure,
-								cycle: defaultMaintenanceMeasure.cycle,
-								unitPrice: defaultMaintenanceMeasure.unitPrice,
-								quantityUnitOfMeasurement: defaultMaintenanceMeasure.quantityUnitOfMeasurement,
-								maintenanceType: castCyclicMeasureType(defaultMaintenanceMeasure.maintenanceType),
-							};
-
-							cyclicMeasures.push(
-								CyclicMeasureFactory.CreateCyclicMeasure(
-									await this.cyclicMeasureRepository.updateCyclicMeasure(data),
-								),
-							);
-						}
-					}
+					cyclicMeasures.push(
+						CyclicMeasureFactory.CreateCyclicMeasure(
+							await this.cyclicMeasureRepository.updateCyclicMeasure(data),
+						),
+					);
 				}
 			}
 		}
+
 		return cyclicMeasures;
 	}
 }

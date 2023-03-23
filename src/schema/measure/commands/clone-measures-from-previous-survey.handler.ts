@@ -100,6 +100,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 					...cyclicMeasure,
 					surveyId,
 					remarks: cyclicMeasure.remarks,
+					deletedAt: null,
 				});
 			});
 		});

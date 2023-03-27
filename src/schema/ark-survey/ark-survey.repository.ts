@@ -142,12 +142,11 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				id: surveyId,
 			},
 			data: {
-				preparedAuthor: preparedAuthor ?? existingSurveyRecord.preparedAuthor,
-				preparedDate: preparedDate ?? existingSurveyRecord.preparedDate,
-				verifiedAuthor: verifiedAuthor ?? existingSurveyRecord.verifiedAuthor,
-				verifiedDate: verifiedDate ?? existingSurveyRecord.verifiedDate,
-				inspectionStandardData:
-					(inspectionStandardData as Prisma.InputJsonObject) ?? existingSurveyRecord.inspectionStandardData,
+				preparedAuthor,
+				preparedDate,
+				verifiedAuthor,
+				verifiedDate,
+				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
 			},
 		});
 

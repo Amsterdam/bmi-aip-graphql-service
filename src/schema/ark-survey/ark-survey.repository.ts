@@ -67,7 +67,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		})) as ArkSurvey;
 
 		if (!survey) {
-			return null;
+			throw new Error('No survey found.');
 		}
 
 		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey?.surveyId);
@@ -167,7 +167,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		inspectionStandardData,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Update Survey
-		this.updateSurvey({
+		await this.updateSurvey({
 			surveyId,
 			preparedAuthor,
 			preparedDate,

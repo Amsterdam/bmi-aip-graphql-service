@@ -66,12 +66,12 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			where: { surveyId: surveyId },
 		})) as ArkSurvey;
 
-		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
-		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
-
 		if (!survey) {
 			throw new Error('No ARK survey found.');
 		}
+
+		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
+		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
 
 		return survey;
 	}

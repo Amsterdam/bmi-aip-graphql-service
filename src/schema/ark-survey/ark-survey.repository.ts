@@ -66,12 +66,12 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			where: { surveyId: surveyId },
 		})) as ArkSurvey;
 
-		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
-		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
-
 		if (!survey) {
 			throw new Error('No ARK survey found.');
 		}
+
+		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
+		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
 
 		return survey;
 	}
@@ -83,15 +83,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		arkGeographyEnd,
 		arkGeographyRDEnd,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
-		const data: Prisma.arkSurveysUpdateInput = {
-			arkGeographyRDStart: {
-				...arkGeographyRDStart,
-			},
-			arkGeographyRDEnd: {
-				...arkGeographyRDEnd,
-			},
-		};
-
 		// Work around Prisma not supporting spatial data types
 		if (arkGeographyStart) {
 			await this.prisma.$executeRaw`
@@ -111,7 +102,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		const arkSurveyGeoData = await this.prisma.arkSurveys.update({
 			where: { surveyId },
-			data,
+			data: {
+				arkGeographyRDStart: {
+					...arkGeographyRDStart,
+				},
+				arkGeographyRDEnd: {
+					...arkGeographyRDEnd,
+				},
+			},
 		});
 
 		// Work around Prisma not supporting spatial data types
@@ -137,7 +135,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			throw new Error('No survey found.');
 		}
 
-		const surveyData = await this.prisma.surveys.update({
+		return this.prisma.surveys.update({
 			where: {
 				id: surveyId,
 			},
@@ -149,8 +147,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
 			},
 		});
-
-		return surveyData;
 	}
 
 	async saveArkSurvey({
@@ -167,7 +163,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		inspectionStandardData,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Update Survey
-		this.updateSurvey({
+		await this.updateSurvey({
 			surveyId,
 			preparedAuthor,
 			preparedDate,
@@ -235,9 +231,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			}
 
 			// Workaround to make sure created reachSegments are included in response
-			const updated = await this.updateArkSurvey(insertData);
-
-			return updated;
+			return this.updateArkSurvey(insertData);
 		}
 	}
 

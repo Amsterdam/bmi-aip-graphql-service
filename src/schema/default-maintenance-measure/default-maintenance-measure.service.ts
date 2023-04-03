@@ -14,10 +14,16 @@ export class DefaultMaintenanceMeasureService {
 		);
 	}
 
-	async getDefaultMaintenanceMeasures(objectTypeUnitCodeId: string): Promise<DefaultMaintenanceMeasure[]> {
+	async getDefaultMaintenanceMeasures(
+		objectTypeUnitCodeId: string,
+		material: string,
+		quantityUnitOfMeasurement,
+	): Promise<DefaultMaintenanceMeasure[]> {
 		return (
-			await this.defaultMaintenanceMeasureRepo.getDefaultMaintenanceMeasureByObjectTypeUnitCodeId(
+			await this.defaultMaintenanceMeasureRepo.findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId(
 				objectTypeUnitCodeId,
+				material,
+				quantityUnitOfMeasurement,
 			)
 		).map((defaultMaintenanceMeasure) =>
 			DefaultMaintenanceMeasureFactory.CreateDefaultMaintenanceMeasure(defaultMaintenanceMeasure),

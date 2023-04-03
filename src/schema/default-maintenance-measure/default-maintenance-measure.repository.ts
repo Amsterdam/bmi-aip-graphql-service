@@ -19,12 +19,16 @@ export class DefaultMaintenanceMeasureRepository implements IDefaultMaintenanceM
 		});
 	}
 
-	async getDefaultMaintenanceMeasureByObjectTypeUnitCodeId(
+	async findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId(
 		objectTypeUnitCodeId: string,
+		material: string,
+		quantityUnitOfMeasurement: string,
 	): Promise<DefaultMaintenanceMeasure[]> {
 		return this.prisma.defaultMaintenanceMeasures.findMany({
 			where: {
 				objectTypeUnitCodeId: objectTypeUnitCodeId,
+				material: material,
+				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			},
 		});
 	}

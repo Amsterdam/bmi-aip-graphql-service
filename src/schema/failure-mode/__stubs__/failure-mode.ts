@@ -3,7 +3,8 @@ import { CreateFailureModeInput } from '../dto/create-failure-mode.input';
 import { FailureMode as DomainFailureMode } from '../types/failure-mode.repository.interface';
 import { FailureModeFactory } from '../failure-mode.factory';
 import { UpdateFailureModeInput } from '../dto/update-failure-mode.input';
-import { FailureModeMetaData } from '../models/failure-mode-meta-data.model';
+
+import { FailureModeMetaDataInput } from './../dto/failure-mode-meta-data.input';
 
 const failureMode1 = new FailureMode();
 failureMode1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -17,12 +18,8 @@ failureMode2.unitId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 
 export { failureMode1, failureMode2 };
 
-const failureModeMetaData = new FailureModeMetaData();
-failureModeMetaData.faalOorzaak = null;
-failureModeMetaData.bronVanFalenAnders = null;
-failureModeMetaData.bronVanFalen = null;
-failureModeMetaData.faaloorzaakAnders = null;
-failureModeMetaData.gevolgVanFalen = null;
+const failureModeMetaData = new FailureModeMetaDataInput();
+failureModeMetaData.failureCause = null;
 
 const failureModeRaw: Omit<DomainFailureMode, 'id'> = {
 	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5adb',

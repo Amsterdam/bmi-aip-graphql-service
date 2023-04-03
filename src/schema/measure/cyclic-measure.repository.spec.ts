@@ -12,6 +12,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		create: jest.fn().mockResolvedValue(domainCyclicMeasure),
 		findMany: jest.fn().mockResolvedValue([domainCyclicMeasure]),
 		update: jest.fn().mockResolvedValue(domainCyclicMeasure),
+		delete: jest.fn().mockResolvedValue(deletedCyclicMeasure),
 	},
 	...(<any>{}),
 };
@@ -53,7 +54,7 @@ describe('CyclicMeasureRepository', () => {
 	test('findCyclicMeasures()', async () => {
 		const cyclicMeasures = await repo.findCyclicMeasures('__SURVEY_ID__');
 		expect(prismaServiceMock.cyclicMeasures.findMany).toHaveBeenCalledWith({
-			where: { surveyId: '__SURVEY_ID__' },
+			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(cyclicMeasures).toEqual([domainCyclicMeasure]);
 	});

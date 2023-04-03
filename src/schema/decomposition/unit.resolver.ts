@@ -21,22 +21,19 @@ export class UnitResolver {
 	constructor(private unitService: UnitService, private commandBus: CommandBus, private queryBus: QueryBus) {}
 
 	@Mutation(() => Unit)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createUnit(@Args('createUnit') input: CreateUnitInput): Promise<Unit> {
-		const domainUnit: DomainUnit = await this.commandBus.execute<CreateUnitCommand>(new CreateUnitCommand(input));
-		return UnitFactory.CreateUnit(domainUnit);
+		return this.commandBus.execute<CreateUnitCommand>(new CreateUnitCommand(input));
 	}
 
 	@Mutation(() => Unit)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateUnit(@Args('updateUnit') input: UpdateUnitInput): Promise<Unit> {
-		const domainUnit: DomainUnit = await this.commandBus.execute<UpdateUnitCommand>(new UpdateUnitCommand(input));
-
-		return UnitFactory.CreateUnit(domainUnit);
+		return this.commandBus.execute<UpdateUnitCommand>(new UpdateUnitCommand(input));
 	}
 
 	@Mutation(() => Unit)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteUnit(@Args('identifier') identifier: string): Promise<Unit> {
 		return this.commandBus.execute<DeleteUnitCommand>(new DeleteUnitCommand(identifier));
 	}

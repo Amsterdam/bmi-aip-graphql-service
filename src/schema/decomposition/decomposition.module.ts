@@ -6,6 +6,7 @@ import { AuthenticationModule } from '../../authentication/authentication.module
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from '../survey/survey.repository';
+import { MeasureModule } from '../measure/measure.module';
 
 import { ElementService } from './element.service';
 import { ElementResolver } from './element.resolver';
@@ -75,7 +76,13 @@ import { ObjectTypeUnitCodeRepository } from './object-type-unit-code.repository
 		SurveyRepository,
 		ObjectTypeUnitCodeRepository,
 	],
-	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
+	imports: [
+		CqrsModule,
+		AuthorizationModule,
+		AuthenticationModule,
+		forwardRef(() => MeasureModule),
+		forwardRef(() => AssetModule),
+	],
 	exports: [UnitService, UnitRepository, ObjectTypeUnitCodeRepository],
 })
 export class DecompositionModule {}

@@ -26,6 +26,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		defaultMaintenanceMeasureId,
 		defectId,
 		failureModeId,
+		createdAt,
+		updatedAt,
 	}: CreateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresCreateInput = {
 			id: newId(),
@@ -40,6 +42,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 			defaultMaintenanceMeasures: { connect: { id: defaultMaintenanceMeasureId } },
+			created_at: createdAt,
+			updated_at: updatedAt,
 		};
 
 		if (failureModeId) {
@@ -65,6 +69,7 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		return this.prisma.cyclicMeasures.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
 			},
 		});
 	}
@@ -95,6 +100,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		maintenanceType,
 		defectId,
 		failureModeId,
+		updatedAt,
+		deletedAt,
 	}: UpdateCyclicMeasureInput): Promise<CyclicMeasure> {
 		const data: Prisma.cyclicMeasuresUpdateInput = {
 			planYear,
@@ -105,6 +112,8 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 			unitPrice,
 			quantityUnitOfMeasurement,
 			maintenanceType,
+			updated_at: updatedAt,
+			deleted_at: deletedAt ?? null,
 		};
 
 		if (failureModeId) {
@@ -144,9 +153,41 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 		const cyclicMeasures = await this.prisma.cyclicMeasures.findMany({
 			where: {
 				surveyId: surveyId,
+				deleted_at: null,
 			},
 		});
 
 		return cyclicMeasures.length > 0;
+	}
+
+	async unitHasMeasures(unitId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				unitId: unitId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
+	}
+
+	async findCyclicMeasuresByUnit(unitId: string): Promise<CyclicMeasure[]> {
+		return this.prisma.cyclicMeasures.findMany({
+			where: {
+				unitId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	async manifestationHasMeasures(manifestationId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				manifestationId: manifestationId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
 	}
 }

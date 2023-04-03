@@ -72,7 +72,6 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 					measure.manifestationId = manifestation.id;
 				}
 				// Duplicate measure record but with new id and different surveyId
-				await this.measureService.createMeasure(measure, surveyId);
 				await this.measureRepository.createMeasure({
 					...measure,
 					surveyId,
@@ -101,6 +100,7 @@ export class CloneMeasuresFromPreviousSurveyHandler implements ICommandHandler<C
 					...cyclicMeasure,
 					surveyId,
 					remarks: cyclicMeasure.remarks,
+					deletedAt: null,
 				});
 			});
 		});

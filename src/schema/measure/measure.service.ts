@@ -20,4 +20,13 @@ export class MeasureService {
 
 		return MeasureFactory.CreateMeasure(result);
 	}
+
+	async deleteMeasuresForUnit(unitId: string): Promise<boolean> {
+		const measures = await this.measureRepo.findMeasuresByUnit(unitId);
+		measures.map(async (measure) => {
+			await this.measureRepo.deleteMeasure(measure.id);
+		});
+
+		return true;
+	}
 }

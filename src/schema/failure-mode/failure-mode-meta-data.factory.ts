@@ -10,12 +10,13 @@ export class FailureModeMetaDataFactory {
 		}
 
 		const failureModeMetModel = new FailureModeMetaData();
-		const parsedFailureModeMetaData = failureModeMetaData as FailureModeMetaData;
-		failureModeMetModel.faalOorzaak = parsedFailureModeMetaData.faalOorzaak ?? null;
-		failureModeMetModel.bronVanFalen = parsedFailureModeMetaData.bronVanFalen ?? null;
-		failureModeMetModel.gevolgVanFalen = parsedFailureModeMetaData.gevolgVanFalen ?? null;
-		failureModeMetModel.faaloorzaakAnders = parsedFailureModeMetaData.faaloorzaakAnders ?? null;
-		failureModeMetModel.bronVanFalenAnders = parsedFailureModeMetaData.bronVanFalenAnders ?? null;
+
+		// eslint-disable-next-line
+		failureModeMetModel.failureCause = failureModeMetaData?.['Faaloorzaak'] ?? '';
+		failureModeMetModel.sourceOfFailure = failureModeMetaData?.['Bron van falen'] ?? '';
+		failureModeMetModel.consequenceOfFailure = failureModeMetaData?.['Gevolg van falen'] ?? '';
+		failureModeMetModel.causeOfFailureOther = failureModeMetaData?.['Faaloorzaak anders'] ?? '';
+		failureModeMetModel.sourceOfFailureOther = failureModeMetaData?.['Bron van falen anders'] ?? '';
 		return failureModeMetModel;
 	}
 }

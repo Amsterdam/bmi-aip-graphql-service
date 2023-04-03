@@ -24,7 +24,9 @@ const unitRepoMock: MockedObjectDeep<UnitRepository> = {
 };
 
 const defaultMaintenanceMeasureRepositoryMock: MockedObjectDeep<DefaultMaintenanceMeasureRepository> = {
-	getDefaultMaintenanceMeasureByObjectTypeUnitCodeId: jest.fn().mockResolvedValue([domainDefaultMaintenanceMeasure]),
+	findDefaultMaintenanceMeasuresByObjectTypeUnitCodeId: jest
+		.fn()
+		.mockResolvedValue([domainDefaultMaintenanceMeasure]),
 	...(<any>{}),
 };
 
@@ -42,7 +44,10 @@ describe('GenerateCyclicMeasuresHandler', () => {
 			defaultMaintenanceMeasureRepositoryMock,
 			objectTypeUnitCodeRepositoryMock,
 		).execute(command);
-		const object = { ...domainCyclicMeasure, deletedAt: domainCyclicMeasure.deleted_at };
+		const object = {
+			...domainCyclicMeasure,
+			deletedAt: domainCyclicMeasure.deleted_at,
+		};
 		delete object.deleted_at;
 
 		expect(cyclicMeasureRepositoryMock.createCyclicMeasure).toHaveBeenCalledTimes(0);

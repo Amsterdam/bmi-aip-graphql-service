@@ -78,6 +78,16 @@ export class MeasureRepository implements IMeasureRepository {
 		return this.prisma.measures.findMany({
 			where: {
 				surveyId,
+				deleted_at: null,
+			},
+		});
+	}
+
+	async findMeasuresByUnit(unitId: string): Promise<Measure[]> {
+		return this.prisma.measures.findMany({
+			where: {
+				unitId,
+				deleted_at: null,
 			},
 		});
 	}
@@ -152,9 +162,32 @@ export class MeasureRepository implements IMeasureRepository {
 		const measures = await this.prisma.measures.findMany({
 			where: {
 				surveyId: surveyId,
+				deleted_at: null,
 			},
 		});
 
 		return measures.length > 0;
+	}
+
+	async unitHasMeasures(unitId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				unitId: unitId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
+	}
+
+	async manifestationHasMeasures(manifestationId: string): Promise<boolean> {
+		const measure = await this.prisma.measures.findMany({
+			where: {
+				manifestationId: manifestationId,
+				deleted_at: null,
+			},
+		});
+
+		return measure.length > 0;
 	}
 }

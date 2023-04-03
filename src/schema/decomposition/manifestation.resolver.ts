@@ -2,7 +2,6 @@ import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 
-import { Manifestation as DomainManifestation } from './types/manifestation.repository.interface';
 import { ManifestationService } from './manifestation.service';
 import { CreateManifestationInput } from './dto/create-manifestation.input';
 import { Manifestation } from './models/manifestation.model';
@@ -23,36 +22,25 @@ export class ManifestationResolver {
 	) {}
 
 	@Mutation(() => Manifestation)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createManifestation(
 		@Args('createManifestation') input: CreateManifestationInput,
 	): Promise<Manifestation> {
-		const domainManifestation: DomainManifestation = await this.commandBus.execute<CreateManifestationCommand>(
-			new CreateManifestationCommand(input),
-		);
-
-		return ManifestationFactory.CreateManifestation(domainManifestation);
+		return this.commandBus.execute<CreateManifestationCommand>(new CreateManifestationCommand(input));
 	}
 
 	@Mutation(() => Manifestation)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateManifestation(
 		@Args('updateManifestation') input: UpdateManifestationInput,
 	): Promise<Manifestation> {
-		const domainManifestation: DomainManifestation = await this.commandBus.execute<UpdateManifestationCommand>(
-			new UpdateManifestationCommand(input),
-		);
-
-		return ManifestationFactory.CreateManifestation(domainManifestation);
+		return this.commandBus.execute<UpdateManifestationCommand>(new UpdateManifestationCommand(input));
 	}
 
 	@Mutation(() => Manifestation)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async deleteManifestation(@Args('identifier') identifier: string): Promise<Manifestation> {
-		const domainManifestation: DomainManifestation = await this.commandBus.execute<DeleteManifestationCommand>(
-			new DeleteManifestationCommand(identifier),
-		);
-		return ManifestationFactory.CreateManifestation(domainManifestation);
+		return this.commandBus.execute<DeleteManifestationCommand>(new DeleteManifestationCommand(identifier));
 	}
 
 	@ResolveField()

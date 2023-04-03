@@ -122,7 +122,7 @@ export class Nen2767MigrateDecompositionCli {
 		);
 		this.progressBar.start(objectsToMigrate.length, 0);
 
-		const queue = new PQueue({ concurrency: 10 });
+		const queue = new PQueue({ concurrency: 5 });
 		objectsToMigrate.forEach(({ id, code }) => {
 			queue.add(() => this.migrateDecompositionForObject(id, code));
 		});

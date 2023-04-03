@@ -4,6 +4,7 @@ import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
+import { DbSurvey } from '../survey/types/survey.repository.interface';
 
 import { ArkSurvey, IArkSurveyRepository } from './types/ark-survey.repository.interface';
 import { CreateArkSurveyInput } from './dto/create-ark-survey.input';
@@ -65,12 +66,12 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			where: { surveyId: surveyId },
 		})) as ArkSurvey;
 
-		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
-		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
-
 		if (!survey) {
 			throw new Error('No ARK survey found.');
 		}
+
+		survey.arkGeographyStart = await this.getGeographyAsGeoJSONStart(survey.surveyId);
+		survey.arkGeographyEnd = await this.getGeographyAsGeoJSONEnd(survey.surveyId);
 
 		return survey;
 	}
@@ -82,15 +83,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		arkGeographyEnd,
 		arkGeographyRDEnd,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
-		const data: Prisma.arkSurveysUpdateInput = {
-			arkGeographyRDStart: {
-				...arkGeographyRDStart,
-			},
-			arkGeographyRDEnd: {
-				...arkGeographyRDEnd,
-			},
-		};
-
 		// Work around Prisma not supporting spatial data types
 		if (arkGeographyStart) {
 			await this.prisma.$executeRaw`
@@ -110,7 +102,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 
 		const arkSurveyGeoData = await this.prisma.arkSurveys.update({
 			where: { surveyId },
-			data,
+			data: {
+				arkGeographyRDStart: {
+					...arkGeographyRDStart,
+				},
+				arkGeographyRDEnd: {
+					...arkGeographyRDEnd,
+				},
+			},
 		});
 
 		// Work around Prisma not supporting spatial data types
@@ -121,6 +120,35 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		};
 	}
 
+	async updateSurvey({
+		surveyId,
+		preparedAuthor,
+		preparedDate,
+		verifiedAuthor,
+		verifiedDate,
+		inspectionStandardData,
+	}: UpdateArkSurveyInput): Promise<DbSurvey> {
+		// Find existing record
+		const existingSurveyRecord = await this.prisma.surveys.findFirst({ where: { id: surveyId } });
+
+		if (!existingSurveyRecord) {
+			throw new Error('No survey found.');
+		}
+
+		return this.prisma.surveys.update({
+			where: {
+				id: surveyId,
+			},
+			data: {
+				preparedAuthor,
+				preparedDate,
+				verifiedAuthor,
+				verifiedDate,
+				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
+			},
+		});
+	}
+
 	async saveArkSurvey({
 		surveyId,
 		arkGeographyStart,
@@ -128,14 +156,23 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		arkGeographyEnd,
 		arkGeographyRDEnd,
 		reachSegments,
+		preparedAuthor,
+		preparedDate,
+		verifiedAuthor,
+		verifiedDate,
+		inspectionStandardData,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
-		// Find existing record
-		const existingRecord = await this.prisma.arkSurveys.findFirst({
-			where: {
-				surveyId,
-			},
+		// Update Survey
+		await this.updateSurvey({
+			surveyId,
+			preparedAuthor,
+			preparedDate,
+			verifiedAuthor,
+			verifiedDate,
+			inspectionStandardData,
 		});
 
+		// Create or update arkSurvey and reachSegments
 		const insertData = {
 			surveyId,
 			arkGeographyStart,
@@ -147,6 +184,12 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			updated_at: null,
 			deleted_at: null,
 		};
+		// Find existing record
+		const existingRecord = await this.prisma.arkSurveys.findFirst({
+			where: {
+				surveyId,
+			},
+		});
 
 		if (existingRecord) {
 			// Delete existing reach segments
@@ -188,9 +231,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			}
 
 			// Workaround to make sure created reachSegments are included in response
-			const updated = await this.updateArkSurvey(insertData);
-
-			return updated;
+			return this.updateArkSurvey(insertData);
 		}
 	}
 

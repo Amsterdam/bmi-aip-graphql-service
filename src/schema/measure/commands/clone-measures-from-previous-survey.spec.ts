@@ -46,6 +46,17 @@ const manifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
 	getLastCreatedForSurvey: jest.fn().mockResolvedValue(domainManifestation),
 	...(<any>{}),
 };
+const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
+	getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+	getUnitById: jest.fn().mockResolvedValue(domainUnit),
+	...(<any>{}),
+};
+
+const emptyManifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
+	getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
+	getManifestationById: jest.fn().mockResolvedValue(domainManifestation),
+	...(<any>{}),
+};
 
 const measureServiceMock: MockedObjectDeep<MeasureService> = {
 	findMeasures: jest.fn().mockResolvedValue([domainMeasure]),
@@ -102,22 +113,8 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 		).rejects.toThrow(SurveyAlreadyHasMeasuresException);
 	});
 
-	// This tests seems to crash on the exception it is supposed to assert
-	// Skipping for now.. TODO: fix this
-
-	test.skip('an exception is thrown when no decomposition data is found', async () => {
-		const emptyUnitRepositoryMock: MockedObjectDeep<UnitRepository> = {
-			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
-			getUnitById: jest.fn().mockResolvedValue(domainUnit),
-			...(<any>{}),
-		};
-		const emptyManifestationRepositoryMock: MockedObjectDeep<ManifestationRepository> = {
-			getLastCreatedForSurvey: jest.fn().mockResolvedValue(null),
-			...(<any>{}),
-		};
-
-		const wrapper = () => {
-			const command = new CloneMeasuresFromPreviousSurveyCommand('__SURVEY_ID__');
+	test('an exception is thrown when no decomposition data is found', async () => {
+		await expect(
 			new CloneMeasuresFromPreviousSurveyHandler(
 				surveyRepoMock,
 				measureRepositoryMock,
@@ -126,8 +123,19 @@ describe('CloneMeasuresFromPreviousSurveyCommand', () => {
 				measureServiceMock,
 				cyclicMeasureServiceMock,
 				cyclicMeasureRepositoryMock,
-			).execute(command);
-		};
-		expect(wrapper).toThrow(DecompositionCloneNotFoundException);
+			).findLastClonedUnit('__UNIT_ID__', '__SURVEY_ID__'),
+		).rejects.toThrow(DecompositionCloneNotFoundException);
+
+		await expect(
+			new CloneMeasuresFromPreviousSurveyHandler(
+				surveyRepoMock,
+				measureRepositoryMock,
+				emptyUnitRepositoryMock,
+				emptyManifestationRepositoryMock,
+				measureServiceMock,
+				cyclicMeasureServiceMock,
+				cyclicMeasureRepositoryMock,
+			).findLastClonedManifestation('__UNIT_ID__', '__SURVEY_ID__'),
+		).rejects.toThrow(DecompositionCloneNotFoundException);
 	});
 });

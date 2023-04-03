@@ -124,6 +124,15 @@ export class MigrateMaintenanceMeasuresRepository {
 						}));
 					}
 
+					const unitIdMatchingSurveyId = await this.getUnitIdMatchingSurveyId(
+						surveyId,
+						unitId || unitIdForManifestation,
+					);
+					const manifestationIdMatchingSurveyId = await this.getManifestationIdMatchingSurveyId(
+						surveyId,
+						manifestationId,
+					);
+
 					await this.prisma.measures.create({
 						data: {
 							id: newId(),
@@ -134,7 +143,7 @@ export class MigrateMaintenanceMeasuresRepository {
 							},
 							units: {
 								connect: {
-									id: unitId || unitIdForManifestation,
+									id: unitIdMatchingSurveyId,
 								},
 							},
 							description,
@@ -149,11 +158,11 @@ export class MigrateMaintenanceMeasuresRepository {
 							remarks,
 							created_at: createdAt,
 							updated_at: updatedAt,
-							...(manifestationId
+							...(manifestationIdMatchingSurveyId
 								? {
 										manifestations: {
 											connect: {
-												id: manifestationId,
+												id: manifestationIdMatchingSurveyId,
 											},
 										},
 								  }
@@ -265,12 +274,55 @@ export class MigrateMaintenanceMeasuresRepository {
 					measure.manifestationId,
 				);
 
+				const {
+					description,
+					maintenanceType,
+					location,
+					planYear,
+					finalPlanYear,
+					quantity,
+					quantityUnitOfMeasurement,
+					unitPrice,
+					costSurcharge,
+					remarks,
+					created_at: createdAt,
+					updated_at: updatedAt,
+				} = measure;
+
 				await this.prisma.measures.create({
 					data: {
-						...measure,
 						id: newId(),
-						unitId,
-						manifestationId,
+						description,
+						maintenanceType,
+						location,
+						planYear,
+						finalPlanYear,
+						quantity,
+						quantityUnitOfMeasurement,
+						unitPrice,
+						costSurcharge,
+						remarks,
+						created_at: createdAt,
+						updated_at: updatedAt,
+						surveys: {
+							connect: {
+								id: surveyId,
+							},
+						},
+						units: {
+							connect: {
+								id: unitId,
+							},
+						},
+						...(manifestationId
+							? {
+									manifestations: {
+										connect: {
+											id: manifestationId,
+										},
+									},
+							  }
+							: {}),
 					},
 				});
 			});

@@ -17,6 +17,7 @@ import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { FindArkSurveyReachSegmentsQuery } from './queries/find-ark-survey-reach-segments.query';
 import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.query';
+import { SaveArkCompletionCommand } from './commands/save-ark-completion.command';
 
 @Resolver((of) => ArkSurvey)
 @Resource(ArkSurvey.name)
@@ -50,6 +51,15 @@ export class ArkSurveyResolver {
 	public async saveArkSurvey(@Args('saveArkSurvey') input: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		const domainArkSurvey: DomainArkSurvey = await this.commandBus.execute<SaveArkSurveyCommand>(
 			new SaveArkSurveyCommand(input),
+		);
+		return ArkSurveyFactory.createArkSurvey(domainArkSurvey);
+	}
+
+	@Mutation(() => ArkSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async saveArkCompletion(@Args('saveArkCompletion') input: UpdateArkSurveyInput): Promise<ArkSurvey> {
+		const domainArkSurvey: DomainArkSurvey = await this.commandBus.execute<SaveArkCompletionCommand>(
+			new SaveArkCompletionCommand(input),
 		);
 		return ArkSurveyFactory.createArkSurvey(domainArkSurvey);
 	}

@@ -50,6 +50,11 @@ export class BaseSupportSystemInput {
 	public installationHeight?: number;
 
 	@IsOptional()
+	@IsNumber()
+	@Field({ nullable: true })
+	public installationLength?: number;
+
+	@IsOptional()
 	@MaxLength(32)
 	@Field({ nullable: true })
 	public houseNumber?: string;

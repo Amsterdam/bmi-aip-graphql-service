@@ -14,6 +14,7 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 		locationIndication: true,
 		a11yDetails: true,
 		installationHeight: true,
+		installationLength: true,
 		remarks: true,
 		constructionYear: true,
 		houseNumber: true,

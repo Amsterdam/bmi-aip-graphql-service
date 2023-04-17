@@ -35,6 +35,10 @@ import {
 } from './types';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemLuminairesHandler } from './commands/find-support-system-luminaires.handler';
+import { FindSpanMeasuresHandler } from './queries/find-span-measures.handler';
+import { SpanMeasureResolver } from './span-measure.resolver';
+import { SpanMeasureService } from './span-measure.service';
+import { SpanMeasureRepository } from './span-measure.repository';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -79,6 +83,10 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 		FindSupportSystemsHandler,
 		FindSupportSystemLuminairesCommand,
 		FindSupportSystemLuminairesHandler,
+		SpanMeasureRepository,
+		SpanMeasureResolver,
+		SpanMeasureService,
+		FindSpanMeasuresHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

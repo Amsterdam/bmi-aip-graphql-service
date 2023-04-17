@@ -56,6 +56,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id'> = {
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
 	installationHeight: new Decimal(10),
+	installationLength: new Decimal(10),
 	deleted_at: null,
 	created_at: undefined,
 	updated_at: undefined,

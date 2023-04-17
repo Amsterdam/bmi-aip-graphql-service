@@ -19,6 +19,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.locationIndication = '__LOCATION__INDICATION__';
 		supportSystem.a11yDetails = a11yDetails;
 		supportSystem.installationHeight = 320;
+		supportSystem.installationLength = 6000;
 		supportSystem.remarks = '__REMARKS__';
 		supportSystem.houseNumber = '33';
 		supportSystem.geography = {
@@ -51,6 +52,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 			houseNumber: '33',
 			id: '71c5450a-c0a3-48ea-adbb-ea435a8804d5',
 			installationHeight: 320,
+			installationLength: 6000,
 			location: null,
 			locationIndication: '__LOCATION__INDICATION__',
 			objectId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',

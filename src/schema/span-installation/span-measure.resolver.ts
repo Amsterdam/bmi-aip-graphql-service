@@ -31,7 +31,7 @@ export class SpanMeasureResolver {
 	) {}
 
 	@Query(() => [SpanMeasure])
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async spanMeasures(@Args('surveyId') surveyId: string): Promise<SpanMeasure[]> {
 		return this.queryBus.execute<FindSpanMeasuresQuery>(new FindSpanMeasuresQuery(surveyId));
 	}

@@ -17,6 +17,7 @@ export const spanMeasureRaw: Omit<SpanMeasure, 'id'> = {
 	decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 	decompositionType: 'SpanMeasure',
 	name: 'Aanpakken losse kabels',
+	measureItems: [],
 	createdAt: '',
 	updatedAt: '',
 };

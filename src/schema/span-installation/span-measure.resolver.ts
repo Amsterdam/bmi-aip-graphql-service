@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -12,6 +12,8 @@ import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
 import { UpdateSpanMeasureCommand } from './commands/update-span-measure.command';
 import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repository.interface';
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
+import { FindSpanMeasureItemsQuery } from './queries/find-span-measure-items.query';
+import { SpanMeasureItem } from './models/span-measure-item.model';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -53,5 +55,10 @@ export class SpanMeasureResolver {
 			new DeleteSpanMeasureCommand(identifier),
 		);
 		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+	}
+
+	@ResolveField()
+	async measureItems(@Parent() { id }: SpanMeasure): Promise<SpanMeasureItem[]> {
+		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
 	}
 }

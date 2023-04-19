@@ -1,4 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, Parent, ResolveField } from '@nestjs/graphql';
+
+import { SpanMeasureItem } from './measure-item.model';
 
 @ObjectType({ description: 'spanMeasure' })
 export class SpanMeasure {
@@ -16,6 +18,9 @@ export class SpanMeasure {
 
 	@Field((type) => String)
 	decompositionType: string;
+
+	@Field((type) => [SpanMeasureItem], { nullable: 'itemsAndList' })
+	measureItems: SpanMeasureItem[];
 
 	@Field((type) => String, { nullable: true })
 	createdAt: string;

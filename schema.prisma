@@ -3009,14 +3009,26 @@ model web_origins {
 }
 
 model spanMeasures {
-  id                String   @id @unique(map: "spanmeasures_id_unique") @db.Uuid
-  surveyId          String   @db.Uuid
-  name              String   @db.VarChar(255)
-  decompositionId   String   @db.Uuid
-  decompositionType String   @db.VarChar(255)
-  created_at        DateTime @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime @default(now()) @db.Timestamptz(6)
-  surveys           surveys  @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasures_surveyid_foreign")
+  id                String             @id @unique(map: "spanmeasures_id_unique") @db.Uuid
+  surveyId          String             @db.Uuid
+  name              String             @db.VarChar(255)
+  decompositionId   String             @db.Uuid
+  decompositionType String             @db.VarChar(255)
+  created_at        DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime           @default(now()) @db.Timestamptz(6)
+  surveys           surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasures_surveyid_foreign")
+  spanMeasureItems  spanMeasureItems[]
+}
+
+model spanMeasureItems {
+  id                        String       @id @unique(map: "spanmeasureitems_id_unique") @db.Uuid
+  name                      String       @db.VarChar(255)
+  spanMeasureId             String       @db.Uuid
+  itemType                  String       @db.VarChar(255)
+  quantityUnitOfMeasurement String       @db.VarChar(255)
+  quantityEstimate          Int
+  quantityActual            Int
+  spanMeasures              spanMeasures @relation(fields: [spanMeasureId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasureitems_spanmeasureid_foreign")
 }
 
 enum degreeOfDamage {

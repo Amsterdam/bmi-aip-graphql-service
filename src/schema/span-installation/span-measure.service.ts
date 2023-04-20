@@ -8,8 +8,8 @@ import { SpanMeasureRepository } from './span-measure.repository';
 export class SpanMeasureService {
 	public constructor(private readonly spanMeasureRepo: SpanMeasureRepository) {}
 
-	async getSpanMeasures(surveyId: string): Promise<SpanMeasure[]> {
-		return (await this.spanMeasureRepo.getSpanMeasures(surveyId)).map((spanMeasure) =>
+	async findSpanMeasures(surveyId: string): Promise<SpanMeasure[]> {
+		return (await this.spanMeasureRepo.findSpanMeasures(surveyId)).map((spanMeasure) =>
 			SpanMeasureFactory.CreateSpanMeasure(spanMeasure),
 		);
 	}

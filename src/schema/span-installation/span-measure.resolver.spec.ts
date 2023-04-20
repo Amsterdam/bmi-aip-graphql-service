@@ -74,7 +74,7 @@ describe('updateSpanMeasure', () => {
 });
 
 describe('Span Installation / Measure / Resolver', () => {
-	test('getSpanMeasures returns an array of span measure objects', async () => {
+	test('findSpanMeasures returns an array of span measure objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
 		const resolver = new SpanMeasureResolver(new SpanMeasureService(spanMeasureRepo), commandBusMock, queryBusMock);

@@ -7,7 +7,7 @@ import { FindSpanMeasuresHandler } from './find-span-measures.handler';
 import { FindSpanMeasuresQuery } from './find-span-measures.query';
 
 const spanMeasuresMock: MockedObjectDeep<SpanMeasureService> = {
-	getSpanMeasures: jest.fn().mockResolvedValue([domainSpanMeasure]),
+	findSpanMeasures: jest.fn().mockResolvedValue([domainSpanMeasure]),
 	...(<any>{}),
 };
 
@@ -18,8 +18,8 @@ describe('FindSpanMeasures', () => {
 		const command = new FindSpanMeasuresQuery(identifier);
 		const result = await new FindSpanMeasuresHandler(spanMeasuresMock).execute(command);
 
-		expect(spanMeasuresMock.getSpanMeasures).toHaveBeenCalledTimes(1);
-		expect(spanMeasuresMock.getSpanMeasures).toHaveBeenCalledWith(identifier);
+		expect(spanMeasuresMock.findSpanMeasures).toHaveBeenCalledTimes(1);
+		expect(spanMeasuresMock.findSpanMeasures).toHaveBeenCalledWith(identifier);
 
 		expect(result).toEqual([domainSpanMeasure]);
 	});

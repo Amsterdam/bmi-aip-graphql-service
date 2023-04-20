@@ -53,7 +53,7 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		});
 	}
 
-	async getSpanMeasures(surveyId: string): Promise<SpanMeasure[]> {
+	async findSpanMeasures(surveyId: string): Promise<SpanMeasure[]> {
 		const spanMeasures = (await this.prisma.spanMeasures.findMany({
 			where: {
 				surveyId,

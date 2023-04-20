@@ -15,5 +15,5 @@ const spanMeasure = Prisma.validator<Prisma.spanMeasuresArgs>()({
 export type SpanMeasure = Prisma.spanMeasuresGetPayload<typeof spanMeasure>;
 
 export interface ISpanMeasureRepository {
-	getSpanMeasures(surveyId: string): Promise<SpanMeasure[]>;
+	findSpanMeasures(surveyId: string): Promise<SpanMeasure[]>;
 }

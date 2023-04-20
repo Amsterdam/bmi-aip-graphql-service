@@ -11,6 +11,6 @@ export class FindSpanMeasuresHandler implements IQueryHandler<FindSpanMeasuresQu
 	constructor(private service: SpanMeasureService) {}
 
 	async execute(query: FindSupportSystemsQuery): Promise<SpanMeasure[]> {
-		return this.service.getSpanMeasures(query.surveyId);
+		return this.service.findSpanMeasures(query.surveyId);
 	}
 }

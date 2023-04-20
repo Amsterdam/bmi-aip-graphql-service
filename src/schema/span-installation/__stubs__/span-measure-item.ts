@@ -16,7 +16,7 @@ export { spanMeasureItem };
 
 export const spanMeasureItemRaw: Omit<SpanMeasureItem, 'id'> = {
 	spanMeasureId: '1f728e79-1b89-4333-a309-ea93bf17667c',
-	itemType: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	itemType: 'material',
 	quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	quantityEstimate: 1,
 	quantityActual: 1,
@@ -25,7 +25,7 @@ export const spanMeasureItemRaw: Omit<SpanMeasureItem, 'id'> = {
 export const domainSpanMeasureItem: DomainSpanMeasureItem = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	spanMeasureId: '1f728e79-1b89-4333-a309-ea93bf17667c',
-	itemType: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	itemType: 'material',
 	quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	quantityEstimate: 1,
 	quantityActual: 1,

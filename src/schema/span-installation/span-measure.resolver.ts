@@ -18,6 +18,8 @@ import { SpanMeasureItemFactory } from './span-measure-item.factory';
 import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
+import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
+import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -29,7 +31,7 @@ export class SpanMeasureResolver {
 	) {}
 
 	@Query(() => [SpanMeasure])
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async spanMeasures(@Args('surveyId') surveyId: string): Promise<SpanMeasure[]> {
 		return this.queryBus.execute<FindSpanMeasuresQuery>(new FindSpanMeasuresQuery(surveyId));
 	}
@@ -44,7 +46,7 @@ export class SpanMeasureResolver {
 	}
 
 	@Mutation(() => SpanMeasure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateSpanMeasure(@Args('updateSpanMeasure') input: UpdateSpanMeasureInput): Promise<SpanMeasure> {
 		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<UpdateSpanMeasureCommand>(
 			new UpdateSpanMeasureCommand(input),
@@ -53,7 +55,7 @@ export class SpanMeasureResolver {
 	}
 
 	@Mutation(() => SpanMeasure)
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteSpanMeasure(@Args('identifier') identifier: string): Promise<SpanMeasure> {
 		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<DeleteSpanMeasureCommand>(
 			new DeleteSpanMeasureCommand(identifier),
@@ -68,6 +70,17 @@ export class SpanMeasureResolver {
 	): Promise<SpanMeasureItem[]> {
 		const domainSpanMeasureItem: SpanMeasureItem = await this.commandBus.execute<SaveSpanMeasureItemsCommand>(
 			new SaveSpanMeasureItemsCommand(input),
+		);
+		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(input.spanMeasureId));
+	}
+
+	@Mutation(() => [SpanMeasureItem])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async updateSpanMeasureItemsActuals(
+		@Args('updateSpanMeasureItemsActuals') input: UpdateSpanMeasureItemsActualsInput,
+	): Promise<SpanMeasureItem[]> {
+		await this.commandBus.execute<UpdateSpanMeasureItemsActualsCommand>(
+			new UpdateSpanMeasureItemsActualsCommand(input),
 		);
 		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(input.spanMeasureId));
 	}

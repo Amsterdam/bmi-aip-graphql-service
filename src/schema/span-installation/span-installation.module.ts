@@ -47,6 +47,8 @@ import { SpanMeasureItemService } from './span-measure-item.service';
 import { SpanMeasureItemRepository } from './span-measure-item.repository';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
+import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
+import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -104,6 +106,8 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 		SpanMeasureItemRepository,
 		SaveSpanMeasureItemsCommand,
 		SaveSpanMeasureItemsHandler,
+		UpdateSpanMeasureItemsActualsCommand,
+		UpdateSpanMeasureItemsActualsHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
@@ -8,6 +8,7 @@ import { SpanMeasureItem } from './models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { ISpanMeasureItemRepository } from './types/span-measure-item.repository.interface';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
+import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
 
 @Injectable()
 export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
@@ -44,6 +45,37 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				spanMeasureId,
 			},
 		});
+	}
+
+	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
+		console.log(input);
+
+		if (input.spanMeasureItemActuals) {
+			input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
+				// Item not found for given id/spanMeasureId combination
+				const result = await this.prisma.spanMeasureItems.findFirst({
+					where: {
+						id: spanMeasureItemActual.id,
+						spanMeasureId: input.spanMeasureId,
+					},
+				});
+
+				if (!result) {
+					throw new NotFoundException('No item found for given id/spanMeasureId combination');
+				}
+
+				await this.prisma.spanMeasureItems.update({
+					where: {
+						id: spanMeasureItemActual.id,
+					},
+					data: {
+						quantityActual: spanMeasureItemActual.quantityActual,
+					},
+				});
+			});
+		}
+
+		return this.findSpanMeasureItems(input.spanMeasureId);
 	}
 
 	async saveSpanMeasureItems(spanMeasureItemsInput: SaveSpanMeasureItemsInput): Promise<SpanMeasureItem[]> {

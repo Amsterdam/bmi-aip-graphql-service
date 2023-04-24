@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class BaseSpanMeasureItemInput {
 	@Field((type) => String)
-	id: string;
+	description: string;
 
 	@Field((type) => String)
 	name: string;

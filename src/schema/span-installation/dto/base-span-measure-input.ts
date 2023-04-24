@@ -4,7 +4,7 @@ import { IsDate, IsOptional } from 'class-validator';
 @InputType()
 export class BaseSpanMeasureInput {
 	@Field((type) => String)
-	name: string;
+	description: string;
 
 	@Field((type) => String)
 	decompositionId: string;

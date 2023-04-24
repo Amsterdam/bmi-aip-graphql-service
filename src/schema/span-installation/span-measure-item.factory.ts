@@ -5,7 +5,8 @@ import { SpanMeasureItem } from './models/span-measure-item.model';
 export class SpanMeasureItemFactory {
 	static CreateSpanMeasureItem({
 		id,
-		name,
+		description,
+		entityListId,
 		spanMeasureId,
 		itemType,
 		quantityUnitOfMeasurement,
@@ -14,7 +15,8 @@ export class SpanMeasureItemFactory {
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = id;
-		spanMeasureItem.name = name;
+		spanMeasureItem.entityListId = entityListId;
+		spanMeasureItem.description = description;
 		spanMeasureItem.spanMeasureId = spanMeasureId;
 		spanMeasureItem.itemType = itemType;
 		spanMeasureItem.quantityUnitOfMeasurement = quantityUnitOfMeasurement;

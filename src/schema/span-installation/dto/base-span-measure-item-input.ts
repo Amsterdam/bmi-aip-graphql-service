@@ -6,10 +6,10 @@ export class BaseSpanMeasureItemInput {
 	description: string;
 
 	@Field((type) => String)
-	name: string;
+	spanMeasureId: string;
 
 	@Field((type) => String)
-	spanMeasureId: string;
+	entityListId: string;
 
 	@Field((type) => String)
 	itemType: string;

@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 const spanMeasureItems = Prisma.validator<Prisma.spanMeasureItemsArgs>()({
 	select: {
 		id: true,
+		name: true,
 		spanMeasureId: true,
 		itemType: true,
 		quantityUnitOfMeasurement: true,

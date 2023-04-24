@@ -1,24 +1,24 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { SupportSystemRepository } from '../support-system.repository';
-import { createSupportSystemInput, createSupportSystemNormalizedInput, domainSupportSystem } from '../__stubs__';
+import { SpanMeasureRepository } from '../span-measure.repository';
+import { createSpanMeasureInput, domainSpanMeasure } from '../__stubs__';
 
-import { CreateSupportSystemCommand } from './create-support-system.command';
-import { CreateSupportSystemHandler } from './create-support-system.handler';
+import { CreateSpanMeasureCommand } from './create-span-measure.command';
+import { CreateSpanMeasureHandler } from './create-span-measure.handler';
 
-const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
-	createSupportSystem: jest.fn().mockResolvedValue(domainSupportSystem),
+const spanMeasureRepoMock: MockedObjectDeep<SpanMeasureRepository> = {
+	createSpanMeasure: jest.fn().mockResolvedValue(domainSpanMeasure),
 	...(<any>{}),
 };
 
-describe('CreateSupportSystemHandler', () => {
+describe('CreateSpanMeasureHandler', () => {
 	test('executes command', async () => {
-		const command = new CreateSupportSystemCommand(createSupportSystemInput);
-		const result = await new CreateSupportSystemHandler(supportSystemRepoMock).execute(command);
+		const command = new CreateSpanMeasureCommand(createSpanMeasureInput);
+		const result = await new CreateSpanMeasureHandler(spanMeasureRepoMock).execute(command);
 
-		expect(supportSystemRepoMock.createSupportSystem).toHaveBeenCalledTimes(1);
-		expect(supportSystemRepoMock.createSupportSystem).toHaveBeenCalledWith(createSupportSystemNormalizedInput);
+		expect(spanMeasureRepoMock.createSpanMeasure).toHaveBeenCalledTimes(1);
+		expect(spanMeasureRepoMock.createSpanMeasure).toHaveBeenCalledWith(createSpanMeasureInput);
 
-		expect(result).toEqual(domainSupportSystem);
+		expect(result).toEqual(domainSpanMeasure);
 	});
 });

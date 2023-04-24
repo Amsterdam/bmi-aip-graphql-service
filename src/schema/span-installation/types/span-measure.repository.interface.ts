@@ -6,7 +6,7 @@ const spanMeasure = Prisma.validator<Prisma.spanMeasuresArgs>()({
 		decompositionId: true,
 		decompositionType: true,
 		surveyId: true,
-		name: true,
+		description: true,
 		created_at: true,
 		updated_at: true,
 	},

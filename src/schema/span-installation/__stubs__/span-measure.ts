@@ -8,7 +8,7 @@ const spanMeasure1 = new SpanMeasure();
 spanMeasure1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
 spanMeasure1.decompositionId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
 spanMeasure1.decompositionType = 'SpanMeasure';
-spanMeasure1.name = '__NAME__';
+spanMeasure1.description = '__NAME__';
 
 export { spanMeasure1 };
 
@@ -16,7 +16,7 @@ export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	surveyId: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 	decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 	decompositionType: 'SpanMeasure',
-	name: '__NAME__',
+	description: '__NAME__',
 	created_at: undefined,
 	updated_at: undefined,
 };

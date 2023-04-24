@@ -11,7 +11,7 @@ export class SpanMeasure {
 	surveyId: string;
 
 	@Field((type) => String)
-	name: string;
+	description: string;
 
 	@Field((type) => String)
 	decompositionId: string;

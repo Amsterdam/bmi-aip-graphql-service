@@ -14,6 +14,10 @@ import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repositor
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
 import { FindSpanMeasureItemsQuery } from './queries/find-span-measure-items.query';
 import { SpanMeasureItem } from './models/span-measure-item.model';
+import { SpanMeasureItemFactory } from './span-measure-item.factory';
+import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
+import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
+import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -55,6 +59,17 @@ export class SpanMeasureResolver {
 			new DeleteSpanMeasureCommand(identifier),
 		);
 		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+	}
+
+	@Mutation(() => [SpanMeasureItem])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async saveSpanMeasureItems(
+		@Args('saveSpanMeasureItems') input: SaveSpanMeasureItemsInput,
+	): Promise<SpanMeasureItem[]> {
+		const domainSpanMeasureItem: SpanMeasureItem = await this.commandBus.execute<SaveSpanMeasureItemsCommand>(
+			new SaveSpanMeasureItemsCommand(input),
+		);
+		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(input.spanMeasureId));
 	}
 
 	@ResolveField()

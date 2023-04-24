@@ -1,6 +1,6 @@
 import { Field, ObjectType, Parent, ResolveField } from '@nestjs/graphql';
 
-import { SpanMeasureItem } from './measure-item.model';
+import { SpanMeasureItem } from './span-measure-item.model';
 
 @ObjectType({ description: 'spanMeasure' })
 export class SpanMeasure {

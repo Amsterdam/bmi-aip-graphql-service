@@ -7,6 +7,7 @@ import { newId } from '../../utils';
 import { SpanMeasureItem } from './models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { ISpanMeasureItemRepository } from './types/span-measure-item.repository.interface';
+import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 
 @Injectable()
 export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
@@ -43,5 +44,51 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				spanMeasureId,
 			},
 		});
+	}
+
+	async saveSpanMeasureItems(spanMeasureItemsInput: SaveSpanMeasureItemsInput): Promise<SpanMeasureItem[]> {
+		const existingRecords = await this.prisma.spanMeasureItems.findFirst({
+			where: {
+				spanMeasureId: spanMeasureItemsInput.spanMeasureId,
+			},
+		});
+
+		if (existingRecords) {
+			await this.prisma.spanMeasureItems.deleteMany({
+				where: {
+					spanMeasureId: spanMeasureItemsInput.spanMeasureId,
+				},
+			});
+
+			if (spanMeasureItemsInput.spanMeasureItems) {
+				const spanMeasureItemsFormatted =
+					spanMeasureItemsInput.spanMeasureItems as Prisma.spanMeasureItemsCreateManyInput[];
+				spanMeasureItemsFormatted.map((spanMeasureItem) => {
+					spanMeasureItem.spanMeasureId = spanMeasureItemsInput.spanMeasureId;
+					spanMeasureItem.id = newId();
+				});
+
+				await this.prisma.spanMeasureItems.createMany({
+					data: spanMeasureItemsFormatted,
+				});
+
+				return this.findSpanMeasureItems(spanMeasureItemsInput.spanMeasureId);
+			}
+		} else {
+			if (spanMeasureItemsInput.spanMeasureItems) {
+				const spanMeasureItemsFormatted =
+					spanMeasureItemsInput.spanMeasureItems as Prisma.spanMeasureItemsCreateManyInput[];
+				spanMeasureItemsFormatted.map((spanMeasureItem) => {
+					spanMeasureItem.spanMeasureId = spanMeasureItemsInput.spanMeasureId;
+					spanMeasureItem.id = newId();
+				});
+
+				await this.prisma.spanMeasureItems.createMany({
+					data: spanMeasureItemsFormatted,
+				});
+
+				return this.findSpanMeasureItems(spanMeasureItemsInput.spanMeasureId);
+			}
+		}
 	}
 }

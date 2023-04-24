@@ -11,8 +11,8 @@ const spanMeasureItem = Prisma.validator<Prisma.spanMeasureItemsArgs>()({
 	},
 });
 
-export type SpanMeasure = Prisma.spanMeasureItemsGetPayload<typeof spanMeasureItem>;
+export type SpanMeasureItem = Prisma.spanMeasureItemsGetPayload<typeof spanMeasureItem>;
 
 export interface ISpanMeasureItemRepository {
-	findSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasure[]>;
+	findSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]>;
 }

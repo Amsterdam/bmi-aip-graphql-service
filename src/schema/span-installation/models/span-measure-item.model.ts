@@ -5,6 +5,9 @@ export class SpanMeasureItem {
 	id: string;
 
 	@Field((type) => String)
+	name: string;
+
+	@Field((type) => String)
 	spanMeasureId: string;
 
 	@Field((type) => String)

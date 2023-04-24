@@ -10,6 +10,9 @@ export class BaseSpanMeasureInput {
 	decompositionId: string;
 
 	@Field((type) => String)
+	entityListId: string;
+
+	@Field((type) => String)
 	decompositionType: string;
 
 	@IsOptional()

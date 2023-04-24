@@ -3,7 +3,10 @@ import { IsIn } from 'class-validator';
 @InputType()
 export class SpanMeasureItemInput {
 	@Field((type) => String)
-	name: string;
+	description: string;
+
+	@Field((type) => String)
+	entityListId: string;
 
 	@Field((type) => String)
 	@IsIn(['material', 'specificationItem'])

@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
-import { DbSurvey } from 'src/schema/survey/types/survey.repository.interface';
 
 import { CreateArkSurveyInput } from '../dto/create-ark-survey.input';
 import { UpdateArkSurveyInput } from '../dto/update-ark-survey.input';
@@ -28,5 +27,5 @@ export interface IArkSurveyRepository {
 	createArkSurvey(input: CreateArkSurveyInput): Promise<ArkSurvey>;
 	updateArkSurvey(input: UpdateArkSurveyInput): Promise<ArkSurvey>;
 	deleteArkSurvey(identifier: string): Promise<ArkSurvey>;
-	updateSurvey(input: UpdateArkSurveyInput): Promise<DbSurvey>;
+	saveArkCompletion(input: UpdateArkSurveyInput): Promise<ArkSurvey>;
 }

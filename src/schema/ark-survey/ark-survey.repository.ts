@@ -4,7 +4,6 @@ import { Point } from 'geojson';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
-import { DbSurvey } from '../survey/types/survey.repository.interface';
 
 import { ArkSurvey, IArkSurveyRepository } from './types/ark-survey.repository.interface';
 import { CreateArkSurveyInput } from './dto/create-ark-survey.input';
@@ -120,14 +119,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		};
 	}
 
-	async updateSurvey({
+	async saveArkCompletion({
 		surveyId,
 		preparedAuthor,
 		preparedDate,
 		verifiedAuthor,
 		verifiedDate,
 		inspectionStandardData,
-	}: UpdateArkSurveyInput): Promise<DbSurvey> {
+	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Find existing record
 		const existingSurveyRecord = await this.prisma.surveys.findFirst({ where: { id: surveyId } });
 
@@ -135,7 +134,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			throw new Error('No survey found.');
 		}
 
-		return this.prisma.surveys.update({
+		await this.prisma.surveys.update({
 			where: {
 				id: surveyId,
 			},
@@ -147,6 +146,24 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
 			},
 		});
+
+		const insertData = {
+			surveyId,
+			created_at: null,
+			updated_at: null,
+			deleted_at: null,
+		};
+
+		const existingRecord = await this.prisma.arkSurveys.findFirst({
+			where: {
+				surveyId,
+			},
+		});
+
+		if (!existingRecord) {
+			return this.createArkSurvey(insertData);
+		}
+		return existingRecord;
 	}
 
 	async saveArkSurvey({
@@ -163,7 +180,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		inspectionStandardData,
 	}: UpdateArkSurveyInput): Promise<ArkSurvey> {
 		// Update Survey
-		await this.updateSurvey({
+		await this.updateArkSurvey({
 			surveyId,
 			preparedAuthor,
 			preparedDate,
@@ -212,7 +229,6 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 					data: reachSegmentsFormatted,
 				});
 			}
-
 			return this.updateArkSurvey(insertData);
 		} else {
 			const newRecord = await this.createArkSurvey(insertData);

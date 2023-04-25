@@ -21,6 +21,7 @@ import { FindReachSegmentsHandler } from './queries/find-reach-segments.handler'
 import { GetArkSurveyBySurveyIdHandler } from './queries/get-ark-survey-by-survey.handler';
 import { ReachSegmentRepository } from './reach-segment.repository';
 import { ReachSegmentService } from './reach-segment.service';
+import { SaveArkCompletionHandler } from './commands/save-ark-completion.handler';
 
 @Module({
 	providers: [
@@ -31,6 +32,7 @@ import { ReachSegmentService } from './reach-segment.service';
 		UpdateArkSurveyHandler,
 		DeleteArkSurveyHandler,
 		SaveArkSurveyHandler,
+		SaveArkCompletionHandler,
 		ReachSegmentService,
 		ReachSegmentRepository,
 		GetArkSurveyBySurveyIdHandler,

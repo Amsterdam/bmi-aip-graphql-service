@@ -59,6 +59,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				},
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
 				installationHeight: new Decimal(10),
+				installationLength: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -118,6 +119,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				installationHeight: new Decimal(10),
+				installationLength: new Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -145,6 +147,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			constructionYear: 1979,
 			a11yDetails: updateSupportSystemNormalizedInput.a11yDetails,
 			installationHeight: new Decimal(10),
+			installationLength: new Decimal(10),
 			remarks: '__REMARKS__',
 			houseNumber: '33',
 			geography: {
@@ -185,6 +188,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				locationIndication: '__LOCATION_INDICATION__',
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
 				installationHeight: new Decimal(10),
+				installationLength: new Decimal(10),
 				remarks: '__REMARKS__',
 				houseNumber: '33',
 				created_at: undefined,

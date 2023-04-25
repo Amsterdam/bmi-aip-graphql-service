@@ -12,6 +12,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 		create: jest.fn().mockResolvedValue(domainArkSurvey),
 		findMany: jest.fn().mockResolvedValue([domainArkSurvey]),
 		update: jest.fn().mockResolvedValue(domainArkSurvey),
+		findFirst: jest.fn().mockResolvedValue(domainSurvey),
 	},
 	surveys: {
 		findFirst: jest.fn().mockResolvedValue([domainSurvey]),
@@ -48,8 +49,8 @@ describe('ARK/ ArkSurvey / Repository', () => {
 			}),
 		);
 	});
-	test('updateSurvey()', async () => {
-		const returnValue = await repository.updateSurvey(updateSurveyInput);
+	test('saveArkCompletion()', async () => {
+		const returnValue = await repository.saveArkCompletion(updateSurveyInput);
 		const survey = prismaServiceMock.surveys.update.mock.calls[0][0].data;
 		expect(survey).toEqual(surveyRaw);
 		expect(returnValue).toEqual(

@@ -74,6 +74,11 @@ export class SupportSystem {
 	@Field((type) => Float, { nullable: true })
 	installationHeight?: number;
 
+	// For type `gevel | mast | ring`
+	// Maps to "Aanleghoogte"
+	@Field((type) => Float, { nullable: true })
+	installationLength?: number;
+
 	// For type `gevel`
 	// Maps to "Huisnummer + verdieping"
 	@Field((type) => String, { nullable: true })

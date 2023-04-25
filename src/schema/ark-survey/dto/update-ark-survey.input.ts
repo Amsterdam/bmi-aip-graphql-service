@@ -10,6 +10,7 @@ import { ReachSegmentInput } from './reach-segment.input';
 
 @InputType()
 export class UpdateArkSurveyInput extends BaseArkSurveyInput {
+	@IsOptional()
 	@Field(() => [ReachSegmentInput], { nullable: true })
 	@IsArrayOfObjects()
 	@ValidateNested({ each: true })

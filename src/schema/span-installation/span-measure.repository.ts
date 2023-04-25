@@ -14,14 +14,14 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 
 	async createSpanMeasure({
 		surveyId,
-		entityListId,
+		optionId,
 		description,
 		decompositionId,
 		decompositionType,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
 		const data: Prisma.spanMeasuresCreateInput = {
 			id: newId(),
-			entityListId,
+			optionId,
 			surveys: { connect: { id: surveyId } },
 			description,
 			decompositionId,

@@ -11,7 +11,7 @@ export class SpanMeasure {
 	surveyId: string;
 
 	@Field((type) => String)
-	entityListId: string;
+	optionId: string;
 
 	@Field((type) => String)
 	description: string;

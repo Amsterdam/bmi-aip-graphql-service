@@ -16,7 +16,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 
 	async createSpanMeasureItem({
 		spanMeasureId,
-		entityListId,
+		optionId,
 		description,
 		itemType,
 		quantityUnitOfMeasurement,
@@ -26,7 +26,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		const data: Prisma.spanMeasureItemsCreateInput = {
 			id: newId(),
 			description: description,
-			entityListId,
+			optionId,
 			spanMeasures: {
 				connect: {
 					id: spanMeasureId,

@@ -11,7 +11,7 @@ export class SaveSpanMeasureItemsInput {
 	spanMeasureId: string;
 
 	@Field((type) => String)
-	entityListId: string;
+	optionId: string;
 
 	@Field(() => [SpanMeasureItemInput], { nullable: true })
 	@IsArrayOfObjects()

@@ -6,7 +6,7 @@ export class SpanMeasureItemFactory {
 	static CreateSpanMeasureItem({
 		id,
 		description,
-		entityListId,
+		optionId,
 		spanMeasureId,
 		itemType,
 		quantityUnitOfMeasurement,
@@ -15,7 +15,7 @@ export class SpanMeasureItemFactory {
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = id;
-		spanMeasureItem.entityListId = entityListId;
+		spanMeasureItem.optionId = optionId;
 		spanMeasureItem.description = description;
 		spanMeasureItem.spanMeasureId = spanMeasureId;
 		spanMeasureItem.itemType = itemType;

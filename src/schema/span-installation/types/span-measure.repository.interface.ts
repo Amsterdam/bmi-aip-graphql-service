@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 const spanMeasure = Prisma.validator<Prisma.spanMeasuresArgs>()({
 	select: {
 		id: true,
-		entityListId: true,
+		optionId: true,
 		decompositionId: true,
 		decompositionType: true,
 		surveyId: true,

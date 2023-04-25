@@ -10,7 +10,7 @@ export class BaseSpanMeasureInput {
 	decompositionId: string;
 
 	@Field((type) => String)
-	entityListId: string;
+	optionId: string;
 
 	@Field((type) => String)
 	decompositionType: string;

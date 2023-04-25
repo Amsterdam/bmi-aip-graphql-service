@@ -26,6 +26,8 @@ import { LuminaireRepository } from './luminaire.repository';
 import { LuminaireService } from './luminaire.service';
 import { DeleteLuminaireHandler } from './commands/delete-luminaire.handler';
 import { FindSupportSystemsHandler } from './queries/find-support-systems.handler';
+import { SpanMeasureResolver } from './span-measure.resolver';
+import { FindSpanMeasuresHandler } from './queries/find-span-measures.handler';
 import {
 	SupportSystemType,
 	SupportSystemTypeDetailedFacade,
@@ -79,6 +81,8 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 		FindSupportSystemsHandler,
 		FindSupportSystemLuminairesCommand,
 		FindSupportSystemLuminairesHandler,
+		SpanMeasureResolver,
+		FindSpanMeasuresHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

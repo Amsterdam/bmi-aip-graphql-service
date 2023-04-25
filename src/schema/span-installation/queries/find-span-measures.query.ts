@@ -1,1 +1,3 @@
-export class FindSpanMeasuresQuery {}
+export class FindSpanMeasuresQuery {
+	public constructor(public readonly surveyId: string) {}
+}

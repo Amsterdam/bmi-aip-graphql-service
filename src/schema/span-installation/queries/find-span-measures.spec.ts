@@ -1,25 +1,26 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-// import { domainMeasure } from '../__stubs__';
+import { domainSpanMeasure } from '../__stubs__/span-measure';
+import { SpanMeasureService } from '../span-measure.service';
 
-// import { FindSpanMeasuresQuery } from './find-span-measures.query';
-// import { FindSpanMeasuresHandler } from './find-span-measures.handler';
+import { FindSpanMeasuresHandler } from './find-span-measures.handler';
+import { FindSpanMeasuresQuery } from './find-span-measures.query';
 
-const measureMock: MockedObjectDeep<any> = {
-	// getMeasures: jest.fn().mockResolvedValue([domainMeasure]),
-	// ...(<any>{}),
+const spanMeasuresMock: MockedObjectDeep<SpanMeasureService> = {
+	findSpanMeasures: jest.fn().mockResolvedValue([domainSpanMeasure]),
+	...(<any>{}),
 };
 
 const identifier = 'b6bbf83e-da23-4693-9502-e6000015c709';
 
-describe('FindMeasuresHandler', () => {
+describe('FindSpanMeasures', () => {
 	test('executes command', async () => {
-		// const command = new FindSpanMeasuresQuery();
-		// const result = await new FindSpanMeasuresHandler().execute(command);
+		const command = new FindSpanMeasuresQuery(identifier);
+		const result = await new FindSpanMeasuresHandler(spanMeasuresMock).execute(command);
 
-		expect(measureMock.getMeasures).toHaveBeenCalledTimes(1);
-		expect(measureMock.getMeasures).toHaveBeenCalledWith(identifier);
+		expect(spanMeasuresMock.findSpanMeasures).toHaveBeenCalledTimes(1);
+		expect(spanMeasuresMock.findSpanMeasures).toHaveBeenCalledWith(identifier);
 
-		// expect(result).toEqual([domainMeasure]);
+		expect(result).toEqual([domainSpanMeasure]);
 	});
 });

@@ -1,11 +1,27 @@
 import { SpanMeasure } from './models/span-measure.model';
+import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repository.interface';
 
 export class SpanMeasureFactory {
-	static CreateMeasures(staticMeasures): SpanMeasure {
-		const measuresModel = new SpanMeasure();
-		const parsedMeasures = staticMeasures as SpanMeasure;
-		measuresModel.id = parsedMeasures?.id;
-		measuresModel.name = parsedMeasures.name;
-		return measuresModel;
+	static CreateSpanMeasure({
+		id,
+		entityListId,
+		decompositionId,
+		decompositionType,
+		surveyId,
+		description,
+		created_at: createdAt,
+		updated_at: updatedAt,
+	}: DomainSpanMeasure): SpanMeasure {
+		const spanMeasure = new SpanMeasure();
+		spanMeasure.id = id;
+		spanMeasure.entityListId = entityListId;
+		spanMeasure.decompositionId = decompositionId;
+		spanMeasure.decompositionType = decompositionType;
+		spanMeasure.surveyId = surveyId;
+		spanMeasure.description = description;
+		spanMeasure.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
+		spanMeasure.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
+
+		return spanMeasure;
 	}
 }

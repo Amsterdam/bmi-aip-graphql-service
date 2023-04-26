@@ -54,7 +54,6 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 	}
 
 	defaultMessage(args: ValidationArguments) {
-		console.log(args);
 		return `Given ${args.property} is not a valid measure option.`;
 	}
 }

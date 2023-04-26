@@ -51,3 +51,5 @@ services:
             NPM_TOKEN:
             DATABASE_URL:
         tty: true
+networks:
+    bmi:

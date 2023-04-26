@@ -2328,7 +2328,7 @@ model spanJunctionBoxes {
   objectId               String                    @db.Uuid
   surveyId               String                    @db.Uuid
   name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(20, 3)
+  mastNumber             Decimal?                  @db.Decimal(10, 3)
   location               String?                   @db.VarChar(255)
   locationIndication     String?                   @db.VarChar(255)
   riserTubeVisible       Boolean?
@@ -2634,7 +2634,6 @@ model surveys {
   observationPoints                                    observationPoints[]
   poleLabResults                                       poleLabResults[]
   spanJunctionBoxes                                    spanJunctionBoxes[]
-  spanMeasures                                         spanMeasures[]
   spanSupportSystems                                   spanSupportSystems[]
   surveyElementGroups                                  surveyElementGroups[]
   surveyElements                                       surveyElements[]
@@ -3003,31 +3002,6 @@ model web_origins {
 
   @@id([client_id, value], map: "constraint_web_origins")
   @@index([client_id], map: "idx_web_orig_client")
-}
-
-model spanMeasureItems {
-  id                        String       @id @unique(map: "spanmeasureitems_id_unique") @db.Uuid
-  description               String       @db.VarChar(255)
-  spanMeasureId             String       @db.Uuid
-  itemType                  String       @db.VarChar(255)
-  quantityUnitOfMeasurement String       @db.VarChar(255)
-  quantityEstimate          Int
-  quantityActual            Int
-  optionId                  String?      @db.Uuid
-  spanMeasures              spanMeasures @relation(fields: [spanMeasureId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasureitems_spanmeasureid_foreign")
-}
-
-model spanMeasures {
-  id                String             @id @unique(map: "spanmeasures_id_unique") @db.Uuid
-  surveyId          String             @db.Uuid
-  description       String             @db.VarChar(255)
-  decompositionId   String             @db.Uuid
-  decompositionType String             @db.VarChar(255)
-  created_at        DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime           @default(now()) @db.Timestamptz(6)
-  optionId          String?            @db.Uuid
-  surveys           surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasures_surveyid_foreign")
-  spanMeasureItems  spanMeasureItems[]
 }
 
 enum degreeOfDamage {

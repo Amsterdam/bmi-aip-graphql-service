@@ -2328,7 +2328,7 @@ model spanJunctionBoxes {
   objectId               String                    @db.Uuid
   surveyId               String                    @db.Uuid
   name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(10, 3)
+  mastNumber             Decimal?                  @db.Decimal(20, 3)
   location               String?                   @db.VarChar(255)
   locationIndication     String?                   @db.VarChar(255)
   riserTubeVisible       Boolean?

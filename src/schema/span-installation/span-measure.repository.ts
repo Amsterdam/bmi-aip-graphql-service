@@ -65,38 +65,27 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 	}
 
 	async checkIfDecompositionElementExists(decompositionId: string, decompositionType: string): Promise<boolean> {
-		let entityExists = false;
-
 		switch (decompositionType) {
 			case 'spanSupportSystem':
-				entityExists = (await this.prisma.spanSupportSystems.findFirst({
+				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
-				break;
+				}));
 			case 'spanLuminaire':
-				entityExists = (await this.prisma.spanLuminaires.findFirst({
+				return !!(await this.prisma.spanLuminaires.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
-				break;
+				}));
 			case 'spanJunctionBox':
-				entityExists = (await this.prisma.spanJunctionBoxes.findFirst({
+				return !!(await this.prisma.spanJunctionBoxes.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
-				break;
+				}));
 		}
 
-		return entityExists;
+		return false;
 	}
 }

@@ -48,19 +48,19 @@ export class SpanMeasureResolver {
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateSpanMeasure(@Args('updateSpanMeasure') input: UpdateSpanMeasureInput): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<UpdateSpanMeasureCommand>(
+		const domainSpanMeasure: SpanMeasure = await this.commandBus.execute<UpdateSpanMeasureCommand>(
 			new UpdateSpanMeasureCommand(input),
 		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return domainSpanMeasure;
 	}
 
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteSpanMeasure(@Args('identifier') identifier: string): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<DeleteSpanMeasureCommand>(
+		const domainSpanMeasure: SpanMeasure = await this.commandBus.execute<DeleteSpanMeasureCommand>(
 			new DeleteSpanMeasureCommand(identifier),
 		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return domainSpanMeasure;
 	}
 
 	@Mutation(() => [SpanMeasureItem])

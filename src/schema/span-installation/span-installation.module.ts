@@ -49,6 +49,7 @@ import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.
 import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
 import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -68,6 +69,10 @@ registerEnumType(SupportSystemTypeDetailedNode, {
 
 registerEnumType(SupportSystemTypeDetailedTensionWire, {
 	name: 'SupportSystemTypeDetailedTensionWire',
+});
+
+registerEnumType(SpanDecompositionType, {
+	name: 'SpanDecompositionType',
 });
 
 @Module({

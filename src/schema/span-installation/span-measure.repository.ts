@@ -6,6 +6,7 @@ import { newId } from '../../utils';
 import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.repository.interface';
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 @Injectable()
 export class SpanMeasureRepository implements ISpanMeasureRepository {
@@ -64,26 +65,32 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		});
 	}
 
-	async checkIfDecompositionElementExists(decompositionId: string, decompositionType: string): Promise<boolean> {
+	async checkIfDecompositionElementExists(
+		decompositionId: string,
+		decompositionType: SpanDecompositionType,
+	): Promise<boolean> {
 		switch (decompositionType) {
-			case 'spanSupportSystem':
+			case SpanDecompositionType.spanSupportSystem:
 				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
 						id: decompositionId,
 					},
 				}));
-			case 'spanLuminaire':
+				break;
+			case SpanDecompositionType.spanLuminaire:
 				return !!(await this.prisma.spanLuminaires.findFirst({
 					where: {
 						id: decompositionId,
 					},
 				}));
-			case 'spanJunctionBox':
+				break;
+			case SpanDecompositionType.spanJunctionBox:
 				return !!(await this.prisma.spanJunctionBoxes.findFirst({
 					where: {
 						id: decompositionId,
 					},
 				}));
+				break;
 		}
 
 		return false;

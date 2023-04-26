@@ -1,5 +1,4 @@
-import { SpanMeasureItem as DomainSpanMeasureItem } from 'src/schema/survey/types/span-measure-item.repository.interface';
-
+import { SpanMeasureItem as DomainSpanMeasureItem } from '../../survey/types/span-measure-item.repository.interface';
 import { SpanMeasureItem } from '../models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from '../dto/create-span-measure-item.input';
 import { UpdateSpanMeasureItemInput } from '../dto/update-span-measure-item-input';

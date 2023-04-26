@@ -1,7 +1,7 @@
-import { PrismaService } from 'src/prisma.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
 import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.repository.interface';

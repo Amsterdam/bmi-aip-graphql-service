@@ -50,8 +50,6 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 	}
 
 	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
-		console.log(input);
-
 		if (input.spanMeasureItemActuals) {
 			input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
 				// Item not found for given id/spanMeasureId combination

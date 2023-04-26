@@ -6,13 +6,20 @@ import { PrismaService } from '../../prisma.service';
 import { ArkSurveyResolver } from './ark-survey.resolver';
 import { ArkSurveyService } from './ark-survey.service';
 import { ArkSurveyRepository } from './ark-survey.repository';
-import { domainArkSurvey, createArkSurveyInput, deletedArkSurvey, updateArkSurveyInput } from './__stubs__';
+import {
+	domainArkSurvey,
+	createArkSurveyInput,
+	deletedArkSurvey,
+	updateArkSurveyInput,
+	updateSurveyInput,
+} from './__stubs__';
 import { CreateArkSurveyCommand } from './commands/create-ark-survey.command';
 import { ArkSurvey } from './models/ark-survey.model';
 import { UpdateArkSurveyCommand } from './commands/update-ark-survey.command';
 import { DeleteArkSurveyCommand } from './commands/delete-ark-survey.command';
 import { SaveArkSurveyCommand } from './commands/save-ark-survey.command';
 import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.query';
+import { SaveArkCompletionCommand } from './commands/save-ark-completion.command';
 
 jest.mock('./ark-survey.service');
 jest.mock('./ark-survey.repository');
@@ -22,6 +29,7 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 		switch (command.constructor.name) {
 			case CreateArkSurveyCommand.name:
 			case SaveArkSurveyCommand.name:
+			case SaveArkCompletionCommand.name:
 			case UpdateArkSurveyCommand.name:
 				return domainArkSurvey;
 			case DeleteArkSurveyCommand.name:
@@ -106,5 +114,18 @@ describe('ARK / ArkSurvey / Resolver', () => {
 		};
 
 		expect(elements).toEqual(object);
+	});
+
+	test('saveArkCompletion', async () => {
+		const commandBusMock = getCommandBusMock();
+		const queryBusMock = getQueryBusMock();
+		const resolver = new ArkSurveyResolver(new ArkSurveyService(ArkSurveyRepo), commandBusMock, queryBusMock);
+		const result = await resolver.saveArkCompletion(updateSurveyInput);
+
+		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+		expect(commandBusMock.execute).toHaveBeenCalledWith(new SaveArkCompletionCommand(updateSurveyInput));
+
+		expect(result).toBeInstanceOf(ArkSurvey);
+		expect(typeof result.id).toBe('string');
 	});
 });

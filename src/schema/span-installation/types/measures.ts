@@ -1,48 +1,38 @@
-type Measure = {
-	id: string;
-	name: string;
-	spanMeasureItems: SpanMeasureItem[];
-};
+import { SpanMeasureOption } from '../models/span-measure-option.model';
+import { SpanMeasureItemOption } from '../models/span-measure-item-option.model';
 
-// export type Material = {
-// 	id: string;
-// 	type: string;
-// 	description: string;
-// };
-
-export type SpanMeasureItem = {
-	id: string;
-	type: string;
-	description: string;
-};
-
-export const spanMeasureItems: SpanMeasureItem[] = [
+export const spanMeasureItems: SpanMeasureItemOption[] = [
 	{
 		id: 'M345790',
-		type: 'material',
+		entityListId: '',
+		itemType: 'material',
 		description: 'M345790 Omschrijving van material',
 	},
 	{
-		id: '',
-		type: 'bestekpost',
+		id: 'sd',
+		entityListId: '',
+		itemType: 'bestekpost',
 		description: '200010 Omschrijving van bestekpost ',
 	},
 	{
-		id: '',
-		type: 'materiaal',
+		id: 'sda',
+		entityListId: '',
+		itemType: 'materiaal',
 		description: 'M345799 Omschrijving van materiaal',
 	},
 	{
-		id: '',
-		type: 'bestekpost',
+		id: 'sad',
+		entityListId: '',
+		itemType: 'bestekpost',
 		description: '200011 Omschrijving van bestekpost ',
 	},
 ];
 
-export const spanMeasures: Measure[] = [
+export const spanMeasureOptions: SpanMeasureOption[] = [
 	{
 		id: '',
-		name: 'Measure vervavngen draagsystem',
-		spanMeasureItems: [...spanMeasureItems],
+		entityListId: '',
+		description: 'Measure vervavngen draagsystem',
+		measureItems: [...spanMeasureItems],
 	},
 ];

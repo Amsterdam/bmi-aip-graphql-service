@@ -39,10 +39,7 @@ export class SpanMeasureResolver {
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createSpanMeasure(@Args('createSpanMeasure') input: CreateSpanMeasureInput): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<CreateSpanMeasureCommand>(
-			new CreateSpanMeasureCommand(input),
-		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return this.commandBus.execute<CreateSpanMeasureCommand>(new CreateSpanMeasureCommand(input));
 	}
 
 	@Mutation(() => SpanMeasure)

@@ -23,22 +23,22 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		quantityEstimate,
 		quantityActual,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
-		const data: Prisma.spanMeasureItemsCreateInput = {
-			id: newId(),
-			description: description,
-			optionId,
-			spanMeasures: {
-				connect: {
-					id: spanMeasureId,
+		return this.prisma.spanMeasureItems.create({
+			data: {
+				id: newId(),
+				description: description,
+				optionId,
+				spanMeasures: {
+					connect: {
+						id: spanMeasureId,
+					},
 				},
+				itemType: itemType,
+				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
+				quantityEstimate: quantityEstimate,
+				quantityActual: quantityActual,
 			},
-			itemType: itemType,
-			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
-			quantityEstimate: quantityEstimate,
-			quantityActual: quantityActual,
-		};
-
-		return this.prisma.spanMeasureItems.create({ data });
+		});
 	}
 
 	async findSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]> {

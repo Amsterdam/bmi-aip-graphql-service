@@ -1,5 +1,7 @@
 import { Field, ObjectType, Parent, ResolveField } from '@nestjs/graphql';
 
+import { SpanDecompositionType } from '../types/span-decomposition-type';
+
 import { SpanMeasureItem } from './span-measure-item.model';
 
 @ObjectType({ description: 'spanMeasure' })
@@ -11,7 +13,7 @@ export class SpanMeasure {
 	surveyId: string;
 
 	@Field((type) => String)
-	entityListId: string;
+	optionId: string;
 
 	@Field((type) => String)
 	description: string;
@@ -19,7 +21,7 @@ export class SpanMeasure {
 	@Field((type) => String)
 	decompositionId: string;
 
-	@Field((type) => String)
+	@Field((type) => SpanDecompositionType, { nullable: true })
 	decompositionType: string;
 
 	@Field((type) => [SpanMeasureItem], { nullable: 'itemsAndList' })

@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { SpanMeasureRepository } from '../span-measure.repository';
-import { SpanMeasure } from '../types/span-measure.repository.interface';
+import { SpanMeasureFactory } from '../span-measure.factory';
+import { SpanMeasure } from '../models/span-measure.model';
 
 import { UpdateSpanMeasureCommand } from './update-span-measure.command';
 
@@ -10,6 +11,6 @@ export class UpdateSpanMeasureHandler implements ICommandHandler<UpdateSpanMeasu
 	constructor(private repository: SpanMeasureRepository) {}
 
 	public async execute(command: UpdateSpanMeasureCommand): Promise<SpanMeasure> {
-		return this.repository.updateSpanMeasure(command.data);
+		return SpanMeasureFactory.CreateSpanMeasure(await this.repository.updateSpanMeasure(command.data));
 	}
 }

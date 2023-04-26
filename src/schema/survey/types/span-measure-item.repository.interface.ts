@@ -4,7 +4,7 @@ const spanMeasureItems = Prisma.validator<Prisma.spanMeasureItemsArgs>()({
 	select: {
 		id: true,
 		description: true,
-		entityListId: true,
+		optionId: true,
 		spanMeasureId: true,
 		itemType: true,
 		quantityUnitOfMeasurement: true,

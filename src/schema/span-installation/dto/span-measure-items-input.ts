@@ -6,7 +6,7 @@ export class SpanMeasureItemInput {
 	description: string;
 
 	@Field((type) => String)
-	entityListId: string;
+	optionId: string;
 
 	@Field((type) => String)
 	@IsIn(['material', 'specificationItem'])

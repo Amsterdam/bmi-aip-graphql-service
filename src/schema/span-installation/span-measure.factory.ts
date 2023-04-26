@@ -4,7 +4,7 @@ import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repositor
 export class SpanMeasureFactory {
 	static CreateSpanMeasure({
 		id,
-		entityListId,
+		optionId,
 		decompositionId,
 		decompositionType,
 		surveyId,
@@ -14,7 +14,7 @@ export class SpanMeasureFactory {
 	}: DomainSpanMeasure): SpanMeasure {
 		const spanMeasure = new SpanMeasure();
 		spanMeasure.id = id;
-		spanMeasure.entityListId = entityListId;
+		spanMeasure.optionId = optionId;
 		spanMeasure.decompositionId = decompositionId;
 		spanMeasure.decompositionType = decompositionType;
 		spanMeasure.surveyId = surveyId;

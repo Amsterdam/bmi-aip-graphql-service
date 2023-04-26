@@ -37,28 +37,19 @@ export class SpanMeasureResolver {
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async createSpanMeasure(@Args('createSpanMeasure') input: CreateSpanMeasureInput): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<CreateSpanMeasureCommand>(
-			new CreateSpanMeasureCommand(input),
-		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return this.commandBus.execute<CreateSpanMeasureCommand>(new CreateSpanMeasureCommand(input));
 	}
 
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async updateSpanMeasure(@Args('updateSpanMeasure') input: UpdateSpanMeasureInput): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<UpdateSpanMeasureCommand>(
-			new UpdateSpanMeasureCommand(input),
-		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return this.commandBus.execute<UpdateSpanMeasureCommand>(new UpdateSpanMeasureCommand(input));
 	}
 
 	@Mutation(() => SpanMeasure)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async deleteSpanMeasure(@Args('identifier') identifier: string): Promise<SpanMeasure> {
-		const domainSpanMeasure: DomainSpanMeasure = await this.commandBus.execute<DeleteSpanMeasureCommand>(
-			new DeleteSpanMeasureCommand(identifier),
-		);
-		return SpanMeasureFactory.CreateSpanMeasure(domainSpanMeasure);
+		return this.commandBus.execute<DeleteSpanMeasureCommand>(new DeleteSpanMeasureCommand(identifier));
 	}
 
 	@Mutation(() => [SpanMeasureItem])
@@ -66,9 +57,7 @@ export class SpanMeasureResolver {
 	public async saveSpanMeasureItems(
 		@Args('saveSpanMeasureItems') input: SaveSpanMeasureItemsInput,
 	): Promise<SpanMeasureItem[]> {
-		const domainSpanMeasureItem: SpanMeasureItem = await this.commandBus.execute<SaveSpanMeasureItemsCommand>(
-			new SaveSpanMeasureItemsCommand(input),
-		);
+		await this.commandBus.execute<SaveSpanMeasureItemsCommand>(new SaveSpanMeasureItemsCommand(input));
 		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(input.spanMeasureId));
 	}
 

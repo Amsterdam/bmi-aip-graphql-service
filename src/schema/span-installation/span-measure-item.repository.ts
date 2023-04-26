@@ -16,29 +16,29 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 
 	async createSpanMeasureItem({
 		spanMeasureId,
-		entityListId,
+		optionId,
 		description,
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
 		quantityActual,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
-		const data: Prisma.spanMeasureItemsCreateInput = {
-			id: newId(),
-			description: description,
-			entityListId,
-			spanMeasures: {
-				connect: {
-					id: spanMeasureId,
+		return this.prisma.spanMeasureItems.create({
+			data: {
+				id: newId(),
+				description: description,
+				optionId,
+				spanMeasures: {
+					connect: {
+						id: spanMeasureId,
+					},
 				},
+				itemType: itemType,
+				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
+				quantityEstimate: quantityEstimate,
+				quantityActual: quantityActual,
 			},
-			itemType: itemType,
-			quantityUnitOfMeasurement: quantityUnitOfMeasurement,
-			quantityEstimate: quantityEstimate,
-			quantityActual: quantityActual,
-		};
-
-		return this.prisma.spanMeasureItems.create({ data });
+		});
 	}
 
 	async findSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]> {
@@ -50,8 +50,6 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 	}
 
 	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
-		console.log(input);
-
 		if (input.spanMeasureItemActuals) {
 			input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
 				// Item not found for given id/spanMeasureId combination

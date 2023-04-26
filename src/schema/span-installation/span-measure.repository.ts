@@ -1,12 +1,12 @@
-import { PrismaService } from 'src/prisma.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 
+import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
 import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.repository.interface';
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 @Injectable()
 export class SpanMeasureRepository implements ISpanMeasureRepository {
@@ -14,28 +14,25 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 
 	async createSpanMeasure({
 		surveyId,
-		entityListId,
+		optionId,
 		description,
 		decompositionId,
 		decompositionType,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
-		const data: Prisma.spanMeasuresCreateInput = {
-			id: newId(),
-			entityListId,
-			surveys: { connect: { id: surveyId } },
-			description,
-			decompositionId,
-			decompositionType,
-		};
-
-		console.log('creating..');
-
 		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
-			console.log('Decomposition entity not found');
 			throw new NotFoundException('Decomposition entity not found');
 		}
 
-		return this.prisma.spanMeasures.create({ data });
+		return this.prisma.spanMeasures.create({
+			data: {
+				id: newId(),
+				optionId,
+				surveys: { connect: { id: surveyId } },
+				description,
+				decompositionId,
+				decompositionType,
+			},
+		});
 	}
 
 	async updateSpanMeasure({
@@ -44,15 +41,13 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		decompositionId,
 		decompositionType,
 	}: UpdateSpanMeasureInput): Promise<SpanMeasure> {
-		const data: Prisma.spanMeasuresUpdateInput = {
-			description,
-			decompositionId,
-			decompositionType,
-		};
-
 		return this.prisma.spanMeasures.update({
 			where: { id },
-			data,
+			data: {
+				description,
+				decompositionId,
+				decompositionType,
+			},
 		});
 	}
 
@@ -63,48 +58,41 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 	}
 
 	async findSpanMeasures(surveyId: string): Promise<SpanMeasure[]> {
-		const spanMeasures = (await this.prisma.spanMeasures.findMany({
+		return this.prisma.spanMeasures.findMany({
 			where: {
 				surveyId,
 			},
-		})) as SpanMeasure[];
-
-		return spanMeasures;
+		});
 	}
 
-	async checkIfDecompositionElementExists(decompositionId: string, decompositionType: string): Promise<boolean> {
-		let entityExists = false;
-
+	async checkIfDecompositionElementExists(
+		decompositionId: string,
+		decompositionType: SpanDecompositionType,
+	): Promise<boolean> {
 		switch (decompositionType) {
-			case 'spanSupportSystem':
-				entityExists = (await this.prisma.spanSupportSystems.findFirst({
+			case SpanDecompositionType.spanSupportSystem:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
+				}));
 				break;
-			case 'spanLuminaire':
-				entityExists = (await this.prisma.spanLuminaires.findFirst({
+			case SpanDecompositionType.spanLuminaire:
+				return !!(await this.prisma.spanLuminaires.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
+				}));
 				break;
-			case 'spanJunctionBox':
-				entityExists = (await this.prisma.spanJunctionBoxes.findFirst({
+			case SpanDecompositionType.spanJunctionBox:
+				return !!(await this.prisma.spanJunctionBoxes.findFirst({
 					where: {
 						id: decompositionId,
 					},
-				}))
-					? true
-					: false;
+				}));
 				break;
 		}
 
-		return entityExists;
+		return false;
 	}
 }

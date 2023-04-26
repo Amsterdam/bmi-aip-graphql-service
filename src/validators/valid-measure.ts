@@ -23,7 +23,6 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async validate(value: string, args: ValidationArguments): Promise<boolean> {
-		console.log(value, args);
 		let dataSource;
 
 		switch (args.targetName) {

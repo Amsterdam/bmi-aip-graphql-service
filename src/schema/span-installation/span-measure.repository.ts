@@ -28,10 +28,7 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 			decompositionType,
 		};
 
-		console.log('creating..');
-
 		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
-			console.log('Decomposition entity not found');
 			throw new NotFoundException('Decomposition entity not found');
 		}
 

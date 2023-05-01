@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -94,15 +93,8 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 			});
 
 			if (spanMeasureItemsInput.spanMeasureItems) {
-				const spanMeasureItemsFormatted =
-					spanMeasureItemsInput.spanMeasureItems as Prisma.spanMeasureItemsCreateManyInput[];
-				spanMeasureItemsFormatted.map((spanMeasureItem) => {
-					spanMeasureItem.spanMeasureId = spanMeasureItemsInput.spanMeasureId;
-					spanMeasureItem.id = newId();
-				});
-
 				await this.prisma.spanMeasureItems.createMany({
-					data: spanMeasureItemsFormatted,
+					data: SpanMeasureItemFactory.FormatSpanMeasureItems(spanMeasureItemsInput),
 				});
 
 				return this.findSpanMeasureItems(spanMeasureItemsInput.spanMeasureId);

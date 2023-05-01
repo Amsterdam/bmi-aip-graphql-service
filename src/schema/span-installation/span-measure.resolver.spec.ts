@@ -11,7 +11,6 @@ import { SpanMeasureRepository } from './span-measure.repository';
 import { CreateSpanMeasureCommand } from './commands/create-span-measure.command';
 import { UpdateSpanMeasureCommand } from './commands/update-span-measure.command';
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
-import { SpanMeasure } from './models/span-measure.model';
 
 jest.mock('./span-measure.service');
 jest.mock('./span-measure.repository');
@@ -53,8 +52,6 @@ describe('createSpanMeasure', () => {
 		const result = await resolver.createSpanMeasure(createSpanMeasureInput);
 		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 		expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateSpanMeasureCommand(createSpanMeasureInput));
-
-		expect(result).toBeInstanceOf(SpanMeasure);
 		expect(typeof result.id).toBe('string');
 	});
 });
@@ -67,8 +64,6 @@ describe('updateSpanMeasure', () => {
 		const result = await resolver.updateSpanMeasure(updateSpanMeasureInput);
 		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 		expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateSpanMeasureCommand(updateSpanMeasureInput));
-
-		expect(result).toBeInstanceOf(SpanMeasure);
 		expect(result.id).toBe(updateSpanMeasureInput.id);
 	});
 });

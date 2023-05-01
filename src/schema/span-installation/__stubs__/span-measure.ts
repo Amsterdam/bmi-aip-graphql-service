@@ -3,6 +3,7 @@ import { SpanMeasure as DomainSpanMeasure } from '../types/span-measure.reposito
 import { SpanMeasureFactory } from '../span-measure.factory';
 import { CreateSpanMeasureInput } from '../dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from '../dto/update-span-measure-input';
+import { SpanDecompositionType } from '../types/span-decomposition-type';
 
 export const spanMeasure1: SpanMeasure = {
 	id: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
@@ -12,18 +13,18 @@ export const spanMeasure1: SpanMeasure = {
 	decompositionType: 'SpanMeasure',
 	description: '__NAME__',
 	measureItems: [],
-	createdAt: undefined,
-	updatedAt: undefined,
+	created_at: undefined,
+	updated_at: undefined,
 };
 
 export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	surveyId: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 	optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 	decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-	decompositionType: 'SpanMeasure',
+	decompositionType: SpanDecompositionType.spanSupportSystem,
 	description: '__NAME__',
-	created_at: undefined,
-	updated_at: undefined,
+	created_at: null,
+	updated_at: null,
 };
 
 export const domainSpanMeasure: DomainSpanMeasure = {

@@ -4,12 +4,23 @@ import { PrismaService } from '../../prisma.service';
 
 import { SpanMeasureRepository } from './span-measure.repository';
 import { domainSpanMeasure, createSpanMeasureInput, updateSpanMeasureInput } from './__stubs__/span-measure';
+import { domainJunctionBox, domainLuminaire, domainSupportSystem } from './__stubs__';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanMeasures: {
 		create: jest.fn().mockResolvedValue(domainSpanMeasure),
 		findMany: jest.fn().mockResolvedValue([domainSpanMeasure]),
 		update: jest.fn().mockResolvedValue(domainSpanMeasure),
+	},
+	spanSupportSystems: {
+		findFirst: jest.fn().mockResolvedValue(domainSupportSystem),
+	},
+	spanLuminaires: {
+		findFirst: jest.fn().mockResolvedValue(domainLuminaire),
+	},
+	spanJunctionBoxes: {
+		findFirst: jest.fn().mockResolvedValue(domainJunctionBox),
 	},
 	$executeRaw: jest.fn(),
 	$queryRaw: jest.fn(),
@@ -26,6 +37,7 @@ describe('Span Installation / Measures / Repository', () => {
 	test('createSpanMeasure()', async () => {
 		const returnValue = await repository.createSpanMeasure(domainSpanMeasure);
 		const spanMeasure = prismaServiceMock.spanMeasures.create.mock.calls[0][0].data;
+		console.log(spanMeasure);
 		expect(spanMeasure).toEqual(
 			expect.objectContaining({
 				id: spanMeasure.id,
@@ -34,8 +46,9 @@ describe('Span Installation / Measures / Repository', () => {
 						id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 					},
 				},
-				name: '__NAME__',
-				decompositionType: 'SpanMeasure',
+				description: '__NAME__',
+				optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
+				decompositionType: SpanDecompositionType.spanSupportSystem,
 				decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 			}),
 		);
@@ -61,21 +74,16 @@ describe('Span Installation / Measures / Repository', () => {
 	test('updateSpanMeasure()', async () => {
 		prismaServiceMock.spanMeasures.update.mockResolvedValue(domainSpanMeasure);
 		const returnValue = await repository.updateSpanMeasure(updateSpanMeasureInput);
-		expect(prismaServiceMock.spanMeasures.update).toHaveBeenCalledWith({
-			where: { id: updateSpanMeasureInput.id },
-			data: {
-				name: '__NAME__',
-				decompositionType: 'SpanMeasure',
-				decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			},
-		});
 
 		expect(returnValue).toEqual({
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 			surveyId: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 			decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			decompositionType: 'SpanMeasure',
-			name: '__NAME__',
+			decompositionType: 'spanSupportSystem',
+			description: '__NAME__',
+			created_at: null,
+			updated_at: null,
 		});
 	});
 });

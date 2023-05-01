@@ -35,6 +35,21 @@ import {
 } from './types';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemLuminairesHandler } from './commands/find-support-system-luminaires.handler';
+import { FindSpanMeasuresHandler } from './queries/find-span-measures.handler';
+import { SpanMeasureResolver } from './span-measure.resolver';
+import { SpanMeasureService } from './span-measure.service';
+import { SpanMeasureRepository } from './span-measure.repository';
+import { CreateSpanMeasureHandler } from './commands/create-span-measure.handler';
+import { DeleteSpanMeasureHandler } from './commands/delete-span-measure.handler';
+import { UpdateSpanMeasureHandler } from './commands/update-span-measure.handler';
+import { FindSpanMeasureItemsHandler } from './queries/find-span-measure-items.handler';
+import { SpanMeasureItemService } from './span-measure-item.service';
+import { SpanMeasureItemRepository } from './span-measure-item.repository';
+import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
+import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
+import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
+import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -54,6 +69,10 @@ registerEnumType(SupportSystemTypeDetailedNode, {
 
 registerEnumType(SupportSystemTypeDetailedTensionWire, {
 	name: 'SupportSystemTypeDetailedTensionWire',
+});
+
+registerEnumType(SpanDecompositionType, {
+	name: 'SpanDecompositionType',
 });
 
 @Module({
@@ -79,6 +98,21 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 		FindSupportSystemsHandler,
 		FindSupportSystemLuminairesCommand,
 		FindSupportSystemLuminairesHandler,
+		SpanMeasureRepository,
+		SpanMeasureResolver,
+		SpanMeasureService,
+		FindSpanMeasuresHandler,
+		CreateSpanMeasureHandler,
+		UpdateSpanMeasureHandler,
+		DeleteSpanMeasureHandler,
+		SpanMeasureItemService,
+		FindSpanMeasureItemsHandler,
+		SpanMeasureRepository,
+		SpanMeasureItemRepository,
+		SaveSpanMeasureItemsCommand,
+		SaveSpanMeasureItemsHandler,
+		UpdateSpanMeasureItemsActualsCommand,
+		UpdateSpanMeasureItemsActualsHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

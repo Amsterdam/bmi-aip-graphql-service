@@ -28,8 +28,8 @@ export class SpanMeasure {
 	measureItems: SpanMeasureItem[];
 
 	@Field((type) => String, { nullable: true })
-	createdAt: string;
+	created_at: string;
 
 	@Field((type) => String, { nullable: true })
-	updatedAt: string;
+	updated_at: string;
 }

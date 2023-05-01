@@ -9,8 +9,8 @@ export class SpanMeasureFactory {
 		decompositionType,
 		surveyId,
 		description,
-		created_at: createdAt,
-		updated_at: updatedAt,
+		created_at: created_at,
+		updated_at: updated_at,
 	}: DomainSpanMeasure): SpanMeasure {
 		const spanMeasure = new SpanMeasure();
 		spanMeasure.id = id;
@@ -19,8 +19,8 @@ export class SpanMeasureFactory {
 		spanMeasure.decompositionType = decompositionType;
 		spanMeasure.surveyId = surveyId;
 		spanMeasure.description = description;
-		spanMeasure.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
-		spanMeasure.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
+		spanMeasure.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
+		spanMeasure.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;
 
 		return spanMeasure;
 	}

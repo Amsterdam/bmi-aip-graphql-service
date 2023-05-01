@@ -9,6 +9,7 @@ import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input
 import { ISpanMeasureItemRepository } from './types/span-measure-item.repository.interface';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
+import { SpanMeasureItemFactory } from './span-measure-item.factory';
 
 @Injectable()
 export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
@@ -108,15 +109,8 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 			}
 		} else {
 			if (spanMeasureItemsInput.spanMeasureItems) {
-				const spanMeasureItemsFormatted =
-					spanMeasureItemsInput.spanMeasureItems as Prisma.spanMeasureItemsCreateManyInput[];
-				spanMeasureItemsFormatted.map((spanMeasureItem) => {
-					spanMeasureItem.spanMeasureId = spanMeasureItemsInput.spanMeasureId;
-					spanMeasureItem.id = newId();
-				});
-
 				await this.prisma.spanMeasureItems.createMany({
-					data: spanMeasureItemsFormatted,
+					data: SpanMeasureItemFactory.FormatSpanMeasureItems(spanMeasureItemsInput),
 				});
 
 				return this.findSpanMeasureItems(spanMeasureItemsInput.spanMeasureId);

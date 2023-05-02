@@ -1,3 +1,3 @@
 export * from './support-system';
 export * from './span-luminaire';
-export * from './measures';
+export * from './measure-options';

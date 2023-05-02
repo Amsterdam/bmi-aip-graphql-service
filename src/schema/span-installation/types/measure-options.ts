@@ -2,26 +2,27 @@ import { SpanMeasureOption } from '../models/span-measure-option.model';
 import { SpanMeasureItemOption } from '../models/span-measure-item-option.model';
 
 import { SpanDecompositionType } from './span-decomposition-type';
+import { SpanMeasureItemType } from './span-measure-item-type';
 
 export const spanMeasureItems: SpanMeasureItemOption[] = [
 	{
 		id: 'M345790',
-		itemType: 'material',
+		itemType: SpanMeasureItemType.material,
 		description: 'M345790 Omschrijving van material',
 	},
 	{
-		id: 'sd',
-		itemType: 'bestekpost',
+		id: 'B345791',
+		itemType: SpanMeasureItemType.specificationItem,
 		description: '200010 Omschrijving van bestekpost ',
 	},
 	{
-		id: 'sda',
-		itemType: 'materiaal',
+		id: 'M345792',
+		itemType: SpanMeasureItemType.material,
 		description: 'M345799 Omschrijving van materiaal',
 	},
 	{
-		id: 'sad',
-		itemType: 'bestekpost',
+		id: 'B345793',
+		itemType: SpanMeasureItemType.specificationItem,
 		description: '200011 Omschrijving van bestekpost ',
 	},
 ];

@@ -5,9 +5,6 @@ export class SpanMeasureItemOption {
 	id: string;
 
 	@Field((type) => String)
-	entityListId: string;
-
-	@Field((type) => String)
 	description: string;
 
 	@Field((type) => String)

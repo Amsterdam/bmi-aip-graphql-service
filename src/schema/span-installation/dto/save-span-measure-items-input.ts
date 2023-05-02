@@ -11,9 +11,6 @@ export class SaveSpanMeasureItemsInput {
 	@Field((type) => String)
 	spanMeasureId: string;
 
-	@Field((type) => String)
-	optionId: string;
-
 	@Field(() => [SpanMeasureItemInput], { nullable: true })
 	@IsArrayOfObjects()
 	@ValidateNested({ each: true })

@@ -2,20 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
 import { PrismaService } from 'src/prisma.service';
 
-// TODO import SpanMeasureOption array when it's available
-const availableSpanMeasureOptions = [
-	{
-		id: '2c6806a0-c52a-23c5-08f8-6757ee5437a1',
-		description: 'Span Measure Option 1',
-	},
-];
-
-const availableSpanMeasureItemOptions = [
-	{
-		id: 'bfab1226-6b41-4cbe-81f8-9a1c69d73044',
-		description: 'Span Measure Item Option 1',
-	},
-];
+import {
+	spanMeasureItems as availableSpanMeasureItemOptions,
+	spanMeasureOptions as availableSpanMeasureOptions,
+} from '../schema/span-installation/types/measure-options';
 
 @ValidatorConstraint({ name: 'optionId' })
 @Injectable()
@@ -25,12 +15,17 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 	async validate(value: string, args: ValidationArguments): Promise<boolean> {
 		let dataSource;
 
+		console.log(args);
+
 		switch (args.targetName) {
-			case 'SpanMeasureInput':
+			case 'CreateSpanMeasureInput':
 				dataSource = availableSpanMeasureOptions;
 				break;
 			case 'SpanMeasureItemInput':
 				dataSource = availableSpanMeasureItemOptions;
+				break;
+			default:
+				throw new Error('Decorator applied to unspecified target.');
 				break;
 		}
 
@@ -44,6 +39,10 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 				keyToCheck = args.property;
 				break;
 		}
+
+		console.log(dataSource);
+		console.log(keyToCheck);
+		console.log(value);
 
 		if (!dataSource.find((option) => option[keyToCheck] === value)) {
 			return false;

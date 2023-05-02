@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-import { SpanMeasureItem as DomainSpanMeasureItem } from '../survey/types/span-measure-item.repository.interface';
+import { SpanMeasureItem as DomainSpanMeasureItem } from '../span-installation/types/span-measure-item.repository.interface';
 import { newId } from '../../utils/newId';
 
 import { SpanMeasureItem } from './models/span-measure-item.model';
@@ -15,7 +15,6 @@ export class SpanMeasureItemFactory {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
-		quantityActual,
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = id;

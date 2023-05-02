@@ -15,8 +15,6 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 	async validate(value: string, args: ValidationArguments): Promise<boolean> {
 		let dataSource;
 
-		console.log(args);
-
 		switch (args.targetName) {
 			case 'CreateSpanMeasureInput':
 				dataSource = availableSpanMeasureOptions;
@@ -39,10 +37,6 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 				keyToCheck = args.property;
 				break;
 		}
-
-		console.log(dataSource);
-		console.log(keyToCheck);
-		console.log(value);
 
 		if (!dataSource.find((option) => option[keyToCheck] === value)) {
 			return false;

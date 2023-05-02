@@ -25,8 +25,6 @@ export class SpanMeasureItemFactory {
 		spanMeasureItem.itemType = itemType;
 		spanMeasureItem.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
 		spanMeasureItem.quantityEstimate = quantityEstimate;
-		spanMeasureItem.quantityActual = quantityActual;
-
 		return spanMeasureItem;
 	}
 
@@ -39,7 +37,6 @@ export class SpanMeasureItemFactory {
 			itemType: data.itemType,
 			quantityUnitOfMeasurement: data.quantityUnitOfMeasurement,
 			quantityEstimate: data.quantityEstimate,
-			quantityActual: data.quantityActual,
 		}));
 	}
 }

@@ -23,5 +23,5 @@ export class SpanMeasureItem {
 	quantityEstimate: number;
 
 	@Field((type) => String)
-	quantityActual: number;
+	quantityActual?: number;
 }

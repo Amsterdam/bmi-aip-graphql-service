@@ -1,11 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsIn } from 'class-validator';
+
+import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 @InputType()
 export class SpanMeasureItemInput {
 	@Field((type) => String)
+	@IsValidMeasureOption()
 	description: string;
 
 	@Field((type) => String)
+	@IsValidMeasureOption()
 	optionId: string;
 
 	@Field((type) => String)
@@ -17,7 +21,4 @@ export class SpanMeasureItemInput {
 
 	@Field((type) => Number)
 	quantityEstimate: number;
-
-	@Field((type) => Number)
-	quantityActual: number;
 }

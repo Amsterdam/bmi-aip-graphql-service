@@ -21,7 +21,7 @@ export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	surveyId: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 	optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 	decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-	decompositionType: SpanDecompositionType.spanSupportSystem,
+	decompositionType: SpanDecompositionType.spanSupportSystemMast,
 	description: '__NAME__',
 	created_at: null,
 	updated_at: null,

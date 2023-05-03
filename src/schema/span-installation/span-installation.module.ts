@@ -1,6 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { registerEnumType } from '@nestjs/graphql';
+import { FindSpanMeasureOptionsHandler } from 'src/schema/span-installation/queries/find-span-measure-options.handler';
 
 import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
@@ -37,6 +38,7 @@ import { FindSupportSystemLuminairesCommand } from './commands/find-support-syst
 import { FindSupportSystemLuminairesHandler } from './commands/find-support-system-luminaires.handler';
 import { FindSpanMeasuresHandler } from './queries/find-span-measures.handler';
 import { SpanMeasureResolver } from './span-measure.resolver';
+import { SpanMeasureOptionResolver } from './span-measure-option.resolver';
 import { SpanMeasureService } from './span-measure.service';
 import { SpanMeasureRepository } from './span-measure.repository';
 import { CreateSpanMeasureHandler } from './commands/create-span-measure.handler';
@@ -49,6 +51,7 @@ import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.
 import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
 import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
+import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { SpanDecompositionType } from './types/span-decomposition-type';
 
 registerEnumType(SupportSystemType, {
@@ -100,8 +103,11 @@ registerEnumType(SpanDecompositionType, {
 		FindSupportSystemLuminairesHandler,
 		SpanMeasureRepository,
 		SpanMeasureResolver,
+		SpanMeasureOptionResolver,
 		SpanMeasureService,
 		FindSpanMeasuresHandler,
+		FindSpanMeasureOptionsHandler,
+		FindSpanMeasureOptionsQuery,
 		CreateSpanMeasureHandler,
 		UpdateSpanMeasureHandler,
 		DeleteSpanMeasureHandler,

@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsIn } from 'class-validator';
-import { IsValidMeasureOption } from 'src/decorators/is-valid-measure';
+
+import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 @InputType()
 export class SpanMeasureItemInput {
 	@Field((type) => String)

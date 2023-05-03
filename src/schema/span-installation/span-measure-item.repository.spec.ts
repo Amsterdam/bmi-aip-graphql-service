@@ -36,7 +36,6 @@ describe('Span Installation / Measures / Repository', () => {
 						id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 					},
 				},
-				quantityActual: 1,
 				quantityEstimate: 1,
 				quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			}),

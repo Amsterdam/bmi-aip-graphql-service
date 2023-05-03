@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsValidMeasureOption } from 'src/decorators/is-valid-measure';
+
+import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 
 @InputType()
 export class BaseSpanMeasureItemInput {

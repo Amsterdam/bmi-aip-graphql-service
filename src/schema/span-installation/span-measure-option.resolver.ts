@@ -9,7 +9,7 @@ import { SpanMeasureItemOption } from './models/span-measure-item-option.model';
 @Resolver((of) => SpanMeasureOption)
 @Resource(SpanMeasureItemOption.name)
 export class SpanMeasureOptionResolver {
-	constructor(private commandBus: CommandBus, private queryBus: QueryBus) {}
+	constructor(private queryBus: QueryBus) {}
 
 	@Query(() => [SpanMeasureOption])
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })

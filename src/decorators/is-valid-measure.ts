@@ -1,5 +1,6 @@
 import { ValidationOptions, registerDecorator } from 'class-validator';
-import { MeasureOptionValidation } from 'src/validators/valid-measure';
+
+import { MeasureOptionValidation } from '../validators/valid-measure';
 
 export function IsValidMeasureOption(validationOptions?: ValidationOptions) {
 	return function (object: any, propertyName: string) {

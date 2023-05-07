@@ -11,6 +11,8 @@ import {
 	createSupportSystemInput,
 	updateSupportSystemInput,
 	deletedSupportSystem,
+	supportSystem1,
+	supportSystem2,
 } from './__stubs__';
 import { CreateSupportSystemCommand } from './commands/create-support-system.command';
 import { SupportSystem } from './models/support-system.model';
@@ -18,6 +20,7 @@ import { UpdateSupportSystemCommand } from './commands/update-support-system.com
 import { DeleteSupportSystemCommand } from './commands/delete-support-system.command';
 import { LuminaireRepository } from './luminaire.repository';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
+import { CloneSupportSystemsFromOVSSurveyCommand } from './commands/clone-support-systems-from-ovs-survey.command';
 
 jest.mock('./support-system.service');
 jest.mock('./support-system.repository');
@@ -30,6 +33,8 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 				return domainSupportSystem;
 			case DeleteSupportSystemCommand.name:
 				return deletedSupportSystem;
+			case CloneSupportSystemsFromOVSSurveyCommand.name:
+				return [supportSystem1, supportSystem2];
 		}
 	}),
 	...(<any>{}),
@@ -125,5 +130,21 @@ describe('Span Installation / SupportSystem / Resolver', () => {
 		);
 		const elements = await resolver.getSurveySupportSystems('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([domainSupportSystem, domainSupportSystem]);
+	});
+
+	test('cloneSupportSystemsFromOVSSurvey', async () => {
+		const commandBusMock = getCommandBusMock();
+		const queryBusMock = getQueryBusMock();
+		const resolver = new SupportSystemResolver(
+			new SupportSystemService(supportSystemRepo),
+			commandBusMock,
+			queryBusMock,
+		);
+		const result = await resolver.cloneSupportSystemsFromOVSSurvey(
+			'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+			'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+		);
+		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
+		expect(result).toEqual([supportSystem1, supportSystem2]);
 	});
 });

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
+import PQueue from 'p-queue';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -153,5 +154,41 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
+	}
+
+	public async cloneJunctionBoxes(surveyId: string, ovsSurveyId: string): Promise<JunctionBox[]> {
+		const junctionBoxes = (await this.prisma.spanJunctionBoxes.findMany({
+			where: {
+				surveyId: ovsSurveyId,
+			},
+		})) as JunctionBox[];
+
+		const queue = new PQueue({ concurrency: 1 });
+		junctionBoxes.forEach((junctionBox) => {
+			queue.add(async () => {
+				const newJunctionBoxId = newId();
+				// Duplicate junction box record but with new id and different surveyId
+				await this.prisma.spanJunctionBoxes.create({
+					data: {
+						...junctionBox,
+						id: newJunctionBoxId,
+						surveyId,
+					},
+				});
+				// Work around Prisma not supporting spatial data types
+				const geography = await this.getGeographyAsGeoJSON(junctionBox.id);
+				if (geography) {
+					await this.prisma.$executeRaw`
+						UPDATE "spanJunctionBoxes"
+						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+						WHERE id = ${newJunctionBoxId}
+					`;
+				}
+			});
+		});
+
+		await queue.onIdle();
+
+		return this.getJunctionBoxes(surveyId);
 	}
 }

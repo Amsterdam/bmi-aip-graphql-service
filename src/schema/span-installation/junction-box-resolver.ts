@@ -11,6 +11,7 @@ import { CreateJunctionBoxCommand } from './commands/create-junction-box.command
 import { UpdateJunctionBoxCommand } from './commands/update-junction-box.command';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
+import { CloneJunctionBoxesFromOVSSurveyCommand } from './commands/clone-junction-boxes-from-ovs-survey.command';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -48,5 +49,16 @@ export class JunctionBoxResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveyJunctionBoxes(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.junctionBoxService.getJunctionBoxes(surveyId);
+	}
+
+	@Mutation(() => [JunctionBox])
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	async cloneJunctionBoxesFromOVSSurvey(
+		@Args('surveyId', { type: () => String }) surveyId: string,
+		@Args('objectId', { type: () => String }) objectId: string,
+	): Promise<JunctionBox[]> {
+		return this.commandBus.execute<CloneJunctionBoxesFromOVSSurveyCommand>(
+			new CloneJunctionBoxesFromOVSSurveyCommand(objectId, surveyId),
+		);
 	}
 }

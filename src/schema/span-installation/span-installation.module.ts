@@ -6,6 +6,7 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
+import { SurveyRepository } from '../survey/survey.repository';
 
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
@@ -50,6 +51,10 @@ import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
 import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
 import { SpanDecompositionType } from './types/span-decomposition-type';
+import { CloneJunctionBoxesFromOVSSurveyHandler } from './commands/clone-junction-boxes-from-ovs-survey.handler';
+import { CloneJunctionBoxesFromOVSSurveyCommand } from './commands/clone-junction-boxes-from-ovs-survey.command';
+import { CloneSupportSystemsFromOVSSurveyCommand } from './commands/clone-support-systems-from-ovs-survey.command';
+import { CloneSupportSystemsFromOVSSurveyHandler } from './commands/clone-support-systems-from-ovs-survey.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -114,6 +119,11 @@ registerEnumType(SpanDecompositionType, {
 		UpdateSpanMeasureItemsActualsCommand,
 		UpdateSpanMeasureItemsActualsHandler,
 		PrismaService,
+		SurveyRepository,
+		CloneJunctionBoxesFromOVSSurveyHandler,
+		CloneJunctionBoxesFromOVSSurveyCommand,
+		CloneSupportSystemsFromOVSSurveyCommand,
+		CloneSupportSystemsFromOVSSurveyHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

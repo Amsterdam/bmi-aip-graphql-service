@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsOptional } from 'class-validator';
 @ObjectType({ description: 'spanMeasureItem' })
 export class SpanMeasureItem {
 	@Field((type) => String)
@@ -22,6 +23,7 @@ export class SpanMeasureItem {
 	@Field((type) => String)
 	quantityEstimate: number;
 
-	@Field((type) => String)
-	quantityActual: number;
+	@IsOptional()
+	@Field((type) => String, { nullable: true })
+	quantityActual?: number;
 }

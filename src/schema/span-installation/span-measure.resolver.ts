@@ -14,8 +14,6 @@ import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repositor
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
 import { FindSpanMeasureItemsQuery } from './queries/find-span-measure-items.query';
 import { SpanMeasureItem } from './models/span-measure-item.model';
-import { SpanMeasureItemFactory } from './span-measure-item.factory';
-import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';

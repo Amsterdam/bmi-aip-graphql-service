@@ -2,15 +2,18 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsDate, IsEnum, IsOptional } from 'class-validator';
 
 import { SpanDecompositionType } from '../types/span-decomposition-type';
+import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 
 @InputType()
 export class BaseSpanMeasureInput {
+	@IsValidMeasureOption()
 	@Field((type) => String)
 	description: string;
 
 	@Field((type) => String)
 	decompositionId: string;
 
+	@IsValidMeasureOption()
 	@Field((type) => String)
 	optionId: string;
 

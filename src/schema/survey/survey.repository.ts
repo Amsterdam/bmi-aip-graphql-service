@@ -74,4 +74,24 @@ export class SurveyRepository implements ISurveyRepository {
 
 		return previous?.id;
 	}
+
+	public async findOVSSurveyIdBySpanObject(objectId: string): Promise<string | null> {
+		const survey = await this.prisma.surveys.findFirst({
+			where: {
+				objectId: objectId,
+				inspectionStandardType: {
+					in: ['nen2767', 'spanInstallation'],
+				},
+				NOT: [{ status: SurveyStates.deleted }],
+			},
+			orderBy: {
+				created_at: 'desc',
+			},
+			select: {
+				id: true,
+			},
+		});
+
+		return survey.id;
+	}
 }

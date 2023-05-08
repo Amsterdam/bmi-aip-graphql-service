@@ -1,0 +1,245 @@
+{
+	"spanMeasureOptions": [
+		{
+			"id": "M-0",
+			"description": "Verwijderen aansluitkabels",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "200010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 200020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 200030" }
+			]
+		},
+		{
+			"id": "M-1",
+			"description": "Verwijderen installatiebuis",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "200050" }
+			]
+		},
+		{
+			"id": "M-2",
+			"description": "Bevestigen aansluitkabel aan spandraad",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Kabelbundelbandjes" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "201020" }
+			]
+		},
+		{
+			"id": "M-3",
+			"description": "Bevestigen aansluitkabel aan gevel",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Zadelklemmen?" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "201030" }
+			]
+		},
+		{
+			"id": "M-4",
+			"description": "Bevestigen aansluitkabel aan armatuur",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "?" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "201010" }
+			]
+		},
+		{
+			"id": "M-5",
+			"description": "Vervangen stijgleiding?",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [{ "id": "MA-", "itemType": "material", "description": "Stijgleiding" }]
+		},
+		{
+			"id": "M-6",
+			"description": "Schade aan aansluitkast communiceren naar V&OR (intern)",
+			"decompositionType": "spanJunctionBox",
+			"measureItems": [{ "id": "MA-", "itemType": "material", "description": "" }]
+		},
+		{
+			"id": "M-7",
+			"description": "Vervangen mastbeugel",
+			"decompositionType": "Mast",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Mastbeugel" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "120030" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130140" }
+			]
+		},
+		{
+			"id": "M-8",
+			"description": "Vervangen mastopzetstuk",
+			"decompositionType": "Mast",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Mastopzetstuk" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "110050" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130130" }
+			]
+		},
+		{
+			"id": "M-9",
+			"description": "Schade aan mast communicieren naar V&OR (intern)",
+			"decompositionType": "Mast",
+			"measureItems": [{ "id": "MA-", "itemType": "material", "description": "" }]
+		},
+		{
+			"id": "M-10",
+			"description": "Verwijderen gevelbevestiging incl. gevelherstel",
+			"decompositionType": "Facade",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "120010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 120020" }
+			]
+		},
+		{
+			"id": "M-11",
+			"description": "Aanbrengen ankerverbindingen incl. trekproeven",
+			"decompositionType": "Facade",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Chemische ankers" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "150020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 150030" }
+			]
+		},
+		{
+			"id": "M-12",
+			"description": "Aanbrengen muurplaat",
+			"decompositionType": "Facade",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Klassiek RVS" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "150010" },
+				{ "id": "MA-", "itemType": "material", "description": "Modern klein RVS" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "150020" },
+				{ "id": "MA-", "itemType": "material", "description": "Modern groot RVS" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "150030" }
+			]
+		},
+		{
+			"id": "M-15",
+			"description": "Verwijderen spandraadsysteem",
+			"decompositionType": "Node",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "100010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 100020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 100030" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 100040" },
+				{ "id": "MA-", "itemType": "material", "description": "-" }
+			]
+		},
+		{
+			"id": "M-16",
+			"description": "Verwijderen spandraadsysteem boven GVB",
+			"decompositionType": "Node",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "110010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 110020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 110030" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 110040" },
+				{ "id": "MA-", "itemType": "material", "description": "-" }
+			]
+		},
+		{
+			"id": "M-17",
+			"description": "Aanbrengen spandraadsysteem",
+			"decompositionType": "Node",
+			"measureItems": [
+				{
+					"id": "MA-",
+					"itemType": "material",
+					"description": "Spandraad 6mm m. mantel RVS/Spandraad 6mm z. mantel RVS, gaffelterminal met spanner 6mm, gaffelterminal zonder spanner 6mm, Y-verbinding, D-sluiting"
+				},
+				{ "id": "SI-", "itemType": "specificationItem", "description": "130010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130030" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130040" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130050" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130060" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130070" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130080" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130090" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130100" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130110" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 130120" },
+				{ "id": "MA-", "itemType": "material", "description": "Spandraad 6mm z. mantel RVS" },
+				{ "id": "MA-", "itemType": "material", "description": "Spandraad 6mm m. mantel RVS" },
+				{ "id": "MA-", "itemType": "material", "description": "Spandraad 8mm z. mantel RVS" }
+			]
+		},
+		{
+			"id": "M-18",
+			"description": "Aanbrengen spandraadsysteem boven GVB",
+			"decompositionType": "Node",
+			"measureItems": [
+				{
+					"id": "MA-",
+					"itemType": "material",
+					"description": "Spandraad 6mm m. mantel RVS, gaffelterminal met spanner 6mm, gaffelterminal zonder spanner 6mm, Y-verbinding, D-sluiting"
+				},
+				{ "id": "SI-", "itemType": "specificationItem", "description": "140010" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140020" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140030" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140040" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140050" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140060" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140070" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140080" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140090" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140100" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140110" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": " 140120" },
+				{ "id": "MA-", "itemType": "material", "description": "0+*" }
+			]
+		},
+		{
+			"id": "M-25",
+			"description": "Vervangen armatuur",
+			"decompositionType": "spanLuminaire",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Diversen (nog specificeren)" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "300030" }
+			]
+		},
+		{
+			"id": "M-26",
+			"description": "Retrofitten armatuur",
+			"decompositionType": "spanLuminaire",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "Diversen (nog specificeren)" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "300040" }
+			]
+		},
+		{
+			"id": "M-27",
+			"description": "Verwijderen bestaand armatuur",
+			"decompositionType": "spanLuminaire",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "-" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "300010" }
+			]
+		},
+		{
+			"id": "M-28",
+			"description": "Aanbrengen bestaand armatuur",
+			"decompositionType": "spanLuminaire",
+			"measureItems": [
+				{ "id": "MA-", "itemType": "material", "description": "(nog specificeren)" },
+				{ "id": "SI-", "itemType": "specificationItem", "description": "300020" }
+			]
+		}
+	],
+	"spanMeasureItemOptions": [
+		{ "id": "MA-", "itemType": "material", "description": "Modern klein RVS" },
+		{ "id": "MA-", "itemType": "material", "description": "Modern groot RVS" },
+		{ "id": "MA-", "itemType": "material", "description": "-" },
+		{ "id": "MA-", "itemType": "material", "description": "Spandraad 6mm z. mantel RVS" },
+		{ "id": "MA-", "itemType": "material", "description": "Spandraad 6mm m. mantel RVS" },
+		{ "id": "MA-", "itemType": "material", "description": "Spandraad 8mm z. mantel RVS" },
+		{ "id": "MA-", "itemType": "material", "description": "0+*" }
+	]
+}

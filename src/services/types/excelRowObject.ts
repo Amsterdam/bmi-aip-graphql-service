@@ -90,3 +90,10 @@ export type NormalizedInstallationFromExcel = {
 	tramTracks?: boolean;
 	passportSplits?: boolean;
 };
+
+export type OVSSpanMeasureExcelRowObject = {
+	Onderdelen: string;
+	Maatregelen: string;
+	Materiaal: string;
+	Besteksposten: string;
+};

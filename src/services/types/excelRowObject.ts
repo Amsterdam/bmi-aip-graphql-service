@@ -93,7 +93,20 @@ export type NormalizedInstallationFromExcel = {
 
 export type OVSSpanMeasureExcelRowObject = {
 	Onderdelen: string;
-	Maatregelen: string;
-	Materiaal: string;
-	Besteksposten: string;
+	Maatregelen: string; // newline separated
+	'Materiaal uit (M)agazijn': string;
+	Besteksposten: string; // comma separated
+	Opmerking: string;
+};
+
+export type BestekspostenExcelRowObject = {
+	'Bestekspostnr.': string;
+	'Postomschrijving (beknopt)': string;
+	'Eenh.': string;
+};
+export type MNummersExcelRowObject = {
+	'Voorlopige benaming': string;
+	'M-nummer': string;
+	'Omschrijving artikel': string;
+	Opmerking: string;
 };

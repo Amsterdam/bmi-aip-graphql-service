@@ -5,7 +5,13 @@ export class SpanMeasureItemOption {
 	id: string;
 
 	@Field((type) => String)
-	description: string;
+	description?: string;
+
+	@Field((type) => String)
+	unit?: string;
+
+	@Field((type) => String)
+	referenceNumber: string;
 
 	@Field((type) => String)
 	itemType: string;

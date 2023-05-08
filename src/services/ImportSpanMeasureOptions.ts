@@ -4,9 +4,16 @@ import { SingleBar } from 'cli-progress';
 import { ConsoleService } from 'nestjs-console';
 import { ConfigService } from '@nestjs/config';
 import * as xlsx from 'xlsx';
+import { WorkSheet } from 'xlsx';
+import { SpanMeasureItemType } from 'src/schema/span-installation/types/span-measure-item-type';
+import { newId } from 'src/utils/newId';
 
+import {
+	OVSSpanMeasureExcelRowObject,
+	BestekspostenExcelRowObject,
+	MNummersExcelRowObject,
+} from './types/excelRowObject';
 import { NormalizeOVSMeasureData } from './NormalizeOVSMeasureData';
-import { OVSSpanMeasureExcelRowObject } from './types/excelRowObject';
 
 @Injectable()
 export class ImportSpanMeasureOptions {
@@ -38,7 +45,7 @@ export class ImportSpanMeasureOptions {
 		);
 	}
 
-	private async getFile(): Promise<OVSSpanMeasureExcelRowObject[]> {
+	private async getFile(): Promise<{ [sheet: string]: WorkSheet }> {
 		const filePath: string =
 			this.configService.get<string>('APP_DIR') +
 			this.configService.get<string>('DOC_DIR') +
@@ -47,7 +54,19 @@ export class ImportSpanMeasureOptions {
 		const maxRow = 9628;
 		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
 
-		const workSheet = workbook.Sheets[workbook.SheetNames[0]];
+		if (!this.sheetStructureIsValid(workbook.Sheets)) {
+			this.logger.error('Invalid sheet structure');
+			throw new Error('Invalid sheet structure');
+		}
+
+		return workbook.Sheets;
+	}
+
+	private sheetStructureIsValid(sheets: object) {
+		return sheets.Matrix && sheets.Besteksposten && sheets['M-nummers'];
+	}
+
+	private fetchMatrixFromSheet(workSheet) {
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;
@@ -57,14 +76,70 @@ export class ImportSpanMeasureOptions {
 		return data;
 	}
 
+	private parseBestekpostRow(bestekpostObj: BestekspostenExcelRowObject) {
+		return {
+			id: newId(),
+			unit: bestekpostObj['Eenh.'],
+			itemType: SpanMeasureItemType.specificationItem,
+			description: bestekpostObj['Postomschrijving (beknopt)'],
+			referenceNumber: bestekpostObj['Bestekspostnr.'].toString(),
+		};
+	}
+
+	private parseMNummersRow(materialenObj: MNummersExcelRowObject) {
+		return {
+			id: newId(),
+			unit: 'Stuk',
+			itemType: SpanMeasureItemType.material,
+			description: materialenObj['Voorlopige benaming'],
+			referenceNumber: materialenObj['M-nummer'].toString(),
+		};
+	}
+
+	private fetchBestekpostenFromSheet(workSheet) {
+		const minRow = 0;
+		let data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
+		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
+
+		const formattedData = data.map((row) => {
+			return this.parseBestekpostRow(row);
+		});
+
+		return formattedData;
+	}
+
+	private fetchMaterialenFromSheet(workSheet) {
+		const minRow = 0;
+		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet);
+		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
+
+		const formattedData = data.map((row) => {
+			return this.parseMNummersRow(row);
+		});
+
+		return formattedData;
+	}
+
 	private async importOVSMeasures() {
 		this.progressBar.start(100, 0);
-		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = await this.getFile();
-		const normalizedData = await this.normalizeOVSMeasureData.normalize(oVSSpanMeasureExcelRowObjectList);
+		const file = await this.getFile();
+
+		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(
+			file.Matrix,
+		);
+
+		const fetchBestekposten = this.fetchBestekpostenFromSheet(file.Besteksposten);
+		const fetchMaterialen = this.fetchMaterialenFromSheet(file['M-nummers']);
+
+		const normalizedData = await this.normalizeOVSMeasureData.normalize(
+			oVSSpanMeasureExcelRowObjectList,
+			fetchMaterialen,
+			fetchBestekposten,
+		);
 
 		this.progressBar.stop();
 
 		this.logger.log('');
-		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} installations`);
+		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} measures and options`);
 	}
 }

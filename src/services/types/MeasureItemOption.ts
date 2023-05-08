@@ -3,5 +3,6 @@ import { SpanMeasureItemType } from '../../schema/span-installation/types/span-m
 export type MeasureItemOption = {
 	id: string;
 	description: string;
+	referenceNumber?: string;
 	itemType: SpanMeasureItemType;
 };

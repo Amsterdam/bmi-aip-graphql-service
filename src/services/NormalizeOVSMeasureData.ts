@@ -60,7 +60,7 @@ export class NormalizeOVSMeasureData {
 		});
 	}
 
-	private formatMaterial(element: string): MeasureItemOption {
+	public formatMaterial(element: string): MeasureItemOption {
 		const material = {
 			id: newId(),
 			itemType: SpanMeasureItemType.material,
@@ -70,7 +70,7 @@ export class NormalizeOVSMeasureData {
 		return material;
 	}
 
-	private formatSpecificationItem(element: string): MeasureItemOption {
+	public formatSpecificationItem(element: string): MeasureItemOption {
 		const specificationItem = {
 			id: newId(),
 			itemType: SpanMeasureItemType.specificationItem,
@@ -80,15 +80,54 @@ export class NormalizeOVSMeasureData {
 		return specificationItem;
 	}
 
-	private parseSpecificationItems(element: string): MeasureItemOption[] {
-		if (!element) {
+	public fetchFromList(key, list, itemType: SpanMeasureItemType) {
+		const foundItem = list.find((item) => {
+			key = key.replace(/\s/g, ''); // sanitize lookup key
+			return item.referenceNumber === key;
+		});
+
+		if (key && !foundItem) {
+			this.logger.warn('Matrix contains reference number that is not recognized: ' + key);
+			//throw new Error('Matrix contains reference number that is not recognized');
+		}
+
+		return foundItem;
+	}
+
+	public parseSpecificationItems(key: string, list: any): MeasureItemOption[] {
+		if (!key) {
 			return [];
 		}
 
-		const array = element.toString().split(',');
-		return array.map((item, index) => {
-			return this.formatSpecificationItem(item);
-		});
+		const array = key.toString().split(',');
+		return array.reduce((acc, item) => {
+			const itemsSplitByComma = item.toString().split(',');
+			const foundItem = this.fetchFromList(itemsSplitByComma[0], list, SpanMeasureItemType.specificationItem);
+
+			if (!foundItem) {
+				return acc;
+			}
+
+			return [...acc, foundItem];
+		}, []);
+	}
+
+	public parseMaterials(key: string, list: any): MeasureItemOption[] {
+		if (!key) {
+			return [];
+		}
+
+		const itemsSplitByNewline = key.toString().split('\n');
+		return itemsSplitByNewline.reduce((acc, item) => {
+			const itemsSplitBySpace = item.toString().split(' '); // reference number is the first 'word' in the title
+			const foundItem = this.fetchFromList(itemsSplitBySpace[0], list, SpanMeasureItemType.specificationItem);
+
+			if (!foundItem) {
+				return acc;
+			}
+
+			return [...acc, foundItem];
+		}, []);
 	}
 
 	private containsMeasureItem(measureOption: MeasureOption, measureItemOption: MeasureItemOption): boolean {
@@ -97,10 +136,12 @@ export class NormalizeOVSMeasureData {
 		});
 	}
 
-	public async normalize(oVSExcelRowObjectList: OVSSpanMeasureExcelRowObject[]): Promise<Record<string, any>> {
+	public async normalize(
+		oVSExcelRowObjectList: OVSSpanMeasureExcelRowObject[],
+		materials: object[],
+		bestekposten: object[],
+	): Promise<Record<string, any>> {
 		const measureOptions = {};
-		const materialOptions = {};
-		const specificationItemOptions = {};
 
 		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
 			const item = {
@@ -108,41 +149,17 @@ export class NormalizeOVSMeasureData {
 				description: element.Maatregelen,
 				decompositionType: this.mapDecompositionType(element.Onderdelen),
 				measureItems: [
-					this.formatMaterial(element.Materiaal),
-					...this.parseSpecificationItems(element.Besteksposten),
+					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
+					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),
 				],
 			};
-
-			// Append data if measure already known
-			if (measureOptions[item.description]) {
-				// Add Materialen (1 per row)
-				const material = this.formatMaterial(element.Materiaal);
-				measureOptions[item.description].measureItems.push(material);
-				materialOptions[element.Materiaal] = material;
-
-				// Add Bestekposten (all in one row, comma separated)
-				if (element.Besteksposten) {
-					const specificationItemInRow = element.Besteksposten.toString().split(',');
-					specificationItemInRow.forEach((specificationItemNumber) => {
-						const specificationItem = this.formatSpecificationItem(specificationItemNumber);
-
-						if (!this.containsMeasureItem(measureOptions[item.description], specificationItem)) {
-							measureOptions[item.description].measureItems.push(specificationItem);
-						}
-					});
-				}
-
-				return true;
-			}
 
 			measureOptions[item.description] = item;
 		});
 
 		// Remap object with named keys to array
 		const measureOptionsArray = Array.from(Object.values(measureOptions));
-		const measureItemOptions = Array.from(Object.values(materialOptions)).concat(
-			Array.from(Object.values(specificationItemOptions)),
-		);
+		const measureItemOptions = [...materials, ...bestekposten];
 
 		const normalizedData = {
 			spanMeasureOptions: measureOptionsArray,

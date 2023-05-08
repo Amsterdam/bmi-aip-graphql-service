@@ -5,9 +5,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
 import { SpanDecompositionType } from 'src/schema/span-installation/types/span-decomposition-type';
 import { SpanMeasureItemType } from 'src/schema/span-installation/types/span-measure-item-type';
+import { newId } from 'src/utils';
 
 import { OVSSpanMeasureExcelRowObject } from './types/excelRowObject';
 import { MeasureItemOption } from './types/MeasureItemOption';
+import { MeasureOption } from './types/MeasureOption';
 
 @Injectable()
 export class NormalizeOVSMeasureData {
@@ -60,7 +62,7 @@ export class NormalizeOVSMeasureData {
 
 	private formatMaterial(element: string): MeasureItemOption {
 		const material = {
-			id: 'MA-',
+			id: newId(),
 			itemType: SpanMeasureItemType.material,
 			description: element ?? '',
 		};
@@ -70,7 +72,7 @@ export class NormalizeOVSMeasureData {
 
 	private formatSpecificationItem(element: string): MeasureItemOption {
 		const specificationItem = {
-			id: 'SI-',
+			id: newId(),
 			itemType: SpanMeasureItemType.specificationItem,
 			description: element ?? '',
 		};
@@ -102,7 +104,7 @@ export class NormalizeOVSMeasureData {
 
 		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
 			const item = {
-				id: 'M-' + index,
+				id: newId(),
 				description: element.Maatregelen,
 				decompositionType: this.mapDecompositionType(element.Onderdelen),
 				measureItems: [

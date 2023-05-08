@@ -124,9 +124,7 @@ export class ImportSpanMeasureOptions {
 		this.progressBar.start(100, 0);
 		const file = await this.getFile();
 
-		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(
-			file.Matrix,
-		);
+		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(file.Matrix);
 
 		const fetchBestekposten = this.fetchBestekpostenFromSheet(file.Besteksposten);
 		const fetchMaterialen = this.fetchMaterialenFromSheet(file['M-nummers']);

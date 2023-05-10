@@ -18,7 +18,6 @@ import { CreateJunctionBoxCommand } from './commands/create-junction-box.command
 import { JunctionBox } from './models/junction-box.model';
 import { UpdateJunctionBoxCommand } from './commands/update-junction-box.command';
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
-import { CloneJunctionBoxesFromOVSSurveyCommand } from './commands/clone-junction-boxes-from-ovs-survey.command';
 
 jest.mock('./junction-box.service');
 jest.mock('./junction-box.repository');
@@ -31,8 +30,6 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 				return domainJunctionBox;
 			case DeleteJunctionBoxCommand.name:
 				return deletedJunctionBox;
-			case CloneJunctionBoxesFromOVSSurveyCommand.name:
-				return [junctionBox1, junctionBox2];
 		}
 	}),
 	...(<any>{}),
@@ -90,16 +87,5 @@ describe('Span Installation / JunctionBox / Resolver', () => {
 		const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock);
 		const elements = await resolver.getSurveyJunctionBoxes('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([junctionBox1, junctionBox2]);
-	});
-
-	test('cloneJunctionBoxesFromOVSSurvey', async () => {
-		const commandBusMock = getCommandBusMock();
-		const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock);
-		const result = await resolver.cloneJunctionBoxesFromOVSSurvey(
-			'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
-		);
-		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
-		expect(result).toEqual([junctionBox1, junctionBox2]);
 	});
 });

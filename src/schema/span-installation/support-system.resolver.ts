@@ -14,7 +14,6 @@ import { DeleteSupportSystemCommand } from './commands/delete-support-system.com
 import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
-import { CloneSupportSystemsFromOVSSurveyCommand } from './commands/clone-support-systems-from-ovs-survey.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -60,17 +59,6 @@ export class SupportSystemResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveySupportSystems(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.queryBus.execute<FindSupportSystemsQuery>(new FindSupportSystemsQuery(surveyId));
-	}
-
-	@Mutation(() => [SupportSystem])
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	async cloneSupportSystemsFromOVSSurvey(
-		@Args('surveyId', { type: () => String }) surveyId: string,
-		@Args('objectId', { type: () => String }) objectId: string,
-	): Promise<SupportSystem[]> {
-		return this.commandBus.execute<CloneSupportSystemsFromOVSSurveyCommand>(
-			new CloneSupportSystemsFromOVSSurveyCommand(objectId, surveyId),
-		);
 	}
 
 	@ResolveField((type) => [Luminaire])

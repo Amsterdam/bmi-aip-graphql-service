@@ -3,9 +3,11 @@ import * as path from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConsoleService } from 'nestjs-console';
-import { SpanDecompositionType } from 'src/schema/span-installation/types/span-decomposition-type';
-import { SpanMeasureItemType } from 'src/schema/span-installation/types/span-measure-item-type';
 import { newId } from 'src/utils';
+
+import { SpanDecompositionType } from '../schema/span-installation/types/span-decomposition-type';
+import { SpanMeasureItemType } from '../schema/span-installation/types/span-measure-item-type';
+import { SpanMeasureOption } from '../schema/span-installation/models/span-measure-option.model';
 
 import { OVSSpanMeasureExcelRowObject } from './types/excelRowObject';
 import { MeasureItemOption } from './types/MeasureItemOption';
@@ -140,7 +142,7 @@ export class NormalizeOVSMeasureData {
 		oVSExcelRowObjectList: OVSSpanMeasureExcelRowObject[],
 		materials: object[],
 		bestekposten: object[],
-	): Promise<Record<string, any>> {
+	): Promise<{ spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: object[] }> {
 		const measureOptions = {};
 
 		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
@@ -148,6 +150,7 @@ export class NormalizeOVSMeasureData {
 				id: newId(),
 				description: element.Maatregelen,
 				decompositionType: this.mapDecompositionType(element.Onderdelen),
+				referenceNumber: 'M' + index,
 				measureItems: [
 					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
 					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),
@@ -162,13 +165,13 @@ export class NormalizeOVSMeasureData {
 		const measureItemOptions = [...materials, ...bestekposten];
 
 		const normalizedData = {
-			spanMeasureOptions: measureOptionsArray,
+			spanMeasureOptions: measureOptionsArray as SpanMeasureOption[],
 			spanMeasureItemOptions: measureItemOptions,
 		};
 
 		// For debugging purposes
 		if (NormalizeOVSMeasureData.DEBUG) {
-			await this.saveToFile(normalizedData);
+			//	await this.saveToFile(normalizedData);
 		}
 
 		return normalizedData;

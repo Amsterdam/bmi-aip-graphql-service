@@ -15,6 +15,9 @@ export class SpanMeasureOption {
 	@Field((type) => String)
 	description: string;
 
+	@Field((type) => String)
+	referenceNumber: string;
+
 	@Field((type) => [SpanMeasureItemOption], { nullable: true })
 	measureItems: SpanMeasureItemOption[];
 }

@@ -21,6 +21,8 @@ import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
 import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
+import { SpanMeasureRepository } from '../schema/span-installation/span-measure.repository';
+import { SpanMeasureOptionRepository } from '../schema/span-installation/span-measure-option.repository';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
 import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';
@@ -99,6 +101,8 @@ import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measure
 		MigrateMaintenanceMeasuresService,
 		MigrateMaintenanceMeasuresRepository,
 		MigrateMaintenanceMeasuresCli,
+		SpanMeasureRepository,
+		SpanMeasureOptionRepository,
 		CommandResolver,
 	],
 })

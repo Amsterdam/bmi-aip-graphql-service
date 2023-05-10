@@ -53,6 +53,7 @@ import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-mea
 import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanMeasureOptionRepository } from './span-measure-option.repository';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -119,6 +120,7 @@ registerEnumType(SpanDecompositionType, {
 		SaveSpanMeasureItemsHandler,
 		UpdateSpanMeasureItemsActualsCommand,
 		UpdateSpanMeasureItemsActualsHandler,
+		SpanMeasureOptionRepository,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

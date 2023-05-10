@@ -2328,7 +2328,7 @@ model spanJunctionBoxes {
   objectId               String                    @db.Uuid
   surveyId               String                    @db.Uuid
   name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(10, 3)
+  mastNumber             Decimal?                  @db.Decimal(20, 3)
   location               String?                   @db.VarChar(255)
   locationIndication     String?                   @db.VarChar(255)
   riserTubeVisible       Boolean?
@@ -2912,15 +2912,12 @@ model users {
   emailAddress           String    @db.VarChar(255)
   mobileNumber           String?   @db.VarChar(255)
   officeNumber           String?   @db.VarChar(255)
-  password               String    @db.VarChar(255)
-  salt                   String    @db.VarChar(255)
   lastLoginOn            DateTime? @db.Timestamptz(6)
   status                 String?
   language               String    @db.VarChar(255)
   companyId              String    @db.Uuid
   created_at             DateTime? @db.Timestamptz(6)
   updated_at             DateTime? @db.Timestamptz(6)
-  loginAttempts          Int?      @default(0)
   isReadOnly             Boolean?  @default(false)
   isAccountManager       Boolean?  @default(false)
   isConfigurationManager Boolean?  @default(false)
@@ -3032,6 +3029,28 @@ model spanMeasureItems {
   quantityActual            Int?
   optionId                  String?      @db.Uuid
   spanMeasures              spanMeasures @relation(fields: [spanMeasureId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasureitems_spanmeasureid_foreign")
+}
+
+model spanMeasureItemOptions {
+  id                 String             @id @unique(map: "spanmeasureitemoptions_id_unique") @db.Uuid
+  description        String             @db.VarChar(255)
+  spanMeasureId      String             @db.Uuid
+  unitOfMeasurement  String?            @db.VarChar(255)
+  itemType           String?            @db.VarChar(255)
+  referenceNumber    String             @db.VarChar(255)
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
+  spanMeasureOptions spanMeasureOptions @relation(fields: [spanMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spanmeasureitemoptions_spanmeasureid_foreign")
+}
+
+model spanMeasureOptions {
+  id                     String                   @id @unique(map: "spanmeasureoptions_id_unique") @db.Uuid
+  referenceNumber        String                   @db.VarChar(255)
+  description            String                   @db.VarChar(255)
+  decompositionType      String                   @db.VarChar(255)
+  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  spanMeasureItemOptions spanMeasureItemOptions[]
 }
 
 enum degreeOfDamage {

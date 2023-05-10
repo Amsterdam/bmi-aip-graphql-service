@@ -8,7 +8,10 @@ export class SpanMeasureItemOption {
 	description?: string;
 
 	@Field((type) => String)
-	unit?: string;
+	spanMeasureOptionId: string;
+
+	@Field((type) => String)
+	quantityUnitOfMeasurement?: string;
 
 	@Field((type) => String)
 	referenceNumber: string;

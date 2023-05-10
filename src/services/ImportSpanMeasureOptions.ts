@@ -5,15 +5,18 @@ import { ConsoleService } from 'nestjs-console';
 import { ConfigService } from '@nestjs/config';
 import * as xlsx from 'xlsx';
 import { WorkSheet } from 'xlsx';
-import { SpanMeasureItemType } from 'src/schema/span-installation/types/span-measure-item-type';
 import { newId } from 'src/utils/newId';
 
+import { SpanMeasureOptionRepository } from '../schema/span-installation/span-measure-option.repository';
+import { SpanMeasureItemType } from '../schema/span-installation/types/span-measure-item-type';
+import { SpanMeasureOption } from '../schema/span-installation/models/span-measure-option.model';
+
+import { NormalizeOVSMeasureData } from './NormalizeOVSMeasureData';
 import {
 	OVSSpanMeasureExcelRowObject,
 	BestekspostenExcelRowObject,
 	MNummersExcelRowObject,
 } from './types/excelRowObject';
-import { NormalizeOVSMeasureData } from './NormalizeOVSMeasureData';
 
 @Injectable()
 export class ImportSpanMeasureOptions {
@@ -32,6 +35,7 @@ export class ImportSpanMeasureOptions {
 		private readonly logger: Logger,
 		private configService: ConfigService,
 		private normalizeOVSMeasureData: NormalizeOVSMeasureData,
+		private spanMeasureOptionRepository: SpanMeasureOptionRepository,
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -135,9 +139,31 @@ export class ImportSpanMeasureOptions {
 			fetchBestekposten,
 		);
 
+		this.saveToDb(normalizedData);
+
 		this.progressBar.stop();
 
 		this.logger.log('');
 		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} measures and options`);
+	}
+
+	public async saveToDb(input: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: object[] }) {
+		input.spanMeasureOptions.map(async (item) => {
+			await this.spanMeasureOptionRepository.createSpanMeasureOption({
+				description: item.description,
+				decompositionType: item.decompositionType,
+				referenceNumber: item.referenceNumber,
+			});
+
+			// item.measureItems.map((itemOption) => {
+			// 	this.spanMeasureOptionRepository.createSpanMeasureItemOption({
+			// 		description: itemOption['description'],
+			// 		referenceNumber: itemOption['referenceNumber'],
+			// 		unitOfMeasurement: itemOption['unit'],
+			// 		itemType: itemOption['itemType'],
+			// 		spanMeasureOptionId: record.id
+			// 	});
+			// });
+		});
 	}
 }

@@ -62,7 +62,7 @@ export class ImportSpanMeasureOptions {
 		return workbook.Sheets;
 	}
 
-	private sheetStructureIsValid(sheets: object) {
+	private sheetStructureIsValid(sheets: xlsx.WorkBook['Sheets']) {
 		return sheets.Matrix && sheets.Besteksposten && sheets['M-nummers'];
 	}
 

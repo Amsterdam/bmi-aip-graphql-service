@@ -11,6 +11,8 @@ import {
 	updateSupportSystemInput,
 	createSupportSystemNormalizedInput,
 	updateSupportSystemNormalizedInput,
+	luminaire1,
+	domainLuminaire,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
 import { SupportSystemType, SupportSystemTypeDetailedFacade } from './types';
@@ -26,6 +28,10 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	$executeRaw: jest.fn(),
 	$queryRaw: jest.fn(),
 	...(<any>{}),
+	spanLuminaires: {
+		create: jest.fn().mockResolvedValue(domainLuminaire),
+		findMany: jest.fn().mockResolvedValue([domainLuminaire]),
+	},
 };
 
 let repository: SupportSystemRepository;
@@ -211,5 +217,20 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
 		const geography = await repository.getGeographyAsGeoJSON(domainSupportSystem.id);
 		expect(geography).toEqual(supportSystem1.geography);
+	});
+
+	test('getLuminaireGeographyAsGeoJSON', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(luminaire1.geography) }]);
+		const geography = await repository.getLuminaireGeographyAsGeoJSON(domainLuminaire.id);
+		expect(geography).toEqual(luminaire1.geography);
+	});
+
+	test('cloneSupportSystems', async () => {
+		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(supportSystem1.geography) }]);
+		const result = await repository.cloneSupportSystems('__Survey_ID__', 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
+		const geography = await repository.getGeographyAsGeoJSON(domainSupportSystem.id);
+		expect(prismaServiceMock.spanSupportSystems.create).toHaveBeenCalled();
+		expect(geography).toEqual(supportSystem1.geography);
+		expect(result).toEqual([domainSupportSystem]);
 	});
 });

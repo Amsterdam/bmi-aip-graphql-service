@@ -70,4 +70,5 @@ export type DbSurvey = Prisma.surveysGetPayload<typeof surveys>;
 
 export interface ISurveyRepository {
 	createSurvey(input: CreateSurveyInput): Promise<DbSurvey>;
+	findOVSSurveyIdBySpanObject(objectId: string): Promise<string | null>;
 }

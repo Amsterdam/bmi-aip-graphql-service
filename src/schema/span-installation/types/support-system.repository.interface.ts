@@ -37,4 +37,5 @@ export interface ISupportSystemRepository {
 	createSupportSystem(input: CreateSupportSystemNormalizedInput): Promise<SupportSystem>;
 	updateSupportSystem(input: UpdateSupportSystemNormalizedInput): Promise<SupportSystem>;
 	deleteSupportSystem(identifier: string): Promise<SupportSystem>;
+	cloneSupportSystems(objectId: string, surveyId: string): Promise<SupportSystem[]>;
 }

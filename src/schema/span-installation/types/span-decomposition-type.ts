@@ -3,5 +3,6 @@ export enum SpanDecompositionType {
 	spanSupportSystemMast = 'Mast',
 	spanSupportSystemFacade = 'Facade',
 	spanSupportSystemNode = 'Node',
+	spanSupportSystemTensionWire = 'TensionWire',
 	spanLuminaire = 'spanLuminaire',
 }

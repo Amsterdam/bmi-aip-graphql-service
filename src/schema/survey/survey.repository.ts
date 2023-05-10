@@ -79,9 +79,7 @@ export class SurveyRepository implements ISurveyRepository {
 		const survey = await this.prisma.surveys.findFirst({
 			where: {
 				objectId: objectId,
-				inspectionStandardType: {
-					in: ['nen2767', 'spanInstallation'],
-				},
+				inspectionStandardType: 'spanInstallation',
 				NOT: [{ status: SurveyStates.deleted }],
 			},
 			orderBy: {

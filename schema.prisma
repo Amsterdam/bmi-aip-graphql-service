@@ -3032,25 +3032,34 @@ model spanMeasureItems {
 }
 
 model spanMeasureItemOptions {
-  id                  String             @id @unique(map: "spanmeasureitemoptions_id_unique") @db.Uuid
-  description         String             @db.VarChar(255)
-  spanMeasureOptionId String             @db.Uuid
-  unitOfMeasurement   String?            @db.VarChar(255)
-  itemType            String?            @db.VarChar(255)
-  referenceNumber     String             @db.VarChar(255)
-  created_at          DateTime           @default(now()) @db.Timestamptz(6)
-  updated_at          DateTime           @default(now()) @db.Timestamptz(6)
-  spanMeasureOptions  spanMeasureOptions @relation(fields: [spanMeasureOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spanmeasureitemoptions_spanmeasureoptionid_foreign")
+  id                       String                     @id @unique(map: "spanmeasureitemoptions_id_unique") @db.Uuid
+  description              String                     @db.VarChar(255)
+  unitOfMeasurement        String?                    @db.VarChar(255)
+  itemType                 String?                    @db.VarChar(255)
+  referenceNumber          String                     @unique(map: "spanmeasureitemoptions_referencenumber_unique") @db.VarChar(255)
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  spanMeasureOptions       spanMeasureOptionsMatrix[]
 }
 
 model spanMeasureOptions {
-  id                     String                   @id @unique(map: "spanmeasureoptions_id_unique") @db.Uuid
-  referenceNumber        String                   @db.VarChar(255)
-  description            String                   @db.VarChar(255)
-  decompositionType      String                   @db.VarChar(255)
-  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  spanMeasureItemOptions spanMeasureItemOptions[]
+  id                       String                     @id @unique(map: "spanmeasureoptions_id_unique") @db.Uuid
+  referenceNumber          String                     @unique(map: "spanmeasureoptions_referencenumber_unique") @db.VarChar(255)
+  description              String                     @db.VarChar(255)
+  decompositionType        String                     @db.VarChar(255)
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  spanMeasureOptions       spanMeasureOptionsMatrix[]
+}
+
+model spanMeasureOptionsMatrix {
+  spanMeasureOptionId     String                 @db.Uuid
+  spanMeasureItemOptionId String                 @db.Uuid
+  spanMeasureOption       spanMeasureOptions     @relation(fields: [spanMeasureOptionId], references: [id])
+  spanMeasureItemOption   spanMeasureItemOptions     @relation(fields: [spanMeasureItemOptionId], references: [id])
+
+ 
+  @@id([spanMeasureOptionId, spanMeasureItemOptionId])
 }
 
 enum degreeOfDamage {

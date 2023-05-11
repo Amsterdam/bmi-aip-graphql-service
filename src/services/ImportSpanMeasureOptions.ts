@@ -83,7 +83,7 @@ export class ImportSpanMeasureOptions {
 	private parseBestekpostRow(bestekpostObj: BestekspostenExcelRowObject) {
 		return {
 			id: newId(),
-			unit: bestekpostObj['Eenh.'],
+			quantityUnitOfMeasurement: bestekpostObj['Eenh.'],
 			itemType: SpanMeasureItemType.specificationItem,
 			description: bestekpostObj['Postomschrijving (beknopt)'],
 			referenceNumber: bestekpostObj['Bestekspostnr.'].toString(),
@@ -93,7 +93,7 @@ export class ImportSpanMeasureOptions {
 	private parseMNummersRow(materialenObj: MNummersExcelRowObject) {
 		return {
 			id: newId(),
-			unit: 'Stuk',
+			quantityUnitOfMeasurement: 'st',
 			itemType: SpanMeasureItemType.material,
 			description: materialenObj['Voorlopige benaming'],
 			referenceNumber: materialenObj['M-nummer'].toString(),
@@ -148,6 +148,8 @@ export class ImportSpanMeasureOptions {
 	}
 
 	public async saveToDb(input: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: object[] }) {
+		this.spanMeasureOptionRepository.clearMatrix();
+
 		input.spanMeasureOptions.map(async (item) => {
 			const spanMeasureOption = await this.spanMeasureOptionRepository.createSpanMeasureOption({
 				description: item.description,
@@ -159,11 +161,13 @@ export class ImportSpanMeasureOptions {
 				this.spanMeasureOptionRepository.createSpanMeasureItemOption({
 					description: itemOption.description,
 					referenceNumber: itemOption.referenceNumber,
-					unitOfMeasurement: itemOption.unit,
+					unitOfMeasurement: itemOption.quantityUnitOfMeasurement,
 					itemType: itemOption.itemType,
 					spanMeasureOptionId: spanMeasureOption.id,
 				});
 			});
 		});
 	}
+
+	public async;
 }

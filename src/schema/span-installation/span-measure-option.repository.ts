@@ -5,8 +5,6 @@ import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils/newId';
 
 import { SpanMeasureOption } from './models/span-measure-option.model';
-import { DbItemOptions } from './types/span-measure-item-option.repository.interface';
-
 @Injectable()
 export class SpanMeasureOptionRepository {
 	public constructor(private readonly prisma: PrismaService) {}
@@ -33,7 +31,7 @@ export class SpanMeasureOptionRepository {
 		unitOfMeasurement,
 		referenceNumber,
 		itemType,
-	}): Promise<DbItemOptions> {
+	}): Promise<any> {
 		const data: Prisma.spanMeasureItemOptionsCreateInput = {
 			id: newId(),
 			description,
@@ -48,5 +46,20 @@ export class SpanMeasureOptionRepository {
 		};
 
 		return this.prisma.spanMeasureItemOptions.create({ data });
+	}
+
+	async findSpanMeasureOptions(): Promise<any[]> {
+		const spanMeasureOptions = await this.prisma.spanMeasureOptions.findMany({
+			include: {
+				spanMeasureItemOptions: true,
+			},
+		});
+
+		return spanMeasureOptions.map((spanMeasureOption) => {
+			return {
+				...spanMeasureOption,
+				measureItems: spanMeasureOption.spanMeasureItemOptions,
+			};
+		});
 	}
 }

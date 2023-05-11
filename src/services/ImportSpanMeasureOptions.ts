@@ -149,21 +149,21 @@ export class ImportSpanMeasureOptions {
 
 	public async saveToDb(input: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: object[] }) {
 		input.spanMeasureOptions.map(async (item) => {
-			await this.spanMeasureOptionRepository.createSpanMeasureOption({
+			const spanMeasureOption = await this.spanMeasureOptionRepository.createSpanMeasureOption({
 				description: item.description,
 				decompositionType: item.decompositionType,
 				referenceNumber: item.referenceNumber,
 			});
 
-			// item.measureItems.map((itemOption) => {
-			// 	this.spanMeasureOptionRepository.createSpanMeasureItemOption({
-			// 		description: itemOption['description'],
-			// 		referenceNumber: itemOption['referenceNumber'],
-			// 		unitOfMeasurement: itemOption['unit'],
-			// 		itemType: itemOption['itemType'],
-			// 		spanMeasureOptionId: record.id
-			// 	});
-			// });
+			item.measureItems.map((itemOption) => {
+				this.spanMeasureOptionRepository.createSpanMeasureItemOption({
+					description: itemOption.description,
+					referenceNumber: itemOption.referenceNumber,
+					unitOfMeasurement: itemOption.unit,
+					itemType: itemOption.itemType,
+					spanMeasureOptionId: spanMeasureOption.id,
+				});
+			});
 		});
 	}
 }

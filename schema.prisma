@@ -1369,11 +1369,9 @@ model knex_migrations {
   migration_time DateTime? @db.Timestamptz(6)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model knex_migrations_lock {
+  index     Int  @id @default(autoincrement())
   is_locked Int?
-
-  @@ignore
 }
 
 model languages {

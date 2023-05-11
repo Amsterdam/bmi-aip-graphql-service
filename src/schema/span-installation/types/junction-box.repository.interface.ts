@@ -34,4 +34,5 @@ export interface IJunctionBoxRepository {
 	createJunctionBox(input: CreateJunctionBoxInput): Promise<JunctionBox>;
 	updateJunctionBox(input: UpdateJunctionBoxInput): Promise<JunctionBox>;
 	deleteJunctionBox(identifier: string): Promise<JunctionBox>;
+	cloneJunctionBoxes(objectId: string, surveyId: string): Promise<JunctionBox[]>;
 }

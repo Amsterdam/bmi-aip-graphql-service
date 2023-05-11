@@ -7,6 +7,7 @@ import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
+import { SurveyRepository } from '../survey/survey.repository';
 
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
@@ -54,6 +55,9 @@ import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-mea
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { SpanDecompositionType } from './types/span-decomposition-type';
 import { SpanMeasureOptionRepository } from './span-measure-option.repository';
+import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
+import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
+import { SpanDecompositionResolver } from './span-decomposition.resolver';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -122,6 +126,10 @@ registerEnumType(SpanDecompositionType, {
 		UpdateSpanMeasureItemsActualsHandler,
 		SpanMeasureOptionRepository,
 		PrismaService,
+		SurveyRepository,
+		CloneSpanInstallationDecompositionCommand,
+		CloneSpanInstallationDecompositionHandler,
+		SpanDecompositionResolver,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

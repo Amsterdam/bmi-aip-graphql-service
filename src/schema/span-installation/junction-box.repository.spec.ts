@@ -184,4 +184,15 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		const geography = await repo.getGeographyAsGeoJSON(domainJunctionBox.id);
 		expect(geography).toEqual(junctionBox1.geography);
 	});
+
+	test('cloneJunctionBoxes', async () => {
+		await repo.cloneJunctionBoxes('__SURVEY_ID___', '__OVS_SURVEY_ID__');
+		const geography = await repo.getGeographyAsGeoJSON(domainJunctionBox.id);
+		expect(prismaServiceMock.spanJunctionBoxes.findMany).toHaveBeenCalledWith({
+			where: { surveyId: '__OVS_SURVEY_ID__' },
+		});
+		expect(prismaServiceMock.spanJunctionBoxes.create).toHaveBeenCalled();
+		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(geography).toEqual(junctionBox1.geography);
+	});
 });

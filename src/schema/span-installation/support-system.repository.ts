@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
+import PQueue from 'p-queue';
 
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
@@ -159,5 +160,86 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
+	}
+
+	async getLuminaireGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON(geography) as geography
+			FROM "spanLuminaires"
+			WHERE id = ${identifier};
+		`;
+		const geography = result?.[0]?.geography;
+		return geography ? JSON.parse(geography) : null;
+	}
+
+	private async duplicateLuminairesForSupportSystem(supportSystemId: string, newSupportSystemtId: string) {
+		const luminaires = await this.prisma.spanLuminaires.findMany({
+			where: {
+				supportSystemId,
+			},
+		});
+
+		const queue = new PQueue({ concurrency: 1 });
+		luminaires.forEach((luminaire) => {
+			queue.add(async () => {
+				const newLuminaireId = newId();
+				// Duplicate luminaire record but with new id and different supportSystemId
+				await this.prisma.spanLuminaires.create({
+					data: {
+						...luminaire,
+						id: newLuminaireId,
+						supportSystemId: newSupportSystemtId,
+					},
+				});
+				// Work around Prisma not supporting spatial data types
+				const geography = await this.getLuminaireGeographyAsGeoJSON(luminaire.id);
+				if (geography) {
+					await this.prisma.$executeRaw`
+						UPDATE "spanLuminaires"
+						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+						WHERE id = ${newLuminaireId}
+					`;
+				}
+			});
+		});
+		await queue.onIdle();
+	}
+
+	public async cloneSupportSystems(surveyId: string, ovsSurveyId: string): Promise<SupportSystem[]> {
+		const supportSystems = await this.prisma.spanSupportSystems.findMany({
+			where: {
+				surveyId: ovsSurveyId,
+			},
+		});
+
+		const queue = new PQueue({ concurrency: 1 });
+		supportSystems.forEach((supportSystem) => {
+			queue.add(async () => {
+				const newSupportSystemtId = newId();
+				// Duplicate support system record but with new id and different surveyId
+				await this.prisma.spanSupportSystems.create({
+					data: {
+						...supportSystem,
+						id: newSupportSystemtId,
+						surveyId,
+					},
+				});
+				// Duplicate luminaires for support system
+				await this.duplicateLuminairesForSupportSystem(supportSystem.id, newSupportSystemtId);
+				// Work around Prisma not supporting spatial data types
+				const geography = await this.getGeographyAsGeoJSON(supportSystem.id);
+				if (geography) {
+					await this.prisma.$executeRaw`
+						UPDATE "spanSupportSystems"
+						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+						WHERE id = ${newSupportSystemtId}
+					`;
+				}
+			});
+		});
+
+		await queue.onIdle();
+
+		return this.getSupportSystems(surveyId);
 	}
 }

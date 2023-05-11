@@ -49,6 +49,7 @@ describe('ARK/ ArkSurvey / Repository', () => {
 			}),
 		);
 	});
+
 	test('saveArkCompletion()', async () => {
 		const returnValue = await repository.saveArkCompletion(updateSurveyInput);
 		const survey = prismaServiceMock.surveys.update.mock.calls[0][0].data;

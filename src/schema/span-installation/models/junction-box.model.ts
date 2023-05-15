@@ -66,4 +66,9 @@ export class JunctionBox {
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;
+
+	// For contract 3 (spanMeasures) survey: This is a reference for the surveyId that the decompositions are coloned from.
+	// For contract 1 survey (spanInstallation), this is the same as surveyId.
+	@Field((type) => String)
+	permanentId: string;
 }

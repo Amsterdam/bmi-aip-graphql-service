@@ -50,6 +50,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			geographyRD: {
 				...geographyRD,
 			},
+			permanentId: surveyId,
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });
@@ -222,6 +223,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 						...supportSystem,
 						id: newSupportSystemtId,
 						surveyId,
+						permanentId: ovsSurveyId,
 					},
 				});
 				// Duplicate luminaires for support system

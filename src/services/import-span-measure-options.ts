@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { Injectable, Logger } from '@nestjs/common';
 import { GraphQLClient } from 'graphql-request';
 import { SingleBar } from 'cli-progress';
@@ -8,12 +10,15 @@ import { WorkSheet } from 'xlsx';
 import { SpanMeasureItemType } from 'src/schema/span-installation/types/span-measure-item-type';
 import { newId } from 'src/utils/newId';
 
+import { SpanMeasureItemOption } from '../schema/span-installation/models/span-measure-item-option.model';
+import { SpanMeasureOption } from '../schema/span-installation/models/span-measure-option.model';
+
 import {
 	OVSSpanMeasureExcelRowObject,
 	BestekspostenExcelRowObject,
 	MNummersExcelRowObject,
 } from './types/excelRowObject';
-import { NormalizeOVSMeasureData } from './NormalizeOVSMeasureData';
+
 
 @Injectable()
 export class ImportSpanMeasureOptions {
@@ -27,11 +32,14 @@ export class ImportSpanMeasureOptions {
 
 	progressTracker = 0;
 
+	private jsonDataFilePath = 'src/schema/span-installation/types/data/normalized-data-measures.json';
+
+	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
+
 	public constructor(
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
-		private configService: ConfigService,
-		private normalizeOVSMeasureData: NormalizeOVSMeasureData,
+		private configService: ConfigService
 	) {
 		const cli = this.consoleService.getCli();
 
@@ -76,9 +84,12 @@ export class ImportSpanMeasureOptions {
 		return data;
 	}
 
-	private parseBestekpostRow(bestekpostObj: BestekspostenExcelRowObject) {
+	private parseBestekpostRow(
+		bestekpostObj: BestekspostenExcelRowObject,
+		knownSpecificationItem?: SpanMeasureItemOption,
+	) {
 		return {
-			id: newId(),
+			id: knownSpecificationItem ? knownSpecificationItem.id : newId(),
 			unit: bestekpostObj['Eenh.'],
 			itemType: SpanMeasureItemType.specificationItem,
 			description: bestekpostObj['Postomschrijving (beknopt)'],
@@ -86,9 +97,9 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
-	private parseMNummersRow(materialenObj: MNummersExcelRowObject) {
+	private parseMNummersRow(materialenObj: MNummersExcelRowObject, knownMaterial?: SpanMeasureItemOption) {
 		return {
-			id: newId(),
+			id: knownMaterial ? knownMaterial.id : newId(),
 			unit: 'Stuk',
 			itemType: SpanMeasureItemType.material,
 			description: materialenObj['Voorlopige benaming'],
@@ -96,25 +107,33 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
-	private fetchBestekpostenFromSheet(workSheet) {
+	private fetchBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const minRow = 0;
 		let data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
 		const formattedData = data.map((row) => {
-			return this.parseBestekpostRow(row);
+			const knownSpecificationItem = knownSpanMeasureItems.find(
+				(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+			);
+
+			return this.parseBestekpostRow(row, knownSpecificationItem);
 		});
 
 		return formattedData;
 	}
 
-	private fetchMaterialenFromSheet(workSheet) {
+	private fetchMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const minRow = 0;
 		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet);
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
 		const formattedData = data.map((row) => {
-			return this.parseMNummersRow(row);
+			const knownMaterial = knownSpanMeasureItems.find(
+				(knownItem) => knownItem.referenceNumber === row['M-nummer'].toString(),
+			);
+
+			return this.parseMNummersRow(row, knownMaterial);
 		});
 
 		return formattedData;
@@ -122,12 +141,17 @@ export class ImportSpanMeasureOptions {
 
 	private async importOVSMeasures() {
 		this.progressBar.start(100, 0);
+
+		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
 		const file = await this.getFile();
 
 		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(file.Matrix);
 
-		const fetchBestekposten = this.fetchBestekpostenFromSheet(file.Besteksposten);
-		const fetchMaterialen = this.fetchMaterialenFromSheet(file['M-nummers']);
+		const fetchBestekposten = this.fetchBestekpostenFromSheet(
+			file.Besteksposten,
+			this.jsonData.spanMeasureItemOptions,
+		);
+		const fetchMaterialen = this.fetchMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions);
 
 		const normalizedData = await this.normalizeOVSMeasureData.normalize(
 			oVSSpanMeasureExcelRowObjectList,

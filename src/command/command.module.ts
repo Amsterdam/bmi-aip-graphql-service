@@ -6,8 +6,8 @@ import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ImportSpanMeasureOptions } from 'src/services/ImportSpanMeasureOptions';
-import { NormalizeOVSMeasureData } from 'src/services/NormalizeOVSMeasureData';
+import { ImportSpanMeasureOptions } from 'src/services/import-span-measure-options';
+import { NormalizeOVSMeasureData } from 'src/services/normalize-ovs-measure-data';
 
 import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';

@@ -191,6 +191,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 						...luminaire,
 						id: newLuminaireId,
 						supportSystemId: newSupportSystemtId,
+						permanentId: luminaire.id,
 					},
 				});
 				// Work around Prisma not supporting spatial data types

@@ -15,10 +15,8 @@ export class SpanMeasureOptionResolver {
 	@Query((returns) => [SpanMeasureOption])
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
 	public async spanMeasureOptions(
-		@Args('decompositionType', { type: () => String }) decompositionType?: SpanDecompositionType,
+		@Args('decompositionType', { type: () => String }) decompositionType: SpanDecompositionType,
 	) {
-		return this.queryBus.execute<FindSpanMeasureOptionsQuery>(
-			new FindSpanMeasureOptionsQuery(decompositionType || null),
-		);
+		return this.queryBus.execute<FindSpanMeasureOptionsQuery>(new FindSpanMeasureOptionsQuery(decompositionType));
 	}
 }

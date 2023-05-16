@@ -7,7 +7,12 @@ import { FindSpanMeasureOptionsQuery } from './find-span-measure-options.query';
 
 @QueryHandler(FindSpanMeasureOptionsQuery)
 export class FindSpanMeasureOptionsHandler implements IQueryHandler<FindSpanMeasureOptionsQuery> {
-	async execute(query: FindSpanMeasureOptionsQuery): Promise<SpanMeasureOption[]> {
+	async execute({ decompositionType }: FindSpanMeasureOptionsQuery): Promise<SpanMeasureOption[]> {
+		if (decompositionType) {
+			return spanMeasureOptions.filter(
+				(spanMeasureOption) => spanMeasureOption.decompositionType === decompositionType,
+			);
+		}
 		return spanMeasureOptions;
 	}
 }

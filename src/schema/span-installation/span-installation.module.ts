@@ -57,6 +57,10 @@ import { SpanDecompositionType } from './types/span-decomposition-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
 import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
 import { SpanDecompositionResolver } from './span-decomposition.resolver';
+import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { FindSpanMeasuresByDecompositionIdHandler } from './commands/find-span-measures-by-decomposition-id.handler';
+import { SpanMeasureStatus } from './types/span-measure-status';
+import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -80,6 +84,14 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 
 registerEnumType(SpanDecompositionType, {
 	name: 'SpanDecompositionType',
+});
+
+registerEnumType(SpanMeasureStatus, {
+	name: 'SpanMeasureStatus',
+});
+
+registerEnumType(SpanMeasureItemStatus, {
+	name: 'SpanMeasureItemStatus',
 });
 
 @Module({
@@ -128,6 +140,8 @@ registerEnumType(SpanDecompositionType, {
 		CloneSpanInstallationDecompositionCommand,
 		CloneSpanInstallationDecompositionHandler,
 		SpanDecompositionResolver,
+		FindSpanMeasuresByDecompositionIdCommand,
+		FindSpanMeasuresByDecompositionIdHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

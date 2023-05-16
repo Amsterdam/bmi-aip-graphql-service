@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
@@ -11,6 +11,8 @@ import { CreateLuminaireCommand } from './commands/create-luminaire.command';
 import { UpdateLuminaireCommand } from './commands/update-luminaire.command';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
 import { DeleteLuminaireCommand } from './commands/delete-luminaire.command';
+import { SpanMeasure } from './models/span-measure.model';
+import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)
@@ -48,5 +50,12 @@ export class LuminaireResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getsupportSystemLuminaires(@Args('supportSystemId', { type: () => String }) supportSystemId: string) {
 		return this.luminaireService.getLuminaires(supportSystemId);
+	}
+
+	@ResolveField((type) => [SpanMeasure])
+	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
+		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
+			new FindSpanMeasuresByDecompositionIdCommand(id),
+		);
 	}
 }

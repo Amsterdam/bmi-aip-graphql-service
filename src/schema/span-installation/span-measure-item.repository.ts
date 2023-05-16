@@ -21,6 +21,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
+		status,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
 		return this.prisma.spanMeasureItems.create({
 			data: {
@@ -35,6 +36,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				itemType: itemType,
 				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 				quantityEstimate: quantityEstimate,
+				status: status,
 			},
 		});
 	}

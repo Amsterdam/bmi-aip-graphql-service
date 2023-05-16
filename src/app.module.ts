@@ -28,6 +28,7 @@ import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
 import { FacadeFollowUpSurveyModule } from './schema/facade-follow-up-survey/facade-follow-up-survey.module';
 import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
+import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-measures-survey.module';
 
 @Module({
 	imports: [
@@ -47,6 +48,7 @@ import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-me
 		FailureModeModule,
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
+		SpanMeasuresSurveyModule,
 		ObjectModule,
 		BatchModule,
 		CommandModule,

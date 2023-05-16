@@ -4,7 +4,6 @@ import { PrismaService } from '../../prisma.service';
 
 import { SpanMeasureItemRepository } from './span-measure-item.repository';
 import { domainSpanMeasureItem, createSpanMeasureItemInput } from './__stubs__/span-measure-item';
-import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanMeasureItems: {
@@ -39,7 +38,8 @@ describe('Span Installation / Measures / Repository', () => {
 				},
 				quantityEstimate: 1,
 				quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				status: SpanMeasureItemStatus.open,
+				optionId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+				status: undefined,
 			}),
 		);
 

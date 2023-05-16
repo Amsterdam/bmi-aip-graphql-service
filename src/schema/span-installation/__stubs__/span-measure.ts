@@ -28,7 +28,7 @@ export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	description: '__NAME__',
 	created_at: null,
 	updated_at: null,
-	status: '',
+	status: undefined,
 };
 
 export const domainSpanMeasure: DomainSpanMeasure = {

@@ -5,6 +5,8 @@ import { CreateSpanMeasureInput } from '../dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from '../dto/update-span-measure-input';
 import { SpanDecompositionType } from '../types/span-decomposition-type';
 
+import { SpanMeasureStatus } from './../types/span-measure-status';
+
 export const spanMeasure1: SpanMeasure = {
 	id: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 	surveyId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
@@ -13,6 +15,7 @@ export const spanMeasure1: SpanMeasure = {
 	decompositionType: 'SpanMeasure',
 	description: '__NAME__',
 	measureItems: [],
+	status: SpanMeasureStatus.open,
 	created_at: undefined,
 	updated_at: undefined,
 };
@@ -25,6 +28,7 @@ export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	description: '__NAME__',
 	created_at: null,
 	updated_at: null,
+	status: '',
 };
 
 export const domainSpanMeasure: DomainSpanMeasure = {

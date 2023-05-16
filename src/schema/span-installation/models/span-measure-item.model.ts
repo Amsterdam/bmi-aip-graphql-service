@@ -30,5 +30,5 @@ export class SpanMeasureItem {
 	quantityActual?: number;
 
 	@Field(() => String)
-	status: SpanMeasureItemStatus;
+	status: string;
 }

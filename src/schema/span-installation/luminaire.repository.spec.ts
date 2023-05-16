@@ -126,6 +126,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			supplierType: 'two',
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			hasLED: true,
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 		});
 	});
 

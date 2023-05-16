@@ -66,4 +66,9 @@ export class JunctionBox {
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;
+
+	// For contract 3 (spanMeasures) survey: This is a reference of the (contract 1) junctionBox id which this junctionBox is coloned from.
+	// For contract 1 survey (spanInstallation), this is the same as the id of the junctionBox in contract 1.
+	@Field((type) => String)
+	permanentId: string;
 }

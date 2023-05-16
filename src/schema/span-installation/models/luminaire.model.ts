@@ -76,4 +76,9 @@ export class Luminaire {
 
 	@Field((type) => String, { nullable: true })
 	deletedAt: string;
+
+	// For contract 3 (spanMeasures) survey: This is a reference of the (contract 1) luminaire id which this luminaire is coloned from.
+	// For contract 1 survey (spanInstallation), this is the same as the id of the luminaire in contract 1.
+	@Field((type) => String)
+	permanentId: string;
 }

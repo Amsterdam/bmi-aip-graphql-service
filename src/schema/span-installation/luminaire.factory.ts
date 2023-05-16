@@ -22,6 +22,7 @@ export class LuminaireFactory {
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
+		permanentId,
 	}: DomainLuminaire): Luminaire {
 		const luminaire = new Luminaire();
 		luminaire.id = id;
@@ -33,6 +34,7 @@ export class LuminaireFactory {
 		luminaire.supplierType = SupplierType[supplierType];
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
+		luminaire.permanentId = permanentId;
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

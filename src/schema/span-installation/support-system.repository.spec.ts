@@ -166,6 +166,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			},
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 		});
 	});
 

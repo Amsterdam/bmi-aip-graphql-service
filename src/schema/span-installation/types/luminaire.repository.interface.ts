@@ -23,6 +23,7 @@ const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 		updated_at: true,
 		deleted_at: true,
 		geographyRD: true,
+		permanentId: true,
 	},
 });
 

@@ -24,6 +24,7 @@ export class SupportSystemFactory {
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
+		permanentId,
 	}: DomainSupportSystem): SupportSystem {
 		const supportSystem = new SupportSystem();
 		supportSystem.id = id;
@@ -40,6 +41,7 @@ export class SupportSystemFactory {
 		supportSystem.type = SupportSystemType[type];
 		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
+		supportSystem.permanentId = permanentId;
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

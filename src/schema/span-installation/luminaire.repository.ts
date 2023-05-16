@@ -29,8 +29,9 @@ export class LuminaireRepository implements ILuminaireRepository {
 		lightSupplierType,
 		lightCommissioningDate,
 	}: CreateLuminaireInput): Promise<Luminaire> {
+		const luminaireId = newId();
 		const data: Prisma.spanLuminairesCreateInput = {
-			id: newId(),
+			id: luminaireId,
 			spanSupportSystems: { connect: { id: supportSystemId } },
 			name,
 			location,
@@ -46,6 +47,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			geographyRD: {
 				...geographyRD,
 			},
+			permanentId: luminaireId,
 		};
 
 		const luminaire = await this.prisma.spanLuminaires.create({ data });

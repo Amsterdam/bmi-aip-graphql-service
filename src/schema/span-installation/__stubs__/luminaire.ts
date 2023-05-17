@@ -35,7 +35,7 @@ luminaire2.geographyRD = {
 
 export { luminaire1, luminaire2 };
 
-const luminaireRaw: Omit<DomainLuminaire, 'id'> = {
+const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
 	supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
@@ -75,6 +75,7 @@ export const updateLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 
 export const domainLuminaire: DomainLuminaire = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...luminaireRaw,
 	deleted_at: null,
 };

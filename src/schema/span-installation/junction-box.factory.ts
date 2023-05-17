@@ -20,6 +20,7 @@ export class JunctionBoxFactory {
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
+		permanentId,
 	}: DomainJunctionBox): JunctionBox {
 		const jb = new JunctionBox();
 		jb.id = id;
@@ -33,6 +34,7 @@ export class JunctionBoxFactory {
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
+		jb.permanentId = permanentId;
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

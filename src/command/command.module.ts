@@ -6,6 +6,8 @@ import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { CqrsModule } from '@nestjs/cqrs';
+import { ImportSpanMeasureOptions } from 'src/services/ImportSpanMeasureOptions';
+import { NormalizeOVSMeasureData } from 'src/services/NormalizeOVSMeasureData';
 
 import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';
@@ -64,6 +66,8 @@ import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measure
 		DuplicateInstallationGroupRemovalService,
 		FileWriterService,
 		UpdateOVSPassport,
+		NormalizeOVSMeasureData,
+		ImportSpanMeasureOptions,
 		UndoOVSImportService,
 		CorrectCoordinatesService,
 		SetOvsSurveySurveyorCli,

@@ -90,3 +90,23 @@ export type NormalizedInstallationFromExcel = {
 	tramTracks?: boolean;
 	passportSplits?: boolean;
 };
+
+export type OVSSpanMeasureExcelRowObject = {
+	Onderdelen: string;
+	Maatregelen: string; // newline separated
+	'Materiaal uit (M)agazijn': string;
+	Besteksposten: string; // comma separated
+	Opmerking: string;
+};
+
+export type BestekspostenExcelRowObject = {
+	'Bestekspostnr.': string;
+	'Postomschrijving (beknopt)': string;
+	'Eenh.': string;
+};
+export type MNummersExcelRowObject = {
+	'Voorlopige benaming': string;
+	'M-nummer': string;
+	'Omschrijving artikel': string;
+	Opmerking: string;
+};

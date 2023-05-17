@@ -5,6 +5,7 @@ import { newId } from '../../utils/newId';
 
 import { SpanMeasureItem } from './models/span-measure-item.model';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
+import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 
 export class SpanMeasureItemFactory {
 	static CreateSpanMeasureItem({
@@ -15,6 +16,7 @@ export class SpanMeasureItemFactory {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
+		status,
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = id;
@@ -24,6 +26,7 @@ export class SpanMeasureItemFactory {
 		spanMeasureItem.itemType = itemType;
 		spanMeasureItem.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
 		spanMeasureItem.quantityEstimate = quantityEstimate;
+		spanMeasureItem.status = SpanMeasureItemStatus[status];
 		return spanMeasureItem;
 	}
 
@@ -36,6 +39,7 @@ export class SpanMeasureItemFactory {
 			itemType: data.itemType,
 			quantityUnitOfMeasurement: data.quantityUnitOfMeasurement,
 			quantityEstimate: data.quantityEstimate,
+			status: data.status,
 		}));
 	}
 }

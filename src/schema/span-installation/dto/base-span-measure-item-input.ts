@@ -1,6 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { IsEnum, IsOptional } from 'class-validator';
 
 import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
+
+import { SpanMeasureItemStatus } from './../types/span-measure-item-status';
 
 @InputType()
 export class BaseSpanMeasureItemInput {
@@ -25,4 +28,9 @@ export class BaseSpanMeasureItemInput {
 
 	@Field((type) => String)
 	quantityActual: number;
+
+	@IsEnum(SpanMeasureItemStatus)
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	status?: SpanMeasureItemStatus;
 }

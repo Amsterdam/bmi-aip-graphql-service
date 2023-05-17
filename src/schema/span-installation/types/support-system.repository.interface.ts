@@ -24,6 +24,7 @@ const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
 		updated_at: true,
 		deleted_at: true,
 		geographyRD: true,
+		permanentId: true,
 	},
 });
 

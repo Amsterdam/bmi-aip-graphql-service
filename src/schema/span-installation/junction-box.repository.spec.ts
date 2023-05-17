@@ -139,6 +139,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			remarks: '__REMARKS__',
 			riserTubeVisible: true,
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 		});
 	});
 

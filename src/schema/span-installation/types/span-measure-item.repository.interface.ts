@@ -9,6 +9,7 @@ const spanMeasureItem = Prisma.validator<Prisma.spanMeasureItemsArgs>()({
 		itemType: true,
 		quantityUnitOfMeasurement: true,
 		quantityEstimate: true,
+		status: true,
 	},
 });
 

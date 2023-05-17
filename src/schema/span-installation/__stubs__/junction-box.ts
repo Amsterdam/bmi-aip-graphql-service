@@ -39,7 +39,7 @@ export { junctionBox1, junctionBox2 };
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
 
-const junctionBoxRaw: Omit<DomainJunctionBox, 'id'> = {
+const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
@@ -85,6 +85,7 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...junctionBoxRaw,
 	deleted_at: null,
 };

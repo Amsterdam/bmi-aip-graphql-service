@@ -18,6 +18,7 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		description,
 		decompositionId,
 		decompositionType,
+		status,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
 		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
 			throw new NotFoundException('Decomposition entity not found');
@@ -31,6 +32,7 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 				description,
 				decompositionId,
 				decompositionType,
+				status,
 			},
 		});
 	}
@@ -61,6 +63,14 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		return this.prisma.spanMeasures.findMany({
 			where: {
 				surveyId,
+			},
+		});
+	}
+
+	async findSpanMeasuresByDecompositionId(decompositionId: string): Promise<SpanMeasure[]> {
+		return this.prisma.spanMeasures.findMany({
+			where: {
+				decompositionId,
 			},
 		});
 	}

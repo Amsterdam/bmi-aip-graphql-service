@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus } from '@nestjs/cqrs';
 
@@ -11,6 +11,8 @@ import { CreateJunctionBoxCommand } from './commands/create-junction-box.command
 import { UpdateJunctionBoxCommand } from './commands/update-junction-box.command';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
+import { SpanMeasure } from './models/span-measure.model';
+import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -48,5 +50,12 @@ export class JunctionBoxResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveyJunctionBoxes(@Args('surveyId', { type: () => String }) surveyId: string) {
 		return this.junctionBoxService.getJunctionBoxes(surveyId);
+	}
+
+	@ResolveField((type) => [SpanMeasure])
+	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
+		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
+			new FindSpanMeasuresByDecompositionIdCommand(id),
+		);
 	}
 }

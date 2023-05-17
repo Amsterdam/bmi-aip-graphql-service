@@ -13,4 +13,10 @@ export class SpanMeasureService {
 			SpanMeasureFactory.CreateSpanMeasure(spanMeasure),
 		);
 	}
+
+	async findSpanMeasuresByDecompositionId(decompositionId: string): Promise<SpanMeasure[]> {
+		return (await this.spanMeasureRepo.findSpanMeasuresByDecompositionId(decompositionId)).map((spanMeasure) =>
+			SpanMeasureFactory.CreateSpanMeasure(spanMeasure),
+		);
+	}
 }

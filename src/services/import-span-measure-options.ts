@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
-import { GraphQLClient } from 'graphql-request';
 import { SingleBar } from 'cli-progress';
 import { ConsoleService } from 'nestjs-console';
 import { ConfigService } from '@nestjs/config';
@@ -26,10 +25,6 @@ import { MeasureOption } from './types/MeasureOption';
 @Injectable()
 export class ImportSpanMeasureOptions {
 	private static CLI_COMMAND = 'ovs:import-measure-options';
-
-	private static DEBUG = true;
-
-	private graphqlClient: GraphQLClient;
 
 	progressBar = new SingleBar({});
 
@@ -60,7 +55,9 @@ export class ImportSpanMeasureOptions {
 		// get first sheet
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;
-		let data: OVSSpanMeasureExcelRowObject[] = xlsx.utils.sheet_to_json<OVSSpanMeasureExcelRowObject>(workSheet);
+		let data: OVSSpanMeasureExcelRowObject[] = xlsx.utils.sheet_to_json<OVSSpanMeasureExcelRowObject>(workSheet, {
+			range: 3,
+		});
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
 		return data;
@@ -107,7 +104,7 @@ export class ImportSpanMeasureOptions {
 
 	private fetchMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const minRow = 0;
-		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet);
+		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, { range: 1 });
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
 		const formattedData = data.map((row) => {
@@ -293,16 +290,21 @@ export class ImportSpanMeasureOptions {
 		bestekposten: object[],
 	): Promise<Record<string, any>> {
 		const measureOptions = {};
+		let lastReadDecompositionType = '';
 
 		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
 			const foundMeasureOption = this.jsonData.spanMeasureOptions.find((item) => {
 				return item.description == element.Maatregelen;
 			});
 
+			if (element.Maatregelen) {
+				lastReadDecompositionType = element.Onderdelen;
+			}
+
 			const item = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),
 				description: element.Maatregelen,
-				decompositionType: this.mapDecompositionType(element.Onderdelen),
+				decompositionType: this.mapDecompositionType(lastReadDecompositionType),
 				measureItems: [
 					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
 					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),
@@ -321,10 +323,7 @@ export class ImportSpanMeasureOptions {
 			spanMeasureItemOptions: measureItemOptions,
 		};
 
-		// For debugging purposes
-		if (ImportSpanMeasureOptions.DEBUG) {
-			await this.saveToFile(normalizedData);
-		}
+		await this.saveToFile(normalizedData);
 
 		return normalizedData;
 	}

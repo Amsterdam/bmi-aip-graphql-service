@@ -52,7 +52,9 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private fetchMatrixFromSheet(workSheet) {
-		// get first sheet
+		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
+		// This file contains some comments and other data in the first rows, so we need to skip those
+
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
 		const minRow = 2;
 		let data: OVSSpanMeasureExcelRowObject[] = xlsx.utils.sheet_to_json<OVSSpanMeasureExcelRowObject>(workSheet, {
@@ -87,9 +89,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private fetchBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
-		const minRow = 0;
-		let data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
-		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
+		const data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 
 		return data.map((row) => {
 			return this.parseBestekpostRow(
@@ -102,9 +102,10 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private fetchMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
-		const minRow = 0;
-		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, { range: 1 });
-		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
+		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
+		// This file contains some comments and other data in the first rows, so we need to skip those to correctly define the columns
+
+		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, { range: 1 });
 
 		return data.map((row) => {
 			return this.parseMNummersRow(
@@ -120,8 +121,7 @@ export class ImportSpanMeasureOptions {
 			this.configService.get<string>('DOC_DIR') +
 			this.configService.get<string>('READ_FILE_OVS_MEASURES');
 		// read from xlsx file
-		const maxRow = 9628;
-		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
+		const workbook = xlsx.readFile(`${filePath}`);
 
 		if (!this.sheetStructureIsValid(workbook.Sheets)) {
 			this.logger.error('Invalid sheet structure');
@@ -143,16 +143,10 @@ export class ImportSpanMeasureOptions {
 
 		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(file.Matrix);
 
-		const fetchBestekposten = this.fetchBestekpostenFromSheet(
-			file.Besteksposten,
-			this.jsonData.spanMeasureItemOptions,
-		);
-		const fetchMaterialen = this.fetchMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions);
-
 		const normalizedData = await this.normalize(
 			oVSSpanMeasureExcelRowObjectList,
-			fetchMaterialen,
-			fetchBestekposten,
+			this.fetchMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
+			this.fetchBestekpostenFromSheet(file.Besteksposten, this.jsonData.spanMeasureItemOptions),
 		);
 
 		this.progressBar.stop();

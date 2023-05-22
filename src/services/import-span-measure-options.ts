@@ -91,15 +91,14 @@ export class ImportSpanMeasureOptions {
 		let data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
-		const formattedData = data.map((row) => {
-			const knownSpecificationItem = knownSpanMeasureItems.find(
-				(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+		return data.map((row) => {
+			return this.parseBestekpostRow(
+				row,
+				knownSpanMeasureItems.find(
+					(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+				),
 			);
-
-			return this.parseBestekpostRow(row, knownSpecificationItem);
 		});
-
-		return formattedData;
 	}
 
 	private fetchMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
@@ -107,15 +106,12 @@ export class ImportSpanMeasureOptions {
 		let data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, { range: 1 });
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
-		const formattedData = data.map((row) => {
-			const knownMaterial = knownSpanMeasureItems.find(
-				(knownItem) => knownItem.referenceNumber === row['M-nummer'].toString(),
+		return data.map((row) => {
+			return this.parseMNummersRow(
+				row,
+				knownSpanMeasureItems.find((knownItem) => knownItem.referenceNumber === row['M-nummer'].toString()),
 			);
-
-			return this.parseMNummersRow(row, knownMaterial);
 		});
-
-		return formattedData;
 	}
 
 	private async getFile(): Promise<{ [sheet: string]: WorkSheet }> {
@@ -209,23 +205,19 @@ export class ImportSpanMeasureOptions {
 	}
 
 	public formatMaterial(element: string): MeasureItemOption {
-		const material = {
+		return {
 			id: newId(),
 			itemType: SpanMeasureItemType.material,
 			description: element ?? '',
 		};
-
-		return material;
 	}
 
 	public formatSpecificationItem(element: string): MeasureItemOption {
-		const specificationItem = {
+		return {
 			id: newId(),
 			itemType: SpanMeasureItemType.specificationItem,
 			description: element ?? '',
 		};
-
-		return specificationItem;
 	}
 
 	public fetchFromList(key, list, itemType: SpanMeasureItemType) {
@@ -279,9 +271,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private containsMeasureItem(measureOption: MeasureOption, measureItemOption: MeasureItemOption): boolean {
-		return measureOption.measureItems.some((item) => {
-			return item.description == measureItemOption.description;
-		});
+		return measureOption.measureItems.some((item) => item.description == measureItemOption.description);
 	}
 
 	public async normalize(
@@ -293,13 +283,11 @@ export class ImportSpanMeasureOptions {
 		let lastReadDecompositionType = '';
 
 		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
-			const foundMeasureOption = this.jsonData.spanMeasureOptions.find((item) => {
-				return item.description == element.Maatregelen;
-			});
+			const foundMeasureOption = this.jsonData.spanMeasureOptions.find(
+				(item) => item.description == element.Maatregelen,
+			);
 
-			if (element.Maatregelen) {
-				lastReadDecompositionType = element.Onderdelen;
-			}
+			if (element.Maatregelen) lastReadDecompositionType = element.Onderdelen;
 
 			const item = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),

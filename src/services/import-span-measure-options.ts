@@ -51,7 +51,7 @@ export class ImportSpanMeasureOptions {
 		);
 	}
 
-	private fetchMatrixFromSheet(workSheet) {
+	private getMatrixFromSheet(workSheet) {
 		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those
 
@@ -88,7 +88,7 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
-	private fetchBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
+	private getBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 
 		return data.map((row) => {
@@ -101,11 +101,13 @@ export class ImportSpanMeasureOptions {
 		});
 	}
 
-	private fetchMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
+	private getMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those to correctly define the columns
 
-		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, { range: 1 });
+		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, {
+			range: 1,
+		});
 
 		return data.map((row) => {
 			return this.parseMNummersRow(
@@ -141,12 +143,12 @@ export class ImportSpanMeasureOptions {
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
 		const file = await this.getFile();
 
-		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.fetchMatrixFromSheet(file.Matrix);
+		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.getMatrixFromSheet(file.Matrix);
 
 		const normalizedData = await this.normalize(
 			oVSSpanMeasureExcelRowObjectList,
-			this.fetchMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
-			this.fetchBestekpostenFromSheet(file.Besteksposten, this.jsonData.spanMeasureItemOptions),
+			this.getMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
+			this.getBestekpostenFromSheet(file.Besteksposten, this.jsonData.spanMeasureItemOptions),
 		);
 
 		this.progressBar.stop();
@@ -214,7 +216,7 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
-	public fetchFromList(key, list, itemType: SpanMeasureItemType) {
+	public getFromList(key, list, itemType: SpanMeasureItemType) {
 		const foundItem = list.find((item) => {
 			key = key.replace(/\s/g, ''); // sanitize lookup key
 			return item.referenceNumber === key;
@@ -238,7 +240,7 @@ export class ImportSpanMeasureOptions {
 			.split(',')
 			.reduce((acc, item) => {
 				const itemsSplitByComma = item.toString().split(',');
-				const foundItem = this.fetchFromList(itemsSplitByComma[0], list, SpanMeasureItemType.specificationItem);
+				const foundItem = this.getFromList(itemsSplitByComma[0], list, SpanMeasureItemType.specificationItem);
 
 				if (!foundItem) {
 					return acc;
@@ -256,7 +258,7 @@ export class ImportSpanMeasureOptions {
 		const itemsSplitByNewline = key.toString().split('\n');
 		return itemsSplitByNewline.reduce((acc, item) => {
 			// Reference number is the first 'word' in the title
-			const foundItem = this.fetchFromList(
+			const foundItem = this.getFromList(
 				item.toString().split(' ')[0],
 				list,
 				SpanMeasureItemType.specificationItem,

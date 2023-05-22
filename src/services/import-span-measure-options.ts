@@ -233,17 +233,19 @@ export class ImportSpanMeasureOptions {
 			return [];
 		}
 
-		const array = key.toString().split(',');
-		return array.reduce((acc, item) => {
-			const itemsSplitByComma = item.toString().split(',');
-			const foundItem = this.fetchFromList(itemsSplitByComma[0], list, SpanMeasureItemType.specificationItem);
+		return key
+			.toString()
+			.split(',')
+			.reduce((acc, item) => {
+				const itemsSplitByComma = item.toString().split(',');
+				const foundItem = this.fetchFromList(itemsSplitByComma[0], list, SpanMeasureItemType.specificationItem);
 
-			if (!foundItem) {
-				return acc;
-			}
+				if (!foundItem) {
+					return acc;
+				}
 
-			return [...acc, foundItem];
-		}, []);
+				return [...acc, foundItem];
+			}, []);
 	}
 
 	public parseMaterials(key: string, list: any): MeasureItemOption[] {
@@ -253,8 +255,12 @@ export class ImportSpanMeasureOptions {
 
 		const itemsSplitByNewline = key.toString().split('\n');
 		return itemsSplitByNewline.reduce((acc, item) => {
-			const itemsSplitBySpace = item.toString().split(' '); // reference number is the first 'word' in the title
-			const foundItem = this.fetchFromList(itemsSplitBySpace[0], list, SpanMeasureItemType.specificationItem);
+			// Reference number is the first 'word' in the title
+			const foundItem = this.fetchFromList(
+				item.toString().split(' ')[0],
+				list,
+				SpanMeasureItemType.specificationItem,
+			);
 
 			if (!foundItem) {
 				return acc;

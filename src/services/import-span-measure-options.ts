@@ -34,6 +34,8 @@ export class ImportSpanMeasureOptions {
 
 	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
 
+	private lastReadDecompositionType = '';
+
 	public constructor(
 		private readonly consoleService: ConsoleService,
 		private readonly logger: Logger,
@@ -143,10 +145,10 @@ export class ImportSpanMeasureOptions {
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
 		const file = await this.getFile();
 
-		const oVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.getMatrixFromSheet(file.Matrix);
+		const OVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.getMatrixFromSheet(file.Matrix);
 
 		const normalizedData = await this.normalize(
-			oVSSpanMeasureExcelRowObjectList,
+			OVSSpanMeasureExcelRowObjectList,
 			this.getMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
 			this.getBestekpostenFromSheet(file.Besteksposten, this.jsonData.spanMeasureItemOptions),
 		);
@@ -277,24 +279,23 @@ export class ImportSpanMeasureOptions {
 	}
 
 	public async normalize(
-		oVSExcelRowObjectList: OVSSpanMeasureExcelRowObject[],
+		OVSExcelRowObjectList: OVSSpanMeasureExcelRowObject[],
 		materials: object[],
 		bestekposten: object[],
 	): Promise<Record<string, any>> {
 		const measureOptions = {};
-		let lastReadDecompositionType = '';
 
-		oVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
+		OVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
 			const foundMeasureOption = this.jsonData.spanMeasureOptions.find(
 				(item) => item.description == element.Maatregelen,
 			);
 
-			if (element.Maatregelen) lastReadDecompositionType = element.Onderdelen;
+			if (element.Onderdelen) this.lastReadDecompositionType = element.Onderdelen;
 
 			const item = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),
 				description: element.Maatregelen,
-				decompositionType: this.mapDecompositionType(lastReadDecompositionType),
+				decompositionType: this.mapDecompositionType(this.lastReadDecompositionType),
 				measureItems: [
 					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
 					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),

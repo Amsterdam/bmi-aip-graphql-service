@@ -1,6 +1,7 @@
 import { createUnionType } from '@nestjs/graphql';
 
 import { JunctionBox } from './junction-box.model';
+import { Luminaire } from './luminaire.model';
 import { SupportSystem } from './support-system.model';
 
 export const SpanDecomposition = createUnionType({

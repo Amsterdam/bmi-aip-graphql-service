@@ -11,6 +11,7 @@ import type {
 } from '../types';
 
 import { A11yDetails } from './a11y-details.model';
+import { SpanDecompositionData } from './span-decomposition-data.model';
 
 @ObjectType({ description: 'supportSystem' })
 export class SupportSystem {
@@ -97,4 +98,7 @@ export class SupportSystem {
 	// For contract 1 survey (spanInstallation), this is the same as the id of the supportSystem in contract 1.
 	@Field((type) => String)
 	permanentId: string;
+
+	@Field((type) => SpanDecompositionData, { nullable: true })
+	spanDecompositionData?: SpanDecompositionData;
 }

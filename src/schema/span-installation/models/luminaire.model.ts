@@ -4,6 +4,8 @@ import { Point as PointType } from 'geojson';
 
 import { SupplierType } from '../types';
 
+import { SpanDecompositionData } from './span-decomposition-data.model';
+
 @ObjectType({ description: 'luminaire' })
 export class Luminaire {
 	@Field((type) => String)
@@ -81,4 +83,7 @@ export class Luminaire {
 	// For contract 1 survey (spanInstallation), this is the same as the id of the luminaire in contract 1.
 	@Field((type) => String)
 	permanentId: string;
+
+	@Field((type) => SpanDecompositionData, { nullable: true })
+	spanDecompositionData?: SpanDecompositionData;
 }

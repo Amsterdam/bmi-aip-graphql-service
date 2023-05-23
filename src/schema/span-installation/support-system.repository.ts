@@ -31,6 +31,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		typeDetailed,
 		geography,
 		geographyRD,
+		spanDecompositionData,
 	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const supportSystemId = newId();
 		const data: Prisma.spanSupportSystemsCreateInput = {
@@ -52,6 +53,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 				...geographyRD,
 			},
 			permanentId: supportSystemId,
+			spanDecompositionData: spanDecompositionData as Prisma.InputJsonObject,
 		};
 
 		const supportSystem = await this.prisma.spanSupportSystems.create({ data });
@@ -100,6 +102,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		typeDetailed,
 		geography,
 		geographyRD,
+		spanDecompositionData,
 	}: UpdateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
@@ -117,6 +120,9 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			typeDetailed,
 			geographyRD: {
 				...geographyRD,
+			},
+			spanDecompositionData: {
+				...spanDecompositionData,
 			},
 		};
 
@@ -192,6 +198,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 						id: newLuminaireId,
 						supportSystemId: newSupportSystemtId,
 						permanentId: luminaire.id,
+						spanDecompositionData: {},
 					},
 				});
 				// Work around Prisma not supporting spatial data types
@@ -226,6 +233,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 						id: newSupportSystemtId,
 						surveyId,
 						permanentId: supportSystem.id,
+						spanDecompositionData: {},
 					},
 				});
 				// Duplicate luminaires for support system

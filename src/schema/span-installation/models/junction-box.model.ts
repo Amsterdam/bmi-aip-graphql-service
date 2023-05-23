@@ -3,6 +3,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
 
 import { A11yDetails } from './a11y-details.model';
+import { SpanDecompositionData } from './span-decomposition-data.model';
 
 @ObjectType({ description: 'junctionBox' })
 export class JunctionBox {
@@ -71,4 +72,7 @@ export class JunctionBox {
 	// For contract 1 survey (spanInstallation), this is the same as the id of the junctionBox in contract 1.
 	@Field((type) => String)
 	permanentId: string;
+
+	@Field((type) => SpanDecompositionData, { nullable: true })
+	spanDecompositionData?: SpanDecompositionData;
 }

@@ -28,6 +28,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		geography,
 		geographyRD,
 		createdAt,
+		spanDecompositionData,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const junctionBoxId = newId();
 		const data: Prisma.spanJunctionBoxesCreateInput = {
@@ -46,6 +47,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 				...geographyRD,
 			},
 			permanentId: junctionBoxId,
+			spanDecompositionData: spanDecompositionData as Prisma.InputJsonObject,
 		};
 
 		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
@@ -93,6 +95,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		remarks,
 		geography,
 		geographyRD,
+		spanDecompositionData,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
@@ -107,6 +110,9 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			remarks,
 			geographyRD: {
 				...geographyRD,
+			},
+			spanDecompositionData: {
+				...spanDecompositionData,
 			},
 		};
 
@@ -176,6 +182,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 						id: newJunctionBoxId,
 						surveyId,
 						permanentId: junctionBox.id,
+						spanDecompositionData: {},
 					},
 				});
 				// Work around Prisma not supporting spatial data types

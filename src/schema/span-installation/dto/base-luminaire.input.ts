@@ -5,6 +5,8 @@ import { Point } from 'graphql-geojson-scalar-types';
 
 import { SupplierType } from '../types';
 
+import { SpanDecompositionDataInput } from './span-decomposition-data.input';
+
 @InputType()
 export class BaseLuminaireInput {
 	@IsOptional()
@@ -82,4 +84,8 @@ export class BaseLuminaireInput {
 	@IsDate()
 	@Field({ nullable: true })
 	deletedAt?: string;
+
+	@IsOptional()
+	@Field((type) => SpanDecompositionDataInput, { nullable: true })
+	public spanDecompositionData?: SpanDecompositionDataInput;
 }

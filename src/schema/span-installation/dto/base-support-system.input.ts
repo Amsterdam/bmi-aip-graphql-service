@@ -6,6 +6,7 @@ import { Point } from 'graphql-geojson-scalar-types';
 import { SupportSystemType } from '../types';
 
 import { A11yDetailsInput } from './a11y-details.input';
+import { SpanDecompositionDataInput } from './span-decomposition-data.input';
 
 @InputType()
 export class BaseSupportSystemInput {
@@ -70,4 +71,8 @@ export class BaseSupportSystemInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	deletedAt?: Date;
+
+	@IsOptional()
+	@Field((type) => SpanDecompositionDataInput, { nullable: true })
+	public spanDecompositionData?: SpanDecompositionDataInput;
 }

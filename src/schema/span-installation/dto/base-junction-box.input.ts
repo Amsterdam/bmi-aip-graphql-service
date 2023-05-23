@@ -4,6 +4,7 @@ import { Point as PointType } from 'geojson';
 import { Point } from 'graphql-geojson-scalar-types';
 
 import { A11yDetailsInput } from './a11y-details.input';
+import { SpanDecompositionDataInput } from './span-decomposition-data.input';
 
 @InputType()
 export class BaseJunctionBoxInput {
@@ -59,4 +60,8 @@ export class BaseJunctionBoxInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	deletedAt?: Date;
+
+	@IsOptional()
+	@Field((type) => SpanDecompositionDataInput, { nullable: true })
+	public spanDecompositionData?: SpanDecompositionDataInput;
 }

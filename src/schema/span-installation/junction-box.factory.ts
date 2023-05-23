@@ -1,6 +1,7 @@
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { A11yDetailsFactory } from './a11y-details.factory';
+import { SpanDecompositionDataFactory } from './span-decomposition-data.factory';
 
 export class JunctionBoxFactory {
 	static CreateJunctionBox({
@@ -21,6 +22,7 @@ export class JunctionBoxFactory {
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
 		permanentId,
+		spanDecompositionData,
 	}: DomainJunctionBox): JunctionBox {
 		const jb = new JunctionBox();
 		jb.id = id;
@@ -35,6 +37,8 @@ export class JunctionBoxFactory {
 		jb.remarks = remarks;
 		jb.geography = geography;
 		jb.permanentId = permanentId;
+		jb.spanDecompositionData =
+			SpanDecompositionDataFactory.CreateSpanDecompositionDataFFromJSONB(spanDecompositionData);
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

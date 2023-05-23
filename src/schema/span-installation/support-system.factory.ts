@@ -2,6 +2,7 @@ import { SupportSystemType, SupportSystemTypeDetailed } from './types';
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystem as DomainSupportSystem } from './types/support-system.repository.interface';
 import { A11yDetailsFactory } from './a11y-details.factory';
+import { SpanDecompositionDataFactory } from './span-decomposition-data.factory';
 
 export class SupportSystemFactory {
 	static CreateSupportSystem({
@@ -25,6 +26,7 @@ export class SupportSystemFactory {
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
 		permanentId,
+		spanDecompositionData,
 	}: DomainSupportSystem): SupportSystem {
 		const supportSystem = new SupportSystem();
 		supportSystem.id = id;
@@ -42,6 +44,8 @@ export class SupportSystemFactory {
 		supportSystem.typeDetailed = typeDetailed as SupportSystemTypeDetailed;
 		supportSystem.geography = geography;
 		supportSystem.permanentId = permanentId;
+		supportSystem.spanDecompositionData =
+			SpanDecompositionDataFactory.CreateSpanDecompositionDataFFromJSONB(spanDecompositionData);
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

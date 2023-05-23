@@ -1,6 +1,7 @@
 import { SupplierType } from './types';
 import { Luminaire } from './models/luminaire.model';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
+import { SpanDecompositionDataFactory } from './span-decomposition-data.factory';
 
 export class LuminaireFactory {
 	static CreateLuminaire({
@@ -23,6 +24,7 @@ export class LuminaireFactory {
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
 		permanentId,
+		spanDecompositionData,
 	}: DomainLuminaire): Luminaire {
 		const luminaire = new Luminaire();
 		luminaire.id = id;
@@ -35,6 +37,8 @@ export class LuminaireFactory {
 		luminaire.manufacturer = manufacturer;
 		luminaire.geography = geography;
 		luminaire.permanentId = permanentId;
+		luminaire.spanDecompositionData =
+			SpanDecompositionDataFactory.CreateSpanDecompositionDataFFromJSONB(spanDecompositionData);
 
 		const parsedGeographyRD = JSON.parse(JSON.stringify(geographyRD));
 		// Allow geographyRD to be null by not defining it

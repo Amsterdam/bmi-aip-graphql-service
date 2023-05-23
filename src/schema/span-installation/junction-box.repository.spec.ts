@@ -57,6 +57,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
+				spanDecompositionData: {},
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
@@ -114,6 +115,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
+				spanDecompositionData: {},
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
@@ -140,6 +142,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			riserTubeVisible: true,
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			spanDecompositionData: {},
 		});
 	});
 

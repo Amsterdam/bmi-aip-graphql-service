@@ -85,6 +85,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			expect.objectContaining({
 				...createSupportSystemNormalizedInput,
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
+				spanDecompositionData: createSupportSystemNormalizedInput.spanDecompositionData,
 			}),
 		);
 	});
@@ -138,6 +139,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					coordinates: [116211.88, 487352.77],
 					type: 'Point',
 				},
+				spanDecompositionData: { remarks: '__TEST__' },
 			},
 		});
 		expect(spy).toHaveBeenCalledWith(updateSupportSystemNormalizedInput.id);
@@ -167,6 +169,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			spanDecompositionData: { remarks: '__TEST__' },
 		});
 	});
 

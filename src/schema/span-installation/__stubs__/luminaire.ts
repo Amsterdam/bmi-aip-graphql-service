@@ -59,6 +59,7 @@ const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
 	hasLED: true,
+	spanDecompositionData: {},
 };
 
 export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {

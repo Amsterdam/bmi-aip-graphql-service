@@ -61,6 +61,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
+	spanDecompositionData: {},
 };
 
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {

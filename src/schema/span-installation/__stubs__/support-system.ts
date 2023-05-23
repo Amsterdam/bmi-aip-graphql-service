@@ -10,6 +10,7 @@ import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-syst
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
+import { SpanDecompositionData } from '../models/span-decomposition-data.model';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -41,7 +42,9 @@ supportSystem2.geographyRD = {
 export { supportSystem1, supportSystem2 };
 
 const a11yDetails = new A11yDetails();
+const spanDecompositionData = new SpanDecompositionData();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
+spanDecompositionData.remarks = '__TEST__';
 
 const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 	name: '__NAME__',
@@ -68,6 +71,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
+	spanDecompositionData: JSON.parse(JSON.stringify(spanDecompositionData)),
 };
 
 export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {

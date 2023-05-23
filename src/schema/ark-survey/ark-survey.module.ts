@@ -22,6 +22,7 @@ import { GetArkSurveyBySurveyIdHandler } from './queries/get-ark-survey-by-surve
 import { ReachSegmentRepository } from './reach-segment.repository';
 import { ReachSegmentService } from './reach-segment.service';
 import { SaveArkCompletionHandler } from './commands/save-ark-completion.handler';
+import { ArkSurveyController } from './ark-survey.controller';
 
 @Module({
 	providers: [
@@ -45,6 +46,7 @@ import { SaveArkCompletionHandler } from './commands/save-ark-completion.handler
 		DeleteReachSegmentHandler,
 		FindReachSegmentsHandler,
 	],
+	controllers: [ArkSurveyController],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })
 export class ArkSurveyModule {}

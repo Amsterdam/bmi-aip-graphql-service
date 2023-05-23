@@ -1,6 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Point } from 'graphql-geojson-scalar-types';
 import { Point as PointType } from 'geojson';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { ReachSegment } from './reach-segment.model';
 import { ArkInspectionStandardData } from './ark-inspection-standard-data.model';
@@ -8,30 +9,39 @@ import { ArkInspectionStandardData } from './ark-inspection-standard-data.model'
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
 	@Field((type) => String)
+	@ApiProperty()
 	id: string;
 
 	@Field((type) => String)
+	@ApiProperty()
 	surveyId: string;
 
 	@Field((type) => Point, { nullable: true })
+	@ApiProperty({ description: 'The starting point coördinate (in WGS format)' })
 	arkGeographyStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
+	@ApiProperty({ description: 'The starting point coördinate (in Rijksdriehoeks format)' })
 	arkGeographyRDStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
+	@ApiProperty({ description: 'The ending point coördinate (in WGS format)' })
 	arkGeographyEnd?: PointType;
 
 	@Field((type) => Point, { nullable: true })
+	@ApiProperty({ description: 'The ending point coördinate (in Rijksdriehoeks format)' })
 	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })
+	@ApiProperty()
 	created_at: string;
 
 	@Field((type) => String, { nullable: true })
+	@ApiProperty()
 	updated_at: string;
 
 	@Field((type) => String, { nullable: true })
+	@ApiProperty()
 	deleted_at: string;
 
 	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })

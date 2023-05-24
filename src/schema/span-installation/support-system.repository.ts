@@ -31,6 +31,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		typeDetailed,
 		geography,
 		geographyRD,
+		remarksRevision,
 	}: CreateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const supportSystemId = newId();
 		const data: Prisma.spanSupportSystemsCreateInput = {
@@ -44,6 +45,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			installationHeight,
 			installationLength,
 			remarks,
+			remarksRevision,
 			constructionYear,
 			houseNumber,
 			type: type,
@@ -100,6 +102,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		typeDetailed,
 		geography,
 		geographyRD,
+		remarksRevision,
 	}: UpdateSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
@@ -111,6 +114,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			installationHeight,
 			installationLength,
 			remarks,
+			remarksRevision,
 			constructionYear,
 			houseNumber,
 			type,

@@ -28,6 +28,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		geography,
 		geographyRD,
 		createdAt,
+		remarksRevision,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
 		const junctionBoxId = newId();
 		const data: Prisma.spanJunctionBoxesCreateInput = {
@@ -42,6 +43,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			remarksRevision,
 			geographyRD: {
 				...geographyRD,
 			},
@@ -93,6 +95,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		remarks,
 		geography,
 		geographyRD,
+		remarksRevision,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
@@ -105,6 +108,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			installationHeight,
 			riserTubeVisible,
 			remarks,
+			remarksRevision,
 			geographyRD: {
 				...geographyRD,
 			},

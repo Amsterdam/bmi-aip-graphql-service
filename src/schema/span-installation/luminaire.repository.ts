@@ -28,6 +28,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		driverCommissioningDate,
 		lightSupplierType,
 		lightCommissioningDate,
+		remarksRevision,
 	}: CreateLuminaireInput): Promise<Luminaire> {
 		const luminaireId = newId();
 		const data: Prisma.spanLuminairesCreateInput = {
@@ -40,6 +41,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			supplierType,
 			manufacturer,
 			remarks,
+			remarksRevision,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,
@@ -97,6 +99,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		driverCommissioningDate,
 		lightSupplierType,
 		lightCommissioningDate,
+		remarksRevision,
 	}: UpdateLuminaireInput): Promise<Luminaire> {
 		const data: Prisma.spanLuminairesUpdateInput = {
 			name,
@@ -106,6 +109,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			supplierType,
 			manufacturer,
 			remarks,
+			remarksRevision,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,

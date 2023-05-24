@@ -17,19 +17,19 @@ export class ArkSurvey {
 	surveyId: string;
 
 	@Field((type) => Point, { nullable: true })
-	@ApiProperty({ description: 'The starting point coördinate (in WGS format)' })
+	@ApiProperty({ description: 'The starting point coördinate (in WGS format)', type: Object })
 	arkGeographyStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	@ApiProperty({ description: 'The starting point coördinate (in Rijksdriehoeks format)' })
+	@ApiProperty({ description: 'The starting point coördinate (in Rijksdriehoeks format)', type: Object })
 	arkGeographyRDStart?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	@ApiProperty({ description: 'The ending point coördinate (in WGS format)' })
+	@ApiProperty({ description: 'The ending point coördinate (in WGS format)', type: Object })
 	arkGeographyEnd?: PointType;
 
 	@Field((type) => Point, { nullable: true })
-	@ApiProperty({ description: 'The ending point coördinate (in Rijksdriehoeks format)' })
+	@ApiProperty({ description: 'The ending point coördinate (in Rijksdriehoeks format)', type: Object })
 	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })

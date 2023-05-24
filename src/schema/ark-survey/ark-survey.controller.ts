@@ -22,7 +22,7 @@ export class ArkSurveyController {
 		status: 200,
 		type: ReachSegment,
 		isArray: true,
-		description: 'Returns the Reach Segments of an ArkSurvey',
+		description: 'Returns the Reach Segments (rakdelen) of an ArkSurvey',
 	})
 	async reachSegments(@Param('surveyId') surveyId: string): Promise<ReachSegment[]> {
 		const arkSurvey = await this.queryBus.execute<GetArkSurveyBySurveyIdQuery>(

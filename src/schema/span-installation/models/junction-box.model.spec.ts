@@ -28,6 +28,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 		junctionBox.createdAt = '2022-08-02T15:51:54.044Z';
 		junctionBox.updatedAt = '2022-08-02T15:52:54.044Z';
 		junctionBox.deletedAt = '2022-08-02T15:53:07.441Z';
+		junctionBox.remarksRevision = '__REMARKS_REVISION__';
 
 		expect(junctionBox).toBeInstanceOf(JunctionBox);
 		expect(junctionBox).toEqual({
@@ -53,6 +54,7 @@ describe('Span Installation / Model / JunctionBox', () => {
 			riserTubeVisible: false,
 			surveyId: '388ecaaa-c6c2-4613-aa14-f206cf577ca7',
 			updatedAt: '2022-08-02T15:52:54.044Z',
+			remarksRevision: '__REMARKS_REVISION__',
 		});
 	});
 });

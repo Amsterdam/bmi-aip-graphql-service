@@ -33,6 +33,7 @@ describe('Span Installation / Model / Luminaire', () => {
 		luminaire.createdAt = '2022-08-02T15:51:54.044Z';
 		luminaire.updatedAt = '2022-08-02T15:52:54.044Z';
 		luminaire.deletedAt = '2022-08-02T15:53:07.441Z';
+		luminaire.remarksRevision = '__REMARKS_REVISION__';
 
 		expect(luminaire).toBeInstanceOf(Luminaire);
 		expect(luminaire).toEqual({
@@ -59,6 +60,7 @@ describe('Span Installation / Model / Luminaire', () => {
 			supplierType: 'two',
 			supportSystemId: 'cecc214d-1c44-4bcd-94e2-f2d661327db3',
 			updatedAt: '2022-08-02T15:52:54.044Z',
+			remarksRevision: '__REMARKS_REVISION__',
 		});
 	});
 });

@@ -68,6 +68,7 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
+	remarksRevision: '__REMARKS_REVISION__',
 };
 
 export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {

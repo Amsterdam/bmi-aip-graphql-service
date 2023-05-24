@@ -52,6 +52,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				mastNumber: new Decimal(33.33),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
+				remarksRevision: '__REMARKS_REVISION__',
 				riserTubeVisible: true,
 				geographyRD: {
 					coordinates: [116211.88, 487352.77],
@@ -109,6 +110,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				mastNumber: new Decimal('33.33'),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
+				remarksRevision: '__REMARKS_REVISION__',
 				riserTubeVisible: true,
 				geographyRD: {
 					coordinates: [116211.88, 487352.77],
@@ -137,6 +139,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			name: '__NAME__',
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			remarks: '__REMARKS__',
+			remarksRevision: '__REMARKS_REVISION__',
 			riserTubeVisible: true,
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',

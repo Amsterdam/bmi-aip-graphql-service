@@ -28,8 +28,8 @@ export class SpanMeasure {
 	@Field((type) => [SpanMeasureItem], { nullable: 'itemsAndList' })
 	measureItems: SpanMeasureItem[];
 
-	@Field(() => SpanMeasureStatus, { nullable: true })
-	status: SpanMeasureStatus;
+	// @Field(() => SpanMeasureStatus, { nullable: true })
+	// status: SpanMeasureStatus;
 
 	@Field((type) => String, { nullable: true })
 	created_at: string;

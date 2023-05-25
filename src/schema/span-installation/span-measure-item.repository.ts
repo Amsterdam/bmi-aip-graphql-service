@@ -21,7 +21,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
-		status,
+		active,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
 		return this.prisma.spanMeasureItems.create({
 			data: {
@@ -36,7 +36,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				itemType: itemType,
 				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 				quantityEstimate: quantityEstimate,
-				status: status,
+				active: active,
 			},
 		});
 	}
@@ -49,30 +49,46 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		});
 	}
 
+	async findActiveSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]> {
+		return this.prisma.spanMeasureItems.findMany({
+			where: {
+				spanMeasureId,
+				active: true,
+			},
+		});
+	}
+
 	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
 		if (input.spanMeasureItemActuals) {
-			input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
-				// Item not found for given id/spanMeasureId combination
-				const result = await this.prisma.spanMeasureItems.findFirst({
-					where: {
-						id: spanMeasureItemActual.id,
-						spanMeasureId: input.spanMeasureId,
-					},
-				});
+			await Promise.all(
+				input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
+					// Item not found for given id/spanMeasureId combination
+					const result = await this.prisma.spanMeasureItems.findFirst({
+						where: {
+							id: spanMeasureItemActual.id,
+							spanMeasureId: input.spanMeasureId,
+						},
+					});
 
-				if (!result) {
-					throw new NotFoundException('No item found for given id/spanMeasureId combination');
-				}
+					console.log(input);
 
-				await this.prisma.spanMeasureItems.update({
-					where: {
-						id: spanMeasureItemActual.id,
-					},
-					data: {
-						quantityActual: spanMeasureItemActual.quantityActual,
-					},
-				});
-			});
+					if (!result) {
+						throw new NotFoundException('No item found for given id/spanMeasureId combination');
+					}
+
+					await this.prisma.spanMeasureItems.update({
+						where: {
+							id: spanMeasureItemActual.id,
+						},
+						data: {
+							quantityActual: spanMeasureItemActual.quantityActual,
+							active: spanMeasureItemActual.active,
+						},
+					});
+				}),
+			);
+
+			return this.findSpanMeasureItems(input.spanMeasureId);
 		}
 
 		return this.findSpanMeasureItems(input.spanMeasureId);

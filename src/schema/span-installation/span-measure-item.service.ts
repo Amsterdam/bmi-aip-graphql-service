@@ -13,4 +13,10 @@ export class SpanMeasureItemService {
 			SpanMeasureItemFactory.CreateSpanMeasureItem(spanMeasureItem),
 		);
 	}
+
+	async findActiveSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]> {
+		return (await this.SpanMeasureItemsRepo.findActiveSpanMeasureItems(spanMeasureId)).map((spanMeasureItem) =>
+			SpanMeasureItemFactory.CreateSpanMeasureItem(spanMeasureItem),
+		);
+	}
 }

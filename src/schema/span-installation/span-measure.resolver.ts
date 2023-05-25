@@ -1,4 +1,4 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -18,6 +18,7 @@ import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
+import { FindActiveSpanMeasureItemsQuery } from './queries/find-active-span-measure-items.query';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -73,7 +74,15 @@ export class SpanMeasureResolver {
 	}
 
 	@ResolveField()
-	async measureItems(@Parent() { id }: SpanMeasure): Promise<SpanMeasureItem[]> {
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	async measureItems(@Parent() { id }: SpanMeasure, @Context() context): Promise<SpanMeasureItem[]> {
+		const { user } = context.req;
+
+		// Owner should see all items, surveyor only active items
+		// if	(user.realm_access.roles.includes('aip_owner')) {
+		//	return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
+		//}
+
 		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
 	}
 }

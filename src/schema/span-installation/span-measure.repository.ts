@@ -18,7 +18,6 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		description,
 		decompositionId,
 		decompositionType,
-		status,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
 		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
 			throw new NotFoundException('Decomposition entity not found');
@@ -32,7 +31,6 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 				description,
 				decompositionId,
 				decompositionType,
-				status,
 			},
 		});
 	}

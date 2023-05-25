@@ -18,7 +18,7 @@ import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
-import { FindActiveSpanMeasureItemsQuery } from './queries/find-active-span-measure-items.query';
+import { SpanMeasureStatus } from './types/span-measure-status';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -84,5 +84,10 @@ export class SpanMeasureResolver {
 		//}
 
 		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
+	}
+
+	@ResolveField()
+	async status(): Promise<string> {
+		return SpanMeasureStatus.open;
 	}
 }

@@ -13,6 +13,10 @@ import { JunctionBox as DomainJunctionBox } from './types/junction-box.repositor
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
 import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { CreateReviseJunctionBoxInput } from './dto/create-revise-junction-box.input';
+import { CreateReviseJunctionBoxCommand } from './commands/create-revise-junction-box.command';
+import { UpdateReviseJunctionBoxCommand } from './commands/update-revise-junction-box.command';
+import { UpdateReviseJunctionBoxInput } from './dto/update-revise-junction-box.input';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -44,6 +48,26 @@ export class JunctionBoxResolver {
 			new DeleteJunctionBoxCommand(identifier),
 		);
 		return JunctionBoxFactory.CreateJunctionBox(domainJunctionBox);
+	}
+
+	@Mutation(() => JunctionBox)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async createReviseJunctionBox(
+		@Args('createReviseJunctionBox') input: CreateReviseJunctionBoxInput,
+	): Promise<JunctionBox> {
+		const domainReviseJunctionBox: DomainJunctionBox =
+			await this.commandBus.execute<CreateReviseJunctionBoxCommand>(new CreateReviseJunctionBoxCommand(input));
+		return JunctionBoxFactory.CreateJunctionBox(domainReviseJunctionBox);
+	}
+
+	@Mutation(() => JunctionBox)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async updateReviseJunctionBox(
+		@Args('updateReviseJunctionBox') input: UpdateReviseJunctionBoxInput,
+	): Promise<JunctionBox> {
+		const domainReviseJunctionBox: DomainJunctionBox =
+			await this.commandBus.execute<UpdateReviseJunctionBoxCommand>(new UpdateReviseJunctionBoxCommand(input));
+		return JunctionBoxFactory.CreateJunctionBox(domainReviseJunctionBox);
 	}
 
 	@Query((returns) => [JunctionBox], { name: 'spanInstallationJunctionBoxes' })

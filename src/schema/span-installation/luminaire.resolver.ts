@@ -13,6 +13,10 @@ import { Luminaire as DomainLuminaire } from './types/luminaire.repository.inter
 import { DeleteLuminaireCommand } from './commands/delete-luminaire.command';
 import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { CreateReviseLuminaireCommand } from './commands/create-revise-luminaire.command';
+import { CreateReviseLuminaireInput } from './dto/create-revise-luminaire.input';
+import { UpdateReviseLuminaireInput } from './dto/update-revise-luminaire.input';
+import { UpdateReviseLuminaireCommand } from './commands/update-revise-luminaire.command';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)
@@ -44,6 +48,28 @@ export class LuminaireResolver {
 			new DeleteLuminaireCommand(identifier),
 		);
 		return LuminaireFactory.CreateLuminaire(domainLuminaire);
+	}
+
+	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async createReviseLuminaire(
+		@Args('createReviseLuminaire') input: CreateReviseLuminaireInput,
+	): Promise<Luminaire> {
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<CreateReviseLuminaireCommand>(
+			new CreateReviseLuminaireCommand(input),
+		);
+		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
+	}
+
+	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async updateReviseLuminaire(
+		@Args('updateReviseLuminaire') input: UpdateReviseLuminaireInput,
+	): Promise<Luminaire> {
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateReviseLuminaireCommand>(
+			new UpdateReviseLuminaireCommand(input),
+		);
+		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
 	}
 
 	@Query((returns) => [Luminaire], { name: 'spanInstallationLuminaires' })

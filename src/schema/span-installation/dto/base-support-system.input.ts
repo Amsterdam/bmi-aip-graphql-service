@@ -32,10 +32,6 @@ export class BaseSupportSystemInput {
 	public remarks?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
-	public remarksRevision?: string;
-
-	@IsOptional()
 	@MaxLength(255)
 	@Field({ nullable: true })
 	public locationIndication?: string;

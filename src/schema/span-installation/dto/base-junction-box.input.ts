@@ -41,10 +41,6 @@ export class BaseJunctionBoxInput {
 	public remarks?: string;
 
 	@IsOptional()
-	@Field({ nullable: true })
-	public remarksRevision?: string;
-
-	@IsOptional()
 	@Field(() => Point, { nullable: true })
 	geography?: PointType;
 

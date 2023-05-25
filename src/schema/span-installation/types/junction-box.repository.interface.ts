@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
 import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
+import { CreateReviseJunctionBoxInput } from '../dto/create-revise-junction-box.input';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
+import { UpdateReviseJunctionBoxInput } from '../dto/update-revise-junction-box.input';
 
 const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 	select: {
@@ -37,4 +39,6 @@ export interface IJunctionBoxRepository {
 	updateJunctionBox(input: UpdateJunctionBoxInput): Promise<JunctionBox>;
 	deleteJunctionBox(identifier: string): Promise<JunctionBox>;
 	cloneJunctionBoxes(objectId: string, surveyId: string): Promise<JunctionBox[]>;
+	createReviseJunctionBox(input: CreateReviseJunctionBoxInput): Promise<JunctionBox>;
+	updateReviseJunctionBox(input: UpdateReviseJunctionBoxInput): Promise<JunctionBox>;
 }

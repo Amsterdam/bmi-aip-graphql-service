@@ -9,6 +9,8 @@ import { newId } from '../../utils';
 import { JunctionBox, IJunctionBoxRepository } from './types/junction-box.repository.interface';
 import { CreateJunctionBoxInput } from './dto/create-junction-box.input';
 import { UpdateJunctionBoxInput } from './dto/update-junction-box.input';
+import { CreateReviseJunctionBoxInput } from './dto/create-revise-junction-box.input';
+import { UpdateReviseJunctionBoxInput } from './dto/update-revise-junction-box.input';
 
 @Injectable()
 export class JunctionBoxRepository implements IJunctionBoxRepository {
@@ -28,8 +30,59 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		geography,
 		geographyRD,
 		createdAt,
-		remarksRevision,
 	}: CreateJunctionBoxInput): Promise<JunctionBox> {
+		const junctionBoxId = newId();
+		const data: Prisma.spanJunctionBoxesCreateInput = {
+			id: junctionBoxId,
+			objects: { connect: { id: objectId } },
+			surveys: { connect: { id: surveyId } },
+			name,
+			mastNumber,
+			location,
+			locationIndication,
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
+			installationHeight,
+			riserTubeVisible,
+			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
+			permanentId: junctionBoxId,
+		};
+
+		const junctionBox = await this.prisma.spanJunctionBoxes.create({ data });
+
+		// Work around Prisma not supporting spatial data types
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanJunctionBoxes"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${junctionBox.id}
+			`;
+		}
+
+		return {
+			...junctionBox,
+			geography,
+		};
+	}
+
+	async createReviseJunctionBox({
+		objectId,
+		surveyId,
+		name,
+		mastNumber,
+		location,
+		locationIndication,
+		a11yDetails,
+		installationHeight,
+		riserTubeVisible,
+		remarks,
+		geography,
+		geographyRD,
+		createdAt,
+		remarksRevision,
+	}: CreateReviseJunctionBoxInput): Promise<JunctionBox> {
 		const junctionBoxId = newId();
 		const data: Prisma.spanJunctionBoxesCreateInput = {
 			id: junctionBoxId,
@@ -95,8 +148,58 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		remarks,
 		geography,
 		geographyRD,
-		remarksRevision,
 	}: UpdateJunctionBoxInput): Promise<JunctionBox> {
+		const data: Prisma.spanJunctionBoxesUpdateInput = {
+			name,
+			mastNumber,
+			location,
+			locationIndication,
+			a11yDetails: {
+				...a11yDetails,
+			},
+			installationHeight,
+			riserTubeVisible,
+			remarks,
+			geographyRD: {
+				...geographyRD,
+			},
+		};
+
+		// Work around Prisma not supporting spatial data types
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanJunctionBoxes"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${id}
+			`;
+		}
+
+		const junctionBox = await this.prisma.spanJunctionBoxes.update({
+			where: { id },
+			data,
+		});
+
+		// Work around Prisma not supporting spatial data types
+		return {
+			...junctionBox,
+			geography: await this.getGeographyAsGeoJSON(id),
+		};
+	}
+
+	async updateReviseJunctionBox({
+		id,
+		name,
+		mastNumber,
+		location,
+		locationIndication,
+		a11yDetails,
+		installationHeight,
+		riserTubeVisible,
+		remarks,
+		geography,
+		geographyRD,
+		remarksRevision,
+	}: UpdateReviseJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
 			mastNumber,

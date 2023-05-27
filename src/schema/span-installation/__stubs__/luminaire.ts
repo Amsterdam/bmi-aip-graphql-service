@@ -19,6 +19,9 @@ luminaire1.geographyRD = {
 	type: 'Point',
 };
 
+const reviseLuminaire1 = luminaire1;
+reviseLuminaire1.remarksRevision = '__REMARKS_REVISION__';
+
 const luminaire2 = new Luminaire();
 luminaire2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 luminaire2.supportSystemId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -33,7 +36,7 @@ luminaire2.geographyRD = {
 	type: 'Point',
 };
 
-export { luminaire1, luminaire2 };
+export { luminaire1, luminaire2, reviseLuminaire1 };
 
 const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	name: '__NAME__',
@@ -59,13 +62,15 @@ const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
 	hasLED: true,
-	remarksRevision: '__REMARKS_REVISION__',
+	remarksRevision: null,
 };
 
 export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	input[key] = luminaireRaw[key];
 	return input;
 }, new CreateLuminaireInput());
+
+export const reviseLuminaireInput = { remarksRevision: '__REMARKS_REVISION__', ...luminaireInput };
 
 const updateLuminaire = new UpdateLuminaireInput();
 updateLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -74,11 +79,21 @@ export const updateLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 	return input;
 }, updateLuminaire);
 
+export const updateReviseLuminaireInput = {
+	remarksRevision: '__REMARKS_REVISION__',
+	...updateLuminaireInput,
+};
+
 export const domainLuminaire: DomainLuminaire = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...luminaireRaw,
 	deleted_at: null,
+};
+
+export const domainReviseLuminaire = {
+	remarksRevision: '__REMARKS_REVISION__',
+	...domainLuminaire,
 };
 
 export const luminaire = LuminaireFactory.CreateLuminaire(domainLuminaire);

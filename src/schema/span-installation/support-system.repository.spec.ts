@@ -70,7 +70,6 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
 				remarks: '__REMARKS__',
-				remarksRevision: '__REMARKS_REVISION__',
 				constructionYear: 1979,
 				houseNumber: '33',
 				type: 'Facade',
@@ -131,7 +130,6 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
 				remarks: '__REMARKS__',
-				remarksRevision: '__REMARKS_REVISION__',
 				constructionYear: 1979,
 				houseNumber: '33',
 				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
@@ -157,7 +155,6 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			installationHeight: new Decimal(10),
 			installationLength: new Decimal(10),
 			remarks: '__REMARKS__',
-			remarksRevision: '__REMARKS_REVISION__',
 			houseNumber: '33',
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
@@ -170,6 +167,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: null,
 		});
 	});
 

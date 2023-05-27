@@ -21,6 +21,9 @@ junctionBox1.geographyRD = {
 	type: 'Point',
 };
 
+const reviseJunctionBox1 = junctionBox1;
+reviseJunctionBox1.remarksRevision = '__REMARKS_REVISION__';
+
 const junctionBox2 = new JunctionBox();
 junctionBox2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 junctionBox2.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -34,7 +37,7 @@ junctionBox2.geographyRD = {
 	type: 'Point',
 };
 
-export { junctionBox1, junctionBox2 };
+export { junctionBox1, junctionBox2, reviseJunctionBox1 };
 
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
@@ -61,7 +64,7 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
-	remarksRevision: '__REMARKS_REVISION__',
+	remarksRevision: null,
 };
 
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
@@ -72,6 +75,11 @@ export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) 
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, new CreateJunctionBoxInput());
+
+export const reviseJunctionBoxInput = {
+	remarksRevision: '__REMARKS_REVISION__',
+	...junctionBoxInput,
+};
 
 const updateJunctionBox = new UpdateJunctionBoxInput();
 updateJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -84,11 +92,18 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 	return input;
 }, updateJunctionBox);
 
+export const updateReviseJunctionBoxInput = { remarksRevision: '__REMARKS_REVISION__', ...updateJunctionBoxInput };
+
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...junctionBoxRaw,
 	deleted_at: null,
+};
+
+export const domainReviseJunctionBox: DomainJunctionBox = {
+	remarksRevision: '__REMARKS_REVISION__',
+	...domainJunctionBox,
 };
 
 export const junctionBox = JunctionBoxFactory.CreateJunctionBox(domainJunctionBox);

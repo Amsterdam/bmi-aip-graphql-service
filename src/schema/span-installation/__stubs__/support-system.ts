@@ -10,6 +10,9 @@ import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-syst
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
+import { CreateReviseSupportSystemNormalizedInput } from '../dto/create-revise-support-system-normalized.input';
+import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
+import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -25,6 +28,8 @@ supportSystem1.geographyRD = {
 	type: 'Point',
 };
 
+const reviseSupportSystem1 = { remarksRevision: '__REMARKS_REVISION__', ...supportSystem1 };
+
 const supportSystem2 = new SupportSystem();
 supportSystem2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 supportSystem2.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -38,7 +43,7 @@ supportSystem2.geographyRD = {
 	type: 'Point',
 };
 
-export { supportSystem1, supportSystem2 };
+export { supportSystem1, supportSystem2, reviseSupportSystem1 };
 
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
@@ -68,8 +73,10 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
-	remarksRevision: '__REMARKS_REVISION__',
+	remarksRevision: null,
 };
+
+const reviseSupportSystemRaw = { remarksRevision: '__REMARKS_REVISION__', ...supportSystemRaw };
 
 export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
@@ -84,8 +91,14 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, new CreateSupportSystemInput());
 
+export const createReviseSupportSystemInput = { remarksRevision: '__REMARKS_REVISION__', ...createSupportSystemInput };
+
 const updateSupportSystem = new UpdateSupportSystemInput();
 updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+const updateReviseSupportSystem = new UpdateReviseSupportSystemInput();
+updateReviseSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+updateReviseSupportSystem.remarksRevision = '__REMARKS_REVISION__';
+
 export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
 		input.typeDetailedFacade = supportSystemRaw[key] as SupportSystemTypeDetailedFacade;
@@ -99,14 +112,41 @@ export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, updateSupportSystem);
 
+export const updateReviseSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+	if (key === 'typeDetailed') {
+		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
+		return input;
+	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseSupportSystemRaw[key];
+	return input;
+}, updateReviseSupportSystem);
+
 export const createSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
 	createSupportSystemInput,
 	new CreateSupportSystemNormalizedInput(),
 );
 
+export const createReviseSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
+	createReviseSupportSystemInput,
+	new CreateReviseSupportSystemNormalizedInput(),
+);
+
 export const updateSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
 	updateSupportSystem,
 	new UpdateSupportSystemNormalizedInput(),
+);
+
+export const updateReviseSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
+	updateReviseSupportSystem,
+	new UpdateReviseSupportSystemNormalizedInput(),
 );
 
 export const domainSupportSystem: DomainSupportSystem = {
@@ -115,6 +155,8 @@ export const domainSupportSystem: DomainSupportSystem = {
 	...supportSystemRaw,
 	deleted_at: null,
 };
+
+export const domainReviseSupportSystem = { remarksRevision: '__REMARKS_REVISION__', ...domainSupportSystem };
 
 export const supportSystem = SupportSystemFactory.CreateSupportSystem(domainSupportSystem);
 

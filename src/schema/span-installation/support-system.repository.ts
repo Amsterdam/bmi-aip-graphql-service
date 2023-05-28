@@ -46,7 +46,6 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			installationHeight,
 			installationLength,
 			remarks,
-
 			constructionYear,
 			houseNumber,
 			type: type,

@@ -11,7 +11,7 @@ const luminaireRepoMock: MockedObjectDeep<LuminaireRepository> = {
 	...(<any>{}),
 };
 
-describe('UpdateLuminaireHandler', () => {
+describe('UpdateReviseLuminaireHandler', () => {
 	test('executes command', async () => {
 		const command = new UpdateReviseLuminaireCommand(updateReviseLuminaireInput);
 		const result = await new UpdateReviseLuminaireHandler(luminaireRepoMock).execute(command);

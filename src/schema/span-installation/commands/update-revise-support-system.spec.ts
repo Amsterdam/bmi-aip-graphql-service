@@ -15,7 +15,7 @@ const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
 	...(<any>{}),
 };
 
-describe('UpdateSupportSystemHandler', () => {
+describe('UpdateReviseSupportSystemHandler', () => {
 	test('executes command', async () => {
 		const command = new UpdateReviseSupportSystemCommand(updateReviseSupportSystemInput);
 		const result = await new UpdateReviseSupportSystemHandler(supportSystemRepoMock).execute(command);

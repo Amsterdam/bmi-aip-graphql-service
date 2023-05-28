@@ -4,6 +4,8 @@ import { Luminaire as DomainLuminaire } from '../types/luminaire.repository.inte
 import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
 import { SupplierType } from '../types';
+import { CreateReviseLuminaireInput } from '../dto/create-revise-luminaire.input';
+import { UpdateReviseLuminaireInput } from '../dto/update-revise-luminaire.input';
 
 const luminaire1 = new Luminaire();
 luminaire1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -65,12 +67,22 @@ const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	remarksRevision: null,
 };
 
+const reviseLuminaireRaw = { ...luminaireRaw };
+reviseLuminaireRaw.remarksRevision = '__REMARKS_REVISION__';
+
 export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	input[key] = luminaireRaw[key];
 	return input;
 }, new CreateLuminaireInput());
 
-export const reviseLuminaireInput = { remarksRevision: '__REMARKS_REVISION__', ...luminaireInput };
+export const reviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = luminaireRaw[key];
+	return input;
+}, new CreateReviseLuminaireInput());
 
 const updateLuminaire = new UpdateLuminaireInput();
 updateLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -79,10 +91,16 @@ export const updateLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 	return input;
 }, updateLuminaire);
 
-export const updateReviseLuminaireInput = {
-	remarksRevision: '__REMARKS_REVISION__',
-	...updateLuminaireInput,
-};
+const updateReviseLuminaire = new UpdateReviseLuminaireInput();
+updateReviseLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateReviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = luminaireRaw[key];
+	return input;
+}, updateReviseLuminaire);
 
 export const domainLuminaire: DomainLuminaire = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
@@ -92,8 +110,10 @@ export const domainLuminaire: DomainLuminaire = {
 };
 
 export const domainReviseLuminaire = {
-	remarksRevision: '__REMARKS_REVISION__',
-	...domainLuminaire,
+	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	...reviseLuminaireRaw,
+	deleted_at: null,
 };
 
 export const luminaire = LuminaireFactory.CreateLuminaire(domainLuminaire);

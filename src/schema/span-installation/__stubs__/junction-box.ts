@@ -6,6 +6,8 @@ import { JunctionBox as DomainJunctionBox } from '../types/junction-box.reposito
 import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
 import { A11yDetails } from '../models/a11y-details.model';
+import { CreateReviseJunctionBoxInput } from '../dto/create-revise-junction-box.input';
+import { UpdateReviseJunctionBoxInput } from '../dto/update-revise-junction-box.input';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -67,6 +69,9 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 	remarksRevision: null,
 };
 
+const reviseJunctionBoxRaw = { ...junctionBoxRaw };
+reviseJunctionBoxRaw.remarksRevision = '__REMARKS_REVISION__';
+
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
 	if (key === 'a11yDetails') {
 		input.a11yDetails = a11yDetails;
@@ -76,10 +81,18 @@ export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) 
 	return input;
 }, new CreateJunctionBoxInput());
 
-export const reviseJunctionBoxInput = {
-	remarksRevision: '__REMARKS_REVISION__',
-	...junctionBoxInput,
-};
+export const reviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseJunctionBoxRaw[key];
+	return input;
+}, new CreateReviseJunctionBoxInput());
 
 const updateJunctionBox = new UpdateJunctionBoxInput();
 updateJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -92,7 +105,20 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 	return input;
 }, updateJunctionBox);
 
-export const updateReviseJunctionBoxInput = { remarksRevision: '__REMARKS_REVISION__', ...updateJunctionBoxInput };
+const updateReviseJunctionBox = new UpdateReviseJunctionBoxInput();
+updateReviseJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const updateReviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = junctionBoxRaw[key];
+	return input;
+}, updateReviseJunctionBox);
 
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
@@ -102,8 +128,10 @@ export const domainJunctionBox: DomainJunctionBox = {
 };
 
 export const domainReviseJunctionBox: DomainJunctionBox = {
-	remarksRevision: '__REMARKS_REVISION__',
-	...domainJunctionBox,
+	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	...reviseJunctionBoxRaw,
+	deleted_at: null,
 };
 
 export const junctionBox = JunctionBoxFactory.CreateJunctionBox(domainJunctionBox);

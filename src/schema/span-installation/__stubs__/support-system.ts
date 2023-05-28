@@ -13,6 +13,7 @@ import { A11yDetails } from '../models/a11y-details.model';
 import { CreateReviseSupportSystemNormalizedInput } from '../dto/create-revise-support-system-normalized.input';
 import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
 import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
+import { CreateReviseSupportSystemInput } from '../dto/create-revise-support-system.input';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -76,7 +77,8 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 	remarksRevision: null,
 };
 
-const reviseSupportSystemRaw = { remarksRevision: '__REMARKS_REVISION__', ...supportSystemRaw };
+const reviseSupportSystemRaw = { ...supportSystemRaw };
+reviseSupportSystemRaw.remarksRevision = '__REMARKS_REVISION__';
 
 export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
@@ -91,7 +93,22 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, new CreateSupportSystemInput());
 
-export const createReviseSupportSystemInput = { remarksRevision: '__REMARKS_REVISION__', ...createSupportSystemInput };
+export const createReviseSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+	if (key === 'typeDetailed') {
+		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
+		return input;
+	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseSupportSystemRaw[key];
+	return input;
+}, new CreateReviseSupportSystemInput());
 
 const updateSupportSystem = new UpdateSupportSystemInput();
 updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -156,7 +173,12 @@ export const domainSupportSystem: DomainSupportSystem = {
 	deleted_at: null,
 };
 
-export const domainReviseSupportSystem = { remarksRevision: '__REMARKS_REVISION__', ...domainSupportSystem };
+export const domainReviseSupportSystem: DomainSupportSystem = {
+	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	...reviseSupportSystemRaw,
+	deleted_at: null,
+};
 
 export const supportSystem = SupportSystemFactory.CreateSupportSystem(domainSupportSystem);
 

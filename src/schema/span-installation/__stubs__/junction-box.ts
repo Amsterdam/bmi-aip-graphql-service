@@ -6,6 +6,8 @@ import { JunctionBox as DomainJunctionBox } from '../types/junction-box.reposito
 import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
 import { A11yDetails } from '../models/a11y-details.model';
+import { CreateMissingJunctionBoxInput } from '../dto/create-missing-junction-box.input';
+import { ReviseJunctionBoxInput } from '../dto/revise-junction-box.input';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -21,6 +23,9 @@ junctionBox1.geographyRD = {
 	type: 'Point',
 };
 
+const reviseJunctionBox1 = junctionBox1;
+reviseJunctionBox1.remarksRevision = '__REMARKS_REVISION__';
+
 const junctionBox2 = new JunctionBox();
 junctionBox2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 junctionBox2.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -34,7 +39,7 @@ junctionBox2.geographyRD = {
 	type: 'Point',
 };
 
-export { junctionBox1, junctionBox2 };
+export { junctionBox1, junctionBox2, reviseJunctionBox1 };
 
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
@@ -61,7 +66,11 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
+	remarksRevision: null,
 };
+
+const reviseJunctionBoxRaw = { ...junctionBoxRaw };
+reviseJunctionBoxRaw.remarksRevision = '__REMARKS_REVISION__';
 
 export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) => {
 	if (key === 'a11yDetails') {
@@ -71,6 +80,19 @@ export const junctionBoxInput = Object.keys(junctionBoxRaw).reduce((input, key) 
 	input[key] = junctionBoxRaw[key];
 	return input;
 }, new CreateJunctionBoxInput());
+
+export const createMissingJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseJunctionBoxRaw[key];
+	return input;
+}, new CreateMissingJunctionBoxInput());
 
 const updateJunctionBox = new UpdateJunctionBoxInput();
 updateJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -83,10 +105,32 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 	return input;
 }, updateJunctionBox);
 
+const reviseJunctionBox = new ReviseJunctionBoxInput();
+reviseJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const reviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = junctionBoxRaw[key];
+	return input;
+}, reviseJunctionBox);
+
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...junctionBoxRaw,
+	deleted_at: null,
+};
+
+export const domainReviseJunctionBox: DomainJunctionBox = {
+	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	...reviseJunctionBoxRaw,
 	deleted_at: null,
 };
 

@@ -61,6 +61,12 @@ import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-m
 import { FindSpanMeasuresByDecompositionIdHandler } from './commands/find-span-measures-by-decomposition-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
+import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junction-box.handler';
+import { ReviseJunctionBoxHandler } from './commands/revise-junction-box.handler';
+import { CreateMissingSupportSystemHandler } from './commands/create-missing-support-system.handler';
+import { ReviseSupportSystemHandler } from './commands/revise-support-system.handler';
+import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
+import { ReviseLuminaireHandler } from './commands/revise-luminaire.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -142,6 +148,12 @@ registerEnumType(SpanMeasureItemStatus, {
 		SpanDecompositionResolver,
 		FindSpanMeasuresByDecompositionIdCommand,
 		FindSpanMeasuresByDecompositionIdHandler,
+		CreateMissingJunctionBoxHandler,
+		ReviseJunctionBoxHandler,
+		CreateMissingSupportSystemHandler,
+		ReviseSupportSystemHandler,
+		CreateMissingLuminaireHandler,
+		ReviseLuminaireHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

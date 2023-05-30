@@ -7,9 +7,13 @@ import { JunctionBoxRepository } from './junction-box.repository';
 import {
 	deletedJunctionBox,
 	domainJunctionBox,
+	domainReviseJunctionBox,
 	junctionBox1,
 	junctionBoxInput,
+	reviseJunctionBox1,
 	updateJunctionBoxInput,
+	reviseJunctionBoxInput,
+	createMissingJunctionBoxInput,
 } from './__stubs__';
 import type { JunctionBoxWithoutGeography } from './types/junction-box.repository.interface';
 
@@ -24,7 +28,19 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
+const revisePrismaServiceMock: MockedObjectDeep<PrismaService> = {
+	spanJunctionBoxes: {
+		create: jest.fn().mockResolvedValue(domainReviseJunctionBox),
+		findMany: jest.fn().mockResolvedValue([domainReviseJunctionBox]),
+		update: jest.fn().mockResolvedValue(domainReviseJunctionBox),
+	},
+	$executeRaw: jest.fn(),
+	$queryRaw: jest.fn(),
+	...(<any>{}),
+};
+
 const repo = new JunctionBoxRepository(prismaServiceMock);
+const reviseRepo = new JunctionBoxRepository(revisePrismaServiceMock);
 
 describe('Span Installation / JunctionBox / Repository', () => {
 	test('createJunctionBox()', async () => {
@@ -68,6 +84,49 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		);
 	});
 
+	test('createMissingJunctionBox()', async () => {
+		const returnValue = await reviseRepo.createMissingJunctionBox(createMissingJunctionBoxInput);
+		const junctionBox = revisePrismaServiceMock.spanJunctionBoxes.create.mock.calls[0][0]
+			.data as JunctionBoxWithoutGeography;
+
+		expect(junctionBox).toEqual(
+			expect.objectContaining({
+				id: junctionBox.id,
+				objects: {
+					connect: {
+						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+					},
+				},
+				surveys: {
+					connect: {
+						id: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+					},
+				},
+				a11yDetails: junctionBoxInput.a11yDetails,
+				installationHeight: new Decimal(10),
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				mastNumber: new Decimal(33.33),
+				name: '__NAME__',
+				remarks: '__REMARKS__',
+				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
+				permanentId: junctionBox.id,
+				remarksRevision: '__REMARKS_REVISION__',
+			}),
+		);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(returnValue).toEqual(
+			expect.objectContaining({
+				...createMissingJunctionBoxInput,
+				a11yDetails: createMissingJunctionBoxInput.a11yDetails,
+			}),
+		);
+	});
+
 	test('getJunctionBoxes()', async () => {
 		prismaServiceMock.$queryRaw.mockResolvedValue([
 			{
@@ -90,6 +149,62 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(junctionBoxes).toEqual([expected]);
+	});
+
+	test('reviseJunctionBox()', async () => {
+		revisePrismaServiceMock.spanJunctionBoxes.update.mockResolvedValue(domainReviseJunctionBox);
+		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
+			{ geography: JSON.stringify(reviseJunctionBox1.geography) },
+		]);
+		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
+			{ geographyRD: JSON.stringify(reviseJunctionBox1.geographyRD) },
+		]);
+		const spy = jest.spyOn(reviseRepo, 'getGeographyAsGeoJSON').mockResolvedValue(reviseJunctionBoxInput.geography);
+		const returnValue = await reviseRepo.reviseJunctionBox(reviseJunctionBoxInput);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(revisePrismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
+			where: { id: reviseJunctionBoxInput.id },
+			data: {
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
+				installationHeight: new Decimal(10),
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				mastNumber: new Decimal('33.33'),
+				name: '__NAME__',
+				remarks: '__REMARKS__',
+				riserTubeVisible: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
+				remarksRevision: '__REMARKS_REVISION__',
+			},
+		});
+		expect(spy).toHaveBeenCalledWith(reviseJunctionBoxInput.id);
+		expect(returnValue).toEqual({
+			a11yDetails: reviseJunctionBoxInput.a11yDetails,
+			deleted_at: null,
+			geography: {
+				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
+			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			installationHeight: new Decimal(10),
+			location: '__LOCATION__',
+			locationIndication: '__LOCATION_INDICATION__',
+			mastNumber: new Decimal(33.33),
+			name: '__NAME__',
+			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			remarks: '__REMARKS__',
+			riserTubeVisible: true,
+			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: '__REMARKS_REVISION__',
+		});
 	});
 
 	test('updateJunctionBox()', async () => {
@@ -119,7 +234,6 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(spy).toHaveBeenCalledWith(updateJunctionBoxInput.id);
 		expect(returnValue).toEqual({
 			a11yDetails: updateJunctionBoxInput.a11yDetails,
-
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],
@@ -140,6 +254,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			riserTubeVisible: true,
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: null,
 		});
 	});
 

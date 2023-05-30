@@ -48,6 +48,10 @@ export class Luminaire {
 	@Field((type) => String, { nullable: true })
 	remarks?: string;
 
+	// Maps to "Opmerking Revisie"
+	@Field((type) => String, { nullable: true })
+	remarksRevision?: string;
+
 	// DRIVER
 
 	// Maps to "Leverancierstype_driver"

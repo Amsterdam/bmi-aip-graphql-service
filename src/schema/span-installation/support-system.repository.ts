@@ -10,6 +10,8 @@ import { SupportSystem, ISupportSystemRepository } from './types/support-system.
 import { LuminaireRepository } from './luminaire.repository';
 import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
+import { ReviseSupportSystemNormalizedInput } from './dto/revise-support-system-normalized.input';
+import { CreateMissingSupportSystemNormalizedInput } from './dto/create-missing-support-system-normalized.input';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {
@@ -44,6 +46,62 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			installationHeight,
 			installationLength,
 			remarks,
+			constructionYear,
+			houseNumber,
+			type: type,
+			typeDetailed: typeDetailed,
+			geographyRD: {
+				...geographyRD,
+			},
+			permanentId: supportSystemId,
+		};
+
+		const supportSystem = await this.prisma.spanSupportSystems.create({ data });
+
+		// Work around Prisma not supporting spatial data types
+		await this.prisma.$executeRaw`
+			UPDATE "spanSupportSystems"
+			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+			WHERE id = ${supportSystem.id}
+		`;
+
+		return {
+			...supportSystem,
+			geography,
+		};
+	}
+
+	async createMissingSupportSystem({
+		objectId,
+		surveyId,
+		name,
+		location,
+		locationIndication,
+		a11yDetails,
+		installationHeight,
+		installationLength,
+		remarks,
+		constructionYear,
+		houseNumber,
+		type,
+		typeDetailed,
+		geography,
+		geographyRD,
+		remarksRevision,
+	}: CreateMissingSupportSystemNormalizedInput): Promise<SupportSystem> {
+		const supportSystemId = newId();
+		const data: Prisma.spanSupportSystemsCreateInput = {
+			id: supportSystemId,
+			objects: { connect: { id: objectId } },
+			surveys: { connect: { id: surveyId } },
+			name,
+			location,
+			locationIndication,
+			a11yDetails: a11yDetails as Prisma.InputJsonObject,
+			installationHeight,
+			installationLength,
+			remarks,
+			remarksRevision,
 			constructionYear,
 			houseNumber,
 			type: type,
@@ -111,6 +169,61 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			installationHeight,
 			installationLength,
 			remarks,
+			constructionYear,
+			houseNumber,
+			type,
+			typeDetailed,
+			geographyRD: {
+				...geographyRD,
+			},
+		};
+
+		// Work around Prisma not supporting spatial data types
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanSupportSystems"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${id}
+			`;
+		}
+
+		const supportSystem = await this.prisma.spanSupportSystems.update({
+			where: { id },
+			data,
+		});
+
+		// Work around Prisma not supporting spatial data types
+		return { ...supportSystem, geography: await this.getGeographyAsGeoJSON(id) };
+	}
+
+	async reviseSupportSystem({
+		id,
+		name,
+		location,
+		locationIndication,
+		a11yDetails,
+		installationHeight,
+		installationLength,
+		remarks,
+		constructionYear,
+		houseNumber,
+		type,
+		typeDetailed,
+		geography,
+		geographyRD,
+		remarksRevision,
+	}: ReviseSupportSystemNormalizedInput): Promise<SupportSystem> {
+		const data: Prisma.spanSupportSystemsUpdateInput = {
+			name,
+			location,
+			locationIndication,
+			a11yDetails: {
+				...a11yDetails,
+			},
+			installationHeight,
+			installationLength,
+			remarks,
+			remarksRevision,
 			constructionYear,
 			houseNumber,
 			type,

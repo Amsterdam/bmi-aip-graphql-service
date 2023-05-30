@@ -6,11 +6,17 @@ import { JunctionBoxSurveyFactory } from './junction-box-survey.factory';
 
 @Injectable()
 export class JunctionBoxSurveyService {
-	public constructor(private readonly mastSurveyRepo: JunctionBoxSurveyRepository) {}
+	public constructor(private readonly junctionBoxRepo: JunctionBoxSurveyRepository) {}
 
-	async getJunctionBoxSurvey(supportSystemId: string): Promise<JunctionBoxSurvey> {
+	async getJunctionBoxSurvey(junctionBoxId: string): Promise<JunctionBoxSurvey> {
 		return JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(
-			await this.mastSurveyRepo.getJunctionBoxSurvey(supportSystemId),
+			await this.junctionBoxRepo.getJunctionBoxSurvey(junctionBoxId),
+		);
+	}
+
+	async getJunctionBoxSurveyOnPermanentId(junctionBoxId: string): Promise<JunctionBoxSurvey> {
+		return JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(
+			await this.junctionBoxRepo.getJunctionBoxSurveyOnPermanentId(junctionBoxId),
 		);
 	}
 }

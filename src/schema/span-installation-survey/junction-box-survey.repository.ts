@@ -76,4 +76,17 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 			where: { id },
 		});
 	}
+
+	async getJunctionBoxSurveyOnPermanentId(junctionBoxId: string): Promise<JunctionBoxSurvey> {
+		const { permanentId } = await this.prisma.spanJunctionBoxes.findUnique({
+			where: {
+				id: junctionBoxId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getJunctionBoxSurvey(permanentId);
+	}
 }

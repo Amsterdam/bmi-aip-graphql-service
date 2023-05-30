@@ -10,6 +10,7 @@ import { CreateJunctionBoxSurveyCommand } from './commands/create-junction-box-s
 import { JunctionBoxSurveyFactory } from './junction-box-survey.factory';
 import { UpdateJunctionBoxSurveyCommand } from './commands/update-junction-box-survey.command';
 import { UpdateJunctionBoxSurveyInput } from './dto/update-junction-box-survey.input';
+import { GetJunctionBoxDamageQuery } from './queries/get-junction-box-damage.query';
 
 @Resolver((of) => JunctionBoxSurvey)
 @Resource(JunctionBoxSurvey.name)
@@ -44,5 +45,11 @@ export class JunctionBoxSurveyResolver {
 		return JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(
 			await this.commandBus.execute<UpdateJunctionBoxSurveyCommand>(new UpdateJunctionBoxSurveyCommand(input)),
 		);
+	}
+
+	@Query(() => JunctionBoxSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async getJunctionBoxDamage(@Args('junctionBoxId') junctionBoxId: string) {
+		return this.queryBus.execute<GetJunctionBoxDamageQuery>(new GetJunctionBoxDamageQuery(junctionBoxId));
 	}
 }

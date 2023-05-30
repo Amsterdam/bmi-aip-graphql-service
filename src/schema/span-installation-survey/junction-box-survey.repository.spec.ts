@@ -6,11 +6,16 @@ import { JunctionBoxSurveyRepository } from './junction-box-survey.repository';
 import { domainJunctionBoxSurvey, createJunctionBoxSurveyInput, updateJunctionBoxSurveyInput } from './__stubs__';
 import { JunctionBoxSurveyNotFoundException } from './exceptions/junction-box-survey-not-found.exception';
 
+const permanentId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
+
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanJunctionBoxSurveys: {
 		create: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		findFirst: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		update: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
+	},
+	spanJunctionBoxes: {
+		findUnique: jest.fn().mockResolvedValue({ permanentId }),
 	},
 	...(<any>{}),
 };
@@ -91,5 +96,11 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 			remarks: '__REMARKS__',
 			stickerNotReadable: true,
 		});
+	});
+
+	test('getJunctionBoxSurveyOnPermanentId()', async () => {
+		const spy = jest.spyOn(repository, 'getJunctionBoxSurvey');
+		await repository.getJunctionBoxSurveyOnPermanentId(domainJunctionBoxSurvey.junctionBoxId);
+		expect(spy).toHaveBeenLastCalledWith(permanentId);
 	});
 });

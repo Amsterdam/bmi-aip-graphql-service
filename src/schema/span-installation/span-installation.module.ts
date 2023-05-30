@@ -65,7 +65,7 @@ import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junct
 import { UpdateReviseJunctionBoxHandler } from './commands/update-revise-junction-box.handler';
 import { CreateReviseSupportSystemHandler } from './commands/create-revise-support-system.handler';
 import { UpdateReviseSupportSystemHandler } from './commands/update-revise-support-system.handler';
-import { CreateReviseLuminaireHandler } from './commands/create-revise-luminaire.handler';
+import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
 import { UpdateReviseLuminaireHandler } from './commands/update-revise-luminaire.handler';
 
 registerEnumType(SupportSystemType, {
@@ -152,7 +152,7 @@ registerEnumType(SpanMeasureItemStatus, {
 		UpdateReviseJunctionBoxHandler,
 		CreateReviseSupportSystemHandler,
 		UpdateReviseSupportSystemHandler,
-		CreateReviseLuminaireHandler,
+		CreateMissingLuminaireHandler,
 		UpdateReviseLuminaireHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],

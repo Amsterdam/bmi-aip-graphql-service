@@ -4,17 +4,17 @@ import { LuminaireRepository } from '../luminaire.repository';
 import { domainReviseLuminaire, reviseLuminaireInput } from '../__stubs__';
 
 import { CreateMissingLuminaireCommand } from './create-missing-luminaire.command';
-import { CreateReviseLuminaireHandler } from './create-revise-luminaire.handler';
+import { CreateMissingLuminaireHandler } from './create-missing-luminaire.handler';
 
 const luminaireRepoMock: MockedObjectDeep<LuminaireRepository> = {
 	createReviseLuminaire: jest.fn().mockResolvedValue(domainReviseLuminaire),
 	...(<any>{}),
 };
 
-describe('CreateReviseLuminaireHandler', () => {
+describe('CreateMissingLuminaireHandler', () => {
 	test('executes command', async () => {
 		const command = new CreateMissingLuminaireCommand(reviseLuminaireInput);
-		const result = await new CreateReviseLuminaireHandler(luminaireRepoMock).execute(command);
+		const result = await new CreateMissingLuminaireHandler(luminaireRepoMock).execute(command);
 
 		expect(luminaireRepoMock.createReviseLuminaire).toHaveBeenCalledTimes(1);
 		expect(luminaireRepoMock.createReviseLuminaire).toHaveBeenCalledWith(reviseLuminaireInput);

@@ -18,8 +18,8 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
-import { UpdateMissingSupportSystemInput } from './dto/update-missing-support-system.input';
-import { UpdateMissingSupportSystemCommand } from './commands/update-missing-support-system.command';
+import { ReviseSupportSystemInput } from './dto/update-missing-support-system.input';
+import { ReviseSupportSystemCommand } from './commands/update-missing-support-system.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -76,12 +76,10 @@ export class SupportSystemResolver {
 	@Mutation(() => SupportSystem)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async reviseSupportSystem(
-		@Args('reviseSupportSystem') input: UpdateMissingSupportSystemInput,
+		@Args('reviseSupportSystem') input: ReviseSupportSystemInput,
 	): Promise<SupportSystem> {
 		const domainReviseSupportSystem: DomainSupportSystem =
-			await this.commandBus.execute<UpdateMissingSupportSystemCommand>(
-				new UpdateMissingSupportSystemCommand(input),
-			);
+			await this.commandBus.execute<ReviseSupportSystemCommand>(new ReviseSupportSystemCommand(input));
 		return SupportSystemFactory.CreateSupportSystem(domainReviseSupportSystem);
 	}
 

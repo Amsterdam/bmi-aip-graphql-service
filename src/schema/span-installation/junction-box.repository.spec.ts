@@ -11,9 +11,9 @@ import {
 	junctionBox1,
 	junctionBoxInput,
 	reviseJunctionBox1,
-	reviseJunctionBoxInput,
 	updateJunctionBoxInput,
-	updateMissingJunctionBoxInput,
+	reviseJunctionBoxInput,
+	createMissingJunctionBoxInput,
 } from './__stubs__';
 import type { JunctionBoxWithoutGeography } from './types/junction-box.repository.interface';
 
@@ -85,7 +85,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 	});
 
 	test('createMissingJunctionBox()', async () => {
-		const returnValue = await reviseRepo.createMissingJunctionBox(reviseJunctionBoxInput);
+		const returnValue = await reviseRepo.createMissingJunctionBox(createMissingJunctionBoxInput);
 		const junctionBox = revisePrismaServiceMock.spanJunctionBoxes.create.mock.calls[0][0]
 			.data as JunctionBoxWithoutGeography;
 
@@ -121,8 +121,8 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...reviseJunctionBoxInput,
-				a11yDetails: reviseJunctionBoxInput.a11yDetails,
+				...createMissingJunctionBoxInput,
+				a11yDetails: createMissingJunctionBoxInput.a11yDetails,
 			}),
 		);
 	});
@@ -159,13 +159,11 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geographyRD: JSON.stringify(reviseJunctionBox1.geographyRD) },
 		]);
-		const spy = jest
-			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
-			.mockResolvedValue(updateMissingJunctionBoxInput.geography);
-		const returnValue = await reviseRepo.reviseJunctionBox(updateMissingJunctionBoxInput);
+		const spy = jest.spyOn(reviseRepo, 'getGeographyAsGeoJSON').mockResolvedValue(reviseJunctionBoxInput.geography);
+		const returnValue = await reviseRepo.reviseJunctionBox(reviseJunctionBoxInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
-			where: { id: updateMissingJunctionBoxInput.id },
+			where: { id: reviseJunctionBoxInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				installationHeight: new Decimal(10),
@@ -182,9 +180,9 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				remarksRevision: '__REMARKS_REVISION__',
 			},
 		});
-		expect(spy).toHaveBeenCalledWith(updateMissingJunctionBoxInput.id);
+		expect(spy).toHaveBeenCalledWith(reviseJunctionBoxInput.id);
 		expect(returnValue).toEqual({
-			a11yDetails: updateMissingJunctionBoxInput.a11yDetails,
+			a11yDetails: reviseJunctionBoxInput.a11yDetails,
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],

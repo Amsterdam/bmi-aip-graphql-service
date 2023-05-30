@@ -3,13 +3,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { LuminaireRepository } from '../luminaire.repository';
 import { Luminaire } from '../types/luminaire.repository.interface';
 
-import { UpdateMissingLuminaireCommand } from './update-missing-luminaire.command';
+import { ReviseLuminaireCommand } from './update-missing-luminaire.command';
 
-@CommandHandler(UpdateMissingLuminaireCommand)
-export class UpdateMissingLuminaireHandler implements ICommandHandler<UpdateMissingLuminaireCommand> {
+@CommandHandler(ReviseLuminaireCommand)
+export class ReviseLuminaireHandler implements ICommandHandler<ReviseLuminaireCommand> {
 	constructor(private repository: LuminaireRepository) {}
 
-	public async execute(command: UpdateMissingLuminaireCommand): Promise<Luminaire> {
+	public async execute(command: ReviseLuminaireCommand): Promise<Luminaire> {
 		return this.repository.reviseLuminaire(command.data);
 	}
 }

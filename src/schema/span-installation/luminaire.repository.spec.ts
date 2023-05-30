@@ -10,9 +10,9 @@ import {
 	luminaire1,
 	luminaireInput,
 	reviseLuminaire1,
-	reviseLuminaireInput,
+	createMissingLuminaireInput,
 	updateLuminaireInput,
-	updateMissingLuminaireInput,
+	reviseLuminaireInput,
 } from './__stubs__';
 import type { LuminaireWithoutGeography } from './types/luminaire.repository.interface';
 
@@ -75,7 +75,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('createMissingLuminaire()', async () => {
-		const returnValue = await reviseRepo.createMissingLuminaire(reviseLuminaireInput);
+		const returnValue = await reviseRepo.createMissingLuminaire(createMissingLuminaireInput);
 		const luminaire = revisePrismaServiceMock.spanLuminaires.create.mock.calls[0][0]
 			.data as LuminaireWithoutGeography;
 		expect(luminaire).toEqual(
@@ -103,7 +103,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...reviseLuminaireInput,
+				...createMissingLuminaireInput,
 			}),
 		);
 	});
@@ -192,13 +192,11 @@ describe('Span Installation / Luminaire / Repository', () => {
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geography: JSON.stringify(reviseLuminaire1.geography) },
 		]);
-		const spy = jest
-			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
-			.mockResolvedValue(updateMissingLuminaireInput.geography);
-		const returnValue = await reviseRepo.reviseLuminaire(updateMissingLuminaireInput);
+		const spy = jest.spyOn(reviseRepo, 'getGeographyAsGeoJSON').mockResolvedValue(reviseLuminaireInput.geography);
+		const returnValue = await reviseRepo.reviseLuminaire(reviseLuminaireInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanLuminaires.update).toHaveBeenCalledWith({
-			where: { id: updateMissingLuminaireInput.id },
+			where: { id: reviseLuminaireInput.id },
 			data: {
 				name: '__NAME__',
 				constructionYear: 1979,
@@ -218,7 +216,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				remarksRevision: '__REMARKS_REVISION__',
 			},
 		});
-		expect(spy).toHaveBeenCalledWith(updateMissingLuminaireInput.id);
+		expect(spy).toHaveBeenCalledWith(reviseLuminaireInput.id);
 		expect(returnValue).toEqual({
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			lightCommissioningDate: null,

@@ -5,7 +5,7 @@ import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
 import { SupplierType } from '../types';
 import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
-import { UpdateMissingLuminaireInput } from '../dto/update-missing-luminaire.input';
+import { ReviseLuminaireInput } from '../dto/update-missing-luminaire.input';
 
 const luminaire1 = new Luminaire();
 luminaire1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -75,7 +75,7 @@ export const luminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	return input;
 }, new CreateLuminaireInput());
 
-export const reviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
+export const createMissingLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	if (key === 'remarksRevision') {
 		input.remarksRevision = '__REMARKS_REVISION__';
 		return input;
@@ -91,9 +91,9 @@ export const updateLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 	return input;
 }, updateLuminaire);
 
-const reviseLuminaire = new UpdateMissingLuminaireInput();
+const reviseLuminaire = new ReviseLuminaireInput();
 reviseLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
-export const updateMissingLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
+export const reviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	if (key === 'remarksRevision') {
 		input.remarksRevision = '__REMARKS_REVISION__';
 		return input;

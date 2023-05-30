@@ -15,8 +15,8 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
 import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junction-box.command';
-import { UpdateMissingJunctionBoxCommand } from './commands/update-missing-junction-box.command';
-import { UpdateMissingJunctionBoxInput } from './dto/update-missing-junction-box.input';
+import { ReviseJunctionBoxCommand } from './commands/update-missing-junction-box.command';
+import { ReviseJunctionBoxInput } from './dto/update-missing-junction-box.input';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -62,11 +62,10 @@ export class JunctionBoxResolver {
 
 	@Mutation(() => JunctionBox)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async reviseJunctionBox(
-		@Args('reviseJunctionBox') input: UpdateMissingJunctionBoxInput,
-	): Promise<JunctionBox> {
-		const domainReviseJunctionBox: DomainJunctionBox =
-			await this.commandBus.execute<UpdateMissingJunctionBoxCommand>(new UpdateMissingJunctionBoxCommand(input));
+	public async reviseJunctionBox(@Args('reviseJunctionBox') input: ReviseJunctionBoxInput): Promise<JunctionBox> {
+		const domainReviseJunctionBox: DomainJunctionBox = await this.commandBus.execute<ReviseJunctionBoxCommand>(
+			new ReviseJunctionBoxCommand(input),
+		);
 		return JunctionBoxFactory.CreateJunctionBox(domainReviseJunctionBox);
 	}
 

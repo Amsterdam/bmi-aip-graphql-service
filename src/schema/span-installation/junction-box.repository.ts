@@ -10,7 +10,7 @@ import { JunctionBox, IJunctionBoxRepository } from './types/junction-box.reposi
 import { CreateJunctionBoxInput } from './dto/create-junction-box.input';
 import { UpdateJunctionBoxInput } from './dto/update-junction-box.input';
 import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
-import { UpdateMissingJunctionBoxInput } from './dto/update-missing-junction-box.input';
+import { ReviseJunctionBoxInput } from './dto/update-missing-junction-box.input';
 
 @Injectable()
 export class JunctionBoxRepository implements IJunctionBoxRepository {
@@ -199,7 +199,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		geography,
 		geographyRD,
 		remarksRevision,
-	}: UpdateMissingJunctionBoxInput): Promise<JunctionBox> {
+	}: ReviseJunctionBoxInput): Promise<JunctionBox> {
 		const data: Prisma.spanJunctionBoxesUpdateInput = {
 			name,
 			mastNumber,

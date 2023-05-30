@@ -61,7 +61,7 @@ import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-m
 import { FindSpanMeasuresByDecompositionIdHandler } from './commands/find-span-measures-by-decomposition-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
-import { CreateReviseJunctionBoxHandler } from './commands/create-revise-junction-box.handler';
+import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junction-box.handler';
 import { UpdateReviseJunctionBoxHandler } from './commands/update-revise-junction-box.handler';
 import { CreateReviseSupportSystemHandler } from './commands/create-revise-support-system.handler';
 import { UpdateReviseSupportSystemHandler } from './commands/update-revise-support-system.handler';
@@ -148,7 +148,7 @@ registerEnumType(SpanMeasureItemStatus, {
 		SpanDecompositionResolver,
 		FindSpanMeasuresByDecompositionIdCommand,
 		FindSpanMeasuresByDecompositionIdHandler,
-		CreateReviseJunctionBoxHandler,
+		CreateMissingJunctionBoxHandler,
 		UpdateReviseJunctionBoxHandler,
 		CreateReviseSupportSystemHandler,
 		UpdateReviseSupportSystemHandler,

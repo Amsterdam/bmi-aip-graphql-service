@@ -11,6 +11,8 @@ import { SpanMeasureRepository } from './span-measure.repository';
 import { CreateSpanMeasureCommand } from './commands/create-span-measure.command';
 import { UpdateSpanMeasureCommand } from './commands/update-span-measure.command';
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
+import { SpanMeasureItemService } from './span-measure-item.service';
+import { SpanMeasureItemRepository } from './span-measure-item.repository';
 
 jest.mock('./span-measure.service');
 jest.mock('./span-measure.repository');
@@ -43,12 +45,18 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 };
 
 const spanMeasureRepo = new SpanMeasureRepository(prismaServiceMock);
+const spanMeasureItemRepo = new SpanMeasureItemRepository(prismaServiceMock);
+const spanMeasureItemsServiceMock = new SpanMeasureItemService(spanMeasureItemRepo);
 
 describe('createSpanMeasure', () => {
 	test('creates and returns an element', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
-		const resolver = new SpanMeasureResolver(new SpanMeasureService(spanMeasureRepo), commandBusMock, queryBusMock);
+		const resolver = new SpanMeasureResolver(
+			new SpanMeasureService(spanMeasureRepo, spanMeasureItemsServiceMock),
+			commandBusMock,
+			queryBusMock,
+		);
 		const result = await resolver.createSpanMeasure(createSpanMeasureInput);
 		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 		expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateSpanMeasureCommand(createSpanMeasureInput));
@@ -60,7 +68,11 @@ describe('updateSpanMeasure', () => {
 	test('updates and returns a support system', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
-		const resolver = new SpanMeasureResolver(new SpanMeasureService(spanMeasureRepo), commandBusMock, queryBusMock);
+		const resolver = new SpanMeasureResolver(
+			new SpanMeasureService(spanMeasureRepo, spanMeasureItemsServiceMock),
+			commandBusMock,
+			queryBusMock,
+		);
 		const result = await resolver.updateSpanMeasure(updateSpanMeasureInput);
 		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 		expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateSpanMeasureCommand(updateSpanMeasureInput));
@@ -72,7 +84,11 @@ describe('Span Installation / Measure / Resolver', () => {
 	test('findSpanMeasures returns an array of span measure objects', async () => {
 		const commandBusMock = getCommandBusMock();
 		const queryBusMock = getQueryBusMock();
-		const resolver = new SpanMeasureResolver(new SpanMeasureService(spanMeasureRepo), commandBusMock, queryBusMock);
+		const resolver = new SpanMeasureResolver(
+			new SpanMeasureService(spanMeasureRepo, spanMeasureItemsServiceMock),
+			commandBusMock,
+			queryBusMock,
+		);
 		const elements = await resolver.spanMeasures('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([domainSpanMeasure, domainSpanMeasure]);
 	});

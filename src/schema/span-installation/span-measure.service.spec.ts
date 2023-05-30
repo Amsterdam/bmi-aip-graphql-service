@@ -11,15 +11,6 @@ import { domainSpanMeasureItem } from './__stubs__/span-measure-item';
 
 jest.mock('./span-measure.repository');
 
-// const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-// 	$executeRaw: jest.fn(),
-// 	$queryRaw: jest.fn(),
-// 	spanMeasures: {
-// 		findMany: jest.fn().mockResolvedValue([domainSpanMeasure]),
-// 	},
-// 	...(<any>{}),
-// };
-
 const spanMeasureItemRepositoryMock: MockedObjectDeep<SpanMeasureItemRepository> = {
 	findSpanMeasureItems: jest.fn().mockResolvedValue([domainSpanMeasureItem]),
 	...(<any>{}),

@@ -2,6 +2,6 @@ import { domainSupportSystem, reviseSupportSystem1, supportSystem1 } from '../__
 
 export const SupportSystemRepository = jest.fn(() => ({
 	createSupportSystem: jest.fn(() => supportSystem1),
-	createReviseSupportSystem: jest.fn(() => reviseSupportSystem1),
+	createMissingSupportSystem: jest.fn(() => reviseSupportSystem1),
 	getSupportSystems: jest.fn(() => [domainSupportSystem]),
 }));

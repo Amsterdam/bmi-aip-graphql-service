@@ -10,7 +10,7 @@ import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-syst
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
-import { CreateReviseSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
+import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
 import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
 import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
 import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
@@ -151,9 +151,9 @@ export const createSupportSystemNormalizedInput = normalizeSupportSystemInputUti
 	new CreateSupportSystemNormalizedInput(),
 );
 
-export const createReviseSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
+export const createMissingSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
 	createMissingSupportSystemInput,
-	new CreateReviseSupportSystemNormalizedInput(),
+	new CreateMissingSupportSystemNormalizedInput(),
 );
 
 export const updateSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(

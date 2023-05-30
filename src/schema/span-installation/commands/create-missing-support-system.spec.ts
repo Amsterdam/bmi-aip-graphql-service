@@ -3,7 +3,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { SupportSystemRepository } from '../support-system.repository';
 import {
 	createMissingSupportSystemInput,
-	createReviseSupportSystemNormalizedInput,
+	createMissingSupportSystemNormalizedInput,
 	domainReviseSupportSystem,
 } from '../__stubs__';
 
@@ -11,7 +11,7 @@ import { CreateMissingSupportSystemCommand } from './create-missing-support-syst
 import { CreateMissingSupportSystemHandler } from './create-missing-support-system.handler';
 
 const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
-	createReviseSupportSystem: jest.fn().mockResolvedValue(domainReviseSupportSystem),
+	createMissingSupportSystem: jest.fn().mockResolvedValue(domainReviseSupportSystem),
 	...(<any>{}),
 };
 
@@ -20,9 +20,9 @@ describe('CreateMissingSupportSystemHandler', () => {
 		const command = new CreateMissingSupportSystemCommand(createMissingSupportSystemInput);
 		const result = await new CreateMissingSupportSystemHandler(supportSystemRepoMock).execute(command);
 
-		expect(supportSystemRepoMock.createReviseSupportSystem).toHaveBeenCalledTimes(1);
-		expect(supportSystemRepoMock.createReviseSupportSystem).toHaveBeenCalledWith(
-			createReviseSupportSystemNormalizedInput,
+		expect(supportSystemRepoMock.createMissingSupportSystem).toHaveBeenCalledTimes(1);
+		expect(supportSystemRepoMock.createMissingSupportSystem).toHaveBeenCalledWith(
+			createMissingSupportSystemNormalizedInput,
 		);
 
 		expect(result).toEqual(domainReviseSupportSystem);

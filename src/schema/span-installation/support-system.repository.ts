@@ -11,7 +11,7 @@ import { LuminaireRepository } from './luminaire.repository';
 import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
 import { UpdateReviseSupportSystemNormalizedInput } from './dto/update-revise-support-system-normalized.input';
-import { CreateReviseSupportSystemNormalizedInput } from './dto/create-missing-support-system-normalized.input';
+import { CreateMissingSupportSystemNormalizedInput } from './dto/create-missing-support-system-normalized.input';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {
@@ -71,7 +71,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		};
 	}
 
-	async createReviseSupportSystem({
+	async createMissingSupportSystem({
 		objectId,
 		surveyId,
 		name,
@@ -88,7 +88,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		geography,
 		geographyRD,
 		remarksRevision,
-	}: CreateReviseSupportSystemNormalizedInput): Promise<SupportSystem> {
+	}: CreateMissingSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const supportSystemId = newId();
 		const data: Prisma.spanSupportSystemsCreateInput = {
 			id: supportSystemId,

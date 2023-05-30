@@ -14,7 +14,7 @@ import {
 	luminaire1,
 	domainLuminaire,
 	domainReviseSupportSystem,
-	createReviseSupportSystemNormalizedInput,
+	createMissingSupportSystemNormalizedInput,
 	reviseSupportSystem1,
 	updateReviseSupportSystemInput,
 	updateReviseSupportSystemNormalizedInput,
@@ -111,8 +111,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		);
 	});
 
-	test('createReviseSupportSystem()', async () => {
-		const returnValue = await reviseRepo.createReviseSupportSystem(createReviseSupportSystemNormalizedInput);
+	test('createMissingSupportSystem()', async () => {
+		const returnValue = await reviseRepo.createMissingSupportSystem(createMissingSupportSystemNormalizedInput);
 		const supportSystem = revisePrismaServiceMock.spanSupportSystems.create.mock.calls[0][0]
 			.data as SupportSystemWithoutGeography;
 		expect(supportSystem).toEqual(
@@ -149,8 +149,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...createReviseSupportSystemNormalizedInput,
-				a11yDetails: createReviseSupportSystemNormalizedInput.a11yDetails,
+				...createMissingSupportSystemNormalizedInput,
+				a11yDetails: createMissingSupportSystemNormalizedInput.a11yDetails,
 			}),
 		);
 	});

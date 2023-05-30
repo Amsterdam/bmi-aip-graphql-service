@@ -11,7 +11,7 @@ import { LuminaireRepository } from './luminaire.repository';
 import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
 import { UpdateReviseSupportSystemNormalizedInput } from './dto/update-revise-support-system-normalized.input';
-import { CreateReviseSupportSystemNormalizedInput } from './dto/create-revise-support-system-normalized.input';
+import { CreateReviseSupportSystemNormalizedInput } from './dto/create-missing-support-system-normalized.input';
 
 @Injectable()
 export class SupportSystemRepository implements ISupportSystemRepository {

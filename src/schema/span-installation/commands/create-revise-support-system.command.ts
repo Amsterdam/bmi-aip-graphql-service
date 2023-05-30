@@ -1,5 +1,5 @@
-import { CreateReviseSupportSystemInput } from '../dto/create-revise-support-system.input';
+import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
 export class CreateReviseSupportSystemCommand {
-	public constructor(public readonly data: CreateReviseSupportSystemInput) {}
+	public constructor(public readonly data: CreateMissingSupportSystemInput) {}
 }

@@ -10,10 +10,10 @@ import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-syst
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
-import { CreateReviseSupportSystemNormalizedInput } from '../dto/create-revise-support-system-normalized.input';
+import { CreateReviseSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
 import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
 import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
-import { CreateReviseSupportSystemInput } from '../dto/create-revise-support-system.input';
+import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -93,7 +93,7 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, new CreateSupportSystemInput());
 
-export const createReviseSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+export const createMissingSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
 		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
 		return input;
@@ -108,7 +108,7 @@ export const createReviseSupportSystemInput = Object.keys(reviseSupportSystemRaw
 	}
 	input[key] = reviseSupportSystemRaw[key];
 	return input;
-}, new CreateReviseSupportSystemInput());
+}, new CreateMissingSupportSystemInput());
 
 const updateSupportSystem = new UpdateSupportSystemInput();
 updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -152,7 +152,7 @@ export const createSupportSystemNormalizedInput = normalizeSupportSystemInputUti
 );
 
 export const createReviseSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
-	createReviseSupportSystemInput,
+	createMissingSupportSystemInput,
 	new CreateReviseSupportSystemNormalizedInput(),
 );
 

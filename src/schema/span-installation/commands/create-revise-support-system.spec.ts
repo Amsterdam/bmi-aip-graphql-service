@@ -2,7 +2,7 @@ import { MockedObjectDeep } from 'ts-jest';
 
 import { SupportSystemRepository } from '../support-system.repository';
 import {
-	createReviseSupportSystemInput,
+	createMissingSupportSystemInput,
 	createReviseSupportSystemNormalizedInput,
 	domainReviseSupportSystem,
 } from '../__stubs__';
@@ -17,7 +17,7 @@ const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
 
 describe('CreateReviseSupportSystemHandler', () => {
 	test('executes command', async () => {
-		const command = new CreateReviseSupportSystemCommand(createReviseSupportSystemInput);
+		const command = new CreateReviseSupportSystemCommand(createMissingSupportSystemInput);
 		const result = await new CreateReviseSupportSystemHandler(supportSystemRepoMock).execute(command);
 
 		expect(supportSystemRepoMock.createReviseSupportSystem).toHaveBeenCalledTimes(1);

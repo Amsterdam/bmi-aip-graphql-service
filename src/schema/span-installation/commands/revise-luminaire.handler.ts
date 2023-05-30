@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { LuminaireRepository } from '../luminaire.repository';
 import { Luminaire } from '../types/luminaire.repository.interface';
 
-import { ReviseLuminaireCommand } from './update-missing-luminaire.command';
+import { ReviseLuminaireCommand } from './revise-luminaire.command';
 
 @CommandHandler(ReviseLuminaireCommand)
 export class ReviseLuminaireHandler implements ICommandHandler<ReviseLuminaireCommand> {

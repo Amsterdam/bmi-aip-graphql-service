@@ -7,7 +7,7 @@ import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
 import { A11yDetails } from '../models/a11y-details.model';
 import { CreateMissingJunctionBoxInput } from '../dto/create-missing-junction-box.input';
-import { ReviseJunctionBoxInput } from '../dto/update-missing-junction-box.input';
+import { ReviseJunctionBoxInput } from '../dto/revise-junction-box.input';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';

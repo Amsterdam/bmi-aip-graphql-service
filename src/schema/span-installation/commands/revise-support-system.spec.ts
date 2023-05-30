@@ -3,8 +3,8 @@ import { MockedObjectDeep } from 'ts-jest';
 import { SupportSystemRepository } from '../support-system.repository';
 import { domainReviseSupportSystem, reviseSupportSystemInput, reviseSupportSystemNormalizedInput } from '../__stubs__';
 
-import { ReviseSupportSystemCommand } from './update-missing-support-system.command';
-import { ReviseSupportSystemHandler } from './update-missing-support-system.handler';
+import { ReviseSupportSystemCommand } from './revise-support-system.command';
+import { ReviseSupportSystemHandler } from './revise-support-system.handler';
 
 const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
 	reviseSupportSystem: jest.fn().mockResolvedValue(domainReviseSupportSystem),

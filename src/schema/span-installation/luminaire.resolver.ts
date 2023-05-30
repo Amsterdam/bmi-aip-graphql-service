@@ -15,8 +15,8 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingLuminaireCommand } from './commands/create-missing-luminaire.command';
 import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
-import { ReviseLuminaireInput } from './dto/update-missing-luminaire.input';
-import { ReviseLuminaireCommand } from './commands/update-missing-luminaire.command';
+import { ReviseLuminaireInput } from './dto/revise-luminaire.input';
+import { ReviseLuminaireCommand } from './commands/revise-luminaire.command';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)

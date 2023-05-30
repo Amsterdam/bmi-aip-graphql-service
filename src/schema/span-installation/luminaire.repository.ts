@@ -9,7 +9,7 @@ import { Luminaire, ILuminaireRepository } from './types/luminaire.repository.in
 import { CreateLuminaireInput } from './dto/create-luminaire.input';
 import { UpdateLuminaireInput } from './dto/update-luminaire.input';
 import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
-import { ReviseLuminaireInput } from './dto/update-missing-luminaire.input';
+import { ReviseLuminaireInput } from './dto/revise-luminaire.input';
 
 @Injectable()
 export class LuminaireRepository implements ILuminaireRepository {

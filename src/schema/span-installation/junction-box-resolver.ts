@@ -15,8 +15,8 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
 import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junction-box.command';
-import { ReviseJunctionBoxCommand } from './commands/update-missing-junction-box.command';
-import { ReviseJunctionBoxInput } from './dto/update-missing-junction-box.input';
+import { ReviseJunctionBoxCommand } from './commands/revise-junction-box.command';
+import { ReviseJunctionBoxInput } from './dto/revise-junction-box.input';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)

@@ -18,8 +18,8 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
-import { ReviseSupportSystemInput } from './dto/update-missing-support-system.input';
-import { ReviseSupportSystemCommand } from './commands/update-missing-support-system.command';
+import { ReviseSupportSystemInput } from './dto/revise-support-system.input';
+import { ReviseSupportSystemCommand } from './commands/revise-support-system.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)

@@ -4,7 +4,7 @@ import { Point } from 'geojson';
 import { CreateLuminaireInput } from '../dto/create-luminaire.input';
 import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
-import { ReviseLuminaireInput } from '../dto/update-missing-luminaire.input';
+import { ReviseLuminaireInput } from '../dto/revise-luminaire.input';
 
 const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 	select: {

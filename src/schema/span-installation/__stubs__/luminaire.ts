@@ -5,7 +5,7 @@ import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
 import { SupplierType } from '../types';
 import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
-import { ReviseLuminaireInput } from '../dto/update-missing-luminaire.input';
+import { ReviseLuminaireInput } from '../dto/revise-luminaire.input';
 
 const luminaire1 = new Luminaire();
 luminaire1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';

@@ -3,8 +3,8 @@ import { MockedObjectDeep } from 'ts-jest';
 import { LuminaireRepository } from '../luminaire.repository';
 import { domainReviseLuminaire, reviseLuminaireInput } from '../__stubs__';
 
-import { ReviseLuminaireCommand } from './update-missing-luminaire.command';
-import { ReviseLuminaireHandler } from './update-missing-luminaire.handler';
+import { ReviseLuminaireCommand } from './revise-luminaire.command';
+import { ReviseLuminaireHandler } from './revise-luminaire.handler';
 
 const luminaireRepoMock: MockedObjectDeep<LuminaireRepository> = {
 	reviseLuminaire: jest.fn().mockResolvedValue(domainReviseLuminaire),

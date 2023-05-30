@@ -3,8 +3,8 @@ import { MockedObjectDeep } from 'ts-jest';
 import { JunctionBoxRepository } from '../junction-box.repository';
 import { domainReviseJunctionBox, reviseJunctionBoxInput } from '../__stubs__';
 
-import { ReviseJunctionBoxCommand } from './update-missing-junction-box.command';
-import { ReviseJunctionBoxHandler } from './update-missing-junction-box.handler';
+import { ReviseJunctionBoxCommand } from './revise-junction-box.command';
+import { ReviseJunctionBoxHandler } from './revise-junction-box.handler';
 
 const junctionBoxRepoMock: MockedObjectDeep<JunctionBoxRepository> = {
 	reviseJunctionBox: jest.fn().mockResolvedValue(domainReviseJunctionBox),

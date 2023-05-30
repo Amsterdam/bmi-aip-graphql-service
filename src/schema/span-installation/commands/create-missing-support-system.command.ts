@@ -1,5 +1,5 @@
 import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
-export class CreateReviseSupportSystemCommand {
+export class CreateMissingSupportSystemCommand {
 	public constructor(public readonly data: CreateMissingSupportSystemInput) {}
 }

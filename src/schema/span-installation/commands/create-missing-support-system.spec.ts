@@ -7,18 +7,18 @@ import {
 	domainReviseSupportSystem,
 } from '../__stubs__';
 
-import { CreateReviseSupportSystemCommand } from './create-revise-support-system.command';
-import { CreateReviseSupportSystemHandler } from './create-revise-support-system.handler';
+import { CreateMissingSupportSystemCommand } from './create-missing-support-system.command';
+import { CreateMissingSupportSystemHandler } from './create-missing-support-system.handler';
 
 const supportSystemRepoMock: MockedObjectDeep<SupportSystemRepository> = {
 	createReviseSupportSystem: jest.fn().mockResolvedValue(domainReviseSupportSystem),
 	...(<any>{}),
 };
 
-describe('CreateReviseSupportSystemHandler', () => {
+describe('CreateMissingSupportSystemHandler', () => {
 	test('executes command', async () => {
-		const command = new CreateReviseSupportSystemCommand(createMissingSupportSystemInput);
-		const result = await new CreateReviseSupportSystemHandler(supportSystemRepoMock).execute(command);
+		const command = new CreateMissingSupportSystemCommand(createMissingSupportSystemInput);
+		const result = await new CreateMissingSupportSystemHandler(supportSystemRepoMock).execute(command);
 
 		expect(supportSystemRepoMock.createReviseSupportSystem).toHaveBeenCalledTimes(1);
 		expect(supportSystemRepoMock.createReviseSupportSystem).toHaveBeenCalledWith(

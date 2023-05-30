@@ -3,7 +3,7 @@ import { Point } from 'geojson';
 
 import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
-import { ReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
+import { ReviseSupportSystemNormalizedInput } from '../dto/revise-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 
 const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({

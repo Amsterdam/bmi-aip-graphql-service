@@ -12,7 +12,7 @@ import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system
 import { A11yDetails } from '../models/a11y-details.model';
 import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
 import { ReviseSupportSystemInput } from '../dto/revise-support-system.input';
-import { ReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
+import { ReviseSupportSystemNormalizedInput } from '../dto/revise-support-system-normalized.input';
 import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
 const supportSystem1 = new SupportSystem();

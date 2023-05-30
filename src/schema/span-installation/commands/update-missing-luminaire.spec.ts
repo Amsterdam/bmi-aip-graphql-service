@@ -7,7 +7,7 @@ import { UpdateMissingLuminaireCommand } from './update-missing-luminaire.comman
 import { UpdateMissingLuminaireHandler } from './update-missing-luminaire.handler';
 
 const luminaireRepoMock: MockedObjectDeep<LuminaireRepository> = {
-	updateReviseLuminaire: jest.fn().mockResolvedValue(domainReviseLuminaire),
+	reviseLuminaire: jest.fn().mockResolvedValue(domainReviseLuminaire),
 	...(<any>{}),
 };
 
@@ -16,8 +16,8 @@ describe('UpdateMissingLuminaireHandler', () => {
 		const command = new UpdateMissingLuminaireCommand(updateMissingLuminaireInput);
 		const result = await new UpdateMissingLuminaireHandler(luminaireRepoMock).execute(command);
 
-		expect(luminaireRepoMock.updateReviseLuminaire).toHaveBeenCalledTimes(1);
-		expect(luminaireRepoMock.updateReviseLuminaire).toHaveBeenCalledWith(updateMissingLuminaireInput);
+		expect(luminaireRepoMock.reviseLuminaire).toHaveBeenCalledTimes(1);
+		expect(luminaireRepoMock.reviseLuminaire).toHaveBeenCalledWith(updateMissingLuminaireInput);
 
 		expect(result).toEqual(domainReviseLuminaire);
 	});

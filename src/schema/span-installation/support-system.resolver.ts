@@ -75,8 +75,8 @@ export class SupportSystemResolver {
 
 	@Mutation(() => SupportSystem)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async updateReviseSupportSystem(
-		@Args('updateReviseSupportSystem') input: UpdateMissingSupportSystemInput,
+	public async reviseSupportSystem(
+		@Args('reviseSupportSystem') input: UpdateMissingSupportSystemInput,
 	): Promise<SupportSystem> {
 		const domainReviseSupportSystem: DomainSupportSystem =
 			await this.commandBus.execute<UpdateMissingSupportSystemCommand>(

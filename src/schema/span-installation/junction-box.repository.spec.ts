@@ -151,7 +151,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(junctionBoxes).toEqual([expected]);
 	});
 
-	test('updateReviseJunctionBox()', async () => {
+	test('reviseJunctionBox()', async () => {
 		revisePrismaServiceMock.spanJunctionBoxes.update.mockResolvedValue(domainReviseJunctionBox);
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geography: JSON.stringify(reviseJunctionBox1.geography) },
@@ -162,7 +162,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
 			.mockResolvedValue(updateMissingJunctionBoxInput.geography);
-		const returnValue = await reviseRepo.updateReviseJunctionBox(updateMissingJunctionBoxInput);
+		const returnValue = await reviseRepo.reviseJunctionBox(updateMissingJunctionBoxInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
 			where: { id: updateMissingJunctionBoxInput.id },

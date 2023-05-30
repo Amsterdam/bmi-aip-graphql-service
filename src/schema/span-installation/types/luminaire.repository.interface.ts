@@ -41,5 +41,5 @@ export interface ILuminaireRepository {
 	updateLuminaire(input: UpdateLuminaireInput): Promise<Luminaire>;
 	deleteLuminaire(identifier: string): Promise<Luminaire>;
 	createMissingLuminaire(input: CreateMissingLuminaireInput): Promise<Luminaire>;
-	updateReviseLuminaire(input: UpdateMissingLuminaireInput): Promise<Luminaire>;
+	reviseLuminaire(input: UpdateMissingLuminaireInput): Promise<Luminaire>;
 }

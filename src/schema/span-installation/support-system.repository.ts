@@ -10,7 +10,7 @@ import { SupportSystem, ISupportSystemRepository } from './types/support-system.
 import { LuminaireRepository } from './luminaire.repository';
 import { CreateSupportSystemNormalizedInput } from './dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from './dto/update-support-system-normalized.input';
-import { UpdateReviseSupportSystemNormalizedInput } from './dto/update-revise-support-system-normalized.input';
+import { ReviseSupportSystemNormalizedInput } from './dto/update-revise-support-system-normalized.input';
 import { CreateMissingSupportSystemNormalizedInput } from './dto/create-missing-support-system-normalized.input';
 
 @Injectable()
@@ -196,7 +196,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		return { ...supportSystem, geography: await this.getGeographyAsGeoJSON(id) };
 	}
 
-	async updateReviseSupportSystem({
+	async reviseSupportSystem({
 		id,
 		name,
 		location,
@@ -212,7 +212,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		geography,
 		geographyRD,
 		remarksRevision,
-	}: UpdateReviseSupportSystemNormalizedInput): Promise<SupportSystem> {
+	}: ReviseSupportSystemNormalizedInput): Promise<SupportSystem> {
 		const data: Prisma.spanSupportSystemsUpdateInput = {
 			name,
 			location,

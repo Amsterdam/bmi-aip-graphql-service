@@ -17,7 +17,7 @@ import {
 	createMissingSupportSystemNormalizedInput,
 	reviseSupportSystem1,
 	updateMissingSupportSystemInput,
-	updateReviseSupportSystemNormalizedInput,
+	reviseSupportSystemNormalizedInput,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
 import { SupportSystemType, SupportSystemTypeDetailedFacade } from './types';
@@ -178,7 +178,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		expect(supportSystems).toEqual([expected]);
 	});
 
-	test('updateReviseSupportSystem()', async () => {
+	test('reviseSupportSystem()', async () => {
 		revisePrismaServiceMock.spanSupportSystems.update.mockResolvedValue(domainReviseSupportSystem);
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geography: JSON.stringify(reviseSupportSystem1.geography) },
@@ -186,10 +186,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
 			.mockResolvedValue(updateMissingSupportSystemInput.geography);
-		const returnValue = await reviseRepo.updateReviseSupportSystem(updateReviseSupportSystemNormalizedInput);
+		const returnValue = await reviseRepo.reviseSupportSystem(reviseSupportSystemNormalizedInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({
-			where: { id: updateReviseSupportSystemNormalizedInput.id },
+			where: { id: reviseSupportSystemNormalizedInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				installationHeight: new Decimal(10),
@@ -209,7 +209,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				remarksRevision: '__REMARKS_REVISION__',
 			},
 		});
-		expect(spy).toHaveBeenCalledWith(updateReviseSupportSystemNormalizedInput.id);
+		expect(spy).toHaveBeenCalledWith(reviseSupportSystemNormalizedInput.id);
 		expect(returnValue).toEqual({
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			deleted_at: null,
@@ -220,7 +220,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
-			a11yDetails: updateReviseSupportSystemNormalizedInput.a11yDetails,
+			a11yDetails: reviseSupportSystemNormalizedInput.a11yDetails,
 			installationHeight: new Decimal(10),
 			installationLength: new Decimal(10),
 			remarks: '__REMARKS__',

@@ -105,8 +105,8 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 	return input;
 }, updateJunctionBox);
 
-const updateReviseJunctionBox = new UpdateMissingJunctionBoxInput();
-updateReviseJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+const reviseJunctionBox = new UpdateMissingJunctionBoxInput();
+reviseJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateMissingJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
 	if (key === 'a11yDetails') {
 		input.a11yDetails = a11yDetails;
@@ -118,7 +118,7 @@ export const updateMissingJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).r
 	}
 	input[key] = junctionBoxRaw[key];
 	return input;
-}, updateReviseJunctionBox);
+}, reviseJunctionBox);
 
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',

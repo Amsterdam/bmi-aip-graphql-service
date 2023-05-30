@@ -4,7 +4,7 @@ import { IsOptional } from 'class-validator';
 import { UpdateSupportSystemNormalizedInput } from './update-support-system-normalized.input';
 
 @InputType()
-export class UpdateReviseSupportSystemNormalizedInput extends UpdateSupportSystemNormalizedInput {
+export class ReviseSupportSystemNormalizedInput extends UpdateSupportSystemNormalizedInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	public remarksRevision?: string;

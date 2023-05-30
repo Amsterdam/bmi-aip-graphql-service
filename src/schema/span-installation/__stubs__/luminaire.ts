@@ -91,8 +91,8 @@ export const updateLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 	return input;
 }, updateLuminaire);
 
-const updateReviseLuminaire = new UpdateMissingLuminaireInput();
-updateReviseLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+const reviseLuminaire = new UpdateMissingLuminaireInput();
+reviseLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 export const updateMissingLuminaireInput = Object.keys(luminaireRaw).reduce((input, key) => {
 	if (key === 'remarksRevision') {
 		input.remarksRevision = '__REMARKS_REVISION__';
@@ -100,7 +100,7 @@ export const updateMissingLuminaireInput = Object.keys(luminaireRaw).reduce((inp
 	}
 	input[key] = luminaireRaw[key];
 	return input;
-}, updateReviseLuminaire);
+}, reviseLuminaire);
 
 export const domainLuminaire: DomainLuminaire = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',

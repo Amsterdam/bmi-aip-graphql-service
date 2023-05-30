@@ -186,7 +186,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		};
 	}
 
-	async updateReviseJunctionBox({
+	async reviseJunctionBox({
 		id,
 		name,
 		mastNumber,

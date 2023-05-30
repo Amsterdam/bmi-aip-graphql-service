@@ -190,7 +190,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		return { ...luminaire, geography: await this.getGeographyAsGeoJSON(id) };
 	}
 
-	async updateReviseLuminaire({
+	async reviseLuminaire({
 		id,
 		name,
 		location,

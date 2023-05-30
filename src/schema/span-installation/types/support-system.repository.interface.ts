@@ -3,7 +3,7 @@ import { Point } from 'geojson';
 
 import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
-import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
+import { ReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 
 const supportSystems = Prisma.validator<Prisma.spanSupportSystemsArgs>()({
@@ -43,5 +43,5 @@ export interface ISupportSystemRepository {
 	deleteSupportSystem(identifier: string): Promise<SupportSystem>;
 	cloneSupportSystems(objectId: string, surveyId: string): Promise<SupportSystem[]>;
 	createMissingSupportSystem(input: CreateMissingSupportSystemNormalizedInput): Promise<SupportSystem>;
-	updateReviseSupportSystem(input: UpdateReviseSupportSystemNormalizedInput): Promise<SupportSystem>;
+	reviseSupportSystem(input: ReviseSupportSystemNormalizedInput): Promise<SupportSystem>;
 }

@@ -10,6 +10,6 @@ export class UpdateMissingJunctionBoxHandler implements ICommandHandler<UpdateMi
 	constructor(private repository: JunctionBoxRepository) {}
 
 	public async execute(command: UpdateMissingJunctionBoxCommand): Promise<JunctionBox> {
-		return this.repository.updateReviseJunctionBox(command.data);
+		return this.repository.reviseJunctionBox(command.data);
 	}
 }

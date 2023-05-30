@@ -187,7 +187,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 		});
 	});
 
-	test('updateReviseLuminaire()', async () => {
+	test('reviseLuminaire()', async () => {
 		revisePrismaServiceMock.spanLuminaires.update.mockResolvedValue(domainReviseLuminaire);
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geography: JSON.stringify(reviseLuminaire1.geography) },
@@ -195,7 +195,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
 			.mockResolvedValue(updateMissingLuminaireInput.geography);
-		const returnValue = await reviseRepo.updateReviseLuminaire(updateMissingLuminaireInput);
+		const returnValue = await reviseRepo.reviseLuminaire(updateMissingLuminaireInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanLuminaires.update).toHaveBeenCalledWith({
 			where: { id: updateMissingLuminaireInput.id },

@@ -63,9 +63,7 @@ export class LuminaireResolver {
 
 	@Mutation(() => Luminaire)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async updateReviseLuminaire(
-		@Args('updateReviseLuminaire') input: UpdateMissingLuminaireInput,
-	): Promise<Luminaire> {
+	public async reviseLuminaire(@Args('reviseLuminaire') input: UpdateMissingLuminaireInput): Promise<Luminaire> {
 		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateMissingLuminaireCommand>(
 			new UpdateMissingLuminaireCommand(input),
 		);

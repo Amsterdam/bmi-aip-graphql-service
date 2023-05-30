@@ -4,7 +4,7 @@ import { IsOptional } from 'class-validator';
 import { CreateJunctionBoxInput } from './create-junction-box.input';
 
 @InputType()
-export class CreateReviseJunctionBoxInput extends CreateJunctionBoxInput {
+export class CreateMissingJunctionBoxInput extends CreateJunctionBoxInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	public remarksRevision?: string;

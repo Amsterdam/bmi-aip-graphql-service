@@ -9,7 +9,7 @@ import { newId } from '../../utils';
 import { JunctionBox, IJunctionBoxRepository } from './types/junction-box.repository.interface';
 import { CreateJunctionBoxInput } from './dto/create-junction-box.input';
 import { UpdateJunctionBoxInput } from './dto/update-junction-box.input';
-import { CreateReviseJunctionBoxInput } from './dto/create-revise-junction-box.input';
+import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
 import { UpdateReviseJunctionBoxInput } from './dto/update-revise-junction-box.input';
 
 @Injectable()
@@ -82,7 +82,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		geographyRD,
 		createdAt,
 		remarksRevision,
-	}: CreateReviseJunctionBoxInput): Promise<JunctionBox> {
+	}: CreateMissingJunctionBoxInput): Promise<JunctionBox> {
 		const junctionBoxId = newId();
 		const data: Prisma.spanJunctionBoxesCreateInput = {
 			id: junctionBoxId,

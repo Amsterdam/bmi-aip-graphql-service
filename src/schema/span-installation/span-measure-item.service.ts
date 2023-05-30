@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { SpanMeasureItemRepository } from './span-measure-item.repository';
 import { SpanMeasureItemFactory } from './span-measure-item.factory';
 import { SpanMeasureItem } from './models/span-measure-item.model';
+import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 
 @Injectable()
 export class SpanMeasureItemService {
@@ -18,5 +19,21 @@ export class SpanMeasureItemService {
 		return (await this.SpanMeasureItemsRepo.findActiveSpanMeasureItems(spanMeasureId)).map((spanMeasureItem) =>
 			SpanMeasureItemFactory.CreateSpanMeasureItem(spanMeasureItem),
 		);
+	}
+
+	async determineSpanMeasureItemStatus(spanMeasureItem: SpanMeasureItem): Promise<SpanMeasureItemStatus> {
+		if (spanMeasureItem.quantityEstimate && spanMeasureItem.quantityActual) {
+			return SpanMeasureItemStatus.completed;
+		}
+
+		if (spanMeasureItem.active) {
+			return SpanMeasureItemStatus.active;
+		}
+
+		if (spanMeasureItem.quantityEstimate !== null) {
+			return SpanMeasureItemStatus.proposal;
+		}
+
+		return SpanMeasureItemStatus.open;
 	}
 }

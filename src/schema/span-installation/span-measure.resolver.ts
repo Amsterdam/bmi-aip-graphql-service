@@ -19,6 +19,7 @@ import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.
 import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
 import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
 import { SpanMeasureStatus } from './types/span-measure-status';
+import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 
 @Resolver((of) => SpanMeasure)
 @Resource(SpanMeasure.name)
@@ -75,14 +76,24 @@ export class SpanMeasureResolver {
 
 	@ResolveField()
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	async measureItems(@Parent() { id }: SpanMeasure, @Context() context): Promise<SpanMeasureItem[]> {
-		const { user } = context.req;
-
-		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
+	async measureItems(@Parent() { id }: SpanMeasure): Promise<SpanMeasureItem[]> {
+		return this.spanMeasureService.determineStatusForItemsInMeasure(
+			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
+		);
 	}
 
 	@ResolveField()
-	async status(): Promise<SpanMeasureStatus> {
-		return SpanMeasureStatus.open;
+	async status(@Parent() { id }: SpanMeasure): Promise<SpanMeasureStatus> {
+		const itemsInMeasure = await this.spanMeasureService.determineStatusForItemsInMeasure(
+			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
+		);
+
+		return itemsInMeasure.reduce((acc, item) => {
+			if (item.status === SpanMeasureItemStatus.completed) {
+				return SpanMeasureStatus.completed;
+			}
+
+			return acc;
+		}, SpanMeasureStatus.open);
 	}
 }

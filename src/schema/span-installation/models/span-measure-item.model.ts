@@ -29,6 +29,10 @@ export class SpanMeasureItem {
 	@Field((type) => String, { nullable: true })
 	quantityActual?: number;
 
+	@Field(() => SpanMeasureItemStatus, { nullable: true })
+	@IsOptional()
+	status?: SpanMeasureItemStatus;
+
 	@Field(() => Boolean)
 	active: boolean;
 }

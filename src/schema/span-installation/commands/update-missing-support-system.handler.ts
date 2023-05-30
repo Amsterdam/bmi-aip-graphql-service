@@ -5,13 +5,13 @@ import { SupportSystem } from '../types/support-system.repository.interface';
 import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-system-input.util';
 import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
 
-import { UpdateReviseSupportSystemCommand } from './update-revise-support-system.command';
+import { UpdateMissingSupportSystemCommand } from './update-missing-support-system.command';
 
-@CommandHandler(UpdateReviseSupportSystemCommand)
-export class UpdateReviseSupportSystemHandler implements ICommandHandler<UpdateReviseSupportSystemCommand> {
+@CommandHandler(UpdateMissingSupportSystemCommand)
+export class UpdateMissingSupportSystemHandler implements ICommandHandler<UpdateMissingSupportSystemCommand> {
 	constructor(private repository: SupportSystemRepository) {}
 
-	public async execute(command: UpdateReviseSupportSystemCommand): Promise<SupportSystem> {
+	public async execute(command: UpdateMissingSupportSystemCommand): Promise<SupportSystem> {
 		return this.repository.updateReviseSupportSystem(
 			normalizeSupportSystemInputUtil(command.data, new UpdateReviseSupportSystemNormalizedInput()),
 		);

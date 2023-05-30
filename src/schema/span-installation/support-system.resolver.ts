@@ -19,7 +19,7 @@ import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-m
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
 import { UpdateMissingSupportSystemInput } from './dto/update-missing-support-system.input';
-import { UpdateReviseSupportSystemCommand } from './commands/update-revise-support-system.command';
+import { UpdateMissingSupportSystemCommand } from './commands/update-missing-support-system.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -79,8 +79,8 @@ export class SupportSystemResolver {
 		@Args('updateReviseSupportSystem') input: UpdateMissingSupportSystemInput,
 	): Promise<SupportSystem> {
 		const domainReviseSupportSystem: DomainSupportSystem =
-			await this.commandBus.execute<UpdateReviseSupportSystemCommand>(
-				new UpdateReviseSupportSystemCommand(input),
+			await this.commandBus.execute<UpdateMissingSupportSystemCommand>(
+				new UpdateMissingSupportSystemCommand(input),
 			);
 		return SupportSystemFactory.CreateSupportSystem(domainReviseSupportSystem);
 	}

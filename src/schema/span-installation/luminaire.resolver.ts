@@ -16,7 +16,7 @@ import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-m
 import { CreateMissingLuminaireCommand } from './commands/create-missing-luminaire.command';
 import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
 import { UpdateMissingLuminaireInput } from './dto/update-missing-luminaire.input';
-import { UpdateReviseLuminaireCommand } from './commands/update-revise-luminaire.command';
+import { UpdateMissingLuminaireCommand } from './commands/update-missing-luminaire.command';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)
@@ -66,8 +66,8 @@ export class LuminaireResolver {
 	public async updateReviseLuminaire(
 		@Args('updateReviseLuminaire') input: UpdateMissingLuminaireInput,
 	): Promise<Luminaire> {
-		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateReviseLuminaireCommand>(
-			new UpdateReviseLuminaireCommand(input),
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateMissingLuminaireCommand>(
+			new UpdateMissingLuminaireCommand(input),
 		);
 		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
 	}

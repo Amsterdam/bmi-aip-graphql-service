@@ -15,7 +15,7 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
 import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junction-box.command';
-import { UpdateReviseJunctionBoxCommand } from './commands/update-revise-junction-box.command';
+import { UpdateMissingJunctionBoxCommand } from './commands/update-missing-junction-box.command';
 import { UpdateMissingJunctionBoxInput } from './dto/update-missing-junction-box.input';
 
 @Resolver((of) => JunctionBox)
@@ -66,7 +66,7 @@ export class JunctionBoxResolver {
 		@Args('updateReviseJunctionBox') input: UpdateMissingJunctionBoxInput,
 	): Promise<JunctionBox> {
 		const domainReviseJunctionBox: DomainJunctionBox =
-			await this.commandBus.execute<UpdateReviseJunctionBoxCommand>(new UpdateReviseJunctionBoxCommand(input));
+			await this.commandBus.execute<UpdateMissingJunctionBoxCommand>(new UpdateMissingJunctionBoxCommand(input));
 		return JunctionBoxFactory.CreateJunctionBox(domainReviseJunctionBox);
 	}
 

@@ -13,8 +13,8 @@ import { Luminaire as DomainLuminaire } from './types/luminaire.repository.inter
 import { DeleteLuminaireCommand } from './commands/delete-luminaire.command';
 import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
-import { CreateReviseLuminaireCommand } from './commands/create-revise-luminaire.command';
-import { CreateReviseLuminaireInput } from './dto/create-revise-luminaire.input';
+import { CreateMissingLuminaireCommand } from './commands/create-missing-luminaire.command';
+import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
 import { UpdateReviseLuminaireInput } from './dto/update-revise-luminaire.input';
 import { UpdateReviseLuminaireCommand } from './commands/update-revise-luminaire.command';
 
@@ -53,10 +53,10 @@ export class LuminaireResolver {
 	@Mutation(() => Luminaire)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async createReviseLuminaire(
-		@Args('createReviseLuminaire') input: CreateReviseLuminaireInput,
+		@Args('createReviseLuminaire') input: CreateMissingLuminaireInput,
 	): Promise<Luminaire> {
-		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<CreateReviseLuminaireCommand>(
-			new CreateReviseLuminaireCommand(input),
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<CreateMissingLuminaireCommand>(
+			new CreateMissingLuminaireCommand(input),
 		);
 		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
 	}

@@ -4,7 +4,7 @@ import { Luminaire as DomainLuminaire } from '../types/luminaire.repository.inte
 import { LuminaireFactory } from '../luminaire.factory';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
 import { SupplierType } from '../types';
-import { CreateReviseLuminaireInput } from '../dto/create-revise-luminaire.input';
+import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
 import { UpdateReviseLuminaireInput } from '../dto/update-revise-luminaire.input';
 
 const luminaire1 = new Luminaire();
@@ -82,7 +82,7 @@ export const reviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 	}
 	input[key] = luminaireRaw[key];
 	return input;
-}, new CreateReviseLuminaireInput());
+}, new CreateMissingLuminaireInput());
 
 const updateLuminaire = new UpdateLuminaireInput();
 updateLuminaire.id = '1f728e79-1b89-4333-a309-ea93bf17667c';

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
 import { CreateLuminaireInput } from '../dto/create-luminaire.input';
-import { CreateReviseLuminaireInput } from '../dto/create-revise-luminaire.input';
+import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
 import { UpdateReviseLuminaireInput } from '../dto/update-revise-luminaire.input';
 
@@ -40,6 +40,6 @@ export interface ILuminaireRepository {
 	createLuminaire(input: CreateLuminaireInput): Promise<Luminaire>;
 	updateLuminaire(input: UpdateLuminaireInput): Promise<Luminaire>;
 	deleteLuminaire(identifier: string): Promise<Luminaire>;
-	createReviseLuminaire(input: CreateReviseLuminaireInput): Promise<Luminaire>;
+	createReviseLuminaire(input: CreateMissingLuminaireInput): Promise<Luminaire>;
 	updateReviseLuminaire(input: UpdateReviseLuminaireInput): Promise<Luminaire>;
 }

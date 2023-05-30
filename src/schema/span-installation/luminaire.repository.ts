@@ -8,7 +8,7 @@ import { newId } from '../../utils';
 import { Luminaire, ILuminaireRepository } from './types/luminaire.repository.interface';
 import { CreateLuminaireInput } from './dto/create-luminaire.input';
 import { UpdateLuminaireInput } from './dto/update-luminaire.input';
-import { CreateReviseLuminaireInput } from './dto/create-revise-luminaire.input';
+import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
 import { UpdateReviseLuminaireInput } from './dto/update-revise-luminaire.input';
 
 @Injectable()
@@ -84,7 +84,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		lightSupplierType,
 		lightCommissioningDate,
 		remarksRevision,
-	}: CreateReviseLuminaireInput): Promise<Luminaire> {
+	}: CreateMissingLuminaireInput): Promise<Luminaire> {
 		const luminaireId = newId();
 		const data: Prisma.spanLuminairesCreateInput = {
 			id: luminaireId,

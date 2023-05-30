@@ -15,6 +15,7 @@ export class SpanMeasureItemFactory {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
+		quantityActual,
 		active,
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
@@ -25,6 +26,11 @@ export class SpanMeasureItemFactory {
 		spanMeasureItem.itemType = itemType;
 		spanMeasureItem.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
 		spanMeasureItem.quantityEstimate = quantityEstimate;
+
+		if (quantityActual !== undefined) {
+			spanMeasureItem.quantityActual = quantityActual;
+		}
+
 		spanMeasureItem.active = active;
 		return spanMeasureItem;
 	}

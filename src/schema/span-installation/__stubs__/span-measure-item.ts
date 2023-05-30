@@ -31,6 +31,7 @@ export const domainSpanMeasureItem: DomainSpanMeasureItem = {
 	itemType: 'material',
 	quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	quantityEstimate: 1,
+	quantityActual: 2,
 	active: true,
 };
 

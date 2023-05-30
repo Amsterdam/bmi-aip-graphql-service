@@ -78,16 +78,11 @@ export class SpanMeasureResolver {
 	async measureItems(@Parent() { id }: SpanMeasure, @Context() context): Promise<SpanMeasureItem[]> {
 		const { user } = context.req;
 
-		// Owner should see all items, surveyor only active items
-		// if	(user.realm_access.roles.includes('aip_owner')) {
-		//	return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
-		//}
-
 		return this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id));
 	}
 
 	@ResolveField()
-	async status(): Promise<string> {
+	async status(): Promise<SpanMeasureStatus> {
 		return SpanMeasureStatus.open;
 	}
 }

@@ -7,6 +7,7 @@ import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.reposi
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
 import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanMeasureStatus } from './types/span-measure-status';
 
 @Injectable()
 export class SpanMeasureRepository implements ISpanMeasureRepository {
@@ -105,5 +106,9 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		}
 
 		return false;
+	}
+
+	async determineSpanMeasureStatus(spanMeasureId: string): Promise<SpanMeasureStatus> {
+		return SpanMeasureStatus.open;
 	}
 }

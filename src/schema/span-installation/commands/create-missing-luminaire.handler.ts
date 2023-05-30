@@ -10,6 +10,6 @@ export class CreateMissingLuminaireHandler implements ICommandHandler<CreateMiss
 	constructor(private repository: LuminaireRepository) {}
 
 	public async execute(command: CreateMissingLuminaireCommand): Promise<Luminaire> {
-		return this.repository.createReviseLuminaire(command.data);
+		return this.repository.createMissingLuminaire(command.data);
 	}
 }

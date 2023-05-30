@@ -68,7 +68,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 		};
 	}
 
-	async createReviseLuminaire({
+	async createMissingLuminaire({
 		supportSystemId,
 		name,
 		location,

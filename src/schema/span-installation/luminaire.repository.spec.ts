@@ -74,8 +74,8 @@ describe('Span Installation / Luminaire / Repository', () => {
 		);
 	});
 
-	test('createReviseLuminaire()', async () => {
-		const returnValue = await reviseRepo.createReviseLuminaire(reviseLuminaireInput);
+	test('createMissingLuminaire()', async () => {
+		const returnValue = await reviseRepo.createMissingLuminaire(reviseLuminaireInput);
 		const luminaire = revisePrismaServiceMock.spanLuminaires.create.mock.calls[0][0]
 			.data as LuminaireWithoutGeography;
 		expect(luminaire).toEqual(

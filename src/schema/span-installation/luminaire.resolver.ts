@@ -52,8 +52,8 @@ export class LuminaireResolver {
 
 	@Mutation(() => Luminaire)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async createReviseLuminaire(
-		@Args('createReviseLuminaire') input: CreateMissingLuminaireInput,
+	public async createMissingLuminaire(
+		@Args('createMissingLuminaire') input: CreateMissingLuminaireInput,
 	): Promise<Luminaire> {
 		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<CreateMissingLuminaireCommand>(
 			new CreateMissingLuminaireCommand(input),

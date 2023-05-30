@@ -67,7 +67,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		};
 	}
 
-	async createReviseJunctionBox({
+	async createMissingJunctionBox({
 		objectId,
 		surveyId,
 		name,

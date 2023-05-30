@@ -7,7 +7,7 @@ import { CreateMissingJunctionBoxCommand } from './create-missing-junction-box.c
 import { CreateMissingJunctionBoxHandler } from './create-missing-junction-box.handler';
 
 const junctionBoxRepoMock: MockedObjectDeep<JunctionBoxRepository> = {
-	createReviseJunctionBox: jest.fn().mockResolvedValue(domainReviseJunctionBox),
+	createMissingJunctionBox: jest.fn().mockResolvedValue(domainReviseJunctionBox),
 	...(<any>{}),
 };
 
@@ -16,8 +16,8 @@ describe('CreateMissingJunctionBoxHandler', () => {
 		const command = new CreateMissingJunctionBoxCommand(reviseJunctionBoxInput);
 		const result = await new CreateMissingJunctionBoxHandler(junctionBoxRepoMock).execute(command);
 
-		expect(junctionBoxRepoMock.createReviseJunctionBox).toHaveBeenCalledTimes(1);
-		expect(junctionBoxRepoMock.createReviseJunctionBox).toHaveBeenCalledWith(reviseJunctionBoxInput);
+		expect(junctionBoxRepoMock.createMissingJunctionBox).toHaveBeenCalledTimes(1);
+		expect(junctionBoxRepoMock.createMissingJunctionBox).toHaveBeenCalledWith(reviseJunctionBoxInput);
 
 		expect(result).toEqual(domainReviseJunctionBox);
 	});

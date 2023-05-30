@@ -52,8 +52,8 @@ export class JunctionBoxResolver {
 
 	@Mutation(() => JunctionBox)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async createReviseJunctionBox(
-		@Args('createReviseJunctionBox') input: CreateMissingJunctionBoxInput,
+	public async createMissingJunctionBox(
+		@Args('createMissingJunctionBox') input: CreateMissingJunctionBoxInput,
 	): Promise<JunctionBox> {
 		const domainReviseJunctionBox: DomainJunctionBox =
 			await this.commandBus.execute<CreateMissingJunctionBoxCommand>(new CreateMissingJunctionBoxCommand(input));

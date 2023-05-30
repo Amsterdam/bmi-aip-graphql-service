@@ -12,7 +12,7 @@ import {
 	reviseLuminaire1,
 	reviseLuminaireInput,
 	updateLuminaireInput,
-	updateReviseLuminaireInput,
+	updateMissingLuminaireInput,
 } from './__stubs__';
 import type { LuminaireWithoutGeography } from './types/luminaire.repository.interface';
 
@@ -194,11 +194,11 @@ describe('Span Installation / Luminaire / Repository', () => {
 		]);
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
-			.mockResolvedValue(updateReviseLuminaireInput.geography);
-		const returnValue = await reviseRepo.updateReviseLuminaire(updateReviseLuminaireInput);
+			.mockResolvedValue(updateMissingLuminaireInput.geography);
+		const returnValue = await reviseRepo.updateReviseLuminaire(updateMissingLuminaireInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanLuminaires.update).toHaveBeenCalledWith({
-			where: { id: updateReviseLuminaireInput.id },
+			where: { id: updateMissingLuminaireInput.id },
 			data: {
 				name: '__NAME__',
 				constructionYear: 1979,
@@ -218,7 +218,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				remarksRevision: '__REMARKS_REVISION__',
 			},
 		});
-		expect(spy).toHaveBeenCalledWith(updateReviseLuminaireInput.id);
+		expect(spy).toHaveBeenCalledWith(updateMissingLuminaireInput.id);
 		expect(returnValue).toEqual({
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			lightCommissioningDate: null,

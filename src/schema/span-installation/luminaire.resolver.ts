@@ -15,7 +15,7 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingLuminaireCommand } from './commands/create-missing-luminaire.command';
 import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
-import { UpdateReviseLuminaireInput } from './dto/update-revise-luminaire.input';
+import { UpdateMissingLuminaireInput } from './dto/update-missing-luminaire.input';
 import { UpdateReviseLuminaireCommand } from './commands/update-revise-luminaire.command';
 
 @Resolver((of) => Luminaire)
@@ -64,7 +64,7 @@ export class LuminaireResolver {
 	@Mutation(() => Luminaire)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateReviseLuminaire(
-		@Args('updateReviseLuminaire') input: UpdateReviseLuminaireInput,
+		@Args('updateReviseLuminaire') input: UpdateMissingLuminaireInput,
 	): Promise<Luminaire> {
 		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<UpdateReviseLuminaireCommand>(
 			new UpdateReviseLuminaireCommand(input),

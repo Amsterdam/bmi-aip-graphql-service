@@ -18,7 +18,7 @@ import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
-import { UpdateReviseSupportSystemInput } from './dto/update-revise-support-system.input';
+import { UpdateMissingSupportSystemInput } from './dto/update-missing-support-system.input';
 import { UpdateReviseSupportSystemCommand } from './commands/update-revise-support-system.command';
 
 @Resolver((of) => SupportSystem)
@@ -76,7 +76,7 @@ export class SupportSystemResolver {
 	@Mutation(() => SupportSystem)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async updateReviseSupportSystem(
-		@Args('updateReviseSupportSystem') input: UpdateReviseSupportSystemInput,
+		@Args('updateReviseSupportSystem') input: UpdateMissingSupportSystemInput,
 	): Promise<SupportSystem> {
 		const domainReviseSupportSystem: DomainSupportSystem =
 			await this.commandBus.execute<UpdateReviseSupportSystemCommand>(

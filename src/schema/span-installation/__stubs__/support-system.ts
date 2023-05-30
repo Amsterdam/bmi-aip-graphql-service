@@ -11,7 +11,7 @@ import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
 import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
-import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
+import { UpdateMissingSupportSystemInput } from '../dto/update-missing-support-system.input';
 import { UpdateReviseSupportSystemNormalizedInput } from '../dto/update-revise-support-system-normalized.input';
 import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
@@ -112,7 +112,7 @@ export const createMissingSupportSystemInput = Object.keys(reviseSupportSystemRa
 
 const updateSupportSystem = new UpdateSupportSystemInput();
 updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
-const updateReviseSupportSystem = new UpdateReviseSupportSystemInput();
+const updateReviseSupportSystem = new UpdateMissingSupportSystemInput();
 updateReviseSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
 updateReviseSupportSystem.remarksRevision = '__REMARKS_REVISION__';
 
@@ -129,7 +129,7 @@ export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, updateSupportSystem);
 
-export const updateReviseSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+export const updateMissingSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
 		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
 		return input;

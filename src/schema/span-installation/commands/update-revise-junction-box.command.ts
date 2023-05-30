@@ -1,5 +1,5 @@
-import { UpdateReviseJunctionBoxInput } from '../dto/update-revise-junction-box.input';
+import { UpdateMissingJunctionBoxInput } from '../dto/update-missing-junction-box.input';
 
 export class UpdateReviseJunctionBoxCommand {
-	public constructor(public readonly data: UpdateReviseJunctionBoxInput) {}
+	public constructor(public readonly data: UpdateMissingJunctionBoxInput) {}
 }

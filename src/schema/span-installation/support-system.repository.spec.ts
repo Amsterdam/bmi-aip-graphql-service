@@ -16,7 +16,7 @@ import {
 	domainReviseSupportSystem,
 	createMissingSupportSystemNormalizedInput,
 	reviseSupportSystem1,
-	updateReviseSupportSystemInput,
+	updateMissingSupportSystemInput,
 	updateReviseSupportSystemNormalizedInput,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
@@ -185,7 +185,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		]);
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
-			.mockResolvedValue(updateReviseSupportSystemInput.geography);
+			.mockResolvedValue(updateMissingSupportSystemInput.geography);
 		const returnValue = await reviseRepo.updateReviseSupportSystem(updateReviseSupportSystemNormalizedInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({

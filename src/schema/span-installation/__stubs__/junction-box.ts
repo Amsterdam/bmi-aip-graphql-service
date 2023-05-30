@@ -7,7 +7,7 @@ import { JunctionBoxFactory } from '../junction-box.factory';
 import { UpdateJunctionBoxInput } from '../dto/update-junction-box.input';
 import { A11yDetails } from '../models/a11y-details.model';
 import { CreateMissingJunctionBoxInput } from '../dto/create-missing-junction-box.input';
-import { UpdateReviseJunctionBoxInput } from '../dto/update-revise-junction-box.input';
+import { UpdateMissingJunctionBoxInput } from '../dto/update-missing-junction-box.input';
 
 const junctionBox1 = new JunctionBox();
 junctionBox1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -105,9 +105,9 @@ export const updateJunctionBoxInput = Object.keys(junctionBoxRaw).reduce((input,
 	return input;
 }, updateJunctionBox);
 
-const updateReviseJunctionBox = new UpdateReviseJunctionBoxInput();
+const updateReviseJunctionBox = new UpdateMissingJunctionBoxInput();
 updateReviseJunctionBox.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
-export const updateReviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
+export const updateMissingJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((input, key) => {
 	if (key === 'a11yDetails') {
 		input.a11yDetails = a11yDetails;
 		return input;

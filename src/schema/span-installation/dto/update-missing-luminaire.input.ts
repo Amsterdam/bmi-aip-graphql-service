@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional } from 'class-validator';
 
-import { UpdateJunctionBoxInput } from './update-junction-box.input';
+import { UpdateLuminaireInput } from './update-luminaire.input';
 
 @InputType()
-export class UpdateReviseJunctionBoxInput extends UpdateJunctionBoxInput {
+export class UpdateMissingLuminaireInput extends UpdateLuminaireInput {
 	@IsOptional()
 	@Field({ nullable: true })
 	public remarksRevision?: string;

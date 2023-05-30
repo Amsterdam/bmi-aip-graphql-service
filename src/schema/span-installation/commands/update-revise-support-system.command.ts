@@ -1,5 +1,5 @@
-import { UpdateReviseSupportSystemInput } from '../dto/update-revise-support-system.input';
+import { UpdateMissingSupportSystemInput } from '../dto/update-missing-support-system.input';
 
 export class UpdateReviseSupportSystemCommand {
-	public constructor(public readonly data: UpdateReviseSupportSystemInput) {}
+	public constructor(public readonly data: UpdateMissingSupportSystemInput) {}
 }

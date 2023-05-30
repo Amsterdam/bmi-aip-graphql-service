@@ -13,7 +13,7 @@ import {
 	reviseJunctionBox1,
 	reviseJunctionBoxInput,
 	updateJunctionBoxInput,
-	updateReviseJunctionBoxInput,
+	updateMissingJunctionBoxInput,
 } from './__stubs__';
 import type { JunctionBoxWithoutGeography } from './types/junction-box.repository.interface';
 
@@ -161,11 +161,11 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		]);
 		const spy = jest
 			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
-			.mockResolvedValue(updateReviseJunctionBoxInput.geography);
-		const returnValue = await reviseRepo.updateReviseJunctionBox(updateReviseJunctionBoxInput);
+			.mockResolvedValue(updateMissingJunctionBoxInput.geography);
+		const returnValue = await reviseRepo.updateReviseJunctionBox(updateMissingJunctionBoxInput);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(revisePrismaServiceMock.spanJunctionBoxes.update).toHaveBeenCalledWith({
-			where: { id: updateReviseJunctionBoxInput.id },
+			where: { id: updateMissingJunctionBoxInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
 				installationHeight: new Decimal(10),
@@ -182,9 +182,9 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				remarksRevision: '__REMARKS_REVISION__',
 			},
 		});
-		expect(spy).toHaveBeenCalledWith(updateReviseJunctionBoxInput.id);
+		expect(spy).toHaveBeenCalledWith(updateMissingJunctionBoxInput.id);
 		expect(returnValue).toEqual({
-			a11yDetails: updateReviseJunctionBoxInput.a11yDetails,
+			a11yDetails: updateMissingJunctionBoxInput.a11yDetails,
 			deleted_at: null,
 			geography: {
 				coordinates: [52.370302853062604, 4.893996915500548],

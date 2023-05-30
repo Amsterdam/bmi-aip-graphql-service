@@ -84,8 +84,8 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		);
 	});
 
-	test('createReviseJunctionBox()', async () => {
-		const returnValue = await reviseRepo.createReviseJunctionBox(reviseJunctionBoxInput);
+	test('createMissingJunctionBox()', async () => {
+		const returnValue = await reviseRepo.createMissingJunctionBox(reviseJunctionBoxInput);
 		const junctionBox = revisePrismaServiceMock.spanJunctionBoxes.create.mock.calls[0][0]
 			.data as JunctionBoxWithoutGeography;
 

@@ -3,13 +3,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JunctionBoxRepository } from '../junction-box.repository';
 import { JunctionBox } from '../types/junction-box.repository.interface';
 
-import { CreateReviseJunctionBoxCommand } from './create-revise-junction-box.command';
+import { CreateMissingJunctionBoxCommand } from './create-missing-junction-box.command';
 
-@CommandHandler(CreateReviseJunctionBoxCommand)
-export class CreateReviseJunctionBoxHandler implements ICommandHandler<CreateReviseJunctionBoxCommand> {
+@CommandHandler(CreateMissingJunctionBoxCommand)
+export class CreateReviseJunctionBoxHandler implements ICommandHandler<CreateMissingJunctionBoxCommand> {
 	constructor(private repository: JunctionBoxRepository) {}
 
-	public async execute(command: CreateReviseJunctionBoxCommand): Promise<JunctionBox> {
+	public async execute(command: CreateMissingJunctionBoxCommand): Promise<JunctionBox> {
 		return this.repository.createReviseJunctionBox(command.data);
 	}
 }

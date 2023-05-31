@@ -15,7 +15,7 @@ import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdQuery } from './commands/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)

@@ -57,8 +57,8 @@ import { SpanDecompositionType } from './types/span-decomposition-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
 import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
 import { SpanDecompositionResolver } from './span-decomposition.resolver';
-import { FindSpanMeasuresByDecompositionIdQuery } from './commands/find-span-measures-by-decomposition-id.query';
-import { FindSpanMeasuresByDecompositionIdHandler } from './commands/find-span-measures-by-decomposition-id.handler';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionIdHandler } from './queries/find-span-measures-by-decomposition-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 

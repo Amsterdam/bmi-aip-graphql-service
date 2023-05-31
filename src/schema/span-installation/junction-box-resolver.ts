@@ -12,7 +12,7 @@ import { UpdateJunctionBoxCommand } from './commands/update-junction-box.command
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdQuery } from './commands/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)

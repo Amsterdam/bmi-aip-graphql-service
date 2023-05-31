@@ -75,7 +75,7 @@ describe('Span Installation / SpanMeasure / Service', () => {
 		spanMeasureItem.itemType = SpanDecompositionType.spanJunctionBox;
 		spanMeasureItem.quantityEstimate = 1;
 		spanMeasureItem.quantityActual = null;
-		spanMeasureItem.active = true;
+		spanMeasureItem.isActive = true;
 
 		const status = service.determineSpanMeasureItemStatus(spanMeasureItem);
 

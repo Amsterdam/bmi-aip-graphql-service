@@ -26,8 +26,8 @@ export class SpanMeasureItemService {
 			return SpanMeasureItemStatus.completed;
 		}
 
-		if (spanMeasureItem.active) {
-			return SpanMeasureItemStatus.active;
+		if (spanMeasureItem.isActive) {
+			return SpanMeasureItemStatus.isActive;
 		}
 
 		if (spanMeasureItem.quantityEstimate !== null) {

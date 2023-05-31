@@ -34,5 +34,5 @@ export class SpanMeasureItem {
 	status?: SpanMeasureItemStatus;
 
 	@Field(() => Boolean)
-	active: boolean;
+	isActive: boolean;
 }

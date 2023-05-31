@@ -20,7 +20,7 @@ export const spanMeasureItemRaw: Omit<SpanMeasureItem, 'id'> = {
 	itemType: 'material',
 	quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	quantityEstimate: 1,
-	active: true,
+	isActive: true,
 };
 
 export const domainSpanMeasureItem: DomainSpanMeasureItem = {
@@ -32,7 +32,7 @@ export const domainSpanMeasureItem: DomainSpanMeasureItem = {
 	quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	quantityEstimate: 1,
 	quantityActual: 2,
-	active: true,
+	isActive: true,
 };
 
 export const saveSpanMeasureItemsInput = {

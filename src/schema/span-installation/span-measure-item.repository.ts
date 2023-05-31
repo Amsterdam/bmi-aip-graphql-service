@@ -36,7 +36,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				itemType: itemType,
 				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 				quantityEstimate: quantityEstimate,
-				active: active,
+				isActive: isActive,
 			},
 		});
 	}
@@ -53,7 +53,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		return this.prisma.spanMeasureItems.findMany({
 			where: {
 				spanMeasureId,
-				active: true,
+				isActive: true,
 			},
 		});
 	}

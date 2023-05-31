@@ -16,7 +16,7 @@ export class SpanMeasureItemFactory {
 		quantityUnitOfMeasurement,
 		quantityEstimate,
 		quantityActual,
-		active,
+		isActive,
 	}: DomainSpanMeasureItem): SpanMeasureItem {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = id;
@@ -31,7 +31,7 @@ export class SpanMeasureItemFactory {
 			spanMeasureItem.quantityActual = quantityActual;
 		}
 
-		spanMeasureItem.active = active;
+		spanMeasureItem.isActive = isActive;
 		return spanMeasureItem;
 	}
 

@@ -2,6 +2,8 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { HasJunctionBoxGotDamageQuery } from '../span-installation-survey/queries/has-junction-box-got-damage.query';
+
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBoxFactory } from './junction-box.factory';
 import { JunctionBoxService } from './junction-box.service';
@@ -61,5 +63,10 @@ export class JunctionBoxResolver {
 		return this.queryBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
 			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id }: JunctionBox): Promise<boolean> {
+		return this.queryBus.execute<HasJunctionBoxGotDamageQuery>(new HasJunctionBoxGotDamageQuery(id));
 	}
 }

@@ -89,4 +89,16 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 
 		return this.getJunctionBoxSurvey(permanentId);
 	}
+
+	async hasDamage(junctionBoxId: string): Promise<boolean> {
+		const junctionBoxSurvey = await this.getJunctionBoxSurveyOnPermanentId(junctionBoxId);
+
+		return (
+			junctionBoxSurvey.cableDamage ||
+			junctionBoxSurvey.faultyMontageTensionWire ||
+			junctionBoxSurvey.faultyMontageFacade ||
+			junctionBoxSurvey.junctionBoxDamage ||
+			junctionBoxSurvey.stickerNotReadable
+		);
+	}
 }

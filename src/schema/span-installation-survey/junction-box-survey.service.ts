@@ -19,4 +19,8 @@ export class JunctionBoxSurveyService {
 			await this.junctionBoxRepo.getJunctionBoxSurveyOnPermanentId(junctionBoxId),
 		);
 	}
+
+	async hasDamage(junctionBoxId: string): Promise<boolean> {
+		return this.junctionBoxRepo.hasDamage(junctionBoxId);
+	}
 }

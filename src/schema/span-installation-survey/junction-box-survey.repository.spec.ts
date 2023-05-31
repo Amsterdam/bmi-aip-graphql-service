@@ -103,4 +103,29 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 		await repository.getJunctionBoxSurveyOnPermanentId(domainJunctionBoxSurvey.junctionBoxId);
 		expect(spy).toHaveBeenLastCalledWith(permanentId);
 	});
+
+	describe('hasDamage', () => {
+		test('true', async () => {
+			const spy = jest
+				.spyOn(repository, 'getJunctionBoxSurveyOnPermanentId')
+				.mockResolvedValue(domainJunctionBoxSurvey);
+			const returnValue = await repository.hasDamage('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(spy).toHaveBeenLastCalledWith('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(returnValue).toEqual(true);
+		});
+
+		test('false', async () => {
+			const spy = jest.spyOn(repository, 'getJunctionBoxSurveyOnPermanentId').mockResolvedValue({
+				...domainJunctionBoxSurvey,
+				cableDamage: false,
+				faultyMontageFacade: false,
+				faultyMontageTensionWire: false,
+				junctionBoxDamage: false,
+				stickerNotReadable: false,
+			});
+			const returnValue = await repository.hasDamage('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(spy).toHaveBeenLastCalledWith('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(returnValue).toEqual(false);
+		});
+	});
 });

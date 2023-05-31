@@ -26,5 +26,5 @@ export class BaseSpanMeasureItemInput {
 	quantityActual?: number;
 
 	@Field(() => Boolean)
-	active?: boolean;
+	isActive?: boolean;
 }

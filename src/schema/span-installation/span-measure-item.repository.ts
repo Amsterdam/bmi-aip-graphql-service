@@ -21,7 +21,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
-		active,
+		isActive,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
 		return this.prisma.spanMeasureItems.create({
 			data: {
@@ -70,8 +70,6 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 						},
 					});
 
-					console.log(input);
-
 					if (!result) {
 						throw new NotFoundException('No item found for given id/spanMeasureId combination');
 					}
@@ -82,7 +80,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 						},
 						data: {
 							quantityActual: spanMeasureItemActual.quantityActual,
-							active: spanMeasureItemActual.active,
+							isActive: spanMeasureItemActual.active,
 						},
 					});
 				}),

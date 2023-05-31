@@ -77,14 +77,14 @@ export class SpanMeasureResolver {
 	@ResolveField()
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async measureItems(@Parent() { id }: SpanMeasure): Promise<SpanMeasureItem[]> {
-		return this.spanMeasureService.determineStatusForItemsInMeasure(
+		return this.spanMeasureService.setStatusForItemsInMeasure(
 			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
 		);
 	}
 
 	@ResolveField()
 	async status(@Parent() { id }: SpanMeasure): Promise<SpanMeasureStatus> {
-		const itemsInMeasure = await this.spanMeasureService.determineStatusForItemsInMeasure(
+		const itemsInMeasure = await this.spanMeasureService.setStatusForItemsInMeasure(
 			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
 		);
 

@@ -25,11 +25,11 @@ export class SpanMeasureService {
 		);
 	}
 
-	async determineStatusForItemsInMeasure(spanMeasureItem: SpanMeasureItem[]): Promise<SpanMeasureItem[]> {
-		spanMeasureItem.map(async (item: SpanMeasureItem) => {
-			item.status = await this.spanMeasureItemService.determineSpanMeasureItemStatus(item);
+	setStatusForItemsInMeasure(spanMeasureItems: SpanMeasureItem[]): SpanMeasureItem[] {
+		spanMeasureItems.map(async (item: SpanMeasureItem) => {
+			item.status = this.spanMeasureItemService.determineSpanMeasureItemStatus(item);
 		});
 
-		return spanMeasureItem;
+		return spanMeasureItems;
 	}
 }

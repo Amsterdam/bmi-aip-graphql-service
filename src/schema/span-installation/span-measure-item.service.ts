@@ -21,7 +21,7 @@ export class SpanMeasureItemService {
 		);
 	}
 
-	async determineSpanMeasureItemStatus(spanMeasureItem: SpanMeasureItem): Promise<SpanMeasureItemStatus> {
+	determineSpanMeasureItemStatus(spanMeasureItem: SpanMeasureItem): SpanMeasureItemStatus {
 		if (spanMeasureItem.quantityEstimate && spanMeasureItem.quantityActual) {
 			return SpanMeasureItemStatus.completed;
 		}

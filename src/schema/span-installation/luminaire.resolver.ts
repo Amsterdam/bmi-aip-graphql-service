@@ -12,7 +12,7 @@ import { UpdateLuminaireCommand } from './commands/update-luminaire.command';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
 import { DeleteLuminaireCommand } from './commands/delete-luminaire.command';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { FindSpanMeasuresByDecompositionIdQuery } from './commands/find-span-measures-by-decomposition-id.query';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)
@@ -54,8 +54,8 @@ export class LuminaireResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
-			new FindSpanMeasuresByDecompositionIdCommand(id),
+		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
+			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
 	}
 }

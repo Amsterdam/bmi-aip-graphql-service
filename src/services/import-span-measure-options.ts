@@ -54,7 +54,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private getMatrixFromSheet(workSheet) {
-		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
+		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those
 
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
@@ -104,7 +104,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private getMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
-		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230501.xlsx'
+		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those to correctly define the columns
 
 		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, {
@@ -145,10 +145,8 @@ export class ImportSpanMeasureOptions {
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
 		const file = await this.getFile();
 
-		const OVSSpanMeasureExcelRowObjectList: OVSSpanMeasureExcelRowObject[] = this.getMatrixFromSheet(file.Matrix);
-
 		const normalizedData = await this.normalize(
-			OVSSpanMeasureExcelRowObjectList,
+			this.getMatrixFromSheet(file.Matrix),
 			this.getMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
 			this.getBestekpostenFromSheet(file.Besteksposten, this.jsonData.spanMeasureItemOptions),
 		);
@@ -225,8 +223,9 @@ export class ImportSpanMeasureOptions {
 		});
 
 		if (key && !foundItem) {
-			this.logger.warn('Matrix contains reference number that is not recognized: ' + key);
-			//throw new Error('Matrix contains reference number that is not recognized');
+			this.logger.warn(
+				'Matrix contains reference number that is not found in sheet Bestekposten or M-nummers: ' + key,
+			);
 		}
 
 		return foundItem;
@@ -296,7 +295,7 @@ export class ImportSpanMeasureOptions {
 
 			if (element.Onderdelen) this.lastReadDecompositionType = element.Onderdelen;
 
-			const item = {
+			const optionFormatted = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),
 				description: element.Maatregelen,
 				decompositionType: this.mapDecompositionType(this.lastReadDecompositionType),
@@ -306,7 +305,18 @@ export class ImportSpanMeasureOptions {
 				],
 			};
 
-			measureOptions[item.description] = item;
+			if (!measureOptions[optionFormatted.description]) {
+				measureOptions[optionFormatted.description] = optionFormatted;
+			} else {
+				optionFormatted.measureItems.map((measureItem) => {
+					const existingItem = measureOptions[optionFormatted.description].measureItems.find(
+						(existing) => existing.id === measureItem.id,
+					);
+					if (!existingItem) {
+						measureOptions[optionFormatted.description].measureItems.push(measureItem);
+					}
+				});
+			}
 		});
 
 		// Remap object with named keys to array

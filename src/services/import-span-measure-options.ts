@@ -32,7 +32,7 @@ export class ImportSpanMeasureOptions {
 
 	private jsonDataFilePath = 'src/schema/span-installation/types/data/normalized-data-measures.json';
 
-	private forcedRewrite = true; // If true, generates the .json from scratch even if an older one exists
+	private forcedRewrite = false; // If true, generates the .json from scratch even if an older one exists
 
 	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
 

@@ -83,9 +83,9 @@ export class ImportSpanMeasureOptions {
 	private parseMNummersRow(materialenObj: MNummersExcelRowObject, knownMaterial?: SpanMeasureItemOption) {
 		return {
 			id: knownMaterial ? knownMaterial.id : newId(),
-			unit: 'Stuk',
+			unit: materialenObj['Eenh.'],
 			itemType: SpanMeasureItemType.material,
-			description: materialenObj['Voorlopige benaming'],
+			description: materialenObj['Omschrijving artikel'],
 			referenceNumber: materialenObj['M-nummer'].toString(),
 		};
 	}
@@ -284,6 +284,10 @@ export class ImportSpanMeasureOptions {
 		bestekposten: object[],
 	): Promise<Record<string, any>> {
 		const measureOptions = {};
+
+		this.jsonData.spanMeasureOptions.map((item) => {
+			measureOptions[item.description] = item;
+		});
 
 		OVSExcelRowObjectList.forEach((element: OVSSpanMeasureExcelRowObject, index) => {
 			const foundMeasureOption = this.jsonData.spanMeasureOptions.find(

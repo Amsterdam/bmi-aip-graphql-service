@@ -32,6 +32,8 @@ export class ImportSpanMeasureOptions {
 
 	private jsonDataFilePath = 'src/schema/span-installation/types/data/normalized-data-measures.json';
 
+	private forcedRewrite = true; // If true, generates the .json from scratch even if an older one exists
+
 	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
 
 	private lastReadDecompositionType = '';
@@ -143,6 +145,11 @@ export class ImportSpanMeasureOptions {
 		this.progressBar.start(100, 0);
 
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
+		if (this.forcedRewrite) {
+			this.jsonData.spanMeasureOptions = [];
+			this.jsonData.spanMeasureItemOptions = [];
+		}
+
 		const file = await this.getFile();
 
 		const normalizedData = await this.normalize(

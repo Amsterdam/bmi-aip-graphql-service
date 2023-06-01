@@ -3,6 +3,7 @@ import { Point } from 'geojson';
 
 import { CreateArkSurveyInput } from '../dto/create-ark-survey.input';
 import { UpdateArkSurveyInput } from '../dto/update-ark-survey.input';
+import { ReachSegment } from '../models/reach-segment.model';
 
 const arkSurvey = Prisma.validator<Prisma.arkSurveysArgs>()({
 	select: {
@@ -20,6 +21,10 @@ export type ArkSurveyWithoutGeography = Prisma.arkSurveysGetPayload<typeof arkSu
 export type ArkSurvey = ArkSurveyWithoutGeography & {
 	arkGeographyStart?: Point;
 	arkGeographyEnd?: Point;
+};
+
+export type ArkSurveyWithReachSegments = ArkSurvey & {
+	reachSegments: ReachSegment[];
 };
 
 export interface IArkSurveyRepository {

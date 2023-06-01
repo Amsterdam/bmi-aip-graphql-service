@@ -11,4 +11,12 @@ export class ArkSurveyService {
 	async getArkSurvey(surveyId: string): Promise<ArkSurvey> {
 		return ArkSurveyFactory.createArkSurvey(await this.arkSurveyRepository.getArkSurvey(surveyId));
 	}
+
+	async findArkSurveysByAssetCode(assetCode: string): Promise<ArkSurvey[]> {
+		const arkSurveys = await this.arkSurveyRepository.findArkSurveysByAssetCode(assetCode);
+
+		console.log(arkSurveys);
+
+		return arkSurveys.map((arkSurvey: any) => ArkSurveyFactory.createArkSurveyWithReachSegments(arkSurvey));
+	}
 }

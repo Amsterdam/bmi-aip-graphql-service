@@ -1,26 +1,26 @@
 {
 	"spanMeasureOptions": [
 		{
-			"id": "9853f821-985f-4426-8bde-c124b84cacdb",
+			"id": "d1f67f7c-038f-4ce9-87de-da476dfc58cc",
 			"description": "Verwijderen aansluitkabel",
 			"decompositionType": "spanJunctionBox",
 			"measureItems": [
 				{
-					"id": "bd5fc39b-7fb5-4681-ac69-f95857ba3cca",
+					"id": "bd5f92b5-3d91-4482-8e53-bf63fb9c0951",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen installatie-kabel in armatuur ",
 					"referenceNumber": "200010"
 				},
 				{
-					"id": "dd7ced43-679d-4bce-a6a2-3c61ea0cb5bc",
+					"id": "d292ef1d-679d-44cd-a6ab-073820ffcf9c",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Verwijderen installatie-kabel van spankabel",
 					"referenceNumber": "200020"
 				},
 				{
-					"id": "7a424a6e-e9d2-40f1-95a5-78602af085d0",
+					"id": "89d5400e-efc9-48fe-b6d7-ce18c01555e6",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Verwijderen installatie-kabel van gevel",
@@ -29,12 +29,12 @@
 			]
 		},
 		{
-			"id": "c8ca97ec-074d-43c2-8107-1514eb9f64c8",
+			"id": "8ebed964-4a95-49fd-b5d2-b6a756afcaec",
 			"description": "Verwijderen installatiebuis",
 			"decompositionType": "spanJunctionBox",
 			"measureItems": [
 				{
-					"id": "12f858f7-4cd9-44f4-a2eb-14daac39667e",
+					"id": "3fea785e-ae3f-4436-9337-7c656b78e0d2",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Verwijderen slagvaste buis incl kabel van gevel",
@@ -43,54 +43,54 @@
 			]
 		},
 		{
-			"id": "209f3453-a7c4-4edc-98b2-5d91842f401e",
-			"description": "Bevestigen aansluitkabel aan spandraad",
+			"id": "93b18164-8ea0-4427-8fcf-d779d67b3006",
+			"description": "Aanbrengen aansluitkabel aan spandraad",
 			"decompositionType": "spanJunctionBox",
 			"measureItems": [
 				{
-					"id": "e0d91226-b67b-497e-b853-88bd3a40714b",
+					"id": "3ccf96fa-1d11-4f73-af8d-f5aa5da76c59",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen installatie-kabel op spandraad",
 					"referenceNumber": "201020"
 				},
 				{
-					"id": "7a89e852-b35f-48cc-9a12-ea64f4e5e40c",
+					"id": "0237e7d4-584a-4501-8f81-3da407860962",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Leveren installatiekabel YMvK 3 x 1,5 mm²",
 					"referenceNumber": "500010"
 				},
 				{
-					"id": "5836f9c1-8fe9-4321-ab01-ffe6ac09403e",
-					"unit": "Stuk",
+					"id": "254770a3-8a0e-4f4c-b44a-ffacefb1589a",
+					"unit": "100 st",
 					"itemType": "material",
-					"description": "M### Kabelbundelbandjes",
+					"description": "Kabelbinder/bundelband  RVS 152 x 4,6 mm (Let op: 100 stuks in één pak. Prijs is per pak)",
 					"referenceNumber": "M7100566"
 				}
 			]
 		},
 		{
-			"id": "364ee4b1-7864-487c-9da8-1adf74f551b7",
-			"description": "Bevestigen aansluitkabel aan gevel",
+			"id": "c8eb5dc4-65a7-4c01-a66e-aa858918bf5f",
+			"description": "Aanbrengen aansluitkabel aan gevel",
 			"decompositionType": "spanJunctionBox",
 			"measureItems": [
 				{
-					"id": "a458b9fb-f2fc-420c-a8b9-e5f065e4c97e",
+					"id": "012c30fa-a8ee-4189-af59-55ed70e293ae",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen installatie-kabel op gevel.",
 					"referenceNumber": "201030"
 				},
 				{
-					"id": "2e2428d8-a3b9-446b-be73-9ef1a0b95819",
+					"id": "69e7d37d-3192-4c21-bd7d-3eb9b3e6bf07",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen slagvaste buis incl kabel op gevel",
 					"referenceNumber": "201050"
 				},
 				{
-					"id": "7a89e852-b35f-48cc-9a12-ea64f4e5e40c",
+					"id": "0237e7d4-584a-4501-8f81-3da407860962",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Leveren installatiekabel YMvK 3 x 1,5 mm²",
@@ -99,114 +99,103 @@
 			]
 		},
 		{
-			"id": "6e7bc38b-554a-4420-a131-1cbb230acbd2",
-			"description": "Bevestigen aansluitkabel aan armatuur",
+			"id": "d39f9108-49c3-43e1-a21a-a2fdb3b9b0aa",
+			"description": "Aanbrengen aansluitkabel in armatuur",
 			"decompositionType": "spanJunctionBox",
 			"measureItems": [
 				{
-					"id": "1f9b2583-06b2-4a37-8a14-18cbed66925e",
+					"id": "ca6d5e77-c43a-494a-aa5e-1ca97e96b2ad",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aansluiten installatie-kabel in armatuur ",
 					"referenceNumber": "201010"
+				},
+				{
+					"id": "95e7ff52-b7b9-4f35-88be-7ac3a5b08c51",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Doorlussen installatie-kabel in armatuur ",
+					"referenceNumber": "201080"
 				}
 			]
 		},
 		{
-			"id": "e0e1ba20-2f2c-410a-b9fd-4cb731fad5db",
-			"description": "Vervangen stijgleiding?",
-			"decompositionType": "spanJunctionBox",
-			"measureItems": []
-		},
-		{
-			"id": "8b8aa6d6-84b8-4b13-b3e0-cc829d24ef8d",
-			"description": "Schade aan aansluitkast communiceren naar V&OR (intern)",
-			"decompositionType": "spanJunctionBox",
-			"measureItems": []
-		},
-		{
-			"id": "f0971555-b287-4fac-abf8-f33568fb4e2f",
+			"id": "d071c21e-43c1-49cf-aef0-1bf8a541d69b",
 			"description": "Vervangen mastbeugel",
 			"decompositionType": "Mast",
 			"measureItems": [
 				{
-					"id": "3c6241a5-dbe2-4974-8fde-c1900e94db4b",
+					"id": "32150ab1-19f1-4585-b0d3-8619f402573a",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen oude mastbeugel ",
 					"referenceNumber": "120030"
 				},
 				{
-					"id": "c528dedb-a438-4129-b70f-069fc5bd0fa5",
+					"id": "cd48d74b-1a04-4ba1-b7dd-8d9e9e7f3707",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen nieuwe mastbeugel ",
 					"referenceNumber": "130140"
 				},
 				{
-					"id": "83ca4b88-541e-4faf-b73e-00b45286af94",
-					"unit": "Stuk",
+					"id": "2b797558-9ff0-46cd-8c42-40ace638c767",
+					"unit": "st",
 					"itemType": "material",
-					"description": "M### Mastbeugel",
-					"referenceNumber": "M7100995"
+					"description": "Beugelset RVS t.b.v. Tram Ø102mm - extra oog",
+					"referenceNumber": "M740166PMF"
 				}
 			]
 		},
 		{
-			"id": "995b6486-b828-4bbd-957c-64017dba721f",
+			"id": "663dca9d-590f-43d4-93f0-63f86e609fd6",
 			"description": "Vervangen mastopzetstuk",
 			"decompositionType": "Mast",
 			"measureItems": [
 				{
-					"id": "916dec63-172e-4f97-8a71-3f46f0d88225",
+					"id": "cc5de963-3046-405a-8d00-5f9fd6d00dbd",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen verlengstuk aan object derden. ",
 					"referenceNumber": "110050"
 				},
 				{
-					"id": "c1330247-e91c-470a-8d65-ed548ce576f4",
+					"id": "2435acf7-8136-447f-a04e-34c7efda7d29",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen verlengstuk aan object derden. ",
 					"referenceNumber": "140130"
 				},
 				{
-					"id": "5e345b16-92b1-4c24-9533-6653882c5970",
-					"unit": "Stuk",
+					"id": "79c72d6f-73d1-434d-9d87-8291eac9311d",
+					"unit": "st",
 					"itemType": "material",
-					"description": "M### Mastopzetstuk",
+					"description": "Opzetstuk 1V-TL2600 top 60x200 incl. beugels RAL-7042 ( nieuwe GVB kleur )",
 					"referenceNumber": "M7100529"
 				},
 				{
-					"id": "83ca4b88-541e-4faf-b73e-00b45286af94",
-					"unit": "Stuk",
+					"id": "2b797558-9ff0-46cd-8c42-40ace638c767",
+					"unit": "st",
 					"itemType": "material",
-					"description": "M### Mastbeugel",
-					"referenceNumber": "M7100995"
+					"description": "Beugelset RVS t.b.v. Tram Ø102mm - extra oog",
+					"referenceNumber": "M740166PMF"
 				}
 			]
 		},
 		{
-			"id": "fb451e7f-5990-44a4-8bc6-b3b18dd8e595",
-			"description": "Schade aan mast communicieren naar V&OR (intern)",
-			"decompositionType": "Mast",
-			"measureItems": []
-		},
-		{
-			"id": "bd1d9f94-702f-40c2-a480-f3bd25de62ff",
+			"id": "95a1f9db-2736-4d32-b398-c5d4c9943e12",
 			"description": "Verwijderen gevelbevestiging incl. gevelherstel",
 			"decompositionType": "Facade",
 			"measureItems": [
 				{
-					"id": "d30af4e0-e19c-486b-b023-679d888fc525",
+					"id": "3593592f-01e3-412d-921b-479159456623",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen muurplaat, klein model. ",
 					"referenceNumber": "120010"
 				},
 				{
-					"id": "9236a6ab-891c-450d-ae1b-af49fe846568",
+					"id": "34eaa2f3-e483-4305-a8fc-bf94c43ed586",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen muurplaat, groot model. ",
@@ -215,117 +204,117 @@
 			]
 		},
 		{
-			"id": "7c0254e2-8b37-4805-b5e4-cf3dd4650330",
+			"id": "7f577a83-ede6-48c6-92df-5f3f56ba0c35",
 			"description": "Aanbrengen ankerverbindingen incl. trekproeven",
 			"decompositionType": "Facade",
 			"measureItems": [
 				{
-					"id": "9c66953e-a227-46a4-8770-815cc9e05309",
+					"id": "2c84725c-f157-4c4b-a893-078cab090ac8",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen chemisch anker in spouwmuur ",
 					"referenceNumber": "150020"
 				},
 				{
-					"id": "6cf56b11-0352-4720-8013-dec634e8d455",
+					"id": "127a519c-31cb-4406-bbfc-7609bf42042f",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen chemisch anker in steensmuur/beton ",
 					"referenceNumber": "150030"
 				},
 				{
-					"id": "7a89e852-b35f-48cc-9a12-ea64f4e5e40c",
+					"id": "0237e7d4-584a-4501-8f81-3da407860962",
 					"unit": "m",
 					"itemType": "specificationItem",
 					"description": "Leveren installatiekabel YMvK 3 x 1,5 mm²",
 					"referenceNumber": "500010"
 				},
 				{
-					"id": "8fdb8b25-794f-48a7-a059-6df9af92dc08",
+					"id": "6f24767b-f5be-43d3-aeb0-3c0ea657b82d",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 120 ",
 					"referenceNumber": "500020"
 				},
 				{
-					"id": "84c1eb41-6c9c-4ec9-ab20-967548f2be2a",
+					"id": "92446939-f270-4065-9b71-0a140309d11b",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 140 ",
 					"referenceNumber": "500030"
 				},
 				{
-					"id": "00187932-2d96-453d-aab9-a32fff93aa45",
+					"id": "01f41d83-384d-4dfc-b2b0-6d79321240c1",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 160 ",
 					"referenceNumber": "500040"
 				},
 				{
-					"id": "c810b704-533b-4e39-9d38-5208b9ba47d6",
+					"id": "2aa2b5df-9113-4ddc-a5e8-a0ecebca122a",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 180 ",
 					"referenceNumber": "500050"
 				},
 				{
-					"id": "6f388a93-6318-464a-9e37-b0c601484116",
+					"id": "30cee557-93b0-43e5-ac9e-767e736d5bfa",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 200 ",
 					"referenceNumber": "500060"
 				},
 				{
-					"id": "be64af39-7950-466f-ae11-f4ca433302d2",
+					"id": "dc31ab9e-913c-4491-942b-b00a2439ec25",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 220 ",
 					"referenceNumber": "500070"
 				},
 				{
-					"id": "8c8878f8-5b36-45ff-929f-c048ca81d1f3",
+					"id": "bf4ab2ed-9e84-4db1-a3c8-e481a85f4b18",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 260 ",
 					"referenceNumber": "500080"
 				},
 				{
-					"id": "9e488e7a-2076-42e2-b933-e6880b1bbb5c",
+					"id": "69785547-bea3-4595-af8a-6b0eaf96bde4",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 280 ",
 					"referenceNumber": "500090"
 				},
 				{
-					"id": "d220f3b4-f615-4c58-abac-d8ada9b46096",
+					"id": "85ee21ad-9d47-43e9-abb3-ea9a7e7a5fe9",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 300 ",
 					"referenceNumber": "500100"
 				},
 				{
-					"id": "8b0299d2-e934-48bc-8a29-5c24236e81b5",
+					"id": "b738557a-be12-4e90-a65a-0eee7e616423",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren ankerstang RVS A4 M12 x 350 ",
 					"referenceNumber": "500110"
 				},
 				{
-					"id": "2a79858b-3174-45eb-8318-c9f34e86e100",
+					"id": "e47b9363-628c-4d76-b5ee-05502e6dae91",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren draadstang M12x1000 ",
 					"referenceNumber": "500120"
 				},
 				{
-					"id": "47c8bdf6-4063-4448-a12d-df64548a2d4e",
+					"id": "d5b3c893-a875-4766-8691-6edd09dbae10",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren zeefhuls 18 ",
 					"referenceNumber": "500130"
 				},
 				{
-					"id": "9ffd1a18-5854-46ae-8013-04aa315f453b",
+					"id": "f09c9ed5-3157-4ef8-9f31-85f6c1c45e49",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Leveren zeefhuls 22 ",
@@ -334,54 +323,61 @@
 			]
 		},
 		{
-			"id": "818f884f-cb69-46da-841e-c205b83845b3",
+			"id": "ae600b58-0465-4cad-8756-22d49d44ca0b",
 			"description": "Aanbrengen muurplaat",
 			"decompositionType": "Facade",
 			"measureItems": [
 				{
-					"id": "25834c29-9cc0-4f9a-ac3c-244d16067ba5",
+					"id": "874d7128-fbdb-4ba1-a993-54ee613cbff3",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen muurplaat ",
 					"referenceNumber": "150010"
 				},
 				{
-					"id": "af202ac6-3696-4c71-9ebf-41d20a17bc37",
-					"unit": "Stuk",
+					"id": "0d41f6c3-0626-41cb-bd84-615814546f40",
+					"unit": "st",
 					"itemType": "material",
-					"description": "M### Muurplaat RVS Klein",
-					"referenceNumber": "M7001440"
+					"description": "Opbouwmuurplaat RVS 80x258mm (strip )",
+					"referenceNumber": "M740186PMF"
 				},
 				{
-					"id": "47e9a6e7-3628-4d2f-83eb-9d909e8dace6",
-					"unit": "Stuk",
+					"id": "4d371fec-8481-4ecd-a171-f1d3e234fc2f",
+					"unit": "st",
 					"itemType": "material",
-					"description": "M### Muurplaat RVS Groot",
-					"referenceNumber": "M7001449"
-				},
-				{
-					"id": "26093549-6c03-4d8b-a030-b89d0a2df70b",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### Muurplaat RVS Rozet",
-					"referenceNumber": "M7100784"
+					"description": "Opbouwmuurplaat RVS 160x258mm (vierkant)",
+					"referenceNumber": "M740185PMF"
 				}
 			]
 		},
 		{
-			"id": "5dfbf4d0-ad1d-4569-bacb-265ac924cdce",
+			"id": "a74fac0c-c2e0-4054-89ab-614736454aa7",
 			"description": "Verwijderen spandraadsysteem",
-			"decompositionType": "TensionWire",
+			"decompositionType": "Node",
 			"measureItems": [
 				{
-					"id": "89326227-2f33-48d7-b075-52dd0702a69a",
+					"id": "fa6d1872-b958-471b-8fb1-afcfd6e47530",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) ED - H- type ",
+					"referenceNumber": "100030"
+				},
+				{
+					"id": "afed2a5a-15ff-48b5-88a1-9bd04450557b",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) ED - Y- type ",
+					"referenceNumber": "100040"
+				},
+				{
+					"id": "7885c3c5-6bc1-4d8d-aaf3-bd56ddebb996",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen OS (L<= 50 m) ED ",
 					"referenceNumber": "100010"
 				},
 				{
-					"id": "e4bec9c7-fd03-43b8-81d7-021af21ca21f",
+					"id": "53ec5ef2-a5a9-41e0-8c83-dba058685e93",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen OS (L<= 50 m) DD ",
@@ -390,19 +386,33 @@
 			]
 		},
 		{
-			"id": "c4172c13-182e-4038-bb26-e0e4810deda0",
+			"id": "301d3867-82d4-4579-a4ab-2f5db39397e0",
 			"description": "Verwijderen spandraadsysteem boven GVB",
-			"decompositionType": "TensionWire",
+			"decompositionType": "Node",
 			"measureItems": [
 				{
-					"id": "97ab8d5a-cb0b-4738-a6d9-cb24ee679446",
+					"id": "586f37e2-e61b-4712-9bae-cd285209cfed",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) ED - H- type - GVB ",
+					"referenceNumber": "110030"
+				},
+				{
+					"id": "0e5b2b52-e611-4ad1-846d-b9ecf0f879b3",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) ED - Y- type - GVB ",
+					"referenceNumber": "110040"
+				},
+				{
+					"id": "08fa02f1-a70d-446a-8ff7-4f6b5eb2e14d",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen OS (L<= 50 m) ED - GVB ",
 					"referenceNumber": "110010"
 				},
 				{
-					"id": "01ad4223-6ed6-4909-b734-e810b6dde7ad",
+					"id": "50a1cf82-ba07-4894-9f90-93208e235308",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen OS (L<= 50 m) DD - GVB ",
@@ -411,223 +421,370 @@
 			]
 		},
 		{
-			"id": "d30a8dfe-17ec-4294-a1a9-747afc3094d5",
+			"id": "9ab94fef-fc66-4deb-9922-f3b76a5b9585",
 			"description": "Aanbrengen spandraadsysteem",
-			"decompositionType": "TensionWire",
+			"decompositionType": "Node",
 			"measureItems": [
 				{
-					"id": "b8c06db5-cf6f-4e51-8447-24908e8e7137",
+					"id": "70daf8db-4f38-4559-9b54-aa03fdfac4c7",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (L<= 10 m). 1 x ES & 1 x EV ",
+					"referenceNumber": "130050"
+				},
+				{
+					"id": "a44b6291-2745-4a92-89aa-4188165b24ed",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 1 x ES & 1 x EV ",
+					"referenceNumber": "130060"
+				},
+				{
+					"id": "08316bcf-3803-46ae-a012-a491b4a18725",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 1 x ES & 1 x EV ",
+					"referenceNumber": "130070"
+				},
+				{
+					"id": "de71e758-ef45-4a0a-b6c6-c7c97c139462",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 1 x ES & 1 x EV ",
+					"referenceNumber": "130080"
+				},
+				{
+					"id": "e5dcf6ea-f69e-4da2-a22a-cec34e2d7a35",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (L<= 10 m). 2 x EV ",
+					"referenceNumber": "130090"
+				},
+				{
+					"id": "f38fdb48-e05f-45ae-a40d-a5ac56734820",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x EV ",
+					"referenceNumber": "130100"
+				},
+				{
+					"id": "f6c0a814-f36b-4027-a07f-c1616d71e910",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x EV ",
+					"referenceNumber": "130110"
+				},
+				{
+					"id": "1401480c-a707-4166-bbc8-d893336a88c7",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x EV ",
+					"referenceNumber": "130120"
+				},
+				{
+					"id": "e3f3ee18-7447-4ee7-8e8b-2f34f6e6e824",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 6mm (wordt per 250m besteld)",
+					"referenceNumber": "M7100882"
+				},
+				{
+					"id": "5fd02b64-b489-4aee-8a7c-043dafeef24b",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 6mm met buitenmantel",
+					"referenceNumber": "M7100883"
+				},
+				{
+					"id": "62887f33-8844-4326-ab8f-d0f3268bce7f",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 8mm (wordt per 250m besteld)",
+					"referenceNumber": "M7100749"
+				},
+				{
+					"id": "e8f13c3a-0205-4b6b-82ec-0bf3bbbd2b30",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 8mm met buitenmantel",
+					"referenceNumber": "M7100750"
+				},
+				{
+					"id": "65b151b0-e599-407a-9aea-030fb8b0f04c",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 6mm",
+					"referenceNumber": "M7100884"
+				},
+				{
+					"id": "f82edbf7-41a0-4597-b854-bb4a26f52ae3",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 8mm",
+					"referenceNumber": "M7100886"
+				},
+				{
+					"id": "2ccc81d4-c4a3-4750-bba5-11ce55838447",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel 6mm",
+					"referenceNumber": "M7101766"
+				},
+				{
+					"id": "5bbd36c7-e2f4-4492-a6e4-fae7cb5fd1a2",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel 8mm",
+					"referenceNumber": "M#ntb11"
+				},
+				{
+					"id": "7b304452-8fc0-477f-89c7-6f7c7c097eae",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS D moerbout sluiting WLL 1800kg afm 14.3x16x29mm  (als verloopstuk voor oude inbouw ankers met nieuwe gaffels)",
+					"referenceNumber": "M7100931"
+				},
+				{
+					"id": "fbfc245c-5310-40f1-b81a-6c87b4201e0d",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 Y-verbinding",
+					"referenceNumber": "M7101767"
+				},
+				{
+					"id": "0e3e5e20-ca8e-448b-ba79-c8783aee7088",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (L<= 10 m). 2 x ES ",
 					"referenceNumber": "130010"
 				},
 				{
-					"id": "3b1fc61b-fc28-46c2-bd4c-3ae34166adb9",
+					"id": "d6d1457c-e1b1-43be-8829-e0c29f910d8a",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x ES ",
 					"referenceNumber": "130020"
 				},
 				{
-					"id": "62bf68ba-3a89-4867-a623-be6395881ad0",
+					"id": "39482189-aa7f-4f21-9d14-ef88f9a639be",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x ES ",
 					"referenceNumber": "130030"
 				},
 				{
-					"id": "a4dfaed3-b391-424a-8b04-60e5d99b970e",
+					"id": "a3c1371f-462f-4037-b3ba-8653782fbd1e",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x ES ",
 					"referenceNumber": "130040"
-				},
-				{
-					"id": "5e3fb2fe-d91c-45c2-b393-5771ba47e67f",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 6mm zonder mantel",
-					"referenceNumber": "M7100882"
-				},
-				{
-					"id": "5b31402d-e5ca-4f9e-a088-122d7e7ee478",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 6mm met mantel zw.",
-					"referenceNumber": "M7100883"
-				},
-				{
-					"id": "82d4ce31-4212-44e1-928c-dfa37b9cff5f",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 8mm zonder mantel",
-					"referenceNumber": "M7100749"
-				},
-				{
-					"id": "4fb48895-4c56-46e9-9364-f1ec51852ba2",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 8mm met mantel zw.",
-					"referenceNumber": "M7100750"
-				},
-				{
-					"id": "a6934e1d-3a1f-4ef2-b6db-0b8df3e1dd6a",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### Gaffelterminal met spanner 6mm",
-					"referenceNumber": "M7100884"
-				},
-				{
-					"id": "c219b713-52e5-41d1-ae30-2c577d1e6ab5",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### Gaffelterminal met spanner 8mm",
-					"referenceNumber": "M7100886"
-				},
-				{
-					"id": "18fea658-6d7e-45bb-a2f1-540869b7d302",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### D-sluiting",
-					"referenceNumber": "M7100931"
 				}
 			]
 		},
 		{
-			"id": "3825cac3-83bd-4149-a251-f2340a406855",
+			"id": "49992c47-51a8-47c7-9a4f-ea6815d1f2e9",
 			"description": "Aanbrengen spandraadsysteem boven GVB",
-			"decompositionType": "TensionWire",
+			"decompositionType": "Node",
 			"measureItems": [
 				{
-					"id": "60480d12-66d4-4643-a286-aa50fe171ca6",
+					"id": "07382fea-23d1-4605-a329-8c1394a7e92c",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (L<= 10 m). 1 x ES & 1 x EV GVB ",
+					"referenceNumber": "140050"
+				},
+				{
+					"id": "8fb6ce48-e1fc-4c61-8424-4b7ff9839c2a",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 1 x ES & 1 x ",
+					"referenceNumber": "140060"
+				},
+				{
+					"id": "7ae9d0ff-51ee-47d7-b73c-37a305e1111a",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 1 x ES & 1 x ",
+					"referenceNumber": "140070"
+				},
+				{
+					"id": "9e5826b4-a630-435c-8abf-5d14d2b5661b",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 1 x ES & 1 x ",
+					"referenceNumber": "140080"
+				},
+				{
+					"id": "5e5a8f9c-458d-432e-be5b-6c77ca465219",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (L<= 10 m). 2 x EV GVB ",
+					"referenceNumber": "140090"
+				},
+				{
+					"id": "aebaec4d-d73e-47bf-bf35-c4da9cb12dcd",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x EV GVB ",
+					"referenceNumber": "140100"
+				},
+				{
+					"id": "0e4acc6a-fc07-43dc-a33d-b8f8c1178170",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x EV GVB ",
+					"referenceNumber": "140110"
+				},
+				{
+					"id": "e10ddceb-c9e5-4fc0-817b-3de6b34946cb",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x EV GVB ",
+					"referenceNumber": "140120"
+				},
+				{
+					"id": "5fd02b64-b489-4aee-8a7c-043dafeef24b",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 6mm met buitenmantel",
+					"referenceNumber": "M7100883"
+				},
+				{
+					"id": "e8f13c3a-0205-4b6b-82ec-0bf3bbbd2b30",
+					"unit": "m",
+					"itemType": "material",
+					"description": "RVS 316 kabel 7x19+core 8mm met buitenmantel",
+					"referenceNumber": "M7100750"
+				},
+				{
+					"id": "65b151b0-e599-407a-9aea-030fb8b0f04c",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 6mm",
+					"referenceNumber": "M7100884"
+				},
+				{
+					"id": "f82edbf7-41a0-4597-b854-bb4a26f52ae3",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 8mm",
+					"referenceNumber": "M7100886"
+				},
+				{
+					"id": "2ccc81d4-c4a3-4750-bba5-11ce55838447",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel 6mm",
+					"referenceNumber": "M7101766"
+				},
+				{
+					"id": "5bbd36c7-e2f4-4492-a6e4-fae7cb5fd1a2",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 eindterminal met gaffel 8mm",
+					"referenceNumber": "M#ntb11"
+				},
+				{
+					"id": "7b304452-8fc0-477f-89c7-6f7c7c097eae",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS D moerbout sluiting WLL 1800kg afm 14.3x16x29mm  (als verloopstuk voor oude inbouw ankers met nieuwe gaffels)",
+					"referenceNumber": "M7100931"
+				},
+				{
+					"id": "fbfc245c-5310-40f1-b81a-6c87b4201e0d",
+					"unit": "st",
+					"itemType": "material",
+					"description": "RVS 316 Y-verbinding",
+					"referenceNumber": "M7101767"
+				},
+				{
+					"id": "9a89f7aa-80ef-4f5b-ad77-905330eb9e14",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (L<= 10 m). 2 x ES GVB ",
 					"referenceNumber": "140010"
 				},
 				{
-					"id": "a8a7116b-8603-4725-b89b-7c60fbe65f4d",
+					"id": "9bda02f7-80bc-45a4-8f3a-049d0822b738",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x ES GVB ",
 					"referenceNumber": "140020"
 				},
 				{
-					"id": "f2cf6aa5-d485-4b8b-8740-0f18e3bb7312",
+					"id": "48ca9b34-c64d-4823-a41d-94e9117a40ce",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x ES GVB ",
 					"referenceNumber": "140030"
 				},
 				{
-					"id": "98d05f2c-dc98-4afc-885f-b6311ccb6fd0",
+					"id": "d468e86d-e376-46ee-90dd-f4f752bd25d5",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x ES GVB ",
 					"referenceNumber": "140040"
-				},
-				{
-					"id": "5e3fb2fe-d91c-45c2-b393-5771ba47e67f",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 6mm zonder mantel",
-					"referenceNumber": "M7100882"
-				},
-				{
-					"id": "5b31402d-e5ca-4f9e-a088-122d7e7ee478",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 6mm met mantel zw.",
-					"referenceNumber": "M7100883"
-				},
-				{
-					"id": "82d4ce31-4212-44e1-928c-dfa37b9cff5f",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 8mm zonder mantel",
-					"referenceNumber": "M7100749"
-				},
-				{
-					"id": "4fb48895-4c56-46e9-9364-f1ec51852ba2",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### RVS spandraad 8mm met mantel zw.",
-					"referenceNumber": "M7100750"
-				},
-				{
-					"id": "a6934e1d-3a1f-4ef2-b6db-0b8df3e1dd6a",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### Gaffelterminal met spanner 6mm",
-					"referenceNumber": "M7100884"
-				},
-				{
-					"id": "c219b713-52e5-41d1-ae30-2c577d1e6ab5",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### Gaffelterminal met spanner 8mm",
-					"referenceNumber": "M7100886"
-				},
-				{
-					"id": "18fea658-6d7e-45bb-a2f1-540869b7d302",
-					"unit": "Stuk",
-					"itemType": "material",
-					"description": "M### D-sluiting",
-					"referenceNumber": "M7100931"
 				}
 			]
 		},
 		{
-			"id": "63c91589-447f-430d-bd6b-77d04b15bb6c",
+			"id": "ed7fd95d-e7c8-4d86-8396-5cf9369bbe8a",
 			"description": "Vervangen armatuur",
 			"decompositionType": "spanLuminaire",
 			"measureItems": [
 				{
-					"id": "4f6ed223-32ce-46ed-8a9b-fcea63e8a59b",
+					"id": "af44173d-a167-4697-9e06-7eace6bcc11b",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Vervangen verlichtingsarmatuur lph <= 10 m ",
 					"referenceNumber": "300030"
 				},
 				{
-					"id": "f5d8f86d-1849-4632-b34d-393a1fd2b1b7",
-					"unit": "Stuk",
+					"id": "eb051ef2-53d6-4c80-9cb5-7da2bfb102bd",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
 					"referenceNumber": "M#ntb01"
 				},
 				{
-					"id": "c7e65d89-dec1-4132-b7c9-9abf75097403",
-					"unit": "Stuk",
+					"id": "c6cd2c49-603d-46b2-aed8-d957e06011cf",
+					"unit": "st",
+					"itemType": "material",
+					"description": "Ophangbeugel Bola+Zhaga",
+					"referenceNumber": "M#ntb07"
+				},
+				{
+					"id": "175ee063-649c-4527-9fc0-fbc106c2d532",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 					"referenceNumber": "M#ntb02"
 				},
 				{
-					"id": "4cc7f1ec-02b0-42b3-aa17-25bb82656beb",
-					"unit": "Stuk",
+					"id": "2dba247f-fc54-4ebe-9a20-83062f76e838",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 					"referenceNumber": "M#ntb03"
 				},
 				{
-					"id": "0ea9d0de-7430-4b6c-a7cc-da2ae2268d68",
-					"unit": "Stuk",
+					"id": "9991c416-7ce7-454f-934b-fd339d655ef5",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
 					"referenceNumber": "M#ntb04"
 				},
 				{
-					"id": "19639e35-c7f7-4a8b-9c36-1310499d967f",
-					"unit": "Stuk",
+					"id": "d1d70886-2196-4f36-a198-f9f6dc586f14",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
 					"referenceNumber": "M#ntb05"
 				},
 				{
-					"id": "10eac29f-5cc8-409b-915c-7a21570ce0ab",
-					"unit": "Stuk",
+					"id": "548501ae-aa5f-4df1-95b8-eebf3ff1dfba",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
 					"referenceNumber": "M#ntb06"
@@ -635,68 +792,68 @@
 			]
 		},
 		{
-			"id": "8580ddb0-2b6f-4f0a-878f-815905f9d89d",
+			"id": "ec26edf9-e197-4e5d-a810-be7a5a0c2770",
 			"description": "Retrofitten armatuur",
 			"decompositionType": "spanLuminaire",
 			"measureItems": [
 				{
-					"id": "a40268c4-facc-42f9-b309-1f1a5b83349c",
+					"id": "d9c19e73-d7ff-47f5-875d-dc388c2118df",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Vervangen van (LED) unit 4m > lph <=10m. ",
 					"referenceNumber": "300040"
 				},
 				{
-					"id": "bf1f7c8c-7b61-4e8a-9e64-431bd2fe455c",
-					"unit": "Stuk",
+					"id": "1a867952-5c7d-4145-bd86-29930474e6a8",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA",
 					"referenceNumber": "M#ntb21"
 				},
 				{
-					"id": "18afef66-21bb-4373-be7a-1a8bdf8143dd",
-					"unit": "Stuk",
+					"id": "55f90700-e262-4606-87de-deb6af28255a",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA",
 					"referenceNumber": "M#ntb22"
 				},
 				{
-					"id": "9feba811-3b22-4fd5-998c-83db24cb81ff",
-					"unit": "Stuk",
+					"id": "cd5594f9-528f-4428-90fe-fe1d9a18d6aa",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA",
 					"referenceNumber": "M#ntb23"
 				},
 				{
-					"id": "905f4f88-2332-4a06-a37d-6a4c122fa2ca",
-					"unit": "Stuk",
+					"id": "b2cf320b-f11a-4c8d-b8f0-5b1c2b2fed3a",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA",
 					"referenceNumber": "M#ntb24"
 				},
 				{
-					"id": "1fd3a12a-106d-41a7-acbf-e80aa44bd5b3",
-					"unit": "Stuk",
+					"id": "61525b79-133f-4396-8139-5c1725c4ca37",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA",
 					"referenceNumber": "M#ntb25"
 				},
 				{
-					"id": "0f631dbd-c6a1-4d10-a9a3-99f3b48b4d79",
-					"unit": "Stuk",
+					"id": "4eb8a47f-e664-4452-a0a7-69a472fa511d",
+					"unit": "st",
 					"itemType": "material",
-					"description": "Retrofit - BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
+					"description": "Retrofit - BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA",
 					"referenceNumber": "M#ntb26"
 				}
 			]
 		},
 		{
-			"id": "9a6df82e-1968-4c9c-be4f-a71f443462a1",
+			"id": "17652b16-f6b8-4d32-ba2d-c348de98b3f9",
 			"description": "Verwijderen armatuur",
 			"decompositionType": "spanLuminaire",
 			"measureItems": [
 				{
-					"id": "dea0d8b5-6e61-46c8-b230-0f984fed4d1b",
+					"id": "44682f89-6d32-4a14-bb16-1003e154d0a6",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Verwijderen hangarmatuur lph <= 10 m ",
@@ -705,55 +862,62 @@
 			]
 		},
 		{
-			"id": "33215c4c-02dd-4dbf-b961-046924f6d8f4",
+			"id": "f3bd9953-444c-4ddb-a0af-2dc6df6e58ee",
 			"description": "Aanbrengen armatuur",
 			"decompositionType": "spanLuminaire",
 			"measureItems": [
 				{
-					"id": "bff1ce38-b915-4a59-aab1-487fe0bf82df",
+					"id": "de60cb70-ddbc-495e-baf0-7472d5b041b2",
 					"unit": "st",
 					"itemType": "specificationItem",
 					"description": "Aanbrengen hangarmatuur lph <= 10 m ",
 					"referenceNumber": "300020"
 				},
 				{
-					"id": "f5d8f86d-1849-4632-b34d-393a1fd2b1b7",
-					"unit": "Stuk",
+					"id": "eb051ef2-53d6-4c80-9cb5-7da2bfb102bd",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
 					"referenceNumber": "M#ntb01"
 				},
 				{
-					"id": "c7e65d89-dec1-4132-b7c9-9abf75097403",
-					"unit": "Stuk",
+					"id": "c6cd2c49-603d-46b2-aed8-d957e06011cf",
+					"unit": "st",
+					"itemType": "material",
+					"description": "Ophangbeugel Bola+Zhaga",
+					"referenceNumber": "M#ntb07"
+				},
+				{
+					"id": "175ee063-649c-4527-9fc0-fbc106c2d532",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 					"referenceNumber": "M#ntb02"
 				},
 				{
-					"id": "4cc7f1ec-02b0-42b3-aa17-25bb82656beb",
-					"unit": "Stuk",
+					"id": "2dba247f-fc54-4ebe-9a20-83062f76e838",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 					"referenceNumber": "M#ntb03"
 				},
 				{
-					"id": "0ea9d0de-7430-4b6c-a7cc-da2ae2268d68",
-					"unit": "Stuk",
+					"id": "9991c416-7ce7-454f-934b-fd339d655ef5",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
 					"referenceNumber": "M#ntb04"
 				},
 				{
-					"id": "19639e35-c7f7-4a8b-9c36-1310499d967f",
-					"unit": "Stuk",
+					"id": "d1d70886-2196-4f36-a198-f9f6dc586f14",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
 					"referenceNumber": "M#ntb05"
 				},
 				{
-					"id": "10eac29f-5cc8-409b-915c-7a21570ce0ab",
-					"unit": "Stuk",
+					"id": "548501ae-aa5f-4df1-95b8-eebf3ff1dfba",
+					"unit": "st",
 					"itemType": "material",
 					"description": "BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
 					"referenceNumber": "M#ntb06"
@@ -763,967 +927,981 @@
 	],
 	"spanMeasureItemOptions": [
 		{
-			"id": "5e3fb2fe-d91c-45c2-b393-5771ba47e67f",
-			"unit": "Stuk",
+			"id": "e3f3ee18-7447-4ee7-8e8b-2f34f6e6e824",
+			"unit": "m",
 			"itemType": "material",
-			"description": "M### RVS spandraad 6mm zonder mantel",
+			"description": "RVS 316 kabel 7x19+core 6mm (wordt per 250m besteld)",
 			"referenceNumber": "M7100882"
 		},
 		{
-			"id": "5b31402d-e5ca-4f9e-a088-122d7e7ee478",
-			"unit": "Stuk",
+			"id": "5fd02b64-b489-4aee-8a7c-043dafeef24b",
+			"unit": "m",
 			"itemType": "material",
-			"description": "M### RVS spandraad 6mm met mantel zw.",
+			"description": "RVS 316 kabel 7x19+core 6mm met buitenmantel",
 			"referenceNumber": "M7100883"
 		},
 		{
-			"id": "82d4ce31-4212-44e1-928c-dfa37b9cff5f",
-			"unit": "Stuk",
+			"id": "62887f33-8844-4326-ab8f-d0f3268bce7f",
+			"unit": "m",
 			"itemType": "material",
-			"description": "M### RVS spandraad 8mm zonder mantel",
+			"description": "RVS 316 kabel 7x19+core 8mm (wordt per 250m besteld)",
 			"referenceNumber": "M7100749"
 		},
 		{
-			"id": "4fb48895-4c56-46e9-9364-f1ec51852ba2",
-			"unit": "Stuk",
+			"id": "e8f13c3a-0205-4b6b-82ec-0bf3bbbd2b30",
+			"unit": "m",
 			"itemType": "material",
-			"description": "M### RVS spandraad 8mm met mantel zw.",
+			"description": "RVS 316 kabel 7x19+core 8mm met buitenmantel",
 			"referenceNumber": "M7100750"
 		},
 		{
-			"id": "a6934e1d-3a1f-4ef2-b6db-0b8df3e1dd6a",
-			"unit": "Stuk",
+			"id": "65b151b0-e599-407a-9aea-030fb8b0f04c",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Gaffelterminal met spanner 6mm",
+			"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 6mm",
 			"referenceNumber": "M7100884"
 		},
 		{
-			"id": "c219b713-52e5-41d1-ae30-2c577d1e6ab5",
-			"unit": "Stuk",
+			"id": "f82edbf7-41a0-4597-b854-bb4a26f52ae3",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Gaffelterminal met spanner 8mm",
+			"description": "RVS 316 eindterminal met gaffel en spanwartel geschikt voor RVS 316 kabel 7x19+core 8mm",
 			"referenceNumber": "M7100886"
 		},
 		{
-			"id": "cce39d67-cc34-46b5-9e92-bfccce849e46",
-			"unit": "Stuk",
+			"id": "2ccc81d4-c4a3-4750-bba5-11ce55838447",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Eindterminal 6 mm",
-			"referenceNumber": "M#ntb10"
+			"description": "RVS 316 eindterminal met gaffel 6mm",
+			"referenceNumber": "M7101766"
 		},
 		{
-			"id": "dd1387fb-b08b-4386-bca1-9ef7582ecf2b",
-			"unit": "Stuk",
+			"id": "5bbd36c7-e2f4-4492-a6e4-fae7cb5fd1a2",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Eindterminal 8 mm",
+			"description": "RVS 316 eindterminal met gaffel 8mm",
 			"referenceNumber": "M#ntb11"
 		},
 		{
-			"id": "18fea658-6d7e-45bb-a2f1-540869b7d302",
-			"unit": "Stuk",
+			"id": "7b304452-8fc0-477f-89c7-6f7c7c097eae",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### D-sluiting",
+			"description": "RVS D moerbout sluiting WLL 1800kg afm 14.3x16x29mm  (als verloopstuk voor oude inbouw ankers met nieuwe gaffels)",
 			"referenceNumber": "M7100931"
 		},
 		{
-			"id": "5c90e73b-b44a-4491-a585-4f434477c273",
-			"unit": "Stuk",
+			"id": "0eaebd44-7efa-4a43-9a59-ab2ea20e7036",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Y-verbinding",
+			"description": "Kruisset 140x60x10(gekoppeld uit dub. Plaat) t.b.v. kruisoverspanning",
 			"referenceNumber": "M7101117"
 		},
 		{
-			"id": "af202ac6-3696-4c71-9ebf-41d20a17bc37",
-			"unit": "Stuk",
+			"id": "fbfc245c-5310-40f1-b81a-6c87b4201e0d",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Muurplaat RVS Klein",
-			"referenceNumber": "M7001440"
+			"description": "RVS 316 Y-verbinding",
+			"referenceNumber": "M7101767"
 		},
 		{
-			"id": "47e9a6e7-3628-4d2f-83eb-9d909e8dace6",
-			"unit": "Stuk",
+			"id": "0d41f6c3-0626-41cb-bd84-615814546f40",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Muurplaat RVS Groot",
-			"referenceNumber": "M7001449"
+			"description": "Opbouwmuurplaat RVS 80x258mm (strip )",
+			"referenceNumber": "M740186PMF"
 		},
 		{
-			"id": "26093549-6c03-4d8b-a030-b89d0a2df70b",
-			"unit": "Stuk",
+			"id": "4d371fec-8481-4ecd-a171-f1d3e234fc2f",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Muurplaat RVS Rozet",
-			"referenceNumber": "M7100784"
+			"description": "Opbouwmuurplaat RVS 160x258mm (vierkant)",
+			"referenceNumber": "M740185PMF"
 		},
 		{
-			"id": "5836f9c1-8fe9-4321-ab01-ffe6ac09403e",
-			"unit": "Stuk",
+			"id": "2d8bf4ae-e968-4076-9233-7e53e0fd653a",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Kabelbundelbandjes",
+			"description": "RVS 316 Klassieke muurplaat",
+			"referenceNumber": "M7101768"
+		},
+		{
+			"id": "254770a3-8a0e-4f4c-b44a-ffacefb1589a",
+			"unit": "100 st",
+			"itemType": "material",
+			"description": "Kabelbinder/bundelband  RVS 152 x 4,6 mm (Let op: 100 stuks in één pak. Prijs is per pak)",
 			"referenceNumber": "M7100566"
 		},
 		{
-			"id": "5e345b16-92b1-4c24-9533-6653882c5970",
-			"unit": "Stuk",
+			"id": "79c72d6f-73d1-434d-9d87-8291eac9311d",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Mastopzetstuk",
+			"description": "Opzetstuk 1V-TL2600 top 60x200 incl. beugels RAL-7042 ( nieuwe GVB kleur )",
 			"referenceNumber": "M7100529"
 		},
 		{
-			"id": "83ca4b88-541e-4faf-b73e-00b45286af94",
-			"unit": "Stuk",
+			"id": "2b797558-9ff0-46cd-8c42-40ace638c767",
+			"unit": "st",
 			"itemType": "material",
-			"description": "M### Mastbeugel",
-			"referenceNumber": "M7100995"
+			"description": "Beugelset RVS t.b.v. Tram Ø102mm - extra oog",
+			"referenceNumber": "M740166PMF"
 		},
 		{
-			"id": "f5d8f86d-1849-4632-b34d-393a1fd2b1b7",
-			"unit": "Stuk",
+			"id": "eb051ef2-53d6-4c80-9cb5-7da2bfb102bd",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
 			"referenceNumber": "M#ntb01"
 		},
 		{
-			"id": "c7e65d89-dec1-4132-b7c9-9abf75097403",
-			"unit": "Stuk",
+			"id": "175ee063-649c-4527-9fc0-fbc106c2d532",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 			"referenceNumber": "M#ntb02"
 		},
 		{
-			"id": "4cc7f1ec-02b0-42b3-aa17-25bb82656beb",
-			"unit": "Stuk",
+			"id": "2dba247f-fc54-4ebe-9a20-83062f76e838",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
 			"referenceNumber": "M#ntb03"
 		},
 		{
-			"id": "0ea9d0de-7430-4b6c-a7cc-da2ae2268d68",
-			"unit": "Stuk",
+			"id": "9991c416-7ce7-454f-934b-fd339d655ef5",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
 			"referenceNumber": "M#ntb04"
 		},
 		{
-			"id": "19639e35-c7f7-4a8b-9c36-1310499d967f",
-			"unit": "Stuk",
+			"id": "d1d70886-2196-4f36-a198-f9f6dc586f14",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
 			"referenceNumber": "M#ntb05"
 		},
 		{
-			"id": "10eac29f-5cc8-409b-915c-7a21570ce0ab",
-			"unit": "Stuk",
+			"id": "548501ae-aa5f-4df1-95b8-eebf3ff1dfba",
+			"unit": "st",
 			"itemType": "material",
 			"description": "BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
 			"referenceNumber": "M#ntb06"
 		},
 		{
-			"id": "bf1f7c8c-7b61-4e8a-9e64-431bd2fe455c",
-			"unit": "Stuk",
+			"id": "c6cd2c49-603d-46b2-aed8-d957e06011cf",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
+			"description": "Ophangbeugel Bola+Zhaga",
+			"referenceNumber": "M#ntb07"
+		},
+		{
+			"id": "1a867952-5c7d-4145-bd86-29930474e6a8",
+			"unit": "st",
+			"itemType": "material",
+			"description": "Retrofit - BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA",
 			"referenceNumber": "M#ntb21"
 		},
 		{
-			"id": "18afef66-21bb-4373-be7a-1a8bdf8143dd",
-			"unit": "Stuk",
+			"id": "55f90700-e262-4606-87de-deb6af28255a",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
+			"description": "Retrofit - BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA",
 			"referenceNumber": "M#ntb22"
 		},
 		{
-			"id": "9feba811-3b22-4fd5-998c-83db24cb81ff",
-			"unit": "Stuk",
+			"id": "cd5594f9-528f-4428-90fe-fe1d9a18d6aa",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
+			"description": "Retrofit - BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA",
 			"referenceNumber": "M#ntb23"
 		},
 		{
-			"id": "905f4f88-2332-4a06-a37d-6a4c122fa2ca",
-			"unit": "Stuk",
+			"id": "b2cf320b-f11a-4c8d-b8f0-5b1c2b2fed3a",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
+			"description": "Retrofit - BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA",
 			"referenceNumber": "M#ntb24"
 		},
 		{
-			"id": "1fd3a12a-106d-41a7-acbf-e80aa44bd5b3",
-			"unit": "Stuk",
+			"id": "61525b79-133f-4396-8139-5c1725c4ca37",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
+			"description": "Retrofit - BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA",
 			"referenceNumber": "M#ntb25"
 		},
 		{
-			"id": "0f631dbd-c6a1-4d10-a9a3-99f3b48b4d79",
-			"unit": "Stuk",
+			"id": "4eb8a47f-e664-4452-a0a7-69a472fa511d",
+			"unit": "st",
 			"itemType": "material",
-			"description": "Retrofit - BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
+			"description": "Retrofit - BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA",
 			"referenceNumber": "M#ntb26"
 		},
 		{
-			"id": "79d96003-33ea-44ba-964f-7aa310dd38de",
+			"id": "6dd98ce0-1e27-4364-948a-7ce4ed95c17e",
 			"itemType": "specificationItem",
 			"description": "WERKZAAMHEDEN AAN OVERSPANNINGEN",
 			"referenceNumber": "1"
 		},
 		{
-			"id": "974ce6b5-2d4f-4350-8579-2fb43889d259",
+			"id": "33a461e7-3cbd-4e32-a642-20af493b301c",
 			"itemType": "specificationItem",
 			"description": "VERWIJDEREN OVERSPANNINGEN",
 			"referenceNumber": "100"
 		},
 		{
-			"id": "89326227-2f33-48d7-b075-52dd0702a69a",
+			"id": "7885c3c5-6bc1-4d8d-aaf3-bd56ddebb996",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED ",
 			"referenceNumber": "100010"
 		},
 		{
-			"id": "e4bec9c7-fd03-43b8-81d7-021af21ca21f",
+			"id": "53ec5ef2-a5a9-41e0-8c83-dba058685e93",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) DD ",
 			"referenceNumber": "100020"
 		},
 		{
-			"id": "22398489-f9f2-4a9c-b214-9ae20b5e78d5",
+			"id": "fa6d1872-b958-471b-8fb1-afcfd6e47530",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED - H- type ",
 			"referenceNumber": "100030"
 		},
 		{
-			"id": "0ebe7da9-bb9c-4c51-a946-cdbdcdc3adb5",
+			"id": "afed2a5a-15ff-48b5-88a1-9bd04450557b",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED - Y- type ",
 			"referenceNumber": "100040"
 		},
 		{
-			"id": "15939b62-919f-4e8a-af66-679f4c87f8cb",
+			"id": "344a2500-011b-484e-9ea6-b2538ce5e124",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verw. afspanmast overspanning zonder voeding. ",
 			"referenceNumber": "100050"
 		},
 		{
-			"id": "b19e549b-b8f8-4027-ac1f-1d8feaff12d1",
+			"id": "40c3c7da-5ede-4f4b-9c85-9f79de4c94e3",
 			"itemType": "specificationItem",
 			"description": "VERWIJDEREN OVERSPANNINGEN BOVEN GVB",
 			"referenceNumber": "110"
 		},
 		{
-			"id": "97ab8d5a-cb0b-4738-a6d9-cb24ee679446",
+			"id": "08fa02f1-a70d-446a-8ff7-4f6b5eb2e14d",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED - GVB ",
 			"referenceNumber": "110010"
 		},
 		{
-			"id": "01ad4223-6ed6-4909-b734-e810b6dde7ad",
+			"id": "50a1cf82-ba07-4894-9f90-93208e235308",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) DD - GVB ",
 			"referenceNumber": "110020"
 		},
 		{
-			"id": "dc54efc7-5ae6-42e7-8e0c-2268d6c0ea76",
+			"id": "586f37e2-e61b-4712-9bae-cd285209cfed",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED - H- type - GVB ",
 			"referenceNumber": "110030"
 		},
 		{
-			"id": "cc40a146-818a-4f85-9dec-0b9f2fa05b2c",
+			"id": "0e5b2b52-e611-4ad1-846d-b9ecf0f879b3",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen OS (L<= 50 m) ED - Y- type - GVB ",
 			"referenceNumber": "110040"
 		},
 		{
-			"id": "916dec63-172e-4f97-8a71-3f46f0d88225",
+			"id": "cc5de963-3046-405a-8d00-5f9fd6d00dbd",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen verlengstuk aan object derden. ",
 			"referenceNumber": "110050"
 		},
 		{
-			"id": "1740955a-3108-4998-97a5-647b5af44ab8",
+			"id": "7489b01e-23f1-44f7-8b11-5a5eee13bb6f",
 			"itemType": "specificationItem",
 			"description": "VERWIJDEREN MUUR-ANKERS / PLAAT",
 			"referenceNumber": "120"
 		},
 		{
-			"id": "d30af4e0-e19c-486b-b023-679d888fc525",
+			"id": "3593592f-01e3-412d-921b-479159456623",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen muurplaat, klein model. ",
 			"referenceNumber": "120010"
 		},
 		{
-			"id": "9236a6ab-891c-450d-ae1b-af49fe846568",
+			"id": "34eaa2f3-e483-4305-a8fc-bf94c43ed586",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen muurplaat, groot model. ",
 			"referenceNumber": "120020"
 		},
 		{
-			"id": "3c6241a5-dbe2-4974-8fde-c1900e94db4b",
+			"id": "32150ab1-19f1-4585-b0d3-8619f402573a",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen oude mastbeugel ",
 			"referenceNumber": "120030"
 		},
 		{
-			"id": "5019d253-1659-4fed-8f13-798c4563ee18",
+			"id": "f7f08a5b-08ad-4d44-89bf-54bec7d613aa",
 			"itemType": "specificationItem",
 			"description": "AANBRENGEN OVERSPANNINGEN",
 			"referenceNumber": "130"
 		},
 		{
-			"id": "b8c06db5-cf6f-4e51-8447-24908e8e7137",
+			"id": "0e3e5e20-ca8e-448b-ba79-c8783aee7088",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 2 x ES ",
 			"referenceNumber": "130010"
 		},
 		{
-			"id": "3b1fc61b-fc28-46c2-bd4c-3ae34166adb9",
+			"id": "d6d1457c-e1b1-43be-8829-e0c29f910d8a",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x ES ",
 			"referenceNumber": "130020"
 		},
 		{
-			"id": "62bf68ba-3a89-4867-a623-be6395881ad0",
+			"id": "39482189-aa7f-4f21-9d14-ef88f9a639be",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x ES ",
 			"referenceNumber": "130030"
 		},
 		{
-			"id": "a4dfaed3-b391-424a-8b04-60e5d99b970e",
+			"id": "a3c1371f-462f-4037-b3ba-8653782fbd1e",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x ES ",
 			"referenceNumber": "130040"
 		},
 		{
-			"id": "bd1a6d7a-1dcd-4976-ad1d-864ab7e56a32",
+			"id": "70daf8db-4f38-4559-9b54-aa03fdfac4c7",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 1 x ES & 1 x EV ",
 			"referenceNumber": "130050"
 		},
 		{
-			"id": "a854481e-ecff-4ba5-86ad-21de6f80c639",
+			"id": "a44b6291-2745-4a92-89aa-4188165b24ed",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 1 x ES & 1 x EV ",
 			"referenceNumber": "130060"
 		},
 		{
-			"id": "de85def1-bc68-4afa-9f1a-f474a69e1a96",
+			"id": "08316bcf-3803-46ae-a012-a491b4a18725",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 1 x ES & 1 x EV ",
 			"referenceNumber": "130070"
 		},
 		{
-			"id": "879c2de5-c3b2-4c2a-a9c9-52b7e537bbdf",
+			"id": "de71e758-ef45-4a0a-b6c6-c7c97c139462",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 1 x ES & 1 x EV ",
 			"referenceNumber": "130080"
 		},
 		{
-			"id": "9176b143-aab1-4789-921a-4aef21b37613",
+			"id": "e5dcf6ea-f69e-4da2-a22a-cec34e2d7a35",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 2 x EV ",
 			"referenceNumber": "130090"
 		},
 		{
-			"id": "4cf774b2-8d0f-4891-985d-f8e98a4696fb",
+			"id": "f38fdb48-e05f-45ae-a40d-a5ac56734820",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x EV ",
 			"referenceNumber": "130100"
 		},
 		{
-			"id": "57012212-e422-4ad9-910e-c68e230d2dd5",
+			"id": "f6c0a814-f36b-4027-a07f-c1616d71e910",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x EV ",
 			"referenceNumber": "130110"
 		},
 		{
-			"id": "3a1c13b3-46cb-417d-b96b-3cfff20dc310",
+			"id": "1401480c-a707-4166-bbc8-d893336a88c7",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x EV ",
 			"referenceNumber": "130120"
 		},
 		{
-			"id": "18c98de5-8d00-40cd-934c-02e54abaa65c",
+			"id": "210036f0-3653-4612-8e45-248414ccd399",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen afspanmast overspanning ",
 			"referenceNumber": "130130"
 		},
 		{
-			"id": "c528dedb-a438-4129-b70f-069fc5bd0fa5",
+			"id": "cd48d74b-1a04-4ba1-b7dd-8d9e9e7f3707",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen nieuwe mastbeugel ",
 			"referenceNumber": "130140"
 		},
 		{
-			"id": "bc01eda6-fb86-42fc-b2cd-5198b058809e",
+			"id": "a3623e24-6861-43ec-bd85-7c07412ee0ee",
 			"itemType": "specificationItem",
 			"description": "AANBRENGEN OVERSPANNINGEN BOVEN GVB",
 			"referenceNumber": "140"
 		},
 		{
-			"id": "60480d12-66d4-4643-a286-aa50fe171ca6",
+			"id": "9a89f7aa-80ef-4f5b-ad77-905330eb9e14",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 2 x ES GVB ",
 			"referenceNumber": "140010"
 		},
 		{
-			"id": "a8a7116b-8603-4725-b89b-7c60fbe65f4d",
+			"id": "9bda02f7-80bc-45a4-8f3a-049d0822b738",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x ES GVB ",
 			"referenceNumber": "140020"
 		},
 		{
-			"id": "f2cf6aa5-d485-4b8b-8740-0f18e3bb7312",
+			"id": "48ca9b34-c64d-4823-a41d-94e9117a40ce",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x ES GVB ",
 			"referenceNumber": "140030"
 		},
 		{
-			"id": "98d05f2c-dc98-4afc-885f-b6311ccb6fd0",
+			"id": "d468e86d-e376-46ee-90dd-f4f752bd25d5",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x ES GVB ",
 			"referenceNumber": "140040"
 		},
 		{
-			"id": "f325a4e3-8716-42a5-b2d0-ef004e69d4fa",
+			"id": "07382fea-23d1-4605-a329-8c1394a7e92c",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 1 x ES & 1 x EV GVB ",
 			"referenceNumber": "140050"
 		},
 		{
-			"id": "e04256ed-1535-4665-a73b-29989f8ec34d",
+			"id": "8fb6ce48-e1fc-4c61-8424-4b7ff9839c2a",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 1 x ES & 1 x ",
 			"referenceNumber": "140060"
 		},
 		{
-			"id": "e5a63a58-25b8-4adc-8742-25eb2b33f898",
+			"id": "7ae9d0ff-51ee-47d7-b73c-37a305e1111a",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 1 x ES & 1 x ",
 			"referenceNumber": "140070"
 		},
 		{
-			"id": "e208b6da-bb00-4b66-ab07-ab3c9a461abc",
+			"id": "9e5826b4-a630-435c-8abf-5d14d2b5661b",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 1 x ES & 1 x ",
 			"referenceNumber": "140080"
 		},
 		{
-			"id": "767c92c0-654e-4aec-a1cd-39c481a82365",
+			"id": "5e5a8f9c-458d-432e-be5b-6c77ca465219",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (L<= 10 m). 2 x EV GVB ",
 			"referenceNumber": "140090"
 		},
 		{
-			"id": "3874d398-d019-4915-93da-ee76f3ad6fe0",
+			"id": "aebaec4d-d73e-47bf-bf35-c4da9cb12dcd",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (10 m <L<= 20 m). 2 x EV GVB ",
 			"referenceNumber": "140100"
 		},
 		{
-			"id": "25469d12-d76d-4a22-8ff0-209801a2692e",
+			"id": "0e4acc6a-fc07-43dc-a33d-b8f8c1178170",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (20 m <L<= 30 m). 2 x EV GVB ",
 			"referenceNumber": "140110"
 		},
 		{
-			"id": "24807fa9-393f-43bb-9261-204e3c7efc19",
+			"id": "e10ddceb-c9e5-4fc0-817b-3de6b34946cb",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen OS enkel (30 m <L<= 40 m). 2 x EV GVB ",
 			"referenceNumber": "140120"
 		},
 		{
-			"id": "c1330247-e91c-470a-8d65-ed548ce576f4",
+			"id": "2435acf7-8136-447f-a04e-34c7efda7d29",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen verlengstuk aan object derden. ",
 			"referenceNumber": "140130"
 		},
 		{
-			"id": "7b53a982-4aec-444d-ac9e-df48797b82c2",
+			"id": "21c22323-190d-480d-97c4-428f12fb9fc8",
 			"itemType": "specificationItem",
 			"description": " AANBRENGEN MUUR-ANKERS / PLAAT",
 			"referenceNumber": "150"
 		},
 		{
-			"id": "25834c29-9cc0-4f9a-ac3c-244d16067ba5",
+			"id": "874d7128-fbdb-4ba1-a993-54ee613cbff3",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen muurplaat ",
 			"referenceNumber": "150010"
 		},
 		{
-			"id": "9c66953e-a227-46a4-8770-815cc9e05309",
+			"id": "2c84725c-f157-4c4b-a893-078cab090ac8",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen chemisch anker in spouwmuur ",
 			"referenceNumber": "150020"
 		},
 		{
-			"id": "6cf56b11-0352-4720-8013-dec634e8d455",
+			"id": "127a519c-31cb-4406-bbfc-7609bf42042f",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen chemisch anker in steensmuur/beton ",
 			"referenceNumber": "150030"
 		},
 		{
-			"id": "f8834a17-bd9b-48c0-bbee-5e36489d4531",
+			"id": "101d1782-9a07-4308-92eb-28002442da2a",
 			"itemType": "specificationItem",
 			"description": "OVERIGE WERKZAAMHEDEN OVERSPANNINGEN",
 			"referenceNumber": "160"
 		},
 		{
-			"id": "b1a9af5e-32db-4f70-9c0a-1995203e0e0e",
+			"id": "03d71601-9995-4ae5-9c43-f191152edada",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen objectnummer <= 5 stuks ",
 			"referenceNumber": "160010"
 		},
 		{
-			"id": "57889ba8-b47a-4aaf-8ec1-2a8187dc2e42",
+			"id": "9f925dbc-c75a-4c6d-a8eb-71b9c1f57881",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen objectnummer <= 5 stuks ",
 			"referenceNumber": "160020"
 		},
 		{
-			"id": "42b2229a-6089-4c1d-add0-cb644e42a482",
+			"id": "20086e6e-5ca1-4172-8b9d-659e9724810c",
 			"itemType": "specificationItem",
 			"description": "INSTALLATIE-KABEL",
 			"referenceNumber": "2"
 		},
 		{
-			"id": "c8062530-dd12-4447-97a5-0a4a815ae53b",
+			"id": "d59952b1-c3d9-4eee-9d7c-366e8987a74d",
 			"itemType": "specificationItem",
 			"description": " INSTALLATIE-KABEL WERKZAAMHEDEN",
 			"referenceNumber": "200"
 		},
 		{
-			"id": "8b279be4-fbb2-4e2b-ad7e-225798d334c1",
+			"id": "08e46bf9-d232-479e-a34b-cf50f5fb0fa9",
 			"itemType": "specificationItem",
 			"description": "Verwijderen",
 			"referenceNumber": "2000"
 		},
 		{
-			"id": "bd5fc39b-7fb5-4681-ac69-f95857ba3cca",
+			"id": "bd5f92b5-3d91-4482-8e53-bf63fb9c0951",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen installatie-kabel in armatuur ",
 			"referenceNumber": "200010"
 		},
 		{
-			"id": "dd7ced43-679d-4bce-a6a2-3c61ea0cb5bc",
+			"id": "d292ef1d-679d-44cd-a6ab-073820ffcf9c",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Verwijderen installatie-kabel van spankabel",
 			"referenceNumber": "200020"
 		},
 		{
-			"id": "7a424a6e-e9d2-40f1-95a5-78602af085d0",
+			"id": "89d5400e-efc9-48fe-b6d7-ce18c01555e6",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Verwijderen installatie-kabel van gevel",
 			"referenceNumber": "200030"
 		},
 		{
-			"id": "2eaab05a-773d-4a4b-a0aa-ee209e66f062",
+			"id": "3447dbce-643c-4cd1-a983-9256f3c61f72",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen aansluitvoorziening aan gevel ",
 			"referenceNumber": "200040"
 		},
 		{
-			"id": "12f858f7-4cd9-44f4-a2eb-14daac39667e",
+			"id": "3fea785e-ae3f-4436-9337-7c656b78e0d2",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Verwijderen slagvaste buis incl kabel van gevel",
 			"referenceNumber": "200050"
 		},
 		{
-			"id": "8ac4340d-a292-448c-b1f6-962db977f796",
+			"id": "3db2b643-e0d0-43dc-a116-98075a3f1b97",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen installatie-kabel in aansluitvoorziening ",
 			"referenceNumber": "200060"
 		},
 		{
-			"id": "6e82eb4d-916c-4c0d-86ad-6f3e0a00054c",
+			"id": "4ef0a24a-f3cc-4260-9692-e9ad78749818",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen VSA uit aansluitvoorziening aan gevel ",
 			"referenceNumber": "200070"
 		},
 		{
-			"id": "1ad452af-b47c-4142-92cc-62406170a338",
+			"id": "2fe0319e-43b1-414a-b750-0eded1df5d36",
 			"itemType": "specificationItem",
 			"description": "Aansluiten",
 			"referenceNumber": "2010"
 		},
 		{
-			"id": "1f9b2583-06b2-4a37-8a14-18cbed66925e",
+			"id": "ca6d5e77-c43a-494a-aa5e-1ca97e96b2ad",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aansluiten installatie-kabel in armatuur ",
 			"referenceNumber": "201010"
 		},
 		{
-			"id": "e0d91226-b67b-497e-b853-88bd3a40714b",
+			"id": "3ccf96fa-1d11-4f73-af8d-f5aa5da76c59",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen installatie-kabel op spandraad",
 			"referenceNumber": "201020"
 		},
 		{
-			"id": "a458b9fb-f2fc-420c-a8b9-e5f065e4c97e",
+			"id": "012c30fa-a8ee-4189-af59-55ed70e293ae",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen installatie-kabel op gevel.",
 			"referenceNumber": "201030"
 		},
 		{
-			"id": "6ed7de70-a94d-49eb-a8bc-e113af709331",
+			"id": "bdbca489-7ff1-45cf-9efd-7bbaa8d6c988",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen gevelaansluitkast ",
 			"referenceNumber": "201040"
 		},
 		{
-			"id": "2e2428d8-a3b9-446b-be73-9ef1a0b95819",
+			"id": "69e7d37d-3192-4c21-bd7d-3eb9b3e6bf07",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen slagvaste buis incl kabel op gevel",
 			"referenceNumber": "201050"
 		},
 		{
-			"id": "8b20d8aa-4a3a-4098-b4e8-183e7fe727e9",
+			"id": "0442b54b-2475-4b05-b67c-80da1195c349",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen centraal/lasdoos. ",
 			"referenceNumber": "201060"
 		},
 		{
-			"id": "86a9267c-2a5a-4958-ac29-c35681147d1e",
+			"id": "b8f1df25-9cd3-4d74-90d0-0f27e602025c",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen installatie-kabel in centraal/lasdoos",
 			"referenceNumber": "201070"
 		},
 		{
-			"id": "d49d2849-3aae-4c72-a75d-e3af73fbea9d",
+			"id": "95e7ff52-b7b9-4f35-88be-7ac3a5b08c51",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Doorlussen installatie-kabel in armatuur ",
 			"referenceNumber": "201080"
 		},
 		{
-			"id": "d60074bf-c104-48a3-8bba-593e03969373",
+			"id": "e9c43989-7fa5-42d7-b7fb-b82d2d1ea4c5",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aansluiten installatie-kabel in de gevelaansluitkast ",
 			"referenceNumber": "201090"
 		},
 		{
-			"id": "b781ba0f-1ebe-4c9a-bd22-9d498895f5e6",
+			"id": "7b1dd557-8775-4da7-a018-3713b1976605",
 			"itemType": "specificationItem",
 			"description": "Vervangen",
 			"referenceNumber": "2020"
 		},
 		{
-			"id": "a9128ec6-36bc-45d3-948e-e0902ada29a5",
+			"id": "270dc13d-927c-4cde-9fb3-bcc591d83720",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Vervangen kabelbundelband op spandraad",
 			"referenceNumber": "202010"
 		},
 		{
-			"id": "247f567b-dfea-46f0-bfef-6e827715cc3c",
+			"id": "6a30c3d6-1ded-477c-a9ba-c5d215166769",
 			"itemType": "specificationItem",
 			"description": "Diverse werkzaamheden ivm NEN 3140",
 			"referenceNumber": "2030"
 		},
 		{
-			"id": "7e2460b5-e46a-46a8-9c80-25c50d930b59",
+			"id": "5cf2d61c-5bc1-4a04-be23-8e9cbe1f2bde",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Maken foto van een gevelaansluitkast ",
 			"referenceNumber": "203010"
 		},
 		{
-			"id": "8a9c0b97-d214-43e2-8395-c700fd1ee4cd",
+			"id": "52c9e8b4-5383-4786-93ff-a6d29178e6b0",
 			"itemType": "specificationItem",
 			"description": "ARMATUUR",
 			"referenceNumber": "3"
 		},
 		{
-			"id": "7a3dd3fc-7cca-43f8-ab4b-801f6e5b6e17",
+			"id": "b6843640-62d3-45f6-b627-65251adcf981",
 			"itemType": "specificationItem",
 			"description": "ARMATUUR WERKZAAMHEDEN",
 			"referenceNumber": "300"
 		},
 		{
-			"id": "dea0d8b5-6e61-46c8-b230-0f984fed4d1b",
+			"id": "44682f89-6d32-4a14-bb16-1003e154d0a6",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Verwijderen hangarmatuur lph <= 10 m ",
 			"referenceNumber": "300010"
 		},
 		{
-			"id": "bff1ce38-b915-4a59-aab1-487fe0bf82df",
+			"id": "de60cb70-ddbc-495e-baf0-7472d5b041b2",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Aanbrengen hangarmatuur lph <= 10 m ",
 			"referenceNumber": "300020"
 		},
 		{
-			"id": "4f6ed223-32ce-46ed-8a9b-fcea63e8a59b",
+			"id": "af44173d-a167-4697-9e06-7eace6bcc11b",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Vervangen verlichtingsarmatuur lph <= 10 m ",
 			"referenceNumber": "300030"
 		},
 		{
-			"id": "a40268c4-facc-42f9-b309-1f1a5b83349c",
+			"id": "d9c19e73-d7ff-47f5-875d-dc388c2118df",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Vervangen van (LED) unit 4m > lph <=10m. ",
 			"referenceNumber": "300040"
 		},
 		{
-			"id": "49dd1328-39bf-47a1-b266-403d5f111686",
+			"id": "5fcb8630-1f58-4c34-87a3-f96d2f1e7cb7",
 			"itemType": "specificationItem",
 			"referenceNumber": "4 COÖRDINATIE"
 		},
 		{
-			"id": "1bed21f0-491e-4339-96cb-296a68e8418f",
+			"id": "dd9fc0c6-ed0d-4e61-86f7-27c6eaa18182",
 			"itemType": "specificationItem",
 			"referenceNumber": "400 COÖRDINATIEVERPLICHTING & TOESLAGEN"
 		},
 		{
-			"id": "fa4d2425-27c9-4e63-a49c-43f523134d2e",
+			"id": "78bee2e9-b376-46e0-9fc8-6ef3bd892303",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "Coördinatieoverleg met directie",
 			"referenceNumber": "400010"
 		},
 		{
-			"id": "faf499a0-177d-4e0b-9b47-8e7749ed0b15",
+			"id": "039ad80d-c14a-4d99-963b-6c09acfb0114",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "Werkvoorbereiding Batch deelopdracht",
 			"referenceNumber": "400020"
 		},
 		{
-			"id": "5f8fb7aa-5dd6-44f8-8355-233f3dcfb619",
+			"id": "bf906864-ce83-4166-ac07-c7de4a8bcc43",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "Coördinatie met het GVB",
 			"referenceNumber": "400030"
 		},
 		{
-			"id": "cfc5fe15-1e2e-4ca3-a301-ab796ea8f6ac",
+			"id": "709c722c-e9dc-4863-bb6c-7ffe658f1571",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "Coördinatie Tijdelijke Verkeers Maatregelen (TVM's)",
 			"referenceNumber": "400040"
 		},
 		{
-			"id": "ab34d34f-78b9-4405-97f6-0bc1f93f848a",
+			"id": "d0dcb81c-be36-45b3-8a70-5af4967587b9",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "VICTOR meldplicht",
 			"referenceNumber": "400050"
 		},
 		{
-			"id": "3c2c7ed8-4f61-4c19-9989-b28ac587124a",
+			"id": "54b2f0e3-48d6-4b5e-966b-87ab90fd3384",
 			"unit": "keer",
 			"itemType": "specificationItem",
 			"description": "Communicatie met omgeving / bewoner",
 			"referenceNumber": "400060"
 		},
 		{
-			"id": "2c2d48c7-e9f8-4a91-9213-2f1adcc17fce",
+			"id": "a3cc9b20-9997-4b20-9425-e7f9fbacbcfe",
 			"itemType": "specificationItem",
 			"referenceNumber": "5 LEVEREN VAN MATERIALEN"
 		},
 		{
-			"id": "bf9a8278-714d-4f08-8158-89c4748d8f5d",
+			"id": "9fc2f678-1664-4998-98d2-707204d39e71",
 			"itemType": "specificationItem",
 			"referenceNumber": "500 DIVERSEN LEVERANTIES"
 		},
 		{
-			"id": "7a89e852-b35f-48cc-9a12-ea64f4e5e40c",
+			"id": "0237e7d4-584a-4501-8f81-3da407860962",
 			"unit": "m",
 			"itemType": "specificationItem",
 			"description": "Leveren installatiekabel YMvK 3 x 1,5 mm²",
 			"referenceNumber": "500010"
 		},
 		{
-			"id": "8fdb8b25-794f-48a7-a059-6df9af92dc08",
+			"id": "6f24767b-f5be-43d3-aeb0-3c0ea657b82d",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 120 ",
 			"referenceNumber": "500020"
 		},
 		{
-			"id": "84c1eb41-6c9c-4ec9-ab20-967548f2be2a",
+			"id": "92446939-f270-4065-9b71-0a140309d11b",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 140 ",
 			"referenceNumber": "500030"
 		},
 		{
-			"id": "00187932-2d96-453d-aab9-a32fff93aa45",
+			"id": "01f41d83-384d-4dfc-b2b0-6d79321240c1",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 160 ",
 			"referenceNumber": "500040"
 		},
 		{
-			"id": "c810b704-533b-4e39-9d38-5208b9ba47d6",
+			"id": "2aa2b5df-9113-4ddc-a5e8-a0ecebca122a",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 180 ",
 			"referenceNumber": "500050"
 		},
 		{
-			"id": "6f388a93-6318-464a-9e37-b0c601484116",
+			"id": "30cee557-93b0-43e5-ac9e-767e736d5bfa",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 200 ",
 			"referenceNumber": "500060"
 		},
 		{
-			"id": "be64af39-7950-466f-ae11-f4ca433302d2",
+			"id": "dc31ab9e-913c-4491-942b-b00a2439ec25",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 220 ",
 			"referenceNumber": "500070"
 		},
 		{
-			"id": "8c8878f8-5b36-45ff-929f-c048ca81d1f3",
+			"id": "bf4ab2ed-9e84-4db1-a3c8-e481a85f4b18",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 260 ",
 			"referenceNumber": "500080"
 		},
 		{
-			"id": "9e488e7a-2076-42e2-b933-e6880b1bbb5c",
+			"id": "69785547-bea3-4595-af8a-6b0eaf96bde4",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 280 ",
 			"referenceNumber": "500090"
 		},
 		{
-			"id": "d220f3b4-f615-4c58-abac-d8ada9b46096",
+			"id": "85ee21ad-9d47-43e9-abb3-ea9a7e7a5fe9",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 300 ",
 			"referenceNumber": "500100"
 		},
 		{
-			"id": "8b0299d2-e934-48bc-8a29-5c24236e81b5",
+			"id": "b738557a-be12-4e90-a65a-0eee7e616423",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren ankerstang RVS A4 M12 x 350 ",
 			"referenceNumber": "500110"
 		},
 		{
-			"id": "2a79858b-3174-45eb-8318-c9f34e86e100",
+			"id": "e47b9363-628c-4d76-b5ee-05502e6dae91",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren draadstang M12x1000 ",
 			"referenceNumber": "500120"
 		},
 		{
-			"id": "47c8bdf6-4063-4448-a12d-df64548a2d4e",
+			"id": "d5b3c893-a875-4766-8691-6edd09dbae10",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren zeefhuls 18 ",
 			"referenceNumber": "500130"
 		},
 		{
-			"id": "9ffd1a18-5854-46ae-8013-04aa315f453b",
+			"id": "f09c9ed5-3157-4ef8-9f31-85f6c1c45e49",
 			"unit": "st",
 			"itemType": "specificationItem",
 			"description": "Leveren zeefhuls 22 ",
 			"referenceNumber": "500140"
 		},
 		{
-			"id": "a1b0163c-0788-480d-89ab-7777f633b99d",
+			"id": "ec76da73-4920-4256-b1eb-2fc07f3e1cae",
 			"itemType": "specificationItem",
 			"description": "OVERIGE WERKZAAMHEDEN",
 			"referenceNumber": "8"
 		},
 		{
-			"id": "4a5457fc-5e86-4755-89a4-7dafd78c1cf9",
+			"id": "87fa44c3-ebdc-49d9-b1ef-f1d0f6c53997",
 			"itemType": "specificationItem",
 			"description": "Ter beschikking stellen werknemers",
 			"referenceNumber": "801"
 		},
 		{
-			"id": "e135c7bc-32db-4eb6-8758-e810cecb854a",
+			"id": "9bcf84c8-f173-4ff8-92bf-9fdc70bde856",
 			"unit": "uur",
 			"itemType": "specificationItem",
 			"description": "Inzetten werknemer een monteur",
 			"referenceNumber": "801010"
 		},
 		{
-			"id": "d136f437-6046-4b9e-b061-7d77faa0e8b9",
+			"id": "15de5a0e-4dad-4e23-b081-9abbfeb8ff6a",
 			"unit": "uur",
 			"itemType": "specificationItem",
 			"description": "Inzetten werknemer projectbegeleider / uitvoerder",
 			"referenceNumber": "801020"
 		},
 		{
-			"id": "bddda1db-39e2-47ed-a08d-a64ee28d2c94",
+			"id": "664fd27f-11b4-411c-9a0c-e8655c2dd773",
 			"itemType": "specificationItem",
 			"description": "Ter beschikking stellen materieel",
 			"referenceNumber": "802"
 		},
 		{
-			"id": "891e0364-af1f-4ce8-bde1-c37818dc197a",
+			"id": "dd83ec2f-a3a1-421e-89f8-164718fcac9a",
 			"unit": "uur",
 			"itemType": "specificationItem",
 			"description": "Inzetten vrachtauto",
 			"referenceNumber": "802010"
 		},
 		{
-			"id": "d0f62ac1-d456-4c49-878c-7c138e8a5ab6",
+			"id": "9b464478-a6b1-4a1a-b971-b35c908dfd6a",
 			"unit": "uur",
 			"itemType": "specificationItem",
 			"description": "Inzetten hoogwerker =<20m",

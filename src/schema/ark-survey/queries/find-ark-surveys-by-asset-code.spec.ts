@@ -1,26 +1,27 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { domainArkSurvey } from '../__stubs__';
+import { domainArkSurvey, domainArkSurveysByAssetCode } from '../__stubs__';
 import { ArkSurveyService } from '../ark-survey.service';
 
-import { GetArkSurveyBySurveyIdQuery } from './get-ark-survey-by-survey.query';
-import { GetArkSurveyBySurveyIdHandler } from './get-ark-survey-by-survey.handler';
+import { FindArkSurveysByAssetCodeHandler } from './find-ark-surveys-by-asset-code.handler';
+import { FindArkSurveysByAssetCodeQuery } from './find-ark-surveys-by-asset-code.query';
 
 const ArkSurveyMock: MockedObjectDeep<ArkSurveyService> = {
 	getArkSurvey: jest.fn().mockResolvedValue([domainArkSurvey]),
+	findArkSurveysByAssetCode: jest.fn().mockResolvedValue([domainArkSurveysByAssetCode]),
 	...(<any>{}),
 };
 
 const identifier = 'b6bbf83e-da23-4693-9502-e6000015c709';
 
-describe('GetArkSurveyBySurveyIdHandler', () => {
+describe('FindArkSurveysByAssetCodeHandler', () => {
 	test('executes query', async () => {
-		const command = new GetArkSurveyBySurveyIdQuery(identifier);
-		const result = await new GetArkSurveyBySurveyIdHandler(ArkSurveyMock).execute(command);
+		const command = new FindArkSurveysByAssetCodeQuery(identifier);
+		const result = await new FindArkSurveysByAssetCodeHandler(ArkSurveyMock).execute(command);
 
-		expect(ArkSurveyMock.getArkSurvey).toHaveBeenCalledTimes(1);
-		expect(ArkSurveyMock.getArkSurvey).toHaveBeenCalledWith(identifier);
+		expect(ArkSurveyMock.findArkSurveysByAssetCode).toHaveBeenCalledTimes(1);
+		expect(ArkSurveyMock.findArkSurveysByAssetCode).toHaveBeenCalledWith(identifier);
 
-		expect(result).toEqual([domainArkSurvey]);
+		expect(result).toEqual([domainArkSurveysByAssetCode]);
 	});
 });

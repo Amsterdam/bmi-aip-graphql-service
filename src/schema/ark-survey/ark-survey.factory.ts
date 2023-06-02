@@ -72,7 +72,7 @@ export class ArkSurveyFactory {
 		arkSurvey.arkGeographyStart = arkGeographyStart;
 		arkSurvey.arkGeographyEnd = arkGeographyEnd;
 
-		arkSurvey.reachSegments = arkSurveyReachSegments;
+		arkSurvey.reachSegments = reachSegments ?? arkSurveyReachSegments;
 
 		arkSurvey.created_at = created_at instanceof Date ? created_at.toUTCString() : null;
 		arkSurvey.updated_at = updated_at instanceof Date ? updated_at.toUTCString() : null;

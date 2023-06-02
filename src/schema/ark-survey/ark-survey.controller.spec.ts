@@ -6,6 +6,7 @@ import { GetArkSurveyBySurveyIdQuery } from './queries/get-ark-survey-by-survey.
 import { FindArkSurveyReachSegmentsQuery } from './queries/find-ark-survey-reach-segments.query';
 import { domainReachSegment } from './__stubs__/reach-segment-stub';
 import { domainArkSurvey } from './__stubs__';
+import { FindArkSurveysByAssetCodeQuery } from './queries/find-ark-surveys-by-asset-code.query';
 
 describe('ArkSurveyController', () => {
 	let queryBus: QueryBus;
@@ -36,6 +37,20 @@ describe('ArkSurveyController', () => {
 			const result = await controller.getArkSurvey(surveyId);
 
 			expect(queryBus.execute).toHaveBeenCalledWith(new GetArkSurveyBySurveyIdQuery(surveyId));
+			expect(result).toBe(arkSurveyResult);
+		});
+	});
+
+	describe('getArkSurveys', () => {
+		it('should return an array of ArkSurvey', async () => {
+			const surveyId = 'exampleSurveyId';
+			const arkSurveyResult = domainArkSurvey;
+			const controller = new ArkSurveyController(queryBus);
+			jest.spyOn(queryBus, 'execute').mockResolvedValueOnce(arkSurveyResult);
+
+			const result = await controller.getArkSurveys(surveyId);
+
+			expect(queryBus.execute).toHaveBeenCalledWith(new FindArkSurveysByAssetCodeQuery(surveyId));
 			expect(result).toBe(arkSurveyResult);
 		});
 	});

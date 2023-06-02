@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 @ObjectType({ description: 'reachSegment' })
 export class ReachSegment {
 	@Field((type) => String)
-	@ApiProperty()
+	@ApiProperty({ description: 'The identifier of ReachSegment (rakdeel) in AIP' })
 	id: string;
 
 	@Field((type) => String)
@@ -15,38 +15,35 @@ export class ReachSegment {
 	name: string;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The `Rakdeellengte` in meters' })
 	reachSegmentLength?: number;
 
 	@Field((type) => Number, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The `Risicoscore` as a value' })
 	riskScore?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The `Risicoscore` in digits' })
 	riskScoreDigit?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The `Faalscore` as a value' })
 	failureModeScore?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The `Gevolgenscore` as a value' })
 	consequenceScore?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty()
 	sortNumber?: number;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The date this `Rakdeel` has been registered' })
 	created_at: string;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
 	updated_at: string;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
 	deleted_at: string;
 }

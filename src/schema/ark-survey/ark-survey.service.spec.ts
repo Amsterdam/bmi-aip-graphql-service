@@ -23,4 +23,15 @@ describe('ARK Reach Segments / Service', () => {
 		expect(ArkSurveyResults).toBeInstanceOf(ArkSurvey);
 		expect(ArkSurveyResults).toEqual(ArkSurveyFactory.createArkSurvey(domainArkSurvey));
 	});
+
+	test('findArkSurveysByAssetCode returns an array of ArkSurveys with reach segments', async () => {
+		const service = new ArkSurveyService(repo);
+		const assetCode = 'ABC123';
+
+		const result = await service.findArkSurveysByAssetCode(assetCode);
+
+		expect(result).toHaveLength(2);
+		expect(result[0]).toBeInstanceOf(ArkSurvey);
+		expect(result[0].reachSegments[0].arkSurveyId).toEqual(result[0].id);
+	});
 });

@@ -15,8 +15,6 @@ export class ArkSurveyService {
 	async findArkSurveysByAssetCode(assetCode: string): Promise<ArkSurvey[]> {
 		const arkSurveys = await this.arkSurveyRepository.findArkSurveysByAssetCode(assetCode);
 
-		console.log(arkSurveys);
-
 		return arkSurveys.map((arkSurvey: any) => ArkSurveyFactory.createArkSurveyWithReachSegments(arkSurvey));
 	}
 }

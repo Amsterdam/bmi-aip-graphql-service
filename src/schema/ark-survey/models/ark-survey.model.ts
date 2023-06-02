@@ -9,11 +9,10 @@ import { ArkInspectionStandardData } from './ark-inspection-standard-data.model'
 @ObjectType({ description: 'arkSurvey' })
 export class ArkSurvey {
 	@Field((type) => String)
-	@ApiProperty()
+	@ApiProperty({ description: 'The identifier of this survey in AIP' })
 	id: string;
 
 	@Field((type) => String)
-	@ApiProperty()
 	surveyId: string;
 
 	@Field((type) => Point, { nullable: true })
@@ -33,18 +32,18 @@ export class ArkSurvey {
 	arkGeographyRDEnd?: PointType;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The date the inspection has been created' })
 	created_at: string;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
+	@ApiProperty({ description: 'The date the inspection has last been updated' })
 	updated_at: string;
 
 	@Field((type) => String, { nullable: true })
-	@ApiProperty()
 	deleted_at: string;
 
 	@Field((type) => [ReachSegment], { nullable: 'itemsAndList' })
+	@ApiProperty({ description: 'An array of ReachSegments objects (rakdelen)', type: [ReachSegment] })
 	reachSegments: ReachSegment[];
 
 	@Field((type) => String, { nullable: true })

@@ -89,6 +89,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 				surveyId: {
 					in: surveys.map((survey) => survey.id),
 				},
+				deleted_at: null,
 			},
 			include: { arkSurveyReachSegments: true },
 		});

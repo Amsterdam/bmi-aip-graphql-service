@@ -61,6 +61,17 @@ and then run:
 npm run generate:gisib-api-types
 ```
 
+## Importing measure options for survey type 'Overspaningsinstallaties'
+
+As of writing the dropdown options used in 'Overspanningsinstallaties' contract 3: maatregelen are imported manually.
+The business delivers us an XLSX file that contains 3 sheets: "Maatregelen" (title + mapping with materials and specificationItems), "Materialen" and "Besteksposten". Part of the Jest test suite is a unit test that validates the generated .json file, to maintain the integrity of this .json file.
+
+-   Place newly supplied .xlsx file in /docs folder
+-   Update the `READ_FILE_OVS_MEASURES` .env variable with the correct filename
+-   Run `npm console ovs:import-measure-options` locally
+-   Check the newly generated `normalized-data-measures.json` file in your working tree
+-   Commit your changes (the `import-span-measure-options.spec` test should be green)
+
 ## License
 
 MPL-2.0. See `./LICENSE`

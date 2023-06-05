@@ -71,7 +71,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 					});
 
 					if (!result) {
-						throw new NotFoundException('No item found for given id/spanMeasureId combination');
+						throw new NotFoundException(`No item found for given spanMeasureItemId (${spanMeasureItemActual.id}) / spanMeasureId (${input.spanMeasureId}) combination`);
 					}
 
 					await this.prisma.spanMeasureItems.update({

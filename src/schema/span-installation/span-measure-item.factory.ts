@@ -27,7 +27,7 @@ export class SpanMeasureItemFactory {
 		spanMeasureItem.quantityUnitOfMeasurement = quantityUnitOfMeasurement;
 		spanMeasureItem.quantityEstimate = quantityEstimate;
 
-		if (quantityActual !== undefined) {
+		if (quantityActual !== null) {
 			spanMeasureItem.quantityActual = quantityActual;
 		}
 

@@ -33,6 +33,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 		supportSystem.createdAt = '2022-08-02T15:51:54.044Z';
 		supportSystem.updatedAt = '2022-08-02T15:52:54.044Z';
 		supportSystem.deletedAt = '2022-08-02T15:53:07.441Z';
+		supportSystem.remarksRevision = '__REMARKS_REVISION__';
 
 		expect(supportSystem).toBeInstanceOf(SupportSystem);
 		expect(supportSystem).toEqual({
@@ -61,6 +62,7 @@ describe('Span Installation / Model / SupportSystem', () => {
 			type: SupportSystemType.Facade,
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updatedAt: '2022-08-02T15:52:54.044Z',
+			remarksRevision: '__REMARKS_REVISION__',
 		});
 	});
 });

@@ -3,7 +3,17 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { LuminaireRepository } from './luminaire.repository';
-import { deletedLuminaire, domainLuminaire, luminaire1, luminaireInput, updateLuminaireInput } from './__stubs__';
+import {
+	deletedLuminaire,
+	domainLuminaire,
+	domainReviseLuminaire,
+	luminaire1,
+	luminaireInput,
+	reviseLuminaire1,
+	createMissingLuminaireInput,
+	updateLuminaireInput,
+	reviseLuminaireInput,
+} from './__stubs__';
 import type { LuminaireWithoutGeography } from './types/luminaire.repository.interface';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -17,7 +27,19 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
 
+const revisePrismaServiceMock: MockedObjectDeep<PrismaService> = {
+	spanLuminaires: {
+		create: jest.fn().mockResolvedValue(domainReviseLuminaire),
+		findMany: jest.fn().mockResolvedValue([domainReviseLuminaire]),
+		update: jest.fn().mockResolvedValue(domainReviseLuminaire),
+	},
+	$executeRaw: jest.fn(),
+	$queryRaw: jest.fn(),
+	...(<any>{}),
+};
+
 const repo = new LuminaireRepository(prismaServiceMock);
+const reviseRepo = new LuminaireRepository(revisePrismaServiceMock);
 
 describe('Span Installation / Luminaire / Repository', () => {
 	test('createLuminaire()', async () => {
@@ -48,6 +70,40 @@ describe('Span Installation / Luminaire / Repository', () => {
 		expect(returnValue).toEqual(
 			expect.objectContaining({
 				...luminaireInput,
+			}),
+		);
+	});
+
+	test('createMissingLuminaire()', async () => {
+		const returnValue = await reviseRepo.createMissingLuminaire(createMissingLuminaireInput);
+		const luminaire = revisePrismaServiceMock.spanLuminaires.create.mock.calls[0][0]
+			.data as LuminaireWithoutGeography;
+		expect(luminaire).toEqual(
+			expect.objectContaining({
+				id: luminaire.id,
+				spanSupportSystems: {
+					connect: {
+						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+					},
+				},
+				name: '__NAME__',
+				constructionYear: 1979,
+				driverSupplierType: 'one',
+				driverCommissioningDate: null,
+				lightCommissioningDate: null,
+				location: '__LOCATION__',
+				lightSupplierType: 'two',
+				manufacturer: '__MANUFACTURER__',
+				remarks: '__REMARKS__',
+				supplierType: 'two',
+				hasLED: true,
+				remarksRevision: '__REMARKS_REVISION__',
+			}),
+		);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(returnValue).toEqual(
+			expect.objectContaining({
+				...createMissingLuminaireInput,
 			}),
 		);
 	});
@@ -127,6 +183,65 @@ describe('Span Installation / Luminaire / Repository', () => {
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			hasLED: true,
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: null,
+		});
+	});
+
+	test('reviseLuminaire()', async () => {
+		revisePrismaServiceMock.spanLuminaires.update.mockResolvedValue(domainReviseLuminaire);
+		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
+			{ geography: JSON.stringify(reviseLuminaire1.geography) },
+		]);
+		const spy = jest.spyOn(reviseRepo, 'getGeographyAsGeoJSON').mockResolvedValue(reviseLuminaireInput.geography);
+		const returnValue = await reviseRepo.reviseLuminaire(reviseLuminaireInput);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(revisePrismaServiceMock.spanLuminaires.update).toHaveBeenCalledWith({
+			where: { id: reviseLuminaireInput.id },
+			data: {
+				name: '__NAME__',
+				constructionYear: 1979,
+				driverSupplierType: 'one',
+				driverCommissioningDate: null,
+				lightCommissioningDate: null,
+				location: '__LOCATION__',
+				lightSupplierType: 'two',
+				manufacturer: '__MANUFACTURER__',
+				remarks: '__REMARKS__',
+				supplierType: 'two',
+				hasLED: true,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
+				remarksRevision: '__REMARKS_REVISION__',
+			},
+		});
+		expect(spy).toHaveBeenCalledWith(reviseLuminaireInput.id);
+		expect(returnValue).toEqual({
+			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			lightCommissioningDate: null,
+			deleted_at: null,
+			name: '__NAME__',
+			constructionYear: 1979,
+			driverCommissioningDate: null,
+			driverSupplierType: 'one',
+			location: '__LOCATION__',
+			geography: {
+				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
+			lightSupplierType: 'two',
+			manufacturer: '__MANUFACTURER__',
+			remarks: '__REMARKS__',
+			supplierType: 'two',
+			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			hasLED: true,
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: '__REMARKS_REVISION__',
 		});
 	});
 

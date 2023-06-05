@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client';
 import { Point } from 'geojson';
 
 import { CreateLuminaireInput } from '../dto/create-luminaire.input';
+import { CreateMissingLuminaireInput } from '../dto/create-missing-luminaire.input';
 import { UpdateLuminaireInput } from '../dto/update-luminaire.input';
+import { ReviseLuminaireInput } from '../dto/revise-luminaire.input';
 
 const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 	select: {
@@ -24,6 +26,7 @@ const luminaires = Prisma.validator<Prisma.spanLuminairesArgs>()({
 		deleted_at: true,
 		geographyRD: true,
 		permanentId: true,
+		remarksRevision: true,
 	},
 });
 
@@ -37,4 +40,6 @@ export interface ILuminaireRepository {
 	createLuminaire(input: CreateLuminaireInput): Promise<Luminaire>;
 	updateLuminaire(input: UpdateLuminaireInput): Promise<Luminaire>;
 	deleteLuminaire(identifier: string): Promise<Luminaire>;
+	createMissingLuminaire(input: CreateMissingLuminaireInput): Promise<Luminaire>;
+	reviseLuminaire(input: ReviseLuminaireInput): Promise<Luminaire>;
 }

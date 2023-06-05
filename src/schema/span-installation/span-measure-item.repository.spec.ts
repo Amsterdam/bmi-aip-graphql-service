@@ -29,6 +29,7 @@ describe('Span Installation / Measures / Repository', () => {
 		expect(spanMeasureItem).toEqual(
 			expect.objectContaining({
 				id: spanMeasureItem.id,
+				isActive: true,
 				itemType: 'material',
 				description: '__NAME__',
 				spanMeasures: {
@@ -39,7 +40,6 @@ describe('Span Installation / Measures / Repository', () => {
 				quantityEstimate: 1,
 				quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
 				optionId: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				status: undefined,
 			}),
 		);
 

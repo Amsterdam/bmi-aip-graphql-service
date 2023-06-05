@@ -49,6 +49,10 @@ export class JunctionBox {
 	@Field((type) => String, { nullable: true })
 	remarks?: string;
 
+	// Maps to "Opmerking Revisie"
+	@Field((type) => String, { nullable: true })
+	remarksRevision?: string;
+
 	// Maps to "XY-coordinaat"
 	// Stored in geography column
 	// https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography

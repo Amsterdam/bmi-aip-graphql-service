@@ -9,11 +9,14 @@ const spanMeasureItem = Prisma.validator<Prisma.spanMeasureItemsArgs>()({
 		itemType: true,
 		quantityUnitOfMeasurement: true,
 		quantityEstimate: true,
-		status: true,
+		isActive: true,
 	},
 });
 
-export type SpanMeasureItem = Prisma.spanMeasureItemsGetPayload<typeof spanMeasureItem>;
+export type SpanMeasureItem = Prisma.spanMeasureItemsGetPayload<typeof spanMeasureItem> & {
+	quantityActual?: number | null;
+	status?: string | null;
+};
 
 export interface ISpanMeasureItemRepository {
 	findSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]>;

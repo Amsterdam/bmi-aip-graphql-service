@@ -9,7 +9,6 @@ export class FindArkSurveyReachSegmentsHandler implements IQueryHandler<FindArkS
 	constructor(private service: ReachSegmentService) {}
 
 	async execute(query: FindArkSurveyReachSegmentsQuery): Promise<ReachSegment[]> {
-		console.log('find!');
 		return this.service.findReachSegments(query.arkSurveyId);
 	}
 }

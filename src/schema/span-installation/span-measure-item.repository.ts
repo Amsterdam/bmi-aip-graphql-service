@@ -7,7 +7,7 @@ import { SpanMeasureItem } from './models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { ISpanMeasureItemRepository } from './types/span-measure-item.repository.interface';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
-import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
+import { UpdateSpanMeasureItemsUsedQuantitiesInput } from './dto/update-span-measure-items-used-quantities-input';
 import { SpanMeasureItemFactory } from './span-measure-item.factory';
 
 @Injectable()
@@ -58,7 +58,9 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		});
 	}
 
-	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
+	async updateSpanMeasureItemsUsedQuantities(
+		input: UpdateSpanMeasureItemsUsedQuantitiesInput,
+	): Promise<SpanMeasureItem[]> {
 		if (input.spanMeasureItemActuals) {
 			await Promise.all(
 				input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
@@ -71,7 +73,9 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 					});
 
 					if (!result) {
-						throw new NotFoundException(`No item found for given spanMeasureItemId (${spanMeasureItemActual.id}) / spanMeasureId (${input.spanMeasureId}) combination`);
+						throw new NotFoundException(
+							`No item found for given spanMeasureItemId (${spanMeasureItemActual.id}) / spanMeasureId (${input.spanMeasureId}) combination`,
+						);
 					}
 
 					await this.prisma.spanMeasureItems.update({

@@ -29,7 +29,7 @@ describe('Span Installation / Measures / Repository', () => {
 		expect(spanMeasureItem).toEqual(
 			expect.objectContaining({
 				id: spanMeasureItem.id,
-				active: true,
+				isActive: true,
 				itemType: 'material',
 				description: '__NAME__',
 				spanMeasures: {

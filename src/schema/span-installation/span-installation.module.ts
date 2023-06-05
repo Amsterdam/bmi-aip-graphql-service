@@ -50,8 +50,8 @@ import { SpanMeasureItemService } from './span-measure-item.service';
 import { SpanMeasureItemRepository } from './span-measure-item.repository';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
-import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
-import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
+import { UpdateSpanMeasureItemsUsedQuantitiesCommand } from './commands/update-span-measure-items-used-quantities.command';
+import { UpdateSpanMeasureItemsUsedQuantitiesHandler } from './commands/update-span-measure-items-used-quantities.handler';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { SpanDecompositionType } from './types/span-decomposition-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
@@ -133,8 +133,8 @@ registerEnumType(SpanMeasureItemStatus, {
 		SpanMeasureItemRepository,
 		SaveSpanMeasureItemsCommand,
 		SaveSpanMeasureItemsHandler,
-		UpdateSpanMeasureItemsActualsCommand,
-		UpdateSpanMeasureItemsActualsHandler,
+		UpdateSpanMeasureItemsUsedQuantitiesCommand,
+		UpdateSpanMeasureItemsUsedQuantitiesHandler,
 		PrismaService,
 		SurveyRepository,
 		CloneSpanInstallationDecompositionCommand,

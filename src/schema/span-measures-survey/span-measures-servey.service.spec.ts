@@ -20,7 +20,7 @@ describe('Span measures survey / Service', () => {
 	test('getSpanMeasuresService returns an SpanMeasuresSurvey object', async () => {
 		const service = new SpanMeasuresSurveyService(repo);
 		const SpanMeasuresSurveyResults = await service.getSpanMeasuresSurvey('9c612187-581b-4be3-902c-9e8035d1d3b7');
-		console.log(SpanMeasuresSurveyResults);
+
 		expect(SpanMeasuresSurveyResults).toBeInstanceOf(SpanMeasuresSurvey);
 		expect(SpanMeasuresSurveyResults).toEqual(
 			SpanMeasuresSurveyFactory.CreateSpanMeasuresSurvey(domainSpanMeasuresSurvey),

@@ -7,7 +7,7 @@ import { SpanMeasureItem } from './models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from './dto/create-span-measure-item.input';
 import { ISpanMeasureItemRepository } from './types/span-measure-item.repository.interface';
 import { SaveSpanMeasureItemsInput } from './dto/save-span-measure-items-input';
-import { UpdateSpanMeasureItemsActualsInput } from './dto/update-span-measure-items-actuals-input';
+import { UpdateSpanMeasureItemsUsedQuantitiesInput } from './dto/update-span-measure-items-used-quantities-input';
 import { SpanMeasureItemFactory } from './span-measure-item.factory';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		itemType,
 		quantityUnitOfMeasurement,
 		quantityEstimate,
-		status,
+		isActive,
 	}: CreateSpanMeasureItemInput): Promise<SpanMeasureItem> {
 		return this.prisma.spanMeasureItems.create({
 			data: {
@@ -36,7 +36,7 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 				itemType: itemType,
 				quantityUnitOfMeasurement: quantityUnitOfMeasurement,
 				quantityEstimate: quantityEstimate,
-				status: status,
+				isActive: isActive,
 			},
 		});
 	}
@@ -49,30 +49,48 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 		});
 	}
 
-	async updateSpanMeasureItemsActuals(input: UpdateSpanMeasureItemsActualsInput): Promise<SpanMeasureItem[]> {
+	async findActiveSpanMeasureItems(spanMeasureId: string): Promise<SpanMeasureItem[]> {
+		return this.prisma.spanMeasureItems.findMany({
+			where: {
+				spanMeasureId,
+				isActive: true,
+			},
+		});
+	}
+
+	async updateSpanMeasureItemsUsedQuantities(
+		input: UpdateSpanMeasureItemsUsedQuantitiesInput,
+	): Promise<SpanMeasureItem[]> {
 		if (input.spanMeasureItemActuals) {
-			input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
-				// Item not found for given id/spanMeasureId combination
-				const result = await this.prisma.spanMeasureItems.findFirst({
-					where: {
-						id: spanMeasureItemActual.id,
-						spanMeasureId: input.spanMeasureId,
-					},
-				});
+			await Promise.all(
+				input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
+					// Item not found for given id/spanMeasureId combination
+					const result = await this.prisma.spanMeasureItems.findFirst({
+						where: {
+							id: spanMeasureItemActual.id,
+							spanMeasureId: input.spanMeasureId,
+						},
+					});
 
-				if (!result) {
-					throw new NotFoundException('No item found for given id/spanMeasureId combination');
-				}
+					if (!result) {
+						throw new NotFoundException(
+							`No item found for given spanMeasureItemId (${spanMeasureItemActual.id}) / spanMeasureId (${input.spanMeasureId}) combination`,
+						);
+					}
 
-				await this.prisma.spanMeasureItems.update({
-					where: {
-						id: spanMeasureItemActual.id,
-					},
-					data: {
-						quantityActual: spanMeasureItemActual.quantityActual,
-					},
-				});
-			});
+					await this.prisma.spanMeasureItems.update({
+						where: {
+							id: spanMeasureItemActual.id,
+						},
+						data: {
+							quantityActual: spanMeasureItemActual.quantityActual,
+							isActive: spanMeasureItemActual.active,
+						},
+					});
+				}),
+			);
+
+			return this.findSpanMeasureItems(input.spanMeasureId);
 		}
 
 		return this.findSpanMeasureItems(input.spanMeasureId);

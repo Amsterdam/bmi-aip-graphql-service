@@ -7,7 +7,7 @@ import { ArkSurvey } from './models/ark-survey.model';
 import { FindArkSurveysByAssetCodeQuery } from './queries/find-ark-surveys-by-asset-code.query';
 import { ArkSurveyWithReachSegments } from './types/ark-survey.repository.interface';
 
-@Controller('ark-data')
+@Controller('rest/ark-data')
 export class ArkSurveyController {
 	constructor(private queryBus: QueryBus) {}
 

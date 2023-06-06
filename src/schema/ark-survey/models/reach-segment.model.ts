@@ -1,5 +1,13 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+
+enum ScoreValue {
+	LAAG_1 = 1,
+	GEMIDDELD_2 = 2,
+	HOOG_3 = 3,
+	ZEER_HOOG_4 = 4,
+}
+
 @ObjectType({ description: 'reachSegment' })
 export class ReachSegment {
 	@Field((type) => String)
@@ -19,7 +27,7 @@ export class ReachSegment {
 	reachSegmentLength?: number;
 
 	@Field((type) => Number, { nullable: true })
-	@ApiProperty({ description: 'The `Risicoscore` as a value' })
+	@ApiProperty({ description: 'The `Risicoscore` as a value', enum: ScoreValue })
 	riskScore?: number;
 
 	@Field((type) => Float, { nullable: true })
@@ -27,11 +35,11 @@ export class ReachSegment {
 	riskScoreDigit?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty({ description: 'The `Faalscore` as a value' })
+	@ApiProperty({ description: 'The `Faalscore` as a value', enum: ScoreValue })
 	failureModeScore?: number;
 
 	@Field((type) => Float, { nullable: true })
-	@ApiProperty({ description: 'The `Gevolgenscore` as a value' })
+	@ApiProperty({ description: 'The `Gevolgenscore` as a value', enum: ScoreValue })
 	consequenceScore?: number;
 
 	@Field((type) => Float, { nullable: true })

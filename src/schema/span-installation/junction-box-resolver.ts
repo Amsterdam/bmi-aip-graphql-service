@@ -2,7 +2,7 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { HasJunctionBoxGotDamageQuery } from '../span-installation-survey/queries/has-junction-box-got-damage.query';
+import { HasDecompositionItemGotDamageQuery } from '../span-installation-survey/queries/has-decomposition-item-got-damage.query';
 
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBoxFactory } from './junction-box.factory';
@@ -19,6 +19,7 @@ import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box
 import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junction-box.command';
 import { ReviseJunctionBoxCommand } from './commands/revise-junction-box.command';
 import { ReviseJunctionBoxInput } from './dto/revise-junction-box.input';
+import { SpanDecompositionType } from './types/span-decomposition-type';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -90,6 +91,8 @@ export class JunctionBoxResolver {
 
 	@ResolveField()
 	async hasDamage(@Parent() { id }: JunctionBox): Promise<boolean> {
-		return this.queryBus.execute<HasJunctionBoxGotDamageQuery>(new HasJunctionBoxGotDamageQuery(id));
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionType.spanJunctionBox),
+		);
 	}
 }

@@ -59,8 +59,8 @@ import { CreateLuminaireSurveyCommand } from './commands/create-luminaire-survey
 import { CreateLuminaireSurveyHandler } from './commands/create-luminaire-survey.handler';
 import { UpdateLuminaireSurveyCommand } from './commands/update-luminaire-survey.command';
 import { UpdateLuminaireSurveyHandler } from './commands/update-luminaire-survey.handler';
-import { HasJunctionBoxGotDamageQuery } from './queries/has-junction-box-got-damage.query';
-import { HasJunctionBoxGotDamageHandler } from './queries/has-junction-box-got-damage.handler';
+import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
+import { GetDecompositionItemDamageHandler } from './queries/get-decomposition-item-damage.handler';
 
 @Module({
 	providers: [
@@ -123,10 +123,8 @@ import { HasJunctionBoxGotDamageHandler } from './queries/has-junction-box-got-d
 		UpdateJunctionBoxSurveyHandler,
 		UpdateLuminaireSurveyCommand,
 		UpdateLuminaireSurveyHandler,
-
-		HasJunctionBoxGotDamageQuery,
-		HasJunctionBoxGotDamageHandler,
-
+		GetDecompositionItemDamageQuery,
+		GetDecompositionItemDamageHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],

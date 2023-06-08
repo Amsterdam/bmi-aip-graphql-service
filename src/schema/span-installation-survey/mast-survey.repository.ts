@@ -80,4 +80,28 @@ export class MastSurveyRepository implements IMastSurveyRepository {
 			where: { id },
 		});
 	}
+
+	async getMastSurveyOnPermanentId(supportSystemId: string): Promise<MastSurvey> {
+		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+			where: {
+				id: supportSystemId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getMastSurvey(permanentId);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		const mastSurvey = await this.getMastSurveyOnPermanentId(supportSystemId);
+
+		return (
+			mastSurvey.mastDamage ||
+			mastSurvey.mastAttachmentDamage ||
+			mastSurvey.mastBracketMissingParts ||
+			mastSurvey.mastBracketDamage
+		);
+	}
 }

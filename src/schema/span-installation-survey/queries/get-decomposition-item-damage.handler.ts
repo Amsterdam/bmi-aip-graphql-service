@@ -5,6 +5,7 @@ import { SpanDecompositionType } from '../../span-installation/types/span-decomp
 import { JunctionBoxSurvey } from '../models/junction-box-survey.model';
 import { FacadeSurveyService } from '../facade-survey.service';
 import { FacadeSurvey } from '../models/facade-survey.model';
+import { MastSurveyService } from '../mast-survey.service';
 
 import { GetDecompositionItemDamageQuery } from './get-decomposition-item-damage.query';
 
@@ -15,6 +16,7 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 	constructor(
 		private junctionBoxService: JunctionBoxSurveyService,
 		private facadeSurveyService: FacadeSurveyService,
+		private mastSurveyService: MastSurveyService,
 	) {}
 
 	async execute(query: GetDecompositionItemDamageQuery): Promise<OneOfOVSSurvey> {
@@ -24,6 +26,9 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 				break;
 			case SpanDecompositionType.spanSupportSystemFacade:
 				return this.facadeSurveyService.getFacadeSurveyOnPermanentId(query.decompositionId);
+				break;
+			case SpanDecompositionType.spanSupportSystemMast:
+				return this.mastSurveyService.getMastSurveyOnPermanentId(query.decompositionId);
 				break;
 		}
 

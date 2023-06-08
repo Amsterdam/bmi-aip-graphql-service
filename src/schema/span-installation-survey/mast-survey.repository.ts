@@ -101,7 +101,8 @@ export class MastSurveyRepository implements IMastSurveyRepository {
 			mastSurvey.mastDamage ||
 			mastSurvey.mastAttachmentDamage ||
 			mastSurvey.mastBracketMissingParts ||
-			mastSurvey.mastBracketDamage
+			mastSurvey.mastBracketDamage ||
+			mastSurvey.mastMissingParts
 		);
 	}
 }

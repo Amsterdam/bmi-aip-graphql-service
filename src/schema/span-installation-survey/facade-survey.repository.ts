@@ -111,6 +111,12 @@ export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 	async hasDamage(supportSystemId: string): Promise<boolean> {
 		const facadeSurvey = await this.getFacadeSurveyOnPermanentId(supportSystemId);
 
-		return facadeSurvey.facadeDamageWithin1m || facadeSurvey.wallPlateDamage;
+		return (
+			facadeSurvey.hinderingVegetation ||
+			facadeSurvey.faultyMontage ||
+			facadeSurvey.nutNotFullyOverThreadedRod ||
+			facadeSurvey.missingFasteners ||
+			facadeSurvey.facadeConnectionFailed
+		);
 	}
 }

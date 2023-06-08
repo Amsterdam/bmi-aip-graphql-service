@@ -100,7 +100,11 @@ export class TensionWireSurveyRepository implements ITensionWireSurveyRepository
 		return (
 			tensionWireSurvey.tensionWireDamage ||
 			tensionWireSurvey.gaffTerminalDamage ||
-			tensionWireSurvey.tensionWireClampDamage
+			tensionWireSurvey.tensionWireClampDamage ||
+			tensionWireSurvey.thirdPartyObjectsAttached ||
+			tensionWireSurvey.gaffTerminalDamage ||
+			tensionWireSurvey.gaffTerminalMissingParts ||
+			tensionWireSurvey.faultyMontage
 		);
 	}
 }

@@ -9,6 +9,7 @@ import { MastSurveyService } from '../mast-survey.service';
 import { NodeSurveyService } from '../node-survey.service';
 import { NodeSurvey } from '../models/node-survey.model';
 import { MastSurvey } from '../models/mast-survey.model';
+import { TensionWireSurveyService } from '../tension-wire-survey.service';
 
 import { GetDecompositionItemDamageQuery } from './get-decomposition-item-damage.query';
 
@@ -21,6 +22,7 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 		private facadeSurveyService: FacadeSurveyService,
 		private mastSurveyService: MastSurveyService,
 		private nodeSurveyService: NodeSurveyService,
+		private tensionWireSurveyService: TensionWireSurveyService,
 	) {}
 
 	async execute(query: GetDecompositionItemDamageQuery): Promise<OneOfOVSSurvey> {
@@ -36,6 +38,9 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 				break;
 			case SpanDecompositionType.spanSupportSystemNode:
 				return this.nodeSurveyService.getNodeSurveyOnPermanentId(query.decompositionId);
+				break;
+			case SpanDecompositionType.spanSupportSystemTensionWire:
+				return this.tensionWireSurveyService.getTensionWireSurveyOnPermanentId(query.decompositionId);
 				break;
 		}
 

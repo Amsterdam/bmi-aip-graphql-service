@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+
 import { NodeSurvey } from './models/node-survey.model';
 import { NodeSurveyService } from './node-survey.service';
 import { GetNodeSurveyQuery } from './queries/get-node-survey.query';
@@ -10,6 +12,7 @@ import { CreateNodeSurveyCommand } from './commands/create-node-survey.command';
 import { NodeSurveyFactory } from './node-survey.factory';
 import { UpdateNodeSurveyCommand } from './commands/update-node-survey.command';
 import { UpdateNodeSurveyInput } from './dto/update-node-survey.input';
+import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
 
 @Resolver((of) => NodeSurvey)
 @Resource(NodeSurvey.name)
@@ -39,6 +42,14 @@ export class NodeSurveyResolver {
 	public async updateNodeSurvey(@Args('updateNodeSurvey') input: UpdateNodeSurveyInput): Promise<NodeSurvey> {
 		return NodeSurveyFactory.CreateNodeSurvey(
 			await this.commandBus.execute<UpdateNodeSurveyCommand>(new UpdateNodeSurveyCommand(input)),
+		);
+	}
+
+	@Query(() => NodeSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async getNodeSurveyDamage(@Args('supportSystemId') supportSystemId: string) {
+		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
+			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionType.spanSupportSystemNode),
 		);
 	}
 }

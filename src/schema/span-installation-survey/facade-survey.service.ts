@@ -11,4 +11,14 @@ export class FacadeSurveyService {
 	async getFacadeSurvey(supportSystemId: string): Promise<FacadeSurvey> {
 		return FacadeSurveyFactory.CreateFacadeSurvey(await this.facadeSurveyRepo.getFacadeSurvey(supportSystemId));
 	}
+
+	async getFacadeSurveyOnPermanentId(supportSystemId: string): Promise<FacadeSurvey> {
+		return FacadeSurveyFactory.CreateFacadeSurvey(
+			await this.facadeSurveyRepo.getFacadeSurveyOnPermanentId(supportSystemId),
+		);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		return this.facadeSurveyRepo.hasDamage(supportSystemId);
+	}
 }

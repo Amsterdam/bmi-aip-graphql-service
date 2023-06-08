@@ -10,10 +10,10 @@ import { NodeSurveyService } from '../node-survey.service';
 import { NodeSurvey } from '../models/node-survey.model';
 import { MastSurvey } from '../models/mast-survey.model';
 import { TensionWireSurveyService } from '../tension-wire-survey.service';
+import { LuminaireSurveyService } from '../luminaire-survey.service';
+import { LuminaireSurvey } from '../models/luminaire-survey.model';
 
 import { GetDecompositionItemDamageQuery } from './get-decomposition-item-damage.query';
-
-export type OneOfOVSSurvey = JunctionBoxSurvey | FacadeSurvey | MastSurvey | NodeSurvey;
 
 @QueryHandler(GetDecompositionItemDamageQuery)
 export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecompositionItemDamageQuery> {
@@ -23,9 +23,12 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 		private mastSurveyService: MastSurveyService,
 		private nodeSurveyService: NodeSurveyService,
 		private tensionWireSurveyService: TensionWireSurveyService,
+		private luminaireSurveyService: LuminaireSurveyService,
 	) {}
 
-	async execute(query: GetDecompositionItemDamageQuery): Promise<OneOfOVSSurvey> {
+	async execute(
+		query: GetDecompositionItemDamageQuery,
+	): Promise<JunctionBoxSurvey | FacadeSurvey | MastSurvey | NodeSurvey | LuminaireSurvey> {
 		switch (query.decompositionType) {
 			case SpanDecompositionType.spanJunctionBox:
 				return this.junctionBoxService.getJunctionBoxSurveyOnPermanentId(query.decompositionId);
@@ -41,6 +44,9 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 				break;
 			case SpanDecompositionType.spanSupportSystemTensionWire:
 				return this.tensionWireSurveyService.getTensionWireSurveyOnPermanentId(query.decompositionId);
+				break;
+			case SpanDecompositionType.spanLuminaire:
+				return this.luminaireSurveyService.getLuminaireSurveyOnPermanentId(query.decompositionId);
 				break;
 		}
 

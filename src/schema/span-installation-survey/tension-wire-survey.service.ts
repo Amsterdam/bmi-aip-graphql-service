@@ -13,4 +13,14 @@ export class TensionWireSurveyService {
 			await this.tensionWireSurveyRepo.getTensionWireSurvey(supportSystemId),
 		);
 	}
+
+	async getTensionWireSurveyOnPermanentId(supportSystemId: string): Promise<TensionWireSurvey> {
+		return TensionWireSurveyFactory.CreateTensionWireSurvey(
+			await this.tensionWireSurveyRepo.getTensionWireSurveyOnPermanentId(supportSystemId),
+		);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		return this.tensionWireSurveyRepo.hasDamage(supportSystemId);
+	}
 }

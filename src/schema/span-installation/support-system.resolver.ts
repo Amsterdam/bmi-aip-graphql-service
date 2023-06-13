@@ -15,7 +15,7 @@ import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
 import { ReviseSupportSystemInput } from './dto/revise-support-system.input';
@@ -96,8 +96,8 @@ export class SupportSystemResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
-			new FindSpanMeasuresByDecompositionIdCommand(id),
+		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
+			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
 	}
 }

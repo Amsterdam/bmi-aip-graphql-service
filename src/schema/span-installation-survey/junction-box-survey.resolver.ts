@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+
 import { JunctionBoxSurvey } from './models/junction-box-survey.model';
 import { JunctionBoxSurveyService } from './junction-box-survey.service';
 import { GetJunctionBoxSurveyQuery } from './queries/get-junction-box-survey.query';
@@ -10,6 +12,7 @@ import { CreateJunctionBoxSurveyCommand } from './commands/create-junction-box-s
 import { JunctionBoxSurveyFactory } from './junction-box-survey.factory';
 import { UpdateJunctionBoxSurveyCommand } from './commands/update-junction-box-survey.command';
 import { UpdateJunctionBoxSurveyInput } from './dto/update-junction-box-survey.input';
+import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
 
 @Resolver((of) => JunctionBoxSurvey)
 @Resource(JunctionBoxSurvey.name)
@@ -43,6 +46,14 @@ export class JunctionBoxSurveyResolver {
 	): Promise<JunctionBoxSurvey> {
 		return JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(
 			await this.commandBus.execute<UpdateJunctionBoxSurveyCommand>(new UpdateJunctionBoxSurveyCommand(input)),
+		);
+	}
+
+	@Query(() => JunctionBoxSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async getJunctionBoxDamage(@Args('junctionBoxId') junctionBoxId: string) {
+		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
+			new GetDecompositionItemDamageQuery(junctionBoxId, SpanDecompositionType.spanJunctionBox),
 		);
 	}
 }

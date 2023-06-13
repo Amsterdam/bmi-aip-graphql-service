@@ -122,7 +122,7 @@
 		{
 			"id": "d071c21e-43c1-49cf-aef0-1bf8a541d69b",
 			"description": "Vervangen mastbeugel",
-			"decompositionType": "Mast",
+			"decompositionType": "spanSupportSystemMast",
 			"measureItems": [
 				{
 					"id": "32150ab1-19f1-4585-b0d3-8619f402573a",
@@ -150,7 +150,7 @@
 		{
 			"id": "663dca9d-590f-43d4-93f0-63f86e609fd6",
 			"description": "Vervangen mastopzetstuk",
-			"decompositionType": "Mast",
+			"decompositionType": "spanSupportSystemMast",
 			"measureItems": [
 				{
 					"id": "cc5de963-3046-405a-8d00-5f9fd6d00dbd",
@@ -185,7 +185,7 @@
 		{
 			"id": "95a1f9db-2736-4d32-b398-c5d4c9943e12",
 			"description": "Verwijderen gevelbevestiging incl. gevelherstel",
-			"decompositionType": "Facade",
+			"decompositionType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "3593592f-01e3-412d-921b-479159456623",
@@ -206,7 +206,7 @@
 		{
 			"id": "7f577a83-ede6-48c6-92df-5f3f56ba0c35",
 			"description": "Aanbrengen ankerverbindingen incl. trekproeven",
-			"decompositionType": "Facade",
+			"decompositionType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "2c84725c-f157-4c4b-a893-078cab090ac8",
@@ -325,7 +325,7 @@
 		{
 			"id": "ae600b58-0465-4cad-8756-22d49d44ca0b",
 			"description": "Aanbrengen muurplaat",
-			"decompositionType": "Facade",
+			"decompositionType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "874d7128-fbdb-4ba1-a993-54ee613cbff3",
@@ -353,7 +353,7 @@
 		{
 			"id": "a74fac0c-c2e0-4054-89ab-614736454aa7",
 			"description": "Verwijderen spandraadsysteem",
-			"decompositionType": "Node",
+			"decompositionType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "fa6d1872-b958-471b-8fb1-afcfd6e47530",
@@ -388,7 +388,7 @@
 		{
 			"id": "301d3867-82d4-4579-a4ab-2f5db39397e0",
 			"description": "Verwijderen spandraadsysteem boven GVB",
-			"decompositionType": "Node",
+			"decompositionType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "586f37e2-e61b-4712-9bae-cd285209cfed",
@@ -423,7 +423,7 @@
 		{
 			"id": "9ab94fef-fc66-4deb-9922-f3b76a5b9585",
 			"description": "Aanbrengen spandraadsysteem",
-			"decompositionType": "Node",
+			"decompositionType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "70daf8db-4f38-4559-9b54-aa03fdfac4c7",
@@ -584,7 +584,7 @@
 		{
 			"id": "49992c47-51a8-47c7-9a4f-ea6815d1f2e9",
 			"description": "Aanbrengen spandraadsysteem boven GVB",
-			"decompositionType": "Node",
+			"decompositionType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "07382fea-23d1-4605-a329-8c1394a7e92c",

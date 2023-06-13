@@ -187,14 +187,6 @@ export class ImportSpanMeasureOptions {
 		}
 	}
 
-	private mapItemType(input: string): string {
-		switch (input) {
-			case 'Aansluitkast':
-				return SpanMeasureItemType.material;
-				break;
-		}
-	}
-
 	public async saveToFile(normalizedData: Record<string, any>) {
 		const filePath = path.resolve(
 			process.cwd(),

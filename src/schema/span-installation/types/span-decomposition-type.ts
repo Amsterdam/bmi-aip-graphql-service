@@ -1,8 +1,8 @@
 export enum SpanDecompositionType {
 	spanJunctionBox = 'spanJunctionBox',
-	spanSupportSystemMast = 'Mast',
-	spanSupportSystemFacade = 'Facade',
-	spanSupportSystemNode = 'Node',
-	spanSupportSystemTensionWire = 'TensionWire',
+	spanSupportSystemMast = 'spanSupportSystemMast',
+	spanSupportSystemFacade = 'spanSupportSystemFacade',
+	spanSupportSystemNode = 'spanSupportSystemNode',
+	spanSupportSystemTensionWire = 'spanSupportSystemTensionWire',
 	spanLuminaire = 'spanLuminaire',
 }

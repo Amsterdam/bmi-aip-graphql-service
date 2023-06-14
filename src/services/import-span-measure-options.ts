@@ -56,7 +56,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private getMatrixFromSheet(workSheet) {
-		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
+		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.6_bk 20230613.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those
 
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
@@ -82,6 +82,15 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
+	private rowIsDescriptiveHeader(row: { 'Eenh.': string }) {
+		// Some rows in the bestekposten sheet are merely heading rows, and should be ignored
+		if (row['Eenh.']) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private parseMNummersRow(materialenObj: MNummersExcelRowObject, knownMaterial?: SpanMeasureItemOption) {
 		return {
 			id: knownMaterial ? knownMaterial.id : newId(),
@@ -95,22 +104,24 @@ export class ImportSpanMeasureOptions {
 	private getBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 
-		return data.map((row) => {
-			return this.parseBestekpostRow(
-				row,
-				knownSpanMeasureItems.find(
-					(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
-				),
-			);
-		});
+		return data
+			.filter((row) => !this.rowIsDescriptiveHeader(row))
+			.map((row) => {
+				return this.parseBestekpostRow(
+					row,
+					knownSpanMeasureItems.find(
+						(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+					),
+				);
+			});
 	}
 
 	private getMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
-		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
+		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.6_bk 20230613.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those to correctly define the columns
 
 		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, {
-			range: 1,
+			range: 0,
 		});
 
 		return data.map((row) => {

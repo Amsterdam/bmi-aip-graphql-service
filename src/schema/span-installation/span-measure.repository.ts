@@ -80,12 +80,26 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 	): Promise<boolean> {
 		switch (decompositionType) {
 			case SpanDecompositionType.spanSupportSystemMast:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'Mast',
+					},
+				}));
+				break;
 			case SpanDecompositionType.spanSupportSystemFacade:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'Facade',
+					},
+				}));
+				break;
 			case SpanDecompositionType.spanSupportSystemNode:
 				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
 						id: decompositionId,
-						type: decompositionType,
+						type: 'Node',
 					},
 				}));
 				break;

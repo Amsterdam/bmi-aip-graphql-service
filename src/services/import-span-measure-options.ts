@@ -82,6 +82,15 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
+	private rowIsDescriptiveHeader(row: { 'Eenh.': string }) {
+		// Some rows in the bestekposten sheet are merely heading rows, and should be ignored
+		if (row['Eenh.']) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private parseMNummersRow(materialenObj: MNummersExcelRowObject, knownMaterial?: SpanMeasureItemOption) {
 		return {
 			id: knownMaterial ? knownMaterial.id : newId(),
@@ -95,14 +104,16 @@ export class ImportSpanMeasureOptions {
 	private getBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 
-		return data.map((row) => {
-			return this.parseBestekpostRow(
-				row,
-				knownSpanMeasureItems.find(
-					(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
-				),
-			);
-		});
+		return data
+			.filter((row) => !this.rowIsDescriptiveHeader(row))
+			.map((row) => {
+				return this.parseBestekpostRow(
+					row,
+					knownSpanMeasureItems.find(
+						(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+					),
+				);
+			});
 	}
 
 	private getMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {

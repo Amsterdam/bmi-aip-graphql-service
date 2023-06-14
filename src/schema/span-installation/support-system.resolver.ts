@@ -96,7 +96,7 @@ export class SupportSystemResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
+		return this.queryBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
 			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
 	}

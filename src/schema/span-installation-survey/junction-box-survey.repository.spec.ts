@@ -6,11 +6,16 @@ import { JunctionBoxSurveyRepository } from './junction-box-survey.repository';
 import { domainJunctionBoxSurvey, createJunctionBoxSurveyInput, updateJunctionBoxSurveyInput } from './__stubs__';
 import { JunctionBoxSurveyNotFoundException } from './exceptions/junction-box-survey-not-found.exception';
 
+const permanentId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
+
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanJunctionBoxSurveys: {
 		create: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		findFirst: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
 		update: jest.fn().mockResolvedValue(domainJunctionBoxSurvey),
+	},
+	spanJunctionBoxes: {
+		findUnique: jest.fn().mockResolvedValue({ permanentId }),
 	},
 	...(<any>{}),
 };
@@ -90,6 +95,37 @@ describe('Span Installation Survey / JunctionBox / Repository', () => {
 			junctionBoxId: '83ca470b-768a-49a7-a59f-4fe5da5620cf',
 			remarks: '__REMARKS__',
 			stickerNotReadable: true,
+		});
+	});
+
+	test('getJunctionBoxSurveyOnPermanentId()', async () => {
+		const spy = jest.spyOn(repository, 'getJunctionBoxSurvey');
+		await repository.getJunctionBoxSurveyOnPermanentId(domainJunctionBoxSurvey.junctionBoxId);
+		expect(spy).toHaveBeenLastCalledWith(permanentId);
+	});
+
+	describe('hasDamage', () => {
+		test('true', async () => {
+			const spy = jest
+				.spyOn(repository, 'getJunctionBoxSurveyOnPermanentId')
+				.mockResolvedValue(domainJunctionBoxSurvey);
+			const returnValue = await repository.hasDamage('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(spy).toHaveBeenLastCalledWith('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(returnValue).toEqual(true);
+		});
+
+		test('false', async () => {
+			const spy = jest.spyOn(repository, 'getJunctionBoxSurveyOnPermanentId').mockResolvedValue({
+				...domainJunctionBoxSurvey,
+				cableDamage: false,
+				faultyMontageFacade: false,
+				faultyMontageTensionWire: false,
+				junctionBoxDamage: false,
+				stickerNotReadable: false,
+			});
+			const returnValue = await repository.hasDamage('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(spy).toHaveBeenLastCalledWith('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+			expect(returnValue).toEqual(false);
 		});
 	});
 });

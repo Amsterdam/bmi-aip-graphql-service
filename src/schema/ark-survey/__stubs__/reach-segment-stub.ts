@@ -11,7 +11,7 @@ domainSurvey.inspectionStandardType = 'quaywalls';
 const reachSegmentRaw: Omit<DomainReachSegment, 'id'> = {
 	name: '__NAME__',
 	reachSegmentLength: new Decimal(1.23),
-	arkSurveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+	arkSurveyId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	riskScore: 1,
 	riskScoreDigit: new Decimal(1.23),
 	failureModeScore: new Decimal(1.23),

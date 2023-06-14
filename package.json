@@ -39,6 +39,7 @@
 		"@nestjs/cqrs": "^8.0.5",
 		"@nestjs/graphql": "^10.1.2",
 		"@nestjs/platform-express": "^8.4.7",
+		"@nestjs/swagger": "^5.2.1",
 		"@nestjs/terminus": "^8.1.1",
 		"@prisma/client": "^3.15.2",
 		"apollo-server-express": "^3.9.0",
@@ -57,8 +58,10 @@
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",
 		"rxjs": "^7.5.6",
+		"swagger-ui-express": "^4.6.3",
 		"uuid": "^8.3.2",
-		"xlsx": "^0.18.5"
+		"xlsx": "^0.18.5",
+		"zod": "^3.21.4"
 	},
 	"devDependencies": {
 		"@nestjs/cli": "^8.2.8",

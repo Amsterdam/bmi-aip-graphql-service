@@ -8,6 +8,8 @@ import { newId } from '../../utils';
 import { Luminaire, ILuminaireRepository } from './types/luminaire.repository.interface';
 import { CreateLuminaireInput } from './dto/create-luminaire.input';
 import { UpdateLuminaireInput } from './dto/update-luminaire.input';
+import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
+import { ReviseLuminaireInput } from './dto/revise-luminaire.input';
 
 @Injectable()
 export class LuminaireRepository implements ILuminaireRepository {
@@ -40,6 +42,61 @@ export class LuminaireRepository implements ILuminaireRepository {
 			supplierType,
 			manufacturer,
 			remarks,
+			driverSupplierType,
+			driverCommissioningDate,
+			lightSupplierType,
+			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
+			permanentId: luminaireId,
+		};
+
+		const luminaire = await this.prisma.spanLuminaires.create({ data });
+
+		// Work around Prisma not supporting spatial data types
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanLuminaires"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${luminaire.id}
+			`;
+		}
+		return {
+			...luminaire,
+			geography,
+		};
+	}
+
+	async createMissingLuminaire({
+		supportSystemId,
+		name,
+		location,
+		hasLED,
+		constructionYear,
+		supplierType,
+		manufacturer,
+		remarks,
+		geography,
+		geographyRD,
+		driverSupplierType,
+		driverCommissioningDate,
+		lightSupplierType,
+		lightCommissioningDate,
+		remarksRevision,
+	}: CreateMissingLuminaireInput): Promise<Luminaire> {
+		const luminaireId = newId();
+		const data: Prisma.spanLuminairesCreateInput = {
+			id: luminaireId,
+			spanSupportSystems: { connect: { id: supportSystemId } },
+			name,
+			location,
+			hasLED,
+			constructionYear,
+			supplierType,
+			manufacturer,
+			remarks,
+			remarksRevision,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,
@@ -106,6 +163,59 @@ export class LuminaireRepository implements ILuminaireRepository {
 			supplierType,
 			manufacturer,
 			remarks,
+			driverSupplierType,
+			driverCommissioningDate,
+			lightSupplierType,
+			lightCommissioningDate,
+			geographyRD: {
+				...geographyRD,
+			},
+		};
+
+		// Work around Prisma not supporting spatial data types
+		if (geography) {
+			await this.prisma.$executeRaw`
+				UPDATE "spanLuminaires"
+				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
+				WHERE id = ${id}
+			`;
+		}
+
+		const luminaire = await this.prisma.spanLuminaires.update({
+			where: { id },
+			data,
+		});
+
+		// Work around Prisma not supporting spatial data types
+		return { ...luminaire, geography: await this.getGeographyAsGeoJSON(id) };
+	}
+
+	async reviseLuminaire({
+		id,
+		name,
+		location,
+		hasLED,
+		constructionYear,
+		supplierType,
+		manufacturer,
+		remarks,
+		geography,
+		geographyRD,
+		driverSupplierType,
+		driverCommissioningDate,
+		lightSupplierType,
+		lightCommissioningDate,
+		remarksRevision,
+	}: ReviseLuminaireInput): Promise<Luminaire> {
+		const data: Prisma.spanLuminairesUpdateInput = {
+			name,
+			location,
+			hasLED,
+			constructionYear,
+			supplierType,
+			manufacturer,
+			remarks,
+			remarksRevision,
 			driverSupplierType,
 			driverCommissioningDate,
 			lightSupplierType,

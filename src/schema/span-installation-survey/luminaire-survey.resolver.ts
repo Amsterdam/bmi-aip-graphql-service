@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+
 import { LuminaireSurvey } from './models/luminaire-survey.model';
 import { LuminaireSurveyService } from './luminaire-survey.service';
 import { GetLuminaireSurveyQuery } from './queries/get-luminaire-survey.query';
@@ -10,6 +12,7 @@ import { CreateLuminaireSurveyCommand } from './commands/create-luminaire-survey
 import { LuminaireSurveyFactory } from './luminaire-survey.factory';
 import { UpdateLuminaireSurveyCommand } from './commands/update-luminaire-survey.command';
 import { UpdateLuminaireSurveyInput } from './dto/update-luminaire-survey.input';
+import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
 
 @Resolver((of) => LuminaireSurvey)
 @Resource(LuminaireSurvey.name)
@@ -43,6 +46,14 @@ export class LuminaireSurveyResolver {
 	): Promise<LuminaireSurvey> {
 		return LuminaireSurveyFactory.CreateLuminaireSurvey(
 			await this.commandBus.execute<UpdateLuminaireSurveyCommand>(new UpdateLuminaireSurveyCommand(input)),
+		);
+	}
+
+	@Query(() => LuminaireSurvey)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async getLuminaireDamage(@Args('junctionBoxId') luminaireId: string) {
+		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
+			new GetDecompositionItemDamageQuery(luminaireId, SpanDecompositionType.spanLuminaire),
 		);
 	}
 }

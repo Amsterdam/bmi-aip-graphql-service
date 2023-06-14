@@ -7,7 +7,7 @@ import { IsArrayOfObjects } from '../../../decorators/is-array-of-objects';
 import { SpanMeasureItemActualInput } from './span-measure-items-actuals-input';
 
 @InputType()
-export class UpdateSpanMeasureItemsActualsInput {
+export class UpdateSpanMeasureItemsUsedQuantitiesInput {
 	@Field((type) => String)
 	spanMeasureId: string;
 

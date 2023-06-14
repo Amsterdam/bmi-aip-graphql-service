@@ -4,8 +4,7 @@ import { SpanMeasureFactory } from '../span-measure.factory';
 import { CreateSpanMeasureInput } from '../dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from '../dto/update-span-measure-input';
 import { SpanDecompositionType } from '../types/span-decomposition-type';
-
-import { SpanMeasureStatus } from './../types/span-measure-status';
+import { SpanMeasureStatus } from '../types/span-measure-status';
 
 export const spanMeasure1: SpanMeasure = {
 	id: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
@@ -28,7 +27,6 @@ export const spanMeasureRaw: Omit<DomainSpanMeasure, 'id'> = {
 	description: '__NAME__',
 	created_at: null,
 	updated_at: null,
-	status: undefined,
 };
 
 export const domainSpanMeasure: DomainSpanMeasure = {

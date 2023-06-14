@@ -25,4 +25,16 @@ describe('Span Installation Survey / JunctionBox / Service', () => {
 		expect(survey).toBeInstanceOf(JunctionBoxSurvey);
 		expect(survey).toEqual(JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(domainJunctionBoxSurvey));
 	});
+
+	test('getJunctionBoxSurveyOnPermanentId returns a JunctionBoxSurvey object', async () => {
+		const service = new JunctionBoxSurveyService(repo);
+		const survey = await service.getJunctionBoxSurveyOnPermanentId('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7');
+		expect(survey).toBeInstanceOf(JunctionBoxSurvey);
+		expect(survey).toEqual(JunctionBoxSurveyFactory.CreateJunctionBoxSurvey(domainJunctionBoxSurvey));
+	});
+
+	test('hasDamage determines if any damage was reported', async () => {
+		const service = new JunctionBoxSurveyService(repo);
+		expect(await service.hasDamage('3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7')).toBe(true);
+	});
 });

@@ -52,4 +52,23 @@ export class NodeSurveyRepository implements INodeSurveyRepository {
 			where: { id },
 		});
 	}
+
+	async getNodeSurveyOnPermanentId(supportSystemId: string): Promise<NodeSurvey> {
+		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+			where: {
+				id: supportSystemId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getNodeSurvey(permanentId);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		const nodeSurvey = await this.getNodeSurveyOnPermanentId(supportSystemId);
+
+		return nodeSurvey.nodeDamage;
+	}
 }

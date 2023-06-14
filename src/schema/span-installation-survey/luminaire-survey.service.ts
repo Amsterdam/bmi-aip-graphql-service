@@ -13,4 +13,14 @@ export class LuminaireSurveyService {
 			await this.luminaireSurveyRepo.getLuminaireSurvey(luminaireId),
 		);
 	}
+
+	async getLuminaireSurveyOnPermanentId(luminaireId: string): Promise<LuminaireSurvey> {
+		return LuminaireSurveyFactory.CreateLuminaireSurvey(
+			await this.luminaireSurveyRepo.getLuminaireSurveyOnPermanentId(luminaireId),
+		);
+	}
+
+	async hasDamage(luminaireId: string): Promise<boolean> {
+		return this.luminaireSurveyRepo.hasDamage(luminaireId);
+	}
 }

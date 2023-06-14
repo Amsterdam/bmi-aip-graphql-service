@@ -94,4 +94,29 @@ export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 			where: { id },
 		});
 	}
+
+	async getFacadeSurveyOnPermanentId(supportSystemId: string): Promise<FacadeSurvey> {
+		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+			where: {
+				id: supportSystemId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getFacadeSurvey(permanentId);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		const facadeSurvey = await this.getFacadeSurveyOnPermanentId(supportSystemId);
+
+		return (
+			facadeSurvey.hinderingVegetation ||
+			facadeSurvey.faultyMontage ||
+			facadeSurvey.nutNotFullyOverThreadedRod ||
+			facadeSurvey.missingFasteners ||
+			facadeSurvey.facadeConnectionFailed
+		);
+	}
 }

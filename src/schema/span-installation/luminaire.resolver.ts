@@ -12,7 +12,11 @@ import { UpdateLuminaireCommand } from './commands/update-luminaire.command';
 import { Luminaire as DomainLuminaire } from './types/luminaire.repository.interface';
 import { DeleteLuminaireCommand } from './commands/delete-luminaire.command';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { CreateMissingLuminaireCommand } from './commands/create-missing-luminaire.command';
+import { CreateMissingLuminaireInput } from './dto/create-missing-luminaire.input';
+import { ReviseLuminaireInput } from './dto/revise-luminaire.input';
+import { ReviseLuminaireCommand } from './commands/revise-luminaire.command';
 
 @Resolver((of) => Luminaire)
 @Resource(Luminaire.name)
@@ -46,6 +50,26 @@ export class LuminaireResolver {
 		return LuminaireFactory.CreateLuminaire(domainLuminaire);
 	}
 
+	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async createMissingLuminaire(
+		@Args('createMissingLuminaire') input: CreateMissingLuminaireInput,
+	): Promise<Luminaire> {
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<CreateMissingLuminaireCommand>(
+			new CreateMissingLuminaireCommand(input),
+		);
+		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
+	}
+
+	@Mutation(() => Luminaire)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async reviseLuminaire(@Args('reviseLuminaire') input: ReviseLuminaireInput): Promise<Luminaire> {
+		const domainReviseLuminaire: DomainLuminaire = await this.commandBus.execute<ReviseLuminaireCommand>(
+			new ReviseLuminaireCommand(input),
+		);
+		return LuminaireFactory.CreateLuminaire(domainReviseLuminaire);
+	}
+
 	@Query((returns) => [Luminaire], { name: 'spanInstallationLuminaires' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getsupportSystemLuminaires(@Args('supportSystemId', { type: () => String }) supportSystemId: string) {
@@ -54,8 +78,8 @@ export class LuminaireResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
-			new FindSpanMeasuresByDecompositionIdCommand(id),
+		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
+			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
 	}
 }

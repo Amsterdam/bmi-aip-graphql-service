@@ -60,4 +60,23 @@ export class LuminaireSurveyRepository implements ILuminaireSurveyRepository {
 			where: { id },
 		});
 	}
+
+	async getLuminaireSurveyOnPermanentId(luminaireId: string): Promise<LuminaireSurvey> {
+		const { permanentId } = await this.prisma.spanLuminaires.findUnique({
+			where: {
+				id: luminaireId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getLuminaireSurvey(permanentId);
+	}
+
+	async hasDamage(luminaireId: string): Promise<boolean> {
+		const luminaireSurvey = await this.getLuminaireSurveyOnPermanentId(luminaireId);
+
+		return luminaireSurvey.luminaireDamage;
+	}
 }

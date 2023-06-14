@@ -80,4 +80,31 @@ export class TensionWireSurveyRepository implements ITensionWireSurveyRepository
 			where: { id },
 		});
 	}
+
+	async getTensionWireSurveyOnPermanentId(supportSystemId: string): Promise<TensionWireSurvey> {
+		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+			where: {
+				id: supportSystemId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getTensionWireSurvey(permanentId);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		const tensionWireSurvey = await this.getTensionWireSurveyOnPermanentId(supportSystemId);
+
+		return (
+			tensionWireSurvey.tensionWireDamage ||
+			tensionWireSurvey.gaffTerminalDamage ||
+			tensionWireSurvey.tensionWireClampDamage ||
+			tensionWireSurvey.thirdPartyObjectsAttached ||
+			tensionWireSurvey.gaffTerminalDamage ||
+			tensionWireSurvey.gaffTerminalMissingParts ||
+			tensionWireSurvey.faultyMontage
+		);
+	}
 }

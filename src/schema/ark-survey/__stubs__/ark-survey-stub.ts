@@ -104,3 +104,5 @@ export const ArkSurvey = ArkSurveyFactory.createArkSurvey(domainArkSurvey);
 export const deletedArkSurvey: DomainArkSurvey = {
 	...domainArkSurvey,
 };
+
+export const domainArkSurveysByAssetCode = domainArkSurvey;

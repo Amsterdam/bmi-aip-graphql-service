@@ -76,4 +76,29 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 			where: { id },
 		});
 	}
+
+	async getJunctionBoxSurveyOnPermanentId(junctionBoxId: string): Promise<JunctionBoxSurvey> {
+		const { permanentId } = await this.prisma.spanJunctionBoxes.findUnique({
+			where: {
+				id: junctionBoxId,
+			},
+			select: {
+				permanentId: true,
+			},
+		});
+
+		return this.getJunctionBoxSurvey(permanentId);
+	}
+
+	async hasDamage(junctionBoxId: string): Promise<boolean> {
+		const junctionBoxSurvey = await this.getJunctionBoxSurveyOnPermanentId(junctionBoxId);
+
+		return (
+			junctionBoxSurvey.cableDamage ||
+			junctionBoxSurvey.faultyMontageTensionWire ||
+			junctionBoxSurvey.faultyMontageFacade ||
+			junctionBoxSurvey.junctionBoxDamage ||
+			junctionBoxSurvey.stickerNotReadable
+		);
+	}
 }

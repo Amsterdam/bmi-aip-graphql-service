@@ -26,4 +26,31 @@ export class ElementService {
 	async getElementById(elementId: string): Promise<Element> {
 		return ElementFactory.CreateElement(await this.elementRepo.getElementById(elementId));
 	}
+
+	async getElementWithUnits(surveyId: string): Promise<Element[]> {
+		return (await this.elementRepo.getElementWithUnits(surveyId)).map((element) =>
+			ElementFactory.CreateElementWithUnits(element),
+		);
+	}
+
+	// async getElementWithUnits(surveyId: string): Promise<Element[]> {
+	// 	const elementsWithUnits: DomainElement[] = await this.elementRepo.getElementWithUnits(surveyId);
+	// 	const units = elementsWithUnits.map((element) => units);
+	// 	return elementsWithUnits.map((element) => {
+	// 		return ElementFactory.CreateElement(element);
+	// 	});
+	// }
+
+	// async getElementWithUnits(surveyId: string): Promise<Element[]> {
+	// 	return (await this.elementRepo.getElementWithUnits(surveyId)).map((element) => {
+	// 		const units: Unit[] = element.units.map((unit) => {
+	// 			UnitFactory.CreateUnit(unit);
+	// 		});
+	// 		return {
+	// 			...element,
+	// 			deletedAt: null, // Assigning a default value for deletedAt
+	// 			units,
+	// 		};
+	// 	});
+	// }
 }

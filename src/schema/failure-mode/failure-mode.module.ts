@@ -29,5 +29,6 @@ import { GetFailureModeByIdHandler } from './queries/get-failure-mode-by-id.hand
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	exports: [FailureModeService],
 })
 export class FailureModeModule {}

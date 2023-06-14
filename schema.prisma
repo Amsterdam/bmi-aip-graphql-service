@@ -32,8 +32,8 @@ model arkSurveys {
   created_at             DateTime                  @default(now()) @db.Timestamptz(6)
   updated_at             DateTime                  @default(now()) @db.Timestamptz(6)
   deleted_at             DateTime?                 @db.Timestamptz(6)
-  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
   arkSurveyReachSegments arkSurveyReachSegments[]
+  surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "arksurveygeographydata_surveyid_foreign")
 }
 
 model assetRemarks {
@@ -85,8 +85,10 @@ model assets {
   failureModeId                                                  String?             @db.Uuid
   isOnReportStartPage                                            Boolean?            @default(false)
   uid                                                            String?             @db.Uuid
+  assetRemarks                                                   assetRemarks[]
   defects                                                        defects?            @relation(fields: [defectId], references: [id], onUpdate: NoAction, map: "assets_defectid_foreign")
   assets                                                         assets?             @relation("assetsToassets_derivedFromAssetId", fields: [derivedFromAssetId], references: [id], onUpdate: NoAction, map: "assets_derivedfromassetid_foreign")
+  other_assets                                                   assets[]            @relation("assetsToassets_derivedFromAssetId")
   elements                                                       elements?           @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assets_elementid_foreign")
   failureModes                                                   failureModes?       @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assets_failuremodeid_foreign")
   imageMeasurements_assets_imageMeasurementIdToimageMeasurements imageMeasurements?  @relation("assets_imageMeasurementIdToimageMeasurements", fields: [imageMeasurementId], references: [id], onUpdate: NoAction, map: "assets_imagemeasurementid_foreign")
@@ -95,8 +97,6 @@ model assets {
   surveys                                                        surveys?            @relation(fields: [surveyId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "assets_surveyid_foreign")
   users                                                          users?              @relation(fields: [uid], references: [id], onUpdate: NoAction, map: "assets_uid_foreign")
   units                                                          units?              @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "assets_unitid_foreign")
-  assetRemarks                                                   assetRemarks[]
-  other_assets                                                   assets[]            @relation("assetsToassets_derivedFromAssetId")
   imageMeasurements_assetsToimageMeasurements_assetId            imageMeasurements[] @relation("assetsToimageMeasurements_assetId")
   observationPoints_assetsToobservationPoints_2dSourceAssetId    observationPoints[] @relation("assetsToobservationPoints_2dSourceAssetId")
   observationPoints_assetsToobservationPoints_assetId            observationPoints[] @relation("assetsToobservationPoints_assetId")
@@ -155,11 +155,11 @@ model batches {
   remarks                 String?
   legacyFailureMode       Boolean?
   inspectionStandardTypes Json?                    @db.Json
+  batchExecutorCompanies  batchExecutorCompanies[]
+  batchObjects            batchObjects[]
   companies               companies?               @relation(fields: [clientCompanyId], references: [id], onUpdate: NoAction, map: "batches_clientcompanyid_foreign")
   contracts               contracts?               @relation(fields: [contractId], references: [id], onUpdate: NoAction, map: "batches_contractid_foreign")
   tranches                tranches?                @relation(fields: [tranchId], references: [id], onUpdate: NoAction, map: "batches_tranchid_foreign")
-  batchExecutorCompanies  batchExecutorCompanies[]
-  batchObjects            batchObjects[]
   surveys                 surveys[]
 
   @@index([clientCompanyId])
@@ -215,10 +215,10 @@ model companies {
   wfsKey                                                   String?                  @db.VarChar(255)
   authenticationToken                                      String?                  @db.VarChar(255)
   auditEvents                                              auditEvents[]
-  batches                                                  batches[]
   batchExecutorCompanies                                   batchExecutorCompanies[]
-  companyRelations_companiesTocompanyRelations_managedById companyRelations[]       @relation("companiesTocompanyRelations_managedById") @ignore
-  companyRelations_companiesTocompanyRelations_managesId   companyRelations[]       @relation("companiesTocompanyRelations_managesId") @ignore
+  batches                                                  batches[]
+  companyRelations_companiesTocompanyRelations_managedById companyRelations[]       @relation("companiesTocompanyRelations_managedById")
+  companyRelations_companiesTocompanyRelations_managesId   companyRelations[]       @relation("companiesTocompanyRelations_managesId")
   companyUsages                                            companyUsages[]
   licences                                                 licences[]
   objects_companiesToobjects_clientCompanyId               objects[]                @relation("companiesToobjects_clientCompanyId")
@@ -385,8 +385,8 @@ model defaultMaintenanceMeasures {
   unitPrice                 Float?
   created_at                DateTime?             @db.Timestamptz(6)
   updated_at                DateTime?             @db.Timestamptz(6)
-  objectTypeUnitCodes       objectTypeUnitCodes?  @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultmaintenancemeasures_objecttypeunitcodeid_foreign")
   cyclicMeasures            cyclicMeasures[]
+  objectTypeUnitCodes       objectTypeUnitCodes?  @relation(fields: [objectTypeUnitCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "defaultmaintenancemeasures_objecttypeunitcodeid_foreign")
   maintenanceMeasures       maintenanceMeasures[]
 
   @@index([objectTypeUnitCodeId])
@@ -427,37 +427,13 @@ model defects {
   ramsEnv                   String?               @db.VarChar(1)
   ramsTotalPriority         String?               @db.VarChar(2)
   ramsWeightedPriority      String?               @db.VarChar(1)
-  conditions                conditions            @relation(fields: [conditionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defects_conditionid_foreign")
   assets                    assets[]
   cyclicMeasures            cyclicMeasures[]
+  conditions                conditions            @relation(fields: [conditionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defects_conditionid_foreign")
   maintenanceMeasures       maintenanceMeasures[]
   measures                  measures[]
 
   @@index([conditionId])
-}
-
-model derivedConditionScores {
-  id               String          @id @unique(map: "derivedconditionscores_id_unique") @db.Uuid
-  elementId        String?         @db.Uuid
-  unitId           String?         @db.Uuid
-  manifestationId  String?         @db.Uuid
-  surveyId         String?         @db.Uuid
-  score            String?         @db.VarChar(1)
-  derivedScore     String?         @db.VarChar(1)
-  replacementIndex Int?
-  created_at       DateTime?       @db.Timestamptz(6)
-  updated_at       DateTime?       @db.Timestamptz(6)
-  careScore        String?         @db.VarChar(1)
-  derivedCareScore String?         @db.VarChar(1)
-  elements         elements?       @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_elementid_foreign")
-  manifestations   manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_manifestationid_foreign")
-  surveys          surveys?        @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_surveyid_foreign")
-  units            units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_unitid_foreign")
-
-  @@index([elementId])
-  @@index([manifestationId])
-  @@index([surveyId])
-  @@index([unitId])
 }
 
 model elementCategories {
@@ -519,15 +495,15 @@ model elements {
   deleted_at                                                       DateTime?                @db.Timestamptz(6)
   gisibId                                                          Int?
   permanentId                                                      String?                  @db.Uuid
+  assets                                                           assets[]
+  conditions_conditions_elementIdToelements                        conditions[]             @relation("conditions_elementIdToelements")
+  derivedConditionScores                                           derivedConditionScores[]
+  elementRemarks                                                   elementRemarks[]
   elementCategories                                                elementCategories?       @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "elements_categoryid_foreign")
   conditions_conditionsToelements_conditionId                      conditions?              @relation("conditionsToelements_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "elements_conditionid_foreign")
   objects                                                          objects                  @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_objectid_foreign")
   observationPoints_elements_observationPointIdToobservationPoints observationPoints?       @relation("elements_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "elements_observationpointid_foreign")
   surveys                                                          surveys?                 @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "elements_surveyid_foreign")
-  assets                                                           assets[]
-  conditions_conditions_elementIdToelements                        conditions[]             @relation("conditions_elementIdToelements")
-  derivedConditionScores                                           derivedConditionScores[]
-  elementRemarks                                                   elementRemarks[]
   failureModes                                                     failureModes[]
   manifestations                                                   manifestations[]
   observationPoints_elementsToobservationPoints_elementId          observationPoints[]      @relation("elementsToobservationPoints_elementId")
@@ -604,8 +580,11 @@ model failureModes {
   sourceOfFailure                                 String?                      @db.Uuid
   consequenceOfFailure                            String?                      @db.VarChar(255)
   noticableFailure                                String?                      @db.VarChar(4)
-  dataSets_dataSetsTofailureModes_causeOfFailure  dataSets?                    @relation("dataSetsTofailureModes_causeOfFailure", fields: [causeOfFailure], references: [id], onUpdate: NoAction, map: "failuremodes_causeoffailure_foreign")
+  assets                                          assets[]
+  cyclicMeasures                                  cyclicMeasures[]
   failureModes                                    failureModes?                @relation("failureModesTofailureModes_copyOfFailureModeId", fields: [copyOfFailureModeId], references: [id], onUpdate: NoAction, map: "failuremodes _copyoffailuremodeid_foreign")
+  other_failureModes                              failureModes[]               @relation("failureModesTofailureModes_copyOfFailureModeId")
+  dataSets_dataSetsTofailureModes_causeOfFailure  dataSets?                    @relation("dataSetsTofailureModes_causeOfFailure", fields: [causeOfFailure], references: [id], onUpdate: NoAction, map: "failuremodes_causeoffailure_foreign")
   defaultFailureModes                             defaultFailureModes?         @relation(fields: [defaultFailureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_defaultfailuremodeid_foreign")
   elements                                        elements                     @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_elementid_foreign")
   dataSets_dataSetsTofailureModes_failureMode     dataSets?                    @relation("dataSetsTofailureModes_failureMode", fields: [failureMode], references: [id], onUpdate: NoAction, map: "failuremodes_failuremode_foreign")
@@ -615,9 +594,6 @@ model failureModes {
   dataSets_dataSetsTofailureModes_sourceOfFailure dataSets?                    @relation("dataSetsTofailureModes_sourceOfFailure", fields: [sourceOfFailure], references: [id], onUpdate: NoAction, map: "failuremodes_sourceoffailure_foreign")
   surveys                                         surveys                      @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_surveyid_foreign")
   units                                           units?                       @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "failuremodes_unitid_foreign")
-  assets                                          assets[]
-  cyclicMeasures                                  cyclicMeasures[]
-  other_failureModes                              failureModes[]               @relation("failureModesTofailureModes_copyOfFailureModeId")
   findings                                        findings[]
   fmecaFurtherInvestigations                      fmecaFurtherInvestigations[]
   maintenanceMeasures                             maintenanceMeasures[]
@@ -711,8 +687,8 @@ model imageMeasurements {
   assetId                                             String    @db.Uuid
   created_at                                          DateTime? @db.Timestamptz(6)
   updated_at                                          DateTime? @db.Timestamptz(6)
-  assets_assetsToimageMeasurements_assetId            assets    @relation("assetsToimageMeasurements_assetId", fields: [assetId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "imagemeasurements_assetid_foreign")
   assets_assets_imageMeasurementIdToimageMeasurements assets[]  @relation("assets_imageMeasurementIdToimageMeasurements")
+  assets_assetsToimageMeasurements_assetId            assets    @relation("assetsToimageMeasurements_assetId", fields: [assetId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "imagemeasurements_assetid_foreign")
 
   @@index([assetId])
 }
@@ -760,11 +736,11 @@ model inspectionStandards {
   updated_at         DateTime?            @db.Timestamptz(6)
   type               String?              @default("free") @db.VarChar(255)
   isActive           Boolean?             @default(true)
+  elementCategories  elementCategories[]
   languages          languages            @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionstandards_languageid_foreign")
   objectTypes        objectTypes          @relation(fields: [objectTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inspectionstandards_objecttypeid_foreign")
-  elementCategories  elementCategories[]
-  objects            objects[]
   objectTypeElements objectTypeElements[]
+  objects            objects[]
 
   @@index([languageId])
   @@index([objectTypeId])
@@ -855,15 +831,15 @@ model maintenanceMeasures {
   quantityUnitOfMeasurement    String?                     @db.VarChar(4)
   netCost                      Float?
   deleted_at                   DateTime?                   @db.Timestamptz(6)
+  objects                      objects                     @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _objectid_foreign")
+  maintenanceMeasures          maintenanceMeasures?        @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId", fields: [previousMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _previousmaintenancemeasureid_foreign")
+  other_maintenanceMeasures    maintenanceMeasures[]       @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId")
   defaultMaintenanceMeasures   defaultMaintenanceMeasures? @relation(fields: [defaultMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_defaultmaintenancemeasureid_foreign")
   defects                      defects?                    @relation(fields: [defectId], references: [id], onUpdate: NoAction, map: "maintenancemeasures_defectid_foreign")
   failureModes                 failureModes?               @relation(fields: [failureModeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_failuremodeid_foreign")
   manifestations               manifestations?             @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_manifestationid_foreign")
-  objects                      objects                     @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _objectid_foreign")
-  maintenanceMeasures          maintenanceMeasures?        @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId", fields: [previousMaintenanceMeasureId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures _previousmaintenancemeasureid_foreign")
   surveys                      surveys?                    @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_surveyid_foreign")
   units                        units?                      @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "maintenancemeasures_unitid_foreign")
-  other_maintenanceMeasures    maintenanceMeasures[]       @relation("maintenanceMeasuresTomaintenanceMeasures_previousMaintenanceMeasureId")
 
   @@unique([surveyId, surveyScopeId], map: "maintenancemeasures_surveyid_surveyscopeid_unique")
   @@index([defaultMaintenanceMeasureId])
@@ -913,12 +889,6 @@ model manifestations {
   deleted_at                                                             DateTime?                    @db.Timestamptz(6)
   gisibId                                                                Int?
   permanentId                                                            String?                      @db.Uuid
-  conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
-  elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
-  objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
-  observationPoints_manifestations_observationPointIdToobservationPoints observationPoints?           @relation("manifestations_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "manifestations_observationpointid_foreign")
-  surveys                                                                surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_surveyid_foreign")
-  units                                                                  units                        @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_unitid_foreign")
   assets                                                                 assets[]
   conditions_conditions_manifestationIdTomanifestations                  conditions[]                 @relation("conditions_manifestationIdTomanifestations")
   derivedConditionScores                                                 derivedConditionScores[]
@@ -927,6 +897,12 @@ model manifestations {
   inspectionPlans                                                        inspectionPlans[]
   maintenanceMeasures                                                    maintenanceMeasures[]
   manifestationRemarks                                                   manifestationRemarks[]
+  objects                                                                objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations _objectid_foreign")
+  conditions_conditionsTomanifestations_conditionId                      conditions?                  @relation("conditionsTomanifestations_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "manifestations_conditionid_foreign")
+  elements                                                               elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_elementid_foreign")
+  observationPoints_manifestations_observationPointIdToobservationPoints observationPoints?           @relation("manifestations_observationPointIdToobservationPoints", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "manifestations_observationpointid_foreign")
+  surveys                                                                surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_surveyid_foreign")
+  units                                                                  units                        @relation(fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "manifestations_unitid_foreign")
   measures                                                               measures[]
   observationPoints_manifestationsToobservationPoints_manifestationId    observationPoints[]          @relation("manifestationsToobservationPoints_manifestationId")
   surveyManifestations                                                   surveyManifestations[]
@@ -966,8 +942,8 @@ model measurements {
   updatedOnDateTime     DateTime                @db.Timestamptz(6)
   createdOnDateTime     DateTime                @db.Timestamptz(6)
   pointNumber           Int                     @default(1)
-  flights               flights                 @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurements_flightid_foreign")
   measurementCandidates measurementCandidates[]
+  flights               flights                 @relation(fields: [flightId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "measurements_flightid_foreign")
 
   @@index([flightId])
 }
@@ -1070,13 +1046,6 @@ model objects {
   width                                          Decimal?                 @db.Decimal(15, 2)
   squareMeters                                   Decimal?                 @db.Decimal(15, 2)
   attributes                                     Json                     @default("{}")
-  companies_companiesToobjects_clientCompanyId   companies?               @relation("companiesToobjects_clientCompanyId", fields: [clientCompanyId], references: [id], onUpdate: NoAction, map: "objects_clientcompanyid_foreign")
-  inspectionStandards                            inspectionStandards?     @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_inspectionstandardid_foreign")
-  objectTypes                                    objectTypes              @relation(fields: [objectTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_objecttypeid_foreign")
-  companies_companiesToobjects_operatorCompanyId companies?               @relation("companiesToobjects_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "objects_operatorcompanyid_foreign")
-  companies_companiesToobjects_ownerCompanyId    companies?               @relation("companiesToobjects_ownerCompanyId", fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "objects_ownercompanyid_foreign")
-  sites                                          sites?                   @relation(fields: [siteId], references: [id], onUpdate: NoAction, map: "objects_siteid_foreign")
-  companies_companiesToobjects_surveyorCompanyId companies?               @relation("companiesToobjects_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "objects_surveyorcompanyid_foreign")
   assets                                         assets[]
   auditEvents                                    auditEvents[]
   batchObjects                                   batchObjects[]
@@ -1084,6 +1053,13 @@ model objects {
   maintenanceMeasures                            maintenanceMeasures[]
   manifestations                                 manifestations[]
   mutationQueue                                  mutationQueue?
+  companies_companiesToobjects_clientCompanyId   companies?               @relation("companiesToobjects_clientCompanyId", fields: [clientCompanyId], references: [id], onUpdate: NoAction, map: "objects_clientcompanyid_foreign")
+  inspectionStandards                            inspectionStandards?     @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_inspectionstandardid_foreign")
+  objectTypes                                    objectTypes              @relation(fields: [objectTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_objecttypeid_foreign")
+  companies_companiesToobjects_operatorCompanyId companies?               @relation("companiesToobjects_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "objects_operatorcompanyid_foreign")
+  companies_companiesToobjects_ownerCompanyId    companies?               @relation("companiesToobjects_ownerCompanyId", fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "objects_ownercompanyid_foreign")
+  sites                                          sites?                   @relation(fields: [siteId], references: [id], onUpdate: NoAction, map: "objects_siteid_foreign")
+  companies_companiesToobjects_surveyorCompanyId companies?               @relation("companiesToobjects_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "objects_surveyorcompanyid_foreign")
   spanJunctionBoxes                              spanJunctionBoxes[]
   spanSupportSystems                             spanSupportSystems[]
   surveyModifications                            surveyModifications[]
@@ -1151,9 +1127,9 @@ model objectTypeElements {
   categoryId            String?             @db.Uuid
   isActive              Boolean?            @default(true)
   isUtResultPlaceholder Boolean             @default(false)
+  objectTypeDefects     objectTypeDefects[]
   elementCategories     elementCategories?  @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "objecttypeelements_categoryid_foreign")
   inspectionStandards   inspectionStandards @relation(fields: [inspectionStandardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypeelements_inspectionstandardid_foreign")
-  objectTypeDefects     objectTypeDefects[]
   objectTypeUnits       objectTypeUnits[]
 
   @@index([categoryId])
@@ -1171,8 +1147,8 @@ model objectTypes {
   customerVersion     String?               @default("all") @db.VarChar(255)
   isActive            Boolean?              @default(true)
   dmsCategory         String                @default("Bruggen") @db.VarChar(255)
-  languages           languages             @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypes_languageid_foreign")
   inspectionStandards inspectionStandards[]
+  languages           languages             @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypes_languageid_foreign")
   objects             objects[]
 
   @@index([languageId])
@@ -1200,8 +1176,8 @@ model objectTypeUnits {
   created_at          DateTime?           @db.Timestamptz(6)
   updated_at          DateTime?           @db.Timestamptz(6)
   isActive            Boolean?            @default(true)
-  objectTypeElements  objectTypeElements? @relation(fields: [objectTypeElementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypeunits_objecttypeelementid_foreign")
   objectTypeDefects   objectTypeDefects[]
+  objectTypeElements  objectTypeElements? @relation(fields: [objectTypeElementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objecttypeunits_objecttypeelementid_foreign")
 
   @@index([code])
   @@index([name])
@@ -1228,6 +1204,8 @@ model observationPoints {
   dSourceAssetId                                                      String?          @map("2dSourceAssetId") @db.Uuid
   dGeometry                                                           Json?            @map("2dGeometry")
   failureModeId                                                       String?          @db.Uuid
+  elements_elements_observationPointIdToobservationPoints             elements[]       @relation("elements_observationPointIdToobservationPoints")
+  manifestations_manifestations_observationPointIdToobservationPoints manifestations[] @relation("manifestations_observationPointIdToobservationPoints")
   assets_assetsToobservationPoints_2dSourceAssetId                    assets?          @relation("assetsToobservationPoints_2dSourceAssetId", fields: [dSourceAssetId], references: [id], onUpdate: NoAction, map: "observationpoints_2dsourceassetid_foreign")
   assets_assetsToobservationPoints_assetId                            assets?          @relation("assetsToobservationPoints_assetId", fields: [assetId], references: [id], onUpdate: NoAction, map: "observationpoints_assetid_foreign")
   elements_elementsToobservationPoints_elementId                      elements?        @relation("elementsToobservationPoints_elementId", fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_elementid_foreign")
@@ -1235,8 +1213,6 @@ model observationPoints {
   manifestations_manifestationsToobservationPoints_manifestationId    manifestations?  @relation("manifestationsToobservationPoints_manifestationId", fields: [manifestationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_manifestationid_foreign")
   surveys                                                             surveys          @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_surveyid_foreign")
   units_observationPoints_unitIdTounits                               units?           @relation("observationPoints_unitIdTounits", fields: [unitId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "observationpoints_unitid_foreign")
-  elements_elements_observationPointIdToobservationPoints             elements[]       @relation("elements_observationPointIdToobservationPoints")
-  manifestations_manifestations_observationPointIdToobservationPoints manifestations[] @relation("manifestations_observationPointIdToobservationPoints")
   units_observationPointsTounits_observationPointId                   units[]          @relation("observationPointsTounits_observationPointId")
 
   @@index([dSourceAssetId])
@@ -1335,8 +1311,8 @@ model sites {
   customerVersion String?    @default("all") @db.VarChar(255)
   created_at      DateTime?  @db.Timestamptz(6)
   updated_at      DateTime?  @db.Timestamptz(6)
-  companies       companies? @relation(fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "sites_ownercompanyid_foreign")
   objects         objects[]
+  companies       companies? @relation(fields: [ownerCompanyId], references: [id], onUpdate: NoAction, map: "sites_ownercompanyid_foreign")
 
   @@index([ownerCompanyId])
 }
@@ -1346,7 +1322,6 @@ model spanJunctionBoxes {
   objectId               String                    @db.Uuid
   surveyId               String                    @db.Uuid
   name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(20, 3)
   location               String?                   @db.VarChar(255)
   locationIndication     String?                   @db.VarChar(255)
   riserTubeVisible       Boolean?
@@ -1358,10 +1333,11 @@ model spanJunctionBoxes {
   installationHeight     Decimal?                  @db.Decimal(8, 2)
   a11yDetails            Json?                     @default("{}")
   geographyRD            Json?                     @default("{}")
+  mastNumber             Decimal?                  @db.Decimal(20, 3)
   permanentId            String                    @db.Uuid
+  spanJunctionBoxSurveys spanJunctionBoxSurveys?
   objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
   surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
-  spanJunctionBoxSurveys spanJunctionBoxSurveys?
 
   @@index([deleted_at], map: "spanjunctionboxes_deleted_at_index")
 }
@@ -1400,8 +1376,8 @@ model spanLuminaires {
   hasLED                  Boolean?
   geographyRD             Json?                     @default("{}")
   permanentId             String                    @db.Uuid
-  spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
   spanLuminaireSurveys    spanLuminaireSurveys?
+  spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
 
   @@index([deleted_at], map: "spanluminaires_deleted_at_index")
 }
@@ -1481,13 +1457,13 @@ model spanSupportSystems {
   geographyRD                         Json?                                @default("{}")
   installationLength                  Decimal?                             @db.Decimal(8, 2)
   permanentId                         String                               @db.Uuid
-  objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
-  surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
   spanLuminaires                      spanLuminaires[]
   spanSupportSystemFacadeSurveys      spanSupportSystemFacadeSurveys?
   spanSupportSystemMastSurveys        spanSupportSystemMastSurveys?
   spanSupportSystemNodeSurveys        spanSupportSystemNodeSurveys?
   spanSupportSystemTensionWireSurveys spanSupportSystemTensionWireSurveys?
+  objects                             objects                              @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spansupportsystems_objectid_foreign")
+  surveys                             surveys                              @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spansupportsystems_surveyid_foreign")
 
   @@index([deleted_at], map: "spansupportsystems_deleted_at_index")
 }
@@ -1631,10 +1607,6 @@ model surveys {
   ARBCraInspectionScore                                Int?
   ARBCraInitialFlagScore                               Int?
   ARBCraInspectionSummary                              String?
-  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
-  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
-  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
-  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
   arkSurveys                                           arkSurveys?
   assets                                               assets[]
   auditEvents                                          auditEvents[]
@@ -1663,6 +1635,10 @@ model surveys {
   surveyManifestations                                 surveyManifestations[]
   surveyModifications                                  surveyModifications[]
   surveyUnits                                          surveyUnits[]
+  batches                                              batches?                     @relation(fields: [batchId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_batchid_foreign")
+  objects                                              objects                      @relation(fields: [objectId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "surveys_objectid_foreign")
+  companies_companiesTosurveys_operatorCompanyId       companies?                   @relation("companiesTosurveys_operatorCompanyId", fields: [operatorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_operatorcompanyid_foreign")
+  companies_companiesTosurveys_surveyorCompanyId       companies?                   @relation("companiesTosurveys_surveyorCompanyId", fields: [surveyorCompanyId], references: [id], onUpdate: NoAction, map: "surveys_surveyorcompanyid_foreign")
   unitRemarks                                          unitRemarks[]
   units                                                units[]
   utProjects                                           utProjects[]
@@ -1696,8 +1672,8 @@ model tranches {
   endDate          DateTime? @db.Timestamptz(6)
   created_at       DateTime? @db.Timestamptz(6)
   updated_at       DateTime? @db.Timestamptz(6)
-  contracts        contracts @relation(fields: [contractId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tranches_contractid_foreign")
   batches          batches[]
+  contracts        contracts @relation(fields: [contractId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tranches_contractid_foreign")
 }
 
 model unitRemarks {
@@ -1741,11 +1717,6 @@ model units {
   deleted_at                                                    DateTime?                    @db.Timestamptz(6)
   gisibId                                                       Int?
   permanentId                                                   String?                      @db.Uuid
-  conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
-  elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
-  objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
-  observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
-  surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
   assets                                                        assets[]
   conditions_conditions_unitIdTounits                           conditions[]                 @relation("conditions_unitIdTounits")
   cyclicMeasures                                                cyclicMeasures[]
@@ -1760,6 +1731,11 @@ model units {
   observationPoints_observationPoints_unitIdTounits             observationPoints[]          @relation("observationPoints_unitIdTounits")
   surveyUnits                                                   surveyUnits[]
   unitRemarks                                                   unitRemarks[]
+  objects                                                       objects                      @relation(fields: [objectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units _objectid_foreign")
+  conditions_conditionsTounits_conditionId                      conditions?                  @relation("conditionsTounits_conditionId", fields: [conditionId], references: [id], onUpdate: NoAction, map: "units_conditionid_foreign")
+  elements                                                      elements                     @relation(fields: [elementId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_elementid_foreign")
+  observationPoints_observationPointsTounits_observationPointId observationPoints?           @relation("observationPointsTounits_observationPointId", fields: [observationPointId], references: [id], onUpdate: NoAction, map: "units_observationpointid_foreign")
+  surveys                                                       surveys?                     @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "units_surveyid_foreign")
   utProjects                                                    utProjects[]
 
   @@index([code])
@@ -1800,8 +1776,8 @@ model users {
   usePointCloud          Boolean   @default(true)
   isContractManager      Boolean?  @default(false)
   source                 String    @default("local")
-  companies              companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_companyid_foreign")
   assets                 assets[]
+  companies              companies @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_companyid_foreign")
 
   @@index([companyId])
   @@index([emailAddress])
@@ -1828,13 +1804,13 @@ model utProjects {
   manifestationId         String?         @db.Uuid
   objectId                String?         @db.Uuid
   surveyId                String?         @db.Uuid
+  flights                 flights[]
   companies               companies       @relation(fields: [clientCompanyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "projects_companyid_foreign")
   elements                elements?       @relation(fields: [elementId], references: [id], onUpdate: NoAction, map: "projects_elementid_foreign")
   manifestations          manifestations? @relation(fields: [manifestationId], references: [id], onUpdate: NoAction, map: "projects_manifestationid_foreign")
   objects                 objects?        @relation(fields: [objectId], references: [id], onUpdate: NoAction, map: "projects_objectid_foreign")
   surveys                 surveys?        @relation(fields: [surveyId], references: [id], onUpdate: NoAction, map: "projects_surveyid_foreign")
   units                   units?          @relation(fields: [unitId], references: [id], onUpdate: NoAction, map: "projects_unitid_foreign")
-  flights                 flights[]
 
   @@index([clientCompanyId])
   @@index([elementId])
@@ -1854,8 +1830,8 @@ model spanMeasures {
   updated_at        DateTime           @default(now()) @db.Timestamptz(6)
   optionId          String?            @db.Uuid
   status            String?
-  surveys           surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasures_surveyid_foreign")
   spanMeasureItems  spanMeasureItems[]
+  surveys           surveys            @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasures_surveyid_foreign")
 }
 
 model spanMeasureItems {
@@ -1869,6 +1845,30 @@ model spanMeasureItems {
   optionId                  String?      @db.Uuid
   status                    String?
   spanMeasures              spanMeasures @relation(fields: [spanMeasureId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasureitems_spanmeasureid_foreign")
+}
+
+model derivedConditionScores {
+  id               String          @id @unique(map: "derivedconditionscores_id_unique") @db.Uuid
+  elementId        String?         @db.Uuid
+  unitId           String?         @db.Uuid
+  manifestationId  String?         @db.Uuid
+  surveyId         String?         @db.Uuid
+  score            String?         @db.VarChar(1)
+  derivedScore     String?         @db.VarChar(1)
+  replacementIndex Int?
+  created_at       DateTime?       @db.Timestamptz(6)
+  updated_at       DateTime?       @db.Timestamptz(6)
+  careScore        String?         @db.VarChar(1)
+  derivedCareScore String?         @db.VarChar(1)
+  elements         elements?       @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_elementid_foreign")
+  manifestations   manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_manifestationid_foreign")
+  surveys          surveys?        @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_surveyid_foreign")
+  units            units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_unitid_foreign")
+
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
 }
 
 enum degreeOfDamage {

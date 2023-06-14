@@ -19,5 +19,6 @@ import { GetDefaultMaintenanceMeasureHandler } from './queries/get-default-maint
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	exports: [DefaultMaintenanceMeasureService],
 })
 export class DefaultMaintenanceMeasureModule {}

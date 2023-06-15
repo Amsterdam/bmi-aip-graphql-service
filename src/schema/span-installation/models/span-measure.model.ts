@@ -1,4 +1,5 @@
 import { Field, ObjectType, Parent, ResolveField } from '@nestjs/graphql';
+import { IsOptional } from 'class-validator';
 
 import { SpanDecompositionType } from '../types/span-decomposition-type';
 
@@ -29,7 +30,8 @@ export class SpanMeasure {
 	measureItems: SpanMeasureItem[];
 
 	@Field(() => SpanMeasureStatus, { nullable: true })
-	status: SpanMeasureStatus;
+	@IsOptional()
+	status?: SpanMeasureStatus;
 
 	@Field((type) => String, { nullable: true })
 	created_at: string;

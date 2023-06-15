@@ -50,17 +50,23 @@ import { SpanMeasureItemService } from './span-measure-item.service';
 import { SpanMeasureItemRepository } from './span-measure-item.repository';
 import { SaveSpanMeasureItemsCommand } from './commands/save-span-measure-items.command';
 import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.handler';
-import { UpdateSpanMeasureItemsActualsCommand } from './commands/update-span-measure-items-actuals.command';
-import { UpdateSpanMeasureItemsActualsHandler } from './commands/update-span-measure-items-actuals.handler';
+import { UpdateSpanMeasureItemsUsedQuantitiesCommand } from './commands/update-span-measure-items-used-quantities.command';
+import { UpdateSpanMeasureItemsUsedQuantitiesHandler } from './commands/update-span-measure-items-used-quantities.handler';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { SpanDecompositionType } from './types/span-decomposition-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
 import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
 import { SpanDecompositionResolver } from './span-decomposition.resolver';
-import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
-import { FindSpanMeasuresByDecompositionIdHandler } from './commands/find-span-measures-by-decomposition-id.handler';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionIdHandler } from './queries/find-span-measures-by-decomposition-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
+import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junction-box.handler';
+import { ReviseJunctionBoxHandler } from './commands/revise-junction-box.handler';
+import { CreateMissingSupportSystemHandler } from './commands/create-missing-support-system.handler';
+import { ReviseSupportSystemHandler } from './commands/revise-support-system.handler';
+import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
+import { ReviseLuminaireHandler } from './commands/revise-luminaire.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -133,15 +139,21 @@ registerEnumType(SpanMeasureItemStatus, {
 		SpanMeasureItemRepository,
 		SaveSpanMeasureItemsCommand,
 		SaveSpanMeasureItemsHandler,
-		UpdateSpanMeasureItemsActualsCommand,
-		UpdateSpanMeasureItemsActualsHandler,
+		UpdateSpanMeasureItemsUsedQuantitiesCommand,
+		UpdateSpanMeasureItemsUsedQuantitiesHandler,
 		PrismaService,
 		SurveyRepository,
 		CloneSpanInstallationDecompositionCommand,
 		CloneSpanInstallationDecompositionHandler,
 		SpanDecompositionResolver,
-		FindSpanMeasuresByDecompositionIdCommand,
+		FindSpanMeasuresByDecompositionIdQuery,
 		FindSpanMeasuresByDecompositionIdHandler,
+		CreateMissingJunctionBoxHandler,
+		ReviseJunctionBoxHandler,
+		CreateMissingSupportSystemHandler,
+		ReviseSupportSystemHandler,
+		CreateMissingLuminaireHandler,
+		ReviseLuminaireHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

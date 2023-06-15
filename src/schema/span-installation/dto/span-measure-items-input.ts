@@ -1,17 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsIn, IsOptional } from 'class-validator';
+import { IsIn } from 'class-validator';
 
-import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
-
-import { SpanMeasureItemStatus } from './../types/span-measure-item-status';
+//import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 @InputType()
 export class SpanMeasureItemInput {
 	@Field((type) => String)
-	@IsValidMeasureOption()
+	//@IsValidMeasureOption()
 	description: string;
 
 	@Field((type) => String)
-	@IsValidMeasureOption()
+	//@IsValidMeasureOption()
 	optionId: string;
 
 	@Field((type) => String)
@@ -23,9 +21,4 @@ export class SpanMeasureItemInput {
 
 	@Field((type) => Number)
 	quantityEstimate: number;
-
-	@IsEnum(SpanMeasureItemStatus)
-	@IsOptional()
-	@Field(() => String, { nullable: true })
-	status?: SpanMeasureItemStatus;
 }

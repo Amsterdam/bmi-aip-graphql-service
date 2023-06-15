@@ -75,6 +75,28 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		return survey;
 	}
 
+	async findArkSurveysByAssetCode(assetCode: string): Promise<ArkSurvey[]> {
+		const surveys = await this.prisma.surveys.findMany({
+			where: {
+				objects: {
+					code: assetCode,
+				},
+			},
+		});
+
+		const arkSurveys = await this.prisma.arkSurveys.findMany({
+			where: {
+				surveyId: {
+					in: surveys.map((survey) => survey.id),
+				},
+				deleted_at: null,
+			},
+			include: { arkSurveyReachSegments: true },
+		});
+
+		return arkSurveys;
+	}
+
 	async updateArkSurvey({
 		surveyId,
 		arkGeographyStart,

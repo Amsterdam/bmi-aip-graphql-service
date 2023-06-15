@@ -11,4 +11,14 @@ export class MastSurveyService {
 	async getMastSurvey(supportSystemId: string): Promise<MastSurvey> {
 		return MastSurveyFactory.CreateMastSurvey(await this.mastSurveyRepo.getMastSurvey(supportSystemId));
 	}
+
+	async getMastSurveyOnPermanentId(supportSystemId: string): Promise<MastSurvey> {
+		return MastSurveyFactory.CreateMastSurvey(
+			await this.mastSurveyRepo.getMastSurveyOnPermanentId(supportSystemId),
+		);
+	}
+
+	async hasDamage(supportSystemId: string): Promise<boolean> {
+		return this.mastSurveyRepo.hasDamage(supportSystemId);
+	}
 }

@@ -7,6 +7,7 @@ import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.reposi
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
 import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanMeasureStatus } from './types/span-measure-status';
 
 @Injectable()
 export class SpanMeasureRepository implements ISpanMeasureRepository {
@@ -18,7 +19,6 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		description,
 		decompositionId,
 		decompositionType,
-		status,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
 		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
 			throw new NotFoundException('Decomposition entity not found');
@@ -32,7 +32,6 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 				description,
 				decompositionId,
 				decompositionType,
-				status,
 			},
 		});
 	}
@@ -81,12 +80,34 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 	): Promise<boolean> {
 		switch (decompositionType) {
 			case SpanDecompositionType.spanSupportSystemMast:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'Mast',
+					},
+				}));
+				break;
 			case SpanDecompositionType.spanSupportSystemFacade:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'Facade',
+					},
+				}));
+				break;
 			case SpanDecompositionType.spanSupportSystemNode:
 				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
 						id: decompositionId,
-						type: decompositionType,
+						type: 'Node',
+					},
+				}));
+				break;
+			case SpanDecompositionType.spanSupportSystemTensionWire:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'TensionWire',
 					},
 				}));
 				break;
@@ -107,5 +128,9 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		}
 
 		return false;
+	}
+
+	async determineSpanMeasureStatus(spanMeasureId: string): Promise<SpanMeasureStatus> {
+		return SpanMeasureStatus.open;
 	}
 }

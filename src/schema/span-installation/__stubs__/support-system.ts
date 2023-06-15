@@ -10,6 +10,10 @@ import { normalizeSupportSystemInputUtil } from '../utils/normalize-support-syst
 import { CreateSupportSystemNormalizedInput } from '../dto/create-support-system-normalized.input';
 import { UpdateSupportSystemNormalizedInput } from '../dto/update-support-system-normalized.input';
 import { A11yDetails } from '../models/a11y-details.model';
+import { CreateMissingSupportSystemNormalizedInput } from '../dto/create-missing-support-system-normalized.input';
+import { ReviseSupportSystemInput } from '../dto/revise-support-system.input';
+import { ReviseSupportSystemNormalizedInput } from '../dto/revise-support-system-normalized.input';
+import { CreateMissingSupportSystemInput } from '../dto/create-missing-support-system.input';
 
 const supportSystem1 = new SupportSystem();
 supportSystem1.id = '9812a0c4-9cb4-4df2-b490-7a5648922f79';
@@ -25,6 +29,8 @@ supportSystem1.geographyRD = {
 	type: 'Point',
 };
 
+const reviseSupportSystem1 = { remarksRevision: '__REMARKS_REVISION__', ...supportSystem1 };
+
 const supportSystem2 = new SupportSystem();
 supportSystem2.id = '6d79f740-186d-4197-888e-3384fcb8cb6a';
 supportSystem2.surveyId = 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7';
@@ -38,7 +44,7 @@ supportSystem2.geographyRD = {
 	type: 'Point',
 };
 
-export { supportSystem1, supportSystem2 };
+export { supportSystem1, supportSystem2, reviseSupportSystem1 };
 
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
@@ -68,7 +74,11 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 		coordinates: [116211.88, 487352.77],
 		type: 'Point',
 	},
+	remarksRevision: null,
 };
+
+const reviseSupportSystemRaw = { ...supportSystemRaw };
+reviseSupportSystemRaw.remarksRevision = '__REMARKS_REVISION__';
 
 export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
@@ -83,8 +93,29 @@ export const createSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, new CreateSupportSystemInput());
 
+export const createMissingSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+	if (key === 'typeDetailed') {
+		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
+		return input;
+	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseSupportSystemRaw[key];
+	return input;
+}, new CreateMissingSupportSystemInput());
+
 const updateSupportSystem = new UpdateSupportSystemInput();
 updateSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+const reviseSupportSystem = new ReviseSupportSystemInput();
+reviseSupportSystem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
+reviseSupportSystem.remarksRevision = '__REMARKS_REVISION__';
+
 export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((input, key) => {
 	if (key === 'typeDetailed') {
 		input.typeDetailedFacade = supportSystemRaw[key] as SupportSystemTypeDetailedFacade;
@@ -98,9 +129,31 @@ export const updateSupportSystemInput = Object.keys(supportSystemRaw).reduce((in
 	return input;
 }, updateSupportSystem);
 
+export const reviseSupportSystemInput = Object.keys(reviseSupportSystemRaw).reduce((input, key) => {
+	if (key === 'typeDetailed') {
+		input.typeDetailedFacade = reviseSupportSystemRaw[key] as SupportSystemTypeDetailedFacade;
+		return input;
+	}
+	if (key === 'a11yDetails') {
+		input.a11yDetails = a11yDetails;
+		return input;
+	}
+	if (key === 'remarksRevision') {
+		input.remarksRevision = '__REMARKS_REVISION__';
+		return input;
+	}
+	input[key] = reviseSupportSystemRaw[key];
+	return input;
+}, reviseSupportSystem);
+
 export const createSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
 	createSupportSystemInput,
 	new CreateSupportSystemNormalizedInput(),
+);
+
+export const createMissingSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
+	createMissingSupportSystemInput,
+	new CreateMissingSupportSystemNormalizedInput(),
 );
 
 export const updateSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
@@ -108,10 +161,22 @@ export const updateSupportSystemNormalizedInput = normalizeSupportSystemInputUti
 	new UpdateSupportSystemNormalizedInput(),
 );
 
+export const reviseSupportSystemNormalizedInput = normalizeSupportSystemInputUtil(
+	reviseSupportSystem,
+	new ReviseSupportSystemNormalizedInput(),
+);
+
 export const domainSupportSystem: DomainSupportSystem = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	...supportSystemRaw,
+	deleted_at: null,
+};
+
+export const domainReviseSupportSystem: DomainSupportSystem = {
+	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	...reviseSupportSystemRaw,
 	deleted_at: null,
 };
 

@@ -13,6 +13,11 @@ import {
 	updateSupportSystemNormalizedInput,
 	luminaire1,
 	domainLuminaire,
+	domainReviseSupportSystem,
+	createMissingSupportSystemNormalizedInput,
+	reviseSupportSystem1,
+	reviseSupportSystemInput,
+	reviseSupportSystemNormalizedInput,
 } from './__stubs__';
 import type { SupportSystemWithoutGeography } from './types/support-system.repository.interface';
 import { SupportSystemType, SupportSystemTypeDetailedFacade } from './types';
@@ -34,11 +39,28 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	},
 };
 
+const revisePrismaServiceMock: MockedObjectDeep<PrismaService> = {
+	spanSupportSystems: {
+		create: jest.fn().mockResolvedValue(domainReviseSupportSystem),
+		findMany: jest.fn().mockResolvedValue([domainReviseSupportSystem]),
+		update: jest.fn().mockResolvedValue(domainReviseSupportSystem),
+	},
+	$executeRaw: jest.fn(),
+	$queryRaw: jest.fn(),
+	...(<any>{}),
+	spanLuminaires: {
+		create: jest.fn().mockResolvedValue(domainLuminaire),
+		findMany: jest.fn().mockResolvedValue([domainLuminaire]),
+	},
+};
+
 let repository: SupportSystemRepository;
 let luminaireRepositoryMock;
 const LuminaireRepositoryJest = jest.fn(() => ({
 	deleteLuminairesForSupportSystem: jest.fn(),
 }));
+
+const reviseRepo = new SupportSystemRepository(revisePrismaServiceMock, luminaireRepositoryMock);
 
 describe('Span Installation / SupportSystem / Repository', () => {
 	beforeEach(() => {
@@ -89,6 +111,50 @@ describe('Span Installation / SupportSystem / Repository', () => {
 		);
 	});
 
+	test('createMissingSupportSystem()', async () => {
+		const returnValue = await reviseRepo.createMissingSupportSystem(createMissingSupportSystemNormalizedInput);
+		const supportSystem = revisePrismaServiceMock.spanSupportSystems.create.mock.calls[0][0]
+			.data as SupportSystemWithoutGeography;
+		expect(supportSystem).toEqual(
+			expect.objectContaining({
+				id: supportSystem.id,
+				objects: {
+					connect: {
+						id: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+					},
+				},
+				surveys: {
+					connect: {
+						id: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+					},
+				},
+				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
+				installationHeight: new Decimal(10),
+				installationLength: new Decimal(10),
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				name: '__NAME__',
+				remarks: '__REMARKS__',
+				constructionYear: 1979,
+				houseNumber: '33',
+				type: 'Facade',
+				typeDetailed: 'MuurplaatInbouwRvs',
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
+				remarksRevision: '__REMARKS_REVISION__',
+			}),
+		);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(returnValue).toEqual(
+			expect.objectContaining({
+				...createMissingSupportSystemNormalizedInput,
+				a11yDetails: createMissingSupportSystemNormalizedInput.a11yDetails,
+			}),
+		);
+	});
+
 	test('getSupportSystems()', async () => {
 		prismaServiceMock.$queryRaw.mockResolvedValue([
 			{
@@ -110,6 +176,68 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			where: { surveyId: '__SURVEY_ID__', deleted_at: null },
 		});
 		expect(supportSystems).toEqual([expected]);
+	});
+
+	test('reviseSupportSystem()', async () => {
+		revisePrismaServiceMock.spanSupportSystems.update.mockResolvedValue(domainReviseSupportSystem);
+		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
+			{ geography: JSON.stringify(reviseSupportSystem1.geography) },
+		]);
+		const spy = jest
+			.spyOn(reviseRepo, 'getGeographyAsGeoJSON')
+			.mockResolvedValue(reviseSupportSystemInput.geography);
+		const returnValue = await reviseRepo.reviseSupportSystem(reviseSupportSystemNormalizedInput);
+		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
+		expect(revisePrismaServiceMock.spanSupportSystems.update).toHaveBeenCalledWith({
+			where: { id: reviseSupportSystemNormalizedInput.id },
+			data: {
+				a11yDetails: { limitationOnTheMaximumHeadroom: true },
+				installationHeight: new Decimal(10),
+				installationLength: new Decimal(10),
+				location: '__LOCATION__',
+				locationIndication: '__LOCATION_INDICATION__',
+				name: '__NAME__',
+				remarks: '__REMARKS__',
+				constructionYear: 1979,
+				houseNumber: '33',
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+				type: SupportSystemType.Facade,
+				geographyRD: {
+					coordinates: [116211.88, 487352.77],
+					type: 'Point',
+				},
+				remarksRevision: '__REMARKS_REVISION__',
+			},
+		});
+		expect(spy).toHaveBeenCalledWith(reviseSupportSystemNormalizedInput.id);
+		expect(returnValue).toEqual({
+			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			deleted_at: null,
+			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
+			surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+			name: '__NAME__',
+			type: SupportSystemType.Facade,
+			location: '__LOCATION__',
+			locationIndication: '__LOCATION_INDICATION__',
+			constructionYear: 1979,
+			a11yDetails: reviseSupportSystemNormalizedInput.a11yDetails,
+			installationHeight: new Decimal(10),
+			installationLength: new Decimal(10),
+			remarks: '__REMARKS__',
+			houseNumber: '33',
+			geography: {
+				coordinates: [52.370302853062604, 4.893996915500548],
+				type: 'Point',
+			},
+			geographyRD: {
+				coordinates: [116211.88, 487352.77],
+				type: 'Point',
+			},
+			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+			updated_at: undefined,
+			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: '__REMARKS_REVISION__',
+		});
 	});
 
 	test('updateSupportSystem()', async () => {
@@ -167,6 +295,7 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 			updated_at: undefined,
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			remarksRevision: null,
 		});
 	});
 

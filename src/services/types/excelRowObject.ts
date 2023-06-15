@@ -107,6 +107,7 @@ export type BestekspostenExcelRowObject = {
 export type MNummersExcelRowObject = {
 	'Voorlopige benaming': string;
 	'M-nummer': string;
+	'Eenh.': string;
 	'Omschrijving artikel': string;
 	Opmerking: string;
 };

@@ -15,7 +15,11 @@ import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdCommand } from './commands/find-span-measures-by-decomposition-id.command';
+import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
+import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
+import { ReviseSupportSystemInput } from './dto/revise-support-system.input';
+import { ReviseSupportSystemCommand } from './commands/revise-support-system.command';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -57,6 +61,28 @@ export class SupportSystemResolver {
 		return SupportSystemFactory.CreateSupportSystem(domainSupportSystem);
 	}
 
+	@Mutation(() => SupportSystem)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async createMissingSupportSystem(
+		@Args('createMissingSupportSystem') input: CreateMissingSupportSystemInput,
+	): Promise<SupportSystem> {
+		const domainReviseSupportSystem: DomainSupportSystem =
+			await this.commandBus.execute<CreateMissingSupportSystemCommand>(
+				new CreateMissingSupportSystemCommand(input),
+			);
+		return SupportSystemFactory.CreateSupportSystem(domainReviseSupportSystem);
+	}
+
+	@Mutation(() => SupportSystem)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
+	public async reviseSupportSystem(
+		@Args('reviseSupportSystem') input: ReviseSupportSystemInput,
+	): Promise<SupportSystem> {
+		const domainReviseSupportSystem: DomainSupportSystem =
+			await this.commandBus.execute<ReviseSupportSystemCommand>(new ReviseSupportSystemCommand(input));
+		return SupportSystemFactory.CreateSupportSystem(domainReviseSupportSystem);
+	}
+
 	@Query((returns) => [SupportSystem], { name: 'spanInstallationSupportSystems' })
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	async getSurveySupportSystems(@Args('surveyId', { type: () => String }) surveyId: string) {
@@ -70,8 +96,8 @@ export class SupportSystemResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.commandBus.execute<FindSpanMeasuresByDecompositionIdCommand>(
-			new FindSpanMeasuresByDecompositionIdCommand(id),
+		return this.queryBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
+			new FindSpanMeasuresByDecompositionIdQuery(id),
 		);
 	}
 }

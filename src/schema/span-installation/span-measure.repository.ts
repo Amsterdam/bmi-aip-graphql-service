@@ -103,6 +103,14 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 					},
 				}));
 				break;
+			case SpanDecompositionType.spanSupportSystemTensionWire:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionId,
+						type: 'TensionWire',
+					},
+				}));
+				break;
 			case SpanDecompositionType.spanLuminaire:
 				return !!(await this.prisma.spanLuminaires.findFirst({
 					where: {

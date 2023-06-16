@@ -23,10 +23,25 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 				break;
 		}
 
-		for (const item of dataSource) {
-			if (item.id === value) {
-				return true;
-			}
+		dataSource = availableSpanMeasureOptions;
+
+		switch (args.targetName) {
+			case 'CreateSpanMeasureInput':
+				for (const item of dataSource) {
+					if (item.id === value) {
+						return true;
+					}
+				}
+				break;
+			case 'SpanMeasureItemInput':
+				for (const item of dataSource) {
+					for (const measureItem of item.measureItems) {
+						if (measureItem.id === value) {
+							return true;
+						}
+					}
+				}
+				break;
 		}
 
 		return false;

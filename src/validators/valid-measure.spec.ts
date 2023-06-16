@@ -1,9 +1,6 @@
 import { ValidationArguments } from 'class-validator';
 
-import {
-	spanMeasureItems as availableSpanMeasureItemOptions,
-	spanMeasureOptions as availableSpanMeasureOptions,
-} from '../schema/span-installation/types/measure-options';
+import { spanMeasureOptions as availableSpanMeasureOptions } from '../schema/span-installation/types/measure-options';
 
 import { MeasureOptionValidation } from './valid-measure';
 
@@ -31,8 +28,22 @@ describe('MeasureOptionValidation', () => {
 
 		it('should return true for a valid measure item option', async () => {
 			// First found spanMeasureItemOption in /data/normalized-data-measures.json
-			const value = availableSpanMeasureItemOptions[0].id;
+			const value = availableSpanMeasureOptions[0].measureItems[0].id;
 
+			const args = {
+				targetName: 'SpanMeasureItemInput',
+				property: 'optionId',
+			} as ValidationArguments;
+
+			const isValid = await measureOptionValidation.validate(value, args);
+
+			expect(isValid).toBe(true);
+		});
+
+		it('should return true for a valid measure item option even when it is only in the nested arrays list', async () => {
+			// First found spanMeasureItemOption in /data/normalized-data-measures.json
+			//const value = availableSpanMeasureItemOptions[0].id;
+			const value = '32150ab1-19f1-4585-b0d3-8619f402573a';
 			const args = {
 				targetName: 'SpanMeasureItemInput',
 				property: 'optionId',

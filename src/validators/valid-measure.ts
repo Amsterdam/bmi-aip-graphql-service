@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
-import { PrismaService } from 'src/prisma.service';
 
 import {
 	spanMeasureItems as availableSpanMeasureItemOptions,
@@ -10,11 +9,8 @@ import {
 @ValidatorConstraint({ name: 'optionId' })
 @Injectable()
 export class MeasureOptionValidation implements ValidatorConstraintInterface {
-	constructor(private readonly prisma: PrismaService) {}
-
 	async validate(value: string, args: ValidationArguments): Promise<boolean> {
 		let dataSource;
-
 		switch (args.targetName) {
 			case 'CreateSpanMeasureInput':
 				dataSource = availableSpanMeasureOptions;
@@ -27,22 +23,13 @@ export class MeasureOptionValidation implements ValidatorConstraintInterface {
 				break;
 		}
 
-		let keyToCheck;
-
-		switch (args.property) {
-			case 'optionId':
-				keyToCheck = 'id';
-				break;
-			default:
-				keyToCheck = args.property;
-				break;
+		for (const item of dataSource) {
+			if (item.id === value) {
+				return true;
+			}
 		}
 
-		if (!dataSource.find((option) => option[keyToCheck] === value)) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	defaultMessage(args: ValidationArguments) {

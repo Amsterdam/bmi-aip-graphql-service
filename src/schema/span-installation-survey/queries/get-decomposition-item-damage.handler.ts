@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
 import { JunctionBoxSurveyService } from '../junction-box-survey.service';
-import { SpanDecompositionType } from '../../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../../span-installation/types/span-decomposition-item-type';
 import { JunctionBoxSurvey } from '../models/junction-box-survey.model';
 import { FacadeSurveyService } from '../facade-survey.service';
 import { FacadeSurvey } from '../models/facade-survey.model';
@@ -29,24 +29,24 @@ export class GetDecompositionItemDamageHandler implements IQueryHandler<GetDecom
 	async execute(
 		query: GetDecompositionItemDamageQuery,
 	): Promise<JunctionBoxSurvey | FacadeSurvey | MastSurvey | NodeSurvey | LuminaireSurvey> {
-		switch (query.decompositionType) {
-			case SpanDecompositionType.spanJunctionBox:
-				return this.junctionBoxService.getJunctionBoxSurveyOnPermanentId(query.decompositionId);
+		switch (query.decompositionItemType) {
+			case SpanDecompositionItemType.spanJunctionBox:
+				return this.junctionBoxService.getJunctionBoxSurveyOnPermanentId(query.decompositionItemId);
 				break;
-			case SpanDecompositionType.spanSupportSystemFacade:
-				return this.facadeSurveyService.getFacadeSurveyOnPermanentId(query.decompositionId);
+			case SpanDecompositionItemType.spanSupportSystemFacade:
+				return this.facadeSurveyService.getFacadeSurveyOnPermanentId(query.decompositionItemId);
 				break;
-			case SpanDecompositionType.spanSupportSystemMast:
-				return this.mastSurveyService.getMastSurveyOnPermanentId(query.decompositionId);
+			case SpanDecompositionItemType.spanSupportSystemMast:
+				return this.mastSurveyService.getMastSurveyOnPermanentId(query.decompositionItemId);
 				break;
-			case SpanDecompositionType.spanSupportSystemNode:
-				return this.nodeSurveyService.getNodeSurveyOnPermanentId(query.decompositionId);
+			case SpanDecompositionItemType.spanSupportSystemNode:
+				return this.nodeSurveyService.getNodeSurveyOnPermanentId(query.decompositionItemId);
 				break;
-			case SpanDecompositionType.spanSupportSystemTensionWire:
-				return this.tensionWireSurveyService.getTensionWireSurveyOnPermanentId(query.decompositionId);
+			case SpanDecompositionItemType.spanSupportSystemTensionWire:
+				return this.tensionWireSurveyService.getTensionWireSurveyOnPermanentId(query.decompositionItemId);
 				break;
-			case SpanDecompositionType.spanLuminaire:
-				return this.luminaireSurveyService.getLuminaireSurveyOnPermanentId(query.decompositionId);
+			case SpanDecompositionItemType.spanLuminaire:
+				return this.luminaireSurveyService.getLuminaireSurveyOnPermanentId(query.decompositionItemId);
 				break;
 		}
 

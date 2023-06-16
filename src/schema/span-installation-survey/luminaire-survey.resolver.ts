@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../span-installation/types/span-decomposition-item-type';
 
 import { LuminaireSurvey } from './models/luminaire-survey.model';
 import { LuminaireSurveyService } from './luminaire-survey.service';
@@ -53,7 +53,7 @@ export class LuminaireSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async getLuminaireDamage(@Args('junctionBoxId') luminaireId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
-			new GetDecompositionItemDamageQuery(luminaireId, SpanDecompositionType.spanLuminaire),
+			new GetDecompositionItemDamageQuery(luminaireId, SpanDecompositionItemType.spanLuminaire),
 		);
 	}
 }

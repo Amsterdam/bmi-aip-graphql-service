@@ -8,7 +8,6 @@ import { SpanMeasureStatus } from './../types/span-measure-status';
 
 @InputType()
 export class BaseSpanMeasureInput {
-	@IsValidMeasureOption()
 	@Field((type) => String)
 	description: string;
 

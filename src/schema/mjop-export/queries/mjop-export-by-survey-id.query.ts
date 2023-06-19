@@ -1,5 +1,5 @@
 import { Response } from 'express';
 
-export class MjopExportBySurveyIdQuery {
+export class MJOPExportBySurveyIdQuery {
 	public constructor(public readonly surveyId: string, readonly response: Response) {}
 }

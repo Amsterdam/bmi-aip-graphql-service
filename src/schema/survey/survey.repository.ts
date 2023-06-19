@@ -37,6 +37,16 @@ export class SurveyRepository implements ISurveyRepository {
 		});
 	}
 
+	async getSurveyByBatchId(batchId: string, inspectionStandardType: string): Promise<DbSurvey[]> {
+		return this.prisma.surveys.findMany({
+			where: {
+				batchId: batchId,
+				inspectionStandardType: inspectionStandardType,
+				NOT: { status: SurveyStates.deleted },
+			},
+		});
+	}
+
 	async getSurveysByObjectId(objectId: string): Promise<DbSurvey[]> {
 		return this.prisma.surveys.findMany({
 			where: { objectId: objectId },

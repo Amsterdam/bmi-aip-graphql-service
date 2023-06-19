@@ -1,8 +1,8 @@
 import { Cell } from 'exceljs';
 
-import { MJOPColumnHeaderKeys } from './types/mjop-record';
+import { MJOPColumnHeaderKeys } from './mjop-record';
 
-export interface MJOPExportHeaderStyle {
+export interface MjopExportHeaderStyle {
 	bgColor: string;
 	textColor: string;
 	italic?: boolean;
@@ -14,7 +14,7 @@ export interface MJOPExportHeaderStyle {
 export interface MjopExportColumn {
 	key: MJOPColumnHeaderKeys;
 	header: string;
-	headerStyle: MJOPExportHeaderStyle;
+	headerStyle: MjopExportHeaderStyle;
 	/**
 	 * Adds data to Cell
 	 * @param {Cell} cell Cell reference to exceljs data workbook > sheet > row > cell

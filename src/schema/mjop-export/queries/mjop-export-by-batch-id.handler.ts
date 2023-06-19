@@ -5,25 +5,16 @@ import { Worksheet } from 'exceljs';
 
 import { InspectionStandard } from '../../survey/types';
 import { SurveyService } from '../../survey/survey.service';
+import { Survey } from '../../survey/models/survey.model';
 
-import { MJOPExportBySurveyIdQuery } from './mjop-export-by-survey-id.query';
+import { MJOPExportByBatchIdQuery } from './mjop-export-by-batch-id.query';
 
-
-@QueryHandler(MJOPExportBySurveyIdQuery)
-export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySurveyIdQuery> {
+@QueryHandler(MJOPExportByBatchIdQuery)
+export class MJOPExportByBatchIdHandler implements IQueryHandler<MJOPExportByBatchIdQuery> {
 	constructor(private surveyService: SurveyService, private readonly addMjopSheetService: AddMJOPSheetService) {}
 
-	async execute(query: MJOPExportBySurveyIdQuery) {
-		const survey = await this.surveyService.getSurvey(query.surveyId);
-
-		if (
-			survey.inspectionStandardType !== InspectionStandard.nen2767 &&
-			survey.inspectionStandardType !== InspectionStandard.fmeca
-		) {
-			return query.response.status(500).send({ code: 'UNKNOWN_TYPE:' + survey.inspectionStandardType });
-		}
-
-		const isFmeca = survey.inspectionStandardType === InspectionStandard.fmeca;
+	async execute(query: MJOPExportByBatchIdQuery) {
+		const isFmeca = query.inspectionStandardType === InspectionStandard.fmeca;
 
 		const workbook = new Promise<ExcelJS.Workbook>((resolve) => {
 			const wb = new ExcelJS.Workbook();
@@ -35,8 +26,15 @@ export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySu
 			const worksheet: Worksheet = generatedWorkbook.addWorksheet('MJOP', {
 				views: [{ state: 'frozen', ySplit: 1, xSplit: 1 }],
 			});
-
-			await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, true);
+			const surveys: Survey[] = await this.surveyService.getSurveysByBatchId(
+				query.batchId,
+				query.inspectionStandardType,
+			);
+			let generateHeaders = true;
+			for (const survey of surveys) {
+				await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, generateHeaders);
+				generateHeaders = false;
+			}
 			const fileName = 'MJOP_Report.xlsx';
 			query.response.setHeader(
 				'Content-Type',

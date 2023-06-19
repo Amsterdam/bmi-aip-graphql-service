@@ -14,17 +14,17 @@ import { CyclicMeasureService } from '../measure/cyclic-measure.service';
 import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
 import { DefectService } from '../ti/defect.service';
 
-import { MjopMeasuresService } from './mjop-measures.service';
+import { MJOPMeasuresService } from './mjop-measures.service';
 import { MJOPRecord } from './types/mjop-record';
-import { IAsset } from './types/asset';
-import { ISurvey } from './types/survey';
-import { IElement } from './types/element';
-import { IUnit } from './types/unit';
-import { IDerivedConditionScoreElement } from './types/derived-condition-score-element';
-import { IDerivedConditionScoreUnit } from './types/Derived-condition-score-unit';
+import { IMJOPAsset } from './types/mjop-asset';
+import { IMJOPSurvey } from './types/mjop-survey';
+import { IMJOPElement } from './types/mjop-element';
+import { IMJOPUnit } from './types/mjop-unit';
+import { IMJOPDerivedConditionScoreElement } from './types/mjop-derived-condition-score-element';
+import { IMJOPDerivedConditionScoreUnit } from './types/mjop-derived-condition-score-unit';
 
 @Injectable()
-export class MjopDataService {
+export class MJOPDataService {
 	public constructor(
 		private readonly assetService: AssetService,
 		private readonly elementService: ElementService,
@@ -34,24 +34,24 @@ export class MjopDataService {
 		private readonly derivedConditionScoreService: DerivedConditionScoreService,
 		private readonly defaultMaintenanceMeasureService: DefaultMaintenanceMeasureService,
 		private readonly defectService: DefectService,
-		private readonly getMjopMeasuresDataService: MjopMeasuresService,
+		private readonly getMjopMeasuresDataService: MJOPMeasuresService,
 	) {}
 
 	public async getMJOPData(survey: Survey): Promise<Partial<MJOPRecord>> {
 		const asset: Asset = await this.assetService.getAssetById(survey.objectId);
 		const elements: Element[] = await this.elementService.getElementWithUnits(survey.id);
 
-		const assetData: IAsset = this.getAssetProps(asset);
-		const surveyData: ISurvey = this.getSurveyProps(survey);
-		const elementData: IElement[] = [];
-		const unitData: IUnit[] = [];
+		const assetData: IMJOPAsset = this.getAssetProps(asset);
+		const surveyData: IMJOPSurvey = this.getSurveyProps(survey);
+		const elementData: IMJOPElement[] = [];
+		const unitData: IMJOPUnit[] = [];
 
 		for (const element of elements) {
 			const derivedConditionScoreElements: DerivedConditionScore[] =
 				await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
 			const derivedConditionScoreElement = derivedConditionScoreElements.find((score) => score.unitId === null);
 
-			const unitsWithMeasures: IUnit[] = [];
+			const unitsWithMeasures: IMJOPUnit[] = [];
 
 			for (const unit of element.units) {
 				const derivedConditionScoreUnit = derivedConditionScoreElements.find((score) => score.unitId !== null);
@@ -98,7 +98,7 @@ export class MjopDataService {
 		return mjopData;
 	}
 
-	private getAssetProps(asset: Asset): IAsset {
+	private getAssetProps(asset: Asset): IMJOPAsset {
 		return {
 			code: asset.code,
 			assetName: asset.name,
@@ -107,7 +107,7 @@ export class MjopDataService {
 		};
 	}
 
-	private getSurveyProps(survey: Survey): ISurvey {
+	private getSurveyProps(survey: Survey): IMJOPSurvey {
 		return {
 			condition: survey.condition,
 			careScore: survey.careCondition,
@@ -115,7 +115,7 @@ export class MjopDataService {
 		};
 	}
 
-	private getElementProps(element: Element): IElement {
+	private getElementProps(element: Element): IMJOPElement {
 		return {
 			id: element.id,
 			assetId: element.objectId,
@@ -123,7 +123,7 @@ export class MjopDataService {
 		};
 	}
 
-	private getUnitProps(unit: Unit): IUnit {
+	private getUnitProps(unit: Unit): IMJOPUnit {
 		return {
 			elementId: unit.elementId,
 			unitName: unit.name,
@@ -135,7 +135,7 @@ export class MjopDataService {
 
 	private getDerivedConditionScoreUnitProps(
 		derivedConditionScore: DerivedConditionScore,
-	): IDerivedConditionScoreUnit {
+	): IMJOPDerivedConditionScoreUnit {
 		return {
 			unitCondition: derivedConditionScore?.score,
 			unitCare: derivedConditionScore?.careScore ?? derivedConditionScore?.derivedCareScore,
@@ -145,7 +145,7 @@ export class MjopDataService {
 
 	private getDerivedConditionScoreElementProps(
 		derivedConditionScore: DerivedConditionScore,
-	): IDerivedConditionScoreElement {
+	): IMJOPDerivedConditionScoreElement {
 		return {
 			elementCondition: derivedConditionScore?.derivedScore,
 			elementCare: derivedConditionScore?.derivedCareScore,

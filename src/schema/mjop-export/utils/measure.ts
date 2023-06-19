@@ -1,4 +1,4 @@
-export function MeasureTypes(value) {
+export function getMeasureTypeLabel(value) {
 	switch (value) {
 		case 'CorrectiveMaintenance':
 			return 'Correctief onderhoud';

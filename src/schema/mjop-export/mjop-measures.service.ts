@@ -11,14 +11,14 @@ import { DefaultMaintenanceMeasure } from '../default-maintenance-measure/models
 import { FailureMode } from '../failure-mode/models/failure-mode.model';
 import { FailureModeService } from '../failure-mode/failure-mode.service';
 
-import { IMeasure } from './types/measure';
-import { ICyclicMeasure } from './types/cyclic-measure';
-import { IDefect } from './types/defect';
-import { IFailureMode } from './types/failure-mode';
+import { IMJOPMeasure } from './types/mjop-measure';
+import { IMJOPCyclicMeasure } from './types/mjop-cyclic-measure';
+import { IMJOPDefect } from './types/mjop-defect';
+import { IMJOPFailureMode } from './types/mjop-failure-mode';
 import { CyclicMaintenance } from './types/mjop-record';
 
 @Injectable()
-export class MjopMeasuresService {
+export class MJOPMeasuresService {
 	constructor(
 		private readonly measureService: MeasureService,
 		private readonly cyclicMeasureService: CyclicMeasureService,
@@ -27,8 +27,8 @@ export class MjopMeasuresService {
 		private readonly failureModeService: FailureModeService,
 	) {}
 
-	public async mapMeasures(measures: Measure[]): Promise<IMeasure[]> {
-		const mappedMeasures: IMeasure[] = [];
+	public async mapMeasures(measures: Measure[]): Promise<IMJOPMeasure[]> {
+		const mappedMeasures: IMJOPMeasure[] = [];
 		const cyclicMaintenance: CyclicMaintenance = {};
 
 		for (const measure of measures) {
@@ -55,8 +55,11 @@ export class MjopMeasuresService {
 		return mappedMeasures;
 	}
 
-	public async mapCyclicMeasures(cyclicMeasures: CyclicMeasure[], unitQuantity: number): Promise<ICyclicMeasure[]> {
-		const mappedCyclicMeasures: ICyclicMeasure[] = [];
+	public async mapCyclicMeasures(
+		cyclicMeasures: CyclicMeasure[],
+		unitQuantity: number,
+	): Promise<IMJOPCyclicMeasure[]> {
+		const mappedCyclicMeasures: IMJOPCyclicMeasure[] = [];
 
 		for (const cyclicMeasure of cyclicMeasures) {
 			const defaultMaintenanceMeasure: DefaultMaintenanceMeasure =
@@ -75,15 +78,20 @@ export class MjopMeasuresService {
 				cyclicMaintenance,
 			};
 
-			for (let i = 0; i <= 20; i++) {
+			// Number of years to plot in the exported file
+			const amountOfYearsPlotted = 20;
+
+			for (let i = 0; i <= amountOfYearsPlotted; i++) {
 				const yearNumber = new Date().getFullYear();
 				const currentYear = yearNumber + i;
 
 				if (cyclicMeasure.planYear === currentYear) {
 					cyclicMaintenance['year' + cyclicMeasure.planYear.toString()] =
 						mappedCyclicMeasure.totalCostWithSurcharge;
-				} else if (cyclicMeasure.cycle && cyclicMeasure.cycle <= 20) {
-					for (let j = 0; j <= 120 - i; j++) {
+				} else if (cyclicMeasure.cycle && cyclicMeasure.cycle <= amountOfYearsPlotted) {
+					// Maximum number of maintenance cycles to consider
+					const maxMaintenanceCycles = 120;
+					for (let j = 0; j <= maxMaintenanceCycles - i; j++) {
 						const maintenCycleYear = Math.ceil(cyclicMeasure.planYear + cyclicMeasure.cycle * j);
 						if (cyclicMeasure.cycle < 1) {
 							cyclicMaintenance['year' + maintenCycleYear.toString()] =
@@ -102,7 +110,7 @@ export class MjopMeasuresService {
 		return mappedCyclicMeasures;
 	}
 
-	private getMeasureProps(measure: Measure): IMeasure {
+	private getMeasureProps(measure: Measure): IMJOPMeasure {
 		return {
 			maintenanceDescription: measure.description,
 			maintenanceType: measure.maintenanceType,
@@ -121,7 +129,7 @@ export class MjopMeasuresService {
 		cyclicMeasure: CyclicMeasure,
 		description: string,
 		unitQuantity: number,
-	): ICyclicMeasure {
+	): IMJOPCyclicMeasure {
 		return {
 			maintenanceDescription: description,
 			maintenanceType: cyclicMeasure.maintenanceType,
@@ -137,7 +145,7 @@ export class MjopMeasuresService {
 		};
 	}
 
-	private getFailureModeProps(failureMode: FailureMode): IFailureMode {
+	private getFailureModeProps(failureMode: FailureMode): IMJOPFailureMode {
 		return {
 			failureModeName: failureMode.customName,
 			faaloorzaak: failureMode?.metaData?.failureCause,
@@ -157,7 +165,7 @@ export class MjopMeasuresService {
 		};
 	}
 
-	private getDefectProps(defect: Defect): IDefect {
+	private getDefectProps(defect: Defect): IMJOPDefect {
 		if (defect === null) {
 			return;
 		} else

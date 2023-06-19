@@ -1,27 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Cell, Row, Style, Workbook, Worksheet } from 'exceljs';
+import { Cell, Row, Style, Worksheet } from 'exceljs';
 
-import { Survey } from '../../survey/models/survey.model';
-import { MjopExportColumn } from '../mjop-export-column';
-import { infrastrutureTypeList } from '../utils/infrastruture-type-list';
-import { mainMaterialList } from '../utils/main-material-list';
-import { MJOPColumnHeaderKeys, MJOPRecord } from '../types/mjop-record';
-import { MjopDataService } from '../mjop-data.service';
-import { MeasureTypes } from '../utils/measure';
-import { IUnit } from '../types/unit';
-import { IMeasure } from '../types/measure';
-import { IElement } from '../types/element';
+import { Survey } from '../survey/models/survey.model';
+
+import { MjopExportColumn } from './types/mjop-export-column';
+import { infrastrutureTypeList } from './utils/infrastruture-type-list';
+import { mainMaterialList } from './utils/main-material-list';
+import { MJOPColumnHeaderKeys, MJOPRecord } from './types/mjop-record';
+import { MJOPDataService } from './mjop-data.service';
+import { getMeasureTypeLabel } from './utils/measure';
+import { IMJOPUnit } from './types/mjop-unit';
+import { IMJOPMeasure } from './types/mjop-measure';
+import { IMJOPElement } from './types/mjop-element';
 
 @Injectable()
-export class AddMjopSheetService {
-	public constructor(private readonly getMJOPDataService: MjopDataService) {}
+export class AddMJOPSheetService {
+	public constructor(private readonly getMjopDataService: MJOPDataService) {}
 
-	public async addMJOPSheet(workbook: Workbook, survey: Survey, isFmeca: boolean) {
-		const data: Partial<MJOPRecord> = await this.getMJOPDataService.getMJOPData(survey);
-
-		const worksheet: Worksheet = workbook.addWorksheet('MJOP', {
-			views: [{ state: 'frozen', ySplit: 1, xSplit: 1 }],
-		});
+	public async addMJOPSheet(worksheet: Worksheet, survey: Survey, isFmeca: boolean, generateHeaders: boolean) {
+		const data: Partial<MJOPRecord> = await this.getMjopDataService.getMJOPData(survey);
 
 		const assetColumns: MjopExportColumn[] = await this.getAssetColumns(data, survey.id);
 		const surveyColumns: MjopExportColumn[] = await this.getSurveyColumns();
@@ -57,12 +54,12 @@ export class AddMjopSheetService {
 		];
 
 		const headers = columns.map((column) => column.header);
-
-		// Render column headers
-		const headerRow = worksheet.addRow(headers);
-		headerRow.height = 40;
-		this.renderHeaderRow(headerRow, columns); // Apply header styles
-
+		if (generateHeaders) {
+			// Render column headers
+			const headerRow = worksheet.addRow(headers);
+			headerRow.height = 40;
+			this.renderHeaderRow(headerRow, columns); // Apply header styles
+		}
 		// Apply specific column styles
 		const startingCol = 1;
 		columns.forEach((column, columnIdx) => {
@@ -71,9 +68,9 @@ export class AddMjopSheetService {
 		});
 
 		const asset = data.asset;
-		data.survey.elements?.forEach((element: IElement) => {
-			element.units?.forEach((unit: IUnit) => {
-				unit.measures?.forEach((measure: IMeasure) => {
+		data.survey.elements?.forEach((element: IMJOPElement) => {
+			element.units?.forEach((unit: IMJOPUnit) => {
+				unit.measures?.forEach((measure: IMJOPMeasure) => {
 					let failureMode;
 					let defect;
 					if (isFmeca) {
@@ -638,7 +635,7 @@ export class AddMjopSheetService {
 					key: 'maintenanceType',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: Cell, value): void => {
-						cell.value = MeasureTypes(value);
+						cell.value = getMeasureTypeLabel(value);
 					},
 					width: 20,
 				},
@@ -812,13 +809,13 @@ export class AddMjopSheetService {
 	private getRamsPriority(value: string) {
 		switch (value) {
 			case '1':
-				return '>5 jaar herstellen';
+				return `>5 jaar herstellen (${value})`;
 			case '2':
-				return '3-5 jaar herstellen';
+				return `3-5 jaar herstellen (${value})`;
 			case '3':
-				return '1-2 jaar herstellen';
+				return `1-2 jaar herstellen (${value})`;
 			case '4':
-				return 'direct herstellen';
+				return `direct herstellen (${value})`;
 			default:
 				return '';
 		}

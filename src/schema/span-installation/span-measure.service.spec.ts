@@ -12,7 +12,7 @@ import { SpanMeasureItemService } from './span-measure-item.service';
 import { domainSpanMeasureItem } from './__stubs__/span-measure-item';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 import { SpanMeasureItem } from './models/span-measure-item.model';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 
 jest.mock('./span-measure.repository');
 
@@ -44,7 +44,7 @@ describe('Span Installation / SpanMeasure / Service', () => {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = newId();
 		spanMeasureItem.spanMeasureId = newId();
-		spanMeasureItem.itemType = SpanDecompositionType.spanJunctionBox;
+		spanMeasureItem.itemType = SpanDecompositionItemType.spanJunctionBox;
 		spanMeasureItem.quantityEstimate = null;
 		spanMeasureItem.quantityActual = null;
 
@@ -58,7 +58,7 @@ describe('Span Installation / SpanMeasure / Service', () => {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = newId();
 		spanMeasureItem.spanMeasureId = newId();
-		spanMeasureItem.itemType = SpanDecompositionType.spanJunctionBox;
+		spanMeasureItem.itemType = SpanDecompositionItemType.spanJunctionBox;
 		spanMeasureItem.quantityEstimate = 1;
 		spanMeasureItem.quantityActual = null;
 
@@ -72,7 +72,7 @@ describe('Span Installation / SpanMeasure / Service', () => {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = newId();
 		spanMeasureItem.spanMeasureId = newId();
-		spanMeasureItem.itemType = SpanDecompositionType.spanJunctionBox;
+		spanMeasureItem.itemType = SpanDecompositionItemType.spanJunctionBox;
 		spanMeasureItem.quantityEstimate = 1;
 		spanMeasureItem.quantityActual = null;
 		spanMeasureItem.isActive = true;
@@ -87,7 +87,7 @@ describe('Span Installation / SpanMeasure / Service', () => {
 		const spanMeasureItem = new SpanMeasureItem();
 		spanMeasureItem.id = newId();
 		spanMeasureItem.spanMeasureId = newId();
-		spanMeasureItem.itemType = SpanDecompositionType.spanJunctionBox;
+		spanMeasureItem.itemType = SpanDecompositionItemType.spanJunctionBox;
 		spanMeasureItem.quantityEstimate = 1;
 		spanMeasureItem.quantityActual = 2;
 

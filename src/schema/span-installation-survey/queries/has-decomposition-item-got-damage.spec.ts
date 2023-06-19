@@ -1,7 +1,7 @@
 import { MockedObjectDeep } from 'ts-jest';
 
 import { JunctionBoxSurveyService } from '../junction-box-survey.service';
-import { SpanDecompositionType } from '../../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../../span-installation/types/span-decomposition-item-type';
 import { FacadeSurveyService } from '../facade-survey.service';
 import { LuminaireSurveyService } from '../luminaire-survey.service';
 import { MastSurveyService } from '../mast-survey.service';
@@ -36,11 +36,14 @@ const luminaireSurveyServiceMock: MockedObjectDeep<LuminaireSurveyService> = {
 	...(<any>{}),
 };
 
-const decompositionId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
+const decompositionItemId = '3cc978ca-3b4e-476a-b44c-d4cf6f6ac8f7';
 
 describe('HasDecompositionItemGotDamageHandler', () => {
 	test('executes query', async () => {
-		const command = new HasDecompositionItemGotDamageQuery(decompositionId, SpanDecompositionType.spanJunctionBox);
+		const command = new HasDecompositionItemGotDamageQuery(
+			decompositionItemId,
+			SpanDecompositionItemType.spanJunctionBox,
+		);
 		await new HasDecompositionItemGotDamageHandler(
 			junctionBoxServiceMock,
 			facadeSurveyServiceMock,
@@ -51,6 +54,6 @@ describe('HasDecompositionItemGotDamageHandler', () => {
 		).execute(command);
 
 		expect(junctionBoxServiceMock.hasDamage).toHaveBeenCalledTimes(1);
-		expect(junctionBoxServiceMock.hasDamage).toHaveBeenCalledWith(decompositionId);
+		expect(junctionBoxServiceMock.hasDamage).toHaveBeenCalledWith(decompositionItemId);
 	});
 });

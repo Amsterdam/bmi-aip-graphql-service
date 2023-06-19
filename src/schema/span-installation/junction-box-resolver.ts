@@ -14,12 +14,12 @@ import { UpdateJunctionBoxCommand } from './commands/update-junction-box.command
 import { JunctionBox as DomainJunctionBox } from './types/junction-box.repository.interface';
 import { DeleteJunctionBoxCommand } from './commands/delete-junction-box.command';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionItemIdQuery } from './queries/find-span-measures-by-decomposition-item-id.query';
 import { CreateMissingJunctionBoxInput } from './dto/create-missing-junction-box.input';
 import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junction-box.command';
 import { ReviseJunctionBoxCommand } from './commands/revise-junction-box.command';
 import { ReviseJunctionBoxInput } from './dto/revise-junction-box.input';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -84,15 +84,15 @@ export class JunctionBoxResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.queryBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
-			new FindSpanMeasuresByDecompositionIdQuery(id),
+		return this.queryBus.execute<FindSpanMeasuresByDecompositionItemIdQuery>(
+			new FindSpanMeasuresByDecompositionItemIdQuery(id),
 		);
 	}
 
 	@ResolveField()
 	async hasDamage(@Parent() { id }: JunctionBox): Promise<boolean> {
 		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
-			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionType.spanJunctionBox),
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanJunctionBox),
 		);
 	}
 }

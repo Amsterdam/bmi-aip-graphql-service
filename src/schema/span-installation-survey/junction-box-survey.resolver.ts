@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../span-installation/types/span-decomposition-item-type';
 
 import { JunctionBoxSurvey } from './models/junction-box-survey.model';
 import { JunctionBoxSurveyService } from './junction-box-survey.service';
@@ -53,7 +53,7 @@ export class JunctionBoxSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async getJunctionBoxDamage(@Args('junctionBoxId') junctionBoxId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
-			new GetDecompositionItemDamageQuery(junctionBoxId, SpanDecompositionType.spanJunctionBox),
+			new GetDecompositionItemDamageQuery(junctionBoxId, SpanDecompositionItemType.spanJunctionBox),
 		);
 	}
 }

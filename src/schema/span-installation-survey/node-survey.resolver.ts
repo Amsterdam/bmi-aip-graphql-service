@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../span-installation/types/span-decomposition-item-type';
 
 import { NodeSurvey } from './models/node-survey.model';
 import { NodeSurveyService } from './node-survey.service';
@@ -49,7 +49,7 @@ export class NodeSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async getNodeSurveyDamage(@Args('supportSystemId') supportSystemId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
-			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionType.spanSupportSystemNode),
+			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionItemType.spanSupportSystemNode),
 		);
 	}
 }

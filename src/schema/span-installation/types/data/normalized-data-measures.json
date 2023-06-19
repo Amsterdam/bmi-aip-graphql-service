@@ -3,7 +3,7 @@
 		{
 			"id": "d1f67f7c-038f-4ce9-87de-da476dfc58cc",
 			"description": "Verwijderen aansluitkabel",
-			"decompositionType": "spanJunctionBox",
+			"decompositionItemType": "spanJunctionBox",
 			"measureItems": [
 				{
 					"id": "bd5f92b5-3d91-4482-8e53-bf63fb9c0951",
@@ -31,7 +31,7 @@
 		{
 			"id": "8ebed964-4a95-49fd-b5d2-b6a756afcaec",
 			"description": "Verwijderen installatiebuis",
-			"decompositionType": "spanJunctionBox",
+			"decompositionItemType": "spanJunctionBox",
 			"measureItems": [
 				{
 					"id": "3fea785e-ae3f-4436-9337-7c656b78e0d2",
@@ -45,7 +45,7 @@
 		{
 			"id": "93b18164-8ea0-4427-8fcf-d779d67b3006",
 			"description": "Aanbrengen aansluitkabel aan spandraad",
-			"decompositionType": "spanJunctionBox",
+			"decompositionItemType": "spanJunctionBox",
 			"measureItems": [
 				{
 					"id": "3ccf96fa-1d11-4f73-af8d-f5aa5da76c59",
@@ -73,7 +73,7 @@
 		{
 			"id": "c8eb5dc4-65a7-4c01-a66e-aa858918bf5f",
 			"description": "Aanbrengen aansluitkabel aan gevel",
-			"decompositionType": "spanJunctionBox",
+			"decompositionItemType": "spanJunctionBox",
 			"measureItems": [
 				{
 					"id": "012c30fa-a8ee-4189-af59-55ed70e293ae",
@@ -101,7 +101,7 @@
 		{
 			"id": "d39f9108-49c3-43e1-a21a-a2fdb3b9b0aa",
 			"description": "Aanbrengen aansluitkabel in armatuur",
-			"decompositionType": "spanJunctionBox",
+			"decompositionItemType": "spanJunctionBox",
 			"measureItems": [
 				{
 					"id": "ca6d5e77-c43a-494a-aa5e-1ca97e96b2ad",
@@ -122,7 +122,7 @@
 		{
 			"id": "d071c21e-43c1-49cf-aef0-1bf8a541d69b",
 			"description": "Vervangen mastbeugel",
-			"decompositionType": "spanSupportSystemMast",
+			"decompositionItemType": "spanSupportSystemMast",
 			"measureItems": [
 				{
 					"id": "32150ab1-19f1-4585-b0d3-8619f402573a",
@@ -150,7 +150,7 @@
 		{
 			"id": "663dca9d-590f-43d4-93f0-63f86e609fd6",
 			"description": "Vervangen mastopzetstuk",
-			"decompositionType": "spanSupportSystemMast",
+			"decompositionItemType": "spanSupportSystemMast",
 			"measureItems": [
 				{
 					"id": "cc5de963-3046-405a-8d00-5f9fd6d00dbd",
@@ -185,7 +185,7 @@
 		{
 			"id": "95a1f9db-2736-4d32-b398-c5d4c9943e12",
 			"description": "Verwijderen gevelbevestiging incl. gevelherstel",
-			"decompositionType": "spanSupportSystemFacade",
+			"decompositionItemType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "3593592f-01e3-412d-921b-479159456623",
@@ -206,7 +206,7 @@
 		{
 			"id": "7f577a83-ede6-48c6-92df-5f3f56ba0c35",
 			"description": "Aanbrengen ankerverbindingen incl. trekproeven",
-			"decompositionType": "spanSupportSystemFacade",
+			"decompositionItemType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "2c84725c-f157-4c4b-a893-078cab090ac8",
@@ -325,7 +325,7 @@
 		{
 			"id": "ae600b58-0465-4cad-8756-22d49d44ca0b",
 			"description": "Aanbrengen muurplaat",
-			"decompositionType": "spanSupportSystemFacade",
+			"decompositionItemType": "spanSupportSystemFacade",
 			"measureItems": [
 				{
 					"id": "874d7128-fbdb-4ba1-a993-54ee613cbff3",
@@ -353,7 +353,7 @@
 		{
 			"id": "a74fac0c-c2e0-4054-89ab-614736454aa7",
 			"description": "Verwijderen spandraadsysteem (knoop)",
-			"decompositionType": "spanSupportSystemNode",
+			"decompositionItemType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "fa6d1872-b958-471b-8fb1-afcfd6e47530",
@@ -374,7 +374,7 @@
 		{
 			"id": "301d3867-82d4-4579-a4ab-2f5db39397e0",
 			"description": "Verwijderen spandraadsysteem boven GVB  (knoop)",
-			"decompositionType": "spanSupportSystemNode",
+			"decompositionItemType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "586f37e2-e61b-4712-9bae-cd285209cfed",
@@ -395,7 +395,7 @@
 		{
 			"id": "9ab94fef-fc66-4deb-9922-f3b76a5b9585",
 			"description": "Aanbrengen spandraadsysteem (knoop)",
-			"decompositionType": "spanSupportSystemNode",
+			"decompositionItemType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "70daf8db-4f38-4559-9b54-aa03fdfac4c7",
@@ -521,7 +521,7 @@
 		{
 			"id": "49992c47-51a8-47c7-9a4f-ea6815d1f2e9",
 			"description": "Aanbrengen spandraadsysteem boven GVB (knoop)",
-			"decompositionType": "spanSupportSystemNode",
+			"decompositionItemType": "spanSupportSystemNode",
 			"measureItems": [
 				{
 					"id": "07382fea-23d1-4605-a329-8c1394a7e92c",
@@ -633,7 +633,7 @@
 		{
 			"id": "3c9f20c5-da53-4792-ba31-0b2b05cb9a73",
 			"description": "Verwijderen spandraadsysteem (spandraad)",
-			"decompositionType": "spanSupportSystemTensionWire",
+			"decompositionItemType": "spanSupportSystemTensionWire",
 			"measureItems": [
 				{
 					"id": "6b3fac5c-a035-4210-a8b2-8c47b592d2cd",
@@ -731,7 +731,7 @@
 		{
 			"id": "98025ff1-f8d9-4c46-a54d-d3d0b203bf0d",
 			"description": "Verwijderen spandraadsysteem boven GVB (spandraad)",
-			"decompositionType": "spanSupportSystemTensionWire",
+			"decompositionItemType": "spanSupportSystemTensionWire",
 			"measureItems": [
 				{
 					"id": "567e7cae-6208-47f0-928e-958a24552696",
@@ -752,7 +752,7 @@
 		{
 			"id": "fbf13d22-149e-472a-9aea-f0e976673f3d",
 			"description": "Aanbrengen spandraadsysteem boven GVB (spandraad)",
-			"decompositionType": "spanSupportSystemTensionWire",
+			"decompositionItemType": "spanSupportSystemTensionWire",
 			"measureItems": [
 				{
 					"id": "5215cc36-08f2-4b70-b27c-2094d0e6322a",
@@ -822,7 +822,7 @@
 		{
 			"id": "956e4169-2e93-4456-8f8f-dbb13903e238",
 			"description": "Vervangen armatuur",
-			"decompositionType": "spanLuminaire",
+			"decompositionItemType": "spanLuminaire",
 			"measureItems": [
 				{
 					"id": "f6a4a3d5-1868-4794-aec2-56a87c725527",
@@ -885,7 +885,7 @@
 		{
 			"id": "35d24b4d-4778-4379-9377-7d44c873c006",
 			"description": "Retrofitten armatuur",
-			"decompositionType": "spanLuminaire",
+			"decompositionItemType": "spanLuminaire",
 			"measureItems": [
 				{
 					"id": "c600beca-5889-4433-a205-1382cad46223",
@@ -941,7 +941,7 @@
 		{
 			"id": "0b692882-dcd9-4fd4-bd1f-f0ea2b4d62e6",
 			"description": "Verwijderen armatuur",
-			"decompositionType": "spanLuminaire",
+			"decompositionItemType": "spanLuminaire",
 			"measureItems": [
 				{
 					"id": "ca1908a7-1ecb-47fa-8d75-a35d7f01b74b",
@@ -955,7 +955,7 @@
 		{
 			"id": "34a1df59-d384-4e89-a830-6e5ac50d5ad8",
 			"description": "Aanbrengen armatuur",
-			"decompositionType": "spanLuminaire",
+			"decompositionItemType": "spanLuminaire",
 			"measureItems": [
 				{
 					"id": "b7a8dbdc-675a-43d8-9644-c362e5f282e5",

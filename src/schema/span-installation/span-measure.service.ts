@@ -19,9 +19,9 @@ export class SpanMeasureService {
 		);
 	}
 
-	async findSpanMeasuresByDecompositionId(decompositionId: string): Promise<SpanMeasure[]> {
-		return (await this.spanMeasureRepo.findSpanMeasuresByDecompositionId(decompositionId)).map((spanMeasure) =>
-			SpanMeasureFactory.CreateSpanMeasure(spanMeasure),
+	async findSpanMeasuresByDecompositionItemId(decompositionItemId: string): Promise<SpanMeasure[]> {
+		return (await this.spanMeasureRepo.findSpanMeasuresByDecompositionItemId(decompositionItemId)).map(
+			(spanMeasure) => SpanMeasureFactory.CreateSpanMeasure(spanMeasure),
 		);
 	}
 

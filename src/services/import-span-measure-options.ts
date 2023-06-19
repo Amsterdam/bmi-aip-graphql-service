@@ -320,7 +320,7 @@ export class ImportSpanMeasureOptions {
 			} else {
 				optionFormatted.measureItems.map((measureItem) => {
 					const existingItem = measureOptions[optionFormatted.description].measureItems.find(
-						(existing) => existing.id === measureItem.id,
+						(existing) => existing.referenceNumber === measureItem.referenceNumber,
 					);
 					if (!existingItem) {
 						measureOptions[optionFormatted.description].measureItems.push(measureItem);
@@ -331,11 +331,9 @@ export class ImportSpanMeasureOptions {
 
 		// Remap object with named keys to array
 		const measureOptionsArray = Array.from(Object.values(measureOptions));
-		const measureItemOptions = [...materials, ...bestekposten];
 
 		const normalizedData = {
 			spanMeasureOptions: measureOptionsArray,
-			spanMeasureItemOptions: measureItemOptions,
 		};
 
 		await this.saveToFile(normalizedData);

@@ -7,7 +7,7 @@ import { DerivedConditionScoreRepository } from './derived-condition-score.repos
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	derivedConditionScores: {
-		findUnique: jest.fn().mockResolvedValue(domainDerivedConditionScore),
+		findMany: jest.fn().mockResolvedValue(domainDerivedConditionScore),
 	},
 	...(<any>{}),
 };
@@ -16,7 +16,7 @@ const repo = new DerivedConditionScoreRepository(prismaServiceMock);
 
 describe('DerivedConditionScore / Repository', () => {
 	test('getDerivedConditionScore()', async () => {
-		expect(await repo.getDerivedConditionScore(domainDerivedConditionScore.id)).toEqual(
+		expect(await repo.getDerivedConditionScoresByElementId(domainDerivedConditionScore.id)).toEqual(
 			domainDerivedConditionScore,
 		);
 	});

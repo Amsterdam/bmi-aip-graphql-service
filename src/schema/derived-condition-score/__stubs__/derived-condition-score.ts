@@ -23,8 +23,9 @@ const derivedConditionScoreRaw: Omit<DomainDerivedConditionScore, 'id'> = {
 };
 
 export const domainDerivedConditionScore: DomainDerivedConditionScore = {
-	id: '842cbc36-c28a-5066-c669-6a32af707576',
+	elementId: '842cbc36-c28a-5066-c669-6a32af707576',
 	...derivedConditionScoreRaw,
+	id: '',
 };
 
 export const derivedConditionScore =

@@ -1,8 +1,8 @@
-import { SpanDecompositionType } from '../../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../../span-installation/types/span-decomposition-item-type';
 
 export class HasDecompositionItemGotDamageQuery {
 	public constructor(
-		public readonly decompositionId: string,
-		public readonly decompositionType: SpanDecompositionType,
+		public readonly decompositionItemId: string,
+		public readonly decompositionItemType: SpanDecompositionItemType,
 	) {}
 }

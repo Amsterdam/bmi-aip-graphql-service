@@ -12,7 +12,7 @@ describe('Services / ImportSpanMeasureOptions', () => {
 				z.object({
 					id: z.string(),
 					description: z.string(),
-					decompositionType: z.string(),
+					decompositionItemType: z.string(),
 					measureItems: z.array(
 						z.object({
 							id: z.string(),

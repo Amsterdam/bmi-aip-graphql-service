@@ -12,7 +12,7 @@ import { newId } from 'src/utils/newId';
 
 import { SpanMeasureItemOption } from '../schema/span-installation/models/span-measure-item-option.model';
 import { SpanMeasureOption } from '../schema/span-installation/models/span-measure-option.model';
-import { SpanDecompositionType } from '../schema/span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../schema/span-installation/types/span-decomposition-item-type';
 
 import {
 	OVSSpanMeasureExcelRowObject,
@@ -36,7 +36,7 @@ export class ImportSpanMeasureOptions {
 
 	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
 
-	private lastReadDecompositionType = '';
+	private lastReadDecompositionItemType = '';
 
 	public constructor(
 		private readonly consoleService: ConsoleService,
@@ -56,7 +56,7 @@ export class ImportSpanMeasureOptions {
 	}
 
 	private getMatrixFromSheet(workSheet) {
-		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
+		// Note: the min rows and ranges defined here are based on the Excel file '2023-03-28 Maatregelen matrix v0.6_bk 20230613.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those
 
 		this.logger.debug(`Mapping file from ${workSheet} sheet`);
@@ -82,6 +82,15 @@ export class ImportSpanMeasureOptions {
 		};
 	}
 
+	private rowIsDescriptiveHeader(row: { 'Eenh.': string }) {
+		// Some rows in the bestekposten sheet are merely heading rows, and should be ignored
+		if (row['Eenh.']) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private parseMNummersRow(materialenObj: MNummersExcelRowObject, knownMaterial?: SpanMeasureItemOption) {
 		return {
 			id: knownMaterial ? knownMaterial.id : newId(),
@@ -95,22 +104,24 @@ export class ImportSpanMeasureOptions {
 	private getBestekpostenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
 		const data: BestekspostenExcelRowObject[] = xlsx.utils.sheet_to_json<BestekspostenExcelRowObject>(workSheet);
 
-		return data.map((row) => {
-			return this.parseBestekpostRow(
-				row,
-				knownSpanMeasureItems.find(
-					(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
-				),
-			);
-		});
+		return data
+			.filter((row) => !this.rowIsDescriptiveHeader(row))
+			.map((row) => {
+				return this.parseBestekpostRow(
+					row,
+					knownSpanMeasureItems.find(
+						(knownItem) => knownItem.referenceNumber === row['Bestekspostnr.'].toString(),
+					),
+				);
+			});
 	}
 
 	private getMaterialenFromSheet(workSheet, knownSpanMeasureItems?: SpanMeasureItemOption[]) {
-		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.3_bk 20230524.xlsx'
+		// Note: the ranges defined here is based on the Excel file '2023-03-28 Maatregelen matrix v0.6_bk 20230613.xlsx'
 		// This file contains some comments and other data in the first rows, so we need to skip those to correctly define the columns
 
 		const data: MNummersExcelRowObject[] = xlsx.utils.sheet_to_json<MNummersExcelRowObject>(workSheet, {
-			range: 1,
+			range: 0,
 		});
 
 		return data.map((row) => {
@@ -164,25 +175,25 @@ export class ImportSpanMeasureOptions {
 		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} measures and options`);
 	}
 
-	private mapDecompositionType(input: string): string {
+	private mapDecompositionItemType(input: string): string {
 		switch (input) {
 			case 'Aansluitkast':
-				return SpanDecompositionType.spanJunctionBox;
+				return SpanDecompositionItemType.spanJunctionBox;
 				break;
 			case 'Mast':
-				return SpanDecompositionType.spanSupportSystemMast;
+				return SpanDecompositionItemType.spanSupportSystemMast;
 				break;
 			case 'Knoop':
-				return SpanDecompositionType.spanSupportSystemNode;
+				return SpanDecompositionItemType.spanSupportSystemNode;
 				break;
 			case 'Gevel':
-				return SpanDecompositionType.spanSupportSystemFacade;
+				return SpanDecompositionItemType.spanSupportSystemFacade;
 				break;
 			case 'Spandraad':
-				return SpanDecompositionType.spanSupportSystemTensionWire;
+				return SpanDecompositionItemType.spanSupportSystemTensionWire;
 				break;
 			case 'Armatuur':
-				return SpanDecompositionType.spanLuminaire;
+				return SpanDecompositionItemType.spanLuminaire;
 				break;
 		}
 	}
@@ -292,12 +303,12 @@ export class ImportSpanMeasureOptions {
 				(item) => item.description == element.Maatregelen,
 			);
 
-			if (element.Onderdelen) this.lastReadDecompositionType = element.Onderdelen;
+			if (element.Onderdelen) this.lastReadDecompositionItemType = element.Onderdelen;
 
 			const optionFormatted = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),
 				description: element.Maatregelen,
-				decompositionType: this.mapDecompositionType(this.lastReadDecompositionType),
+				decompositionItemType: this.mapDecompositionItemType(this.lastReadDecompositionItemType),
 				measureItems: [
 					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
 					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),
@@ -309,7 +320,7 @@ export class ImportSpanMeasureOptions {
 			} else {
 				optionFormatted.measureItems.map((measureItem) => {
 					const existingItem = measureOptions[optionFormatted.description].measureItems.find(
-						(existing) => existing.id === measureItem.id,
+						(existing) => existing.referenceNumber === measureItem.referenceNumber,
 					);
 					if (!existingItem) {
 						measureOptions[optionFormatted.description].measureItems.push(measureItem);
@@ -320,11 +331,9 @@ export class ImportSpanMeasureOptions {
 
 		// Remap object with named keys to array
 		const measureOptionsArray = Array.from(Object.values(measureOptions));
-		const measureItemOptions = [...materials, ...bestekposten];
 
 		const normalizedData = {
 			spanMeasureOptions: measureOptionsArray,
-			spanMeasureItemOptions: measureItemOptions,
 		};
 
 		await this.saveToFile(normalizedData);

@@ -1,4 +1,4 @@
-import { SpanDecompositionType } from '../types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../types/span-decomposition-item-type';
 export class FindSpanMeasureOptionsQuery {
-	public constructor(public decompositionType: SpanDecompositionType) {}
+	public constructor(public decompositionItemType: SpanDecompositionItemType) {}
 }

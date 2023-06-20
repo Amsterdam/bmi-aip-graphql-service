@@ -53,12 +53,12 @@ import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.
 import { UpdateSpanMeasureItemsUsedQuantitiesCommand } from './commands/update-span-measure-items-used-quantities.command';
 import { UpdateSpanMeasureItemsUsedQuantitiesHandler } from './commands/update-span-measure-items-used-quantities.handler';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
 import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
 import { SpanDecompositionResolver } from './span-decomposition.resolver';
-import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
-import { FindSpanMeasuresByDecompositionIdHandler } from './queries/find-span-measures-by-decomposition-id.handler';
+import { FindSpanMeasuresByDecompositionItemIdQuery } from './queries/find-span-measures-by-decomposition-item-id.query';
+import { FindSpanMeasuresByDecompositionItemIdHandler } from './queries/find-span-measures-by-decomposition-item-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junction-box.handler';
@@ -88,8 +88,8 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 	name: 'SupportSystemTypeDetailedTensionWire',
 });
 
-registerEnumType(SpanDecompositionType, {
-	name: 'SpanDecompositionType',
+registerEnumType(SpanDecompositionItemType, {
+	name: 'SpanDecompositionItemType',
 });
 
 registerEnumType(SpanMeasureStatus, {
@@ -146,8 +146,8 @@ registerEnumType(SpanMeasureItemStatus, {
 		CloneSpanInstallationDecompositionCommand,
 		CloneSpanInstallationDecompositionHandler,
 		SpanDecompositionResolver,
-		FindSpanMeasuresByDecompositionIdQuery,
-		FindSpanMeasuresByDecompositionIdHandler,
+		FindSpanMeasuresByDecompositionItemIdQuery,
+		FindSpanMeasuresByDecompositionItemIdHandler,
 		CreateMissingJunctionBoxHandler,
 		ReviseJunctionBoxHandler,
 		CreateMissingSupportSystemHandler,

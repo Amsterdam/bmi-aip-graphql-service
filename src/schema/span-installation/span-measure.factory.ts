@@ -5,8 +5,8 @@ export class SpanMeasureFactory {
 	static CreateSpanMeasure({
 		id,
 		optionId,
-		decompositionId,
-		decompositionType,
+		decompositionItemId,
+		decompositionItemType,
 		surveyId,
 		description,
 		created_at: created_at,
@@ -15,8 +15,8 @@ export class SpanMeasureFactory {
 		const spanMeasure = new SpanMeasure();
 		spanMeasure.id = id;
 		spanMeasure.optionId = optionId;
-		spanMeasure.decompositionId = decompositionId;
-		spanMeasure.decompositionType = decompositionType;
+		spanMeasure.decompositionItemId = decompositionItemId;
+		spanMeasure.decompositionItemType = decompositionItemType;
 		spanMeasure.surveyId = surveyId;
 		spanMeasure.description = description;
 		spanMeasure.created_at = created_at instanceof Date ? created_at.toUTCString() : null;

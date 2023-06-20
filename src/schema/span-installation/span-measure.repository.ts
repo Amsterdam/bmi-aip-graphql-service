@@ -6,7 +6,7 @@ import { newId } from '../../utils';
 import { ISpanMeasureRepository, SpanMeasure } from './types/span-measure.repository.interface';
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 import { SpanMeasureStatus } from './types/span-measure-status';
 
 @Injectable()
@@ -17,10 +17,10 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		surveyId,
 		optionId,
 		description,
-		decompositionId,
-		decompositionType,
+		decompositionItemId,
+		decompositionItemType,
 	}: CreateSpanMeasureInput): Promise<SpanMeasure> {
-		if (!(await this.checkIfDecompositionElementExists(decompositionId, decompositionType))) {
+		if (!(await this.checkIfDecompositionElementExists(decompositionItemId, decompositionItemType))) {
 			throw new NotFoundException('Decomposition entity not found');
 		}
 
@@ -30,8 +30,8 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 				optionId,
 				surveys: { connect: { id: surveyId } },
 				description,
-				decompositionId,
-				decompositionType,
+				decompositionItemId,
+				decompositionItemType,
 			},
 		});
 	}
@@ -39,15 +39,15 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 	async updateSpanMeasure({
 		id,
 		description,
-		decompositionId,
-		decompositionType,
+		decompositionItemId,
+		decompositionItemType,
 	}: UpdateSpanMeasureInput): Promise<SpanMeasure> {
 		return this.prisma.spanMeasures.update({
 			where: { id },
 			data: {
 				description,
-				decompositionId,
-				decompositionType,
+				decompositionItemId,
+				decompositionItemType,
 			},
 		});
 	}
@@ -66,40 +66,62 @@ export class SpanMeasureRepository implements ISpanMeasureRepository {
 		});
 	}
 
-	async findSpanMeasuresByDecompositionId(decompositionId: string): Promise<SpanMeasure[]> {
+	async findSpanMeasuresByDecompositionItemId(decompositionItemId: string): Promise<SpanMeasure[]> {
 		return this.prisma.spanMeasures.findMany({
 			where: {
-				decompositionId,
+				decompositionItemId,
 			},
 		});
 	}
 
 	async checkIfDecompositionElementExists(
-		decompositionId: string,
-		decompositionType: SpanDecompositionType,
+		decompositionItemId: string,
+		decompositionItemType: SpanDecompositionItemType,
 	): Promise<boolean> {
-		switch (decompositionType) {
-			case SpanDecompositionType.spanSupportSystemMast:
-			case SpanDecompositionType.spanSupportSystemFacade:
-			case SpanDecompositionType.spanSupportSystemNode:
+		switch (decompositionItemType) {
+			case SpanDecompositionItemType.spanSupportSystemMast:
 				return !!(await this.prisma.spanSupportSystems.findFirst({
 					where: {
-						id: decompositionId,
-						type: decompositionType,
+						id: decompositionItemId,
+						type: 'Mast',
 					},
 				}));
 				break;
-			case SpanDecompositionType.spanLuminaire:
+			case SpanDecompositionItemType.spanSupportSystemFacade:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionItemId,
+						type: 'Facade',
+					},
+				}));
+				break;
+			case SpanDecompositionItemType.spanSupportSystemNode:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionItemId,
+						type: 'Node',
+					},
+				}));
+				break;
+			case SpanDecompositionItemType.spanSupportSystemTensionWire:
+				return !!(await this.prisma.spanSupportSystems.findFirst({
+					where: {
+						id: decompositionItemId,
+						type: 'TensionWire',
+					},
+				}));
+				break;
+			case SpanDecompositionItemType.spanLuminaire:
 				return !!(await this.prisma.spanLuminaires.findFirst({
 					where: {
-						id: decompositionId,
+						id: decompositionItemId,
 					},
 				}));
 				break;
-			case SpanDecompositionType.spanJunctionBox:
+			case SpanDecompositionItemType.spanJunctionBox:
 				return !!(await this.prisma.spanJunctionBoxes.findFirst({
 					where: {
-						id: decompositionId,
+						id: decompositionItemId,
 					},
 				}));
 				break;

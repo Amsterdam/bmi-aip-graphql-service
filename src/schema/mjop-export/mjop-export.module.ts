@@ -3,12 +3,12 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { PrismaService } from 'src/prisma.service';
+import { DerivedConditionScoreModule } from 'src/derived-condition-score/derived-condition-score.module';
 
 import { MeasureModule } from '../measure/measure.module';
 import { AssetModule } from '../asset/asset.module';
 import { DecompositionModule } from '../decomposition/decomposition.module';
 import { SurveyModule } from '../survey/survey.module';
-import { DerivedConditionScoreModule } from '../derived-condition-score/derived-condition-score.module';
 import { DefaultMaintenanceMeasureModule } from '../default-maintenance-measure/default-maintenance-measure.module';
 import { TiModule } from '../ti/ti.module';
 import { FailureModeModule } from '../failure-mode/failure-mode.module';

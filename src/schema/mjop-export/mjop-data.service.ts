@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { DerivedConditionScore } from 'src/derived-condition-score/models/derived-condition-score.model';
+import { DerivedConditionScoreService } from 'src/derived-condition-score/derived-condition-score.service';
 
 import { Survey } from '../survey/models/survey.model';
 import { Asset } from '../asset/models/asset.model';
@@ -7,9 +9,7 @@ import { Unit } from '../decomposition/models/unit.model';
 import { UnitService } from '../decomposition/unit.service';
 import { AssetService } from '../asset/asset.service';
 import { ElementService } from '../decomposition/element.service';
-import { DerivedConditionScore } from '../derived-condition-score/models/derived-condition-score.model';
 import { MeasureService } from '../measure/measure.service';
-import { DerivedConditionScoreService } from '../derived-condition-score/derived-condition-score.service';
 import { CyclicMeasureService } from '../measure/cyclic-measure.service';
 import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
 import { DefectService } from '../ti/defect.service';

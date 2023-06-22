@@ -29,25 +29,27 @@ export class MJOPMeasuresService {
 
 	public async mapMeasures(measures: Measure[]): Promise<IMJOPMeasure[]> {
 		const mappedMeasures: IMJOPMeasure[] = [];
-		const cyclicMaintenance: CyclicMaintenance = {};
 
 		for (const measure of measures) {
-			const defect: Defect | null = measure.defectId
-				? await this.defectService.getDefect(measure.defectId)
-				: null;
-			const failureMode: FailureMode | null = measure.failureModeId
-				? await this.failureModeService.getFailureMode(measure.failureModeId)
-				: null;
+			const defectPromise: Promise<Defect | null> = measure.defectId
+				? this.defectService.getDefect(measure.defectId)
+				: Promise.resolve(null);
+			const failureModePromise: Promise<FailureMode | null> = measure.failureModeId
+				? this.failureModeService.getFailureMode(measure.failureModeId)
+				: Promise.resolve(null);
 
-			const mappedMeasure = {
+			const [defect, failureMode] = await Promise.all([defectPromise, failureModePromise]);
+
+			const cyclicMaintenance: CyclicMaintenance = {
+				['year' + measure.planYear.toString()]: measure.quantity * measure.unitPrice,
+			};
+
+			const mappedMeasure: IMJOPMeasure = {
 				...this.getMeasureProps(measure),
-				defect: {
-					...(defect ? this.getDefectProps(defect) : null),
-				},
+				defect: defect ? this.getDefectProps(defect) : null,
 				failureMode: failureMode ? this.getFailureModeProps(failureMode) : null,
 				cyclicMaintenance,
 			};
-			cyclicMaintenance['year' + measure.planYear.toString()] = mappedMeasure.totalCost; //measure.quantity * measure.unitPrice;
 
 			mappedMeasures.push(mappedMeasure);
 		}
@@ -59,55 +61,52 @@ export class MJOPMeasuresService {
 		cyclicMeasures: CyclicMeasure[],
 		unitQuantity: number,
 	): Promise<IMJOPCyclicMeasure[]> {
-		const mappedCyclicMeasures: IMJOPCyclicMeasure[] = [];
+		// Number of years to plot in the exported file
+		const amountOfYearsPlotted = 20;
 
-		for (const cyclicMeasure of cyclicMeasures) {
-			const defaultMaintenanceMeasure: DefaultMaintenanceMeasure =
-				await this.defaultMaintenanceMeasureService.getDefaultMaintenanceMeasure(
-					cyclicMeasure.defaultMaintenanceMeasureId,
-				);
-			const failureMode: FailureMode | null = cyclicMeasure.failureModeId
-				? await this.failureModeService.getFailureMode(cyclicMeasure.failureModeId)
-				: null;
+		return Promise.all(
+			cyclicMeasures.map(async (cyclicMeasure) => {
+				const defaultMaintenanceMeasure: DefaultMaintenanceMeasure =
+					await this.defaultMaintenanceMeasureService.getDefaultMaintenanceMeasure(
+						cyclicMeasure.defaultMaintenanceMeasureId,
+					);
+				const failureMode: FailureMode = cyclicMeasure.failureModeId
+					? await this.failureModeService.getFailureMode(cyclicMeasure.failureModeId)
+					: null;
 
-			const cyclicMaintenance: CyclicMaintenance = {};
+				const mappedCyclicMeasure = {
+					...this.getCyclicMeasureProps(cyclicMeasure, defaultMaintenanceMeasure.description, unitQuantity),
+					failureMode: failureMode ? this.getFailureModeProps(failureMode) : null,
+					cyclicMaintenance: {},
+				};
 
-			const mappedCyclicMeasure = {
-				...this.getCyclicMeasureProps(cyclicMeasure, defaultMaintenanceMeasure.description, unitQuantity),
-				failureMode: failureMode ? this.getFailureModeProps(failureMode) : null,
-				cyclicMaintenance,
-			};
-
-			// Number of years to plot in the exported file
-			const amountOfYearsPlotted = 20;
-
-			for (let i = 0; i <= amountOfYearsPlotted; i++) {
-				const yearNumber = new Date().getFullYear();
-				const currentYear = yearNumber + i;
-
-				if (cyclicMeasure.planYear === currentYear) {
-					cyclicMaintenance['year' + cyclicMeasure.planYear.toString()] =
+				if (cyclicMeasure.planYear === new Date().getFullYear()) {
+					mappedCyclicMeasure.cyclicMaintenance['year' + cyclicMeasure.planYear.toString()] =
 						mappedCyclicMeasure.totalCostWithSurcharge;
 				} else if (cyclicMeasure.cycle && cyclicMeasure.cycle <= amountOfYearsPlotted) {
 					// Maximum number of maintenance cycles to consider
 					const maxMaintenanceCycles = 120;
-					for (let j = 0; j <= maxMaintenanceCycles - i; j++) {
-						const maintenCycleYear = Math.ceil(cyclicMeasure.planYear + cyclicMeasure.cycle * j);
-						if (cyclicMeasure.cycle < 1) {
-							cyclicMaintenance['year' + maintenCycleYear.toString()] =
-								mappedCyclicMeasure.totalCostWithSurcharge / cyclicMeasure.cycle;
-						} else {
-							cyclicMaintenance['year' + maintenCycleYear.toString()] =
-								mappedCyclicMeasure.totalCostWithSurcharge;
-						}
-					}
+					mappedCyclicMeasure.cyclicMaintenance = Array.from({ length: maxMaintenanceCycles }).reduce(
+						(cyclicMaintenance, _, index) => {
+							const maintenanceCycleYear = Math.ceil(
+								cyclicMeasure.planYear + cyclicMeasure.cycle * index,
+							);
+							const cost =
+								cyclicMeasure.cycle < 1
+									? mappedCyclicMeasure.totalCostWithSurcharge / cyclicMeasure.cycle
+									: mappedCyclicMeasure.totalCostWithSurcharge;
+
+							cyclicMaintenance['year' + maintenanceCycleYear.toString()] = cost;
+
+							return cyclicMaintenance;
+						},
+						{},
+					);
 				}
-			}
 
-			mappedCyclicMeasures.push(mappedCyclicMeasure);
-		}
-
-		return mappedCyclicMeasures;
+				return mappedCyclicMeasure;
+			}),
+		);
 	}
 
 	private getMeasureProps(measure: Measure): IMJOPMeasure {

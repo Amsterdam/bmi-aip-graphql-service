@@ -2,7 +2,7 @@ spectaql:
     #logoFile: ./test/fixtures/logo.png
     #faviconFile: ./test/fixtures/favicon.png
     displayAllServers: true
-    targetDir: help/graphql/
+    targetDir: documentation/graphql/
 
 introspection:
     removeTrailingPeriodFromDescriptions: false

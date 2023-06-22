@@ -2,16 +2,20 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import * as ExcelJS from 'exceljs';
 import { AddMJOPSheetService } from 'src/schema/mjop-export/add-mjop-sheet.service';
 import { Worksheet } from 'exceljs';
+import { Logger } from '@nestjs/common';
 
 import { InspectionStandard } from '../../survey/types';
 import { SurveyService } from '../../survey/survey.service';
 
 import { MJOPExportBySurveyIdQuery } from './mjop-export-by-survey-id.query';
 
-
 @QueryHandler(MJOPExportBySurveyIdQuery)
 export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySurveyIdQuery> {
-	constructor(private surveyService: SurveyService, private readonly addMjopSheetService: AddMJOPSheetService) {}
+	constructor(
+		private surveyService: SurveyService,
+		private readonly addMjopSheetService: AddMJOPSheetService,
+		private readonly logger: Logger,
+	) {}
 
 	async execute(query: MJOPExportBySurveyIdQuery) {
 		const survey = await this.surveyService.getSurvey(query.surveyId);
@@ -46,7 +50,7 @@ export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySu
 			await generatedWorkbook.xlsx.write(query.response);
 			return query.response.end();
 		} catch (err) {
-			console.error(err);
+			this.logger.error('Error:', err);
 			query.response.status(500).send({});
 		}
 	}

@@ -6,7 +6,7 @@ import { MJOPExportController } from './mjop-export.controller';
 import { MJOPExportBySurveyIdQuery } from './queries/mjop-export-by-survey-id.query';
 import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.query';
 
-describe('MjopExportController', () => {
+describe('MJOPExportController', () => {
 	let queryBus: QueryBus;
 
 	beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('MjopExportController', () => {
 		queryBus = module.get<QueryBus>(QueryBus);
 	});
 
-	describe('surveyMjopExport', () => {
+	describe('surveyMJOPExport', () => {
 		it('should execute MjopExportBySurveyIdQuery with the provided surveyId and response', async () => {
 			const surveyId = '123';
 			const response: Response = {} as Response;
@@ -55,7 +55,7 @@ describe('MjopExportController', () => {
 			expect(response.send).toHaveBeenCalledWith({ error });
 		});
 	});
-	describe('surveyMjopExportForBatch', () => {
+	describe('surveyMJOPExportForBatch', () => {
 		it('should execute MjopExportByBatchIdQuery with correct parameters', async () => {
 			const batchId = '123';
 			const inspectionStandardType = 'fmeca';

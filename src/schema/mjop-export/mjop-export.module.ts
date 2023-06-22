@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
@@ -40,13 +40,13 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 		AuthorizationModule,
 		AuthenticationModule,
 		FailureModeModule,
-		forwardRef(() => AssetModule),
-		forwardRef(() => DecompositionModule),
-		forwardRef(() => MeasureModule),
-		forwardRef(() => SurveyModule),
-		forwardRef(() => DerivedConditionScoreModule),
-		forwardRef(() => DefaultMaintenanceMeasureModule),
-		forwardRef(() => TiModule),
+		AssetModule,
+		DecompositionModule,
+		MeasureModule,
+		SurveyModule,
+		DerivedConditionScoreModule,
+		DefaultMaintenanceMeasureModule,
+		TiModule,
 	],
 	exports: [MJOPDataService],
 })

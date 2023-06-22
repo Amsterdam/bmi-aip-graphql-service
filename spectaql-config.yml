@@ -1,0 +1,43 @@
+spectaql:
+    #logoFile: ./test/fixtures/logo.png
+    #faviconFile: ./test/fixtures/favicon.png
+    displayAllServers: true
+    targetDir: help/graphql/
+
+introspection:
+    removeTrailingPeriodFromDescriptions: false
+    #schemaFile: ./examples/data/schema.gql
+    #metadataFile: ./examples/data/metadata.json
+    url: http://localhost:3000/graphql
+    d#ynamicExamplesProcessingModule: ./examples/customizations/examples
+    queryNameStrategy: capitalizeFirst
+    fieldExpansionDepth: 2
+
+    spectaqlDirective:
+        enable: true
+
+extensions:
+    graphqlScalarExamples: true
+
+info:
+    title: AIP GraphQL Service documentaton
+    description: Up to date documentation of the AIP GQL schema
+    contact:
+        name: API Support
+        url: http://www.example.com/support
+        email: support@example.com
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+    x-introItems:
+        - title: Getting started
+          description: Some important stuff we wanted you to know. Supports `markdown`
+
+servers:
+    - url: http://localhost:3000/graphql
+      description: Local
+      # production: true
+      headers:
+          - name: Authorization
+            example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1YUhhSm9GcVV6ZzBhemdFTDBJMGN6VGlJd0pjM2hfZjYxOEowcEZvQWFFIn0.eyJleHAiOjE2ODc0NTU3OTQsImlhdCI6MTY4NzQxOTc5NCwianRpIjoiYzQ5Zjg4NmUtY2E3Yi00MWM2LTkzZmMtODBkMDg5ZGVlYjk5IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrLmFpcC5sb2NhbGhvc3Q6ODA4NS9hdXRoL3JlYWxtcy9BSVAtZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImIxMjlhOTZjLWU0ZDMtNGJiOC1hOGFlLTFjZGQwNWViNjU4YiIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFpcC1mcm9udGVuZCIsInNlc3Npb25fc3RhdGUiOiI1MWYwMWM2YS1lY2Y3LTQ4MWMtOTJhOC1iYWVjODk1ODliZjEiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImFpcF9jb25maWciLCJhaXBfZWRpdG9yIiwiYWlwX2FjY291Iiwib2ZmbGluZV9hY2Nlc3MiLCJhaXBfY2xpZW50IiwidW1hX2F1dGhvcml6YXRpb24iLCJkZWZhdWx0LXJvbGVzLWFpcC1kZXYiLCJhaXBfYWRtaW4iLCJhaXBfb3duZXIiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IlRlc3QgQWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhaXAudGVzdC5hZG1pbiIsImdpdmVuX25hbWUiOiJUZXN0IiwiZmFtaWx5X25hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWlwLnRlc3QuYWRtaW5AYW1zdGVyZGFtLm5sIn0.NJ-DmaE8v9-7AOsocT0Rb0sJugIWgY64dpYQBN0LXuchgJQVxbAub1aa5xuvZZx-JVdPa6EdXiFTAyH1Zj0bKrGdXg8WxvaE34ap6PZiAcxMxJDAUfRfjz0ZG-28CpHUIyfFnqGQT5EDwc902t9ypVTVi8SkvdiZSv9Sbp5MV4z6Djxd0-wJWmmnt8h68t4IvJD7m5-ARy6jktf3rHdoVx3nA5y3LY2WjJyiKCD7Kn_2Zh7b2P1-dYTdxcaXWHnptnoSBJpmn9UXUVOSLNJlxzCivIHUoY_jZLC3ydOIvfFANQrdHWu_aeMaEwxUWHApS21OXDRcmmfxWCf2ISqrmw
+            comment: Required for all calls.

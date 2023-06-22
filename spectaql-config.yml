@@ -6,8 +6,6 @@ spectaql:
 
 introspection:
     removeTrailingPeriodFromDescriptions: false
-    #schemaFile: ./examples/data/schema.gql
-    #metadataFile: ./examples/data/metadata.json
     url: http://localhost:3000/graphql
     d#ynamicExamplesProcessingModule: ./examples/customizations/examples
     queryNameStrategy: capitalizeFirst
@@ -17,7 +15,7 @@ introspection:
         enable: true
 
 extensions:
-    graphqlScalarExamples: true
+    graphqlScalarExamples: false
 
 info:
     title: AIP GraphQL Service documentaton

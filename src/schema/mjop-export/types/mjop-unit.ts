@@ -10,4 +10,5 @@ export interface IMJOPUnit {
 	quantityUnitOfMeasurement: string; // Eenheid
 	derivedConditionScoreUnit?: IMJOPDerivedConditionScoreUnit;
 	measures?: IMJOPMeasure[] | IMJOPCyclicMeasure[];
+	elementName?: string; // Element
 }

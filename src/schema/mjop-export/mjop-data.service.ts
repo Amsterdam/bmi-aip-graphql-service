@@ -45,9 +45,7 @@ export class MJOPDataService {
 		const surveyData: IMJOPSurvey = this.getSurveyProps(survey);
 
 		const elementData: IMJOPElement[] = await Promise.all(
-			elements.map(async (element) => {
-				return this.processElement(element);
-			}),
+			elements.map(async (element) => this.processElement(element)),
 		);
 
 		const mjopData: Partial<MJOPRecord> = {
@@ -67,18 +65,14 @@ export class MJOPDataService {
 		const derivedConditionScoreElement = derivedConditionScoreElements.find((score) => score.unitId === null);
 
 		const unitsWithMeasures: IMJOPUnit[] = await Promise.all(
-			element.units.map(async (unit) => {
-				return this.processUnit(unit, element);
-			}),
+			element.units.map(async (unit) => this.processUnit(unit, element)),
 		);
 
-		const elementWithUnits: IMJOPElement = {
+		return {
 			...this.getElementProps(element),
 			units: unitsWithMeasures,
 			derivedConditionScoreElement: this.getDerivedConditionScoreElementProps(derivedConditionScoreElement),
 		};
-
-		return elementWithUnits;
 	}
 
 	private async processUnit(unit: Unit, element: Element): Promise<IMJOPUnit> {
@@ -86,7 +80,7 @@ export class MJOPDataService {
 			await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
 		const derivedConditionScoreUnit = derivedConditionScoreElements.find((score) => score.unitId !== null);
 
-		const unitProps = {
+		const unitProps: IMJOPUnit = {
 			...this.getUnitProps(unit),
 			elementName: element.name,
 		};
@@ -99,13 +93,11 @@ export class MJOPDataService {
 			unit.quantity,
 		);
 
-		const unitWithMeasures: IMJOPUnit = {
+		return {
 			...unitProps,
 			derivedConditionScoreUnit: this.getDerivedConditionScoreUnitProps(derivedConditionScoreUnit),
 			measures: [...measuresWithUnit, ...cyclicMeasuresWithUnit],
 		};
-
-		return unitWithMeasures;
 	}
 
 	private getAssetProps(asset: Asset): IMJOPAsset {

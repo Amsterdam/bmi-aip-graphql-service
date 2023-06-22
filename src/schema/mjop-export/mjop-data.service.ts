@@ -46,49 +46,7 @@ export class MJOPDataService {
 
 		const elementData: IMJOPElement[] = await Promise.all(
 			elements.map(async (element) => {
-				const derivedConditionScoreElements: DerivedConditionScore[] =
-					await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
-				const derivedConditionScoreElement = derivedConditionScoreElements.find(
-					(score) => score.unitId === null,
-				);
-
-				const unitsWithMeasures: IMJOPUnit[] = await Promise.all(
-					element.units.map(async (unit) => {
-						const derivedConditionScoreUnit = derivedConditionScoreElements.find(
-							(score) => score.unitId !== null,
-						);
-						const unitProps = {
-							...this.getUnitProps(unit),
-							elementName: element.name,
-						};
-
-						const measuresWithUnit = await this.getMjopMeasuresDataService.mapMeasures(
-							await this.measureService.findMeasuresByUnitId(unit.id),
-						);
-						const cyclicMeasuresWithUnit = await this.getMjopMeasuresDataService.mapCyclicMeasures(
-							await this.cyclicMeasureService.findCyclicMeasuresByUnitId(unit.id),
-							unit.quantity,
-						);
-
-						const unitWithMeasures = {
-							...unitProps,
-							derivedConditionScoreUnit:
-								this.getDerivedConditionScoreUnitProps(derivedConditionScoreUnit),
-							measures: [...measuresWithUnit, ...cyclicMeasuresWithUnit],
-						};
-
-						return unitWithMeasures;
-					}),
-				);
-
-				const elementWithUnits: IMJOPElement = {
-					...this.getElementProps(element),
-					units: unitsWithMeasures,
-					derivedConditionScoreElement:
-						this.getDerivedConditionScoreElementProps(derivedConditionScoreElement),
-				};
-
-				return elementWithUnits;
+				return this.processElement(element);
 			}),
 		);
 
@@ -103,66 +61,52 @@ export class MJOPDataService {
 		return mjopData;
 	}
 
-	// public async getMJOPData(survey: Survey): Promise<Partial<MJOPRecord>> {
-	// 	const asset: Asset = await this.assetService.getAssetById(survey.objectId);
-	// 	const elements: Element[] = await this.elementService.getElementWithUnits(survey.id);
-	//
-	// 	const assetData: IMJOPAsset = this.getAssetProps(asset);
-	// 	const surveyData: IMJOPSurvey = this.getSurveyProps(survey);
-	// 	const elementData: IMJOPElement[] = [];
-	// 	const unitData: IMJOPUnit[] = [];
-	//
-	// 	for (const element of elements) {
-	// 		const derivedConditionScoreElements: DerivedConditionScore[] =
-	// 			await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
-	// 		const derivedConditionScoreElement = derivedConditionScoreElements.find((score) => score.unitId === null);
-	//
-	// 		const unitsWithMeasures: IMJOPUnit[] = [];
-	//
-	// 		for (const unit of element.units) {
-	// 			const derivedConditionScoreUnit = derivedConditionScoreElements.find((score) => score.unitId !== null);
-	// 			const unitProps = {
-	// 				...this.getUnitProps(unit),
-	// 				elementName: element.name, // Add the element name to the unit object
-	// 			};
-	//
-	// 			const measuresWithUnit = await this.getMjopMeasuresDataService.mapMeasures(
-	// 				await this.measureService.findMeasuresByUnitId(unit.id),
-	// 			);
-	// 			const cyclicMeasuresWithUnit = await this.getMjopMeasuresDataService.mapCyclicMeasures(
-	// 				await this.cyclicMeasureService.findCyclicMeasuresByUnitId(unit.id),
-	// 				unit.quantity,
-	// 			);
-	//
-	// 			const unitWithMeasures = {
-	// 				...unitProps,
-	// 				derivedConditionScoreUnit: this.getDerivedConditionScoreUnitProps(derivedConditionScoreUnit),
-	// 				measures: [...measuresWithUnit, ...cyclicMeasuresWithUnit], // Combine measures and cyclic measures into one array
-	// 			};
-	//
-	// 			unitsWithMeasures.push(unitWithMeasures);
-	// 			unitData.push(unitWithMeasures);
-	// 		}
-	//
-	// 		const elementWithUnits = {
-	// 			...this.getElementProps(element),
-	// 			units: unitsWithMeasures,
-	// 			derivedConditionScoreElement: this.getDerivedConditionScoreElementProps(derivedConditionScoreElement),
-	// 		};
-	//
-	// 		elementData.push(elementWithUnits);
-	// 	}
-	//
-	// 	const mjopData: Partial<MJOPRecord> = {
-	// 		asset: assetData,
-	// 		survey: {
-	// 			...surveyData,
-	// 			elements: elementData,
-	// 		},
-	// 	};
-	//
-	// 	return mjopData;
-	// }
+	private async processElement(element: Element): Promise<IMJOPElement> {
+		const derivedConditionScoreElements: DerivedConditionScore[] =
+			await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
+		const derivedConditionScoreElement = derivedConditionScoreElements.find((score) => score.unitId === null);
+
+		const unitsWithMeasures: IMJOPUnit[] = await Promise.all(
+			element.units.map(async (unit) => {
+				return this.processUnit(unit, element);
+			}),
+		);
+
+		const elementWithUnits: IMJOPElement = {
+			...this.getElementProps(element),
+			units: unitsWithMeasures,
+			derivedConditionScoreElement: this.getDerivedConditionScoreElementProps(derivedConditionScoreElement),
+		};
+
+		return elementWithUnits;
+	}
+
+	private async processUnit(unit: Unit, element: Element): Promise<IMJOPUnit> {
+		const derivedConditionScoreElements: DerivedConditionScore[] =
+			await this.derivedConditionScoreService.getDerivedConditionScoresByElementId(element.id);
+		const derivedConditionScoreUnit = derivedConditionScoreElements.find((score) => score.unitId !== null);
+
+		const unitProps = {
+			...this.getUnitProps(unit),
+			elementName: element.name,
+		};
+
+		const measuresWithUnit = await this.getMjopMeasuresDataService.mapMeasures(
+			await this.measureService.findMeasuresByUnitId(unit.id),
+		);
+		const cyclicMeasuresWithUnit = await this.getMjopMeasuresDataService.mapCyclicMeasures(
+			await this.cyclicMeasureService.findCyclicMeasuresByUnitId(unit.id),
+			unit.quantity,
+		);
+
+		const unitWithMeasures: IMJOPUnit = {
+			...unitProps,
+			derivedConditionScoreUnit: this.getDerivedConditionScoreUnitProps(derivedConditionScoreUnit),
+			measures: [...measuresWithUnit, ...cyclicMeasuresWithUnit],
+		};
+
+		return unitWithMeasures;
+	}
 
 	private getAssetProps(asset: Asset): IMJOPAsset {
 		return {

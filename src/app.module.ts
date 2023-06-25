@@ -6,7 +6,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from 'nest-keycloak-connect';
 import { HttpModule } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
-import { MjopExportModule } from 'src/schema/mjop-export/mjop-export.module';
 
 import { MeasureModule } from './schema/measure/measure.module';
 import { FailureModeModule } from './schema/failure-mode/failure-mode.module';
@@ -30,6 +29,7 @@ import { FacadeFollowUpSurveyModule } from './schema/facade-follow-up-survey/fac
 import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-measures-survey.module';
+import { MjopExportModule } from './schema/mjop-export/mjop-export.module';
 
 @Module({
 	imports: [

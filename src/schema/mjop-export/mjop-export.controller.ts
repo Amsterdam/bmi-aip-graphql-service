@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { Response } from 'express';
@@ -8,7 +8,7 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 
 @Controller('rest/mjop-export')
 export class MJOPExportController {
-	constructor(private queryBus: QueryBus) {}
+	constructor(private queryBus: QueryBus, private readonly logger: Logger) {}
 
 	@Get('survey/:surveyId')
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
@@ -32,6 +32,7 @@ export class MJOPExportController {
 				new MJOPExportByBatchIdQuery(batchId, inspectionStandardType, response),
 			);
 		} catch (error) {
+			this.logger.error('Error:', error);
 			response.status(500).send({ error });
 		}
 	}

@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
 
 import { MJOPExportController } from './mjop-export.controller';
 import { MJOPExportBySurveyIdQuery } from './queries/mjop-export-by-survey-id.query';
@@ -19,6 +20,7 @@ describe('MJOPExportController', () => {
 						execute: jest.fn(),
 					},
 				},
+				Logger,
 			],
 		}).compile();
 
@@ -29,7 +31,8 @@ describe('MJOPExportController', () => {
 		it('should execute MjopExportBySurveyIdQuery with the provided surveyId and response', async () => {
 			const surveyId = '123';
 			const response: Response = {} as Response;
-			const controller = new MJOPExportController(queryBus);
+			const logger = new Logger(); // Create a new instance of Logger
+			const controller = new MJOPExportController(queryBus, logger);
 			await controller.surveyMjopExport(surveyId, response);
 			jest.spyOn(queryBus, 'execute').mockResolvedValueOnce(response);
 
@@ -46,7 +49,8 @@ describe('MJOPExportController', () => {
 			const error = new Error('Internal server error');
 			jest.spyOn(queryBus, 'execute').mockRejectedValueOnce(error);
 
-			const controller = new MJOPExportController(queryBus);
+			const logger = new Logger(); // Create a new instance of Logger
+			const controller = new MJOPExportController(queryBus, logger);
 			await controller.surveyMjopExport(surveyId, response);
 			jest.spyOn(queryBus, 'execute').mockResolvedValueOnce(response);
 
@@ -64,7 +68,8 @@ describe('MJOPExportController', () => {
 				send: jest.fn().mockReturnThis(),
 			} as any;
 
-			const controller = new MJOPExportController(queryBus);
+			const logger = new Logger(); // Create a new instance of Logger
+			const controller = new MJOPExportController(queryBus, logger);
 			await controller.surveyMjopExportForBatch(batchId, inspectionStandardType, response);
 
 			expect(queryBus.execute).toHaveBeenCalledWith(expect.any(MJOPExportByBatchIdQuery));
@@ -84,7 +89,8 @@ describe('MJOPExportController', () => {
 
 			jest.spyOn(queryBus, 'execute').mockRejectedValueOnce(error);
 
-			const controller = new MJOPExportController(queryBus);
+			const logger = new Logger(); // Create a new instance of Logger
+			const controller = new MJOPExportController(queryBus, logger);
 			await controller.surveyMjopExportForBatch(batchId, inspectionStandardType, response);
 
 			expect(queryBus.execute).toHaveBeenCalledWith(expect.any(MJOPExportByBatchIdQuery));

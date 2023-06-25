@@ -2,6 +2,7 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import * as ExcelJS from 'exceljs';
 import { AddMJOPSheetService } from 'src/schema/mjop-export/add-mjop-sheet.service';
 import { Worksheet } from 'exceljs';
+import { Logger } from '@nestjs/common';
 
 import { InspectionStandard } from '../../survey/types';
 import { SurveyService } from '../../survey/survey.service';
@@ -11,7 +12,11 @@ import { MJOPExportByBatchIdQuery } from './mjop-export-by-batch-id.query';
 
 @QueryHandler(MJOPExportByBatchIdQuery)
 export class MJOPExportByBatchIdHandler implements IQueryHandler<MJOPExportByBatchIdQuery> {
-	constructor(private surveyService: SurveyService, private readonly addMjopSheetService: AddMJOPSheetService) {}
+	constructor(
+		private surveyService: SurveyService,
+		private readonly addMjopSheetService: AddMJOPSheetService,
+		private readonly logger: Logger,
+	) {}
 
 	async execute(query: MJOPExportByBatchIdQuery) {
 		const isFmeca = query.inspectionStandardType === InspectionStandard.fmeca;
@@ -44,7 +49,7 @@ export class MJOPExportByBatchIdHandler implements IQueryHandler<MJOPExportByBat
 			await generatedWorkbook.xlsx.write(query.response);
 			return query.response.end();
 		} catch (err) {
-			console.error(err);
+			this.logger.error('Error:', err);
 			query.response.status(500).send({});
 		}
 	}

@@ -30,6 +30,10 @@ export class SurveyService {
 		);
 	}
 
+	async getNen2767OrFmecaSurveyByObjectId(objectId: string): Promise<Survey> {
+		return SurveyFactory.CreateSurvey(await this.surveyRepo.getNen2767OrFmecaSurveyByObjectId(objectId));
+	}
+
 	public async findSurveyDataByFieldAndId(id: string, field: SurveyDataFieldType): Promise<any> {
 		const survey = await this.surveyRepo.getSurveyById(id);
 

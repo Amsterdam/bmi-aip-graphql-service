@@ -53,6 +53,21 @@ export class SurveyRepository implements ISurveyRepository {
 		});
 	}
 
+	async getNen2767OrFmecaSurveyByObjectId(objectId: string): Promise<DbSurvey> {
+		return this.prisma.surveys.findFirst({
+			where: {
+				objectId: objectId,
+				inspectionStandardType: {
+					in: ['nen2767', 'fmeca'],
+				},
+				NOT: { status: SurveyStates.deleted },
+			},
+			orderBy: {
+				created_at: 'desc',
+			},
+		});
+	}
+
 	public async findIdPreviousNen2767OrFmecaSurvey(surveyId: string): Promise<string | null> {
 		const current = await this.prisma.surveys.findFirst({
 			where: {

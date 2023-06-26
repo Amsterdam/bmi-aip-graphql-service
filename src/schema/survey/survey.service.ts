@@ -30,6 +30,10 @@ export class SurveyService {
 		);
 	}
 
+	async getNen2767OrFmecaSurveyByObjectId(objectId: string): Promise<Survey> {
+		return SurveyFactory.CreateSurvey(await this.surveyRepo.getNen2767OrFmecaSurveyByObjectId(objectId));
+	}
+
 	public async findSurveyDataByFieldAndId(id: string, field: SurveyDataFieldType): Promise<any> {
 		const survey = await this.surveyRepo.getSurveyById(id);
 
@@ -38,5 +42,11 @@ export class SurveyService {
 		}
 
 		return survey[`${field}`];
+	}
+
+	async getSurveysByBatchId(batchId: string, inspectionStandardType: string): Promise<Survey[]> {
+		return (await this.surveyRepo.getSurveyByBatchId(batchId, inspectionStandardType)).map((survey) =>
+			SurveyFactory.CreateSurvey(survey),
+		);
 	}
 }

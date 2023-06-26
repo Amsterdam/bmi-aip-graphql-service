@@ -39,5 +39,6 @@ registerEnumType(RepairAdviceCategory, {
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
+	exports: [DefectService],
 })
 export class TiModule {}

@@ -9,6 +9,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	$queryRaw: jest.fn().mockResolvedValue([{ code: 'BRU001' }, { code: 'BRU002' }]),
 	objects: {
 		create: jest.fn().mockResolvedValue(dbAsset),
+		findUnique: jest.fn().mockResolvedValue(dbAsset),
 	},
 	...(<any>{}),
 };
@@ -28,5 +29,11 @@ describe('AssetRepository', () => {
 		const [, arg2] = prismaServiceMock.$queryRaw.mock.calls[0];
 		expect(arg2).toBe('__COMPANY_ID__');
 		expect(codes).toEqual(['BRU001', 'BRU002']);
+	});
+
+	test('getAssetById()', async () => {
+		const repo = new AssetRepository(prismaServiceMock);
+		const code = await repo.getAssetById('__ID__');
+		expect(code.id).toEqual('dd456392-9c75-40c6-a861-48d393f78559');
 	});
 });

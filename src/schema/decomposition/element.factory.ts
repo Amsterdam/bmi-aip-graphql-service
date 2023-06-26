@@ -2,10 +2,63 @@ import { GisibElement } from '../../gisib/types/GisibElement';
 import { GisibFeature } from '../../gisib/types/GisibFeature';
 
 import { Element } from './models/element.model';
-import { Element as DomainElement } from './types/element.repository.interface';
+import { Element as DomainElement, ElementWithUnits } from './types/element.repository.interface';
 import { CreateElementInput } from './dto/create-element.input';
+import { UnitFactory } from './unit.factory';
 
 export class ElementFactory {
+	static CreateElementWithUnits({
+		id,
+		permanentId,
+		name,
+		objectId,
+		surveyId,
+		gisibId,
+		code,
+		location,
+		conditionId,
+		observationPointId,
+		constructionYear,
+		constructionType,
+		isElectrical,
+		isElectricalObjectSpecific,
+		isStructural,
+		isStructuralObjectSpecific,
+		isRelevant,
+		categoryId,
+		elementGroupName,
+		isArchived,
+		units,
+		deleted_at: deletedAt,
+	}: ElementWithUnits): Element {
+		const element = new Element();
+		element.id = id;
+		element.permanentId = permanentId;
+		element.name = name;
+		element.code = code;
+		element.location = location;
+		element.objectId = objectId;
+		element.surveyId = surveyId;
+		element.conditionId = conditionId;
+		element.observationPointId = observationPointId;
+		element.categoryId = categoryId;
+		element.constructionYear = constructionYear;
+		element.constructionType = constructionType;
+		element.elementGroupName = elementGroupName;
+		element.gisibId = gisibId;
+		element.isElectrical = !!isElectrical;
+		element.isElectricalObjectSpecific = !!isElectricalObjectSpecific;
+		element.isStructural = !!isStructural;
+		element.isStructuralObjectSpecific = !!isStructuralObjectSpecific;
+		element.isRelevant = !!isRelevant;
+		element.isArchived = !!isArchived;
+		element.units = units.map((unit) => {
+			return UnitFactory.CreateUnit(unit);
+		});
+		element.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;
+		return element;
+	}
+
 	static CreateElement({
 		id,
 		permanentId,

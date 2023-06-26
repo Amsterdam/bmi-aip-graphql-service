@@ -436,30 +436,6 @@ model defects {
   @@index([conditionId])
 }
 
-model derivedConditionScores {
-  id               String          @id @unique(map: "derivedconditionscores_id_unique") @db.Uuid
-  elementId        String?         @db.Uuid
-  unitId           String?         @db.Uuid
-  manifestationId  String?         @db.Uuid
-  surveyId         String?         @db.Uuid
-  score            String?         @db.VarChar(1)
-  derivedScore     String?         @db.VarChar(1)
-  replacementIndex Int?
-  created_at       DateTime?       @db.Timestamptz(6)
-  updated_at       DateTime?       @db.Timestamptz(6)
-  careScore        String?         @db.VarChar(1)
-  derivedCareScore String?         @db.VarChar(1)
-  elements         elements?       @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_elementid_foreign")
-  manifestations   manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_manifestationid_foreign")
-  surveys          surveys?        @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_surveyid_foreign")
-  units            units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_unitid_foreign")
-
-  @@index([elementId])
-  @@index([manifestationId])
-  @@index([surveyId])
-  @@index([unitId])
-}
-
 model elementCategories {
   id                   String               @id @unique(map: "elementcategories_id_unique") @db.Uuid
   name                 String               @db.VarChar(255)
@@ -1871,6 +1847,30 @@ model spanMeasureItems {
   optionId                  String?      @db.Uuid
   isActive                  Boolean      @default(false)
   spanMeasures              spanMeasures @relation(fields: [spanMeasureId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanmeasureitems_spanmeasureid_foreign")
+}
+
+model derivedConditionScores {
+  id               String          @id @unique(map: "derivedconditionscores_id_unique") @db.Uuid
+  elementId        String?         @db.Uuid
+  unitId           String?         @db.Uuid
+  manifestationId  String?         @db.Uuid
+  surveyId         String?         @db.Uuid
+  score            String?         @db.VarChar(1)
+  derivedScore     String?         @db.VarChar(1)
+  replacementIndex Int?
+  created_at       DateTime?       @db.Timestamptz(6)
+  updated_at       DateTime?       @db.Timestamptz(6)
+  careScore        String?         @db.VarChar(1)
+  derivedCareScore String?         @db.VarChar(1)
+  elements         elements?       @relation(fields: [elementId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_elementid_foreign")
+  manifestations   manifestations? @relation(fields: [manifestationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_manifestationid_foreign")
+  surveys          surveys?        @relation(fields: [surveyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_surveyid_foreign")
+  units            units?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "derivedconditionscores_unitid_foreign")
+
+  @@index([elementId])
+  @@index([manifestationId])
+  @@index([surveyId])
+  @@index([unitId])
 }
 
 enum degreeOfDamage {

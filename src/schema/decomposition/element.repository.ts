@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma.service';
 import { newId } from '../../utils';
 
-import { Element, IElementRepository } from './types/element.repository.interface';
+import { Element, ElementWithUnits, IElementRepository } from './types/element.repository.interface';
 import { CreateElementInput } from './dto/create-element.input';
 import { UpdateElementInput } from './dto/update-element.input';
 
@@ -124,6 +124,18 @@ export class ElementRepository implements IElementRepository {
 		return this.prisma.elements.update({
 			where: { id: identifier },
 			data,
+		});
+	}
+
+	async getElementWithUnits(surveyId: string): Promise<ElementWithUnits[]> {
+		return this.prisma.elements.findMany({
+			where: {
+				surveyId: surveyId,
+				deleted_at: null,
+			},
+			include: {
+				units: true,
+			},
 		});
 	}
 

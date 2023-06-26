@@ -17,6 +17,7 @@ export class MJOPExportController {
 		try {
 			await this.queryBus.execute<MJOPExportBySurveyIdQuery>(new MJOPExportBySurveyIdQuery(surveyId, response));
 		} catch (error) {
+			this.logger.error('Error:', error);
 			response.status(500).send({ error });
 		}
 	}
@@ -30,6 +31,7 @@ export class MJOPExportController {
 		try {
 			await this.queryBus.execute<MJOPExportByObjectIdQuery>(new MJOPExportByObjectIdQuery(objectId, response));
 		} catch (error) {
+			this.logger.error('Error:', error);
 			response.status(500).send({ error });
 		}
 	}

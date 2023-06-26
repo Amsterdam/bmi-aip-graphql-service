@@ -61,8 +61,8 @@ describe('MJOPExportController', () => {
 		});
 	});
 
-	describe('surveyMJOPExport', () => {
-		it('should execute MjopExportBySurveyIdQuery with the provided objectId and response', async () => {
+	describe('surveyMJOPExportByObjectId', () => {
+		it('should execute surveyMJOPExportByObjectIdQuery with the provided objectId and response', async () => {
 			const objectId = '123';
 			const response: Response = {} as Response;
 			const logger = new Logger(); // Create a new instance of Logger

@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { MJOPExportBySurveyIdQuery } from './queries/mjop-export-by-survey-id.query';
 import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.query';
 
-@Controller('rest/mjop-export')
+@Controller('api/mjop-export')
 export class MJOPExportController {
 	constructor(private queryBus: QueryBus, private readonly logger: Logger) {}
 

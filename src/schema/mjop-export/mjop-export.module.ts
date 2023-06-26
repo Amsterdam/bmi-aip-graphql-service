@@ -16,6 +16,8 @@ import { FailureModeModule } from '../failure-mode/failure-mode.module';
 import { MJOPDataService } from './mjop-data.service';
 import { MJOPExportBySurveyIdHandler } from './queries/mjop-export-by-survey-id.handler';
 import { MJOPExportBySurveyIdQuery } from './queries/mjop-export-by-survey-id.query';
+import { MJOPExportByObjectIdHandler } from './queries/mjop-export-by-object-id.handler';
+import { MJOPExportByObjectIdQuery } from './queries/mjop-export-by-object-id.query';
 import { MJOPMeasuresService } from './mjop-measures.service';
 import { AddMJOPSheetService } from './add-mjop-sheet.service';
 import { MJOPExportController } from './mjop-export.controller';
@@ -31,6 +33,8 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 		MJOPExportController,
 		MJOPExportBySurveyIdHandler,
 		MJOPExportBySurveyIdQuery,
+		MJOPExportByObjectIdHandler,
+		MJOPExportByObjectIdQuery,
 		MJOPExportByBatchIdHandler,
 		MJOPExportByBatchIdQuery,
 	],

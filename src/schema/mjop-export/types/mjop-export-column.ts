@@ -20,6 +20,6 @@ export interface MjopExportColumn {
 	 * @param {Cell} cell Cell reference to exceljs data workbook > sheet > row > cell
 	 * @param {any} value Value from DB to fit into cell
 	 */
-	renderCell: (cell: Cell, value: unknown, rowIdx: number, columnIdx: string) => void;
+	renderCell: (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
 	width?: number;
 }

@@ -100,20 +100,15 @@ export class MJOPDataService {
 		};
 	}
 
-	private getAssetProps(asset: Asset): IMJOPAsset {
-		return {
-			code: asset.code,
-			assetName: asset.name,
-			marineInfrastrutureType: asset.marineInfrastrutureType,
-			mainMaterial: asset.mainMaterial,
-		};
+	private getAssetProps({ code, name, marineInfrastrutureType, mainMaterial }: Asset): IMJOPAsset {
+		return { code, assetName: name, marineInfrastrutureType, mainMaterial };
 	}
 
-	private getSurveyProps(survey: Survey): IMJOPSurvey {
+	private getSurveyProps({ condition, careCondition, craInspectionScore }: Survey): IMJOPSurvey {
 		return {
-			condition: survey.condition,
-			careScore: survey.careCondition,
-			craInspectionScore: survey.craInspectionScore,
+			condition,
+			careScore: careCondition,
+			craInspectionScore,
 		};
 	}
 

@@ -12,6 +12,12 @@ export class MeasureService {
 		return (await this.measureRepo.findMeasures(surveyId)).map((measure) => MeasureFactory.CreateMeasure(measure));
 	}
 
+	async findMeasuresByUnitId(unitId: string): Promise<Measure[]> {
+		return (await this.measureRepo.findMeasuresByUnit(unitId)).map((measure) =>
+			MeasureFactory.CreateMeasure(measure),
+		);
+	}
+
 	async createMeasure(measure: Measure, surveyId: string): Promise<Measure> {
 		const result = await this.measureRepo.createMeasure({
 			...measure,

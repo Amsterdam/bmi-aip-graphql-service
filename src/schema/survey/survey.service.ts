@@ -39,4 +39,10 @@ export class SurveyService {
 
 		return survey[`${field}`];
 	}
+
+	async getSurveysByBatchId(batchId: string, inspectionStandardType: string): Promise<Survey[]> {
+		return (await this.surveyRepo.getSurveyByBatchId(batchId, inspectionStandardType)).map((survey) =>
+			SurveyFactory.CreateSurvey(survey),
+		);
+	}
 }

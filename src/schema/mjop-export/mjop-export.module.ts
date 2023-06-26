@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
@@ -37,6 +37,7 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 		MJOPExportByObjectIdQuery,
 		MJOPExportByBatchIdHandler,
 		MJOPExportByBatchIdQuery,
+		Logger,
 	],
 	controllers: [MJOPExportController],
 	imports: [
@@ -54,4 +55,4 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 	],
 	exports: [MJOPDataService],
 })
-export class MjopExportModule {}
+export class MJOPExportModule {}

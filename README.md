@@ -2,6 +2,12 @@
 
 A GraphQL service developed with NestJS in service of the frontend of the "Amsterdam Inspectie Portaal" app.
 
+## Schema documentation
+
+Documentation can be viewed locally via SpectaQL, or use your favorite GraphQL client to inspect the schema.
+Make sure the service is running via `npm run start` and execute `npm run graphql-docs`.
+Visit `http://localhost:4400/` to browse the available queries and mutations.
+
 ## Installation
 
 ```bash

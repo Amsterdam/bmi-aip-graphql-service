@@ -2,7 +2,7 @@ spectaql:
     #logoFile: ./test/fixtures/logo.png
     #faviconFile: ./test/fixtures/favicon.png
     displayAllServers: true
-    targetDir: documentation/graphql/
+    targetDir: 'null'
 
 introspection:
     removeTrailingPeriodFromDescriptions: false
@@ -20,21 +20,13 @@ extensions:
 info:
     title: AIP GraphQL Service documentaton
     description: Up to date documentation of the AIP GQL schema
-    contact:
-        name: API Support
-        url: http://www.example.com/support
-        email: support@example.com
     license:
-        name: Apache 2.0
-        url: https://www.apache.org/licenses/LICENSE-2.0.html
-    x-introItems:
-        - title: Getting started
-          description: Some important stuff we wanted you to know. Supports `markdown`
+        name: Mozilla Public License Version 2.0
+        url: https://www.mozilla.org/en-US/MPL/2.0/
 
 servers:
     - url: http://localhost:3000/graphql
       description: Local
-      # production: true
       headers:
           - name: Authorization
             example: Bearer <TOKEN>

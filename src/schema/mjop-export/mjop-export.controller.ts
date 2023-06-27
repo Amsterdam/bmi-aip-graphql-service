@@ -12,7 +12,7 @@ export class MJOPExportController {
 	constructor(private queryBus: QueryBus, private readonly logger: Logger) {}
 
 	@Get('survey/:surveyId')
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async surveyMJOPExport(@Param('surveyId') surveyId: string, @Res() response: Response): Promise<void> {
 		try {
 			await this.queryBus.execute<MJOPExportBySurveyIdQuery>(new MJOPExportBySurveyIdQuery(surveyId, response));
@@ -23,7 +23,7 @@ export class MJOPExportController {
 	}
 
 	@Get('object/:objectId')
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async surveyMJOPExportByObjectId(
 		@Param('objectId') objectId: string,
 		@Res() response: Response,
@@ -37,7 +37,7 @@ export class MJOPExportController {
 	}
 
 	@Get('batch/:batchId/inspectionType/:inspectionStandardType')
-	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async surveyMJOPExportForBatch(
 		@Param('batchId') batchId: string,
 		@Param('inspectionStandardType') inspectionStandardType: string,

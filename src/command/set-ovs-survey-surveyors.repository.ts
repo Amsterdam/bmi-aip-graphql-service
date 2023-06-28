@@ -57,7 +57,19 @@ export class SetOvsSurveySurveyorsRepository {
 					});
 
 					// If object is in a batch, determine 1st batch executor if configured and
-					const companyId = object.batchObjects[0]?.batches.batchExecutorCompanies?.[0]?.companyId;
+					let companyId;
+					if (
+						object.batchObjects &&
+						object.batchObjects[0] &&
+						object.batchObjects[0].batches &&
+						object.batchObjects[0].batches.batchExecutorCompanies &&
+						object.batchObjects[0].batches.batchExecutorCompanies[0] &&
+						object.batchObjects[0].batches.batchExecutorCompanies[0].companyId
+					) {
+						companyId = object.batchObjects[0].batches.batchExecutorCompanies[0].companyId;
+					} else {
+						companyId = null;
+					}
 
 					// If we did find a batch executor company id, set it on the survey table as the surveyorCompanyId
 					if (companyId) {

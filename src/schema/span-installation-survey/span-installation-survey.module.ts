@@ -61,6 +61,8 @@ import { UpdateLuminaireSurveyCommand } from './commands/update-luminaire-survey
 import { UpdateLuminaireSurveyHandler } from './commands/update-luminaire-survey.handler';
 import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
 import { GetDecompositionItemDamageHandler } from './queries/get-decomposition-item-damage.handler';
+import { HasDecompositionItemGotDamageHandler } from './queries/has-decomposition-item-got-damage.handler';
+import { HasDecompositionItemGotDamageQuery } from './queries/has-decomposition-item-got-damage.query';
 
 @Module({
 	providers: [
@@ -125,6 +127,8 @@ import { GetDecompositionItemDamageHandler } from './queries/get-decomposition-i
 		UpdateLuminaireSurveyHandler,
 		GetDecompositionItemDamageQuery,
 		GetDecompositionItemDamageHandler,
+		HasDecompositionItemGotDamageQuery,
+		HasDecompositionItemGotDamageHandler,
 		PrismaService,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],

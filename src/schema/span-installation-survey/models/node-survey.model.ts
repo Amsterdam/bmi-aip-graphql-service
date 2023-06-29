@@ -15,6 +15,9 @@ export class NodeSurvey {
 	@Field((type) => String, { nullable: true })
 	remarks?: string;
 
+	@Field((type) => Boolean, { nullable: true })
+	hasDamage?: string;
+
 	@Field((type) => String, { nullable: true })
 	createdAt?: string;
 

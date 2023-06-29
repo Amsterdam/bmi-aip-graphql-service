@@ -10,6 +10,9 @@ declare const module: any;
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
+	app.enableCors({
+		origin: '*',
+	});
 
 	const config = new DocumentBuilder()
 		.setTitle('Amsterdam Inspectie Portaal - REST API')

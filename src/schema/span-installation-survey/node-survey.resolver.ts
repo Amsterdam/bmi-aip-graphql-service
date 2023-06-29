@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -13,6 +13,7 @@ import { NodeSurveyFactory } from './node-survey.factory';
 import { UpdateNodeSurveyCommand } from './commands/update-node-survey.command';
 import { UpdateNodeSurveyInput } from './dto/update-node-survey.input';
 import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
+import { HasDecompositionItemGotDamageQuery } from './queries/has-decomposition-item-got-damage.query';
 
 @Resolver((of) => NodeSurvey)
 @Resource(NodeSurvey.name)
@@ -50,6 +51,13 @@ export class NodeSurveyResolver {
 	public async getNodeSurveyDamage(@Args('supportSystemId') supportSystemId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
 			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionItemType.spanSupportSystemNode),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id }: NodeSurvey): Promise<boolean> {
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanSupportSystemNode),
 		);
 	}
 }

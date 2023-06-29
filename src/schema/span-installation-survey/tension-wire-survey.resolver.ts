@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -13,6 +13,7 @@ import { TensionWireSurveyFactory } from './tension-wire-survey.factory';
 import { UpdateTensionWireSurveyCommand } from './commands/update-tension-wire-survey.command';
 import { UpdateTensionWireSurveyInput } from './dto/update-tension-wire-survey.input';
 import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
+import { HasDecompositionItemGotDamageQuery } from './queries/has-decomposition-item-got-damage.query';
 
 @Resolver((of) => TensionWireSurvey)
 @Resource(TensionWireSurvey.name)
@@ -57,6 +58,13 @@ export class TensionWireSurveyResolver {
 				supportSystemId,
 				SpanDecompositionItemType.spanSupportSystemTensionWire,
 			),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id }: TensionWireSurvey): Promise<boolean> {
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanSupportSystemTensionWire),
 		);
 	}
 }

@@ -51,7 +51,7 @@ export class LuminaireSurveyResolver {
 
 	@Query(() => LuminaireSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getLuminaireDamage(@Args('junctionBoxId') luminaireId: string) {
+	public async getLuminaireDamage(@Args('luminaireId') luminaireId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
 			new GetDecompositionItemDamageQuery(luminaireId, SpanDecompositionItemType.spanLuminaire),
 		);

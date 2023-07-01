@@ -47,37 +47,37 @@ export class SpanMeasuresSurveyResolver {
 	}
 
 	@ResolveField()
-	async preparedAuthor(@Parent() { surveyId }: SpanMeasuresSurvey): Promise<string> {
+	async preparedAuthor(@Parent() { id }: SpanMeasuresSurvey): Promise<string> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(surveyId, 'preparedAuthor'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'preparedAuthor'),
 		);
 	}
 
 	@ResolveField()
-	async preparedDate(@Parent() { surveyId }: SpanMeasuresSurvey): Promise<Date> {
+	async preparedDate(@Parent() { id }: SpanMeasuresSurvey): Promise<Date> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(surveyId, 'preparedDate'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'preparedDate'),
 		);
 	}
 
 	@ResolveField()
-	async verifiedAuthor(@Parent() { surveyId }: SpanMeasuresSurvey): Promise<string> {
+	async verifiedAuthor(@Parent() { id }: SpanMeasuresSurvey): Promise<string> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(surveyId, 'verifiedAuthor'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'verifiedAuthor'),
 		);
 	}
 
 	@ResolveField()
-	async verifiedDate(@Parent() { surveyId }: SpanMeasuresSurvey): Promise<Date> {
+	async verifiedDate(@Parent() { id }: SpanMeasuresSurvey): Promise<Date> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(surveyId, 'verifiedDate'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'verifiedDate'),
 		);
 	}
 
 	@ResolveField()
-	async inspectionStandardData(@Parent() { surveyId }: SpanMeasuresSurvey): Promise<JSON> {
+	async inspectionStandardData(@Parent() { id }: SpanMeasuresSurvey): Promise<JSON> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(surveyId, 'inspectionStandardData'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'inspectionStandardData'),
 		);
 	}
 }

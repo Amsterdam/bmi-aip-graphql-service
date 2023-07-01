@@ -14,4 +14,5 @@ export type SpanMeasuresSurvey = Prisma.surveysGetPayload<typeof spanMeasuresSur
 export interface ISpanMeasuresSurveyRepository {
 	getSpanMeasuresSurvey(surveyId: string): Promise<SpanMeasuresSurvey>;
 	updateSpanMeasuresSurvey(input: UpdateSpanMeasuresSurveyInput): Promise<SpanMeasuresSurvey>;
+	updateSpanMeasuresCompletion(input: UpdateSpanMeasuresSurveyInput): Promise<SpanMeasuresSurvey>;
 }

@@ -37,6 +37,21 @@ describe('Span Measures survey / Repository', () => {
 		);
 	});
 
+	test('updateSpanMeasuresComletion()', async () => {
+		const returnValue = await new SpanMeasuresSurveyRepository(prismaServiceMock).updateSpanMeasuresCompletion(
+			updateSpanMeasuresSurveyInput,
+		);
+		expect(prismaServiceMock.surveys.update).toHaveBeenCalledWith({
+			where: { id: updateSpanMeasuresSurveyInput.surveyId },
+			data: spanMeasuresSurveyRaw,
+		});
+		expect(returnValue).toEqual(
+			expect.objectContaining({
+				...updateSpanMeasuresSurveyInput,
+			}),
+		);
+	});
+
 	test('getSpanMeasuresSurvey', async () => {
 		const survey = await new SpanMeasuresSurveyRepository(prismaServiceMock).getSpanMeasuresSurvey(identifier);
 		expect(prismaServiceMock.surveys.findFirst).toHaveBeenCalledWith({

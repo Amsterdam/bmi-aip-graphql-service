@@ -3,7 +3,7 @@ import { SpanMeasuresSurveyFactory } from '../span-measures-survey.factory';
 import { SpanMeasuresSurvey as DomainSpanMeasuresSurvey } from '../types/span-measures-survey.repository.interface';
 
 export const spanMeasuresSurveyRaw: Omit<DomainSpanMeasuresSurvey, 'id'> = {
-	inspectionStandardData: { generalRemarks: '__TEST__' },
+	inspectionStandardData: { generalRemarks: '__TEST__', completionRemarks: '__TEST__' },
 };
 
 const updateSpanMeasuresSurveyInputRaw = new UpdateSpanMeasuresSurveyInput();

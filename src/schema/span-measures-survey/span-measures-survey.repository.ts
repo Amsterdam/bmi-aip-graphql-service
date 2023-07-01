@@ -35,11 +35,9 @@ export class SpanMeasuresSurveyRepository implements ISpanMeasuresSurveyReposito
 
 	async updateSpanMeasuresCompletion({
 		surveyId,
-		preparedAuthor,
-		preparedDate,
 		verifiedAuthor,
 		verifiedDate,
-		inspectionStandardData,
+		status,
 	}: UpdateSpanMeasuresSurveyInput): Promise<SpanMeasuresSurvey> {
 		// Find existing record in survey table
 		const existingRecord = await this.prisma.surveys.findFirst({ where: { id: surveyId } });
@@ -52,11 +50,9 @@ export class SpanMeasuresSurveyRepository implements ISpanMeasuresSurveyReposito
 				id: surveyId,
 			},
 			data: {
-				preparedAuthor,
-				preparedDate,
 				verifiedAuthor,
 				verifiedDate,
-				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
+				status,
 			},
 		});
 	}

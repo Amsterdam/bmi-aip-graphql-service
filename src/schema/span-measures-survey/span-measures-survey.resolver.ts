@@ -3,6 +3,7 @@ import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { FindSurveyDataByFieldAndIdQuery } from '../survey/queries/find-survey-data-by-field-and-id.query';
+import { SurveyStates } from '../survey/types/surveyStates';
 
 import { SpanMeasuresSurvey } from './models/span-measures-survey.model';
 import { GetSpanMeasuresSurveyBySurveyIdQuery } from './queries/get-span-measures-survey-by-survey.query';
@@ -47,20 +48,6 @@ export class SpanMeasuresSurveyResolver {
 	}
 
 	@ResolveField()
-	async preparedAuthor(@Parent() { id }: SpanMeasuresSurvey): Promise<string> {
-		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(id, 'preparedAuthor'),
-		);
-	}
-
-	@ResolveField()
-	async preparedDate(@Parent() { id }: SpanMeasuresSurvey): Promise<Date> {
-		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(id, 'preparedDate'),
-		);
-	}
-
-	@ResolveField()
 	async verifiedAuthor(@Parent() { id }: SpanMeasuresSurvey): Promise<string> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
 			new FindSurveyDataByFieldAndIdQuery(id, 'verifiedAuthor'),
@@ -75,9 +62,9 @@ export class SpanMeasuresSurveyResolver {
 	}
 
 	@ResolveField()
-	async inspectionStandardData(@Parent() { id }: SpanMeasuresSurvey): Promise<JSON> {
+	async status(@Parent() { id }: SpanMeasuresSurvey): Promise<SurveyStates> {
 		return this.queryBus.execute<FindSurveyDataByFieldAndIdQuery>(
-			new FindSurveyDataByFieldAndIdQuery(id, 'inspectionStandardData'),
+			new FindSurveyDataByFieldAndIdQuery(id, 'status'),
 		);
 	}
 }

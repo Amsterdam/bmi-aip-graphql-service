@@ -4,7 +4,4 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class SpanMeasuresInspectionStandardData {
 	@Field((type) => String, { nullable: true })
 	generalRemarks?: string;
-
-	@Field((type) => String, { nullable: true })
-	completionRemarks?: string;
 }

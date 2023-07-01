@@ -4,6 +4,8 @@ import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { PrismaService } from 'src/prisma.service';
 
+import { UpdateSpanMeasuresCompletionCommand } from './commands/update-span-measures-completion.command';
+import { UpdateSpanMeasuresCompletionHandler } from './commands/update-span-measures-completion.handler';
 import { UpdateSpanMeasuresSurveyCommand } from './commands/update-span-measures-survey.command';
 import { UpdateSpanMeasuresSurveyHandler } from './commands/update-span-measures-survey.handler';
 import { GetSpanMeasuresSurveyBySurveyIdHandler } from './queries/get-span-measures-survey-by-survey.handler';
@@ -22,6 +24,8 @@ import { SpanMeasuresSurveyService } from './span-measures-survey.service';
 		UpdateSpanMeasuresSurveyHandler,
 		GetSpanMeasuresSurveyBySurveyIdHandler,
 		GetSpanMeasuresSurveyBySurveyIdQuery,
+		UpdateSpanMeasuresCompletionCommand,
+		UpdateSpanMeasuresCompletionHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })

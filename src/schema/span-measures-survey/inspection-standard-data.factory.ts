@@ -10,6 +10,7 @@ export class InspectionStandardDataFactory {
 		const parsedinspectionStandardData = inspectionStandardData as SpanMeasuresInspectionStandardData;
 
 		inspectionStandardDataModel.generalRemarks = parsedinspectionStandardData?.generalRemarks;
+		inspectionStandardDataModel.completionRemarks = parsedinspectionStandardData?.completionRemarks;
 
 		return inspectionStandardDataModel;
 	}

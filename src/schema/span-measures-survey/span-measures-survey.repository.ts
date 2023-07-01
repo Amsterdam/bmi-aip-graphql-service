@@ -33,6 +33,35 @@ export class SpanMeasuresSurveyRepository implements ISpanMeasuresSurveyReposito
 		});
 	}
 
+	async updateSpanMeasuresCompletion({
+		surveyId,
+		preparedAuthor,
+		preparedDate,
+		verifiedAuthor,
+		verifiedDate,
+		inspectionStandardData,
+	}: UpdateSpanMeasuresSurveyInput): Promise<SpanMeasuresSurvey> {
+		console.log('hit the updateSpanMeasuresComplettion in repository');
+		// Find existing record in survey table
+		const existingRecord = await this.prisma.surveys.findFirst({ where: { id: surveyId } });
+
+		if (!existingRecord) throw new Error('No survey found.');
+
+		//Update data in survey table
+		return this.prisma.surveys.update({
+			where: {
+				id: surveyId,
+			},
+			data: {
+				preparedAuthor,
+				preparedDate,
+				verifiedAuthor,
+				verifiedDate,
+				inspectionStandardData: inspectionStandardData as Prisma.InputJsonObject,
+			},
+		});
+	}
+
 	async getSpanMeasuresSurvey(surveyId: string): Promise<SpanMeasuresSurvey> {
 		const survey = (await this.prisma.surveys.findFirst({
 			where: { id: surveyId },

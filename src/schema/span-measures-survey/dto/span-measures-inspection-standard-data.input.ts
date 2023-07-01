@@ -7,4 +7,9 @@ export class SpanMeasuresInspectionStandardDataInput {
 	@MaxLength(255)
 	@Field((type) => String, { nullable: true })
 	public generalRemarks?: string;
+
+	@IsOptional()
+	@MaxLength(255)
+	@Field((type) => String, { nullable: true })
+	public completionRemarks?: string;
 }

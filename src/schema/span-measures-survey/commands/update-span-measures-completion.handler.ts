@@ -10,7 +10,6 @@ export class UpdateSpanMeasuresCompletionHandler implements ICommandHandler<Upda
 	constructor(private repository: SpanMeasuresSurveyRepository) {}
 
 	public async execute(command: UpdateSpanMeasuresCompletionCommand): Promise<SpanMeasuresSurvey> {
-		console.log('hit the updateSpanMeasuresComplettionHandler');
 		return this.repository.updateSpanMeasuresCompletion(command.data);
 	}
 }

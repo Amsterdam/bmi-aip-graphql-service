@@ -41,7 +41,6 @@ export class SpanMeasuresSurveyRepository implements ISpanMeasuresSurveyReposito
 		verifiedDate,
 		inspectionStandardData,
 	}: UpdateSpanMeasuresSurveyInput): Promise<SpanMeasuresSurvey> {
-		console.log('hit the updateSpanMeasuresComplettion in repository');
 		// Find existing record in survey table
 		const existingRecord = await this.prisma.surveys.findFirst({ where: { id: surveyId } });
 

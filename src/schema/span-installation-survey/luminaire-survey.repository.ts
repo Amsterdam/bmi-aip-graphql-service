@@ -7,6 +7,7 @@ import { ILuminaireSurveyRepository, LuminaireSurvey } from './types';
 import { CreateLuminaireSurveyInput } from './dto/create-luminaire-survey.input';
 import { UpdateLuminaireSurveyInput } from './dto/update-luminaire-survey.input';
 import { LuminaireSurveyNotFoundException } from './exceptions/luminaire-survey-not-found.exception';
+import { LuminaireNotFoundException } from './exceptions/luminaire-not-found.exception';
 
 @Injectable()
 export class LuminaireSurveyRepository implements ILuminaireSurveyRepository {
@@ -62,7 +63,7 @@ export class LuminaireSurveyRepository implements ILuminaireSurveyRepository {
 	}
 
 	async getLuminaireSurveyOnPermanentId(luminaireId: string): Promise<LuminaireSurvey> {
-		const { permanentId } = await this.prisma.spanLuminaires.findUnique({
+		const luminaire = await this.prisma.spanLuminaires.findUnique({
 			where: {
 				id: luminaireId,
 			},
@@ -71,11 +72,18 @@ export class LuminaireSurveyRepository implements ILuminaireSurveyRepository {
 			},
 		});
 
-		return this.getLuminaireSurvey(permanentId);
+		if (!luminaire) throw new LuminaireNotFoundException(luminaireId);
+
+		return this.getLuminaireSurvey(luminaire.permanentId);
 	}
 
 	async hasDamage(luminaireId: string): Promise<boolean> {
-		const luminaireSurvey = await this.getLuminaireSurveyOnPermanentId(luminaireId);
+		let luminaireSurvey: LuminaireSurvey;
+		try {
+			luminaireSurvey = await this.getLuminaireSurveyOnPermanentId(luminaireId);
+		} catch (e) {
+			return false;
+		}
 
 		return luminaireSurvey.luminaireDamage;
 	}

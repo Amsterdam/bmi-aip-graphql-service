@@ -22,6 +22,7 @@ export class HasDecompositionItemGotDamageHandler implements IQueryHandler<HasDe
 	) {}
 
 	async execute(query: HasDecompositionItemGotDamageQuery): Promise<boolean> {
+		console.log(query);
 		switch (query.decompositionItemType) {
 			case SpanDecompositionItemType.spanJunctionBox:
 				return this.junctionBoxService.hasDamage(query.decompositionItemId);

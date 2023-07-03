@@ -88,6 +88,9 @@ export class SupportSystem {
 	@Field((type) => String, { nullable: true })
 	houseNumber?: string;
 
+	@Field((type) => Boolean, { nullable: true })
+	hasDamage?: string;
+
 	@Field((type) => String, { nullable: true })
 	createdAt: string;
 

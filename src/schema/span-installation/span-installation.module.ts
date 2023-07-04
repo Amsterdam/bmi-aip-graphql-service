@@ -17,8 +17,12 @@ import { FacadeSurveyRepository } from '../span-installation-survey/facade-surve
 import { MastSurveyRepository } from '../span-installation-survey/mast-survey.repository';
 import { MastSurveyService } from '../span-installation-survey/mast-survey.service';
 import { NodeSurveyService } from '../span-installation-survey/node-survey.service';
-
 import { NodeSurveyRepository } from '../span-installation-survey/node-survey.repository';
+import { TensionWireSurveyService } from '../span-installation-survey/tension-wire-survey.service';
+import { TensionWireSurveyRepository } from '../span-installation-survey/tension-wire-survey.repository';
+import { LuminaireSurveyService } from '../span-installation-survey/luminaire-survey.service';
+import { LuminaireSurveyRepository } from '../span-installation-survey/luminaire-survey.repository';
+
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
 import { JunctionBoxRepository } from './junction-box.repository';
@@ -77,10 +81,6 @@ import { CreateMissingSupportSystemHandler } from './commands/create-missing-sup
 import { ReviseSupportSystemHandler } from './commands/revise-support-system.handler';
 import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
 import { ReviseLuminaireHandler } from './commands/revise-luminaire.handler';
-import { TensionWireSurveyService } from '../span-installation-survey/tension-wire-survey.service';
-import { TensionWireSurveyRepository } from '../span-installation-survey/tension-wire-survey.repository';
-import { LuminaireSurveyService } from '../span-installation-survey/luminaire-survey.service';
-import { LuminaireSurveyRepository } from '../span-installation-survey/luminaire-survey.repository';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',

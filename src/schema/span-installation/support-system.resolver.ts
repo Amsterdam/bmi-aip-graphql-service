@@ -3,6 +3,7 @@ import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { HasDecompositionItemGotDamageQuery } from '../span-installation-survey/queries/has-decomposition-item-got-damage.query';
+import { supportSystemToSpanDecompositionItemMapping } from '../span-installation-survey/types/support-system-to-span-decomposition-item';
 
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystemFactory } from './support-system.factory';
@@ -22,9 +23,6 @@ import { CreateMissingSupportSystemInput } from './dto/create-missing-support-sy
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
 import { ReviseSupportSystemInput } from './dto/revise-support-system.input';
 import { ReviseSupportSystemCommand } from './commands/revise-support-system.command';
-import { SpanDecompositionResolver } from './span-decomposition.resolver';
-import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
-import { SupportSystemType } from './types';
 
 @Resolver((of) => SupportSystem)
 @Resource(SupportSystem.name)
@@ -108,25 +106,14 @@ export class SupportSystemResolver {
 
 	@ResolveField()
 	async hasDamage(@Parent() { id, type }: SupportSystem): Promise<boolean> {
-		let itemType;
+		const decompositionItemType = supportSystemToSpanDecompositionItemMapping[type];
 
-		switch (type) {
-			case SupportSystemType.TensionWire:
-				itemType = SpanDecompositionItemType.spanSupportSystemTensionWire;
-				break;
-			case SupportSystemType.Facade:
-				itemType = SpanDecompositionItemType.spanSupportSystemFacade;
-				break;
-			case SupportSystemType.Mast:
-				itemType = SpanDecompositionItemType.spanSupportSystemMast;
-				break;
-			case SupportSystemType.Node:
-				itemType = SpanDecompositionItemType.spanSupportSystemNode;
-				break;
+		if (!decompositionItemType) {
+			throw new Error(`Unsupported SupportSystemType: ${type}`);
 		}
 
 		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
-			new HasDecompositionItemGotDamageQuery(id, itemType),
+			new HasDecompositionItemGotDamageQuery(id, decompositionItemType),
 		);
 	}
 }

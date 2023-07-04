@@ -2,6 +2,9 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { HasDecompositionItemGotDamageQuery } from '../span-installation-survey/queries/has-decomposition-item-got-damage.query';
+import { supportSystemToSpanDecompositionItemMapping } from '../span-installation-survey/types/support-system-to-span-decomposition-item';
+
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystemFactory } from './support-system.factory';
 import { SupportSystemService } from './support-system.service';
@@ -98,6 +101,19 @@ export class SupportSystemResolver {
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
 		return this.queryBus.execute<FindSpanMeasuresByDecompositionItemIdQuery>(
 			new FindSpanMeasuresByDecompositionItemIdQuery(id),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id, type }: SupportSystem): Promise<boolean> {
+		const decompositionItemType = supportSystemToSpanDecompositionItemMapping[type];
+
+		if (!decompositionItemType) {
+			throw new Error(`Unsupported SupportSystemType: ${type}`);
+		}
+
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, decompositionItemType),
 		);
 	}
 }

@@ -8,6 +8,20 @@ import { AuthenticationModule } from '../../authentication/authentication.module
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from '../survey/survey.repository';
+import { GetDecompositionItemDamageHandler } from '../span-installation-survey/queries/get-decomposition-item-damage.handler';
+import { GetDecompositionItemDamageQuery } from '../span-installation-survey/queries/get-decomposition-item-damage.query';
+import { JunctionBoxSurveyService } from '../span-installation-survey/junction-box-survey.service';
+import { JunctionBoxSurveyRepository } from '../span-installation-survey/junction-box-survey.repository';
+import { FacadeSurveyService } from '../span-installation-survey/facade-survey.service';
+import { FacadeSurveyRepository } from '../span-installation-survey/facade-survey.repository';
+import { MastSurveyRepository } from '../span-installation-survey/mast-survey.repository';
+import { MastSurveyService } from '../span-installation-survey/mast-survey.service';
+import { NodeSurveyService } from '../span-installation-survey/node-survey.service';
+import { NodeSurveyRepository } from '../span-installation-survey/node-survey.repository';
+import { TensionWireSurveyService } from '../span-installation-survey/tension-wire-survey.service';
+import { TensionWireSurveyRepository } from '../span-installation-survey/tension-wire-survey.repository';
+import { LuminaireSurveyService } from '../span-installation-survey/luminaire-survey.service';
+import { LuminaireSurveyRepository } from '../span-installation-survey/luminaire-survey.repository';
 
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
@@ -154,6 +168,20 @@ registerEnumType(SpanMeasureItemStatus, {
 		ReviseSupportSystemHandler,
 		CreateMissingLuminaireHandler,
 		ReviseLuminaireHandler,
+		JunctionBoxSurveyService,
+		JunctionBoxSurveyRepository,
+		FacadeSurveyService,
+		FacadeSurveyRepository,
+		MastSurveyService,
+		MastSurveyRepository,
+		NodeSurveyService,
+		NodeSurveyRepository,
+		TensionWireSurveyService,
+		TensionWireSurveyRepository,
+		LuminaireSurveyService,
+		LuminaireSurveyRepository,
+		GetDecompositionItemDamageHandler,
+		GetDecompositionItemDamageQuery,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

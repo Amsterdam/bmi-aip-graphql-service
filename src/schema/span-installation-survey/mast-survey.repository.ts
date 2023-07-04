@@ -7,6 +7,7 @@ import { IMastSurveyRepository, MastSurvey } from './types';
 import { CreateMastSurveyInput } from './dto/create-mast-survey.input';
 import { UpdateMastSurveyInput } from './dto/update-mast-survey.input';
 import { SupportSystemSurveyNotFoundException } from './exceptions/support-system-survey-not-found.exception';
+import { SupportSystemNotFoundException } from './exceptions/support-system-not-found.exception';
 
 @Injectable()
 export class MastSurveyRepository implements IMastSurveyRepository {
@@ -82,7 +83,7 @@ export class MastSurveyRepository implements IMastSurveyRepository {
 	}
 
 	async getMastSurveyOnPermanentId(supportSystemId: string): Promise<MastSurvey> {
-		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+		const result = await this.prisma.spanSupportSystems.findUnique({
 			where: {
 				id: supportSystemId,
 			},
@@ -91,11 +92,22 @@ export class MastSurveyRepository implements IMastSurveyRepository {
 			},
 		});
 
+		if (!result) {
+			throw new SupportSystemNotFoundException(supportSystemId);
+		}
+
+		const { permanentId } = result;
+
 		return this.getMastSurvey(permanentId);
 	}
 
 	async hasDamage(supportSystemId: string): Promise<boolean> {
-		const mastSurvey = await this.getMastSurveyOnPermanentId(supportSystemId);
+		let mastSurvey;
+		try {
+			mastSurvey = await this.getMastSurveyOnPermanentId(supportSystemId);
+		} catch (e) {
+			return false;
+		}
 
 		return (
 			mastSurvey.mastDamage ||

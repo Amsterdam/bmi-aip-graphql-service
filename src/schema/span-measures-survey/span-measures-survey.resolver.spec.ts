@@ -9,7 +9,7 @@ import { UpdateSpanMeasuresSurveyCommand } from './commands/update-span-measures
 import { SpanMeasuresSurveyResolver } from './span-measures-survey.resolver';
 import { SpanMeasuresSurvey } from './models/span-measures-survey.model';
 import { GetSpanMeasuresSurveyBySurveyIdQuery } from './queries/get-span-measures-survey-by-survey.query';
-import { UpdateSpanMeasuresCompletionCommand } from './commands/update-span-measures-completion.command';
+import { CompleteSpanMeasuresSurveyCommand } from './commands/complete-span-measures-survey.command';
 
 jest.mock('./span-measures-survey.service');
 jest.mock('./span-measures-survey.repository');
@@ -18,7 +18,7 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	execute: jest.fn((command: any) => {
 		switch (command.constructor.name) {
 			case UpdateSpanMeasuresSurveyCommand.name:
-			case UpdateSpanMeasuresCompletionCommand.name:
+			case CompleteSpanMeasuresSurveyCommand.name:
 				return domainSpanMeasuresSurvey;
 		}
 	}),
@@ -67,12 +67,12 @@ describe('Span measures survey / Resolver', () => {
 		expect(result).toEqual(domainSpanMeasuresSurvey);
 	});
 
-	test('updateSpanMeasuresCompletion', async () => {
-		const result = await resolver.updateSpanMeasuresCompletion(updateSpanMeasuresSurveyInput);
+	test('completeSpanMeasuresSurvey', async () => {
+		const result = await resolver.completeSpanMeasuresSurvey(updateSpanMeasuresSurveyInput);
 
 		expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 		expect(commandBusMock.execute).toHaveBeenCalledWith(
-			new UpdateSpanMeasuresCompletionCommand(updateSpanMeasuresSurveyInput),
+			new CompleteSpanMeasuresSurveyCommand(updateSpanMeasuresSurveyInput),
 		);
 
 		expect(result).toBeInstanceOf(SpanMeasuresSurvey);

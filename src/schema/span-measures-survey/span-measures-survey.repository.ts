@@ -33,7 +33,7 @@ export class SpanMeasuresSurveyRepository implements ISpanMeasuresSurveyReposito
 		});
 	}
 
-	async updateSpanMeasuresCompletion({
+	async completeSpanMeasuresSurvey({
 		surveyId,
 		verifiedAuthor,
 		verifiedDate,

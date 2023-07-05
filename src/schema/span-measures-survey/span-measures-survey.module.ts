@@ -7,8 +7,8 @@ import { PrismaService } from 'src/prisma.service';
 
 import { SurveyStates } from '../survey/types/surveyStates';
 
-import { UpdateSpanMeasuresCompletionCommand } from './commands/update-span-measures-completion.command';
-import { UpdateSpanMeasuresCompletionHandler } from './commands/update-span-measures-completion.handler';
+import { CompleteSpanMeasuresSurveyCommand } from './commands/complete-span-measures-survey.command';
+import { CompleteSpanMeasuresSurveyHandler } from './commands/complete-span-measures-survey.handler';
 import { UpdateSpanMeasuresSurveyCommand } from './commands/update-span-measures-survey.command';
 import { UpdateSpanMeasuresSurveyHandler } from './commands/update-span-measures-survey.handler';
 import { GetSpanMeasuresSurveyBySurveyIdHandler } from './queries/get-span-measures-survey-by-survey.handler';
@@ -31,8 +31,8 @@ registerEnumType(SurveyStates, {
 		UpdateSpanMeasuresSurveyHandler,
 		GetSpanMeasuresSurveyBySurveyIdHandler,
 		GetSpanMeasuresSurveyBySurveyIdQuery,
-		UpdateSpanMeasuresCompletionCommand,
-		UpdateSpanMeasuresCompletionHandler,
+		CompleteSpanMeasuresSurveyCommand,
+		CompleteSpanMeasuresSurveyHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })

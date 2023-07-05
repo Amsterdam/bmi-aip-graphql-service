@@ -10,7 +10,7 @@ import { GetSpanMeasuresSurveyBySurveyIdQuery } from './queries/get-span-measure
 import { UpdateSpanMeasuresSurveyInput } from './dto/update-span-measures-survey.input';
 import { SpanMeasuresSurveyFactory } from './span-measures-survey.factory';
 import { UpdateSpanMeasuresSurveyCommand } from './commands/update-span-measures-survey.command';
-import { UpdateSpanMeasuresCompletionCommand } from './commands/update-span-measures-completion.command';
+import { CompleteSpanMeasuresSurveyCommand } from './commands/complete-span-measures-survey.command';
 
 @Resolver((of) => SpanMeasuresSurvey)
 @Resource(SpanMeasuresSurvey.name)
@@ -37,12 +37,12 @@ export class SpanMeasuresSurveyResolver {
 
 	@Mutation(() => SpanMeasuresSurvey)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async updateSpanMeasuresCompletion(
-		@Args('updateSpanMeasuresCompletion') input: UpdateSpanMeasuresSurveyInput,
+	public async completeSpanMeasuresSurvey(
+		@Args('completeSpanMeasuresSurvey') input: UpdateSpanMeasuresSurveyInput,
 	): Promise<SpanMeasuresSurvey> {
 		return SpanMeasuresSurveyFactory.CreateSpanMeasuresSurvey(
-			await this.commandBus.execute<UpdateSpanMeasuresCompletionCommand>(
-				new UpdateSpanMeasuresCompletionCommand(input),
+			await this.commandBus.execute<CompleteSpanMeasuresSurveyCommand>(
+				new CompleteSpanMeasuresSurveyCommand(input),
 			),
 		);
 	}

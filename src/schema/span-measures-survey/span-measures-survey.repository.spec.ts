@@ -37,8 +37,8 @@ describe('Span Measures survey / Repository', () => {
 		);
 	});
 
-	test('updateSpanMeasuresComletion()', async () => {
-		const returnValue = await new SpanMeasuresSurveyRepository(prismaServiceMock).updateSpanMeasuresCompletion(
+	test('completeSpanMeasuresSurvey()', async () => {
+		const returnValue = await new SpanMeasuresSurveyRepository(prismaServiceMock).completeSpanMeasuresSurvey(
 			updateSpanMeasuresSurveyInput,
 		);
 		expect(prismaServiceMock.surveys.update).toHaveBeenCalledWith({

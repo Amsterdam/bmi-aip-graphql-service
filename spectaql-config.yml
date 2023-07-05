@@ -1,0 +1,33 @@
+spectaql:
+    #logoFile: ./test/fixtures/logo.png
+    #faviconFile: ./test/fixtures/favicon.png
+    displayAllServers: true
+    targetDir: 'null'
+
+introspection:
+    removeTrailingPeriodFromDescriptions: false
+    url: http://localhost:3000/graphql
+    d#ynamicExamplesProcessingModule: ./examples/customizations/examples
+    queryNameStrategy: capitalizeFirst
+    fieldExpansionDepth: 2
+
+    spectaqlDirective:
+        enable: true
+
+extensions:
+    graphqlScalarExamples: false
+
+info:
+    title: AIP GraphQL Service documentaton
+    description: Up to date documentation of the AIP GQL schema
+    license:
+        name: Mozilla Public License Version 2.0
+        url: https://www.mozilla.org/en-US/MPL/2.0/
+
+servers:
+    - url: http://localhost:3000/graphql
+      description: Local
+      headers:
+          - name: Authorization
+            example: Bearer <TOKEN>
+            comment: Required for all calls.

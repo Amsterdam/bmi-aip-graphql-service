@@ -546,8 +546,8 @@ export class AddMJOPSheetService {
 					width: 4,
 				},
 				{
-					header: 'Env',
-					key: 'verificationRamsEnv',
+					header: 'Ec',
+					key: 'verificationRamsEc',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: Cell, value): void => {
 						cell.value = value;
@@ -555,8 +555,8 @@ export class AddMJOPSheetService {
 					width: 4,
 				},
 				{
-					header: 'Ec',
-					key: 'verificationRamsEc',
+					header: 'Env',
+					key: 'verificationRamsEnv',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: Cell, value): void => {
 						cell.value = value;
@@ -749,10 +749,10 @@ export class AddMJOPSheetService {
 					type: 'pattern',
 					pattern: 'solid',
 					fgColor: {
-						argb: bgColor || 'FFFFFFFF', // Use a default color if bgColor is undefined
+						argb: bgColor || 'FFFFFF', // Use a default color if bgColor is undefined
 					},
 					bgColor: {
-						argb: bgColor || 'FFFFFFFF', // Use a default color if bgColor is undefined
+						argb: bgColor || 'FFFFFF', // Use a default color if bgColor is undefined
 					},
 				},
 				font: {
@@ -789,7 +789,7 @@ export class AddMJOPSheetService {
 			case '6':
 				return 'd73f2d';
 			default:
-				return '';
+				return 'FFFFFF';
 		}
 	}
 

@@ -21,12 +21,11 @@ export class AddMJOPSheetService {
 		const data: Partial<MJOPRecord> = await this.getMjopDataService.getMJOPData(survey);
 
 		const assetColumns: MjopExportColumn[] = await this.getAssetColumns(data, survey.id);
-		const surveyColumns: MjopExportColumn[] = await this.getSurveyColumns();
+		let surveyColumns: MjopExportColumn[] = [];
 		const elementColumns: MjopExportColumn[] = await this.getElementColumns();
-		const derivedConditionScoreElementColumns: MjopExportColumn[] =
-			await this.getDerivedConditionScoreElementColumns();
+		let derivedConditionScoreElementColumns: MjopExportColumn[] = [];
 		const unitColumns: MjopExportColumn[] = await this.getUnitColumns();
-		const derivedConditionScoreUnitColumns: MjopExportColumn[] = await this.getDerivedConditionScoreUnitColumns();
+		let derivedConditionScoreUnitColumns: MjopExportColumn[] = [];
 		let failureModeColumns: MjopExportColumn[] = [];
 		let defectColumns: MjopExportColumn[] = [];
 		let conditionColumns: MjopExportColumn[] = [];
@@ -34,7 +33,10 @@ export class AddMJOPSheetService {
 			failureModeColumns = await this.getFailureModeColumns();
 			conditionColumns = await this.getConditionColumns();
 		} else {
+			surveyColumns = await this.getSurveyColumns();
 			defectColumns = await this.getDefectColumns();
+			derivedConditionScoreElementColumns = await this.getDerivedConditionScoreElementColumns();
+			derivedConditionScoreUnitColumns = await this.getDerivedConditionScoreUnitColumns();
 		}
 		const measureColumns: MjopExportColumn[] = await this.getMeasureColumns();
 		const cyclicMaintenanceColumns: MjopExportColumn[] = this.getCyclicMaintenanceColumns();
@@ -71,22 +73,28 @@ export class AddMJOPSheetService {
 		data.survey.elements?.forEach((element: IMJOPElement) => {
 			element.units?.forEach((unit: IMJOPUnit) => {
 				unit.measures?.forEach((measure: IMJOPMeasure) => {
+					let surveyData;
 					let failureMode;
 					let defect;
+					let derivedConditionScoreElement;
+					let derivedConditionScoreUnit;
 					if (isFmeca) {
 						failureMode = measure.failureMode;
 					} else {
+						surveyData = data.survey;
+						derivedConditionScoreElement = element.derivedConditionScoreElement;
+						derivedConditionScoreUnit = unit.derivedConditionScoreUnit;
 						defect = measure.defect;
 					}
 
 					const rowData = {
 						...asset,
-						...data.survey,
+						...surveyData,
 						...element,
-						...element.derivedConditionScoreElement,
+						...derivedConditionScoreElement,
 						...unit,
 						...failureMode,
-						...unit.derivedConditionScoreUnit,
+						...derivedConditionScoreUnit,
 						...defect,
 						...measure,
 						...measure.cyclicMaintenance,

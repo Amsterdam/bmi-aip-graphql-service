@@ -6,7 +6,7 @@ export class SpanMeasureItemActualInput {
 	@IsUUID()
 	public id: string;
 
-	@Field((type) => Boolean, { nullable: true })
+	@Field((type) => Number)
 	@IsOptional()
 	quantityActual: number;
 

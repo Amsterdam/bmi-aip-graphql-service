@@ -72,7 +72,7 @@ The business delivers us an XLSX file that contains 3 sheets: "Maatregelen" (tit
 
 -   Place newly supplied .xlsx file in /docs folder
 -   Update the `READ_FILE_OVS_MEASURES` .env variable with the correct filename
--   Run `npm console ovs:import-measure-options` locally
+-   Run `npm run console ovs:import-measure-options` locally
 -   Check the newly generated `normalized-data-measures.json` file in your working tree
 -   Commit your changes (the `import-span-measure-options.spec` test should be green)
 

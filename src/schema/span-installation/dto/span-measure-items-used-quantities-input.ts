@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional, IsUUID } from 'class-validator';
 @InputType()
-export class SpanMeasureItemActualInput {
+export class SpanMeasureItemsUsedQuantitiesInput {
 	@Field()
 	@IsUUID()
 	public id: string;

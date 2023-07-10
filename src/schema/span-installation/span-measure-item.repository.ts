@@ -61,30 +61,30 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 	async updateSpanMeasureItemsUsedQuantities(
 		input: UpdateSpanMeasureItemsUsedQuantitiesInput,
 	): Promise<SpanMeasureItem[]> {
-		if (input.spanMeasureItemActuals) {
+		if (input.spanMeasureItemsUsedQuantities) {
 			await Promise.all(
-				input.spanMeasureItemActuals.map(async (spanMeasureItemActual) => {
+				input.spanMeasureItemsUsedQuantities.map(async (spanMeasureItem) => {
 					// Item not found for given id/spanMeasureId combination
 					const result = await this.prisma.spanMeasureItems.findFirst({
 						where: {
-							id: spanMeasureItemActual.id,
+							id: spanMeasureItem.id,
 							spanMeasureId: input.spanMeasureId,
 						},
 					});
 
 					if (!result) {
 						throw new NotFoundException(
-							`No item found for given spanMeasureItemId (${spanMeasureItemActual.id}) / spanMeasureId (${input.spanMeasureId}) combination`,
+							`No item found for given spanMeasureItemId (${spanMeasureItem.id}) / spanMeasureId (${input.spanMeasureId}) combination`,
 						);
 					}
 
 					await this.prisma.spanMeasureItems.update({
 						where: {
-							id: spanMeasureItemActual.id,
+							id: spanMeasureItem.id,
 						},
 						data: {
-							quantityActual: spanMeasureItemActual.quantityActual,
-							isActive: spanMeasureItemActual.active,
+							quantityActual: spanMeasureItem.quantityActual,
+							isActive: spanMeasureItem.active,
 						},
 					});
 				}),

@@ -11,9 +11,10 @@ import {
 	DmsMetadataSpanInstallationTypes,
 	RawDMSDocument,
 } from './types/dms-document-span-installation';
-import { getSurveyInspectionType, InspectionStandard } from './../schema/survey/types';
+import { InspectionStandard } from './../schema/survey/types';
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
+import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
 
 @Injectable()
 export class DmsRepository {
@@ -23,7 +24,10 @@ export class DmsRepository {
 		private readonly prisma: PrismaService,
 	) {}
 
-	private apiUrl = this.configService.get<string>('DMS_API_URL');
+	//private apiUrl = this.configService.get<string>('DMS_API_URL');
+	private apiUrl = 'http://127.0.0.1:4321/';
+
+	private token = '';
 
 	// private apiUsername = this.configService.get<string>('DMS_API_USERNAME');
 	//
@@ -31,29 +35,16 @@ export class DmsRepository {
 	//
 	// private apiKey = this.configService.get<string>('GISIB_API_KEY');
 
-	// public login(): Promise<string> {
-	// 	return new Promise((resolve, reject) => {
-	// 		this.httpService
-	// 			.post<string>(`${this.apiUrl}/login`, {
-	// 				Username: this.apiUsername,
-	// 				Password: this.apiPassword,
-	// 				ApiKey: this.apiKey,
-	// 			})
-	// 			.pipe(
-	// 				map((res) => res.data),
-	// 				single(),
-	// 				catchError((e) => {
-	// 					throw new HttpException(e.statusText, e.status);
-	// 				}),
-	// 			)
-	// 			.subscribe((token) => {
-	// 				resolve(token);
-	// 			});
-	// 	});
-	// }
+	public setToken(token: string) {
+		this.token = token;
+	}
+
+	private getToken() {
+		return this.token;
+	}
 
 	private async request<T = any>(url: string): Promise<T[]> {
-		const token = await this.login();
+		const token = this.getToken();
 
 		return new Promise((resolve) => {
 			this.httpService
@@ -71,69 +62,83 @@ export class DmsRepository {
 		});
 	}
 
-	public async getSpanInstallationDocumentsFromDms<T extends DMSDocumentSpanInstallation>(
-		token: string,
-		assetId: string,
-		surveyId?: string,
-		entityId?: string,
-	): Promise<T[]> {
-		let object;
+	private async post<T = any>(url: string, data: object): Promise<any> {
+		const token = this.getToken();
 
-		if (assetId) {
-			object = await this.prisma.objects.findUnique({
-				where: { id: assetId },
-			});
-		}
-
-		let url = this.apiUrl + 'documents?';
-
-		if (object.code && object.code !== '') {
-			url += 'code=' + object.code;
-		} else {
-			return [];
-		}
-
-		let surveyInspectionType: InspectionStandard;
-
-		if (surveyId || entityId) {
-			url += '&metadata=[';
-
-			url += surveyId ? `{"key":"survey-id-overspanning","value":"${surveyId}"}` : '';
-			url += surveyId && entityId ? ',' : '';
-			url += entityId ? `{"key":"onderdeel-id","value":"${entityId}"}` : '';
-
-			url += ']';
-		}
-
-		if (surveyId) {
-			const survey = await this.prisma.surveys.findUnique({
-				select: { inspectionStandardType: true },
-				where: { id: surveyId },
-			});
-
-			surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
-		}
-
-		const response = new Promise((resolve) => {
+		return new Promise((resolve) => {
 			this.httpService
-				.get<[]>(url, {
+				.post<T[]>(url, data, {
 					headers: { Authorization: `Bearer ${token}` },
 				})
-				.pipe(
-					map((res) => res.data),
-					single(),
-					catchError((e) => {
-						throw new HttpException(e.statusText, e.status);
-					}),
-				)
-				.subscribe((values) => resolve(values));
+				.subscribe(function (response) {
+					resolve(response.data);
+				});
 		});
-
-		const data: RawDMSDocument[] = await response;
-		return (data || [])
-			.map((doc) => this.mapMetadata(doc, surveyInspectionType) as T)
-			.sort((a, b) => (a.name < b.name ? -1 : 1));
 	}
+
+	// public async getSpanInstallationDocumentsFromDms<T extends DMSDocumentSpanInstallation>(
+	// 	token: string,
+	// 	assetId: string,
+	// 	surveyId?: string,
+	// 	entityId?: string,
+	// ): Promise<T[]> {
+	// 	let object;
+
+	// 	if (assetId) {
+	// 		object = await this.prisma.objects.findUnique({
+	// 			where: { id: assetId },
+	// 		});
+	// 	}
+
+	// 	let url = this.apiUrl + 'documents?';
+
+	// 	if (object.code && object.code !== '') {
+	// 		url += 'code=' + object.code;
+	// 	} else {
+	// 		return [];
+	// 	}
+
+	// 	let surveyInspectionType: InspectionStandard;
+
+	// 	if (surveyId || entityId) {
+	// 		url += '&metadata=[';
+
+	// 		url += surveyId ? `{"key":"survey-id-overspanning","value":"${surveyId}"}` : '';
+	// 		url += surveyId && entityId ? ',' : '';
+	// 		url += entityId ? `{"key":"onderdeel-id","value":"${entityId}"}` : '';
+
+	// 		url += ']';
+	// 	}
+
+	// 	if (surveyId) {
+	// 		const survey = await this.prisma.surveys.findUnique({
+	// 			select: { inspectionStandardType: true },
+	// 			where: { id: surveyId },
+	// 		});
+
+	// 		surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
+	// 	}
+
+	// 	const response = new Promise((resolve) => {
+	// 		this.httpService
+	// 			.get<[]>(url, {
+	// 				headers: { Authorization: `Bearer ${token}` },
+	// 			})
+	// 			.pipe(
+	// 				map((res) => res.data),
+	// 				single(),
+	// 				catchError((e) => {
+	// 					throw new HttpException(e.statusText, e.status);
+	// 				}),
+	// 			)
+	// 			.subscribe((values) => resolve(values));
+	// 	});
+
+	// 	const data: RawDMSDocument[] = await response;
+	// 	return (data || [])
+	// 		.map((doc) => this.mapMetadata(doc, surveyInspectionType) as T)
+	// 		.sort((a, b) => (a.name < b.name ? -1 : 1));
+	// }
 
 	/**
 	 * Maps metadata based on inspection type using the provided survey inspection type or alternatively using a
@@ -230,4 +235,21 @@ export class DmsRepository {
 	// 			.subscribe((v) => resolve(v));
 	// 	});
 	// }
+
+	public getUrl() {
+		return this.apiUrl;
+	}
+
+	async getDmsUploadUrl(filename: string, assetCode: string): Promise<DmsUploadUrlResponse> {
+		const data = {
+			asset_code: assetCode,
+			file_name: filename,
+		};
+
+		const uploadUrl = this.apiUrl + 'documents/uploadurl';
+
+		const dmsResponse = await this.post<DmsUploadUrlResponse>(uploadUrl, data);
+
+		return dmsResponse;
+	}
 }

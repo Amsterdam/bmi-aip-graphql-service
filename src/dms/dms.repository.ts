@@ -11,7 +11,7 @@ import {
 	DmsMetadataSpanInstallationTypes,
 	RawDMSDocument,
 } from './types/dms-document-span-installation';
-import { InspectionStandard } from './../schema/survey/types';
+import { getSurveyInspectionType, InspectionStandard } from './../schema/survey/types';
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
 import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
@@ -28,12 +28,6 @@ export class DmsRepository {
 	private apiUrl = 'http://127.0.0.1:4321/';
 
 	private token = '';
-
-	// private apiUsername = this.configService.get<string>('DMS_API_USERNAME');
-	//
-	// private apiPassword = this.configService.get<string>('DMS_API_PASSWORD');
-	//
-	// private apiKey = this.configService.get<string>('GISIB_API_KEY');
 
 	public setToken(token: string) {
 		this.token = token;
@@ -76,69 +70,79 @@ export class DmsRepository {
 		});
 	}
 
-	// public async getSpanInstallationDocumentsFromDms<T extends DMSDocumentSpanInstallation>(
-	// 	token: string,
-	// 	assetId: string,
-	// 	surveyId?: string,
-	// 	entityId?: string,
-	// ): Promise<T[]> {
-	// 	let object;
+	public async getSpanInstallationDocumentsFromDms<T extends DMSDocumentSpanInstallation>(
+		assetId: string,
+		surveyId?: string,
+		entityId?: string,
+	): Promise<T[]> {
+		let object;
+		const token = this.getToken();
 
-	// 	if (assetId) {
-	// 		object = await this.prisma.objects.findUnique({
-	// 			where: { id: assetId },
-	// 		});
-	// 	}
+		if (assetId) {
+			console.log(assetId);
+			object = await this.prisma.objects.findUnique({
+				where: { id: assetId },
+			});
+		}
 
-	// 	let url = this.apiUrl + 'documents?';
+		let url = this.apiUrl + 'documents?';
 
-	// 	if (object.code && object.code !== '') {
-	// 		url += 'code=' + object.code;
-	// 	} else {
-	// 		return [];
-	// 	}
+		if (object.code && object.code !== '') {
+			url += 'code=' + object.code;
+		} else {
+			return [];
+		}
 
-	// 	let surveyInspectionType: InspectionStandard;
+		let surveyInspectionType: InspectionStandard;
 
-	// 	if (surveyId || entityId) {
-	// 		url += '&metadata=[';
+		if (surveyId || entityId) {
+			url += '&metadata=[';
 
-	// 		url += surveyId ? `{"key":"survey-id-overspanning","value":"${surveyId}"}` : '';
-	// 		url += surveyId && entityId ? ',' : '';
-	// 		url += entityId ? `{"key":"onderdeel-id","value":"${entityId}"}` : '';
+			url += surveyId ? `{"key":"survey-id-overspanning","value":"${surveyId}"}` : '';
+			url += surveyId && entityId ? ',' : '';
+			url += entityId ? `{"key":"onderdeel-id","value":"${entityId}"}` : '';
 
-	// 		url += ']';
-	// 	}
+			url += ']';
+		}
 
-	// 	if (surveyId) {
-	// 		const survey = await this.prisma.surveys.findUnique({
-	// 			select: { inspectionStandardType: true },
-	// 			where: { id: surveyId },
-	// 		});
+		if (surveyId) {
+			const survey = await this.prisma.surveys.findUnique({
+				select: { inspectionStandardType: true },
+				where: { id: surveyId },
+			});
 
-	// 		surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
-	// 	}
+			surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
+		}
 
-	// 	const response = new Promise((resolve) => {
-	// 		this.httpService
-	// 			.get<[]>(url, {
-	// 				headers: { Authorization: `Bearer ${token}` },
-	// 			})
-	// 			.pipe(
-	// 				map((res) => res.data),
-	// 				single(),
-	// 				catchError((e) => {
-	// 					throw new HttpException(e.statusText, e.status);
-	// 				}),
-	// 			)
-	// 			.subscribe((values) => resolve(values));
-	// 	});
+		const response = new Promise((resolve) => {
+			this.httpService
+				.get<[]>(url, {
+					headers: { Authorization: `Bearer ${token}` },
+				})
+				.pipe(
+					map((res) => res.data),
+					single(),
+					catchError((e) => {
+						throw new HttpException(e.statusText, e.status);
+					}),
+				)
+				.subscribe((values) => resolve(values));
+		});
 
-	// 	const data: RawDMSDocument[] = await response;
-	// 	return (data || [])
-	// 		.map((doc) => this.mapMetadata(doc, surveyInspectionType) as T)
-	// 		.sort((a, b) => (a.name < b.name ? -1 : 1));
-	// }
+		const data: RawDMSDocument[] = await response;
+
+		const resp = (data || [])
+			.map(
+				function (doc: any) {
+					return this.mapMetadata(doc, surveyInspectionType) as T;
+				}.bind(this),
+			)
+			.sort((a, b) => (a.name < b.name ? -1 : 1));
+
+		console.log(resp);
+
+		return resp;
+	}
 
 	/**
 	 * Maps metadata based on inspection type using the provided survey inspection type or alternatively using a

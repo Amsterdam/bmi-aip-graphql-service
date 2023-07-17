@@ -114,7 +114,7 @@ export class DmsRepository {
 			surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
 		}
 
-		const response = new Promise((resolve) => {
+		const response = new Promise<RawDMSDocument[]>((resolve) => {
 			this.httpService
 				.get<[]>(url, {
 					headers: { Authorization: `Bearer ${token}` },
@@ -137,9 +137,7 @@ export class DmsRepository {
 					return this.mapMetadata(doc, surveyInspectionType) as T;
 				}.bind(this),
 			)
-			.sort((a, b) => (a.name < b.name ? -1 : 1));
-
-		console.log(resp);
+			.sort((a: RawDMSDocument, b: RawDMSDocument) => (a.name < b.name ? -1 : 1)) as T[];
 
 		return resp;
 	}

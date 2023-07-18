@@ -79,3 +79,4 @@ The business delivers us an XLSX file that contains 3 sheets: "Maatregelen" (tit
 ## License
 
 MPL-2.0. See `./LICENSE`
+..

@@ -24,8 +24,7 @@ export class DmsRepository {
 		private readonly prisma: PrismaService,
 	) {}
 
-	//private apiUrl = this.configService.get<string>('DMS_API_URL');
-	private apiUrl = 'http://127.0.0.1:4321/';
+	private apiUrl = this.configService.get<string>('DMS_API_URL');
 
 	private token = '';
 

@@ -26,4 +26,10 @@ export class ElementService {
 	async getElementById(elementId: string): Promise<Element> {
 		return ElementFactory.CreateElement(await this.elementRepo.getElementById(elementId));
 	}
+
+	async getElementWithUnits(surveyId: string): Promise<Element[]> {
+		return (await this.elementRepo.getElementWithUnits(surveyId)).map((element) =>
+			ElementFactory.CreateElementWithUnits(element),
+		);
+	}
 }

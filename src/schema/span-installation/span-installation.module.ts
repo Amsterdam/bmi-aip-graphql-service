@@ -8,6 +8,20 @@ import { AuthenticationModule } from '../../authentication/authentication.module
 import { AssetModule } from '../asset/asset.module';
 import { PrismaService } from '../../prisma.service';
 import { SurveyRepository } from '../survey/survey.repository';
+import { GetDecompositionItemDamageHandler } from '../span-installation-survey/queries/get-decomposition-item-damage.handler';
+import { GetDecompositionItemDamageQuery } from '../span-installation-survey/queries/get-decomposition-item-damage.query';
+import { JunctionBoxSurveyService } from '../span-installation-survey/junction-box-survey.service';
+import { JunctionBoxSurveyRepository } from '../span-installation-survey/junction-box-survey.repository';
+import { FacadeSurveyService } from '../span-installation-survey/facade-survey.service';
+import { FacadeSurveyRepository } from '../span-installation-survey/facade-survey.repository';
+import { MastSurveyRepository } from '../span-installation-survey/mast-survey.repository';
+import { MastSurveyService } from '../span-installation-survey/mast-survey.service';
+import { NodeSurveyService } from '../span-installation-survey/node-survey.service';
+import { NodeSurveyRepository } from '../span-installation-survey/node-survey.repository';
+import { TensionWireSurveyService } from '../span-installation-survey/tension-wire-survey.service';
+import { TensionWireSurveyRepository } from '../span-installation-survey/tension-wire-survey.repository';
+import { LuminaireSurveyService } from '../span-installation-survey/luminaire-survey.service';
+import { LuminaireSurveyRepository } from '../span-installation-survey/luminaire-survey.repository';
 
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
@@ -53,12 +67,12 @@ import { SaveSpanMeasureItemsHandler } from './commands/save-span-measure-items.
 import { UpdateSpanMeasureItemsUsedQuantitiesCommand } from './commands/update-span-measure-items-used-quantities.command';
 import { UpdateSpanMeasureItemsUsedQuantitiesHandler } from './commands/update-span-measure-items-used-quantities.handler';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 import { CloneSpanInstallationDecompositionHandler } from './commands/clone-span-installation-decomposition.handler';
 import { CloneSpanInstallationDecompositionCommand } from './commands/clone-span-installation-decomposition.command';
 import { SpanDecompositionResolver } from './span-decomposition.resolver';
-import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
-import { FindSpanMeasuresByDecompositionIdHandler } from './queries/find-span-measures-by-decomposition-id.handler';
+import { FindSpanMeasuresByDecompositionItemIdQuery } from './queries/find-span-measures-by-decomposition-item-id.query';
+import { FindSpanMeasuresByDecompositionItemIdHandler } from './queries/find-span-measures-by-decomposition-item-id.handler';
 import { SpanMeasureStatus } from './types/span-measure-status';
 import { SpanMeasureItemStatus } from './types/span-measure-item-status';
 import { CreateMissingJunctionBoxHandler } from './commands/create-missing-junction-box.handler';
@@ -88,8 +102,8 @@ registerEnumType(SupportSystemTypeDetailedTensionWire, {
 	name: 'SupportSystemTypeDetailedTensionWire',
 });
 
-registerEnumType(SpanDecompositionType, {
-	name: 'SpanDecompositionType',
+registerEnumType(SpanDecompositionItemType, {
+	name: 'SpanDecompositionItemType',
 });
 
 registerEnumType(SpanMeasureStatus, {
@@ -146,14 +160,28 @@ registerEnumType(SpanMeasureItemStatus, {
 		CloneSpanInstallationDecompositionCommand,
 		CloneSpanInstallationDecompositionHandler,
 		SpanDecompositionResolver,
-		FindSpanMeasuresByDecompositionIdQuery,
-		FindSpanMeasuresByDecompositionIdHandler,
+		FindSpanMeasuresByDecompositionItemIdQuery,
+		FindSpanMeasuresByDecompositionItemIdHandler,
 		CreateMissingJunctionBoxHandler,
 		ReviseJunctionBoxHandler,
 		CreateMissingSupportSystemHandler,
 		ReviseSupportSystemHandler,
 		CreateMissingLuminaireHandler,
 		ReviseLuminaireHandler,
+		JunctionBoxSurveyService,
+		JunctionBoxSurveyRepository,
+		FacadeSurveyService,
+		FacadeSurveyRepository,
+		MastSurveyService,
+		MastSurveyRepository,
+		NodeSurveyService,
+		NodeSurveyRepository,
+		TensionWireSurveyService,
+		TensionWireSurveyRepository,
+		LuminaireSurveyService,
+		LuminaireSurveyRepository,
+		GetDecompositionItemDamageHandler,
+		GetDecompositionItemDamageQuery,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

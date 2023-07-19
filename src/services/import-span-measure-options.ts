@@ -12,7 +12,7 @@ import { newId } from 'src/utils/newId';
 
 import { SpanMeasureItemOption } from '../schema/span-installation/models/span-measure-item-option.model';
 import { SpanMeasureOption } from '../schema/span-installation/models/span-measure-option.model';
-import { SpanDecompositionType } from '../schema/span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../schema/span-installation/types/span-decomposition-item-type';
 
 import {
 	OVSSpanMeasureExcelRowObject,
@@ -36,7 +36,7 @@ export class ImportSpanMeasureOptions {
 
 	private jsonData: { spanMeasureOptions: SpanMeasureOption[]; spanMeasureItemOptions: SpanMeasureItemOption[] };
 
-	private lastReadDecompositionType = '';
+	private lastReadDecompositionItemType = '';
 
 	public constructor(
 		private readonly consoleService: ConsoleService,
@@ -67,6 +67,26 @@ export class ImportSpanMeasureOptions {
 		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
 
 		return data;
+	}
+
+	private getSpanMeasureItemOptionsFromGeneratedJson(data: SpanMeasureOption[]) {
+		const spanMeasureOptions = data;
+		const spanMeasureItemOptions: SpanMeasureItemOption[] = [];
+
+		for (const spanMeasureOption of spanMeasureOptions) {
+			for (const measureItem of spanMeasureOption.measureItems) {
+				spanMeasureItemOptions.push(measureItem);
+			}
+		}
+
+		// De-duplicate the span measure item options array
+		const uniqueSpanMeasureItemOptions = Array.from(new Set(spanMeasureItemOptions.map((item) => item.id))).map(
+			(id) => {
+				return spanMeasureItemOptions.find((item) => item.id === id);
+			},
+		);
+
+		return { spanMeasureOptions, spanMeasureItemOptions: uniqueSpanMeasureItemOptions };
 	}
 
 	private parseBestekpostRow(
@@ -156,13 +176,17 @@ export class ImportSpanMeasureOptions {
 		this.progressBar.start(100, 0);
 
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
+
 		if (this.forcedRewrite) {
 			this.jsonData.spanMeasureOptions = [];
 			this.jsonData.spanMeasureItemOptions = [];
+		} else {
+			this.jsonData.spanMeasureItemOptions = this.getSpanMeasureItemOptionsFromGeneratedJson(
+				this.jsonData.spanMeasureOptions,
+			).spanMeasureItemOptions;
 		}
 
 		const file = await this.getFile();
-
 		const normalizedData = await this.normalize(
 			this.getMatrixFromSheet(file.Matrix),
 			this.getMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),
@@ -175,25 +199,25 @@ export class ImportSpanMeasureOptions {
 		this.logger.log(`Completed importing ${Object.keys(normalizedData).length} measures and options`);
 	}
 
-	private mapDecompositionType(input: string): string {
+	private mapDecompositionItemType(input: string): string {
 		switch (input) {
 			case 'Aansluitkast':
-				return SpanDecompositionType.spanJunctionBox;
+				return SpanDecompositionItemType.spanJunctionBox;
 				break;
 			case 'Mast':
-				return SpanDecompositionType.spanSupportSystemMast;
+				return SpanDecompositionItemType.spanSupportSystemMast;
 				break;
 			case 'Knoop':
-				return SpanDecompositionType.spanSupportSystemNode;
+				return SpanDecompositionItemType.spanSupportSystemNode;
 				break;
 			case 'Gevel':
-				return SpanDecompositionType.spanSupportSystemFacade;
+				return SpanDecompositionItemType.spanSupportSystemFacade;
 				break;
 			case 'Spandraad':
-				return SpanDecompositionType.spanSupportSystemTensionWire;
+				return SpanDecompositionItemType.spanSupportSystemTensionWire;
 				break;
 			case 'Armatuur':
-				return SpanDecompositionType.spanLuminaire;
+				return SpanDecompositionItemType.spanLuminaire;
 				break;
 		}
 	}
@@ -303,12 +327,12 @@ export class ImportSpanMeasureOptions {
 				(item) => item.description == element.Maatregelen,
 			);
 
-			if (element.Onderdelen) this.lastReadDecompositionType = element.Onderdelen;
+			if (element.Onderdelen) this.lastReadDecompositionItemType = element.Onderdelen;
 
 			const optionFormatted = {
 				id: foundMeasureOption ? foundMeasureOption.id : newId(),
 				description: element.Maatregelen,
-				decompositionType: this.mapDecompositionType(this.lastReadDecompositionType),
+				decompositionItemType: this.mapDecompositionItemType(this.lastReadDecompositionItemType),
 				measureItems: [
 					...this.parseSpecificationItems(element.Besteksposten, bestekposten),
 					...this.parseMaterials(element['Materiaal uit (M)agazijn'], materials),
@@ -320,7 +344,7 @@ export class ImportSpanMeasureOptions {
 			} else {
 				optionFormatted.measureItems.map((measureItem) => {
 					const existingItem = measureOptions[optionFormatted.description].measureItems.find(
-						(existing) => existing.id === measureItem.id,
+						(existing) => existing.referenceNumber === measureItem.referenceNumber,
 					);
 					if (!existingItem) {
 						measureOptions[optionFormatted.description].measureItems.push(measureItem);
@@ -331,11 +355,9 @@ export class ImportSpanMeasureOptions {
 
 		// Remap object with named keys to array
 		const measureOptionsArray = Array.from(Object.values(measureOptions));
-		const measureItemOptions = [...materials, ...bestekposten];
 
 		const normalizedData = {
 			spanMeasureOptions: measureOptionsArray,
-			spanMeasureItemOptions: measureItemOptions,
 		};
 
 		await this.saveToFile(normalizedData);

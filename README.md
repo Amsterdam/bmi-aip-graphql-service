@@ -2,6 +2,10 @@
 
 A GraphQL service developed with NestJS in service of the frontend of the "Amsterdam Inspectie Portaal" app.
 
+## Schema documentation
+
+Documentation can be viewed locally via SpectaQL, or use your favorite GraphQL client to inspect the schema. Make sure the service is running via `npm run start` and execute `npm run graphql-docs`. Visit http://localhost:4400/ to browse the available queries and mutations.
+
 ## Installation
 
 ```bash
@@ -68,7 +72,7 @@ The business delivers us an XLSX file that contains 3 sheets: "Maatregelen" (tit
 
 -   Place newly supplied .xlsx file in /docs folder
 -   Update the `READ_FILE_OVS_MEASURES` .env variable with the correct filename
--   Run `npm console ovs:import-measure-options` locally
+-   Run `npm run console ovs:import-measure-options` locally
 -   Check the newly generated `normalized-data-measures.json` file in your working tree
 -   Commit your changes (the `import-span-measure-options.spec` test should be green)
 

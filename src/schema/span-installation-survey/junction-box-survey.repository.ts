@@ -78,7 +78,7 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 	}
 
 	async getJunctionBoxSurveyOnPermanentId(junctionBoxId: string): Promise<JunctionBoxSurvey> {
-		const { permanentId } = await this.prisma.spanJunctionBoxes.findUnique({
+		const junctionBox = await this.prisma.spanJunctionBoxes.findUnique({
 			where: {
 				id: junctionBoxId,
 			},
@@ -87,11 +87,20 @@ export class JunctionBoxSurveyRepository implements IJunctionBoxSurveyRepository
 			},
 		});
 
-		return this.getJunctionBoxSurvey(permanentId);
+		if (!junctionBox || !junctionBox.permanentId) {
+			throw new JunctionBoxSurveyNotFoundException(junctionBoxId);
+		}
+
+		return this.getJunctionBoxSurvey(junctionBox.permanentId);
 	}
 
 	async hasDamage(junctionBoxId: string): Promise<boolean> {
-		const junctionBoxSurvey = await this.getJunctionBoxSurveyOnPermanentId(junctionBoxId);
+		let junctionBoxSurvey: JunctionBoxSurvey | null = null;
+		try {
+			junctionBoxSurvey = await this.getJunctionBoxSurveyOnPermanentId(junctionBoxId);
+		} catch (e) {
+			return false;
+		}
 
 		return (
 			junctionBoxSurvey.cableDamage ||

@@ -1,4 +1,4 @@
-export enum SpanDecompositionType {
+export enum SpanDecompositionItemType {
 	spanJunctionBox = 'spanJunctionBox',
 	spanSupportSystemMast = 'spanSupportSystemMast',
 	spanSupportSystemFacade = 'spanSupportSystemFacade',

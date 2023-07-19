@@ -5,7 +5,7 @@ import { PrismaService } from '../../prisma.service';
 import { SpanMeasureRepository } from './span-measure.repository';
 import { domainSpanMeasure, createSpanMeasureInput, updateSpanMeasureInput } from './__stubs__/span-measure';
 import { domainJunctionBox, domainLuminaire, domainSupportSystem } from './__stubs__';
-import { SpanDecompositionType } from './types/span-decomposition-type';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	spanMeasures: {
@@ -48,8 +48,8 @@ describe('Span Installation / Measures / Repository', () => {
 				},
 				description: '__NAME__',
 				optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
-				decompositionType: SpanDecompositionType.spanSupportSystemMast,
-				decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+				decompositionItemType: SpanDecompositionItemType.spanSupportSystemMast,
+				decompositionItemId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
 			}),
 		);
 
@@ -79,8 +79,8 @@ describe('Span Installation / Measures / Repository', () => {
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			optionId: '9812a0c4-9cb4-4df2-b490-7a5648922f79',
 			surveyId: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
-			decompositionId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
-			decompositionType: SpanDecompositionType.spanSupportSystemMast,
+			decompositionItemId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',
+			decompositionItemType: SpanDecompositionItemType.spanSupportSystemMast,
 			description: '__NAME__',
 			created_at: null,
 			updated_at: null,

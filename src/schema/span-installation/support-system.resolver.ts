@@ -2,6 +2,9 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { HasDecompositionItemGotDamageQuery } from '../span-installation-survey/queries/has-decomposition-item-got-damage.query';
+import { supportSystemToSpanDecompositionItemMapping } from '../span-installation-survey/types/support-system-to-span-decomposition-item';
+
 import { SupportSystem } from './models/support-system.model';
 import { SupportSystemFactory } from './support-system.factory';
 import { SupportSystemService } from './support-system.service';
@@ -15,7 +18,7 @@ import { Luminaire } from './models/luminaire.model';
 import { FindSupportSystemLuminairesCommand } from './commands/find-support-system-luminaires.command';
 import { FindSupportSystemsQuery } from './queries/find-support-systems.query';
 import { SpanMeasure } from './models/span-measure.model';
-import { FindSpanMeasuresByDecompositionIdQuery } from './queries/find-span-measures-by-decomposition-id.query';
+import { FindSpanMeasuresByDecompositionItemIdQuery } from './queries/find-span-measures-by-decomposition-item-id.query';
 import { CreateMissingSupportSystemInput } from './dto/create-missing-support-system.input';
 import { CreateMissingSupportSystemCommand } from './commands/create-missing-support-system.command';
 import { ReviseSupportSystemInput } from './dto/revise-support-system.input';
@@ -96,8 +99,21 @@ export class SupportSystemResolver {
 
 	@ResolveField((type) => [SpanMeasure])
 	async spanMeasures(@Parent() { id }: SpanMeasure): Promise<SpanMeasure[]> {
-		return this.queryBus.execute<FindSpanMeasuresByDecompositionIdQuery>(
-			new FindSpanMeasuresByDecompositionIdQuery(id),
+		return this.queryBus.execute<FindSpanMeasuresByDecompositionItemIdQuery>(
+			new FindSpanMeasuresByDecompositionItemIdQuery(id),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id, type }: SupportSystem): Promise<boolean> {
+		const decompositionItemType = supportSystemToSpanDecompositionItemMapping[type];
+
+		if (!decompositionItemType) {
+			throw new Error(`Unsupported SupportSystemType: ${type}`);
+		}
+
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, decompositionItemType),
 		);
 	}
 }

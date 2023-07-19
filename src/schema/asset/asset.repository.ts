@@ -88,6 +88,14 @@ export class AssetRepository implements IAssetRepository {
 		return this.prisma.objects.create({ data });
 	}
 
+	async getAssetById(id: string): Promise<DBAsset> {
+		return this.prisma.objects.findUnique({
+			where: {
+				id,
+			},
+		});
+	}
+
 	async updateAsset(input: UpdateAssetInput): Promise<DBAsset> {
 		const id = input.id;
 		const data: Prisma.objectsUpdateInput = {

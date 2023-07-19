@@ -14,6 +14,12 @@ export class CyclicMeasureService {
 		);
 	}
 
+	async findCyclicMeasuresByUnitId(unitId: string): Promise<CyclicMeasure[]> {
+		return (await this.cyclicMeasureRepo.findCyclicMeasuresByUnit(unitId)).map((cyclicMeasure) =>
+			CyclicMeasureFactory.CreateCyclicMeasure(cyclicMeasure),
+		);
+	}
+
 	async deleteCyclicMeasuresForUnit(unitId: string): Promise<boolean> {
 		const measures = await this.cyclicMeasureRepo.findCyclicMeasuresByUnit(unitId);
 		measures.map(async (cyclicMeasure) => {

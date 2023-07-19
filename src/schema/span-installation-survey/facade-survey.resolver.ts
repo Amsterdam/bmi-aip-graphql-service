@@ -1,8 +1,8 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../span-installation/types/span-decomposition-item-type';
 
 import { FacadeSurvey } from './models/facade-survey.model';
 import { FacadeSurveyService } from './facade-survey.service';
@@ -13,6 +13,7 @@ import { FacadeSurveyFactory } from './facade-survey.factory';
 import { UpdateFacadeSurveyCommand } from './commands/update-facade-survey.command';
 import { UpdateFacadeSurveyInput } from './dto/update-facade-survey.input';
 import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
+import { HasDecompositionItemGotDamageQuery } from './queries/has-decomposition-item-got-damage.query';
 
 @Resolver((of) => FacadeSurvey)
 @Resource(FacadeSurvey.name)
@@ -49,7 +50,14 @@ export class FacadeSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async getFacadeSurveyDamage(@Args('supportSystemId') supportSystemId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
-			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionType.spanSupportSystemFacade),
+			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionItemType.spanSupportSystemFacade),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id }: FacadeSurvey): Promise<boolean> {
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanSupportSystemFacade),
 		);
 	}
 }

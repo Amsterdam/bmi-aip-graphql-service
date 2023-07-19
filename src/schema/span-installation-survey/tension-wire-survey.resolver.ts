@@ -1,8 +1,8 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SpanDecompositionType } from '../span-installation/types/span-decomposition-type';
+import { SpanDecompositionItemType } from '../span-installation/types/span-decomposition-item-type';
 
 import { TensionWireSurvey } from './models/tension-wire-survey.model';
 import { TensionWireSurveyService } from './tension-wire-survey.service';
@@ -13,6 +13,7 @@ import { TensionWireSurveyFactory } from './tension-wire-survey.factory';
 import { UpdateTensionWireSurveyCommand } from './commands/update-tension-wire-survey.command';
 import { UpdateTensionWireSurveyInput } from './dto/update-tension-wire-survey.input';
 import { GetDecompositionItemDamageQuery } from './queries/get-decomposition-item-damage.query';
+import { HasDecompositionItemGotDamageQuery } from './queries/has-decomposition-item-got-damage.query';
 
 @Resolver((of) => TensionWireSurvey)
 @Resource(TensionWireSurvey.name)
@@ -53,7 +54,17 @@ export class TensionWireSurveyResolver {
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async getTensionWireSurveyDamage(@Args('supportSystemId') supportSystemId: string) {
 		return this.queryBus.execute<GetDecompositionItemDamageQuery>(
-			new GetDecompositionItemDamageQuery(supportSystemId, SpanDecompositionType.spanSupportSystemTensionWire),
+			new GetDecompositionItemDamageQuery(
+				supportSystemId,
+				SpanDecompositionItemType.spanSupportSystemTensionWire,
+			),
+		);
+	}
+
+	@ResolveField()
+	async hasDamage(@Parent() { id }: TensionWireSurvey): Promise<boolean> {
+		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
+			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanSupportSystemTensionWire),
 		);
 	}
 }

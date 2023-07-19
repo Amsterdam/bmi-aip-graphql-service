@@ -83,6 +83,6 @@ import { ObjectTypeUnitCodeRepository } from './object-type-unit-code.repository
 		forwardRef(() => MeasureModule),
 		forwardRef(() => AssetModule),
 	],
-	exports: [UnitService, UnitRepository, ObjectTypeUnitCodeRepository],
+	exports: [UnitService, UnitRepository, ObjectTypeUnitCodeRepository, ElementService],
 })
 export class DecompositionModule {}

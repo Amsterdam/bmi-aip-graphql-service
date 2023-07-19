@@ -35,6 +35,7 @@ export type Condition = Prisma.conditionsGetPayload<typeof conditions>;
 
 export interface IConditionRepository {
 	getConditions(surveyId: string): Promise<Condition[]>;
+	getCondition(id: string): Promise<Condition | null>;
 	createCondition(input: CreateConditionInput): Promise<Condition>;
 	updateCondition(input: UpdateConditionInput): Promise<Condition>;
 }

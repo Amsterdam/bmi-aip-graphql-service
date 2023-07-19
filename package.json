@@ -25,6 +25,7 @@
 		"prepare": "husky install",
 		"console": "node dist/src/console.js",
 		"prisma": "prisma",
+		"graphql-docs": "npx spectaql -d spectaql-config.yml",
 		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate-gisib-api-types/index.ts"
 	},
 	"dependencies": {
@@ -47,6 +48,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.0",
 		"cli-progress": "^3.11.2",
+		"exceljs": "^4.3.0",
 		"geojson": "^0.5.0",
 		"graphql": "^16.6.0",
 		"graphql-geojson-scalar-types": "^0.1.0",

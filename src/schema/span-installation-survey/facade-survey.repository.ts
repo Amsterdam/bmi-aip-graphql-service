@@ -7,6 +7,7 @@ import { IFacadeSurveyRepository, FacadeSurvey } from './types';
 import { CreateFacadeSurveyInput } from './dto/create-facade-survey.input';
 import { UpdateFacadeSurveyInput } from './dto/update-facade-survey.input';
 import { SupportSystemSurveyNotFoundException } from './exceptions/support-system-survey-not-found.exception';
+import { SupportSystemNotFoundException } from './exceptions/support-system-not-found.exception';
 
 @Injectable()
 export class FacadeSurveyRepository implements IFacadeSurveyRepository {
@@ -96,7 +97,7 @@ export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 	}
 
 	async getFacadeSurveyOnPermanentId(supportSystemId: string): Promise<FacadeSurvey> {
-		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+		const spanSupportSystem = await this.prisma.spanSupportSystems.findUnique({
 			where: {
 				id: supportSystemId,
 			},
@@ -105,11 +106,20 @@ export class FacadeSurveyRepository implements IFacadeSurveyRepository {
 			},
 		});
 
-		return this.getFacadeSurvey(permanentId);
+		if (!spanSupportSystem) {
+			throw new SupportSystemNotFoundException(supportSystemId);
+		}
+
+		return this.getFacadeSurvey(spanSupportSystem.permanentId);
 	}
 
 	async hasDamage(supportSystemId: string): Promise<boolean> {
-		const facadeSurvey = await this.getFacadeSurveyOnPermanentId(supportSystemId);
+		let facadeSurvey: FacadeSurvey;
+		try {
+			facadeSurvey = await this.getFacadeSurveyOnPermanentId(supportSystemId);
+		} catch (e) {
+			return false;
+		}
 
 		return (
 			facadeSurvey.hinderingVegetation ||

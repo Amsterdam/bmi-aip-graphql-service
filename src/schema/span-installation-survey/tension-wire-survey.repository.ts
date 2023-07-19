@@ -81,8 +81,8 @@ export class TensionWireSurveyRepository implements ITensionWireSurveyRepository
 		});
 	}
 
-	async getTensionWireSurveyOnPermanentId(supportSystemId: string): Promise<TensionWireSurvey> {
-		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+	async getTensionWireSurveyOnPermanentId(supportSystemId: string): Promise<TensionWireSurvey | null> {
+		const supportSystem = await this.prisma.spanSupportSystems.findUnique({
 			where: {
 				id: supportSystemId,
 			},
@@ -91,11 +91,22 @@ export class TensionWireSurveyRepository implements ITensionWireSurveyRepository
 			},
 		});
 
-		return this.getTensionWireSurvey(permanentId);
+		if (!supportSystem || !supportSystem.permanentId) {
+			throw new SupportSystemSurveyNotFoundException(supportSystemId);
+		}
+
+		const tensionWireSurvey = await this.getTensionWireSurvey(supportSystem.permanentId);
+
+		return tensionWireSurvey;
 	}
 
 	async hasDamage(supportSystemId: string): Promise<boolean> {
-		const tensionWireSurvey = await this.getTensionWireSurveyOnPermanentId(supportSystemId);
+		let tensionWireSurvey: TensionWireSurvey;
+		try {
+			tensionWireSurvey = await this.getTensionWireSurveyOnPermanentId(supportSystemId);
+		} catch (error) {
+			return false;
+		}
 
 		return (
 			tensionWireSurvey.tensionWireDamage ||

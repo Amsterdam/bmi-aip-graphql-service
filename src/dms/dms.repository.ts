@@ -78,7 +78,6 @@ export class DmsRepository {
 		const token = this.getToken();
 
 		if (assetId) {
-			console.log(assetId);
 			object = await this.prisma.objects.findUnique({
 				where: { id: assetId },
 			});

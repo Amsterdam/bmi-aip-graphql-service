@@ -207,35 +207,6 @@ export class DmsRepository {
 		return this.request<DmsResponse>(url);
 	}
 
-	// public async getDMSDocumentsAssetFilter(url: string): Promise<DmsResponse> {
-	// 	return new Promise((resolve) => {
-	// 		this.httpService
-	// 			.post<DmsResponse>(url, {
-	// 				headers: { Authorization: `Bearer ${token}` },
-	// 				data: [
-	// 					{
-	// 						Criterias: [
-	// 							{
-	// 								Property: '',
-	// 								Value: '',
-	// 								Operator: 'Equal',
-	// 							},
-	// 						],
-	// 						Operator: 'AND',
-	// 					},
-	// 				],
-	// 			})
-	// 			.pipe(
-	// 				map((res) => res.data),
-	// 				single(),
-	// 				catchError((e) => {
-	// 					throw new HttpException(e.statusText, e.status);
-	// 				}),
-	// 			)
-	// 			.subscribe((v) => resolve(v));
-	// 	});
-	// }
-
 	public getUrl() {
 		return this.apiUrl;
 	}

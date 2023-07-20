@@ -1,6 +1,7 @@
 import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AuthGuard, Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { UseGuards } from '@nestjs/common';
+import { QueryBus } from '@nestjs/cqrs';
 
 import { DmsUploadUrlResponse } from '../../dms/types/dms-upload-upload-url-response';
 import { DMSDocumentSpanInstallation } from '../../dms/types/dms-document-span-installation';
@@ -8,11 +9,13 @@ import { DMSDocumentSpanInstallation } from '../../dms/types/dms-document-span-i
 import { DocumentService } from './document.service';
 import { Document } from './models/document.model';
 import { DMSDocumentSpanInstallation as DMSDocumentSpanInstallationGQLModel } from './models/dms-document-span-installation';
+import { GetDocumentUploadUrl } from './queries/get-document-upload-url.query';
+import { FindDocumentsSpanInstallation } from './queries/find-documents-span-installation.query';
 
 @Resolver((of) => Document)
 @Resource(Document.name)
 export class DocumentResolver {
-	constructor(private documentService: DocumentService) {}
+	constructor(private documentService: DocumentService, private queryBus: QueryBus) {}
 
 	@Query(() => Document)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
@@ -22,18 +25,22 @@ export class DocumentResolver {
 		@Args({ name: 'provider', defaultValue: 'dms' }) provider: string,
 		@Context() ctx: any,
 	): Promise<DmsUploadUrlResponse> {
-		return this.documentService.getDocumentUploadUrl(assetCode, fileName, provider, ctx);
+		return this.queryBus.execute<GetDocumentUploadUrl>(
+			new GetDocumentUploadUrl(assetCode, fileName, provider, ctx),
+		);
 	}
 
 	@Query(() => [DMSDocumentSpanInstallationGQLModel])
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
-	public async getDocumentsSpanInstallation(
+	public async findDocumentsSpanInstallation(
 		@Args('assetId') assetId: string,
 		@Args('surveyId') surveyId: string,
 		@Args('entityId') entityId: string,
 		@Args({ name: 'provider', defaultValue: 'dms' }) provider: string,
 		@Context() ctx: any,
 	): Promise<DMSDocumentSpanInstallation[]> {
-		return this.documentService.getSpanInstallationDocuments(assetId, surveyId, entityId, provider, ctx);
+		return this.queryBus.execute<FindDocumentsSpanInstallation>(
+			new FindDocumentsSpanInstallation(assetId, surveyId, entityId, provider, ctx),
+		);
 	}
 }

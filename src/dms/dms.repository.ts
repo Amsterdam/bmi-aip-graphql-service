@@ -11,7 +11,7 @@ import {
 	DmsMetadataSpanInstallationTypes,
 	RawDMSDocument,
 } from './types/dms-document-span-installation';
-import { getSurveyInspectionType, InspectionStandard } from './../schema/survey/types';
+import { InspectionStandard } from './../schema/survey/types';
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
 import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
@@ -69,7 +69,7 @@ export class DmsRepository {
 		});
 	}
 
-	public async getSpanInstallationDocumentsFromDms<T extends DMSDocumentSpanInstallation>(
+	public async findSpanInstallationDocumentsInDms<T extends DMSDocumentSpanInstallation>(
 		assetId: string,
 		surveyId?: string,
 		entityId?: string,
@@ -109,7 +109,7 @@ export class DmsRepository {
 				where: { id: surveyId },
 			});
 
-			surveyInspectionType = getSurveyInspectionType(survey.inspectionStandardType);
+			surveyInspectionType = InspectionStandard[survey.inspectionStandardType];
 		}
 
 		const response = new Promise<RawDMSDocument[]>((resolve) => {

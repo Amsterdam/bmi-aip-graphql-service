@@ -26,7 +26,7 @@ export class DocumentService {
 		}
 	}
 
-	async getSpanInstallationDocuments(
+	async findSpanInstallationDocuments(
 		assetId: string,
 		surveyId: string,
 		entityId: string,
@@ -36,7 +36,7 @@ export class DocumentService {
 		switch (provider) {
 			case 'dms':
 				this.dmsRepository.setToken(ctx.req.accessTokenJWT);
-				return this.dmsRepository.getSpanInstallationDocumentsFromDms(assetId, surveyId, entityId);
+				return this.dmsRepository.findSpanInstallationDocumentsInDms(assetId, surveyId, entityId);
 				break;
 			default:
 				throw new Error('Provider not supported');

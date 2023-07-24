@@ -91,8 +91,6 @@ export class DmsRepository {
 			return [];
 		}
 
-		let surveyInspectionType: InspectionStandard;
-
 		if (surveyId || entityId) {
 			url += '&metadata=[';
 
@@ -104,12 +102,10 @@ export class DmsRepository {
 		}
 
 		if (surveyId) {
-			const survey = await this.prisma.surveys.findUnique({
+			await this.prisma.surveys.findUnique({
 				select: { inspectionStandardType: true },
 				where: { id: surveyId },
 			});
-
-			surveyInspectionType = InspectionStandard[survey.inspectionStandardType];
 		}
 
 		const response = new Promise<RawDMSDocument[]>((resolve) => {
@@ -131,8 +127,8 @@ export class DmsRepository {
 
 		const resp = (data || [])
 			.map(
-				function (doc: any) {
-					return this.mapMetadata(doc, surveyInspectionType) as T;
+				function (doc: RawDMSDocument) {
+					return doc;
 				}.bind(this),
 			)
 			.sort((a: RawDMSDocument, b: RawDMSDocument) => (a.name < b.name ? -1 : 1)) as T[];

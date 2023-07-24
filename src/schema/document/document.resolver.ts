@@ -9,13 +9,13 @@ import { DMSDocumentSpanInstallation } from '../../dms/types/dms-document-span-i
 import { DocumentService } from './document.service';
 import { Document } from './models/document.model';
 import { DMSDocumentSpanInstallation as DMSDocumentSpanInstallationGQLModel } from './models/dms-document-span-installation';
-import { GetDocumentUploadUrl } from './queries/get-document-upload-url.query';
-import { FindDocumentsSpanInstallation } from './queries/find-documents-span-installation.query';
+import { FindDocumentsSpanInstallationQuery } from './queries/find-documents-span-installation.query';
+import { GetDocumentUploadUrlQuery } from './queries/get-document-upload-url.query';
 
 @Resolver((of) => Document)
 @Resource(Document.name)
 export class DocumentResolver {
-	constructor(private documentService: DocumentService, private queryBus: QueryBus) {}
+	constructor(private documentService: DocumentService, private readonly queryBus: QueryBus) {}
 
 	@Query(() => Document)
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
@@ -25,9 +25,7 @@ export class DocumentResolver {
 		@Args({ name: 'provider', defaultValue: 'dms' }) provider: string,
 		@Context() ctx: any,
 	): Promise<DmsUploadUrlResponse> {
-		return this.queryBus.execute<GetDocumentUploadUrl>(
-			new GetDocumentUploadUrl(assetCode, fileName, provider, ctx),
-		);
+		return this.queryBus.execute(new GetDocumentUploadUrlQuery(assetCode, fileName, provider, ctx));
 	}
 
 	@Query(() => [DMSDocumentSpanInstallationGQLModel])
@@ -39,8 +37,8 @@ export class DocumentResolver {
 		@Args({ name: 'provider', defaultValue: 'dms' }) provider: string,
 		@Context() ctx: any,
 	): Promise<DMSDocumentSpanInstallation[]> {
-		return this.queryBus.execute<FindDocumentsSpanInstallation>(
-			new FindDocumentsSpanInstallation(assetId, surveyId, entityId, provider, ctx),
+		return this.queryBus.execute(
+			new FindDocumentsSpanInstallationQuery(assetId, surveyId, entityId, provider, ctx),
 		);
 	}
 }

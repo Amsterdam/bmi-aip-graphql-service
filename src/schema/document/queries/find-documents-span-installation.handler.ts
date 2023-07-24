@@ -3,13 +3,13 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DocumentService } from '../document.service';
 import { DMSDocumentSpanInstallation } from '../../../dms/types/dms-document-span-installation';
 
-import { FindDocumentsSpanInstallation } from './find-documents-span-installation.query';
+import { FindDocumentsSpanInstallationQuery } from './find-documents-span-installation.query';
 
-@QueryHandler(FindDocumentsSpanInstallation)
-export class FindDocumentsSpanInstallationHandler implements IQueryHandler<FindDocumentsSpanInstallation> {
+@QueryHandler(FindDocumentsSpanInstallationQuery)
+export class FindDocumentsSpanInstallationHandler implements IQueryHandler<FindDocumentsSpanInstallationQuery> {
 	constructor(private service: DocumentService) {}
 
-	public async execute(query: FindDocumentsSpanInstallation): Promise<DMSDocumentSpanInstallation[]> {
+	public async execute(query: FindDocumentsSpanInstallationQuery): Promise<DMSDocumentSpanInstallation[]> {
 		return this.service.findSpanInstallationDocuments(
 			query.assetId,
 			query.surveyId,

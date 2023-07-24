@@ -1,4 +1,4 @@
-export class GetDocumentUploadUrl {
+export class GetDocumentUploadUrlQuery {
 	public constructor(
 		public readonly assetCode: string,
 		public readonly fileName: string,

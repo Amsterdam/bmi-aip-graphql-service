@@ -1,4 +1,4 @@
-export class FindDocumentsSpanInstallation {
+export class FindDocumentsSpanInstallationQuery {
 	public constructor(
 		public readonly assetId: string,
 		public readonly surveyId: string,

@@ -5,8 +5,8 @@ import { PrismaService } from '../../prisma.service';
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
 import {
 	updateFacadeFollowUpSurveyInput,
-	FacadeFollowUpSurvey as domainFacadeFollowUpSurvey,
 	facadeFollowUpSurveyRaw,
+	domainFacadeFollowUpSurvey,
 } from './__stubs__/facade-follow-up-survey-stub';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -23,6 +23,7 @@ const identifier = '9c612187-581b-4be3-902c-9e8035d1d3b7';
 
 describe('Facade follow up survey / Repository', () => {
 	test('updateFacadeFollowUpSurvey()', async () => {
+		updateFacadeFollowUpSurveyInput.surveyId = '68a95a2c-b909-e77f-4d66-9fd5afef5adb';
 		const returnValue = await new FacadeFollowUpSurveyRepository(prismaServiceMock).updateFacadeFollowUpSurvey(
 			updateFacadeFollowUpSurveyInput,
 		);
@@ -32,7 +33,7 @@ describe('Facade follow up survey / Repository', () => {
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...updateFacadeFollowUpSurveyInput,
+				...domainFacadeFollowUpSurvey,
 			}),
 		);
 	});

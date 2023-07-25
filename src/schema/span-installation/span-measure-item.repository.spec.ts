@@ -24,7 +24,7 @@ describe('Span Installation / Measures / Repository', () => {
 	});
 
 	test('createSpanMeasureItem()', async () => {
-		const returnValue = await repository.createSpanMeasureItem(domainSpanMeasureItem);
+		const returnValue = await repository.createSpanMeasureItem(createSpanMeasureItemInput);
 		const spanMeasureItem = prismaServiceMock.spanMeasureItems.create.mock.calls[0][0].data;
 		expect(spanMeasureItem).toEqual(
 			expect.objectContaining({
@@ -45,7 +45,7 @@ describe('Span Installation / Measures / Repository', () => {
 
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...createSpanMeasureItemInput,
+				...domainSpanMeasureItem,
 			}),
 		);
 	});

@@ -57,7 +57,6 @@ import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
 		TiModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
-			debug: true,
 			playground: true,
 			sortSchema: true,
 			autoSchemaFile: true,

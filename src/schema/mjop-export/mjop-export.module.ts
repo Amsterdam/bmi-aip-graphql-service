@@ -1,9 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { PrismaService } from 'src/prisma.service';
-import { DerivedConditionScoreModule } from 'src/derived-condition-score/derived-condition-score.module';
 
 import { MeasureModule } from '../measure/measure.module';
 import { AssetModule } from '../asset/asset.module';
@@ -12,6 +8,10 @@ import { SurveyModule } from '../survey/survey.module';
 import { DefaultMaintenanceMeasureModule } from '../default-maintenance-measure/default-maintenance-measure.module';
 import { TiModule } from '../ti/ti.module';
 import { FailureModeModule } from '../failure-mode/failure-mode.module';
+import { PrismaService } from '../../prisma.service';
+import { AuthorizationModule } from '../../authorization/authorization.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
+import { DerivedConditionScoreModule } from '../../derived-condition-score/derived-condition-score.module';
 
 import { MJOPDataService } from './mjop-data.service';
 import { MJOPExportBySurveyIdHandler } from './queries/mjop-export-by-survey-id.handler';

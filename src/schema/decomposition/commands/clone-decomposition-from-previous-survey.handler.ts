@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SurveyRepository } from 'src/schema/survey/survey.repository';
 
 import { DecompositionRepository } from '../decomposition.repository';
 import { Element } from '../models/element.model';
 import { SurveyHasDecompositionException } from '../exceptions/survey-has-decomposition.exception';
+import { SurveyRepository } from '../../survey/survey.repository';
 
 import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decomposition-from-previous-survey.command';
 

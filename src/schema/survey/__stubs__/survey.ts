@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { Survey } from '../models/survey.model';
 import { CreateSurveyInput } from '../dto/create-survey.input';
@@ -59,8 +59,8 @@ export const surveyRaw: Omit<DomainSurvey, 'id'> = {
 	craInspectionStaticallyIndeterminateRemarks: '',
 	craInitialHistoryRemarks: '',
 	craInspectionRemarks: '',
-	craInitialHistoryScore: new Decimal(0),
-	craInspectionScore: new Decimal(0),
+	craInitialHistoryScore: new Prisma.Decimal(0),
+	craInspectionScore: new Prisma.Decimal(0),
 	craInitialHistoryCondition: 0,
 	craInspectionCondition: 0,
 	craInitialHistoryConditionWithoutFactor: 0,

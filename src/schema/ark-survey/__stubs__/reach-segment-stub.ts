@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { domainSurvey } from '../../survey/__stubs__';
 import { ReachSegment as DomainReachSegment } from '../types/reach-segment.repository.interface';
@@ -10,12 +10,12 @@ domainSurvey.inspectionStandardType = 'quaywalls';
 
 const reachSegmentRaw: Omit<DomainReachSegment, 'id'> = {
 	name: '__NAME__',
-	reachSegmentLength: new Decimal(1.23),
+	reachSegmentLength: new Prisma.Decimal(1.23),
 	arkSurveyId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	riskScore: 1,
-	riskScoreDigit: new Decimal(1.23),
-	failureModeScore: new Decimal(1.23),
-	consequenceScore: new Decimal(1.23),
+	riskScoreDigit: new Prisma.Decimal(1.23),
+	failureModeScore: new Prisma.Decimal(1.23),
+	consequenceScore: new Prisma.Decimal(1.23),
 	sortNumber: 1,
 	created_at: null,
 	updated_at: null,

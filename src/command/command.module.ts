@@ -1,12 +1,11 @@
-import { Module, CacheModule, Logger } from '@nestjs/common';
-import { FileWriterService } from 'src/services/FileWriterService';
+import { Module, Logger } from '@nestjs/common';
 import { ConsoleModule } from 'nestjs-console';
 import { ConfigService } from '@nestjs/config';
 import { GraphQLRequestModule } from '@golevelup/nestjs-graphql-request';
 import { Reflector } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ImportSpanMeasureOptions } from 'src/services/import-span-measure-options';
+import { CacheModule } from '@nestjs/cache-manager';
 
 import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';
@@ -20,6 +19,8 @@ import { CorrectCoordinatesService } from '../services/correct-coordinates-servi
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
+import { FileWriterService } from '../services/FileWriterService';
+import { ImportSpanMeasureOptions } from '../services/import-span-measure-options';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
 import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';

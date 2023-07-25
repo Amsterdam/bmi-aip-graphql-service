@@ -67,11 +67,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...luminaireInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainLuminaire);
 	});
 
 	test('createMissingLuminaire()', async () => {
@@ -101,11 +97,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			}),
 		);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createMissingLuminaireInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainReviseLuminaire);
 	});
 
 	test('getLuminaires()', async () => {

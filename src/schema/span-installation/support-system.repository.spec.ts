@@ -1,5 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -86,8 +86,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					},
 				},
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -103,12 +103,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			}),
 		);
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createSupportSystemNormalizedInput,
-				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
-			}),
-		);
+		expect(returnValue).toEqual({
+			...domainSupportSystem,
+			a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
+		});
 	});
 
 	test('createMissingSupportSystem()', async () => {
@@ -129,8 +127,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 					},
 				},
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -147,12 +145,10 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			}),
 		);
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createMissingSupportSystemNormalizedInput,
-				a11yDetails: createMissingSupportSystemNormalizedInput.a11yDetails,
-			}),
-		);
+		expect(returnValue).toEqual({
+			...domainReviseSupportSystem,
+			a11yDetails: createMissingSupportSystemNormalizedInput.a11yDetails,
+		});
 	});
 
 	test('getSupportSystems()', async () => {
@@ -192,8 +188,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			where: { id: reviseSupportSystemNormalizedInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -221,8 +217,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
 			a11yDetails: reviseSupportSystemNormalizedInput.a11yDetails,
-			installationHeight: new Decimal(10),
-			installationLength: new Decimal(10),
+			installationHeight: new Prisma.Decimal(10),
+			installationLength: new Prisma.Decimal(10),
 			remarks: '__REMARKS__',
 			houseNumber: '33',
 			geography: {
@@ -252,8 +248,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			where: { id: updateSupportSystemNormalizedInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -280,8 +276,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 			locationIndication: '__LOCATION_INDICATION__',
 			constructionYear: 1979,
 			a11yDetails: updateSupportSystemNormalizedInput.a11yDetails,
-			installationHeight: new Decimal(10),
-			installationLength: new Decimal(10),
+			installationHeight: new Prisma.Decimal(10),
+			installationLength: new Prisma.Decimal(10),
 			remarks: '__REMARKS__',
 			houseNumber: '33',
 			geography: {
@@ -323,8 +319,8 @@ describe('Span Installation / SupportSystem / Repository', () => {
 				constructionYear: 1979,
 				locationIndication: '__LOCATION_INDICATION__',
 				a11yDetails: createSupportSystemNormalizedInput.a11yDetails,
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				remarks: '__REMARKS__',
 				houseNumber: '33',
 				created_at: undefined,

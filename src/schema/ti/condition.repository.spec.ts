@@ -1,5 +1,5 @@
+import { Prisma } from '@prisma/client';
 import { MockedObjectDeep } from 'ts-jest';
-import { Decimal } from '@prisma/client/runtime';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -42,8 +42,8 @@ describe('ConditionRepository', () => {
 				craInspectionScore: 0,
 				craInitialRemarks: '',
 				craHistoryRemarks: '',
-				craInitialUnityCheck: new Decimal(10.2),
-				craHistoryUnityCheck: new Decimal(10.2),
+				craInitialUnityCheck: new Prisma.Decimal(10.2),
+				craHistoryUnityCheck: new Prisma.Decimal(10.2),
 				ramsMaxTotalPriority: '',
 				ramsMaxWeightedPriority: '',
 				isFurtherInvestigation: false,

@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { JunctionBox } from '../models/junction-box.model';
 import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
@@ -50,10 +50,10 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 	remarks: '__REMARKS__',
-	mastNumber: new Decimal(33.33),
+	mastNumber: new Prisma.Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
-	installationHeight: new Decimal(10),
+	installationHeight: new Prisma.Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,
 	created_at: undefined,

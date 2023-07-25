@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { SupportSystem } from '../models/support-system.model';
 import { CreateSupportSystemInput } from '../dto/create-support-system.input';
@@ -61,8 +61,8 @@ const supportSystemRaw: Omit<DomainSupportSystem, 'id' | 'permanentId'> = {
 	typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
-	installationHeight: new Decimal(10),
-	installationLength: new Decimal(10),
+	installationHeight: new Prisma.Decimal(10),
+	installationLength: new Prisma.Decimal(10),
 	deleted_at: null,
 	created_at: undefined,
 	updated_at: undefined,

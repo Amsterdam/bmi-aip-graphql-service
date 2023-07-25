@@ -1,4 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
+import { surveys } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -6,7 +7,6 @@ import { SurveyRepository } from './survey.repository';
 import { domainSurvey, survey1, surveyInput } from './__stubs__';
 import { InspectionStandard } from './types';
 import { SurveyStates } from './types/surveyStates';
-import { Survey } from './models/survey.model';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	surveys: {
@@ -45,8 +45,8 @@ describe('SurveyRepository', () => {
 	});
 
 	test('getSurvey()', async () => {
-		const surveys = await surveyRepoMock.getSurveyById('0deb07f3-28f5-47e1-b72a-d1b2a19d4670');
-		expect(surveys).toEqual({
+		const surveysFromRepo = await surveyRepoMock.getSurveyById('0deb07f3-28f5-47e1-b72a-d1b2a19d4670');
+		expect(surveysFromRepo).toEqual({
 			description: '__DESCRIPTION__',
 			id: '0deb07f3-28f5-47e1-b72a-d1b2a19d4670',
 			inspectionStandardType: InspectionStandard.spanInstallation,
@@ -59,7 +59,7 @@ describe('SurveyRepository', () => {
 			prismaServiceMock.surveys.findFirst.mockResolvedValue({
 				...domainSurvey,
 				id: '__PREVIOUS_SURVEY_ID__',
-			} as Survey);
+			} as surveys);
 
 			const resultId = await repo.findIdPreviousNen2767OrFmecaSurvey('__SURVEY_ID__');
 

@@ -259,7 +259,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanJunctionBoxes"
-			WHERE id = ${identifier};
+			WHERE id = ${identifier}::uuid;
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;

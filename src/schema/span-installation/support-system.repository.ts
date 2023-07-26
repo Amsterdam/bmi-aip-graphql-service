@@ -268,21 +268,21 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 	}
 
 	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
-		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>(Prisma.sql`
-			SELECT ST_AsGeoJSON(geography)::geography as geography
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanSupportSystems"
-			WHERE id = ${identifier};
-		`);
+			WHERE id = ${identifier}::uuid;
+		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
 	}
 
 	async getLuminaireGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
-		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>(Prisma.sql`
-			SELECT ST_AsGeoJSON(geography)::geography as geography
+		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
+			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanLuminaires"
-			WHERE id = ${identifier};
-		`);
+			WHERE id = ${identifier}::uuid;
+		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
 	}

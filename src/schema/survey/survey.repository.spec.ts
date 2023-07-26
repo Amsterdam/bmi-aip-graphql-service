@@ -56,6 +56,7 @@ describe('SurveyRepository', () => {
 
 	describe('findPrevousSurveyId()', () => {
 		test('returns the id of the survey with the same objectId created prior to the given surveyId, based on the created_at field', async () => {
+			// @ts-ignore
 			prismaServiceMock.surveys.findFirst.mockResolvedValue({
 				...domainSurvey,
 				id: '__PREVIOUS_SURVEY_ID__',

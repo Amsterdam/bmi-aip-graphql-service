@@ -20,6 +20,9 @@ import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junct
 import { ReviseJunctionBoxCommand } from './commands/revise-junction-box.command';
 import { ReviseJunctionBoxInput } from './dto/revise-junction-box.input';
 import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
+import { OVSDecompositionModel } from './models/ovs-decomposition.model';
+import { UpdateOVSDecompositionInput } from './dto/update-ovs-decomposition.input';
+import { UpdateOVSDecompositionCommand } from './commands/update-ovs-decomposition.command';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -94,5 +97,19 @@ export class JunctionBoxResolver {
 		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
 			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanJunctionBox),
 		);
+	}
+
+	// TMP
+	@Mutation(() => OVSDecompositionModel)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async updateOVSDecomposition(
+		@Args('updateOVSDecomposition') input: UpdateOVSDecompositionInput,
+	): Promise<OVSDecompositionModel> {
+		const result = await this.commandBus.execute<UpdateOVSDecompositionCommand>(
+			new UpdateOVSDecompositionCommand(input),
+		);
+		const response = new OVSDecompositionModel();
+		response.success = result;
+		return response;
 	}
 }

@@ -20,6 +20,7 @@ import { CorrectCoordinatesService } from '../services/correct-coordinates-servi
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
 import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
+import { UpdateOVSDecompositionService } from '../services/update-ovs-decomposition.service';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
 import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';
@@ -98,6 +99,7 @@ import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measure
 		MigrateMaintenanceMeasuresRepository,
 		MigrateMaintenanceMeasuresCli,
 		CommandResolver,
+		UpdateOVSDecompositionService,
 	],
 })
 export class CommandModule {}

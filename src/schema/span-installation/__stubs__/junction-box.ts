@@ -44,7 +44,7 @@ export { junctionBox1, junctionBox2, reviseJunctionBox1 };
 const a11yDetails = new A11yDetails();
 a11yDetails.limitationOnTheMaximumHeadroom = true;
 
-const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
+const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId' | 'techViewId' | 'mastId'> = {
 	name: '__NAME__',
 	location: '__LOCATION__',
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
@@ -67,6 +67,8 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId'> = {
 		type: 'Point',
 	},
 	remarksRevision: null,
+	// mastId: new Decimal(10),
+	// techViewId: new Decimal(10),
 };
 
 const reviseJunctionBoxRaw = { ...junctionBoxRaw };
@@ -123,6 +125,8 @@ export const reviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	mastId: new Decimal(10),
+	techViewId: new Decimal(10),
 	...junctionBoxRaw,
 	deleted_at: null,
 };
@@ -130,6 +134,8 @@ export const domainJunctionBox: DomainJunctionBox = {
 export const domainReviseJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	mastId: new Decimal(10),
+	techViewId: new Decimal(10),
 	...reviseJunctionBoxRaw,
 	deleted_at: null,
 };

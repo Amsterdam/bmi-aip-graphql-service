@@ -85,4 +85,7 @@ export class Luminaire {
 	// For contract 1 survey (spanInstallation), this is the same as the id of the luminaire in contract 1.
 	@Field((type) => String)
 	permanentId: string;
+
+	@Field((type) => Boolean, { nullable: true })
+	hasDamage?: string;
 }

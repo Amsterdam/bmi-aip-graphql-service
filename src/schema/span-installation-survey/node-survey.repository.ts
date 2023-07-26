@@ -54,7 +54,7 @@ export class NodeSurveyRepository implements INodeSurveyRepository {
 	}
 
 	async getNodeSurveyOnPermanentId(supportSystemId: string): Promise<NodeSurvey> {
-		const { permanentId } = await this.prisma.spanSupportSystems.findUnique({
+		const result = await this.prisma.spanSupportSystems.findUnique({
 			where: {
 				id: supportSystemId,
 			},
@@ -63,11 +63,21 @@ export class NodeSurveyRepository implements INodeSurveyRepository {
 			},
 		});
 
-		return this.getNodeSurvey(permanentId);
+		if (!result || !result.permanentId) {
+			throw new SupportSystemSurveyNotFoundException(supportSystemId);
+		}
+
+		return this.getNodeSurvey(result.permanentId);
 	}
 
 	async hasDamage(supportSystemId: string): Promise<boolean> {
-		const nodeSurvey = await this.getNodeSurveyOnPermanentId(supportSystemId);
+		let nodeSurvey;
+
+		try {
+			nodeSurvey = await this.getNodeSurveyOnPermanentId(supportSystemId);
+		} catch (exception) {
+			return false;
+		}
 
 		return nodeSurvey.nodeDamage;
 	}

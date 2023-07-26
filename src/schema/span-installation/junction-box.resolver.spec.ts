@@ -2,6 +2,8 @@ import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
+import { GetArkSurveyBySurveyIdQuery } from '../ark-survey/queries/get-ark-survey-by-survey.query';
+import { domainArkSurvey } from '../ark-survey/__stubs__';
 
 import { JunctionBoxResolver } from './junction-box-resolver';
 import { JunctionBoxService } from './junction-box.service';
@@ -35,6 +37,15 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	...(<any>{}),
 });
 
+const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
+	execute: jest.fn((query: any) => {
+		switch (query.constructor.name) {
+			case GetArkSurveyBySurveyIdQuery.name:
+				return domainArkSurvey;
+		}
+	}),
+	...(<any>{}),
+});
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
@@ -42,11 +53,15 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 const junctionBoxRepo = new JunctionBoxRepository(prismaServiceMock);
 
 describe('Span Installation / JunctionBox / Resolver', () => {
-	let queryBus: QueryBus;
 	describe('createJunctionBox', () => {
 		test('creates and returns an element', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock, queryBus);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new JunctionBoxResolver(
+				new JunctionBoxService(junctionBoxRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.createJunctionBox(junctionBoxInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateJunctionBoxCommand(junctionBoxInput));
@@ -59,7 +74,12 @@ describe('Span Installation / JunctionBox / Resolver', () => {
 	describe('updateJunctionBox', () => {
 		test('updates and returns a junction box', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock, queryBus);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new JunctionBoxResolver(
+				new JunctionBoxService(junctionBoxRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.updateJunctionBox(updateJunctionBoxInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateJunctionBoxCommand(updateJunctionBoxInput));
@@ -72,7 +92,12 @@ describe('Span Installation / JunctionBox / Resolver', () => {
 	describe('deleteJunctionBox', () => {
 		test('soft-deletes and returns a junction box', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock, queryBus);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new JunctionBoxResolver(
+				new JunctionBoxService(junctionBoxRepo),
+				commandBusMock,
+				queryBusMock,
+			);
 			const result = await resolver.deleteJunctionBox(domainJunctionBox.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteJunctionBoxCommand(domainJunctionBox.id));
@@ -85,7 +110,8 @@ describe('Span Installation / JunctionBox / Resolver', () => {
 
 	test('getSurveyJunctionBoxes returns an array of junction box objects', async () => {
 		const commandBusMock = getCommandBusMock();
-		const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock, queryBus);
+		const queryBusMock = getQueryBusMock();
+		const resolver = new JunctionBoxResolver(new JunctionBoxService(junctionBoxRepo), commandBusMock, queryBusMock);
 		const elements = await resolver.getSurveyJunctionBoxes('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([junctionBox1, junctionBox2]);
 	});

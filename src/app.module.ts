@@ -30,9 +30,11 @@ import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-measures-survey.module';
 import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
+import { DocumentModule } from './schema/document/document.module';
 
 @Module({
 	imports: [
+		DocumentModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 		}),

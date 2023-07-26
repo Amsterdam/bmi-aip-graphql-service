@@ -12,4 +12,6 @@ export enum InspectionStandard {
 	quaywalls = 'quaywalls',
 	verificatieBerekening = 'verificatieBerekening',
 	spanInstallation = 'spanInstallation',
+	facadeFollowUpSurvey = 'facadeFollowUpSurvey',
+	spanMeasuresSurvey = 'spanMeasuresSurvey',
 }

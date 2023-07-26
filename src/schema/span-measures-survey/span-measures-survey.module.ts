@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { registerEnumType } from '@nestjs/graphql';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { PrismaService } from 'src/prisma.service';
 
+import { SurveyStates } from '../survey/types/surveyStates';
+
+import { CompleteSpanMeasuresSurveyCommand } from './commands/complete-span-measures-survey.command';
+import { CompleteSpanMeasuresSurveyHandler } from './commands/complete-span-measures-survey.handler';
 import { UpdateSpanMeasuresSurveyCommand } from './commands/update-span-measures-survey.command';
 import { UpdateSpanMeasuresSurveyHandler } from './commands/update-span-measures-survey.handler';
 import { GetSpanMeasuresSurveyBySurveyIdHandler } from './queries/get-span-measures-survey-by-survey.handler';
@@ -11,6 +16,10 @@ import { GetSpanMeasuresSurveyBySurveyIdQuery } from './queries/get-span-measure
 import { SpanMeasuresSurveyRepository } from './span-measures-survey.repository';
 import { SpanMeasuresSurveyResolver } from './span-measures-survey.resolver';
 import { SpanMeasuresSurveyService } from './span-measures-survey.service';
+
+registerEnumType(SurveyStates, {
+	name: 'SurveyStates',
+});
 
 @Module({
 	providers: [
@@ -22,6 +31,8 @@ import { SpanMeasuresSurveyService } from './span-measures-survey.service';
 		UpdateSpanMeasuresSurveyHandler,
 		GetSpanMeasuresSurveyBySurveyIdHandler,
 		GetSpanMeasuresSurveyBySurveyIdQuery,
+		CompleteSpanMeasuresSurveyCommand,
+		CompleteSpanMeasuresSurveyHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule],
 })

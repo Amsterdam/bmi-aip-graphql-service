@@ -25,6 +25,7 @@
 		"prepare": "husky install",
 		"console": "node dist/src/console.js",
 		"prisma": "prisma",
+		"graphql-docs": "npx spectaql -d spectaql-config.yml",
 		"generate:gisib-api-types": "node_modules/.bin/ts-node scripts/generate-gisib-api-types/index.ts"
 	},
 	"dependencies": {

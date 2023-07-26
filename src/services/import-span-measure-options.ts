@@ -69,6 +69,26 @@ export class ImportSpanMeasureOptions {
 		return data;
 	}
 
+	private getSpanMeasureItemOptionsFromGeneratedJson(data: SpanMeasureOption[]) {
+		const spanMeasureOptions = data;
+		const spanMeasureItemOptions: SpanMeasureItemOption[] = [];
+
+		for (const spanMeasureOption of spanMeasureOptions) {
+			for (const measureItem of spanMeasureOption.measureItems) {
+				spanMeasureItemOptions.push(measureItem);
+			}
+		}
+
+		// De-duplicate the span measure item options array
+		const uniqueSpanMeasureItemOptions = Array.from(new Set(spanMeasureItemOptions.map((item) => item.id))).map(
+			(id) => {
+				return spanMeasureItemOptions.find((item) => item.id === id);
+			},
+		);
+
+		return { spanMeasureOptions, spanMeasureItemOptions: uniqueSpanMeasureItemOptions };
+	}
+
 	private parseBestekpostRow(
 		bestekpostObj: BestekspostenExcelRowObject,
 		knownSpecificationItem?: SpanMeasureItemOption,
@@ -156,13 +176,17 @@ export class ImportSpanMeasureOptions {
 		this.progressBar.start(100, 0);
 
 		this.jsonData = JSON.parse(fs.readFileSync(this.jsonDataFilePath, 'utf8'));
+
 		if (this.forcedRewrite) {
 			this.jsonData.spanMeasureOptions = [];
 			this.jsonData.spanMeasureItemOptions = [];
+		} else {
+			this.jsonData.spanMeasureItemOptions = this.getSpanMeasureItemOptionsFromGeneratedJson(
+				this.jsonData.spanMeasureOptions,
+			).spanMeasureItemOptions;
 		}
 
 		const file = await this.getFile();
-
 		const normalizedData = await this.normalize(
 			this.getMatrixFromSheet(file.Matrix),
 			this.getMaterialenFromSheet(file['M-nummers'], this.jsonData.spanMeasureItemOptions),

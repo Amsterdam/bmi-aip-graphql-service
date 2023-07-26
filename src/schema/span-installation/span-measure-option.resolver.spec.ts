@@ -4,6 +4,7 @@ import { QueryBus } from '@nestjs/cqrs';
 import { SpanMeasureOptionResolver } from './span-measure-option.resolver';
 import { FindSpanMeasureOptionsQuery } from './queries/find-span-measure-options.query';
 import { domainSpanMeasure } from './__stubs__/span-measure';
+import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 
 const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
 	execute: jest.fn((query: any) => {
@@ -19,7 +20,7 @@ describe('Span Installation / MeasureOptions / Resolver', () => {
 	test('spanMeasureOptions returns an array of options', async () => {
 		const queryBusMock = getQueryBusMock();
 		const resolver = new SpanMeasureOptionResolver(queryBusMock);
-		const options = await resolver.spanMeasureOptions();
+		const options = await resolver.spanMeasureOptions(SpanDecompositionItemType.spanJunctionBox);
 		expect(options).toBeInstanceOf(Array);
 	});
 });

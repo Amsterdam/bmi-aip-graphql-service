@@ -3,17 +3,17 @@ import ExcelJS from 'exceljs';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
 
-import { ExportDataQuery } from './export-data.query';
+import { ExportAllDataQuery } from './export-all-data.query';
 
-@QueryHandler(ExportDataQuery)
-export class ExportDataHandler
-	implements IQueryHandler<ExportDataQuery, { xlsxBuffer: ExcelJS.Buffer; fileName: string }>
+@QueryHandler(ExportAllDataQuery)
+export class ExportAllDataHandler
+	implements IQueryHandler<ExportAllDataQuery, { xlsxBuffer: ExcelJS.Buffer; fileName: string }>
 {
 	constructor(private readonly exporterService: SpanInstallationExportService) {}
 
-	async execute(query: ExportDataQuery) {
+	async execute(query: ExportAllDataQuery) {
 		return {
-			xlsxBuffer: await this.exporterService.createXLSXForBatch(query.batchId),
+			xlsxBuffer: await this.exporterService.exportAll(),
 			fileName: `OVS-export-${new Date().toISOString()}`,
 		};
 	}

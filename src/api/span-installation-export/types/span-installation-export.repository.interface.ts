@@ -8,6 +8,6 @@ const spanInstallations = Prisma.validator<Prisma.objectsArgs>()({
 
 export type SpanInstallation = Prisma.objectsGetPayload<typeof spanInstallations>;
 
-export interface SpanInstallationExportRepository {
-	findSpanInstallations(): Promise<SpanInstallation[]>;
+export interface ISpanInstallationExportRepository {
+	findSpanInstallations(batchId: string): Promise<SpanInstallation[]>;
 }

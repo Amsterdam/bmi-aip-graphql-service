@@ -5,5 +5,5 @@ const worksheet: ExcelJS.Worksheet = workbook.addWorksheet('Mock');
 worksheet.addRow([]);
 
 export const SpanInstallationExportService = jest.fn(() => ({
-	createXLSX: jest.fn(() => (workbook.xlsx as ExcelJS.Xlsx).writeBuffer()),
+	createXLSXForBatch: jest.fn(() => (workbook.xlsx as ExcelJS.Xlsx).writeBuffer()),
 }));

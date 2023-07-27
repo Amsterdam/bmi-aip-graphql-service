@@ -16,11 +16,11 @@ import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRo
 import { NormalizeOVSImportData } from './NormalizeOVSImportData';
 
 /**
- * npm run console ovs:setAdditionalPropsForOVSExport
+ * npm run console ovs:additional-props-for-ovs-export
  */
 @Injectable()
 export class SetAdditionalPropsForOVSExportService {
-	private static CLI_COMMAND = 'ovs:setAdditionalPropsForOVSExport';
+	private static CLI_COMMAND = 'ovs:set-additional-props-for-ovs-export';
 
 	private static DEBUG = true;
 
@@ -55,7 +55,7 @@ export class SetAdditionalPropsForOVSExportService {
 		this.consoleService.createCommand(
 			{
 				command: SetAdditionalPropsForOVSExportService.CLI_COMMAND,
-				description: 'Update ovs decomposition',
+				description: 'set additional props for ovs export',
 			},
 			this.run.bind(this),
 			cli,
@@ -98,7 +98,7 @@ export class SetAdditionalPropsForOVSExportService {
 		} catch (err) {
 			this.logger.debug('Failed to update ovs decomposition', err.message, installation);
 			this.report.failures.push({
-				error: `Failed to update ovs decomposition, error: ${err.message}`,
+				error: `Failed to set additional ovs props, error: ${err.message}`,
 				input: {
 					installationGroup: installation.id,
 					source: installation,

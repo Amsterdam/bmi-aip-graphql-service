@@ -10,20 +10,17 @@ import * as xlsx from 'xlsx';
 import { SingleBar } from 'cli-progress';
 
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
-import { UpdateOVSDecompositionInput } from '../schema/span-installation/dto/update-ovs-decomposition.input';
+import { AdditionalPropsForOVSExportInput } from '../schema/span-installation/dto/additional-props-for-ovs-export.input';
 
 import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRowObject';
 import { NormalizeOVSImportData } from './NormalizeOVSImportData';
 
-
-
-
 /**
- * npm run console ovs:updateDecomposition
+ * npm run console ovs:setAdditionalPropsForOVSExport
  */
 @Injectable()
-export class UpdateOVSDecompositionService {
-	private static CLI_COMMAND = 'ovs:updateDecomposition';
+export class SetAdditionalPropsForOVSExportService {
+	private static CLI_COMMAND = 'ovs:setAdditionalPropsForOVSExport';
 
 	private static DEBUG = true;
 
@@ -34,7 +31,7 @@ export class UpdateOVSDecompositionService {
 		success: string[];
 		failures: {
 			error: string;
-			input: Partial<UpdateOVSDecompositionInput>;
+			input: Partial<AdditionalPropsForOVSExportInput>;
 		}[];
 	} = {
 		file: '',
@@ -57,7 +54,7 @@ export class UpdateOVSDecompositionService {
 
 		this.consoleService.createCommand(
 			{
-				command: UpdateOVSDecompositionService.CLI_COMMAND,
+				command: SetAdditionalPropsForOVSExportService.CLI_COMMAND,
 				description: 'Update ovs decomposition',
 			},
 			this.run.bind(this),
@@ -90,9 +87,9 @@ export class UpdateOVSDecompositionService {
 		return data;
 	}
 
-	private async updateOVSDecomposition(installation: NormalizedInstallationFromExcel): Promise<void> {
+	private async setAdditionalPropsForOVSExport(installation: NormalizedInstallationFromExcel): Promise<void> {
 		try {
-			await this.externalAIPGraphQLRepository.updateOVSDecomposition({
+			await this.externalAIPGraphQLRepository.setAdditionalPropsForOVSExport({
 				installationGroup: installation.id,
 				source: installation,
 			});
@@ -118,7 +115,7 @@ export class UpdateOVSDecompositionService {
 		const queue = new PQueue({ concurrency: 10 });
 
 		Object.keys(normalizedData).forEach((key) => {
-			queue.add(() => this.updateOVSDecomposition(normalizedData[key]));
+			queue.add(() => this.setAdditionalPropsForOVSExport(normalizedData[key]));
 		});
 		await queue.onIdle();
 

@@ -8,13 +8,13 @@ import { Luminaire } from 'src/schema/span-installation/types/luminaire.reposito
 
 import { DbObject } from '../object/types/object.repository.interface';
 
-import { UpdateOVSDecompositionInput } from './dto/update-ovs-decomposition.input';
+import { AdditionalPropsForOVSExportInput } from './dto/additional-props-for-ovs-export.input';
 
 @Injectable()
-export class OVSDecompositionRepository {
+export class AdditionalPropsForOVSExportRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	async updateOVSDecomposition(input: UpdateOVSDecompositionInput): Promise<string> {
+	async setAdditionalPropsForOVSExport(input: AdditionalPropsForOVSExportInput): Promise<string> {
 		const { installationGroup, source } = input;
 
 		try {

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ description: 'object' })
-export class OVSDecompositionModel {
+export class AdditionalPropsForOVSExportModel {
 	@Field((type) => String)
 	success: string;
 }

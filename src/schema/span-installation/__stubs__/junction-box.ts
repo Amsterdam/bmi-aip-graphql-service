@@ -67,8 +67,6 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId' | 'techViewId
 		type: 'Point',
 	},
 	remarksRevision: null,
-	// mastId: new Decimal(10),
-	// techViewId: new Decimal(10),
 };
 
 const reviseJunctionBoxRaw = { ...junctionBoxRaw };

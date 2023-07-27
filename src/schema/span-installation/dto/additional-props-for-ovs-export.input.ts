@@ -4,7 +4,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { NormalizedInstallationFromExcel } from 'src/services/types/excelRowObject';
 
 @InputType()
-export class UpdateOVSDecompositionInput {
+export class AdditionalPropsForOVSExportInput {
 	@Field()
 	public installationGroup: number;
 

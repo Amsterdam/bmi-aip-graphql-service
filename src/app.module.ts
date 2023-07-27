@@ -31,9 +31,11 @@ import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-me
 import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-measures-survey.module';
 import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
 import { SpanInstallationExportModule } from './api/span-installation-export/span-installation-export.module';
+import { DocumentModule } from './schema/document/document.module';
 
 @Module({
 	imports: [
+		DocumentModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 		}),

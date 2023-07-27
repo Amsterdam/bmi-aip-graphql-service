@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { IsOptional } from 'class-validator';
 
 import { SpanMeasureItemStatus } from './../types/span-measure-item-status';
@@ -22,11 +22,11 @@ export class SpanMeasureItem {
 	@Field((type) => String)
 	quantityUnitOfMeasurement: string;
 
-	@Field((type) => String)
+	@Field((type) => Int)
 	quantityEstimate: number;
 
 	@IsOptional()
-	@Field((type) => String, { nullable: true })
+	@Field((type) => Int, { nullable: true })
 	quantityActual?: number;
 
 	@Field(() => SpanMeasureItemStatus, { nullable: true })

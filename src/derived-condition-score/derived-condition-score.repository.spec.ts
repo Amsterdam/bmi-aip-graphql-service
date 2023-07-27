@@ -1,6 +1,6 @@
 import { MockedObjectDeep } from 'ts-jest';
 
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../prisma.service';
 
 import { domainDerivedConditionScore } from './__stubs__';
 import { DerivedConditionScoreRepository } from './derived-condition-score.repository';

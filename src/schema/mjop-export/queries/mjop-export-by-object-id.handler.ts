@@ -45,7 +45,6 @@ export class MJOPExportByObjectIdHandler implements IQueryHandler<MJOPExportByOb
 
 			await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, true);
 			const fileName = `MJOP_Report_${objectCode}_${new Date().toISOString()}.xlsx`;
-			console.log(fileName);
 			query.response.setHeader(
 				'Content-Type',
 				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

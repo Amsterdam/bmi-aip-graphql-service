@@ -2,10 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 
-import { survey } from '../../schema/survey/__stubs__';
-
 import { SpanInstallationExportController } from './span-installation-export.controller';
-import { ExportDataQuery } from './queries/export-data.query';
+import { ExportBatchDataQuery } from './queries/export-batch-data.query';
 
 describe('SpanInstallationExporterController', () => {
 	let controller: SpanInstallationExportController;
@@ -27,7 +25,6 @@ describe('SpanInstallationExporterController', () => {
 			providers: [{ provide: QueryBus, useValue: queryBusMock }],
 		}).compile();
 
-		// controller = module.get<SpanInstallationExportController>(SpanInstallationExportController);
 		queryBus = module.get<QueryBus>(QueryBus);
 		controller = new SpanInstallationExportController(queryBus);
 		res = responseMock as unknown as Response;
@@ -38,9 +35,9 @@ describe('SpanInstallationExporterController', () => {
 	});
 
 	describe('exportToXLSX()', () => {
-		test('queryBus is called with the correct ExportDataQuery', async () => {
+		test('queryBus is called with the correct ExportBatchDataQuery', async () => {
 			await controller.exportToXLSX(res);
-			expect(queryBus.execute).toHaveBeenCalledWith(new ExportDataQuery());
+			expect(queryBus.execute).toHaveBeenCalledWith(new ExportBatchDataQuery());
 		});
 		test('correct headers are being set', async () => {
 			await controller.exportToXLSX(res);

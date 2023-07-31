@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-// import { ConsoleModule } from 'nestjs-console';
-// import { HttpModule } from '@nestjs/axios';
 
 import { PrismaService } from '../../prisma.service';
 import { BatchRepository } from '../../schema/batch/batch.repository';

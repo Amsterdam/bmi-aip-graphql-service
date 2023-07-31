@@ -36,8 +36,7 @@ describe('ExportBatchDataHandler', () => {
 	});
 
 	beforeEach(() => {
-		// exporterServiceMock.getDummyData.mockClear();
-		exporterServiceMock.createXLSXForBatch.mockClear();
+		exporterServiceMock.createXLSX.mockClear();
 		handler = new ExportBatchDataHandler(exporterServiceMock);
 	});
 

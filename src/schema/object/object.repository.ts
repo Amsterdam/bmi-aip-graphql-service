@@ -56,8 +56,7 @@ export class ObjectRepository implements IObjectRepository {
 				id: objectId,
 			},
 		});
-
-		const objectCode = object.code ?? object.name;
+		const objectCode = !object.code ? object.name : object.code;
 
 		return objectCode;
 	}

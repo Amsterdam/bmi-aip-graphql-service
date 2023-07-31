@@ -29,8 +29,9 @@ export class SpanInstallationExportService {
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
 		const result = [];
 
-		batchDetails.forEach(async (batch) => {
+		for (const batch of batchDetails) {
 			let spanInstallations = await this.spanRepository.findSpanInstallations(batch.id);
+
 			spanInstallations = spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
 				return {
 					...spanInstallation,
@@ -39,7 +40,7 @@ export class SpanInstallationExportService {
 			});
 
 			result.push(...spanInstallations);
-		});
+		}
 
 		return result;
 	}
@@ -71,13 +72,11 @@ export class SpanInstallationExportService {
 	}
 
 	async exportByBatch(batchId: string): Promise<ExcelJS.Buffer> {
-		const data = await this.getObjectsInBatch(batchId);
-		return this.createXLSX(data);
+		return this.createXLSX(await this.getObjectsInBatch(batchId));
 	}
 
 	async exportAll(): Promise<ExcelJS.Buffer> {
-		const data = await this.getObjectsInAllBatches();
-		return this.createXLSX(data);
+		return this.createXLSX(await this.getObjectsInAllBatches());
 	}
 
 	async createXLSX(data: OVSExportSpanInstallationWithBatchDetails[]): Promise<ExcelJS.Buffer> {

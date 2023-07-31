@@ -26,7 +26,6 @@ export class SpanInstallationExportRepository implements ISpanInstallationExport
 				id: {
 					in: surveys.map((survey) => survey.objectId),
 				},
-				//	type: 'span_installation',
 			},
 			select: {
 				id: true,

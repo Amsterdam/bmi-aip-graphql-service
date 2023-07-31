@@ -14,7 +14,7 @@ export class ExportAllDataHandler
 	async execute(query: ExportAllDataQuery) {
 		return {
 			xlsxBuffer: await this.exporterService.exportAll(),
-			fileName: `OVS-export-${new Date().toISOString()}`,
+			fileName: `OVS-batch-export-${new Date().toISOString()}`,
 		};
 	}
 }

@@ -40,11 +40,12 @@ export class MJOPExportByBatchIdHandler implements IQueryHandler<MJOPExportByBat
 				await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, generateHeaders);
 				generateHeaders = false;
 			}
-			const fileName = 'MJOP_Report.xlsx';
+			const fileName = `MJOP_Batch_Report_${new Date().toISOString()}.xlsx`;
 			query.response.setHeader(
 				'Content-Type',
 				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 			);
+			query.response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
 			query.response.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
 			await generatedWorkbook.xlsx.write(query.response);
 			return query.response.end();

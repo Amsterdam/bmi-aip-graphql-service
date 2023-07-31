@@ -50,6 +50,18 @@ export class ObjectRepository implements IObjectRepository {
 		return this.transformToDto(dbObject);
 	}
 
+	async getObjectCodeOtherwiseNameById(objectId: string): Promise<string> {
+		const object = await this.prisma.objects.findFirst({
+			where: {
+				id: objectId,
+			},
+		});
+
+		const objectCode = object.code ?? object.name;
+
+		return objectCode;
+	}
+
 	async getObjectByObjectTypeId(objectTypeId: string): Promise<DbObject[]> {
 		return this.prisma.objects.findMany({
 			where: {

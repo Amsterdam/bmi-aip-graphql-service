@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { JunctionBox } from 'src/schema/span-installation/types/junction-box.repository.interface';
 import { ExcelJunctionBoxProps, ExcelLuminaireProps } from 'src/services/types/excelRowObject';
-import { SupportSystemType } from 'src/schema/span-installation/types';
-import { SupportSystem } from 'src/schema/span-installation/types/support-system.repository.interface';
-import { Luminaire } from 'src/schema/span-installation/types/luminaire.repository.interface';
 
 import { DbObject } from '../object/types/object.repository.interface';
 
+import { JunctionBox } from './types/junction-box.repository.interface';
+import { SupportSystemType } from './types';
+import { SupportSystem } from './types/support-system.repository.interface';
+import { Luminaire } from './types/luminaire.repository.interface';
 import { AdditionalPropsForOVSExportInput } from './dto/additional-props-for-ovs-export.input';
 
 @Injectable()

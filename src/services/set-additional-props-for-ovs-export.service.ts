@@ -16,7 +16,7 @@ import { ExcelRowObject, NormalizedInstallationFromExcel } from './types/excelRo
 import { NormalizeOVSImportData } from './NormalizeOVSImportData';
 
 /**
- * npm run console ovs:additional-props-for-ovs-export
+ * npm run console ovs:set-additional-props-for-ovs-export
  */
 @Injectable()
 export class SetAdditionalPropsForOVSExportService {

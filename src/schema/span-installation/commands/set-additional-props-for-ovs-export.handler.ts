@@ -5,7 +5,7 @@ import { AdditionalPropsForOVSExportRepository } from '../additional-props-for-o
 import { SetAdditionalPropsForOVSExportCommand } from './set-additional-props-for-ovs-export.command';
 
 @CommandHandler(SetAdditionalPropsForOVSExportCommand)
-export class SetAdditionalPropsForOvsExportHandler implements ICommandHandler<SetAdditionalPropsForOVSExportCommand> {
+export class SetAdditionalPropsForOVSExportHandler implements ICommandHandler<SetAdditionalPropsForOVSExportCommand> {
 	constructor(private repo: AdditionalPropsForOVSExportRepository) {}
 
 	public async execute(command: SetAdditionalPropsForOVSExportCommand): Promise<string> {

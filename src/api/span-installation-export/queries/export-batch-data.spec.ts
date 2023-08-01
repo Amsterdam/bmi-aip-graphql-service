@@ -12,7 +12,7 @@ worksheet.addRow([]);
 
 const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
 	// @ts-ignore
-	createXLSXForBatch: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
+	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	getDummyData: jest.fn().mockReturnValue([]),
 	...(<any>{}),
 };

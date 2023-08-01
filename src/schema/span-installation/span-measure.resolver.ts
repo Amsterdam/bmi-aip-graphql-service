@@ -88,12 +88,8 @@ export class SpanMeasureResolver {
 			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
 		);
 
-		return itemsInMeasure.reduce((acc, item) => {
-			if (item.status === SpanMeasureItemStatus.completed) {
-				return SpanMeasureStatus.completed;
-			}
+		const allItemsCompleted = itemsInMeasure.every((item) => item.status === SpanMeasureItemStatus.completed);
 
-			return acc;
-		}, SpanMeasureStatus.open);
+		return allItemsCompleted ? SpanMeasureStatus.completed : SpanMeasureStatus.open;
 	}
 }

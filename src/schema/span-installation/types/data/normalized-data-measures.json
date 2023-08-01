@@ -832,55 +832,6 @@
 					"referenceNumber": "300030"
 				},
 				{
-					"id": "7d3ca526-ac23-4797-8fc8-542420bc1e75",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
-					"referenceNumber": "M#ntb01"
-				},
-				{
-					"id": "063634a6-4a13-4d72-adb5-a74b24840b50",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
-					"referenceNumber": "M#ntb02"
-				},
-				{
-					"id": "5319b09e-a538-41e2-9ed2-fc8759f2a6e3",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
-					"referenceNumber": "M#ntb03"
-				},
-				{
-					"id": "b665053e-236a-4f3e-8e9e-c6a9ffe9745b",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
-					"referenceNumber": "M#ntb04"
-				},
-				{
-					"id": "bf6df5ec-78fd-40f4-98a7-a34d0d57727e",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
-					"referenceNumber": "M#ntb05"
-				},
-				{
-					"id": "82404e6d-a6d6-4be2-afed-97e6c4f21192",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
-					"referenceNumber": "M#ntb06"
-				},
-				{
-					"id": "cc837c93-e45a-4d9c-b4a1-2923dfb2abb3",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Ophangbeugel Bola+Zhaga",
-					"referenceNumber": "M#ntb07"
-				},
-				{
 					"id": "d1cb12e4-9bbc-4588-8c8e-615272eabafd",
 					"unit": "STUKS",
 					"itemType": "material",
@@ -942,48 +893,6 @@
 					"itemType": "specificationItem",
 					"description": "Vervangen van (LED) unit 4m > lph <=10m. ",
 					"referenceNumber": "300040"
-				},
-				{
-					"id": "02f2d49e-5924-4a2b-8c82-d46ba3676b76",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA",
-					"referenceNumber": "M#ntb21"
-				},
-				{
-					"id": "a657a2ba-f8e7-4b6c-9345-e9fe9a3a073a",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA",
-					"referenceNumber": "M#ntb22"
-				},
-				{
-					"id": "a1a82ef4-e61e-4fde-956e-492814e607d7",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA",
-					"referenceNumber": "M#ntb23"
-				},
-				{
-					"id": "3619bed9-a4de-4b99-9bf0-d41db54a2e9f",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA",
-					"referenceNumber": "M#ntb24"
-				},
-				{
-					"id": "bf61253d-2b04-4cd0-aa46-9c1d85d7416b",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA",
-					"referenceNumber": "M#ntb25"
-				},
-				{
-					"id": "fdd30b2d-a00f-4918-8f13-a3fa6f97f716",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Retrofit - BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA",
-					"referenceNumber": "M#ntb26"
 				},
 				{
 					"id": "c8ad5ed4-5fab-448c-b6c1-bb1471b5cb15",
@@ -1054,55 +963,6 @@
 					"itemType": "specificationItem",
 					"description": "Aanbrengen hangarmatuur lph <= 10 m ",
 					"referenceNumber": "300020"
-				},
-				{
-					"id": "7d3ca526-ac23-4797-8fc8-542420bc1e75",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 40 2BLS12 XLRS ##W 3K #1700lm ###mA RAL7038",
-					"referenceNumber": "M#ntb01"
-				},
-				{
-					"id": "063634a6-4a13-4d72-adb5-a74b24840b50",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 40 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
-					"referenceNumber": "M#ntb02"
-				},
-				{
-					"id": "5319b09e-a538-41e2-9ed2-fc8759f2a6e3",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 3BLS12 XLRS ##W 3K #3400lm ###mA RAL7038",
-					"referenceNumber": "M#ntb03"
-				},
-				{
-					"id": "b665053e-236a-4f3e-8e9e-c6a9ffe9745b",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 4BLS12 XLRS ##W 3K #4500lm ###mA RAL7038",
-					"referenceNumber": "M#ntb04"
-				},
-				{
-					"id": "bf6df5ec-78fd-40f4-98a7-a34d0d57727e",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 5BLS12 XLRS ##W 3K #7200lm ###mA RAL7038",
-					"referenceNumber": "M#ntb05"
-				},
-				{
-					"id": "82404e6d-a6d6-4be2-afed-97e6c4f21192",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "BOLA 55 6BLS12 XLRS ##W 3K #9500lm ###mA RAL7038",
-					"referenceNumber": "M#ntb06"
-				},
-				{
-					"id": "cc837c93-e45a-4d9c-b4a1-2923dfb2abb3",
-					"unit": "STUKS",
-					"itemType": "material",
-					"description": "Ophangbeugel Bola+Zhaga",
-					"referenceNumber": "M#ntb07"
 				},
 				{
 					"id": "d1cb12e4-9bbc-4588-8c8e-615272eabafd",

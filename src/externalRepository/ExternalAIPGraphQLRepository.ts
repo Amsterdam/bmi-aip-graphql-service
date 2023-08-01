@@ -16,7 +16,7 @@ import { JunctionBox } from '../schema/span-installation/models/junction-box.mod
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { UpdateObjectInput } from '../schema/object/dto/update-object.input';
 import { CorrectCoordinatesInput } from '../schema/object/dto/correct-coordinates.input';
-import { AdditionalPropsForOvsExportInput } from '../schema/span-installation/dto/update-ovs-decomposition.input';
+import { AdditionalPropsForOVSExportInput } from '../schema/span-installation/dto/additional-props-for-ovs-export.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
 
@@ -160,7 +160,7 @@ export class ExternalAIPGraphQLRepository {
 	}
 
 	public async setAdditionalPropsForOVSExport(
-		input: Partial<AdditionalPropsForOvsExportInput>,
+		input: Partial<AdditionalPropsForOVSExportInput>,
 	): Promise<ExternalAIPGraphQLRequest> {
 		const mutation = gql`
 			mutation setAdditionalPropsForOVSExport($input: additionalPropsForOVSExportInput!) {

@@ -30,6 +30,7 @@ import { TiModule } from './schema/ti/ti.module';
 import { DefaultMaintenanceMeasureModule } from './schema/default-maintenance-measure/default-maintenance-measure.module';
 import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-measures-survey.module';
 import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
+import { SpanInstallationExportModule } from './api/span-installation-export/span-installation-export.module';
 import { DocumentModule } from './schema/document/document.module';
 
 @Module({
@@ -69,6 +70,7 @@ import { DocumentModule } from './schema/document/document.module';
 		FacadeFollowUpSurveyModule,
 		DefaultMaintenanceMeasureModule,
 		MJOPExportModule,
+		SpanInstallationExportModule,
 	],
 	controllers: [HealthController],
 	providers: [

@@ -24,6 +24,8 @@ const junctionBoxes = Prisma.validator<Prisma.spanJunctionBoxesArgs>()({
 		deleted_at: true,
 		geographyRD: true,
 		permanentId: true,
+		techViewId: true,
+		mastId: true,
 		remarksRevision: true,
 	},
 });

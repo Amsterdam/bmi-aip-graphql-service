@@ -16,6 +16,7 @@ import { JunctionBox } from '../schema/span-installation/models/junction-box.mod
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
 import { UpdateObjectInput } from '../schema/object/dto/update-object.input';
 import { CorrectCoordinatesInput } from '../schema/object/dto/correct-coordinates.input';
+import { AdditionalPropsForOvsExportInput } from '../schema/span-installation/dto/update-ovs-decomposition.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
 
@@ -155,6 +156,20 @@ export class ExternalAIPGraphQLRepository {
 				}
 			}
 		`;
+		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, { input });
+	}
+
+	public async setAdditionalPropsForOVSExport(
+		input: Partial<AdditionalPropsForOvsExportInput>,
+	): Promise<ExternalAIPGraphQLRequest> {
+		const mutation = gql`
+			mutation setAdditionalPropsForOVSExport($input: additionalPropsForOVSExportInput!) {
+				setAdditionalPropsForOVSExport(additionalPropsForOVSExport: $input) {
+					success
+				}
+			}
+		`;
+
 		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, { input });
 	}
 

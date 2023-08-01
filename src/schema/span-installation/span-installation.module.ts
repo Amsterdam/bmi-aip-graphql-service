@@ -81,6 +81,9 @@ import { CreateMissingSupportSystemHandler } from './commands/create-missing-sup
 import { ReviseSupportSystemHandler } from './commands/revise-support-system.handler';
 import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
 import { ReviseLuminaireHandler } from './commands/revise-luminaire.handler';
+import { AdditionalPropsForOvsExportRepository } from './ovs-decomposition.repository';
+import { SetAdditionalPropsForOvsExportCommand } from './commands/update-ovs-decomposition.command';
+import { SetAdditionalPropsForOvsExportHandler } from './commands/update-ovs-decomposition.handler';
 
 registerEnumType(SupportSystemType, {
 	name: 'SupportSystemType',
@@ -182,6 +185,9 @@ registerEnumType(SpanMeasureItemStatus, {
 		LuminaireSurveyRepository,
 		GetDecompositionItemDamageHandler,
 		GetDecompositionItemDamageQuery,
+		AdditionalPropsForOvsExportRepository,
+		SetAdditionalPropsForOvsExportCommand,
+		SetAdditionalPropsForOvsExportHandler,
 	],
 	imports: [CqrsModule, AuthorizationModule, AuthenticationModule, forwardRef(() => AssetModule)],
 })

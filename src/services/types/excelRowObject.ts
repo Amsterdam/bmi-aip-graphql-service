@@ -61,6 +61,7 @@ export type ExcelJunctionBoxProps = Pick<
 	| 'def batch'
 	| 'LOB-tram'
 	| 'Lichtpunthoogte'
+	| 'Id-mast (niet weergeven, tbv export)'
 >;
 
 export type ExcelLuminaireProps = Pick<

@@ -50,6 +50,7 @@ export class NormalizeOVSImportData {
 			'situatie nw': row['situatie nw'],
 			'def batch': row['def batch'],
 			'LOB-tram': row['LOB-tram'],
+			'Id-mast (niet weergeven, tbv export)': row['Id-mast (niet weergeven, tbv export)'],
 			Lichtpunthoogte: row.Lichtpunthoogte,
 		});
 	}

@@ -163,8 +163,8 @@ export class ExternalAIPGraphQLRepository {
 		input: Partial<AdditionalPropsForOVSExportInput>,
 	): Promise<ExternalAIPGraphQLRequest> {
 		const mutation = gql`
-			mutation setAdditionalPropsForOVSExport($input: additionalPropsForOVSExportInput!) {
-				setAdditionalPropsForOVSExport(additionalPropsForOVSExport: $input) {
+			mutation setAdditionalPropsForOVSExport($input: AdditionalPropsForOVSExportInput!) {
+				setAdditionalPropsForOVSExport(setAdditionalPropsForOVSExport: $input) {
 					success
 				}
 			}

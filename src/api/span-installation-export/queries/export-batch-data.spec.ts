@@ -14,6 +14,7 @@ const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
 	// @ts-ignore
 	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	getDummyData: jest.fn().mockReturnValue([]),
+	exportByBatch: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	...(<any>{}),
 };
 

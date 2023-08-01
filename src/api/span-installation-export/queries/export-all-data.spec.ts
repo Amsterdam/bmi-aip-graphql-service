@@ -14,6 +14,7 @@ const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
 	// @ts-ignore
 	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	getDummyData: jest.fn().mockReturnValue([]),
+	exportAll: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	...(<any>{}),
 };
 
@@ -47,6 +48,6 @@ describe('ExportAllDataHandler', () => {
 
 	it('should return the fileName', async () => {
 		const result = await handler.execute(new ExportAllDataQuery());
-		expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
+		expect(result.fileName).toBe('OVS-batch-export-2023-07-19T12:34:56.789Z');
 	});
 });

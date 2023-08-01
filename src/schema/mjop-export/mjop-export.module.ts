@@ -9,6 +9,7 @@ import { MeasureModule } from '../measure/measure.module';
 import { AssetModule } from '../asset/asset.module';
 import { DecompositionModule } from '../decomposition/decomposition.module';
 import { SurveyModule } from '../survey/survey.module';
+import { ObjectModule } from '../object/object.module';
 import { DefaultMaintenanceMeasureModule } from '../default-maintenance-measure/default-maintenance-measure.module';
 import { TiModule } from '../ti/ti.module';
 import { FailureModeModule } from '../failure-mode/failure-mode.module';
@@ -49,6 +50,7 @@ import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.quer
 		DecompositionModule,
 		MeasureModule,
 		SurveyModule,
+		ObjectModule,
 		DerivedConditionScoreModule,
 		DefaultMaintenanceMeasureModule,
 		TiModule,

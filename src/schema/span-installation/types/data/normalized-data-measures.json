@@ -1518,6 +1518,27 @@
 					"referenceNumber": "140040"
 				}
 			]
+		},
+		{
+			"id": "c8e05e38-6511-4280-bfc9-607481893afc",
+			"description": "Verwijderen spandraadsysteem boven GVB (knoop)",
+			"decompositionItemType": "spanSupportSystemNode",
+			"measureItems": [
+				{
+					"id": "586f37e2-e61b-4712-9bae-cd285209cfed",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) EDja  - H- type - GVB ",
+					"referenceNumber": "110030"
+				},
+				{
+					"id": "0e5b2b52-e611-4ad1-846d-b9ecf0f879b3",
+					"unit": "st",
+					"itemType": "specificationItem",
+					"description": "Verwijderen OS (L<= 50 m) ED - Y- type - GVB ",
+					"referenceNumber": "110040"
+				}
+			]
 		}
 	]
 }

@@ -78,4 +78,12 @@ export class JunctionBox {
 
 	@Field((type) => Boolean, { nullable: true })
 	hasDamage?: string;
+
+	// Maps to "techViewId"
+	@Field((type) => Float, { nullable: true })
+	techViewId?: number;
+
+	// Maps to "mastId"
+	@Field((type) => Float, { nullable: true })
+	mastId?: number;
 }

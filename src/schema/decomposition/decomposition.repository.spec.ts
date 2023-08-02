@@ -39,6 +39,7 @@ const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 
 const elementsServiceMock: MockedObjectDeep<ElementService> = {
 	getElements: jest.fn().mockResolvedValue([domainElement]),
+	...(<any>{}),
 };
 
 const repo = new DecompositionRepository(elementsServiceMock, prismaServiceMock);

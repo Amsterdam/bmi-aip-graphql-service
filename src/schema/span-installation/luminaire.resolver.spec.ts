@@ -1,5 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -35,6 +35,10 @@ const getCommandBusMock = (): MockedObjectDeep<CommandBus> => ({
 	...(<any>{}),
 });
 
+const getQueryBusMock = (): MockedObjectDeep<QueryBus> => ({
+	...(<any>{}),
+});
+
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
 	...(<any>{}),
 };
@@ -45,7 +49,8 @@ describe('Span Installation / Luminaire / Resolver', () => {
 	describe('createLuminaire', () => {
 		test('creates and returns an element', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock, queryBusMock);
 			const result = await resolver.createLuminaire(luminaireInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new CreateLuminaireCommand(luminaireInput));
@@ -58,7 +63,8 @@ describe('Span Installation / Luminaire / Resolver', () => {
 	describe('updateLuminaire', () => {
 		test('updates and returns a junction box', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock, queryBusMock);
 			const result = await resolver.updateLuminaire(updateLuminaireInput);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new UpdateLuminaireCommand(updateLuminaireInput));
@@ -71,7 +77,8 @@ describe('Span Installation / Luminaire / Resolver', () => {
 	describe('deleteLuminaire', () => {
 		test('soft-deletes and returns a junction box', async () => {
 			const commandBusMock = getCommandBusMock();
-			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock);
+			const queryBusMock = getQueryBusMock();
+			const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock, queryBusMock);
 			const result = await resolver.deleteLuminaire(domainLuminaire.id);
 			expect(commandBusMock.execute).toHaveBeenCalledTimes(1);
 			expect(commandBusMock.execute).toHaveBeenCalledWith(new DeleteLuminaireCommand(domainLuminaire.id));
@@ -84,7 +91,8 @@ describe('Span Installation / Luminaire / Resolver', () => {
 
 	test('getsupportSystemLuminaires returns an array of luminaire objects', async () => {
 		const commandBusMock = getCommandBusMock();
-		const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock);
+		const queryBusMock = getQueryBusMock();
+		const resolver = new LuminaireResolver(new LuminaireService(junctionBoxRepo), commandBusMock, queryBusMock);
 		const elements = await resolver.getsupportSystemLuminaires('ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7');
 		expect(elements).toEqual([luminaire1, luminaire2]);
 	});

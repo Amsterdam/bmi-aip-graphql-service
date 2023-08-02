@@ -18,6 +18,8 @@ describe('Span Installation / JunctionBox / Factory', () => {
 		delete object.updated_at;
 		delete object.deleted_at;
 		delete object.a11yDetails;
+		delete object.techViewId;
+		delete object.mastId;
 		expect(result).toEqual(expect.objectContaining(object));
 		expect(result).toBeInstanceOf(JunctionBox);
 		expect(result.a11yDetails).toBeInstanceOf(A11yDetails);

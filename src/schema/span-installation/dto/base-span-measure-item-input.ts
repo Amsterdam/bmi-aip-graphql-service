@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 import { IsValidMeasureOption } from '../../../decorators/is-valid-measure';
 @InputType()
@@ -19,10 +19,10 @@ export class BaseSpanMeasureItemInput {
 	@Field((type) => String)
 	quantityUnitOfMeasurement: string;
 
-	@Field((type) => String)
+	@Field((type) => Int)
 	quantityEstimate: number;
 
-	@Field((type) => String)
+	@Field((type) => Int)
 	quantityActual?: number;
 
 	@Field(() => Boolean)

@@ -15,6 +15,7 @@ export interface ExternalAIPGraphQLRequest {
 	setOVSSurveySurveyors?: SetOvsSurveySurveyorsModel;
 	removeDuplicateInstallationGroup?: any;
 	correctCoordinates?: any;
+	setAdditionalPropsForOVSExport?: any;
 	findObjectsWithNen2767Decomposition?: Nen2767ObjectWithDecompositionModel[];
 	migrateNen2767Decomposition?: Nen2767MigrateDecompositionModel;
 	objectsWithMaintenanceMeasures?: ObjectWithMaintenanceMeasuresModel[];

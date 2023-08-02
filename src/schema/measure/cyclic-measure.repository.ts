@@ -122,6 +122,10 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 					id: failureModeId,
 				},
 			};
+		} else {
+			data.failureModes = {
+				disconnect: true,
+			};
 		}
 
 		if (defectId) {
@@ -129,6 +133,10 @@ export class CyclicMeasureRepository implements ICyclicMeasureRepository {
 				connect: {
 					id: defectId,
 				},
+			};
+		} else {
+			data.defects = {
+				disconnect: true,
 			};
 		}
 

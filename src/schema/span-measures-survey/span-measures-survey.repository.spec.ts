@@ -23,7 +23,6 @@ const identifier = '9c612187-581b-4be3-902c-9e8035d1d3b7';
 
 describe('Span Measures survey / Repository', () => {
 	test('updateSpanMeasuresSurvey()', async () => {
-		updateSpanMeasuresSurveyInput.surveyId = '68a95a2c-b909-e77f-4d66-9fd5afef5adb';
 		const returnValue = await new SpanMeasuresSurveyRepository(prismaServiceMock).updateSpanMeasuresSurvey(
 			updateSpanMeasuresSurveyInput,
 		);
@@ -39,7 +38,6 @@ describe('Span Measures survey / Repository', () => {
 	});
 
 	test('completeSpanMeasuresSurvey()', async () => {
-		updateSpanMeasuresSurveyInput.surveyId = '68a95a2c-b909-e77f-4d66-9fd5afef5adb';
 		const returnValue = await new SpanMeasuresSurveyRepository(prismaServiceMock).completeSpanMeasuresSurvey(
 			updateSpanMeasuresSurveyInput,
 		);

@@ -1321,7 +1321,6 @@ model spanJunctionBoxes {
   objectId               String                    @db.Uuid
   surveyId               String                    @db.Uuid
   name                   String                    @db.VarChar(128)
-  mastNumber             Decimal?                  @db.Decimal(20, 3)
   location               String?                   @db.VarChar(255)
   locationIndication     String?                   @db.VarChar(255)
   riserTubeVisible       Boolean?
@@ -1333,8 +1332,11 @@ model spanJunctionBoxes {
   installationHeight     Decimal?                  @db.Decimal(8, 2)
   a11yDetails            Json?                     @default("{}")
   geographyRD            Json?                     @default("{}")
+  mastNumber             Decimal?                  @db.Decimal(20, 3)
   permanentId            String                    @db.Uuid
   remarksRevision        String?
+  techViewId             Decimal?                  @db.Decimal(20, 3)
+  mastId                 Decimal?                  @db.Decimal(20, 3)
   spanJunctionBoxSurveys spanJunctionBoxSurveys?
   objects                objects                   @relation(fields: [objectId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "spanjunctionboxes_objectid_foreign")
   surveys                surveys                   @relation(fields: [surveyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanjunctionboxes_surveyid_foreign")
@@ -1377,6 +1379,7 @@ model spanLuminaires {
   geographyRD             Json?                     @default("{}")
   permanentId             String                    @db.Uuid
   remarksRevision         String?
+  sphere                  String?                   @db.VarChar(255)
   spanLuminaireSurveys    spanLuminaireSurveys?
   spanSupportSystems      spanSupportSystems        @relation(fields: [supportSystemId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spanluminaires_supportsystemid_foreign")
 

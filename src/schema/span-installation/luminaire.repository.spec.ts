@@ -125,6 +125,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('updateLuminaire()', async () => {
+		// @ts-ignore
 		prismaServiceMock.spanLuminaires.update.mockResolvedValue(domainLuminaire);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(luminaire1.geography) }]);
 		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateLuminaireInput.geography);
@@ -180,6 +181,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('reviseLuminaire()', async () => {
+		// @ts-ignore
 		revisePrismaServiceMock.spanLuminaires.update.mockResolvedValue(domainReviseLuminaire);
 		revisePrismaServiceMock.$queryRaw.mockResolvedValue([
 			{ geography: JSON.stringify(reviseLuminaire1.geography) },
@@ -238,6 +240,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 	});
 
 	test('deleteLuminaire', async () => {
+		// @ts-ignore
 		prismaServiceMock.spanLuminaires.update.mockResolvedValue(deletedLuminaire);
 		prismaServiceMock.$queryRaw.mockResolvedValue([{ geography: JSON.stringify(luminaire1.geography) }]);
 		const spy = jest.spyOn(repo, 'getGeographyAsGeoJSON').mockResolvedValue(updateLuminaireInput.geography);

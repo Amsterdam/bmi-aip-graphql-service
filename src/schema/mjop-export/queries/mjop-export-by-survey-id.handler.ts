@@ -6,6 +6,7 @@ import { Logger } from '@nestjs/common';
 import { InspectionStandard } from '../../survey/types';
 import { SurveyService } from '../../survey/survey.service';
 import { AddMJOPSheetService } from '../add-mjop-sheet.service';
+import { ObjectService } from '../../object/object.service';
 
 import { MJOPExportBySurveyIdQuery } from './mjop-export-by-survey-id.query';
 
@@ -13,12 +14,14 @@ import { MJOPExportBySurveyIdQuery } from './mjop-export-by-survey-id.query';
 export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySurveyIdQuery> {
 	constructor(
 		private surveyService: SurveyService,
+		private objectService: ObjectService,
 		private readonly addMjopSheetService: AddMJOPSheetService,
 		private readonly logger: Logger,
 	) {}
 
 	async execute(query: MJOPExportBySurveyIdQuery) {
 		const survey = await this.surveyService.getSurvey(query.surveyId);
+		const objectCode = await this.objectService.getObjectCodeOtherwiseNameById(survey.objectId);
 
 		if (
 			survey.inspectionStandardType !== InspectionStandard.nen2767 &&
@@ -41,11 +44,12 @@ export class MJOPExportBySurveyIdHandler implements IQueryHandler<MJOPExportBySu
 			});
 
 			await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, true);
-			const fileName = 'MJOP_Report.xlsx';
+			const fileName = `MJOP_Report_${objectCode}_${new Date().toISOString()}.xlsx`;
 			query.response.setHeader(
 				'Content-Type',
 				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 			);
+			query.response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
 			query.response.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
 			await generatedWorkbook.xlsx.write(query.response);
 			return query.response.end();

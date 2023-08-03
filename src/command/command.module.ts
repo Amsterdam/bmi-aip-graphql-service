@@ -21,6 +21,7 @@ import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
 import { FileWriterService } from '../services/FileWriterService';
 import { ImportSpanMeasureOptions } from '../services/import-span-measure-options';
+import { SetAdditionalPropsForOVSExportService } from '../services/set-additional-props-for-ovs-export.service';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
 import { SetOVSSurveySurveyorsHandler } from './commands/set-ovs-survey-surveyors.handler';
@@ -99,6 +100,7 @@ import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measure
 		MigrateMaintenanceMeasuresRepository,
 		MigrateMaintenanceMeasuresCli,
 		CommandResolver,
+		SetAdditionalPropsForOVSExportService,
 	],
 })
 export class CommandModule {}

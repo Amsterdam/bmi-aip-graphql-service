@@ -50,3 +50,9 @@ MAINTENANCE_MEASURES_MIGRATION_OBJECT_CODES='BRU0175,BRU0176'
 ```
 
 NOTE: comma separated, no spaces
+
+## The `ovs:set-additional-props-for-ovs-export` command
+
+This command updates the techviewId and mastId properties in the junctionbox and sets the sphere property (Aanp. K-Hang/Bol (contract 3)) from the source file. This update is intended exclusively for OVS export purposes
+
+NOTE: comma separated, no spaces

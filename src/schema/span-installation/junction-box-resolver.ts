@@ -20,6 +20,9 @@ import { CreateMissingJunctionBoxCommand } from './commands/create-missing-junct
 import { ReviseJunctionBoxCommand } from './commands/revise-junction-box.command';
 import { ReviseJunctionBoxInput } from './dto/revise-junction-box.input';
 import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
+import { AdditionalPropsForOVSExportModel } from './models/additional-props-for-ovs-export.model';
+import { AdditionalPropsForOVSExportInput } from './dto/additional-props-for-ovs-export.input';
+import { SetAdditionalPropsForOVSExportCommand } from './commands/set-additional-props-for-ovs-export.command';
 
 @Resolver((of) => JunctionBox)
 @Resource(JunctionBox.name)
@@ -94,5 +97,19 @@ export class JunctionBoxResolver {
 		return this.queryBus.execute<HasDecompositionItemGotDamageQuery>(
 			new HasDecompositionItemGotDamageQuery(id, SpanDecompositionItemType.spanJunctionBox),
 		);
+	}
+
+	// TMP
+	@Mutation(() => AdditionalPropsForOVSExportModel)
+	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin'], mode: RoleMatchingMode.ANY })
+	public async setAdditionalPropsForOVSExport(
+		@Args('setAdditionalPropsForOVSExport') input: AdditionalPropsForOVSExportInput,
+	): Promise<AdditionalPropsForOVSExportModel> {
+		const result = await this.commandBus.execute<SetAdditionalPropsForOVSExportCommand>(
+			new SetAdditionalPropsForOVSExportCommand(input),
+		);
+		const response = new AdditionalPropsForOVSExportModel();
+		response.success = result;
+		return response;
 	}
 }

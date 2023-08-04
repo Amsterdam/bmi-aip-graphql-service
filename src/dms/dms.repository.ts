@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { catchError, map, single } from 'rxjs';
 
 import { PrismaService } from '../prisma.service';
+import { InspectionStandard } from '../schema/survey/types';
 
 import {
 	convertMetadataArrayToObject,
@@ -12,7 +13,6 @@ import {
 	DmsMetadataSpanInstallationTypes,
 	RawDMSDocument,
 } from './types/dms-document-span-installation';
-import { InspectionStandard } from './../schema/survey/types';
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
 import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
@@ -126,15 +126,13 @@ export class DmsRepository {
 
 		const data: RawDMSDocument[] = await response;
 
-		const resp = (data || [])
+		return (data || [])
 			.map(
 				function (doc: RawDMSDocument) {
 					return doc;
 				}.bind(this),
 			)
 			.sort((a: RawDMSDocument, b: RawDMSDocument) => (a.name < b.name ? -1 : 1)) as T[];
-
-		return resp;
 	}
 
 	/**
@@ -213,11 +211,8 @@ export class DmsRepository {
 			asset_code: assetCode,
 			file_name: filename,
 		};
-
 		const uploadUrl = this.apiUrl + 'documents/uploadurl';
 
-		const dmsResponse = await this.post<DmsUploadUrlResponse>(uploadUrl, data);
-
-		return dmsResponse;
+		return this.post<DmsUploadUrlResponse>(uploadUrl, data);
 	}
 }

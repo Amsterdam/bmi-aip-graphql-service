@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 
 import { ExcelJunctionBoxProps, ExcelLuminaireProps } from '../../services/types/excelRowObject';
+import { PrismaService } from '../../prisma.service';
 
 import { JunctionBox } from './types/junction-box.repository.interface';
 import { SupportSystemType } from './types';

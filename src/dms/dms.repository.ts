@@ -1,8 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma.service';
 import { catchError, map, single } from 'rxjs';
+
+import { PrismaService } from '../prisma.service';
 
 import {
 	convertMetadataArrayToObject,

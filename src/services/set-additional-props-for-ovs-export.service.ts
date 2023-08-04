@@ -6,8 +6,7 @@ import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import { ConfigService } from '@nestjs/config';
 import PQueue from 'p-queue';
-import ExcelJS from 'exceljs';
-// import * as xlsx from 'xlsx';
+import * as Excel from 'exceljs';
 import { SingleBar } from 'cli-progress';
 
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
@@ -75,9 +74,9 @@ export class SetAdditionalPropsForOVSExportService {
 			this.configService.get<string>('DOC_DIR') +
 			this.configService.get<string>('READ_FILE');
 
-		const workbook = new ExcelJS.Workbook();
+		const workbook = new Excel.Workbook();
 		await workbook.xlsx.readFile(filePath);
-		const worksheet = workbook.getWorksheet(2);
+		const worksheet = workbook.getWorksheet(1);
 
 		const rows = [];
 		worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
@@ -91,20 +90,7 @@ export class SetAdditionalPropsForOVSExportService {
 			});
 			rows.push(rowData); // Add the row object to the array
 		});
-
 		return rows;
-		// read from xlsx file
-		// const maxRow = 9628;
-
-		// const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
-		// const workSheet = workbook.Sheets[workbook.SheetNames[1]];
-		// get first sheet
-		// this.logger.debug(`Mapping file from ${workSheet} sheet`);
-		// const minRow = 2;
-		// let data: ExcelRowObject[] = xlsx.utils.sheet_to_json(workSheet);
-		// data = data.slice(minRow <= 2 ? 0 : minRow - 2);
-		//
-		// return data;
 	}
 
 	private async setAdditionalPropsForOVSExport(installation: NormalizedInstallationFromExcel): Promise<void> {

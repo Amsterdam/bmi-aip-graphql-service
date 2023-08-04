@@ -1,5 +1,18 @@
 import { SupportSystemType } from '../../schema/span-installation/types';
-import { IPassport } from '../../schema/object/models/passport.model';
+
+export interface IPassport {
+	passportIdentification?: string;
+	passportCityArea?: string;
+	passportDistrict?: string;
+	passportNeighborhood?: string;
+	passportStreet?: string;
+	passportYear?: number;
+	passportPowerSupplies?: number;
+	passportSplits?: boolean;
+	passportDoubleWired?: boolean;
+	tramTracks?: boolean;
+	notes?: string;
+}
 
 export type ExcelRowObject = {
 	Installatiegroep?: number;

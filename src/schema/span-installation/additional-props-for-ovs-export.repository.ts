@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { ExcelJunctionBoxProps, ExcelLuminaireProps } from 'src/services/types/excelRowObject';
 
-import { DbObject } from '../object/types/object.repository.interface';
+import { ExcelJunctionBoxProps, ExcelLuminaireProps } from '../../services/types/excelRowObject';
+import { PrismaService } from '../../prisma.service';
 
 import { JunctionBox } from './types/junction-box.repository.interface';
 import { SupportSystemType } from './types';
@@ -19,7 +18,7 @@ export class AdditionalPropsForOVSExportRepository {
 
 		try {
 			const name = 'OVS' + ('000' + installationGroup).slice(-4);
-			const object: DbObject = await this.prisma.objects.findFirst({ where: { name } });
+			const object = await this.prisma.objects.findFirst({ where: { name } });
 			const junctionBoxes: JunctionBox[] = await this.prisma.spanJunctionBoxes.findMany({
 				where: { objectId: object.id },
 			});

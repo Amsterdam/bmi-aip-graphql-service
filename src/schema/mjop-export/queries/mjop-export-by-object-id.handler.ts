@@ -6,7 +6,7 @@ import { Logger } from '@nestjs/common';
 import { InspectionStandard } from '../../survey/types';
 import { SurveyService } from '../../survey/survey.service';
 import { AddMJOPSheetService } from '../add-mjop-sheet.service';
-import { ObjectService } from '../../object/object.service';
+import { AssetService } from '../../asset/asset.service';
 
 import { MJOPExportByObjectIdQuery } from './mjop-export-by-object-id.query';
 
@@ -14,14 +14,14 @@ import { MJOPExportByObjectIdQuery } from './mjop-export-by-object-id.query';
 export class MJOPExportByObjectIdHandler implements IQueryHandler<MJOPExportByObjectIdQuery> {
 	constructor(
 		private surveyService: SurveyService,
-		private objectService: ObjectService,
-		private readonly addMjopSheetService: AddMJOPSheetService,
+		private assetService: AssetService,
+		private readonly addMJOPSheetService: AddMJOPSheetService,
 		private readonly logger: Logger,
 	) {}
 
 	async execute(query: MJOPExportByObjectIdQuery) {
 		const survey = await this.surveyService.getNen2767OrFmecaSurveyByObjectId(query.objectId);
-		const objectCode = await this.objectService.getObjectCodeOtherwiseNameById(survey.objectId);
+		const { code: objectCode } = await this.assetService.getAssetById(survey.objectId);
 
 		if (
 			survey.inspectionStandardType !== InspectionStandard.nen2767 &&
@@ -43,7 +43,7 @@ export class MJOPExportByObjectIdHandler implements IQueryHandler<MJOPExportByOb
 				views: [{ state: 'frozen', ySplit: 1, xSplit: 1 }],
 			});
 
-			await this.addMjopSheetService.addMJOPSheet(worksheet, survey, isFmeca, true);
+			await this.addMJOPSheetService.addMJOPSheet(worksheet, survey, isFmeca, true);
 			const fileName = `MJOP_Report_${objectCode}_${new Date().toISOString()}.xlsx`;
 			query.response.setHeader(
 				'Content-Type',

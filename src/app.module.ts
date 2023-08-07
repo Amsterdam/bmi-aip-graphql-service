@@ -21,7 +21,6 @@ import { AssetModule } from './schema/asset/asset.module';
 import { CommandModule } from './command/command.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
 import { SpanInstallationSurveyModule } from './schema/span-installation-survey/span-installation-survey.module';
-import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
@@ -53,7 +52,6 @@ import { DocumentModule } from './schema/document/document.module';
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		SpanMeasuresSurveyModule,
-		ObjectModule,
 		BatchModule,
 		CommandModule,
 		SurveyModule,

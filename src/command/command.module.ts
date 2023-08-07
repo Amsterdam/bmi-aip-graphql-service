@@ -7,7 +7,6 @@ import { HttpModule } from '@nestjs/axios';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CacheModule } from '@nestjs/cache-manager';
 
-import { ObjectRepository } from '../schema/object/object.repository';
 import { PrismaService } from '../prisma.service';
 import { SurveyRepository } from '../schema/survey/survey.repository';
 import { JunctionBoxRepository } from '../schema/span-installation/junction-box.repository';
@@ -15,12 +14,8 @@ import { SupportSystemRepository } from '../schema/span-installation/support-sys
 import { LuminaireRepository } from '../schema/span-installation/luminaire.repository';
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
 import { UndoOVSImportService } from '../services/undo-ovs-import.service';
-import { CorrectCoordinatesService } from '../services/correct-coordinates-service';
 import { DuplicateInstallationGroupRemovalService } from '../services/DuplicateInstallationGroupRemovalService';
-import { UpdateOVSPassport } from '../services/UpdateOVSPassport';
 import { NormalizeOVSImportData } from '../services/NormalizeOVSImportData';
-import { FileWriterService } from '../services/FileWriterService';
-import { ImportSpanMeasureOptions } from '../services/import-span-measure-options';
 import { SetAdditionalPropsForOVSExportService } from '../services/set-additional-props-for-ovs-export.service';
 
 import { SetOVSSurveySurveyorsCommand } from './commands/set-ovs-survey-surveyors.command';
@@ -65,15 +60,10 @@ import { MigrateMaintenanceMeasuresCli } from './cli/migrate-maintenance-measure
 	],
 	providers: [
 		DuplicateInstallationGroupRemovalService,
-		FileWriterService,
-		UpdateOVSPassport,
-		ImportSpanMeasureOptions,
 		UndoOVSImportService,
-		CorrectCoordinatesService,
 		SetOvsSurveySurveyorCli,
 		Logger,
 		ConfigService,
-		ObjectRepository,
 		PrismaService,
 		SurveyRepository,
 		JunctionBoxRepository,

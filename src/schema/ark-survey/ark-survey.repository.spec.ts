@@ -54,10 +54,6 @@ describe('ARK/ ArkSurvey / Repository', () => {
 		const returnValue = await repository.saveArkCompletion(updateSurveyInput);
 		const survey = prismaServiceMock.surveys.update.mock.calls[0][0].data;
 		expect(survey).toEqual(surveyRaw);
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...updateSurveyInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainSurvey);
 	});
 });

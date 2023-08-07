@@ -1,10 +1,10 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { PrismaService } from 'src/prisma.service';
 
 import { AssetModule } from '../asset/asset.module';
+import { PrismaService } from '../../prisma.service';
+import { AuthorizationModule } from '../../authorization/authorization.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
 
 import { ArkSurveyRepository } from './ark-survey.repository';
 import { ArkSurveyResolver } from './ark-survey.resolver';

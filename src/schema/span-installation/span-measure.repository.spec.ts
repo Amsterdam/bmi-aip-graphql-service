@@ -3,8 +3,14 @@ import { MockedObjectDeep } from 'ts-jest';
 import { PrismaService } from '../../prisma.service';
 
 import { SpanMeasureRepository } from './span-measure.repository';
-import { domainSpanMeasure, createSpanMeasureInput, updateSpanMeasureInput } from './__stubs__/span-measure';
-import { domainJunctionBox, domainLuminaire, domainSupportSystem } from './__stubs__';
+import {
+	domainSpanMeasure,
+	updateSpanMeasureInput,
+	domainJunctionBox,
+	domainLuminaire,
+	domainSupportSystem,
+	createSpanMeasureInput,
+} from './__stubs__';
 import { SpanDecompositionItemType } from './types/span-decomposition-item-type';
 
 const prismaServiceMock: MockedObjectDeep<PrismaService> = {
@@ -35,7 +41,7 @@ describe('Span Installation / Measures / Repository', () => {
 	});
 
 	test('createSpanMeasure()', async () => {
-		const returnValue = await repository.createSpanMeasure(domainSpanMeasure);
+		const returnValue = await repository.createSpanMeasure(createSpanMeasureInput);
 		const spanMeasure = prismaServiceMock.spanMeasures.create.mock.calls[0][0].data;
 
 		expect(spanMeasure).toEqual(
@@ -53,11 +59,7 @@ describe('Span Installation / Measures / Repository', () => {
 			}),
 		);
 
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createSpanMeasureInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainSpanMeasure);
 	});
 
 	test('findSpanMeasures()', async () => {
@@ -72,7 +74,6 @@ describe('Span Installation / Measures / Repository', () => {
 	});
 
 	test('updateSpanMeasure()', async () => {
-		prismaServiceMock.spanMeasures.update.mockResolvedValue(domainSpanMeasure);
 		const returnValue = await repository.updateSpanMeasure(updateSpanMeasureInput);
 
 		expect(returnValue).toEqual({

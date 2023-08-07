@@ -1,6 +1,3 @@
-import { ManifestationRepository } from 'src/schema/decomposition/manifestation.repository';
-import { UnitRepository } from 'src/schema/decomposition/unit.repository';
-import { SurveyRepository } from 'src/schema/survey/survey.repository';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures.exception';
@@ -11,6 +8,9 @@ import { MeasureRepository } from '../measure.repository';
 import { MeasureService } from '../measure.service';
 import { domainCyclicMeasure, domainMeasure } from '../__stubs__';
 import { DecompositionCloneNotFoundException } from '../../decomposition/exceptions/decomposition-clone-not-found.exception';
+import { SurveyRepository } from '../../survey/survey.repository';
+import { UnitRepository } from '../../decomposition/unit.repository';
+import { ManifestationRepository } from '../../decomposition/manifestation.repository';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
 import { CloneMeasuresFromPreviousSurveyHandler } from './clone-measures-from-previous-survey.handler';

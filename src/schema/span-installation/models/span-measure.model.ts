@@ -1,10 +1,10 @@
-import { Field, ObjectType, Parent, ResolveField } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { IsOptional } from 'class-validator';
 
 import { SpanDecompositionItemType } from '../types/span-decomposition-item-type';
 
-import { SpanMeasureItem } from './span-measure-item.model';
 import { SpanMeasureStatus } from './../types/span-measure-status';
+import { SpanMeasureItem } from './span-measure-item.model';
 
 @ObjectType({ description: 'spanMeasure' })
 export class SpanMeasure {

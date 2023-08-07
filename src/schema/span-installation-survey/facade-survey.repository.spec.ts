@@ -65,11 +65,7 @@ describe('Span Installation Survey / Facade / Repository', () => {
 			}),
 		);
 		expect(typeof survey.id).toBe('string');
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createFacadeSurveyInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainFacadeSurvey);
 	});
 
 	test('updateFacadeSurvey()', async () => {

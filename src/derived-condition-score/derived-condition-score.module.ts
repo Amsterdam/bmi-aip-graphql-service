@@ -1,8 +1,9 @@
 import { CqrsModule } from '@nestjs/cqrs';
 import { Module } from '@nestjs/common';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { PrismaService } from 'src/prisma.service';
+
+import { PrismaService } from '../prisma.service';
+import { AuthorizationModule } from '../authorization/authorization.module';
+import { AuthenticationModule } from '../authentication/authentication.module';
 
 import { DerivedConditionScoreService } from './derived-condition-score.service';
 import { DerivedConditionScoreRepository } from './derived-condition-score.repository';

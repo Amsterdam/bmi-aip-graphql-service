@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { registerEnumType } from '@nestjs/graphql';
-import { FindSpanMeasureOptionsHandler } from 'src/schema/span-installation/queries/find-span-measure-options.handler';
 
 import { AuthorizationModule } from '../../authorization/authorization.module';
 import { AuthenticationModule } from '../../authentication/authentication.module';
@@ -81,6 +80,7 @@ import { CreateMissingSupportSystemHandler } from './commands/create-missing-sup
 import { ReviseSupportSystemHandler } from './commands/revise-support-system.handler';
 import { CreateMissingLuminaireHandler } from './commands/create-missing-luminaire.handler';
 import { ReviseLuminaireHandler } from './commands/revise-luminaire.handler';
+import { FindSpanMeasureOptionsHandler } from './queries/find-span-measure-options.handler';
 import { AdditionalPropsForOVSExportRepository } from './additional-props-for-ovs-export.repository';
 import { SetAdditionalPropsForOVSExportCommand } from './commands/set-additional-props-for-ovs-export.command';
 import { SetAdditionalPropsForOVSExportHandler } from './commands/set-additional-props-for-ovs-export.handler';

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DerivedConditionScore } from 'src/derived-condition-score/models/derived-condition-score.model';
-import { DerivedConditionScoreService } from 'src/derived-condition-score/derived-condition-score.service';
 
 import { Survey } from '../survey/models/survey.model';
 import { Asset } from '../asset/models/asset.model';
@@ -13,6 +11,8 @@ import { MeasureService } from '../measure/measure.service';
 import { CyclicMeasureService } from '../measure/cyclic-measure.service';
 import { DefaultMaintenanceMeasureService } from '../default-maintenance-measure/default-maintenance-measure.service';
 import { DefectService } from '../ti/defect.service';
+import { DerivedConditionScoreService } from '../../derived-condition-score/derived-condition-score.service';
+import { DerivedConditionScore } from '../../derived-condition-score/models/derived-condition-score.model';
 
 import { MJOPMeasuresService } from './mjop-measures.service';
 import { MJOPRecord } from './types/mjop-record';

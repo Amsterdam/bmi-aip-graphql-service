@@ -271,7 +271,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanSupportSystems"
-			WHERE id = ${identifier};
+			WHERE id = ${identifier}::uuid;
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
@@ -281,7 +281,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanLuminaires"
-			WHERE id = ${identifier};
+			WHERE id = ${identifier}::uuid;
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;

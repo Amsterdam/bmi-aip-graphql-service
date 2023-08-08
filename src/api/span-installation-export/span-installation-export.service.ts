@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
-
-import { BatchRepository } from '../../schema/batch/batch.repository';
+import { BatchRepository } from 'src/schema/batch/batch.repository';
+import { Cell, Row } from 'exceljs';
 
 import { SpanInstallationExportRepository } from './span-installation-export.repository';
-import { OVSExportSpanInstallationWithBatchDetails } from './types/span-installation';
+import { OVSExportColumn, OVSExportSpanInstallationWithBatchDetails } from './types/span-installation';
 
 @Injectable()
 export class SpanInstallationExportService {
@@ -13,17 +13,22 @@ export class SpanInstallationExportService {
 		private readonly batchRepository: BatchRepository,
 	) {}
 
-	async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
-		const batchDetails = await this.batchRepository.getBatchDetails(batchId);
-		const spanInstallations = await this.spanRepository.findSpanInstallations(batchId);
+	private headerStyle = {
+		bgColor: 'e93323',
+		textColor: 'ffffff',
+	};
 
-		return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
-			return {
-				...spanInstallation,
-				batch: batchDetails,
-			};
-		});
-	}
+	// async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+	// 	const batchDetails = await this.batchRepository.getBatchDetails(batchId);
+	// 	const spanInstallations = await this.spanRepository.findSpanInstallations(batchId);
+	//
+	// 	return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
+	// 		return {
+	// 			...spanInstallation,
+	// 			batch: batchDetails,
+	// 		};
+	// 	});
+	// }
 
 	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
@@ -45,30 +50,88 @@ export class SpanInstallationExportService {
 		return result;
 	}
 
-	setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): ExcelJS.Worksheet {
-		// Add upper most heading (Contracts)
-		worksheet.mergeCells('A1', 'N1');
-		worksheet.getCell('A1').value = 'Contract - 1';
-		worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
-		worksheet.getCell('A1').fill = {
-			type: 'pattern',
-			pattern: 'solid',
-			fgColor: { argb: 'FF416289' },
-		};
+	// setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): ExcelJS.Worksheet {
+	// 	// Add upper most heading (Contracts)
+	// 	worksheet.mergeCells('A1', 'N1');
+	// 	worksheet.getCell('A1').value = 'Contract - 1';
+	// 	worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
+	// 	worksheet.getCell('A1').fill = {
+	// 		type: 'pattern',
+	// 		pattern: 'solid',
+	// 		fgColor: { argb: 'FF416289' },
+	// 	};
+	//
+	// 	// Add second rows of heading (Categories)
+	// 	worksheet.mergeCells('A2', 'N3');
+	// 	worksheet.getCell('A2').value = 'Paspoort';
+	// 	worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
+	// 	worksheet.getCell('A2').font = { bold: true };
+	// 	worksheet.getCell('A2').font = { bold: true };
+	// 	worksheet.getCell('A2').fill = {
+	// 		type: 'pattern',
+	// 		pattern: 'solid',
+	// 		fgColor: { argb: 'FFCEDFF0' },
+	// 	};
+	//
+	// 	return worksheet;
+	// }
 
-		// Add second rows of heading (Categories)
-		worksheet.mergeCells('A2', 'N3');
-		worksheet.getCell('A2').value = 'Paspoort';
-		worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
-		worksheet.getCell('A2').font = { bold: true };
-		worksheet.getCell('A2').font = { bold: true };
-		worksheet.getCell('A2').fill = {
-			type: 'pattern',
-			pattern: 'solid',
-			fgColor: { argb: 'FFCEDFF0' },
-		};
+	async addOVSSheet(worksheet: ExcelJS.Worksheet) {
+		const data: OVSExportSpanInstallationWithBatchDetails[] = await this.getObjectsInAllBatches();
 
-		return worksheet;
+		const passportColumns: OVSExportColumn[] = await this.getPassportColumns();
+		const columns: OVSExportColumn[] = [...passportColumns];
+		const headers = columns.map((column) => column.header);
+		// Render column headers
+		const headerRow = worksheet.addRow(headers);
+		headerRow.height = 40;
+		// Apply specific column styles
+		const startingCol = 1;
+		columns.forEach((column, columnIdx) => {
+			const col = worksheet.getColumn(startingCol + columnIdx);
+			col.width = column.width || 12;
+		});
+
+		data.forEach((row) => {
+			const rowData = {};
+			const newRow = worksheet.addRow([]);
+			this.renderColumns(columns, rowData, newRow, startingCol); // Apply cell styles
+		});
+	}
+
+	private renderColumns(
+		columns: OVSExportSpanInstallationWithBatchDetails[],
+		data: any,
+		row: Row,
+		startingCol: number,
+	): void {
+		columns.forEach((column: OVSExportColumn, columnIdx: number) => {
+			const cell: Cell = row.getCell(startingCol + columnIdx);
+			column.renderCell(cell, data[column.key], row.number, cell.col);
+
+			// Set the column width if specified
+			if (column.width) {
+				const col = row.worksheet.getColumn(startingCol + columnIdx);
+				col.width = column.width;
+			}
+		});
+	}
+
+	private getPassportColumns(): Promise<OVSExportColumn[]> {
+		return new Promise((resolve) => {
+			const columns: OVSExportColumn[] = [
+				{
+					key: 'id',
+					header: 'Id',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell, value): void => {
+						cell.value = value;
+					},
+					width: 36,
+				},
+			];
+			resolve(columns);
+		});
 	}
 
 	async exportByBatch(batchId: string): Promise<ExcelJS.Buffer> {
@@ -84,7 +147,8 @@ export class SpanInstallationExportService {
 		const worksheet = workbook.addWorksheet('Overspanningsinstallatie Export');
 
 		// Set up first and second row of heading (Contracs and Categories)
-		this.setDocumentHeaderStyling(worksheet);
+
+		// this.setDocumentHeaderStyling(worksheet);
 
 		// Add third row of headings (fields in each category)
 		worksheet.addRow([
@@ -102,6 +166,14 @@ export class SpanInstallationExportService {
 			'Dubbeldraads',
 			'Boven trambaan',
 			'Opmerking',
+			'Type gedetailleerd',
+			'Straat',
+			'Huisnummer',
+			'Verdieping',
+			'X coördinaat',
+			'Y coördinaat',
+			'Aanleghoogte',
+			'Opmerkingen',
 		]);
 
 		worksheet.getRow(4).eachCell({ includeEmpty: false }, function (cell) {

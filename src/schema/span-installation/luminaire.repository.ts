@@ -59,7 +59,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanLuminaires"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${luminaire.id}
+				WHERE id = ${luminaire.id}::uuid
 			`;
 		}
 		return {
@@ -114,7 +114,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanLuminaires"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${luminaire.id}
+				WHERE id = ${luminaire.id}::uuid
 			`;
 		}
 		return {
@@ -177,7 +177,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanLuminaires"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -230,7 +230,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanLuminaires"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -259,7 +259,7 @@ export class LuminaireRepository implements ILuminaireRepository {
 
 	async getGeographyAsGeoJSON(identifier: string): Promise<Point | null> {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
-			SELECT ST_AsGeoJSON(geography)::jsonb as geography
+			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanLuminaires"
 			WHERE id = ${identifier}::uuid;
 		`;

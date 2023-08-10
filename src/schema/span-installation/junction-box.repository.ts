@@ -57,7 +57,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanJunctionBoxes"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${junctionBox.id}
+				WHERE id = ${junctionBox.id}::uuid
 			`;
 		}
 
@@ -110,7 +110,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanJunctionBoxes"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${junctionBox.id}
+				WHERE id = ${junctionBox.id}::uuid
 			`;
 		}
 
@@ -170,7 +170,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanJunctionBoxes"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -222,7 +222,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanJunctionBoxes"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -291,7 +291,7 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanJunctionBoxes"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${newJunctionBoxId}
+						WHERE id = ${newJunctionBoxId}::uuid
 					`;
 				}
 			});

@@ -42,14 +42,14 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyStart)})
-				WHERE "surveyId" = ${arkSurveyRecord.id}
+				WHERE "surveyId" = ${arkSurveyRecord.id}::uuid
 			`;
 		}
 		if (arkGeographyEnd) {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyEnd)})
-				WHERE "surveyId" = ${arkSurveyRecord.id}
+				WHERE "surveyId" = ${arkSurveyRecord.id}::uuid
 			`;
 		}
 
@@ -109,7 +109,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyStart" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyStart)})
-				WHERE "surveyId" = ${surveyId}
+				WHERE "surveyId" = ${surveyId}::uuid
 			`;
 		}
 
@@ -117,7 +117,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "arkSurveys"
 				SET "arkGeographyEnd" = ST_GeomFromGeoJSON(${JSON.stringify(arkGeographyEnd)})
-				WHERE "surveyId" = ${surveyId}
+				WHERE "surveyId" = ${surveyId}::uuid
 			`;
 		}
 
@@ -268,7 +268,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("arkGeographyStart") as geography
 			FROM "arkSurveys"
-			WHERE "surveyId" = ${identifier};
+			WHERE "surveyId" = ${identifier}::uuid;
 		`;
 
 		const geography = result?.[0]?.geography;
@@ -279,7 +279,7 @@ export class ArkSurveyRepository implements IArkSurveyRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON("arkGeographyEnd") as geography
 			FROM "arkSurveys"
-			WHERE "surveyId" = ${identifier};
+			WHERE "surveyId" = ${identifier}::uuid;
 		`;
 
 		const geography = result?.[0]?.geography;

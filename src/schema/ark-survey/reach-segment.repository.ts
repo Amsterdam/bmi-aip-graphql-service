@@ -48,7 +48,7 @@ export class ReachSegmentRepository implements IReachSegmentRepository {
 	async getHighestSortNumber(arkSurveyId: string): Promise<number> {
 		const result = await this.prisma.$queryRaw<{
 			max: number | null;
-		}>`SELECT MAX("sortNumber") FROM "arkSurveyReachSegments" WHERE "arkSurveyId" = ${arkSurveyId};`;
+		}>`SELECT MAX("sortNumber") FROM "arkSurveyReachSegments" WHERE "arkSurveyId" = ${arkSurveyId}::uuid;`;
 		return result[0].max ?? 0;
 	}
 

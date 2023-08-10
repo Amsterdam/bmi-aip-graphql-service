@@ -62,7 +62,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		await this.prisma.$executeRaw`
 			UPDATE "spanSupportSystems"
 			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${supportSystem.id}
+			WHERE id = ${supportSystem.id}::uuid
 		`;
 
 		return {
@@ -118,7 +118,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		await this.prisma.$executeRaw`
 			UPDATE "spanSupportSystems"
 			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${supportSystem.id}
+			WHERE id = ${supportSystem.id}::uuid
 		`;
 
 		return {
@@ -183,7 +183,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanSupportSystems"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -238,7 +238,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanSupportSystems"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -313,7 +313,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanLuminaires"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${newLuminaireId}
+						WHERE id = ${newLuminaireId}::uuid
 					`;
 				}
 			});
@@ -349,7 +349,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanSupportSystems"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${newSupportSystemtId}
+						WHERE id = ${newSupportSystemtId}::uuid
 					`;
 				}
 			});

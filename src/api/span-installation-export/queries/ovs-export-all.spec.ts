@@ -3,8 +3,8 @@ import ExcelJS from 'exceljs';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
 
-import { ExportBatchDataHandler } from './export-batch-data.handler';
-import { ExportBatchDataQuery } from './export-batch-data.query';
+import { OVSExportAllHandler } from './ovs-export-all.handler';
+import { OVSExportAllQuery } from './ovs-export-all.query';
 
 const workbook = new ExcelJS.Workbook();
 const worksheet = workbook.addWorksheet('Mock');
@@ -14,14 +14,14 @@ const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
 	// @ts-ignore
 	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	getDummyData: jest.fn().mockReturnValue([]),
-	exportByBatch: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
+	exportAll: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	...(<any>{}),
 };
 
-describe('ExportBatchDataHandler', () => {
+describe('OVSExportAllHandler', () => {
 	const fixedDate = new Date('2023-07-19T12:34:56.789Z');
 	const realDate = Date;
-	let handler: ExportBatchDataHandler;
+	let handler: OVSExportAllHandler;
 
 	beforeAll(() => {
 		global.Date = class extends Date {
@@ -38,16 +38,16 @@ describe('ExportBatchDataHandler', () => {
 
 	beforeEach(() => {
 		exporterServiceMock.createXLSX.mockClear();
-		handler = new ExportBatchDataHandler(exporterServiceMock);
+		handler = new OVSExportAllHandler(exporterServiceMock);
 	});
 
 	it('should return the XLSX buffer', async () => {
-		const result = await handler.execute(new ExportBatchDataQuery('__id__'));
+		const result = await handler.execute(new OVSExportAllQuery());
 		expect(Buffer.isBuffer(result.xlsxBuffer)).toBe(true);
 	});
 
 	it('should return the fileName', async () => {
-		const result = await handler.execute(new ExportBatchDataQuery('__id__'));
-		expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
+		const result = await handler.execute(new OVSExportAllQuery());
+		expect(result.fileName).toBe('OVS-batch-export-2023-07-19T12:34:56.789Z');
 	});
 });

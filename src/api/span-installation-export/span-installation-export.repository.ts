@@ -10,7 +10,45 @@ import { OVSExportSpanInstallationBaseData } from './types/span-installation';
 export class SpanInstallationExportRepository implements ISpanInstallationExportRepository {
 	public constructor(private readonly prisma: PrismaService) {}
 
-	public async findSpanInstallations(batchId: string): Promise<OVSExportSpanInstallationBaseData[]> {
+	public async findByObject(objectId: string): Promise<OVSExportSpanInstallationBaseData[]> {
+		const surveys = await this.prisma.surveys.findMany({
+			where: {
+				objectId: objectId,
+			},
+			select: {
+				id: true,
+				objectId: true,
+			},
+		});
+
+		const spanInstallations = await this.prisma.objects.findMany({
+			where: {
+				id: {
+					in: surveys.map((survey) => survey.objectId),
+				},
+			},
+			select: {
+				id: true,
+				name: true,
+				code: true,
+				location: true,
+				latitude: true,
+				longitude: true,
+				attributes: true,
+			},
+		});
+
+		const output = spanInstallations.map((spanInstallation) => {
+			return {
+				...spanInstallation,
+				attributes: spanInstallation.attributes as unknown as IPassport,
+			};
+		});
+
+		return output;
+	}
+
+	public async findByBatch(batchId: string): Promise<OVSExportSpanInstallationBaseData[]> {
 		const surveys = await this.prisma.surveys.findMany({
 			where: {
 				batchId: batchId,

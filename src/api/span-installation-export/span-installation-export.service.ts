@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 import { BatchRepository } from 'src/schema/batch/batch.repository';
-import { Cell, Row } from 'exceljs';
 
 import { SpanInstallationExportRepository } from './span-installation-export.repository';
-import { OVSExportColumn, OVSExportSpanInstallationWithBatchDetails } from './types/span-installation';
+import { OVSExportSpanInstallationWithBatchDetails } from './types/span-installation';
 
 @Injectable()
 export class SpanInstallationExportService {
@@ -13,29 +12,44 @@ export class SpanInstallationExportService {
 		private readonly batchRepository: BatchRepository,
 	) {}
 
-	private headerStyle = {
-		bgColor: 'e93323',
-		textColor: 'ffffff',
-	};
+	// private headerStyle = {
+	// 	bgColor: 'e93323',
+	// 	textColor: 'ffffff',
+	// };
 
-	// async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
-	// 	const batchDetails = await this.batchRepository.getBatchDetails(batchId);
-	// 	const spanInstallations = await this.spanRepository.findSpanInstallations(batchId);
-	//
-	// 	return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
-	// 		return {
-	// 			...spanInstallation,
-	// 			batch: batchDetails,
-	// 		};
-	// 	});
-	// }
+	async getObjectById(objectId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+		//TODO only get objects in batch of type spanInstallation
+		const spanInstallations = await this.spanRepository.findByObject(objectId);
+
+		return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
+			return {
+				...spanInstallation,
+			};
+		});
+	}
+
+	async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+		//TODO only get objects in batch of type spanInstallation
+
+		const batchDetails = await this.batchRepository.getBatchDetails(batchId);
+		const spanInstallations = await this.spanRepository.findByBatch(batchId);
+
+		return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
+			return {
+				...spanInstallation,
+				batch: batchDetails,
+			};
+		});
+	}
 
 	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+		//TODO only get objects in batch of type spanInstallation
+
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
 		const result = [];
 
 		for (const batch of batchDetails) {
-			let spanInstallations = await this.spanRepository.findSpanInstallations(batch.id);
+			let spanInstallations = await this.spanRepository.findByBatch(batch.id);
 
 			spanInstallations = spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
 				return {
@@ -76,63 +90,63 @@ export class SpanInstallationExportService {
 	// 	return worksheet;
 	// }
 
-	async addOVSSheet(worksheet: ExcelJS.Worksheet) {
-		const data: OVSExportSpanInstallationWithBatchDetails[] = await this.getObjectsInAllBatches();
+	// async addOVSSheet(worksheet: ExcelJS.Worksheet) {
+	// 	const data: OVSExportSpanInstallationWithBatchDetails[] = await this.getObjectsInAllBatches();
 
-		const passportColumns: OVSExportColumn[] = await this.getPassportColumns();
-		const columns: OVSExportColumn[] = [...passportColumns];
-		const headers = columns.map((column) => column.header);
-		// Render column headers
-		const headerRow = worksheet.addRow(headers);
-		headerRow.height = 40;
-		// Apply specific column styles
-		const startingCol = 1;
-		columns.forEach((column, columnIdx) => {
-			const col = worksheet.getColumn(startingCol + columnIdx);
-			col.width = column.width || 12;
-		});
+	// 	const passportColumns: OVSExportColumn[] = await this.getPassportColumns();
+	// 	const columns: OVSExportColumn[] = [...passportColumns];
+	// 	const headers = columns.map((column) => column.header);
+	// 	// Render column headers
+	// 	const headerRow = worksheet.addRow(headers);
+	// 	headerRow.height = 40;
+	// 	// Apply specific column styles
+	// 	const startingCol = 1;
+	// 	columns.forEach((column, columnIdx) => {
+	// 		const col = worksheet.getColumn(startingCol + columnIdx);
+	// 		col.width = column.width || 12;
+	// 	});
 
-		data.forEach((row) => {
-			const rowData = {};
-			const newRow = worksheet.addRow([]);
-			this.renderColumns(columns, rowData, newRow, startingCol); // Apply cell styles
-		});
-	}
+	// 	data.forEach((row) => {
+	// 		const rowData = {};
+	// 		const newRow = worksheet.addRow([]);
+	// 		this.renderColumns(columns, rowData, newRow, startingCol); // Apply cell styles
+	// 	});
+	// }
 
-	private renderColumns(
-		columns: OVSExportSpanInstallationWithBatchDetails[],
-		data: any,
-		row: Row,
-		startingCol: number,
-	): void {
-		columns.forEach((column: OVSExportColumn, columnIdx: number) => {
-			const cell: Cell = row.getCell(startingCol + columnIdx);
-			column.renderCell(cell, data[column.key], row.number, cell.col);
+	// private renderColumns(
+	// 	columns: OVSExportSpanInstallationWithBatchDetails[],
+	// 	data: any,
+	// 	row: Row,
+	// 	startingCol: number,
+	// ): void {
+	// 	columns.forEach((column: OVSExportColumn, columnIdx: number) => {
+	// 		const cell: Cell = row.getCell(startingCol + columnIdx);
+	// 		column.renderCell(cell, data[column.key], row.number, cell.col);
 
-			// Set the column width if specified
-			if (column.width) {
-				const col = row.worksheet.getColumn(startingCol + columnIdx);
-				col.width = column.width;
-			}
-		});
-	}
+	// 		// Set the column width if specified
+	// 		if (column.width) {
+	// 			const col = row.worksheet.getColumn(startingCol + columnIdx);
+	// 			col.width = column.width;
+	// 		}
+	// 	});
+	// }
 
-	private getPassportColumns(): Promise<OVSExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: OVSExportColumn[] = [
-				{
-					key: 'id',
-					header: 'Id',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: ExcelJS.Cell, value): void => {
-						cell.value = value;
-					},
-					width: 36,
-				},
-			];
-			resolve(columns);
-		});
-	}
+	// private getPassportColumns(): Promise<OVSExportColumn[]> {
+	// 	return new Promise((resolve) => {
+	// 		const columns: OVSExportColumn[] = [
+	// 			{
+	// 				key: 'id',
+	// 				header: 'Id',
+	// 				headerStyle: { ...this.headerStyle, italic: true },
+	// 				renderCell: (cell: ExcelJS.Cell, value): void => {
+	// 					cell.value = value;
+	// 				},
+	// 				width: 36,
+	// 			},
+	// 		];
+	// 		resolve(columns);
+	// 	});
+	// }
 
 	async exportByBatch(batchId: string): Promise<ExcelJS.Buffer> {
 		return this.createXLSX(await this.getObjectsInBatch(batchId));

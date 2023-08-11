@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
+import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
-import { ExportBatchDataQuery } from './queries/export-batch-data.query';
+import { OVSExportByBatchQuery } from './queries/ovs-export-by-batch.query';
 
 describe('SpanInstallationExporterController', () => {
 	let controller: SpanInstallationExportController;
@@ -26,7 +27,8 @@ describe('SpanInstallationExporterController', () => {
 		}).compile();
 
 		queryBus = module.get<QueryBus>(QueryBus);
-		controller = new SpanInstallationExportController(queryBus);
+		const logger = new Logger();
+		controller = new SpanInstallationExportController(queryBus, logger);
 		res = responseMock as unknown as Response;
 	});
 
@@ -35,9 +37,11 @@ describe('SpanInstallationExporterController', () => {
 	});
 
 	describe('exportToXLSX()', () => {
-		test('queryBus is called with the correct ExportBatchDataQuery', async () => {
+		test('queryBus is called with the correct OVSExportByBatchQuery', async () => {
 			await controller.exportToXLSX(res);
-			expect(queryBus.execute).toHaveBeenCalledWith(new ExportBatchDataQuery());
+			const batchId = '123';
+			const response: Response = {} as Response;
+			expect(queryBus.execute).toHaveBeenCalledWith(new OVSExportByBatchQuery(response, batchId));
 		});
 		test('correct headers are being set', async () => {
 			await controller.exportToXLSX(res);

@@ -11,7 +11,6 @@ import { SpanInstallationExportRepository } from './span-installation-export.rep
 import { OVSExportByBatchHandler } from './queries/ovs-export-by-batch.handler';
 import { OVSExportAllHandler } from './queries/ovs-export-all.handler';
 import { AddOVSSheetService } from './add-ovs-sheet.service';
-import { OVSDataService } from './ovs-data.service';
 
 @Module({
 	imports: [CqrsModule, AssetModule],
@@ -23,7 +22,6 @@ import { OVSDataService } from './ovs-data.service';
 		BatchRepository,
 		OVSExportByBatchHandler,
 		OVSExportAllHandler,
-		OVSDataService,
 		AddOVSSheetService,
 		Logger,
 	],

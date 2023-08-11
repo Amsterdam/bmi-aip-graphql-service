@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
+import { BatchRepository } from '../../schema/batch/batch.repository';
+
 import { OVSExportColumn, OVSExportSpanInstallationBaseData } from './types/span-installation';
 
 @Injectable()
 export class AddOVSSheetService {
+	constructor(private readonly batchRepository: BatchRepository) {}
+
 	public async addOVSSheet(
 		worksheet: ExcelJS.Worksheet,
 		ovsAsset: OVSExportSpanInstallationBaseData,
 		generateHeaders: boolean,
 	) {
 		const baseDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBaseDataColumns(ovsAsset);
+		const batchDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBatchDataColumns(ovsAsset);
+		const passportDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationPassportDataColumns(
+			ovsAsset,
+		);
 		// actually redundant, but for the sake of clarity
 
-		const columns: OVSExportColumn[] = [...baseDataColumns];
+		const columns: OVSExportColumn[] = [...baseDataColumns, ...batchDataColumns, ...passportDataColumns];
 		const headers = columns.map((column) => column.header);
 
 		if (generateHeaders) {
@@ -79,25 +87,7 @@ export class AddOVSSheetService {
 		return new Promise((resolve) => {
 			const columns: OVSExportColumn[] = [
 				{
-					header: 'ID',
-					key: 'id',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = asset.id;
-					},
-					width: 16,
-				},
-				{
-					header: 'Name',
-					key: 'name',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = asset.name;
-					},
-					width: 16,
-				},
-				{
-					header: 'Code',
+					header: 'OVS nummer',
 					key: 'code',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: ExcelJS.Cell): void => {
@@ -105,39 +95,115 @@ export class AddOVSSheetService {
 					},
 					width: 16,
 				},
+			];
+			resolve(columns);
+		});
+	}
+
+	private async getOVSExportSpanInstallationBatchDataColumns(
+		ovsAsset: OVSExportSpanInstallationBaseData,
+	): Promise<OVSExportColumn[]> {
+		const batches = await this.batchRepository.findBatchesForAssetThroughSurveys(ovsAsset.id);
+
+		return new Promise((resolve) => {
+			const columns: OVSExportColumn[] = [
 				{
-					header: 'Location',
-					key: 'location',
+					header: 'Batch nummer(s)',
+					key: 'batchNumbers',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = asset.location;
+						cell.value = batches.map((batch) => batch.name).join(', ');
 					},
 					width: 16,
 				},
 				{
-					header: 'Latitude',
-					key: 'latitude',
+					header: 'Batch status',
+					key: 'batchStatus',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = '' + asset.latitude;
+						cell.value = batches[0].status; // TODO what if you have multiple batches?
+					},
+					width: 16,
+				},
+			];
+			resolve(columns);
+		});
+	}
+
+	private async getOVSExportSpanInstallationPassportDataColumns(
+		ovsAsset: OVSExportSpanInstallationBaseData,
+	): Promise<OVSExportColumn[]> {
+		return new Promise((resolve) => {
+			const columns: OVSExportColumn[] = [
+				{
+					header: 'Straat',
+					key: 'passportStreet',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.passportStreet;
 					},
 					width: 16,
 				},
 				{
-					header: 'Longitude',
-					key: 'longitude',
+					header: 'Buurt',
+					key: 'passportNeighborhood',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = '' + asset.longitude;
+						cell.value = ovsAsset.attributes.passportNeighborhood;
 					},
 					width: 16,
 				},
 				{
-					header: 'attributes',
-					key: 'attributes',
+					header: 'Wijk',
+					key: 'passportDistrict',
 					headerStyle: { ...this.headerStyle, italic: true },
 					renderCell: (cell: ExcelJS.Cell): void => {
-						cell.value = '';
+						cell.value = ovsAsset.attributes.passportDistrict;
+					},
+					width: 16,
+				},
+				{
+					header: 'Stadsdeel',
+					key: 'passportCityArea',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.passportCityArea;
+					},
+					width: 16,
+				},
+				{
+					header: 'Splitsingen',
+					key: 'passportSplits',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.passportSplits;
+					},
+					width: 16,
+				},
+				{
+					header: 'Dubbeldraads',
+					key: 'passportDoubleWired',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.passportDoubleWired;
+					},
+					width: 16,
+				},
+				{
+					header: 'Boven trambaan',
+					key: 'tramTracks',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.tramTracks;
+					},
+					width: 16,
+				},
+				{
+					header: 'Opmerkingen',
+					key: 'notes',
+					headerStyle: { ...this.headerStyle, italic: true },
+					renderCell: (cell: ExcelJS.Cell): void => {
+						cell.value = ovsAsset.attributes.notes;
 					},
 					width: 16,
 				},

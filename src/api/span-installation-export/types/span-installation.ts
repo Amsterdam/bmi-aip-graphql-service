@@ -3,7 +3,7 @@ import { IPassport } from 'src/schema/asset/models/passport.model';
 import { Cell } from 'exceljs';
 import { UnionKeys } from 'src/utils/utils';
 
-export interface OVSRecord {
+export type OVSBaseData = {
 	id: string;
 	name: string;
 	code: string;
@@ -11,9 +11,28 @@ export interface OVSRecord {
 	latitude: Prisma.Decimal;
 	longitude: Prisma.Decimal;
 	attributes: IPassport;
-}
+};
+
+export type OVSBatchData = {
+	batchNumbers: string;
+	batchStatus: string;
+};
+
+export type OVSPassportData = IPassport;
+
+export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData {}
 
 export type OVSExportSpanInstallationBaseData = {
+	id: string;
+	name: string;
+	code: string;
+	location: string;
+	latitude: Prisma.Decimal;
+	longitude: Prisma.Decimal;
+	attributes: IPassport;
+};
+
+export type OVSExportSpanInstallationPasportData = {
 	id: string;
 	name: string;
 	code: string;

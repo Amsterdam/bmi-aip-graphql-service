@@ -174,30 +174,4 @@ export class AddOVSSheetService {
 			};
 		}
 	}
-
-	// 	cell.alignment = {
-	// 		horizontal: 'center',
-	// 		vertical: 'middle',
-	// 		wrapText: true,
-	// 	};
-	// }
-
-	// private getPriorityColor(priority) {
-	// 	switch (priority) {
-	// 		case '1':
-	// 			return '267b45';
-	// 		case '2':
-	// 			return '5ec54b';
-	// 		case '3':
-	// 			return 'f4b027';
-	// 		case '4':
-	// 			return 'fd9408';
-	// 		case '5':
-	// 			return 'fd7808';
-	// 		case '6':
-	// 			return 'd73f2d';
-	// 		default:
-	// 			return 'FFFFFF';
-	// 	}
-	// }
 }

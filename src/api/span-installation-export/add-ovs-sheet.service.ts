@@ -81,7 +81,7 @@ export class AddOVSSheetService {
 		return worksheet;
 	}
 
-	private async getOVSExportSpanInstallationBaseDataColumns(
+	public async getOVSExportSpanInstallationBaseDataColumns(
 		asset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
 		return new Promise((resolve) => {
@@ -100,7 +100,7 @@ export class AddOVSSheetService {
 		});
 	}
 
-	private async getOVSExportSpanInstallationBatchDataColumns(
+	public async getOVSExportSpanInstallationBatchDataColumns(
 		ovsAsset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
 		const batches = await this.batchRepository.findBatchesForAssetThroughSurveys(ovsAsset.id);
@@ -130,7 +130,7 @@ export class AddOVSSheetService {
 		});
 	}
 
-	private async getOVSExportSpanInstallationPassportDataColumns(
+	public async getOVSExportSpanInstallationPassportDataColumns(
 		ovsAsset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
 		return new Promise((resolve) => {

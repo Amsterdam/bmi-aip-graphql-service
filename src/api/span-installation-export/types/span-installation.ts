@@ -7,10 +7,6 @@ export type OVSBaseData = {
 	id: string;
 	name: string;
 	code: string;
-	location: string;
-	latitude: Prisma.Decimal;
-	longitude: Prisma.Decimal;
-	attributes: IPassport;
 };
 
 export type OVSBatchData = {
@@ -26,9 +22,6 @@ export type OVSExportSpanInstallationBaseData = {
 	id: string;
 	name: string;
 	code: string;
-	location: string;
-	latitude: Prisma.Decimal;
-	longitude: Prisma.Decimal;
 	attributes: IPassport;
 };
 

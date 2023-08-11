@@ -43,7 +43,7 @@ export class AddOVSSheetService {
 
 	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {
 		// Add upper most heading (Contracts)
-		worksheet.mergeCells('A1', 'N1');
+		worksheet.mergeCells('A1', 'P1');
 		worksheet.getCell('A1').value = 'Contract - 1';
 		worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
 		worksheet.getCell('A1').fill = {
@@ -53,7 +53,7 @@ export class AddOVSSheetService {
 		};
 
 		// Add second rows of heading (Categories)
-		worksheet.mergeCells('A2', 'N3');
+		worksheet.mergeCells('A2', 'P3');
 		worksheet.getCell('A2').value = 'Paspoort';
 		worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
 		worksheet.getCell('A2').font = {

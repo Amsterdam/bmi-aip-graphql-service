@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Cell, Row, Worksheet } from 'exceljs';
+import * as ExcelJS from 'exceljs';
 
 import { OVSExportColumn, OVSExportSpanInstallationBaseData } from './types/span-installation';
-import { OVSDataService } from './ovs-data.service';
 
 @Injectable()
 export class AddOVSSheetService {
-	public constructor(private readonly getOvsDataService: OVSDataService) {}
-
 	public async addOVSSheet(
-		worksheet: Worksheet,
+		worksheet: ExcelJS.Worksheet,
 		ovsAsset: OVSExportSpanInstallationBaseData,
 		generateHeaders: boolean,
 	) {
@@ -17,15 +14,18 @@ export class AddOVSSheetService {
 		// actually redundant, but for the sake of clarity
 
 		const columns: OVSExportColumn[] = [...baseDataColumns];
-
 		const headers = columns.map((column) => column.header);
 
 		if (generateHeaders) {
+			// Render upper most headers
+			this.setDocumentHeaderStyling(worksheet);
+
 			// Render column headers
 			const headerRow = worksheet.addRow(headers);
 			headerRow.height = 40;
 			this.renderHeaderRow(headerRow, columns); // Apply header styles
 		}
+
 		// Apply specific column styles
 		const startingCol = 1;
 		columns.forEach((column, columnIdx) => {
@@ -41,6 +41,38 @@ export class AddOVSSheetService {
 		this.renderColumns(columns, rowData, newRow, startingCol); // Apply cell styles
 	}
 
+	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {
+		// Add upper most heading (Contracts)
+		worksheet.mergeCells('A1', 'N1');
+		worksheet.getCell('A1').value = 'Contract - 1';
+		worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell('A1').fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: 'FF416289' },
+		};
+
+		// Add second rows of heading (Categories)
+		worksheet.mergeCells('A2', 'N3');
+		worksheet.getCell('A2').value = 'Paspoort';
+		worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell('A2').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('A2').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('A2').fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: 'FFCEDFF0' },
+		};
+
+		return worksheet;
+	}
+
 	private async getOVSExportSpanInstallationBaseDataColumns(
 		asset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
@@ -50,7 +82,7 @@ export class AddOVSSheetService {
 					header: 'ID',
 					key: 'id',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = asset.id;
 					},
 					width: 16,
@@ -59,7 +91,7 @@ export class AddOVSSheetService {
 					header: 'Name',
 					key: 'name',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = asset.name;
 					},
 					width: 16,
@@ -68,7 +100,7 @@ export class AddOVSSheetService {
 					header: 'Code',
 					key: 'code',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = asset.code;
 					},
 					width: 16,
@@ -77,7 +109,7 @@ export class AddOVSSheetService {
 					header: 'Location',
 					key: 'location',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = asset.location;
 					},
 					width: 16,
@@ -86,7 +118,7 @@ export class AddOVSSheetService {
 					header: 'Latitude',
 					key: 'latitude',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = '' + asset.latitude;
 					},
 					width: 16,
@@ -95,7 +127,7 @@ export class AddOVSSheetService {
 					header: 'Longitude',
 					key: 'longitude',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = '' + asset.longitude;
 					},
 					width: 16,
@@ -104,7 +136,7 @@ export class AddOVSSheetService {
 					header: 'attributes',
 					key: 'attributes',
 					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
+					renderCell: (cell: ExcelJS.Cell): void => {
 						cell.value = '';
 					},
 					width: 16,
@@ -114,9 +146,9 @@ export class AddOVSSheetService {
 		});
 	}
 
-	private renderColumns(columns: OVSExportColumn[], data: any, row: Row, startingCol: number): void {
+	private renderColumns(columns: OVSExportColumn[], data: any, row: ExcelJS.Row, startingCol: number): void {
 		columns.forEach((column: OVSExportColumn, columnIdx: number) => {
-			const cell: Cell = row.getCell(startingCol + columnIdx);
+			const cell: ExcelJS.Cell = row.getCell(startingCol + columnIdx);
 			column.renderCell(cell, data[column.key], row.number, cell.col);
 
 			// Set the column width if specified
@@ -128,18 +160,18 @@ export class AddOVSSheetService {
 	}
 
 	private headerStyle = {
-		bgColor: 'e93323',
-		textColor: 'ffffff',
+		bgColor: 'dfdfdf',
+		textColor: '000000',
 	};
 
-	private renderHeaderRow(row: Row, columns: OVSExportColumn[]): void {
+	private renderHeaderRow(row: ExcelJS.Row, columns: OVSExportColumn[]): void {
 		row.eachCell((cell, colNumber) => {
 			const column = columns[colNumber - 1];
 			this.renderHeader(cell, column);
 		});
 	}
 
-	private renderHeader(cell: Cell, column: OVSExportColumn) {
+	private renderHeader(cell: ExcelJS.Cell, column: OVSExportColumn) {
 		cell.value = column?.header;
 
 		if (column?.headerStyle) {

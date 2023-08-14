@@ -1,17 +1,18 @@
+import { IPassport } from '../../../schema/asset/models/passport.model';
 import { OVSRecord } from '../types/span-installation';
 
-const assetBaseData = {
+const assetBaseData: OVSBaseData = {
 	id: '1',
 	name: 'test',
 	code: 'test',
 };
 
-const assetBatchData = {
+const assetBatchData: OVSBatchData = {
 	batchNumbers: 'test',
 	batchStatus: 'test',
 };
 
-const passportData = {
+const passportData: IPassport = {
 	passportIdentification: 'test',
 	passportCityArea: 'test',
 	passportDistrict: 'test',

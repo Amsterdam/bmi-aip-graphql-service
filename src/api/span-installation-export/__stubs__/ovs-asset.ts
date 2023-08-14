@@ -1,17 +1,18 @@
-import { OVSExportSpanInstallationBaseData } from '../types/span-installation';
+import { IPassport } from '../../../schema/asset/models/passport.model';
+import { OVSBaseData, OVSBatchData, OVSExportSpanInstallationBaseData } from '../types/span-installation';
 
-const ovsAssetBaseDataStub = {
+const ovsAssetBaseDataStub: OVSBaseData = {
 	id: 'object1',
 	name: 'Installation 1',
 	code: 'CODE1',
 };
 
-const ovsAssetBatchDataStub = {
-	batchNumber: 'batch1',
+const ovsAssetBatchDataStub: OVSBatchData = {
+	batchNumbers: 'batch1, batch2',
 	batchStatus: 'active',
 };
 
-const ovsAssetPassportStub = {
+const ovsAssetPassportStub: IPassport = {
 	passportIdentification: 'test',
 	passportCityArea: 'test',
 	passportDistrict: 'test',

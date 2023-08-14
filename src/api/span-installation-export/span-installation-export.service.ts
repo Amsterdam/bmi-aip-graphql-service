@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BatchRepository } from 'src/schema/batch/batch.repository';
 
 import { SpanInstallationExportRepository } from './span-installation-export.repository';
-import { OVSExportSpanInstallationWithBatchDetails } from './types/span-installation';
+import { OVSExportSpanInstallationBaseData } from './types/span-installation';
 
 @Injectable()
 export class SpanInstallationExportService {
@@ -11,50 +11,24 @@ export class SpanInstallationExportService {
 		private readonly batchRepository: BatchRepository,
 	) {}
 
-	async getObjectById(objectId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+	async getObjectById(objectId: string): Promise<OVSExportSpanInstallationBaseData[]> {
 		// TODO only get objects in batch of type spanInstallation
-		// TODO fetching batch details is done in ovs-sheet-service so can be removed here
 
-		const spanInstallations = await this.spanRepository.findByObject(objectId);
-
-		return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
-			return {
-				...spanInstallation,
-			};
-		});
+		return this.spanRepository.findByObject(objectId);
 	}
 
-	async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
-		// TODO only get objects in batch of type spanInstallation
-		// TODO fetching batch details is done in ovs-sheet-service so can be removed here
-
-		const batchDetails = await this.batchRepository.getBatchDetails(batchId);
-		const spanInstallations = await this.spanRepository.findByBatch(batchId);
-
-		return spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
-			return {
-				...spanInstallation,
-				batch: batchDetails,
-			};
-		});
+	async getObjectsInBatch(batchId: string): Promise<OVSExportSpanInstallationBaseData[]> {
+		return this.spanRepository.findByBatch(batchId);
 	}
 
-	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationWithBatchDetails[]> {
+	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationBaseData[]> {
 		// TODO only get objects in batch of type spanInstallation
-		// TODO fetching batch details is done in ovs-sheet-service so can be removed here
 
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
 		const result = [];
 
 		for (const batch of batchDetails) {
-			let spanInstallations = await this.spanRepository.findByBatch(batch.id);
-
-			spanInstallations = spanInstallations.map((spanInstallation: OVSExportSpanInstallationWithBatchDetails) => {
-				return {
-					...spanInstallation,
-					batch: batch,
-				};
-			});
+			const spanInstallations = await this.spanRepository.findByBatch(batch.id);
 
 			result.push(...spanInstallations);
 		}

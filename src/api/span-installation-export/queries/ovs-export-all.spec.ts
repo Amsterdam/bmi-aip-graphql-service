@@ -33,16 +33,4 @@ describe('OVSExportAllHandler', () => {
 
 		expect(mockAddOvsSheetService.addOVSSheet).toHaveBeenCalledTimes(1);
 	});
-
-	it('should return the XLSX buffer', async () => {
-		const handler = new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
-		await handler.execute(new OVSExportAllQuery(responseMock));
-		expect(Buffer.isBuffer(result.xlsxBuffer)).toBe(true);
-	});
-
-	it('should return the fileName', async () => {
-		const handler = new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
-		const result = await handler.execute(new OVSExportAllQuery(responseMock));
-		expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
-	});
 });

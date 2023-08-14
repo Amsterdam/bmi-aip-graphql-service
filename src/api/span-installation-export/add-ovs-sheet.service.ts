@@ -19,7 +19,6 @@ export class AddOVSSheetService {
 		const passportDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationPassportDataColumns(
 			ovsAsset,
 		);
-		// actually redundant, but for the sake of clarity
 
 		const columns: OVSExportColumn[] = [...baseDataColumns, ...batchDataColumns, ...passportDataColumns];
 		const headers = columns.map((column) => column.header);
@@ -31,7 +30,9 @@ export class AddOVSSheetService {
 			// Render column headers
 			const headerRow = worksheet.addRow(headers);
 			headerRow.height = 40;
-			this.renderHeaderRow(headerRow, columns); // Apply header styles
+
+			// Apply header styles
+			this.renderHeaderRow(headerRow, columns);
 		}
 
 		// Apply specific column styles

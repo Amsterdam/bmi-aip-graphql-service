@@ -20,7 +20,7 @@ export class BatchRepository implements IBatchRepository {
 	}
 
 	async findBatchesForAssetThroughSurveys(objectId: string): Promise<DBBatch[]> {
-		const batches = await this.prisma.batches.findMany({
+		return this.prisma.batches.findMany({
 			where: {
 				surveys: {
 					some: {
@@ -29,8 +29,6 @@ export class BatchRepository implements IBatchRepository {
 				},
 			},
 		});
-
-		return batches;
 	}
 
 	async getAllOVSBatches(): Promise<DBBatch[]> {

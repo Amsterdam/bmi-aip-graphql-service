@@ -1,52 +1,48 @@
 import { MockedObjectDeep } from 'ts-jest';
-import ExcelJS from 'exceljs';
+import { Logger } from '@nestjs/common';
 
+import { responseMock } from '../__mocks__/response';
 import { SpanInstallationExportService } from '../span-installation-export.service';
+import { AddOVSSheetService } from '../add-ovs-sheet.service';
+import { ovsAssetStub } from '../__stubs__/ovs-asset';
 
-import { OVSExportAllHandler } from './ovs-export-all.handler';
 import { OVSExportAllQuery } from './ovs-export-all.query';
+import { OVSExportAllHandler } from './ovs-export-all.handler';
 
-const workbook = new ExcelJS.Workbook();
-const worksheet = workbook.addWorksheet('Mock');
-worksheet.addRow([]);
-
-const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
-	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
-	getDummyData: jest.fn().mockReturnValue([]),
-	exportAll: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
+const mockExporterService: MockedObjectDeep<SpanInstallationExportService> = {
+	getObjectsInAllBatches: jest.fn().mockResolvedValue([ovsAssetStub]),
 	...(<any>{}),
 };
 
+const mockAddOvsSheetService: MockedObjectDeep<AddOVSSheetService> = {
+	addOVSSheet: jest.fn().mockResolvedValue({}),
+	...(<any>{}),
+};
+
+const mockLogger: MockedObjectDeep<Logger> = {
+	...(<any>{
+		log: jest.fn(),
+		error: jest.fn(),
+	}),
+};
+
 describe('OVSExportAllHandler', () => {
-	const fixedDate = new Date('2023-07-19T12:34:56.789Z');
-	const realDate = Date;
-	let handler: OVSExportAllHandler;
+	test('executes query', async () => {
+		const query = new OVSExportAllQuery(responseMock);
+		await new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
-	beforeAll(() => {
-		global.Date = class extends Date {
-			constructor() {
-				super();
-				return fixedDate;
-			}
-		} as DateConstructor;
-	});
-
-	afterAll(() => {
-		global.Date = realDate;
-	});
-
-	beforeEach(() => {
-		exporterServiceMock.createXLSX.mockClear();
-		handler = new OVSExportAllHandler(exporterServiceMock);
+		expect(mockAddOvsSheetService.addOVSSheet).toHaveBeenCalledTimes(1);
 	});
 
 	it('should return the XLSX buffer', async () => {
-		const result = await handler.execute(new OVSExportAllQuery());
+		const handler = new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
+		await handler.execute(new OVSExportAllQuery(responseMock));
 		expect(Buffer.isBuffer(result.xlsxBuffer)).toBe(true);
 	});
 
 	it('should return the fileName', async () => {
-		const result = await handler.execute(new OVSExportAllQuery());
-		expect(result.fileName).toBe('OVS-batch-export-2023-07-19T12:34:56.789Z');
+		const handler = new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
+		const result = await handler.execute(new OVSExportAllQuery(responseMock));
+		expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
 	});
 });

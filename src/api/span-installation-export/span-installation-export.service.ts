@@ -12,8 +12,6 @@ export class SpanInstallationExportService {
 	) {}
 
 	async getObjectById(objectId: string): Promise<OVSExportSpanInstallationBaseData[]> {
-		// TODO only get objects in batch of type spanInstallation
-
 		return this.spanRepository.findByObject(objectId);
 	}
 
@@ -22,8 +20,6 @@ export class SpanInstallationExportService {
 	}
 
 	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationBaseData[]> {
-		// TODO only get objects in batch of type spanInstallation
-
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
 		const result = [];
 

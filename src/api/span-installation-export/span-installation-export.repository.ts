@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma.service';
 import { IPassport } from '../../schema/asset/models/passport.model';
+import { InspectionStandard } from '../../schema/survey/types';
 
 import { ISpanInstallationExportRepository } from './types/span-installation-export.repository.interface';
 import { OVSExportSpanInstallationBaseData } from './types/span-installation';
@@ -50,6 +51,7 @@ export class SpanInstallationExportRepository implements ISpanInstallationExport
 		const surveys = await this.prisma.surveys.findMany({
 			where: {
 				batchId: batchId,
+				inspectionStandardType: InspectionStandard.spanInstallation,
 			},
 			select: {
 				id: true,

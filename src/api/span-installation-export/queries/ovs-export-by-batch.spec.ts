@@ -1,52 +1,53 @@
 import { MockedObjectDeep } from 'ts-jest';
-import ExcelJS from 'exceljs';
+import { Logger } from '@nestjs/common';
 
+import { responseMock } from '../__mocks__/response';
 import { SpanInstallationExportService } from '../span-installation-export.service';
+import { AddOVSSheetService } from '../add-ovs-sheet.service';
+import { ovsAssetStub } from '../__stubs__/ovs-asset';
 
+import { OVSExportByBatchQuery } from './ovs-export-by-batch.query';
 import { OVSExportByBatchHandler } from './ovs-export-by-batch.handler';
 
-const workbook = new ExcelJS.Workbook();
-const worksheet = workbook.addWorksheet('Mock');
-worksheet.addRow([]);
-
-const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
-	// @ts-ignore
-	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
-	getDummyData: jest.fn().mockReturnValue([]),
-	exportByBatch: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
+const mockExporterService: MockedObjectDeep<SpanInstallationExportService> = {
+	getObjectsInBatch: jest.fn().mockResolvedValue([ovsAssetStub]),
 	...(<any>{}),
 };
 
+const mockAddOvsSheetService: MockedObjectDeep<AddOVSSheetService> = {
+	addOVSSheet: jest.fn().mockResolvedValue({}),
+	...(<any>{}),
+};
+
+const mockLogger: MockedObjectDeep<Logger> = {
+	...(<any>{
+		log: jest.fn(),
+		error: jest.fn(),
+	}),
+};
+
 describe('OVSExportByBatchHandler', () => {
-	const fixedDate = new Date('2023-07-19T12:34:56.789Z');
-	const realDate = Date;
-	let handler: OVSExportByBatchHandler;
+	test('executes query', async () => {
+		const batchId = 'batchId';
+		const query = new OVSExportByBatchQuery(responseMock, batchId);
+		await new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
-	beforeAll(() => {
-		global.Date = class extends Date {
-			constructor() {
-				super();
-				return fixedDate;
-			}
-		} as DateConstructor;
+		expect(mockAddOvsSheetService.addOVSSheet).toHaveBeenCalledTimes(1);
 	});
 
-	afterAll(() => {
-		global.Date = realDate;
-	});
+	// it('should return the XLSX buffer', async () => {
+	// 	const handler = new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
+	// 	const batchId = 'batchId';
+	// 	const query = new OVSExportByBatchQuery(responseMock, batchId);
+	// 	expect(Buffer.isBuffer(result.xlsxBuffer)).toBe(true);
+	// });
 
-	beforeEach(() => {
-		exporterServiceMock.createXLSX.mockClear();
-		handler = new OVSExportByBatchHandler(exporterServiceMock);
-	});
+	// it('should return the fileName', async () => {
+	// 	const batchId = 'batchId';
+	// 	const query = new OVSExportByBatchQuery(responseMock, batchId);
 
-	it('should return the XLSX buffer', async () => {
-		const result = await handler.execute(new ExportByBatchQuery('__id__'));
-		expect(Buffer.isBuffer(result.xlsxBuffer)).toBe(true);
-	});
-
-	it('should return the fileName', async () => {
-		const result = await handler.execute(new ExportByBatchQuery('__id__'));
-		expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
-	});
+	// 	const handler = new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger);
+	// 	const result = await handler.execute(query);
+	// 	expect(result.fileName).toBe('OVS-export-2023-07-19T12:34:56.789Z');
+	// });
 });

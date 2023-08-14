@@ -46,8 +46,9 @@ export class AddOVSSheetService {
 			...ovsAsset,
 		};
 
+		// Apply cell styles
 		const newRow = worksheet.addRow([]);
-		this.renderColumns(columns, rowData, newRow, startingCol); // Apply cell styles
+		this.renderColumns(columns, rowData, newRow, startingCol);
 	}
 
 	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {

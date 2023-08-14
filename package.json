@@ -5,7 +5,7 @@
 	"author": "Gemeente Amsterdam",
 	"license": "MPL-2.0",
 	"scripts": {
-		"prestart": "npx @olegjs/on-change --file schema.prisma node_modules/.bin/prisma generate",
+		"prestart": "node_modules/.bin/prisma generate",
 		"prebuild": "rimraf dist",
 		"build": "nest build",
 		"format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

@@ -74,13 +74,11 @@ export class SpanInstallationExportRepository implements ISpanInstallationExport
 			},
 		});
 
-		const output = spanInstallations.map((spanInstallation) => {
+		return spanInstallations.map((spanInstallation) => {
 			return {
 				...spanInstallation,
 				attributes: spanInstallation.attributes as unknown as IPassport,
 			};
 		});
-
-		return output;
 	}
 }

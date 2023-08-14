@@ -11,7 +11,6 @@ const worksheet = workbook.addWorksheet('Mock');
 worksheet.addRow([]);
 
 const exporterServiceMock: MockedObjectDeep<SpanInstallationExportService> = {
-	// @ts-ignore
 	createXLSX: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),
 	getDummyData: jest.fn().mockReturnValue([]),
 	exportAll: jest.fn().mockReturnValue(workbook.xlsx.writeBuffer()),

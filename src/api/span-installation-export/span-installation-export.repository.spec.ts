@@ -25,8 +25,7 @@ describe('SpanInstallationExportRepository', () => {
 	describe('findSpanInstallations', () => {
 		it('should return spanInstallations when given a valid batchId', async () => {
 			const batchId = '__BATCH_ID__';
-
-			const result = await repository.findSpanInstallations(batchId);
+			const result = await repository.findByBatch(batchId);
 
 			expect(result).toEqual(spanInstallationsData);
 			expect(prismaServiceMock.surveys.findMany).toHaveBeenCalledTimes(1);

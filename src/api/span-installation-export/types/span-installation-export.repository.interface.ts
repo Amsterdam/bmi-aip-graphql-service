@@ -9,5 +9,6 @@ const spanInstallations = Prisma.validator<Prisma.objectsArgs>()({
 export type SpanInstallation = Prisma.objectsGetPayload<typeof spanInstallations>;
 
 export interface ISpanInstallationExportRepository {
-	findSpanInstallations(batchId: string): Promise<SpanInstallation[]>;
+	findByBatch(batchId: string): Promise<SpanInstallation[]>;
+	findByObject(objectId: string): Promise<SpanInstallation[]>;
 }

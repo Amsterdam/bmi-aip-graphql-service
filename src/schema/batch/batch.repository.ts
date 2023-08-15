@@ -19,20 +19,30 @@ export class BatchRepository implements IBatchRepository {
 		return batch;
 	}
 
+	async findBatchesForAssetThroughSurveys(objectId: string): Promise<DBBatch[]> {
+		return this.prisma.batches.findMany({
+			where: {
+				surveys: {
+					some: {
+						objectId,
+					},
+				},
+			},
+		});
+	}
+
 	async getAllOVSBatches(): Promise<DBBatch[]> {
 		// Wrote this awkward rawQuery as I could not figure out how to do this with the version of Prisma we use
 		// Feel free to refactor this in the future
 
-		const batches = (await this.prisma.$queryRaw`
+		return this.prisma.$queryRaw`
 			SELECT b.*, inspectionTypesText
 			FROM "batches" b
 			cross join lateral json_array_elements_text ( "inspectionStandardTypes" ) as inspectionTypesText
-	  		WHERE 
-				inspectionTypesText like '%spanInstallation%' 
+			WHERE
+				inspectionTypesText like '%spanInstallation%'
 				AND status = 'active';
-		`) as DBBatch[];
-
-		return batches;
+		`;
 	}
 
 	async getBatchExecutorCompanies(batchId: string): Promise<DBCompany[]> {

@@ -86,7 +86,7 @@ export class AddOVSSheetService {
 	public async getOVSExportSpanInstallationBaseDataColumns(
 		asset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
-		return Promise.resolve([
+		return [
 			{
 				header: 'OVS nummer',
 				key: 'code',
@@ -96,7 +96,7 @@ export class AddOVSSheetService {
 				},
 				width: 16,
 			},
-		]);
+		];
 	}
 
 	public async getOVSExportSpanInstallationBatchDataColumns(
@@ -104,7 +104,7 @@ export class AddOVSSheetService {
 	): Promise<OVSExportColumn[]> {
 		const batches = await this.batchRepository.findBatchesForAssetThroughSurveys(ovsAsset.id);
 
-		return Promise.resolve([
+		return [
 			{
 				header: 'Batch nummer(s)',
 				key: 'batchNumbers',
@@ -123,13 +123,13 @@ export class AddOVSSheetService {
 				},
 				width: 16,
 			},
-		]);
+		];
 	}
 
 	public async getOVSExportSpanInstallationPassportDataColumns(
 		ovsAsset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
-		return Promise.resolve([
+		return [
 			{
 				header: 'Straat',
 				key: 'passportStreet',
@@ -202,7 +202,7 @@ export class AddOVSSheetService {
 				},
 				width: 16,
 			},
-		]);
+		];
 	}
 
 	private renderColumns(columns: OVSExportColumn[], data: any, row: ExcelJS.Row, startingCol: number): void {

@@ -21,7 +21,7 @@ export class SpanInstallationExportService {
 
 	async getObjectsInAllBatches(): Promise<OVSExportSpanInstallationBaseData[]> {
 		const batchDetails = await this.batchRepository.getAllOVSBatches();
-		const result = [];
+		const result: OVSExportSpanInstallationBaseData[] = [];
 
 		for (const batch of batchDetails) {
 			const spanInstallations = await this.spanRepository.findByBatch(batch.id);

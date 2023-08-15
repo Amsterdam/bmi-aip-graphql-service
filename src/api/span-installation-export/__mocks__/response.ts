@@ -3,11 +3,7 @@ import { Response } from 'express';
 export const responseMock = {
 	set: jest.fn(),
 	send: jest.fn(),
-	status: jest.fn(function (statusCode) {
-		// Modify the status method to return an instance of itself
-		this.statusCode = statusCode;
-		return this;
-	}),
+	status: jest.fn().mockReturnThis(),
 	sendStatus: jest.fn(),
 	links: jest.fn(),
 	json: jest.fn(),
@@ -27,4 +23,7 @@ export const responseMock = {
 	sendFile: jest.fn(),
 	type: jest.fn(),
 	vary: jest.fn(),
+	end: jest.fn(),
+	write: jest.fn().mockReturnThis(),
+	setHeader: jest.fn(),
 } as unknown as Response<any, Record<string, any>>;

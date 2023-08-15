@@ -4,7 +4,6 @@ import { MockedObjectDeep } from 'ts-jest';
 import { SpanInstallationExportRepository } from './span-installation-export.repository';
 import { SpanInstallationExportService } from './span-installation-export.service';
 
-
 const spanInstallationsData = [
 	{
 		id: 'span1',
@@ -31,6 +30,7 @@ describe('SpanInstallationExportService', () => {
 
 	beforeEach(() => {
 		service = new SpanInstallationExportService(spanRepositoryMock, batchRepositoryMock);
+		jest.clearAllMocks();
 	});
 
 	it('should be defined', () => {

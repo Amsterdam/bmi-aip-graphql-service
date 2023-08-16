@@ -1,7 +1,7 @@
 import { IMJOPDefect } from './mjop-defect';
 import { CyclicMaintenance } from './mjop-record';
 
-export interface IMJOPCyclicMeasure {
+export type IMJOPCyclicMeasure = {
 	maintenanceDescription: string; // Maatregel
 	maintenanceType: string; // Type onderhoud
 	maintenanceCycle: number; // Cyclus
@@ -12,4 +12,4 @@ export interface IMJOPCyclicMeasure {
 	maintenanceYear: number; // Planjaar
 	defect?: IMJOPDefect;
 	cyclicMaintenance?: CyclicMaintenance;
-}
+};

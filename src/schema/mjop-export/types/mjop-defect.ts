@@ -1,4 +1,4 @@
-export interface IMJOPDefect {
+export type IMJOPDefect = {
 	defectName: string; // Schadebeeld
 	seriousness: number;
 	intensity: number;
@@ -13,4 +13,4 @@ export interface IMJOPDefect {
 	ramsEnv: string; // ramsEnv
 	ramsWeightedPriority: string;
 	ramsTotalPriority: string; // Prioritering
-}
+};

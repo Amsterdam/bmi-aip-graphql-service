@@ -2,8 +2,6 @@ import * as ExcelJS from 'exceljs';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { DBBatch } from '../../schema/batch/types/batch.repository.interface';
-// import { PrismaService } from '../../prisma.service';
-
 import { supportSystem } from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 
@@ -59,18 +57,6 @@ describe('AddOvsSheetService', () => {
 				updated_at: new Date(),
 			} as DBBatch;
 
-			// const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-			// 	batches: {
-			// 		findMany: jest.fn().mockResolvedValue([batchStub]),
-			// 	},
-			// 	supportSystems: {
-			// 		findByObject: jest.fn().mockResolvedValue([supportSystem]),
-			// 	},
-			// 	$executeRaw: jest.fn(),
-			// 	$queryRaw: jest.fn(),
-			// 	...(<any>{}),
-			// };
-
 			const mockSupportSystemService: MockedObjectDeep<SupportSystemService> = {
 				findByObject: jest.fn().mockResolvedValue([supportSystem]),
 				...(<any>{}),
@@ -91,10 +77,6 @@ describe('AddOvsSheetService', () => {
 			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
 			expect(labels).toEqual([...baseFields, ...batchFields, ...passportFields, ...decompositionFacadeFields]);
-		});
-
-		it('should contain a row for each item in the decomposition ', async () => {
-			//
 		});
 	});
 });

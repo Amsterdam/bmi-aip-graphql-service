@@ -26,10 +26,22 @@ export type OVSSupportSystemData = {
 	supportSystemRemarks: string;
 };
 
+export type OVSSupportSystemFacadeData = {
+	facadeTypeDetailed: string;
+	facadeStreet: string;
+	facadeHouseNumber: string;
+	facadeFloor: string;
+	facadeXCoordinate: string;
+	facadeYCoordinate: string;
+	facadeInstallationHeight: string;
+	facadeInstallationLength: string;
+	facadeRemarks: string;
+};
+
 export type OVSPassportData = IPassport;
 
 // OVS Record describes a single row of data in the Excel export
-export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, OVSSupportSystemData {}
+export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, OVSSupportSystemFacadeData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;

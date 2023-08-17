@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
-import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { BatchService } from '../../schema/batch/batch.service';
+import { SupportSystemType } from '../../types';
+import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
 
 import { OVSExportColumn, OVSExportSpanInstallationBaseData } from './types/span-installation';
 
@@ -26,33 +27,40 @@ export class AddOVSSheetService {
 		// 	batchStatus: batch.status
 		// }));
 
-		const supportSystemFormatted = supportSystems.map((supportSystem) => ({
-			...supportSystem,
-			street: '--- TODO ---',
-			houseNumber: '--- TODO ---',
-			floor: '--- TODO ---',
-			xCoordinate: '--- TODO ---',
-			yCoordinate: '--- TODO ---',
-		}));
-
 		return {
 			...ovsAsset,
 			...passportData,
 			batches,
-			supportSystems: supportSystemFormatted,
+			supportSystems,
 		};
 	}
 
-	public async getDataPerSupportSystem(supportSystem: SupportSystem): Promise<any> {
+	// For each row in the Excel sheet all fields for all types of SupportSystem should be present
+	private async fillSupportSystemFields(supportSystem: SupportSystem, typeToCheck: SupportSystemType) {
+		let data = this.formatFacadeSurveyData(supportSystem);
+
+		if (supportSystem.type !== typeToCheck) {
+			// Create an object with null values for all keys
+			const nullData = { ...data };
+			for (const key in nullData) {
+				nullData[key] = null;
+			}
+			data = nullData;
+		}
+
+		return data;
+	}
+
+	private formatFacadeSurveyData(supportSystem: SupportSystem): any {
 		return {
-			supportSystemTypeDetailed: supportSystem.typeDetailed,
-			supportSystemStreet: supportSystem.location,
-			supportSystemHouseNumber: supportSystem.houseNumber,
-			supportSystemFloor: supportSystem.location,
-			supportSystemXCoordinate: 'supportSystem.xCoordinate',
-			supportSystemYCoordinate: 'supportSystem.yCoordinate',
-			supportSystemInstallationHeight: supportSystem.installationHeight,
-			supportSystemRemarks: supportSystem.remarks,
+			facadeTypeDetailed: supportSystem.typeDetailed,
+			facadeStreet: supportSystem.location,
+			facadeHouseNumber: supportSystem.houseNumber,
+			facadeFloor: supportSystem.locationIndication,
+			facadeXCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[0] : '',
+			facadeYCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[1] : '',
+			facadeInstallationHeight: supportSystem.installationHeight,
+			facadeRemarks: supportSystem.remarks,
 		};
 	}
 
@@ -101,10 +109,11 @@ export class AddOVSSheetService {
 
 		// Loop over all support systems as this is the most deeply nested entity
 		data.supportSystems.forEach(async (supportSystem: SupportSystem) => {
-			const supportSystemFormatted = await this.getDataPerSupportSystem(supportSystem);
+			const facadeSupportSystem = await this.fillSupportSystemFields(supportSystem, SupportSystemType.Facade);
+
 			const rowData = {
 				...data,
-				...supportSystemFormatted,
+				...facadeSupportSystem,
 			};
 
 			// Apply cell styles
@@ -156,6 +165,24 @@ export class AddOVSSheetService {
 			bold: true,
 		};
 		worksheet.getCell('L2').fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: 'FFCEDFF0' },
+		};
+
+		// Add third row of headings (per category)
+		worksheet.mergeCells('L3', 'S3');
+		worksheet.getCell('L3').value = 'Gevel';
+		worksheet.getCell('L3').alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell('L3').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L3').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L3').fill = {
 			type: 'pattern',
 			pattern: 'solid',
 			fgColor: { argb: 'FFCEDFF0' },
@@ -290,7 +317,7 @@ export class AddOVSSheetService {
 		return [
 			{
 				header: 'Type gedetailleerd',
-				key: 'supportSystemTypeDetailed',
+				key: 'facadeTypeDetailed',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';
@@ -299,7 +326,7 @@ export class AddOVSSheetService {
 			},
 			{
 				header: 'Straat',
-				key: 'supportSystemStreet',
+				key: 'facadeStreet',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';
@@ -308,7 +335,7 @@ export class AddOVSSheetService {
 			},
 			{
 				header: 'Huisnummer',
-				key: 'supportSystemHouseNumber',
+				key: 'facadeHouseNumber',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';
@@ -317,7 +344,7 @@ export class AddOVSSheetService {
 			},
 			{
 				header: 'Verdieping',
-				key: 'supportSystemFloor',
+				key: 'facadeFloor',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';
@@ -326,25 +353,25 @@ export class AddOVSSheetService {
 			},
 			{
 				header: 'X coordinaat',
-				key: 'supportSystemXCoordinate',
+				key: 'facadeXCoordinate',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = '--- TODO ---';
+					cell.value = cell.value ? cell.value : '';
 				},
 				width: 16,
 			},
 			{
 				header: 'Y coordinaat',
-				key: 'supportSystemYCoordinate',
+				key: 'facadeYCoordinate',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = '--- TODO ---';
+					cell.value = cell.value ? cell.value : '';
 				},
 				width: 16,
 			},
 			{
 				header: 'Aanleghoogte',
-				key: 'supportSystemInstallationHeight',
+				key: 'facadeInstallationHeight',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';
@@ -353,7 +380,7 @@ export class AddOVSSheetService {
 			},
 			{
 				header: 'Opmerkingen',
-				key: 'supportSystemRemarks',
+				key: 'facadeRemarks',
 				headerStyle: { ...this.headerStyle },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = cell.value ? cell.value : '';

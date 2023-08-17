@@ -2,21 +2,32 @@ import * as ExcelJS from 'exceljs';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { DBBatch } from '../../schema/batch/types/batch.repository.interface';
-import { BatchRepository } from '../../schema/batch/batch.repository';
-import { PrismaService } from '../../prisma.service';
+// import { PrismaService } from '../../prisma.service';
+
+import { supportSystem } from '../../schema/span-installation/__stubs__';
+import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 
 import { AddOVSSheetService } from './add-ovs-sheet.service';
 import { ovsAssetStub } from './__stubs__/ovs-asset';
 
-
-
 // The labels below are the labels that are expected to be present in the OVS export sheet
 // The order of the labels is important, as it is used to determine the column index of the label
-// The labels are split into multiple groups for readability reasons
+// The labels are split into multiple groups for better readability
 
 const baseFields = ['OVS nummer'];
 
 const batchFields = ['Batch nummer(s)', 'Batch status'];
+
+const decompositionFacadeFields = [
+	'Type gedetailleerd',
+	'Straat',
+	'Huisnummer',
+	'Verdieping',
+	'X coordinaat',
+	'Y coordinaat',
+	'Aanleghoogte',
+	'Opmerkingen',
+];
 
 const passportFields = [
 	'Straat',
@@ -31,7 +42,7 @@ const passportFields = [
 
 describe('AddOvsSheetService', () => {
 	describe('addOVSSheet', () => {
-		it('should add a new OVS export sheet with the appopriate columns', async () => {
+		it('should add a new OVS export sheet with the appropriate columns', async () => {
 			const batchStub = {
 				id: '__BATCH_ID__',
 				name: '__BATCH_NAME__',
@@ -48,17 +59,29 @@ describe('AddOvsSheetService', () => {
 				updated_at: new Date(),
 			} as DBBatch;
 
-			const prismaServiceMock: MockedObjectDeep<PrismaService> = {
-				batches: {
-					findMany: jest.fn().mockResolvedValue([batchStub]),
-				},
-				$executeRaw: jest.fn(),
-				$queryRaw: jest.fn(),
+			// const prismaServiceMock: MockedObjectDeep<PrismaService> = {
+			// 	batches: {
+			// 		findMany: jest.fn().mockResolvedValue([batchStub]),
+			// 	},
+			// 	supportSystems: {
+			// 		findByObject: jest.fn().mockResolvedValue([supportSystem]),
+			// 	},
+			// 	$executeRaw: jest.fn(),
+			// 	$queryRaw: jest.fn(),
+			// 	...(<any>{}),
+			// };
+
+			const mockSupportSystemService: MockedObjectDeep<SupportSystemService> = {
+				findByObject: jest.fn().mockResolvedValue([supportSystem]),
 				...(<any>{}),
 			};
 
-			const mockBatchRepository = new BatchRepository(prismaServiceMock);
-			const addOvsSheetService = new AddOVSSheetService(mockBatchRepository);
+			const mockBatchService = {
+				findForAssetThroughSurveys: jest.fn().mockResolvedValue(batchStub),
+				...(<any>{}),
+			};
+
+			const addOvsSheetService = new AddOVSSheetService(mockBatchService, mockSupportSystemService);
 
 			const workbook = new ExcelJS.Workbook();
 			const worksheet = workbook.addWorksheet('');
@@ -67,7 +90,11 @@ describe('AddOvsSheetService', () => {
 			const rowWithColumnNames = worksheet.getRow(4);
 			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
-			expect(labels).toEqual([...baseFields, ...batchFields, ...passportFields]);
+			expect(labels).toEqual([...baseFields, ...batchFields, ...passportFields, ...decompositionFacadeFields]);
+		});
+
+		it('should contain a row for each item in the decomposition ', async () => {
+			//
 		});
 	});
 });

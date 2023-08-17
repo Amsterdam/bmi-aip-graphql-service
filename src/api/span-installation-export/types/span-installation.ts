@@ -14,9 +14,22 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
+export type OVSSupportSystemData = {
+	supportSystemTypeDetailed: string;
+	supportSystemStreet: string;
+	supportSystemHouseNumber: string;
+	supportSystemFloor: string;
+	supportSystemXCoordinate: string;
+	supportSystemYCoordinate: string;
+	supportSystemInstallationHeight: string;
+	supportSystemInstallationLength: string;
+	supportSystemRemarks: string;
+};
+
 export type OVSPassportData = IPassport;
 
-export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData {}
+// OVS Record describes a single row of data in the Excel export
+export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, OVSSupportSystemData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;
@@ -33,6 +46,17 @@ export type OVSExportSpanInstallationPasportData = {
 	latitude: Prisma.Decimal;
 	longitude: Prisma.Decimal;
 	attributes: IPassport;
+};
+
+export type OVSExportSpanInstallationDecompositionFacadeData = {
+	typeDetailed: string;
+	street: string;
+	houseNumber: string;
+	verdieping: string;
+	xCoordinate: string;
+	yCoordinate: string;
+	installationHeight: string;
+	remarks: string;
 };
 
 export type OVSExportSpanInstallationWithBatchDetails = OVSExportSpanInstallationBaseData & {

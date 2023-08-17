@@ -4,6 +4,10 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { PrismaService } from '../../prisma.service';
 import { BatchRepository } from '../../schema/batch/batch.repository';
 import { AssetModule } from '../../schema/asset/asset.module';
+import { BatchService } from '../../schema/batch/batch.service';
+import { SupportSystemService } from '../../schema/span-installation/support-system.service';
+import { SupportSystemRepository } from '../../schema/span-installation/support-system.repository';
+import { LuminaireRepository } from '../../schema/span-installation/luminaire.repository';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { SpanInstallationExportService } from './span-installation-export.service';
@@ -20,6 +24,10 @@ import { AddOVSSheetService } from './add-ovs-sheet.service';
 		SpanInstallationExportService,
 		SpanInstallationExportRepository,
 		BatchRepository,
+		BatchService,
+		SupportSystemService,
+		SupportSystemRepository,
+		LuminaireRepository,
 		OVSExportByBatchHandler,
 		OVSExportAllHandler,
 		AddOVSSheetService,

@@ -127,6 +127,22 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		};
 	}
 
+	async findByObject(objectId: string): Promise<SupportSystem[]> {
+		const supportSystems = (await this.prisma.spanSupportSystems.findMany({
+			where: {
+				objectId,
+				deleted_at: null,
+			},
+		})) as SupportSystem[];
+
+		return Promise.all(
+			supportSystems.map(async (supportSystem) => {
+				supportSystem.geography = await this.getGeographyAsGeoJSON(supportSystem.id);
+				return supportSystem;
+			}),
+		);
+	}
+
 	async getSupportSystems(surveyId: string): Promise<SupportSystem[]> {
 		const supportSystems = (await this.prisma.spanSupportSystems.findMany({
 			where: {

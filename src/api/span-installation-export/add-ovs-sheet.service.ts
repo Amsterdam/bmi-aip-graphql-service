@@ -1,26 +1,84 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
-import { BatchRepository } from '../../schema/batch/batch.repository';
+import { SupportSystemService } from '../../schema/span-installation/support-system.service';
+import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
+import { BatchService } from '../../schema/batch/batch.service';
 
 import { OVSExportColumn, OVSExportSpanInstallationBaseData } from './types/span-installation';
 
 @Injectable()
 export class AddOVSSheetService {
-	constructor(private readonly batchRepository: BatchRepository) {}
+	constructor(
+		private readonly batchService: BatchService,
+		private readonly supportSystemService: SupportSystemService,
+	) {}
+
+	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<any> {
+		const supportSystems = await this.supportSystemService.findByObject(ovsAsset.id);
+		console.log(supportSystems);
+		const passportData = ovsAsset.attributes;
+
+		// fetch batches from service
+		// prep batches in new type with batchNumber and batchStatus
+		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
+		// const batchesData = batches.map((batch) => ({
+		// 	batchNumber: batch.name,
+		// 	batchStatus: batch.status
+		// }));
+
+		const supportSystemFormatted = supportSystems.map((supportSystem) => ({
+			...supportSystem,
+			street: '--- TODO ---',
+			houseNumber: '--- TODO ---',
+			floor: '--- TODO ---',
+			xCoordinate: '--- TODO ---',
+			yCoordinate: '--- TODO ---',
+		}));
+
+		return {
+			...ovsAsset,
+			...passportData,
+			batches,
+			supportSystems: supportSystemFormatted,
+		};
+	}
+
+	public async getDataPerSupportSystem(supportSystem: SupportSystem): Promise<any> {
+		return {
+			supportSystemTypeDetailed: supportSystem.typeDetailed,
+			supportSystemStreet: supportSystem.location,
+			supportSystemHouseNumber: supportSystem.houseNumber,
+			supportSystemFloor: supportSystem.location,
+			supportSystemXCoordinate: 'supportSystem.xCoordinate',
+			supportSystemYCoordinate: 'supportSystem.yCoordinate',
+			supportSystemInstallationHeight: supportSystem.installationHeight,
+			supportSystemRemarks: supportSystem.remarks,
+		};
+	}
 
 	public async addOVSSheet(
 		worksheet: ExcelJS.Worksheet,
 		ovsAsset: OVSExportSpanInstallationBaseData,
 		generateHeaders: boolean,
 	) {
+		const data = await this.getData(ovsAsset);
+		// data is expected to contain the data at root level, where 'key' is the column key
+
 		const baseDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBaseDataColumns(ovsAsset);
 		const batchDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBatchDataColumns(ovsAsset);
 		const passportDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationPassportDataColumns(
 			ovsAsset,
 		);
+		const decompositionFacadeDataColumns: OVSExportColumn[] =
+			await this.getOVSExportSpanInstallationDecompositionFacadeDataColumns(ovsAsset);
 
-		const columns: OVSExportColumn[] = [...baseDataColumns, ...batchDataColumns, ...passportDataColumns];
+		const columns: OVSExportColumn[] = [
+			...baseDataColumns,
+			...batchDataColumns,
+			...passportDataColumns,
+			...decompositionFacadeDataColumns,
+		];
 		const headers = columns.map((column) => column.header);
 
 		if (generateHeaders) {
@@ -42,13 +100,18 @@ export class AddOVSSheetService {
 			col.width = column.width || 12;
 		});
 
-		const rowData = {
-			...ovsAsset,
-		};
+		// Loop over all support systems as this is the most deeply nested entity
+		data.supportSystems.forEach(async (supportSystem: SupportSystem) => {
+			const supportSystemFormatted = await this.getDataPerSupportSystem(supportSystem);
+			const rowData = {
+				...data,
+				...supportSystemFormatted,
+			};
 
-		// Apply cell styles
-		const newRow = worksheet.addRow([]);
-		this.renderColumns(columns, rowData, newRow, startingCol);
+			// Apply cell styles
+			const newRow = worksheet.addRow([]);
+			this.renderColumns(columns, rowData, newRow, startingCol);
+		});
 	}
 
 	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {
@@ -63,7 +126,8 @@ export class AddOVSSheetService {
 		};
 
 		// Add second rows of heading (Categories)
-		worksheet.mergeCells('A2', 'P3');
+		// Paspoort
+		worksheet.mergeCells('A2', 'K3');
 		worksheet.getCell('A2').value = 'Paspoort';
 		worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
 		worksheet.getCell('A2').font = {
@@ -75,6 +139,24 @@ export class AddOVSSheetService {
 			bold: true,
 		};
 		worksheet.getCell('A2').fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: 'FFCEDFF0' },
+		};
+
+		// Decompositie
+		worksheet.mergeCells('L2', 'AY2');
+		worksheet.getCell('L2').value = 'Decompositie';
+		worksheet.getCell('L2').alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell('L2').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L2').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L2').fill = {
 			type: 'pattern',
 			pattern: 'solid',
 			fgColor: { argb: 'FFCEDFF0' },
@@ -102,7 +184,7 @@ export class AddOVSSheetService {
 	public async getOVSExportSpanInstallationBatchDataColumns(
 		ovsAsset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
-		const batches = await this.batchRepository.findBatchesForAssetThroughSurveys(ovsAsset.id);
+		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
 
 		return [
 			{
@@ -199,6 +281,85 @@ export class AddOVSSheetService {
 				headerStyle: { ...this.headerStyle, italic: true },
 				renderCell: (cell: ExcelJS.Cell): void => {
 					cell.value = ovsAsset.attributes.notes;
+				},
+				width: 16,
+			},
+		];
+	}
+
+	public async getOVSExportSpanInstallationDecompositionFacadeDataColumns(
+		ovsAsset: OVSExportSpanInstallationBaseData,
+	): Promise<OVSExportColumn[]> {
+		return [
+			{
+				header: 'Type gedetailleerd',
+				key: 'supportSystemTypeDetailed',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
+				},
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				key: 'supportSystemStreet',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
+				},
+				width: 16,
+			},
+			{
+				header: 'Huisnummer',
+				key: 'supportSystemHouseNumber',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
+				},
+				width: 16,
+			},
+			{
+				header: 'Verdieping',
+				key: 'supportSystemFloor',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
+				},
+				width: 16,
+			},
+			{
+				header: 'X coordinaat',
+				key: 'supportSystemXCoordinate',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = '--- TODO ---';
+				},
+				width: 16,
+			},
+			{
+				header: 'Y coordinaat',
+				key: 'supportSystemYCoordinate',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = '--- TODO ---';
+				},
+				width: 16,
+			},
+			{
+				header: 'Aanleghoogte',
+				key: 'supportSystemInstallationHeight',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
+				},
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				key: 'supportSystemRemarks',
+				headerStyle: { ...this.headerStyle },
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
 				},
 				width: 16,
 			},

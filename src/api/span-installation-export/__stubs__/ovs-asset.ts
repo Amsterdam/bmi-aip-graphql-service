@@ -1,5 +1,5 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
-import { OVSBaseData, OVSBatchData, OVSExportSpanInstallationBaseData } from '../types/span-installation';
+import { OVSBaseData, OVSExportSpanInstallationBaseData } from '../types/span-installation';
 
 const ovsAssetBaseDataStub: OVSBaseData = {
 	id: 'object1',
@@ -7,10 +7,10 @@ const ovsAssetBaseDataStub: OVSBaseData = {
 	code: 'CODE1',
 };
 
-const ovsAssetBatchDataStub: OVSBatchData = {
-	batchNumbers: 'batch1, batch2',
-	batchStatus: 'active',
-};
+// const ovsAssetBatchDataStub: OVSBatchData = {
+// 	batchNumbers: 'batch1, batch2',
+// 	batchStatus: 'active',
+// };
 
 const ovsAssetPassportStub: IPassport = {
 	passportIdentification: 'test',
@@ -28,7 +28,6 @@ const ovsAssetPassportStub: IPassport = {
 
 export const ovsAssetStub: OVSExportSpanInstallationBaseData = {
 	...ovsAssetBaseDataStub,
-	...ovsAssetBatchDataStub,
 	attributes: {
 		...ovsAssetPassportStub,
 	},

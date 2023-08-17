@@ -16,7 +16,6 @@ export class AddOVSSheetService {
 
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<any> {
 		const supportSystems = await this.supportSystemService.findByObject(ovsAsset.id);
-		console.log(supportSystems);
 		const passportData = ovsAsset.attributes;
 
 		// fetch batches from service
@@ -184,15 +183,13 @@ export class AddOVSSheetService {
 	public async getOVSExportSpanInstallationBatchDataColumns(
 		ovsAsset: OVSExportSpanInstallationBaseData,
 	): Promise<OVSExportColumn[]> {
-		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
-
 		return [
 			{
 				header: 'Batch nummer(s)',
 				key: 'batchNumbers',
 				headerStyle: { ...this.headerStyle, italic: true },
 				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = batches.map((batch) => batch.name).join(', ');
+					cell.value = cell.value ? cell.value : '';
 				},
 				width: 16,
 			},
@@ -201,7 +198,7 @@ export class AddOVSSheetService {
 				key: 'batchStatus',
 				headerStyle: { ...this.headerStyle, italic: true },
 				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = batches[0]?.status || ''; // Handle the case of no batches
+					cell.value = cell.value ? cell.value : ''; // Handle the case of no batches
 				},
 				width: 16,
 			},

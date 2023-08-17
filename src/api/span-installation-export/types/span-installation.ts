@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client';
-import { IPassport } from 'src/schema/asset/models/passport.model';
 import { Cell } from 'exceljs';
-import { UnionKeys } from 'src/utils/utils';
+
+import { IPassport } from '../../../services/types/excelRowObject';
+import { UnionKeys } from '../../../utils/utils';
 
 export type OVSBaseData = {
 	id: string;
@@ -14,22 +15,29 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
-export type OVSSupportSystemData = {
-	supportSystemTypeDetailed: string;
-	supportSystemStreet: string;
-	supportSystemHouseNumber: string;
-	supportSystemFloor: string;
-	supportSystemXCoordinate: string;
-	supportSystemYCoordinate: string;
-	supportSystemInstallationHeight: string;
-	supportSystemInstallationLength: string;
-	supportSystemRemarks: string;
+export type FacadeData = {
+	facadeTypeDetailed: string;
+	facadeStreet: string;
+	facadeHouseNumber: string;
+	facadeFloor: string;
+	facadeXCoordinate: string;
+	facadeYCoordinate: string;
+	facadeInstallationHeight: string;
+	facadeInstallationLength: number;
+	facadeRemarks: string;
+};
+
+export type TensionWireData = {
+	tensionWireTypeDetailed: string;
+	tensionWireInstallationLength: number;
+	tensionWireStreet: string;
+	tensionWireRemarks: string;
 };
 
 export type OVSPassportData = IPassport;
 
 // OVS Record describes a single row of data in the Excel export
-export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, OVSSupportSystemData {}
+export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, FacadeData, TensionWireData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;
@@ -38,7 +46,7 @@ export type OVSExportSpanInstallationBaseData = {
 	attributes: IPassport;
 };
 
-export type OVSExportSpanInstallationPasportData = {
+export type OVSExportSpanInstallationPassportData = {
 	id: string;
 	name: string;
 	code: string;
@@ -75,6 +83,8 @@ export interface OVSExportHeaderStyle {
 	strike?: boolean;
 }
 
+export type RenderCellFunction = (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
+
 export interface OVSExportColumn {
 	key: OVSColumnHeaderKeys;
 	header: string;
@@ -84,7 +94,7 @@ export interface OVSExportColumn {
 	 * @param {Cell} cell Cell reference to exceljs data workbook > sheet > row > cell
 	 * @param {any} value Value from DB to fit into cell
 	 */
-	renderCell: (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
+	renderCell?: RenderCellFunction;
 	width?: number;
 }
 

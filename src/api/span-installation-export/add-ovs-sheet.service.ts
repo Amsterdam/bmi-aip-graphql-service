@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
+import type { Cell } from 'exceljs';
 
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { BatchService } from '../../schema/batch/batch.service';
 
-import { OVSExportColumn, OVSExportSpanInstallationBaseData } from './types/span-installation';
+import { OVSExportColumn, OVSExportHeaderStyle, OVSExportSpanInstallationBaseData } from './types/span-installation';
 
 @Injectable()
 export class AddOVSSheetService {
@@ -65,19 +66,18 @@ export class AddOVSSheetService {
 		const data = await this.getData(ovsAsset);
 		// data is expected to contain the data at root level, where 'key' is the column key
 
-		const baseDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBaseDataColumns(ovsAsset);
-		const batchDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationBatchDataColumns(ovsAsset);
-		const passportDataColumns: OVSExportColumn[] = await this.getOVSExportSpanInstallationPassportDataColumns(
-			ovsAsset,
-		);
-		const decompositionFacadeDataColumns: OVSExportColumn[] =
-			await this.getOVSExportSpanInstallationDecompositionFacadeDataColumns(ovsAsset);
+		const baseDataColumns = await this.getBaseDataColumns(ovsAsset);
+		const batchDataColumns = await this.getBatchDataColumns(ovsAsset);
+		const passportDataColumns = await this.getPassportDataColumns(ovsAsset);
+		const decompositionFacadeColumns = await this.getFacadeColumns(ovsAsset);
+		const decompositionTensionWireColumns = this.getTensionWireColumns();
 
-		const columns: OVSExportColumn[] = [
+		const columns = [
 			...baseDataColumns,
 			...batchDataColumns,
 			...passportDataColumns,
-			...decompositionFacadeDataColumns,
+			...decompositionFacadeColumns,
+			...decompositionTensionWireColumns,
 		];
 		const headers = columns.map((column) => column.header);
 
@@ -165,15 +165,13 @@ export class AddOVSSheetService {
 		return worksheet;
 	}
 
-	public async getOVSExportSpanInstallationBaseDataColumns(
-		asset: OVSExportSpanInstallationBaseData,
-	): Promise<OVSExportColumn[]> {
+	public async getBaseDataColumns(asset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
 		return [
 			{
 				header: 'OVS nummer',
 				key: 'code',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = asset.code;
 				},
 				width: 16,
@@ -181,9 +179,7 @@ export class AddOVSSheetService {
 		];
 	}
 
-	public async getOVSExportSpanInstallationBatchDataColumns(
-		ovsAsset: OVSExportSpanInstallationBaseData,
-	): Promise<OVSExportColumn[]> {
+	public async getBatchDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
 		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
 
 		return [
@@ -191,7 +187,7 @@ export class AddOVSSheetService {
 				header: 'Batch nummer(s)',
 				key: 'batchNumbers',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = batches.map((batch) => batch.name).join(', ');
 				},
 				width: 16,
@@ -200,7 +196,7 @@ export class AddOVSSheetService {
 				header: 'Batch status',
 				key: 'batchStatus',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = batches[0]?.status || ''; // Handle the case of no batches
 				},
 				width: 16,
@@ -208,15 +204,13 @@ export class AddOVSSheetService {
 		];
 	}
 
-	public async getOVSExportSpanInstallationPassportDataColumns(
-		ovsAsset: OVSExportSpanInstallationBaseData,
-	): Promise<OVSExportColumn[]> {
+	public async getPassportDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
 		return [
 			{
 				header: 'Straat',
 				key: 'passportStreet',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportStreet;
 				},
 				width: 16,
@@ -225,7 +219,7 @@ export class AddOVSSheetService {
 				header: 'Buurt',
 				key: 'passportNeighborhood',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportNeighborhood;
 				},
 				width: 16,
@@ -234,7 +228,7 @@ export class AddOVSSheetService {
 				header: 'Wijk',
 				key: 'passportDistrict',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportDistrict;
 				},
 				width: 16,
@@ -243,7 +237,7 @@ export class AddOVSSheetService {
 				header: 'Stadsdeel',
 				key: 'passportCityArea',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportCityArea;
 				},
 				width: 16,
@@ -252,7 +246,7 @@ export class AddOVSSheetService {
 				header: 'Splitsingen',
 				key: 'passportSplits',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportSplits;
 				},
 				width: 16,
@@ -261,7 +255,7 @@ export class AddOVSSheetService {
 				header: 'Dubbeldraads',
 				key: 'passportDoubleWired',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.passportDoubleWired;
 				},
 				width: 16,
@@ -270,7 +264,7 @@ export class AddOVSSheetService {
 				header: 'Boven trambaan',
 				key: 'tramTracks',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.tramTracks;
 				},
 				width: 16,
@@ -279,7 +273,7 @@ export class AddOVSSheetService {
 				header: 'Opmerkingen',
 				key: 'notes',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				renderCell: (cell): void => {
 					cell.value = ovsAsset.attributes.notes;
 				},
 				width: 16,
@@ -287,89 +281,113 @@ export class AddOVSSheetService {
 		];
 	}
 
-	public async getOVSExportSpanInstallationDecompositionFacadeDataColumns(
-		ovsAsset: OVSExportSpanInstallationBaseData,
-	): Promise<OVSExportColumn[]> {
+	private async getFacadeColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
+		const headerStyle = this.headerStyle;
 		return [
 			{
 				header: 'Type gedetailleerd',
-				key: 'supportSystemTypeDetailed',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeTypeDetailed',
+				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Straat',
-				key: 'supportSystemStreet',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeStreet',
+				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Huisnummer',
-				key: 'supportSystemHouseNumber',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeHouseNumber',
+				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Verdieping',
-				key: 'supportSystemFloor',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeFloor',
+				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'X coordinaat',
-				key: 'supportSystemXCoordinate',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				key: 'facadeXCoordinate',
+				headerStyle,
+				renderCell: (cell): void => {
 					cell.value = '--- TODO ---';
 				},
 				width: 16,
 			},
 			{
 				header: 'Y coordinaat',
-				key: 'supportSystemYCoordinate',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
+				key: 'facadeYCoordinate',
+				headerStyle,
+				renderCell: (cell): void => {
 					cell.value = '--- TODO ---';
 				},
 				width: 16,
 			},
 			{
 				header: 'Aanleghoogte',
-				key: 'supportSystemInstallationHeight',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeInstallationHeight',
+				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
-				key: 'supportSystemRemarks',
-				headerStyle: { ...this.headerStyle },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
+				key: 'facadeRemarks',
+				headerStyle,
 				width: 16,
 			},
 		];
 	}
 
+	private getTensionWireColumns(): OVSExportColumn[] {
+		const headerStyle: OVSExportHeaderStyle = {
+			bgColor: 'c5e0b4',
+			textColor: '000000',
+		};
+
+		return [
+			{
+				header: 'Type gedetailleerd',
+				key: 'tensionWireTypeDetailed',
+				headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Lengte spandraad',
+				key: 'tensionWireInstallationLength',
+				headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				key: 'tensionWireStreet',
+				headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				key: 'tensionWireRemarks',
+				headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private renderCellDefault(cell: Cell, value: string | number | boolean | Date) {
+		cell.value = value;
+	}
+
 	private renderColumns(columns: OVSExportColumn[], data: any, row: ExcelJS.Row, startingCol: number): void {
 		columns.forEach((column: OVSExportColumn, columnIdx: number) => {
 			const cell: ExcelJS.Cell = row.getCell(startingCol + columnIdx);
-			column.renderCell(cell, data[column.key], row.number, cell.col);
+
+			if (column?.renderCell) {
+				column.renderCell(cell, data[column.key], row.number, cell.col);
+			} else {
+				this.renderCellDefault(cell, data[column.key]);
+			}
 
 			// Set the column width if specified
 			if (column.width) {

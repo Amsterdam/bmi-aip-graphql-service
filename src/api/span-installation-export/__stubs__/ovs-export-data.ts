@@ -1,5 +1,5 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
-import { OVSRecord, OVSSupportSystemData } from '../types/span-installation';
+import { OVSRecord, FacadeData, TensionWireData } from '../types/span-installation';
 
 const assetBaseData: OVSBaseData = {
 	id: '1',
@@ -56,16 +56,23 @@ const passportData: IPassport = {
 // 	remarks: 'test'
 // }];
 
-const supportSystemData: OVSSupportSystemData = {
-	supportSystemTypeDetailed: 'test',
-	supportSystemStreet: 'test',
-	supportSystemHouseNumber: 'test',
-	supportSystemFloor: 'test',
-	supportSystemXCoordinate: 'test',
-	supportSystemYCoordinate: 'test',
-	supportSystemInstallationHeight: '1',
-	supportSystemInstallationLength: '1',
-	supportSystemRemarks: 'test',
+const facadeData: FacadeData = {
+	facadeTypeDetailed: 'test',
+	facadeStreet: 'test',
+	facadeHouseNumber: 'test',
+	facadeFloor: 'test',
+	facadeXCoordinate: 'test',
+	facadeYCoordinate: 'test',
+	facadeInstallationHeight: '1',
+	facadeInstallationLength: 1,
+	facadeRemarks: 'test',
+};
+
+const tensionWireData: TensionWireData = {
+	tensionWireTypeDetailed: 'test',
+	tensionWireStreet: 'test',
+	tensionWireInstallationLength: 1,
+	tensionWireRemarks: 'test',
 };
 
 export const ovsRecordMock: OVSRecord = {
@@ -73,7 +80,8 @@ export const ovsRecordMock: OVSRecord = {
 	...assetBatchData,
 	...passportData,
 	...assetBatchData,
-	...supportSystemData,
+	...facadeData,
+	...tensionWireData,
 };
 
 export type OVSBaseData = {

@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { SupportSystemType, SupportSystemTypeDetailedFacade } from '../types';
 import { createSupportSystemInput, updateSupportSystemInput } from '../__stubs__';
@@ -24,8 +24,8 @@ describe('normalizeSupportSystemInputUtil', () => {
 					type: 'Point',
 				},
 				houseNumber: '33',
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',
@@ -55,8 +55,8 @@ describe('normalizeSupportSystemInputUtil', () => {
 				},
 				houseNumber: '33',
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				installationHeight: new Decimal(10),
-				installationLength: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
+				installationLength: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
 				name: '__NAME__',

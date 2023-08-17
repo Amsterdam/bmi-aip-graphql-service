@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SurveyRepository } from 'src/schema/survey/survey.repository';
 
 import { JunctionBoxRepository } from '../junction-box.repository';
 import { SupportSystemRepository } from '../support-system.repository';
@@ -7,6 +6,7 @@ import { JunctionBox } from '../models/junction-box.model';
 import { SupportSystem } from '../models/support-system.model';
 import { JunctionBoxFactory } from '../junction-box.factory';
 import { SupportSystemFactory } from '../support-system.factory';
+import { SurveyRepository } from '../../survey/survey.repository';
 
 import { CloneSpanInstallationDecompositionCommand } from './clone-span-installation-decomposition.command';
 

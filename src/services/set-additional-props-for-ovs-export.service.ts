@@ -6,7 +6,7 @@ import { ConsoleService } from 'nestjs-console';
 import { GraphQLClient } from 'graphql-request';
 import { ConfigService } from '@nestjs/config';
 import PQueue from 'p-queue';
-import * as xlsx from 'xlsx';
+import * as Excel from 'exceljs';
 import { SingleBar } from 'cli-progress';
 
 import { ExternalAIPGraphQLRepository } from '../externalRepository/ExternalAIPGraphQLRepository';
@@ -73,18 +73,24 @@ export class SetAdditionalPropsForOVSExportService {
 			this.configService.get<string>('APP_DIR') +
 			this.configService.get<string>('DOC_DIR') +
 			this.configService.get<string>('READ_FILE');
-		// read from xlsx file
-		const maxRow = 9628;
 
-		const workbook = xlsx.readFile(`${filePath}`, { sheetRows: maxRow });
-		const workSheet = workbook.Sheets[workbook.SheetNames[1]];
-		// get first sheet
-		this.logger.debug(`Mapping file from ${workSheet} sheet`);
-		const minRow = 2;
-		let data: ExcelRowObject[] = xlsx.utils.sheet_to_json(workSheet);
-		data = data.slice(minRow <= 2 ? 0 : minRow - 2);
+		const workbook = new Excel.Workbook();
+		await workbook.xlsx.readFile(filePath);
+		const worksheet = workbook.getWorksheet(1);
 
-		return data;
+		const rows = [];
+		worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+			if (rowNumber === 1) return; // Skip first row (headers)
+			// For each row (skipping the first row), map the column values to a JSON object
+			const rowData = {};
+			row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+				const headerCell = worksheet.getRow(1).getCell(colNumber);
+				const columnName = headerCell.value;
+				rowData[columnName as string] = cell.value;
+			});
+			rows.push(rowData); // Add the row object to the array
+		});
+		return rows;
 	}
 
 	private async setAdditionalPropsForOVSExport(installation: NormalizedInstallationFromExcel): Promise<void> {

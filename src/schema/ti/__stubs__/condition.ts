@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { Condition } from '../models/condition.model';
 import { CreateConditionInput } from '../dto/create-condition.input';
@@ -73,8 +73,8 @@ const conditionRaw: Omit<DomainCondition, 'id'> = {
 	craInspectionScore: 0,
 	craInitialRemarks: '',
 	craHistoryRemarks: '',
-	craInitialUnityCheck: new Decimal(10.2),
-	craHistoryUnityCheck: new Decimal(10.2),
+	craInitialUnityCheck: new Prisma.Decimal(10.2),
+	craHistoryUnityCheck: new Prisma.Decimal(10.2),
 	ramsMaxTotalPriority: '',
 	ramsMaxWeightedPriority: '',
 	isFurtherInvestigation: false,

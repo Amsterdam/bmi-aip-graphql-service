@@ -62,7 +62,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		await this.prisma.$executeRaw`
 			UPDATE "spanSupportSystems"
 			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${supportSystem.id}
+			WHERE id = ${supportSystem.id}::uuid
 		`;
 
 		return {
@@ -118,7 +118,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		await this.prisma.$executeRaw`
 			UPDATE "spanSupportSystems"
 			SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-			WHERE id = ${supportSystem.id}
+			WHERE id = ${supportSystem.id}::uuid
 		`;
 
 		return {
@@ -199,7 +199,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanSupportSystems"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -254,7 +254,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 			await this.prisma.$executeRaw`
 				UPDATE "spanSupportSystems"
 				SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-				WHERE id = ${id}
+				WHERE id = ${id}::uuid
 			`;
 		}
 
@@ -287,7 +287,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanSupportSystems"
-			WHERE id = ${identifier};
+			WHERE id = ${identifier}::uuid;
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
@@ -297,7 +297,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 		const result = await this.prisma.$queryRaw<{ geography?: Point | null }>`
 			SELECT ST_AsGeoJSON(geography) as geography
 			FROM "spanLuminaires"
-			WHERE id = ${identifier};
+			WHERE id = ${identifier}::uuid;
 		`;
 		const geography = result?.[0]?.geography;
 		return geography ? JSON.parse(geography) : null;
@@ -329,7 +329,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanLuminaires"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${newLuminaireId}
+						WHERE id = ${newLuminaireId}::uuid
 					`;
 				}
 			});
@@ -365,7 +365,7 @@ export class SupportSystemRepository implements ISupportSystemRepository {
 					await this.prisma.$executeRaw`
 						UPDATE "spanSupportSystems"
 						SET geography = ST_GeomFromGeoJSON(${JSON.stringify(geography)})
-						WHERE id = ${newSupportSystemtId}
+						WHERE id = ${newSupportSystemtId}::uuid
 					`;
 				}
 			});

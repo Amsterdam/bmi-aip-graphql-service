@@ -1,10 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import PQueue from 'p-queue';
-import { SurveyRepository } from 'src/schema/survey/survey.repository';
-import { Unit } from 'src/schema/decomposition/models/unit.model';
-import { ManifestationRepository } from 'src/schema/decomposition/manifestation.repository';
-import { UnitRepository } from 'src/schema/decomposition/unit.repository';
-import { Manifestation } from 'src/schema/decomposition/models/manifestation.model';
 
 import { SurveyAlreadyHasMeasuresException } from '../../survey/exceptions/survey-already-has-measures.exception';
 import { SurveyAlreadyHasCyclicMeasuresException } from '../../survey/exceptions/survey-already-has-cyclic-measures.exception';
@@ -18,6 +13,11 @@ import { CyclicMeasure } from '../models/cyclic-measure.model';
 import { CyclicMeasureService } from '../cyclic-measure.service';
 import { CyclicMeasureRepository } from '../cyclic-measure.repository';
 import { MeasuresAndCyclicMeasuresCollection } from '../models/measures-and-cyclic-measures-collection.model';
+import { SurveyRepository } from '../../survey/survey.repository';
+import { UnitRepository } from '../../decomposition/unit.repository';
+import { ManifestationRepository } from '../../decomposition/manifestation.repository';
+import { Manifestation } from '../../decomposition/models/manifestation.model';
+import { Unit } from '../../decomposition/models/unit.model';
 
 import { CloneMeasuresFromPreviousSurveyCommand } from './clone-measures-from-previous-survey.command';
 

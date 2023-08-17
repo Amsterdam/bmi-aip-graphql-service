@@ -103,7 +103,9 @@ describe('MjopMeasuresService', () => {
 						defectScore: 5,
 						// Add more expected defect properties as needed
 					},
-					failureMode: {},
+					failureMode: {
+						failureModeName: 'Failure Mode',
+					},
 					cyclicMaintenance: {
 						year2023: 50,
 					},
@@ -169,11 +171,12 @@ describe('MjopMeasuresService', () => {
 					totalCost: 50,
 					totalCostWithSurcharge: 5,
 					maintenanceYear: 2023,
+					defect: null,
 					failureMode: {
+						failureModeName: 'Failure Mode',
 						analysisRemarks: undefined,
 						bronVanFalen: undefined,
 						faaloorzaak: undefined,
-						failureModeName: undefined,
 						gevolgVanFalen: undefined,
 						maintenanceRemarks: undefined,
 						verificationRamsA: undefined,
@@ -249,11 +252,12 @@ describe('MjopMeasuresService', () => {
 					totalCost: 50,
 					totalCostWithSurcharge: 5,
 					maintenanceYear: 2023,
+					defect: null,
 					failureMode: {
 						analysisRemarks: undefined,
 						bronVanFalen: undefined,
 						faaloorzaak: undefined,
-						failureModeName: undefined,
+						failureModeName: 'Failure Mode',
 						gevolgVanFalen: undefined,
 						maintenanceRemarks: undefined,
 						verificationRamsA: undefined,

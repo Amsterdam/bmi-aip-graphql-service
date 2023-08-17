@@ -66,6 +66,9 @@ export class MJOPMeasuresService {
 
 		return Promise.all(
 			cyclicMeasures.map(async (cyclicMeasure) => {
+				const defectPromise: Promise<Defect | null> = cyclicMeasure.defectId
+					? this.defectService.getDefect(cyclicMeasure.defectId)
+					: Promise.resolve(null);
 				const defaultMaintenanceMeasure: DefaultMaintenanceMeasure =
 					await this.defaultMaintenanceMeasureService.getDefaultMaintenanceMeasure(
 						cyclicMeasure.defaultMaintenanceMeasureId,
@@ -74,9 +77,12 @@ export class MJOPMeasuresService {
 					? await this.failureModeService.getFailureMode(cyclicMeasure.failureModeId)
 					: null;
 
+				const [defect] = await Promise.all([defectPromise]);
+
 				const mappedCyclicMeasure = {
 					...this.getCyclicMeasureProps(cyclicMeasure, defaultMaintenanceMeasure.description, unitQuantity),
 					failureMode: failureMode ? this.getFailureModeProps(failureMode) : null,
+					defect: defect ? this.getDefectProps(defect) : null,
 					cyclicMaintenance: {},
 				};
 
@@ -146,10 +152,10 @@ export class MJOPMeasuresService {
 
 	private getFailureModeProps(failureMode: FailureMode): IMJOPFailureMode {
 		return {
-			failureModeName: failureMode.customName,
-			faaloorzaak: failureMode?.metaData?.failureCause,
-			bronVanFalen: failureMode?.metaData?.sourceOfFailure,
-			gevolgVanFalen: failureMode?.metaData?.consequenceOfFailure,
+			failureModeName: failureMode.customName || failureMode?.failureMode,
+			faaloorzaak: failureMode?.metaData?.failureCause || failureMode?.causeOfFailure,
+			bronVanFalen: failureMode?.metaData?.sourceOfFailure || failureMode?.sourceOfFailure,
+			gevolgVanFalen: failureMode?.metaData?.consequenceOfFailure || failureMode?.consequenceOfFailure,
 			analysisRemarks: failureMode.analysisRemarks,
 			verificationRemarks: failureMode.verificationRemarks,
 			maintenanceRemarks: failureMode.maintenanceRemarks,

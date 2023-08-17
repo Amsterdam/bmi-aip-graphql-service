@@ -1,7 +1,7 @@
-import { PrismaService } from 'src/prisma.service';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { domainSurvey } from '../survey/__stubs__';
+import { PrismaService } from '../../prisma.service';
 
 import { DecompositionRepository } from './decomposition.repository';
 import { SurveyHasDecompositionException } from './exceptions/survey-has-decomposition.exception';

@@ -133,7 +133,7 @@ export class AddMJOPSheetService {
 		return columns;
 	}
 
-	private async getAssetColumns(data: Partial<MJOPRecord>, surveyId: string): Promise<MjopExportColumn[]> {
+	private getAssetColumns(data: Partial<MJOPRecord>, surveyId: string): MjopExportColumn[] {
 		// Update asset properties if necessary
 		const asset = data.asset;
 		if (asset.marineInfrastrutureType) {
@@ -146,51 +146,48 @@ export class AddMJOPSheetService {
 			const material = mainMaterialList.find((materialItem) => materialItem.value === asset.mainMaterial);
 			asset.mainMaterial = material && material.text;
 		}
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Objectnr',
-					key: 'code',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
-						cell.value = { text: asset.code, hyperlink: 'https://aip.amsterdam.nl/surveys/' + surveyId };
-						cell.font = { underline: 'single', bold: true };
-					},
-					width: 16,
+		return [
+			{
+				header: 'Objectnr',
+				key: 'code',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell): void => {
+					cell.value = { text: asset.code, hyperlink: 'https://aip.amsterdam.nl/surveys/' + surveyId };
+					cell.font = { underline: 'single', bold: true };
 				},
-				{
-					header: 'Name',
-					key: 'assetName',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
-						cell.value = asset.assetName;
-					},
-					width: 16,
+				width: 16,
+			},
+			{
+				header: 'Name',
+				key: 'assetName',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell): void => {
+					cell.value = asset.assetName;
 				},
-				{
-					header: 'Type object',
-					key: 'marineInfrastrutureType',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
-						cell.value = asset.marineInfrastrutureType;
-					},
-					width: 16,
+				width: 16,
+			},
+			{
+				header: 'Type object',
+				key: 'marineInfrastrutureType',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell): void => {
+					cell.value = asset.marineInfrastrutureType;
 				},
-				{
-					header: 'Materiaal',
-					key: 'mainMaterial',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell): void => {
-						cell.value = asset.mainMaterial;
-					},
-					width: 20,
+				width: 16,
+			},
+			{
+				header: 'Materiaal',
+				key: 'mainMaterial',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell): void => {
+					cell.value = asset.mainMaterial;
 				},
-			];
-			resolve(columns);
-		});
+				width: 20,
+			},
+		];
 	}
 
-	private async getSurveyColumns(): Promise<MjopExportColumn[]> {
+	private getSurveyColumns(): MjopExportColumn[] {
 		return [
 			{
 				header: 'Conditiescore Object',
@@ -217,398 +214,394 @@ export class AddMJOPSheetService {
 		];
 	}
 
-	private getElementColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					key: 'elementName',
-					header: 'Element',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 36,
+	private getElementColumns(): MjopExportColumn[] {
+		return [
+			{
+				key: 'elementName',
+				header: 'Element',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-			];
-			resolve(columns);
-		});
+				width: 36,
+			},
+		];
 	}
 
-	private getDerivedConditionScoreElementColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Conditiescore Element',
-					key: 'elementCondition',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 16,
+	private getDerivedConditionScoreElementColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Conditiescore Element',
+				key: 'elementCondition',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Verzorgingsscore Element',
-					key: 'elementCare',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 16,
+				width: 16,
+			},
+			{
+				header: 'Verzorgingsscore Element',
+				key: 'elementCare',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-			];
-			resolve(columns);
-		});
+				width: 16,
+			},
+		];
 	}
 
-	private getDerivedConditionScoreUnitColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Conditiescore Bouwdeel',
-					key: 'unitCondition',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 16,
+	private getDerivedConditionScoreUnitColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Conditiescore Bouwdeel',
+				key: 'unitCondition',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Verzorgingsscore Bouwdeel',
-					key: 'unitCare',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 16,
+				width: 16,
+			},
+			{
+				header: 'Verzorgingsscore Bouwdeel',
+				key: 'unitCare',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-			];
-			resolve(columns);
-		});
+				width: 16,
+			},
+		];
 	}
 
-	private getUnitColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Bouwdeel',
-					key: 'unitName',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+	private getUnitColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Bouwdeel',
+				key: 'unitName',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Materiaal',
-					key: 'unitMaterial',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 12,
+				width: 35,
+			},
+			{
+				header: 'Materiaal',
+				key: 'unitMaterial',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Hoeveelheid',
-					key: 'quantity',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 12,
+				width: 12,
+			},
+			{
+				header: 'Hoeveelheid',
+				key: 'quantity',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Eenheid',
-					key: 'quantityUnitOfMeasurement',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value === 'pcs' ? 'st' : value; // Update the value if it is 'pcs'
-					},
-					width: 12,
+				width: 12,
+			},
+			{
+				header: 'Eenheid',
+				key: 'quantityUnitOfMeasurement',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value === 'pcs' ? 'st' : value; // Update the value if it is 'pcs'
 				},
-			];
-			resolve(columns);
-		});
+				width: 12,
+			},
+		];
 	}
 
-	private getDefectColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Schadebeeld',
-					key: 'defectName',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 20,
+	private getDefectColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Schadebeeld',
+				key: 'defectName',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Herstel advies',
-					key: 'repairAdvice',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 40,
+				width: 20,
+			},
+			{
+				header: 'Herstel advies',
+				key: 'repairAdvice',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Conditiescore Gebrek',
-					key: 'defectScore',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 20,
+				width: 40,
+			},
+			{
+				header: 'Conditiescore Gebrek',
+				key: 'defectScore',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Verzorgingsscore Gebrek',
-					key: 'defectCareScore',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 20,
+				width: 20,
+			},
+			{
+				header: 'Verzorgingsscore Gebrek',
+				key: 'defectCareScore',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'R',
-					key: 'ramsR',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 4,
+				width: 20,
+			},
+			{
+				header: 'R',
+				key: 'ramsR',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'A',
-					key: 'ramsA',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'A',
+				key: 'ramsA',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'S',
-					key: 'ramsS',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'S',
+				key: 'ramsS',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Ec',
-					key: 'ramsEc',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'Ec',
+				key: 'ramsEc',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Env',
-					key: 'ramsEnv',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
-						cell.value = value;
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'Env',
+				key: 'ramsEnv',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Prioritering',
-					key: 'ramsTotalPriority',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = this.getRamsPriority(value);
-						cell.alignment = { horizontal: 'center' };
-					},
-					width: 18,
+				width: 4,
+			},
+			{
+				header: 'Prioritering',
+				key: 'ramsTotalPriority',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-			];
-			resolve(columns);
-		});
+				width: 18,
+			},
+		];
 	}
 
-	private getFailureModeColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Faalwijze',
-					key: 'failureModeName',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+	private getFailureModeColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Faalwijze',
+				key: 'failureModeName',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Faaloorzaak',
-					key: 'faaloorzaak',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Faaloorzaak',
+				key: 'faaloorzaak',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Bron van falen',
-					key: 'bronVanFalen',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Bron van falen',
+				key: 'bronVanFalen',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Gevolg van falen',
-					key: 'gevolgVanFalen',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Gevolg van falen',
+				key: 'gevolgVanFalen',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Bureaustudie',
-					key: 'analysisRemarks',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Bureaustudie',
+				key: 'analysisRemarks',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Verificatie',
-					key: 'verificationRemarks',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Verificatie',
+				key: 'verificationRemarks',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Onderhoud',
-					key: 'maintenanceRemarks',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 35,
+				width: 35,
+			},
+			{
+				header: 'Onderhoud',
+				key: 'maintenanceRemarks',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'R',
-					key: 'verificationRamsR',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 35,
+			},
+			{
+				header: 'R',
+				key: 'verificationRamsR',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'A',
-					key: 'verificationRamsA',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'A',
+				key: 'verificationRamsA',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'S',
-					key: 'verificationRamsS',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'S',
+				key: 'verificationRamsS',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'C',
-					key: 'verificationRamsC',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'C',
+				key: 'verificationRamsC',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Ec',
-					key: 'verificationRamsEc',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'Ec',
+				key: 'verificationRamsEc',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Env',
-					key: 'verificationRamsEnv',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'Env',
+				key: 'verificationRamsEnv',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'P',
-					key: 'verificationRamsP',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 4,
+				width: 4,
+			},
+			{
+				header: 'P',
+				key: 'verificationRamsP',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-				{
-					header: 'Prioritering',
-					key: 'verificationRamsWeightedPriority',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 16,
+				width: 4,
+			},
+			{
+				header: 'Prioritering',
+				key: 'verificationRamsWeightedPriority',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.style = value ? this.getRisicoScoreCellStyle(cell, value) : {};
+					cell.value = value;
+					cell.alignment = { horizontal: 'center' };
 				},
-			];
-			resolve(columns);
-		});
+				width: 16,
+			},
+		];
 	}
 
-	private async getConditionColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Conditiescore Object',
-					key: 'craInspectionScore',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = this.getConditionScore(value);
-					},
-					width: 50,
+	private getConditionColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Conditiescore Object',
+				key: 'craInspectionScore',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = this.getConditionScore(value);
 				},
-			];
-			resolve(columns);
-		});
+				width: 50,
+			},
+		];
 	}
 
 	private getConditionScore(value) {
@@ -626,93 +619,90 @@ export class AddMJOPSheetService {
 		}
 	}
 
-	private getMeasureColumns(): Promise<MjopExportColumn[]> {
-		return new Promise((resolve) => {
-			const columns: MjopExportColumn[] = [
-				{
-					header: 'Maatregel',
-					key: 'maintenanceDescription',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-					},
-					width: 40,
+	private getMeasureColumns(): MjopExportColumn[] {
+		return [
+			{
+				header: 'Maatregel',
+				key: 'maintenanceDescription',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
 				},
-				{
-					header: 'Type onderhoud',
-					key: 'maintenanceType',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = getMeasureTypeLabel(value);
-					},
-					width: 20,
+				width: 40,
+			},
+			{
+				header: 'Type onderhoud',
+				key: 'maintenanceType',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = getMeasureTypeLabel(value);
 				},
-				{
-					header: 'Cyclus',
-					key: 'maintenanceCycle',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-					},
-					width: 8,
+				width: 20,
+			},
+			{
+				header: 'Cyclus',
+				key: 'maintenanceCycle',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
 				},
-				{
-					header: 'Eenheidsprijs',
-					key: 'maintenanceUnitPrice',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-						cell.style = { numFmt: '"€"#,##0.00;' };
-					},
-					width: 8,
+				width: 8,
+			},
+			{
+				header: 'Eenheidsprijs',
+				key: 'maintenanceUnitPrice',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
+					cell.style = { numFmt: '"€"#,##0.00;' };
 				},
-				{
-					header: 'Toeslag',
-					key: 'maintenanceCostSurcharge',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-					},
-					width: 8,
+				width: 8,
+			},
+			{
+				header: 'Toeslag',
+				key: 'maintenanceCostSurcharge',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
 				},
-				{
-					header: 'Totale kosten',
-					key: 'totalCost',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-						cell.style = { numFmt: '"€"#,##0.00;' };
-					},
-					width: 16,
+				width: 8,
+			},
+			{
+				header: 'Totale kosten',
+				key: 'totalCost',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
+					cell.style = { numFmt: '"€"#,##0.00;' };
 				},
-				{
-					header: 'Totale kosten incl.toeslagen',
-					key: 'totalCostWithSurcharge',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-						cell.style = { numFmt: '"€"#,##0.00;' };
-					},
-					width: 16,
+				width: 16,
+			},
+			{
+				header: 'Totale kosten incl.toeslagen',
+				key: 'totalCostWithSurcharge',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
+					cell.style = { numFmt: '"€"#,##0.00;' };
 				},
-				{
-					header: 'Planjaar',
-					key: 'maintenanceYear',
-					headerStyle: { ...this.headerStyle, italic: true },
-					renderCell: (cell: Cell, value): void => {
-						cell.value = value;
-						cell.alignment = { horizontal: 'right' };
-					},
-					width: 12,
+				width: 16,
+			},
+			{
+				header: 'Planjaar',
+				key: 'maintenanceYear',
+				headerStyle: { ...this.headerStyle, italic: true },
+				renderCell: (cell: Cell, value): void => {
+					cell.value = value;
+					cell.alignment = { horizontal: 'right' };
 				},
-			];
-			resolve(columns);
-		});
+				width: 12,
+			},
+		];
 	}
 
 	private renderColumns(columns: MjopExportColumn[], data: any, row: Row, startingCol: number): void {

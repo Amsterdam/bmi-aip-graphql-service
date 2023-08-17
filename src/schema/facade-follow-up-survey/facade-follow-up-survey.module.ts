@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { PrismaService } from 'src/prisma.service';
+
+import { PrismaService } from '../../prisma.service';
+import { AuthorizationModule } from '../../authorization/authorization.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
 
 import { FacadeFollowUpSurveyRepository } from './facade-follow-up-survey.repository';
 import { FacadeFollowUpSurveyResolver } from './facade-follow-up-survey.resolver';

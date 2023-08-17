@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { DBAsset } from '../asset.repository';
 
@@ -7,8 +7,8 @@ export const dbAsset: DBAsset = {
 	name: '__NAME__',
 	code: 'BRU0670',
 	location: 'Zuid Naaldwijkstraat-Afrit Einsteinweg (A10)',
-	latitude: new Decimal(52.34561457),
-	longitude: new Decimal(4.84204465),
+	latitude: new Prisma.Decimal(52.34561457),
+	longitude: new Prisma.Decimal(4.84204465),
 	updatedOn: new Date('2019-12-18T11:35:19.410Z'),
 	compositionIsVisible: true,
 	clientCompanyId: 'da93b18e-8326-db37-6b30-1216f5b38b2c',
@@ -35,9 +35,9 @@ export const dbAsset: DBAsset = {
 	trafficType: ',3',
 	mainMaterial: null,
 	marineInfrastrutureType: null,
-	length: new Decimal(33.0),
-	width: new Decimal(10.0),
-	squareMeters: new Decimal(330.0),
+	length: new Prisma.Decimal(33.0),
+	width: new Prisma.Decimal(10.0),
+	squareMeters: new Prisma.Decimal(330.0),
 	attributes:
 		'{"id": "670285", "fase": "bureaustudie", "batch": "1", "palen": "Beton", "dragers": "Vgs prefabbeton - gewapend beton", "functie": "Normaal verkeer", "gebruik": "Normaal verkeer", "subsoort": "Viaduct", "materiaal": "Vaste brug beton", "stadsdeel": "Zuid", "brugruimte": "2", "ligging-in": "Naaldwijkstraat", "beheer-type": "Verkeer & Openbare Ruimte", "constructie": "Vgs prefabbeton, gew.beton", "guid-intern": "G0363.4eaad02a09e64fb7bb9dacc4b10875cd", "object-type": "Viaduct", "gebruik-auto": "1", "ligging-over": "Naaldwijkstraat", "object-nummer": "BRU670", "batch-voorstel": "9", "damwandplanken": "Beton", "aspect-bouwjaar": "3", "belastingklasse": "BK-A-1938", "object-conditie": "2", "belastingklasse-2": "Klasse 60", "belastingklasse-3": "Klasse 60", "oppervlakte-in-m2": "236", "overspanning-land": "1", "afdeling-in-beheer": "Verkeer & Openbare Ruimte", "aspect-belasting-klasse": "1"}',
 };

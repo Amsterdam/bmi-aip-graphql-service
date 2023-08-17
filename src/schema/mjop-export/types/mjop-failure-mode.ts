@@ -1,4 +1,4 @@
-export interface IMJOPFailureMode {
+export type IMJOPFailureMode = {
 	failureModeName: string; // Faalwijze
 	faaloorzaak: string; // Faaloorzaak
 	bronVanFalen: string; // Bron van falen
@@ -14,4 +14,4 @@ export interface IMJOPFailureMode {
 	verificationRamsEnv: string; // Env
 	verificationRamsP: string; // P
 	verificationRamsWeightedPriority: string; // Prioritering
-}
+};

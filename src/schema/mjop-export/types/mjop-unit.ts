@@ -2,7 +2,7 @@ import { IMJOPDerivedConditionScoreUnit } from './mjop-derived-condition-score-u
 import { IMJOPCyclicMeasure } from './mjop-cyclic-measure';
 import { IMJOPMeasure } from './mjop-measure';
 
-export interface IMJOPUnit {
+export type IMJOPUnit = {
 	elementId: string;
 	unitName: string; // Bouwdeel
 	unitMaterial: string; //'Materiaal
@@ -11,4 +11,4 @@ export interface IMJOPUnit {
 	derivedConditionScoreUnit?: IMJOPDerivedConditionScoreUnit;
 	measures?: IMJOPMeasure[] | IMJOPCyclicMeasure[];
 	elementName?: string; // Element
-}
+};

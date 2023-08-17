@@ -4,8 +4,6 @@ import { InjectGraphQLClient } from '@golevelup/nestjs-graphql-request';
 import { GraphQLClient } from 'graphql-request';
 import { gql } from 'apollo-server-express';
 
-import { CreateObjectInput } from '../schema/object/dto/create-object.input';
-import { ObjectModel } from '../schema/object/models/object.model';
 import { CreateSurveyInput } from '../schema/survey/dto/create-survey.input';
 import { Survey } from '../schema/survey/models/survey.model';
 import { CreateLuminaireInput } from '../schema/span-installation/dto/create-luminaire.input';
@@ -14,8 +12,6 @@ import { CreateJunctionBoxInput } from '../schema/span-installation/dto/create-j
 import { SupportSystem } from '../schema/span-installation/models/support-system.model';
 import { JunctionBox } from '../schema/span-installation/models/junction-box.model';
 import { CreateSupportSystemInput } from '../schema/span-installation/dto/create-support-system.input';
-import { UpdateObjectInput } from '../schema/object/dto/update-object.input';
-import { CorrectCoordinatesInput } from '../schema/object/dto/correct-coordinates.input';
 import { AdditionalPropsForOVSExportInput } from '../schema/span-installation/dto/additional-props-for-ovs-export.input';
 
 import { ExternalAIPGraphQLRequest } from './ExternalAIPGraphQLRequest';
@@ -27,30 +23,6 @@ export class ExternalAIPGraphQLRepository {
 		private readonly configService: ConfigService,
 		@InjectGraphQLClient() private readonly graphqlClient: GraphQLClient,
 	) {}
-
-	public async createObject(input: CreateObjectInput): Promise<ObjectModel> {
-		const mutation = gql`
-			mutation createObject($input: CreateObjectInput!) {
-				createObject(createObject: $input) {
-					id
-				}
-			}
-		`;
-
-		return this.executeGraphQLRequest(mutation, input);
-	}
-
-	public async updatePassportByObjectCode(input: Partial<UpdateObjectInput>): Promise<string> {
-		const mutation = gql`
-			mutation updatePassportByObjectCode($input: UpdateObjectInput!) {
-				updatePassportByObjectCode(updateObject: $input) {
-					success
-				}
-			}
-		`;
-
-		return this.executeGraphQLRequest(mutation, input);
-	}
 
 	public async createSurvey(input: CreateSurveyInput): Promise<Survey> {
 		const mutation = gql`
@@ -146,17 +118,6 @@ export class ExternalAIPGraphQLRepository {
 		});
 
 		return result?.removeDuplicateInstallationGroup;
-	}
-
-	public async correctCoordinates(input: CorrectCoordinatesInput): Promise<any> {
-		const mutation = gql`
-			mutation correctCoordinates($input: CorrectCoordinatesInput!) {
-				correctCoordinates(correctCoordinates: $input) {
-					success
-				}
-			}
-		`;
-		return this.graphqlClient.request<ExternalAIPGraphQLRequest>(mutation, { input });
 	}
 
 	public async setAdditionalPropsForOVSExport(

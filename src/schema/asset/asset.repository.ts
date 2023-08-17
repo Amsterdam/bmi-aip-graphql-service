@@ -42,7 +42,7 @@ export class AssetRepository implements IAssetRepository {
 						SELECT "batchExecutorCompanies".id FROM "batchExecutorCompanies"
 						WHERE
 							batches.id = "batchExecutorCompanies"."batchId"
-							AND "batchExecutorCompanies"."companyId" = ${companyId}
+							AND "batchExecutorCompanies"."companyId" = ${companyId}::uuid
 					)
 				)
 		`;

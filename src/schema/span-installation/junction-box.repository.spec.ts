@@ -1,5 +1,5 @@
 import { MockedObjectDeep } from 'ts-jest';
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma.service';
 
@@ -62,10 +62,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					},
 				},
 				a11yDetails: junctionBoxInput.a11yDetails,
-				installationHeight: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal(33.33),
+				mastNumber: new Prisma.Decimal(33.33),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
@@ -78,7 +78,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(prismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...junctionBoxInput,
+				...domainJunctionBox,
 				a11yDetails: junctionBoxInput.a11yDetails,
 			}),
 		);
@@ -103,10 +103,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					},
 				},
 				a11yDetails: junctionBoxInput.a11yDetails,
-				installationHeight: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal(33.33),
+				mastNumber: new Prisma.Decimal(33.33),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
@@ -121,7 +121,7 @@ describe('Span Installation / JunctionBox / Repository', () => {
 		expect(revisePrismaServiceMock.$executeRaw).toHaveBeenCalled();
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...createMissingJunctionBoxInput,
+				...domainReviseJunctionBox,
 				a11yDetails: createMissingJunctionBoxInput.a11yDetails,
 			}),
 		);
@@ -166,10 +166,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			where: { id: reviseJunctionBoxInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
-				installationHeight: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal('33.33'),
+				mastNumber: new Prisma.Decimal('33.33'),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
@@ -193,10 +193,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				type: 'Point',
 			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: new Decimal(10),
+			installationHeight: new Prisma.Decimal(10),
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
-			mastNumber: new Decimal(33.33),
+			mastNumber: new Prisma.Decimal(33.33),
 			name: '__NAME__',
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			remarks: '__REMARKS__',
@@ -204,8 +204,8 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			remarksRevision: '__REMARKS_REVISION__',
-			mastId: new Decimal(10),
-			techViewId: new Decimal(10),
+			mastId: new Prisma.Decimal(10),
+			techViewId: new Prisma.Decimal(10),
 		});
 	});
 
@@ -220,10 +220,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			where: { id: updateJunctionBoxInput.id },
 			data: {
 				a11yDetails: { limitationOnTheMaximumHeadroom: true },
-				installationHeight: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal('33.33'),
+				mastNumber: new Prisma.Decimal('33.33'),
 				name: '__NAME__',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
@@ -246,10 +246,10 @@ describe('Span Installation / JunctionBox / Repository', () => {
 				type: 'Point',
 			},
 			id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-			installationHeight: new Decimal(10),
+			installationHeight: new Prisma.Decimal(10),
 			location: '__LOCATION__',
 			locationIndication: '__LOCATION_INDICATION__',
-			mastNumber: new Decimal(33.33),
+			mastNumber: new Prisma.Decimal(33.33),
 			name: '__NAME__',
 			objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			remarks: '__REMARKS__',
@@ -257,8 +257,8 @@ describe('Span Installation / JunctionBox / Repository', () => {
 			surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 			permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 			remarksRevision: null,
-			mastId: new Decimal(10),
-			techViewId: new Decimal(10),
+			mastId: new Prisma.Decimal(10),
+			techViewId: new Prisma.Decimal(10),
 		});
 	});
 
@@ -285,17 +285,17 @@ describe('Span Installation / JunctionBox / Repository', () => {
 					type: 'Point',
 				},
 				id: '1f728e79-1b89-4333-a309-ea93bf17667c',
-				installationHeight: new Decimal(10),
+				installationHeight: new Prisma.Decimal(10),
 				location: '__LOCATION__',
 				locationIndication: '__LOCATION_INDICATION__',
-				mastNumber: new Decimal(33.33),
+				mastNumber: new Prisma.Decimal(33.33),
 				name: '__NAME__',
 				objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 				remarks: '__REMARKS__',
 				riserTubeVisible: true,
 				surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
-				mastId: new Decimal(10),
-				techViewId: new Decimal(10),
+				mastId: new Prisma.Decimal(10),
+				techViewId: new Prisma.Decimal(10),
 			}),
 		);
 		expect(spy).toHaveBeenCalledWith(identifier);

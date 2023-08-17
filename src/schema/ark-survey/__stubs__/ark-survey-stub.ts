@@ -1,10 +1,9 @@
-import { DbSurvey } from 'src/schema/survey/types/survey.repository.interface';
-
 import { ArkSurvey as DomainArkSurvey } from '../types/ark-survey.repository.interface';
 import { CreateArkSurveyInput } from '../dto/create-ark-survey.input';
 import { ArkSurveyFactory } from '../ark-survey.factory';
 import { UpdateArkSurveyInput } from '../dto/update-ark-survey.input';
 import { SaveArkSurveyInput } from '../dto/save-ark-survey.input';
+import { DbSurvey } from '../../survey/types/survey.repository.interface';
 
 const arkSurveyRaw: Omit<DomainArkSurvey, 'id'> = {
 	surveyId: 'ad18b7c4-b2ef-4e6e-9bbf-c33360584cd7',

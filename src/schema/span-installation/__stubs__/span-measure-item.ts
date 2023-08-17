@@ -1,7 +1,7 @@
 import { SpanMeasureItem as DomainSpanMeasureItem } from '../../span-installation/types/span-measure-item.repository.interface';
 import { SpanMeasureItem } from '../models/span-measure-item.model';
 import { CreateSpanMeasureItemInput } from '../dto/create-span-measure-item.input';
-import { UpdateSpanMeasureItemInput } from '../dto/update-span-measure-item-input';
+import { SaveSpanMeasureItemsInput } from '../dto/save-span-measure-items-input';
 
 const spanMeasureItem = new SpanMeasureItem();
 spanMeasureItem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
@@ -35,6 +35,19 @@ export const domainSpanMeasureItem: DomainSpanMeasureItem = {
 	isActive: true,
 };
 
+export const saveSpanMeasureItemRaw: SaveSpanMeasureItemsInput = {
+	spanMeasureId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	spanMeasureItems: [
+		{
+			optionId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			description: '__NAME__',
+			itemType: 'material',
+			quantityUnitOfMeasurement: '1f728e79-1b89-4333-a309-ea93bf17667c',
+			quantityEstimate: 1,
+		},
+	],
+};
+
 export const saveSpanMeasureItemsInput = {
 	spanMeasureId: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	spanMeasureItems: [spanMeasureItemRaw],
@@ -45,9 +58,9 @@ export const createSpanMeasureItemInput = Object.keys(spanMeasureItemRaw).reduce
 	return input;
 }, new CreateSpanMeasureItemInput());
 
-const updateSpanMeasureItem = new UpdateSpanMeasureItemInput();
-updateSpanMeasureItem.id = '1f728e79-1b89-4333-a309-ea93bf17667c';
-export const updateSpanMeasureItemInput = Object.keys(spanMeasureItemRaw).reduce((input, key) => {
-	input[key] = spanMeasureItemRaw[key];
+const saveSpanMeasureItem = new SaveSpanMeasureItemsInput();
+saveSpanMeasureItem.spanMeasureId = '1f728e79-1b89-4333-a309-ea93bf17667c';
+export const saveSpanMeasureItemInput = Object.keys(saveSpanMeasureItemRaw).reduce((input, key) => {
+	input[key] = saveSpanMeasureItemRaw[key];
 	return input;
-}, updateSpanMeasureItem);
+}, saveSpanMeasureItem);

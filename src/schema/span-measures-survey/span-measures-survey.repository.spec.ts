@@ -32,7 +32,7 @@ describe('Span Measures survey / Repository', () => {
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...updateSpanMeasuresSurveyInput,
+				...domainSpanMeasuresSurvey,
 			}),
 		);
 	});
@@ -47,7 +47,7 @@ describe('Span Measures survey / Repository', () => {
 		});
 		expect(returnValue).toEqual(
 			expect.objectContaining({
-				...updateSpanMeasuresSurveyInput,
+				...domainSpanMeasuresSurvey,
 			}),
 		);
 	});

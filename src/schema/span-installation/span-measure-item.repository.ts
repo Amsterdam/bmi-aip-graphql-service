@@ -111,9 +111,15 @@ export class SpanMeasureItemRepository implements ISpanMeasureItemRepository {
 			});
 
 			if (spanMeasureItemsInput.spanMeasureItems) {
-				await this.prisma.spanMeasureItems.createMany({
-					data: SpanMeasureItemFactory.FormatSpanMeasureItems(spanMeasureItemsInput),
-				});
+				if (spanMeasureItemsInput.spanMeasureItems.length > 0) {
+					await this.prisma.spanMeasureItems.createMany({
+						data: SpanMeasureItemFactory.FormatSpanMeasureItems(spanMeasureItemsInput),
+					});
+				} else {
+					await this.prisma.spanMeasures.delete({
+						where: { id: spanMeasureItemsInput.spanMeasureId },
+					});
+				}
 
 				return this.findSpanMeasureItems(spanMeasureItemsInput.spanMeasureId);
 			}

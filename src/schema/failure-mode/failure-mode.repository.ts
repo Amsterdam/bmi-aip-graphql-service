@@ -128,11 +128,37 @@ export class FailureModeRepository implements IFailureModeRepository {
 	}
 
 	public async getFailureMode(failureModeId: string): Promise<FailureMode | null> {
-		return this.prisma.failureModes.findUnique({
+		const failureMode = await this.prisma.failureModes.findUnique({
 			where: {
 				id: failureModeId,
 			},
 		});
+
+		if (failureMode) {
+			const values = await this.prisma.dataSets.findMany({
+				where: {
+					id: {
+						in: [
+							failureMode.failureMode,
+							failureMode.function,
+							failureMode.guideword,
+							failureMode.causeOfFailure,
+							failureMode.sourceOfFailure,
+						],
+					},
+				},
+			});
+
+			const valueMap = new Map(values.map((value) => [value.id, value.value]));
+
+			failureMode.failureMode = valueMap.get(failureMode.failureMode) || null;
+			failureMode.function = valueMap.get(failureMode.function) || null;
+			failureMode.guideword = valueMap.get(failureMode.guideword) || null;
+			failureMode.causeOfFailure = valueMap.get(failureMode.causeOfFailure) || null;
+			failureMode.sourceOfFailure = valueMap.get(failureMode.sourceOfFailure) || null;
+		}
+
+		return failureMode;
 	}
 
 	async updateFailureMode({

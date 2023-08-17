@@ -1,8 +1,8 @@
 import { IMJOPElement } from './mjop-element';
 
-export interface IMJOPSurvey {
+export type IMJOPSurvey = {
 	condition: string;
 	careScore: string; // Verzorgingsscore Object
 	elements?: IMJOPElement[];
 	craInspectionScore: number; // CRA Inspectie scores
-}
+};

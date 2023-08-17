@@ -2,16 +2,16 @@ import { Cell } from 'exceljs';
 
 import { MJOPColumnHeaderKeys } from './mjop-record';
 
-export interface MjopExportHeaderStyle {
+export type MjopExportHeaderStyle = {
 	bgColor: string;
 	textColor: string;
 	italic?: boolean;
 	underline?: boolean;
 	bold?: boolean;
 	strike?: boolean;
-}
+};
 
-export interface MjopExportColumn {
+export type MjopExportColumn = {
 	key: MJOPColumnHeaderKeys;
 	header: string;
 	headerStyle: MjopExportHeaderStyle;
@@ -22,4 +22,4 @@ export interface MjopExportColumn {
 	 */
 	renderCell: (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
 	width?: number;
-}
+};

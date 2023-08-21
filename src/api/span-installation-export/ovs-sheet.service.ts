@@ -3,8 +3,9 @@ import * as ExcelJS from 'exceljs';
 import type { Cell } from 'exceljs';
 
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
-import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { BatchService } from '../../schema/batch/batch.service';
+import { SupportSystemType } from '../../types';
+import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
 
 import {
 	OVSExportColumn,
@@ -20,11 +21,15 @@ export class OVSSheetService {
 		private readonly supportSystemService: SupportSystemService,
 	) {}
 
-	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<{
-		supportSystems: OVSRow[];
-	}> {
+	// This method fetches all the data related to one asset
+	// One to many relations (supportSystems) are nested in the data
+	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<any> {
+		// TODO set up proper return type for this method
+		// Currently it is any, but it should be a type that contains all the data for use in addOVSRows
+		// As at this point the input is an Asset, and an Asset contains multiple SupportSystems,
+		// It is not possible to use the OVSRow type as this only contains data for a single SupportSystem
+
 		const supportSystems = await this.supportSystemService.findByObject(ovsAsset.id);
-		console.log(supportSystems);
 		const passportData = ovsAsset.attributes;
 
 		// fetch batches from service
@@ -35,33 +40,40 @@ export class OVSSheetService {
 		// 	batchStatus: batch.status
 		// }));
 
-		const supportSystemFormatted = supportSystems.map((supportSystem) => ({
-			...supportSystem,
-			street: '--- TODO ---',
-			houseNumber: '--- TODO ---',
-			floor: '--- TODO ---',
-			xCoordinate: '--- TODO ---',
-			yCoordinate: '--- TODO ---',
-		}));
-
 		return {
 			...ovsAsset,
 			...passportData,
 			batches,
-			supportSystems: supportSystemFormatted,
+			supportSystems,
 		};
 	}
 
-	public async getDataPerSupportSystem(supportSystem: SupportSystem): Promise<any> {
+	// For each row in the Excel sheet all fields for all types of SupportSystem should be present
+	private async fillSupportSystemFields(supportSystem: SupportSystem, typeToCheck: SupportSystemType) {
+		let data = this.formatFacadeSurveyData(supportSystem);
+
+		if (supportSystem.type !== typeToCheck) {
+			// Create an object with null values for all keys
+			const nullData = { ...data };
+			for (const key in nullData) {
+				nullData[key] = null;
+			}
+			data = nullData;
+		}
+
+		return data;
+	}
+
+	private formatFacadeSurveyData(supportSystem: SupportSystem): any {
 		return {
-			supportSystemTypeDetailed: supportSystem.typeDetailed,
-			supportSystemStreet: supportSystem.location,
-			supportSystemHouseNumber: supportSystem.houseNumber,
-			supportSystemFloor: supportSystem.location,
-			supportSystemXCoordinate: 'supportSystem.xCoordinate',
-			supportSystemYCoordinate: 'supportSystem.yCoordinate',
-			supportSystemInstallationHeight: supportSystem.installationHeight,
-			supportSystemRemarks: supportSystem.remarks,
+			facadeTypeDetailed: supportSystem.typeDetailed,
+			facadeStreet: supportSystem.location,
+			facadeHouseNumber: supportSystem.houseNumber,
+			facadeFloor: supportSystem.locationIndication,
+			facadeXCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[0] : '',
+			facadeYCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[1] : '',
+			facadeInstallationHeight: supportSystem.installationHeight,
+			facadeRemarks: supportSystem.remarks,
 		};
 	}
 
@@ -74,7 +86,7 @@ export class OVSSheetService {
 		// data is expected to contain the data at root level, where 'key' is the column key
 
 		const baseDataColumns = await this.getBaseDataColumns(ovsAsset);
-		const batchDataColumns = await this.getBatchDataColumns(ovsAsset);
+		const batchDataColumns = await this.getOVSExportSpanInstallationBatchDataColumns(ovsAsset);
 		const passportDataColumns = await this.getPassportDataColumns(ovsAsset);
 		const decompositionFacadeColumns = await this.getFacadeColumns(ovsAsset);
 		const decompositionTensionWireColumns = this.getTensionWireColumns();
@@ -109,10 +121,10 @@ export class OVSSheetService {
 
 		// Loop over all support systems as this is the most deeply nested entity
 		for (const supportSystem of data.supportSystems) {
-			const supportSystemFormatted = await this.getDataPerSupportSystem(supportSystem);
+			const facadeSupportSystem = await this.fillSupportSystemFields(supportSystem, SupportSystemType.Facade);
 			const rowData = {
 				...data,
-				...supportSystemFormatted,
+				...facadeSupportSystem,
 			};
 
 			// Apply cell styles
@@ -169,6 +181,24 @@ export class OVSSheetService {
 			fgColor: { argb: 'FFCEDFF0' },
 		};
 
+		// Add third row of headings (per category)
+		worksheet.mergeCells('L3', 'S3');
+		worksheet.getCell('L3').value = 'Gevel';
+		worksheet.getCell('L3').alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell('L3').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L3').font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell('L3').fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: 'FFCEDFF0' },
+		};
+
 		return worksheet;
 	}
 
@@ -186,16 +216,20 @@ export class OVSSheetService {
 		];
 	}
 
-	public async getBatchDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
-		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
+	// public async getBatchDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
+	// 	const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
+	// }
 
+	public async getOVSExportSpanInstallationBatchDataColumns(
+		ovsAsset: OVSExportSpanInstallationBaseData,
+	): Promise<OVSExportColumn[]> {
 		return [
 			{
 				header: 'Batch nummer(s)',
 				key: 'batchNumbers',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = batches.map((batch) => batch.name).join(', ');
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : '';
 				},
 				width: 16,
 			},
@@ -203,8 +237,8 @@ export class OVSSheetService {
 				header: 'Batch status',
 				key: 'batchStatus',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = batches[0]?.status || ''; // Handle the case of no batches
+				renderCell: (cell: ExcelJS.Cell): void => {
+					cell.value = cell.value ? cell.value : ''; // Handle the case of no batches
 				},
 				width: 16,
 			},

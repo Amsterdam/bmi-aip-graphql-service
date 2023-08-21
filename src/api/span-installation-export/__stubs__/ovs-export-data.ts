@@ -26,36 +26,6 @@ const passportData: IPassport = {
 	notes: 'test',
 };
 
-// const batchesData: DBBatch[] = [
-// 	{
-// 		id: '1',
-// 		name: 'test',
-// 		status: 'test',
-// 		startDate: new Date(),
-// 		endDate: new Date(),
-// 		created_at: new Date(),
-// 		updated_at: new Date(),
-// 		plannedStartDate: new Date(),
-// 		plannedEndDate: new Date(),
-// 		contractId: '1',
-// 		tranchId: '1',
-// 		remarks: 'test',
-// 		legacyFailureMode: false
-// 	},
-// ];
-
-// const supportSystemData: IOVSSupportSystem[] = [{
-// 	typeDetailed: 'test',
-// 	street: 'test',
-// 	houseNumber: 'test',
-// 	floor: 'test',
-// 	xCoordinate: 'test',
-// 	yCoordinate: 'test',
-// 	installationHeight: 1,
-// 	installationLength: 1,
-// 	remarks: 'test'
-// }];
-
 const facadeData: FacadeData = {
 	facadeTypeDetailed: 'test',
 	facadeStreet: 'test',

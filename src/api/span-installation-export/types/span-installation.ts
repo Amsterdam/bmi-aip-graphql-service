@@ -15,6 +15,18 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
+export type OVSSupportSystemData = {
+	supportSystemTypeDetailed: string;
+	supportSystemStreet: string;
+	supportSystemHouseNumber: string;
+	supportSystemFloor: string;
+	supportSystemXCoordinate: string;
+	supportSystemYCoordinate: string;
+	supportSystemInstallationHeight: string;
+	supportSystemInstallationLength: string;
+	supportSystemRemarks: string;
+};
+
 export type FacadeData = {
 	facadeTypeDetailed: string;
 	facadeStreet: string;
@@ -37,7 +49,13 @@ export type TensionWireData = {
 export type OVSPassportData = IPassport;
 
 // OVS Record describes a single row of data in the Excel export
-export interface OVSRow extends OVSBaseData, OVSBatchData, OVSPassportData, FacadeData, TensionWireData {}
+export interface OVSRow
+	extends OVSBaseData,
+		OVSBatchData,
+		OVSPassportData,
+		OVSSupportSystemData,
+		FacadeData,
+		TensionWireData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;

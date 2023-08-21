@@ -28,6 +28,8 @@ const decompositionFacadeFields = [
 	'Opmerkingen',
 ];
 
+const decompositionTensionWireFields = ['Type gedetailleerd', 'Lengte spandraad', 'Straat', 'Opmerkingen'];
+
 const passportFields = [
 	'Straat',
 	'Buurt',
@@ -61,7 +63,13 @@ describe('OVSSheetService', () => {
 			const rowWithColumnNames = worksheet.getRow(4);
 			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
-			expect(labels).toEqual([...baseFields, ...batchFields, ...passportFields, ...decompositionFacadeFields]);
+			expect(labels).toEqual([
+				...baseFields,
+				...batchFields,
+				...passportFields,
+				...decompositionFacadeFields,
+				...decompositionTensionWireFields,
+			]);
 		});
 
 		// it('should add a new OVS export sheet with the appropriate values', async () => {

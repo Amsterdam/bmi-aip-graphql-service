@@ -108,7 +108,7 @@ export class OVSSheetService {
 		});
 
 		// Loop over all support systems as this is the most deeply nested entity
-		data.supportSystems.forEach(async (supportSystem: SupportSystem) => {
+		for (const supportSystem of data.supportSystems) {
 			const supportSystemFormatted = await this.getDataPerSupportSystem(supportSystem);
 			const rowData = {
 				...data,
@@ -118,7 +118,7 @@ export class OVSSheetService {
 			// Apply cell styles
 			const newRow = worksheet.addRow([]);
 			this.renderColumns(columns, rowData, newRow, startingCol);
-		});
+		}
 	}
 
 	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {

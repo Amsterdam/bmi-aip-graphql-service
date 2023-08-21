@@ -6,7 +6,6 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
-import { luminaireStub } from '../../schema/span-installation/__stubs__';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';

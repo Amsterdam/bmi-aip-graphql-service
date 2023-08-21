@@ -7,7 +7,7 @@ const assetBaseData: OVSBaseData = {
 	code: 'test',
 };
 
-const assetBatchData: OVSBatchData = {
+export const assetBatchData: OVSBatchData = {
 	batchNumbers: 'test',
 	batchStatus: 'test',
 };
@@ -24,6 +24,18 @@ const passportData: IPassport = {
 	passportDoubleWired: true,
 	tramTracks: true,
 	notes: 'test',
+};
+
+export type OVSSupportSystemData = {
+	supportSystemTypeDetailed: string;
+	supportSystemStreet: string;
+	supportSystemHouseNumber: string;
+	supportSystemFloor: string;
+	supportSystemXCoordinate: string;
+	supportSystemYCoordinate: string;
+	supportSystemInstallationHeight: string;
+	supportSystemInstallationLength: string;
+	supportSystemRemarks: string;
 };
 
 const facadeData: FacadeData = {

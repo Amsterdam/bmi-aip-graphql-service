@@ -5,7 +5,7 @@ import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
 import { OVSExportSpanInstallationBaseData } from '../types/span-installation';
-import { AddOVSSheetService } from '../add-ovs-sheet.service';
+import { OVSSheetService } from '../ovs-sheet.service';
 
 import { OVSExportAllQuery } from './ovs-export-all.query';
 
@@ -13,7 +13,7 @@ import { OVSExportAllQuery } from './ovs-export-all.query';
 export class OVSExportAllHandler implements IQueryHandler<OVSExportAllQuery> {
 	constructor(
 		private readonly exporterService: SpanInstallationExportService,
-		private readonly addOVSSheetService: AddOVSSheetService,
+		private readonly addOVSSheetService: OVSSheetService,
 		private readonly logger: Logger,
 	) {}
 
@@ -32,7 +32,7 @@ export class OVSExportAllHandler implements IQueryHandler<OVSExportAllQuery> {
 
 			let generateHeaders = true;
 			for (const object of objects) {
-				await this.addOVSSheetService.addOVSSheet(worksheet, object, generateHeaders);
+				await this.addOVSSheetService.addOVSRows(worksheet, object, generateHeaders);
 				generateHeaders = false;
 			}
 

@@ -7,7 +7,7 @@ import { DBBatch } from '../../schema/batch/types/batch.repository.interface';
 import { supportSystem } from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 
-import { AddOVSSheetService } from './add-ovs-sheet.service';
+import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub } from './__stubs__/ovs-asset';
 
 // The labels below are the labels that are expected to be present in the OVS export sheet
@@ -40,8 +40,8 @@ const passportFields = [
 	'Opmerkingen',
 ];
 
-describe('AddOvsSheetService', () => {
-	describe('addOVSSheet', () => {
+describe('OVSSheetService', () => {
+	describe('addOVSRows', () => {
 		it('should add a new OVS export sheet with the appropriate columns', async () => {
 			const batchStub = {
 				id: '__BATCH_ID__',
@@ -81,11 +81,11 @@ describe('AddOvsSheetService', () => {
 				...(<any>{}),
 			};
 
-			const addOvsSheetService = new AddOVSSheetService(mockBatchService, mockSupportSystemService);
+			const addOvsSheetService = new OVSSheetService(mockBatchService, mockSupportSystemService);
 
 			const workbook = new ExcelJS.Workbook();
 			const worksheet = workbook.addWorksheet('');
-			await addOvsSheetService.addOVSSheet(worksheet, ovsAssetStub, true);
+			await addOvsSheetService.addOVSRows(worksheet, ovsAssetStub, true);
 
 			const rowWithColumnNames = worksheet.getRow(4);
 			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells

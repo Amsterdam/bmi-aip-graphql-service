@@ -6,16 +6,23 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { BatchService } from '../../schema/batch/batch.service';
 
-import { OVSExportColumn, OVSExportHeaderStyle, OVSExportSpanInstallationBaseData } from './types/span-installation';
+import {
+	OVSExportColumn,
+	OVSExportHeaderStyle,
+	OVSExportSpanInstallationBaseData,
+	OVSRow,
+} from './types/span-installation';
 
 @Injectable()
-export class AddOVSSheetService {
+export class OVSSheetService {
 	constructor(
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 	) {}
 
-	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<any> {
+	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<{
+		supportSystems: OVSRow[];
+	}> {
 		const supportSystems = await this.supportSystemService.findByObject(ovsAsset.id);
 		console.log(supportSystems);
 		const passportData = ovsAsset.attributes;
@@ -58,7 +65,7 @@ export class AddOVSSheetService {
 		};
 	}
 
-	public async addOVSSheet(
+	public async addOVSRows(
 		worksheet: ExcelJS.Worksheet,
 		ovsAsset: OVSExportSpanInstallationBaseData,
 		generateHeaders: boolean,

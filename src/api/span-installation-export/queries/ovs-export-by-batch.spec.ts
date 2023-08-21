@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 
 import { responseMock } from '../__mocks__/response';
 import { SpanInstallationExportService } from '../span-installation-export.service';
-import { AddOVSSheetService } from '../add-ovs-sheet.service';
+import { OVSSheetService } from '../ovs-sheet.service';
 import { ovsAssetStub } from '../__stubs__/ovs-asset';
 
 import { OVSExportByBatchQuery } from './ovs-export-by-batch.query';
@@ -14,8 +14,8 @@ const mockExporterService: MockedObjectDeep<SpanInstallationExportService> = {
 	...(<any>{}),
 };
 
-const mockAddOvsSheetService: MockedObjectDeep<AddOVSSheetService> = {
-	addOVSSheet: jest.fn().mockResolvedValue({}),
+const mockAddOvsSheetService: MockedObjectDeep<OVSSheetService> = {
+	addOVSRows: jest.fn().mockResolvedValue({}),
 	...(<any>{}),
 };
 
@@ -40,7 +40,7 @@ describe('OVSExportByBatchHandler', () => {
 		const query = new OVSExportByBatchQuery(responseMock, batchId);
 		await new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
-		expect(mockAddOvsSheetService.addOVSSheet).toHaveBeenCalledTimes(1);
+		expect(mockAddOvsSheetService.addOVSRows).toHaveBeenCalledTimes(1);
 	});
 
 	it('should return the correct headers for a spreadsheet', async () => {

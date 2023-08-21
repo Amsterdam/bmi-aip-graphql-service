@@ -37,7 +37,7 @@ export type TensionWireData = {
 export type OVSPassportData = IPassport;
 
 // OVS Record describes a single row of data in the Excel export
-export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData, FacadeData, TensionWireData {}
+export interface OVSRow extends OVSBaseData, OVSBatchData, OVSPassportData, FacadeData, TensionWireData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;
@@ -98,4 +98,4 @@ export interface OVSExportColumn {
 	width?: number;
 }
 
-export type OVSColumnHeaderKeys = UnionKeys<OVSRecord>;
+export type OVSColumnHeaderKeys = UnionKeys<OVSRow>;

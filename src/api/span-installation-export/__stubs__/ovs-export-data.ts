@@ -1,5 +1,5 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
-import { OVSRecord, FacadeData, TensionWireData } from '../types/span-installation';
+import { OVSRow, FacadeData, TensionWireData } from '../types/span-installation';
 
 const assetBaseData: OVSBaseData = {
 	id: '1',
@@ -75,7 +75,7 @@ const tensionWireData: TensionWireData = {
 	tensionWireRemarks: 'test',
 };
 
-export const ovsRecordMock: OVSRecord = {
+export const ovsRecordMock: OVSRow = {
 	...assetBaseData,
 	...assetBatchData,
 	...passportData,

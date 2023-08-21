@@ -6,46 +6,77 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
+import { luminaireStub } from '../../schema/span-installation/__stubs__';
+import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 
+import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
 	OVSExportColumn,
 	OVSExportHeaderStyle,
 	OVSExportSpanInstallationBaseData,
 	OVSRow,
-} from './types/span-installation';
+	OVSRowBase,
+	DecompositionFacadeData,
+	DecompositionTensionWireData,
+} from './types';
 
 @Injectable()
 export class OVSSheetService {
 	constructor(
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
+		private readonly luminaireService: LuminaireService,
 	) {}
 
-	// This method fetches all the data related to one asset
-	// One to many relations (supportSystems) are nested in the data
-	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<any> {
-		// TODO set up proper return type for this method
-		// Currently it is any, but it should be a type that contains all the data for use in addOVSRows
-		// As at this point the input is an Asset, and an Asset contains multiple SupportSystems,
-		// It is not possible to use the OVSRow type as this only contains data for a single SupportSystem
-
-		const supportSystems = await this.supportSystemService.findByObject(ovsAsset.id);
-		const passportData = ovsAsset.attributes;
-
-		// fetch batches from service
-		// prep batches in new type with batchNumber and batchStatus
-		const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
-		// const batchesData = batches.map((batch) => ({
-		// 	batchNumber: batch.name,
-		// 	batchStatus: batch.status
-		// }));
-
-		return {
-			...ovsAsset,
+	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
+		const { id, name, code, attributes } = ovsAsset;
+		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
+		const supportSystems = await this.supportSystemService.findByObject(id);
+		const batches = await this.batchService.findForAssetThroughSurveys(id);
+		const baseRow: OVSRowBase = {
+			// OVSBaseData
+			id,
+			name,
+			code,
+			// OVSBatchData
+			batchNumbers: batches.map((batch) => batch.name).join(', '),
+			batchStatus: batches.map((batch) => batch.status).join(', '),
+			// OVSPassportData
 			...passportData,
-			batches,
-			supportSystems,
 		};
+
+		const rows: OVSRow[] = [];
+
+		for (const supportSystem of supportSystems) {
+			rows.push({
+				...baseRow,
+				...SpanInstallationExportFactory.CreateDecompositionFacadeData(supportSystem),
+				...SpanInstallationExportFactory.CreateDecompositionTensionWireData(supportSystem),
+				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
+				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
+				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+			});
+
+			if (supportSystem.type === SupportSystemType.TensionWire) {
+				const luminaires = await this.luminaireService.getLuminaires(supportSystem.id);
+
+				for (const luminaire of luminaires) {
+					rows.push({
+						...baseRow,
+						...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
+						...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
+						...SpanInstallationExportFactory.CreateDecompositionMastData(),
+						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
+						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+					});
+				}
+			}
+		}
+
+		// Loop over support system types and per type loop over the support systems and add a row for each
+		// For each tensionWire, fetch the luminaires and add a row for each luminaire
+
+		return rows;
 	}
 
 	// For each row in the Excel sheet all fields for all types of SupportSystem should be present
@@ -83,26 +114,27 @@ export class OVSSheetService {
 		generateHeaders: boolean,
 	) {
 		const data = await this.getData(ovsAsset);
-		// data is expected to contain the data at root level, where 'key' is the column key
 
-		const baseDataColumns = await this.getBaseDataColumns(ovsAsset);
-		const batchDataColumns = await this.getOVSExportSpanInstallationBatchDataColumns(ovsAsset);
-		const passportDataColumns = await this.getPassportDataColumns(ovsAsset);
-		const decompositionFacadeColumns = await this.getFacadeColumns(ovsAsset);
-		const decompositionTensionWireColumns = this.getTensionWireColumns();
+		const baseDataColumns = this.getBaseDataColumns();
+		const batchDataColumns = this.getBatchDataColumns();
+		const passportDataColumns = this.getPassportDataColumns();
 
 		const columns = [
 			...baseDataColumns,
 			...batchDataColumns,
 			...passportDataColumns,
-			...decompositionFacadeColumns,
-			...decompositionTensionWireColumns,
+			...this.getFacadeColumns(),
+			...this.getTensionWireColumns(),
+			...this.getLuminaireColumns(),
+			...this.getMastColumns(),
+			...this.getNodeColumns(),
 		];
+
 		const headers = columns.map((column) => column.header);
 
 		if (generateHeaders) {
 			// Render upper most headers
-			this.setDocumentHeaderStyling(worksheet);
+			this.setDocumentHeaderStyling(worksheet, columns);
 
 			// Render column headers
 			const headerRow = worksheet.addRow(headers);
@@ -120,22 +152,17 @@ export class OVSSheetService {
 		});
 
 		// Loop over all support systems as this is the most deeply nested entity
-		for (const supportSystem of data.supportSystems) {
-			const facadeSupportSystem = await this.fillSupportSystemFields(supportSystem, SupportSystemType.Facade);
-			const rowData = {
-				...data,
-				...facadeSupportSystem,
-			};
-
-			// Apply cell styles
-			const newRow = worksheet.addRow([]);
-			this.renderColumns(columns, rowData, newRow, startingCol);
+		for (const rowData of data) {
+			this.renderColumns(columns, rowData, worksheet.addRow([]), startingCol);
 		}
 	}
 
-	public async setDocumentHeaderStyling(worksheet: ExcelJS.Worksheet): Promise<ExcelJS.Worksheet> {
+	public async setDocumentHeaderStyling(
+		worksheet: ExcelJS.Worksheet,
+		columns: OVSExportColumn[],
+	): Promise<ExcelJS.Worksheet> {
 		// Add upper most heading (Contracts)
-		worksheet.mergeCells('A1', 'P1');
+		worksheet.mergeCells('A1', 'AN1');
 		worksheet.getCell('A1').value = 'Contract - 1';
 		worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
 		worksheet.getCell('A1').fill = {
@@ -182,35 +209,84 @@ export class OVSSheetService {
 		};
 
 		// Add third row of headings (per category)
-		worksheet.mergeCells('L3', 'S3');
-		worksheet.getCell('L3').value = 'Gevel';
-		worksheet.getCell('L3').alignment = { vertical: 'middle', horizontal: 'center' };
-		worksheet.getCell('L3').font = {
-			name: 'Calibri',
-			bold: true,
-		};
-		worksheet.getCell('L3').font = {
-			name: 'Calibri',
-			bold: true,
-		};
-		worksheet.getCell('L3').fill = {
-			type: 'pattern',
-			pattern: 'solid',
-			fgColor: { argb: 'FFCEDFF0' },
-		};
+
+		const getColumnLetter = (key: string) =>
+			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1).letter;
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('facadeTypeDetailed')}3`,
+			`${getColumnLetter('facadeRemarks')}3`,
+			'Gevel',
+			'FFc5e0b4',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('tensionWireTypeDetailed')}3`,
+			`${getColumnLetter('tensionWireRemarks')}3`,
+			'Spandraad',
+			'FFc5e0b4',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('mastTypeDetailed')}3`,
+			`${getColumnLetter('mastRemarks')}3`,
+			'Mast',
+			'FFe2f0d9',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('nodeTypeDetailed')}3`,
+			`${getColumnLetter('nodeRemarks')}3`,
+			'Node',
+			'FFc5e0b4',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('luminaireTypeDetailed')}3`,
+			`${getColumnLetter('luminaireRemarks')}3`,
+			'Armatuur',
+			'FFe2f0d9',
+		);
 
 		return worksheet;
 	}
 
-	public async getBaseDataColumns(asset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
+	private setEntityHeader(
+		worksheet: ExcelJS.Worksheet,
+		startCell: string,
+		endCell: string,
+		name: string,
+		color: string,
+	) {
+		worksheet.mergeCells(startCell, endCell);
+		worksheet.getCell(startCell).value = name;
+		worksheet.getCell(startCell).alignment = { vertical: 'middle', horizontal: 'center' };
+		worksheet.getCell(startCell).font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell(startCell).font = {
+			name: 'Calibri',
+			bold: true,
+		};
+		worksheet.getCell(startCell).fill = {
+			type: 'pattern',
+			pattern: 'solid',
+			fgColor: { argb: color },
+		};
+	}
+
+	public getBaseDataColumns(): OVSExportColumn[] {
 		return [
 			{
 				header: 'OVS nummer',
 				key: 'code',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = asset.code;
-				},
 				width: 16,
 			},
 		];
@@ -220,197 +296,270 @@ export class OVSSheetService {
 	// 	const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
 	// }
 
-	public async getOVSExportSpanInstallationBatchDataColumns(
-		ovsAsset: OVSExportSpanInstallationBaseData,
-	): Promise<OVSExportColumn[]> {
+	public getBatchDataColumns(): OVSExportColumn[] {
 		return [
 			{
 				header: 'Batch nummer(s)',
 				key: 'batchNumbers',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : '';
-				},
 				width: 16,
 			},
 			{
 				header: 'Batch status',
 				key: 'batchStatus',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell: ExcelJS.Cell): void => {
-					cell.value = cell.value ? cell.value : ''; // Handle the case of no batches
-				},
 				width: 16,
 			},
 		];
 	}
 
-	public async getPassportDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
+	public getPassportDataColumns(): OVSExportColumn[] {
 		return [
 			{
 				header: 'Straat',
 				key: 'passportStreet',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportStreet;
-				},
 				width: 16,
 			},
 			{
 				header: 'Buurt',
 				key: 'passportNeighborhood',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportNeighborhood;
-				},
 				width: 16,
 			},
 			{
 				header: 'Wijk',
 				key: 'passportDistrict',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportDistrict;
-				},
 				width: 16,
 			},
 			{
 				header: 'Stadsdeel',
 				key: 'passportCityArea',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportCityArea;
-				},
 				width: 16,
 			},
 			{
 				header: 'Splitsingen',
 				key: 'passportSplits',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportSplits;
-				},
 				width: 16,
 			},
 			{
 				header: 'Dubbeldraads',
 				key: 'passportDoubleWired',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.passportDoubleWired;
-				},
 				width: 16,
 			},
 			{
 				header: 'Boven trambaan',
 				key: 'tramTracks',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.tramTracks;
-				},
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
 				key: 'notes',
 				headerStyle: { ...this.headerStyle, italic: true },
-				renderCell: (cell): void => {
-					cell.value = ovsAsset.attributes.notes;
-				},
 				width: 16,
 			},
 		];
 	}
 
-	private async getFacadeColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
-		const headerStyle = this.headerStyle;
+	private getFacadeColumns(): OVSExportColumn[] {
 		return [
 			{
 				header: 'Type gedetailleerd',
+				headerStyle: this.headerStyle,
 				key: 'facadeTypeDetailed',
-				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Straat',
-				key: 'facadeStreet',
-				headerStyle,
+				headerStyle: this.headerStyle,
+				key: 'facadeLocation',
 				width: 16,
 			},
 			{
 				header: 'Huisnummer',
+				headerStyle: this.headerStyle,
 				key: 'facadeHouseNumber',
-				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Verdieping',
-				key: 'facadeFloor',
-				headerStyle,
+				headerStyle: this.headerStyle,
+				key: 'facadeLocationIndication',
 				width: 16,
 			},
 			{
 				header: 'X coordinaat',
+				headerStyle: this.headerStyle,
 				key: 'facadeXCoordinate',
-				headerStyle,
-				renderCell: (cell): void => {
-					cell.value = '--- TODO ---';
-				},
 				width: 16,
 			},
 			{
 				header: 'Y coordinaat',
+				headerStyle: this.headerStyle,
 				key: 'facadeYCoordinate',
-				headerStyle,
-				renderCell: (cell): void => {
-					cell.value = '--- TODO ---';
-				},
 				width: 16,
 			},
 			{
 				header: 'Aanleghoogte',
+				headerStyle: this.headerStyle,
 				key: 'facadeInstallationHeight',
-				headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
 				key: 'facadeRemarks',
-				headerStyle,
 				width: 16,
 			},
 		];
 	}
 
 	private getTensionWireColumns(): OVSExportColumn[] {
-		const headerStyle: OVSExportHeaderStyle = {
-			bgColor: 'c5e0b4',
-			textColor: '000000',
-		};
-
 		return [
 			{
 				header: 'Type gedetailleerd',
 				key: 'tensionWireTypeDetailed',
-				headerStyle,
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Lengte spandraad',
 				key: 'tensionWireInstallationLength',
-				headerStyle,
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Straat',
-				key: 'tensionWireStreet',
-				headerStyle,
+				key: 'tensionWireLocation',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
 				key: 'tensionWireRemarks',
-				headerStyle,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private getLuminaireColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Straat',
+				key: 'luminaireLocation',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Reeds voorzien van LED',
+				key: 'luminaireHasLED',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'X coördinaat',
+				key: 'luminaireXCoordinate',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Y coördinaat',
+				key: 'luminaireYCoordinate',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				key: 'luminaireRemarks',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private getMastColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Type gedetailleerd',
+				key: 'mastTypeDetailed',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				key: 'mastLocation',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'X coordinaat',
+				headerStyle: this.headerStyle,
+				key: 'mastXCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Y coordinaat',
+				headerStyle: this.headerStyle,
+				key: 'mastYCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Aanleghoogte',
+				headerStyle: this.headerStyle,
+				key: 'mastInstallationHeight',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'mastRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getNodeColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Type gedetailleerd',
+				key: 'nodeTypeDetailed',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				key: 'nodeLocation',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'X coordinaat',
+				headerStyle: this.headerStyle,
+				key: 'nodeXCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Y coordinaat',
+				headerStyle: this.headerStyle,
+				key: 'nodeYCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Aanleghoogte',
+				headerStyle: this.headerStyle,
+				key: 'nodeInstallationHeight',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'nodeRemarks',
 				width: 16,
 			},
 		];

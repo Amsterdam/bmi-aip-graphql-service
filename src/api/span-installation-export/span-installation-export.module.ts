@@ -8,6 +8,7 @@ import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { SupportSystemRepository } from '../../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../../schema/span-installation/luminaire.repository';
+import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { SpanInstallationExportService } from './span-installation-export.service';
@@ -28,6 +29,7 @@ import { OVSSheetService } from './ovs-sheet.service';
 		SupportSystemService,
 		SupportSystemRepository,
 		LuminaireRepository,
+		LuminaireService,
 		OVSExportByBatchHandler,
 		OVSExportAllHandler,
 		OVSSheetService,

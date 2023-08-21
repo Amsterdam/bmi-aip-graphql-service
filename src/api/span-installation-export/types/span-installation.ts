@@ -15,47 +15,96 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
+/**
+ * @deprecated
+ */
 export type OVSSupportSystemData = {
 	supportSystemTypeDetailed: string;
 	supportSystemStreet: string;
 	supportSystemHouseNumber: string;
-	supportSystemFloor: string;
+	supportSystemLocationIndication: string;
 	supportSystemXCoordinate: string;
 	supportSystemYCoordinate: string;
-	supportSystemInstallationHeight: string;
-	supportSystemInstallationLength: string;
+	supportSystemInstallationHeight: Prisma.Decimal;
+	supportSystemInstallationLength: Prisma.Decimal;
 	supportSystemRemarks: string;
 };
 
-export type FacadeData = {
-	facadeTypeDetailed: string;
-	facadeStreet: string;
-	facadeHouseNumber: string;
-	facadeFloor: string;
-	facadeXCoordinate: string;
-	facadeYCoordinate: string;
-	facadeInstallationHeight: string;
-	facadeInstallationLength: number;
-	facadeRemarks: string;
+export type GeoJSONPoint = {
+	type: 'Point';
+	coordinates: [number, number];
 };
 
-export type TensionWireData = {
-	tensionWireTypeDetailed: string;
-	tensionWireInstallationLength: number;
-	tensionWireStreet: string;
-	tensionWireRemarks: string;
+export type DecompositionFacadeData = {
+	facadeTypeDetailed: string | null;
+	facadeLocation: string | null;
+	facadeHouseNumber: string | null;
+	facadeLocationIndication: string | null;
+	facadeXCoordinate: number | null;
+	facadeYCoordinate: number | null;
+	facadeInstallationHeight: number | null;
+	facadeInstallationLength: number | null;
+	facadeRemarks: string | null;
 };
 
-export type OVSPassportData = IPassport;
+export type DecompositionTensionWireData = {
+	tensionWireTypeDetailed: string | null;
+	tensionWireInstallationLength: number | null;
+	tensionWireLocation: string | null;
+	tensionWireRemarks: string | null;
+};
+
+export type DecompositionMastData = {
+	mastTypeDetailed: string | null;
+	mastLocation: string | null;
+	mastXCoordinate: number | null;
+	mastYCoordinate: number | null;
+	mastInstallationHeight: number | null;
+	mastRemarks: string | null;
+};
+
+export type DecompositionNodeData = {
+	nodeTypeDetailed: string | null;
+	nodeLocation: string | null;
+	nodeXCoordinate: number | null;
+	nodeYCoordinate: number | null;
+	nodeInstallationHeight: number | null;
+	nodeRemarks: string | null;
+};
+export type DecompositionLuminaireData = {
+	luminaireLocation: string | null;
+	luminaireHasLED: boolean | null;
+	luminaireXCoordinate: number | null;
+	luminaireYCoordinate: number | null;
+	luminaireRemarks: string | null;
+};
+
+export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
+// {
+// 	passportStreet: string;
+// 	passportNeighborhood: string;
+// 	passportDistrict: string;
+// 	passportCityArea: string;
+// 	passportSplits: string;
+// 	passportDoubleWired: string;
+// 	passportTramTracks: string;
+// 	passportNotes: string;
+
+// };
 
 // OVS Record describes a single row of data in the Excel export
 export interface OVSRow
 	extends OVSBaseData,
 		OVSBatchData,
 		OVSPassportData,
-		OVSSupportSystemData,
-		FacadeData,
-		TensionWireData {}
+		// OVSSupportSystemData,
+		DecompositionFacadeData,
+		DecompositionTensionWireData,
+		DecompositionLuminaireData,
+		DecompositionMastData,
+		DecompositionNodeData {}
+
+export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;
@@ -81,7 +130,8 @@ export type OVSExportSpanInstallationDecompositionFacadeData = {
 	verdieping: string;
 	xCoordinate: string;
 	yCoordinate: string;
-	installationHeight: string;
+	installationHeight: Prisma.Decimal;
+	installationLength: Prisma.Decimal;
 	remarks: string;
 };
 

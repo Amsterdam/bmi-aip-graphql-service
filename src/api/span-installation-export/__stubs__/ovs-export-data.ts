@@ -1,5 +1,13 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
-import { OVSRow, FacadeData, TensionWireData } from '../types/span-installation';
+import {
+	OVSRow,
+	DecompositionFacadeData,
+	DecompositionTensionWireData,
+	DecompositionMastData,
+	DecompositionNodeData,
+	OVSPassportData,
+	DecompositionLuminaireData,
+} from '../types/span-installation';
 
 const assetBaseData: OVSBaseData = {
 	id: '1',
@@ -12,7 +20,7 @@ export const assetBatchData: OVSBatchData = {
 	batchStatus: 'test',
 };
 
-const passportData: IPassport = {
+const passportData: OVSPassportData = {
 	passportIdentification: 'test',
 	passportCityArea: 'test',
 	passportDistrict: 'test',
@@ -22,8 +30,8 @@ const passportData: IPassport = {
 	passportPowerSupplies: 1,
 	passportSplits: true,
 	passportDoubleWired: true,
-	tramTracks: true,
-	notes: 'test',
+	passportTramTracks: true,
+	passportNotes: 'test',
 };
 
 export type OVSSupportSystemData = {
@@ -38,23 +46,49 @@ export type OVSSupportSystemData = {
 	supportSystemRemarks: string;
 };
 
-const facadeData: FacadeData = {
+const decompositionFacadeData: DecompositionFacadeData = {
 	facadeTypeDetailed: 'test',
-	facadeStreet: 'test',
+	facadeLocation: 'test',
 	facadeHouseNumber: 'test',
-	facadeFloor: 'test',
-	facadeXCoordinate: 'test',
-	facadeYCoordinate: 'test',
-	facadeInstallationHeight: '1',
+	facadeLocationIndication: 'test',
+	facadeXCoordinate: 1,
+	facadeYCoordinate: 1,
+	facadeInstallationHeight: 1,
 	facadeInstallationLength: 1,
 	facadeRemarks: 'test',
 };
 
-const tensionWireData: TensionWireData = {
+const tensionWireData: DecompositionTensionWireData = {
 	tensionWireTypeDetailed: 'test',
-	tensionWireStreet: 'test',
+	tensionWireLocation: 'test',
 	tensionWireInstallationLength: 1,
 	tensionWireRemarks: 'test',
+};
+
+const luminaireData: DecompositionLuminaireData = {
+	luminaireHasLED: true,
+	luminaireLocation: 'test',
+	luminaireXCoordinate: 1,
+	luminaireYCoordinate: 1,
+	luminaireRemarks: 'test',
+};
+
+const mastData: DecompositionMastData = {
+	mastTypeDetailed: 'test',
+	mastLocation: 'test',
+	mastXCoordinate: 1,
+	mastYCoordinate: 1,
+	mastInstallationHeight: 1,
+	mastRemarks: 'test',
+};
+
+const nodeData: DecompositionNodeData = {
+	nodeTypeDetailed: 'test',
+	nodeLocation: 'test',
+	nodeXCoordinate: 1,
+	nodeYCoordinate: 1,
+	nodeInstallationHeight: 1,
+	nodeRemarks: 'test',
 };
 
 export const ovsRecordMock: OVSRow = {
@@ -62,8 +96,11 @@ export const ovsRecordMock: OVSRow = {
 	...assetBatchData,
 	...passportData,
 	...assetBatchData,
-	...facadeData,
+	...decompositionFacadeData,
 	...tensionWireData,
+	...luminaireData,
+	...mastData,
+	...nodeData,
 };
 
 export type OVSBaseData = {

@@ -16,22 +16,21 @@ const assetBaseData: OVSBaseData = {
 };
 
 export const assetBatchData: OVSBatchData = {
-	batchNumbers: 'test',
-	batchStatus: 'test',
+	batchNumbers: '1',
+	batchStatus: 'active',
 };
 
 const passportData: OVSPassportData = {
-	passportIdentification: 'test',
-	passportCityArea: 'test',
-	passportDistrict: 'test',
-	passportNeighborhood: 'test',
 	passportStreet: 'test',
-	passportYear: 1,
-	passportPowerSupplies: 1,
+	passportNeighborhood: 'test',
+	passportDistrict: 'test',
+	passportCityArea: 'test',
 	passportSplits: true,
 	passportDoubleWired: true,
 	passportTramTracks: true,
 	passportNotes: 'test',
+	// passportYear: 1,
+	// passportPowerSupplies: 1,
 };
 
 export type OVSSupportSystemData = {
@@ -49,8 +48,8 @@ export type OVSSupportSystemData = {
 const decompositionFacadeData: DecompositionFacadeData = {
 	facadeTypeDetailed: 'test',
 	facadeLocation: 'test',
-	facadeHouseNumber: 'test',
 	facadeLocationIndication: 'test',
+	facadeHouseNumber: 'test',
 	facadeXCoordinate: 1,
 	facadeYCoordinate: 1,
 	facadeInstallationHeight: 1,
@@ -65,9 +64,9 @@ const tensionWireData: DecompositionTensionWireData = {
 	tensionWireRemarks: 'test',
 };
 
-const luminaireData: DecompositionLuminaireData = {
-	luminaireHasLED: true,
+export const luminaireData: DecompositionLuminaireData = {
 	luminaireLocation: 'test',
+	luminaireHasLED: true,
 	luminaireXCoordinate: 1,
 	luminaireYCoordinate: 1,
 	luminaireRemarks: 'test',
@@ -98,9 +97,9 @@ export const ovsRecordMock: OVSRow = {
 	...assetBatchData,
 	...decompositionFacadeData,
 	...tensionWireData,
-	...luminaireData,
 	...mastData,
 	...nodeData,
+	...luminaireData,
 };
 
 export type OVSBaseData = {

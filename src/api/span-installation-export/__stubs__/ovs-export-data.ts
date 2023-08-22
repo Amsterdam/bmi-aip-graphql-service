@@ -1,5 +1,10 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
-import { SupportSystemTypeDetailedFacade } from '../../../types';
+import {
+	SupportSystemTypeDetailedFacade,
+	SupportSystemTypeDetailedMast,
+	SupportSystemTypeDetailedNode,
+	SupportSystemTypeDetailedTensionWire,
+} from '../../../types';
 import {
 	OVSRow,
 	DecompositionFacadeData,
@@ -59,34 +64,34 @@ export const decompositionFacadeData: DecompositionFacadeData = {
 };
 
 export const tensionWireData: DecompositionTensionWireData = {
-	tensionWireTypeDetailed: 'test',
+	tensionWireTypeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
 	tensionWireLocation: 'test',
 	tensionWireInstallationLength: 1,
 	tensionWireRemarks: 'test',
 };
 
 export const luminaireData: DecompositionLuminaireData = {
-	luminaireLocation: 'test',
+	luminaireLocation: '__LOCATION__',
 	luminaireHasLED: true,
-	luminaireXCoordinate: 1,
-	luminaireYCoordinate: 1,
-	luminaireRemarks: 'test',
+	luminaireXCoordinate: 116211.88,
+	luminaireYCoordinate: 487352.77,
+	luminaireRemarks: '__REMARKS__',
 };
 
 export const mastData: DecompositionMastData = {
-	mastTypeDetailed: 'test',
+	mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
 	mastLocation: 'test',
-	mastXCoordinate: 1,
-	mastYCoordinate: 1,
+	mastXCoordinate: 12.345,
+	mastYCoordinate: 23.456,
 	mastInstallationHeight: 1,
 	mastRemarks: 'test',
 };
 
 export const nodeData: DecompositionNodeData = {
-	nodeTypeDetailed: 'test',
+	nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
 	nodeLocation: 'test',
-	nodeXCoordinate: 1,
-	nodeYCoordinate: 1,
+	nodeXCoordinate: 12.345,
+	nodeYCoordinate: 23.456,
 	nodeInstallationHeight: 1,
 	nodeRemarks: 'test',
 };

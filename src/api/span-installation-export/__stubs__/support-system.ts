@@ -5,8 +5,6 @@ import { decompositionFacadeData } from './ovs-export-data';
 
 const supportSystemStub = new SupportSystem();
 supportSystemStub.id = '__ID__';
-supportSystemStub.type = SupportSystemType.Facade;
-supportSystemStub.typeDetailed = SupportSystemTypeDetailedTensionWire.Denhalon;
 supportSystemStub.location = 'test';
 supportSystemStub.locationIndication = 'test';
 supportSystemStub.houseNumber = 'test';

@@ -1,4 +1,5 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
+import { SupportSystemTypeDetailedFacade } from '../../../types';
 import {
 	OVSRow,
 	DecompositionFacadeData,
@@ -20,7 +21,7 @@ export const assetBatchData: OVSBatchData = {
 	batchStatus: 'active',
 };
 
-const passportData: OVSPassportData = {
+export const passportData: OVSPassportData = {
 	passportStreet: 'test',
 	passportNeighborhood: 'test',
 	passportDistrict: 'test',
@@ -45,19 +46,19 @@ export type OVSSupportSystemData = {
 	supportSystemRemarks: string;
 };
 
-const decompositionFacadeData: DecompositionFacadeData = {
-	facadeTypeDetailed: 'test',
+export const decompositionFacadeData: DecompositionFacadeData = {
+	facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	facadeLocation: 'test',
 	facadeLocationIndication: 'test',
 	facadeHouseNumber: 'test',
-	facadeXCoordinate: 1,
-	facadeYCoordinate: 1,
+	facadeXCoordinate: 12.345,
+	facadeYCoordinate: 23.456,
 	facadeInstallationHeight: 1,
 	facadeInstallationLength: 1,
 	facadeRemarks: 'test',
 };
 
-const tensionWireData: DecompositionTensionWireData = {
+export const tensionWireData: DecompositionTensionWireData = {
 	tensionWireTypeDetailed: 'test',
 	tensionWireLocation: 'test',
 	tensionWireInstallationLength: 1,
@@ -72,7 +73,7 @@ export const luminaireData: DecompositionLuminaireData = {
 	luminaireRemarks: 'test',
 };
 
-const mastData: DecompositionMastData = {
+export const mastData: DecompositionMastData = {
 	mastTypeDetailed: 'test',
 	mastLocation: 'test',
 	mastXCoordinate: 1,
@@ -81,7 +82,7 @@ const mastData: DecompositionMastData = {
 	mastRemarks: 'test',
 };
 
-const nodeData: DecompositionNodeData = {
+export const nodeData: DecompositionNodeData = {
 	nodeTypeDetailed: 'test',
 	nodeLocation: 'test',
 	nodeXCoordinate: 1,

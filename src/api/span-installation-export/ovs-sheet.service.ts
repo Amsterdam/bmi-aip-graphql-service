@@ -246,7 +246,7 @@ export class OVSSheetService {
 
 		this.setEntityHeader(
 			worksheet,
-			`${getColumnLetter('luminaireTypeDetailed')}3`,
+			`${getColumnLetter('luminaireStreet')}3`,
 			`${getColumnLetter('luminaireRemarks')}3`,
 			'Armatuur',
 			'FFe2f0d9',

@@ -127,6 +127,10 @@ export class MeasureRepository implements IMeasureRepository {
 					id: failureModeId,
 				},
 			};
+		} else {
+			data.failureModes = {
+				disconnect: true,
+			};
 		}
 
 		if (defectId) {
@@ -134,6 +138,10 @@ export class MeasureRepository implements IMeasureRepository {
 				connect: {
 					id: defectId,
 				},
+			};
+		} else {
+			data.defects = {
+				disconnect: true,
 			};
 		}
 

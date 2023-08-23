@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { catchError, map, single } from 'rxjs';
@@ -27,23 +27,25 @@ export class DmsRepository {
 
 	private apiUrl = this.configService.get<string>('DMS_API_URL');
 
-	private token = '';
+	/**
+	 * Token gets set from the initiator as access to the execution context is required to retrieve the token
+	 * @private
+	 */
+	private _token = '';
 
-	public setToken(token: string) {
-		this.token = token;
+	set token(token: string) {
+		this._token = token;
 	}
 
-	private getToken() {
-		return this.token;
+	get token() {
+		return this._token;
 	}
 
 	private async request<T = any>(url: string): Promise<T[]> {
-		const token = this.getToken();
-
 		return new Promise((resolve) => {
 			this.httpService
 				.get<T[]>(url, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.pipe(
 					map((res) => res.data),
@@ -57,12 +59,10 @@ export class DmsRepository {
 	}
 
 	private async post<T = any>(url: string, data: object): Promise<any> {
-		const token = this.getToken();
-
 		return new Promise((resolve) => {
 			this.httpService
 				.post<T[]>(url, data, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.subscribe(function (response) {
 					resolve(response.data);
@@ -75,21 +75,17 @@ export class DmsRepository {
 		surveyId?: string,
 		entityId?: string,
 	): Promise<T[]> {
-		let object;
-		const token = this.getToken();
-
-		if (assetId) {
-			object = await this.prisma.objects.findUnique({
-				where: { id: assetId },
-			});
-		}
-
 		let url = this.apiUrl + 'documents?';
 
-		if (object.code && object.code !== '') {
-			url += 'code=' + object.code;
-		} else {
-			return [];
+		try {
+			const object = await this.prisma.objects.findUnique({
+				where: { id: assetId },
+			});
+			if (object.code && object.code !== '') {
+				url += 'code=' + object.code;
+			}
+		} catch (err) {
+			throw new NotFoundException('Unable to determine object code for assetId: ' + assetId);
 		}
 
 		if (surveyId || entityId) {
@@ -112,7 +108,7 @@ export class DmsRepository {
 		const response = new Promise<RawDMSDocument[]>((resolve) => {
 			this.httpService
 				.get<[]>(url, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.pipe(
 					map((res) => res.data),

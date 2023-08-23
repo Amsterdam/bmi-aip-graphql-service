@@ -3,8 +3,8 @@ import ExcelJS, { Worksheet } from 'exceljs';
 import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
-import { OVSExportSpanInstallationBaseData } from '../types/span-installation';
-import { AddOVSSheetService } from '../add-ovs-sheet.service';
+import { OVSExportSpanInstallationBaseData } from '../types';
+import { OVSSheetService } from '../ovs-sheet.service';
 
 import { OVSExportByBatchQuery } from './ovs-export-by-batch.query';
 
@@ -12,7 +12,7 @@ import { OVSExportByBatchQuery } from './ovs-export-by-batch.query';
 export class OVSExportByBatchHandler implements IQueryHandler<OVSExportByBatchQuery> {
 	constructor(
 		private readonly exporterService: SpanInstallationExportService,
-		private readonly addOVSSheetService: AddOVSSheetService,
+		private readonly addOVSSheetService: OVSSheetService,
 		private readonly logger: Logger,
 	) {}
 
@@ -33,7 +33,7 @@ export class OVSExportByBatchHandler implements IQueryHandler<OVSExportByBatchQu
 
 			let generateHeaders = true;
 			for (const object of objects) {
-				await this.addOVSSheetService.addOVSSheet(worksheet, object, generateHeaders);
+				await this.addOVSSheetService.addOVSRows(worksheet, object, generateHeaders);
 				generateHeaders = false;
 			}
 

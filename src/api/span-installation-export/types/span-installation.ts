@@ -1,7 +1,30 @@
 import { Prisma } from '@prisma/client';
-import { IPassport } from 'src/schema/asset/models/passport.model';
 import { Cell } from 'exceljs';
-import { UnionKeys } from 'src/utils/utils';
+
+import { IPassport } from '../../../services/types/excelRowObject';
+import { UnionKeys } from '../../../utils/utils';
+
+export type OVSColumnHeaderValues =
+	| 'OVS nummer'
+	| 'Batch nummer(s)'
+	| 'Batch status'
+	| 'Straat'
+	| 'Buurt'
+	| 'Wijk'
+	| 'Stadsdeel'
+	| 'Splitsingen'
+	| 'Dubbeldraads'
+	| 'Boven trambaan'
+	| 'Opmerkingen'
+	| 'Type gedetailleerd'
+	| 'Huisnummer'
+	| 'Verdieping'
+	| 'X-coördinaat'
+	| 'Y-coördinaat'
+	| 'Aanleghoogte'
+	| 'Lengte spandraad'
+	| 'Reeds voorzien van LED'
+	| 'Opmerkingen';
 
 export type OVSBaseData = {
 	id: string;
@@ -14,9 +37,81 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
-export type OVSPassportData = IPassport;
+export type GeoJSONPoint = {
+	type: 'Point';
+	coordinates: [number, number];
+};
 
-export interface OVSRecord extends OVSBaseData, OVSBatchData, OVSPassportData {}
+export type DecompositionFacadeData = {
+	facadeTypeDetailed: string | null;
+	facadeLocation: string | null;
+	facadeHouseNumber: string | null;
+	facadeLocationIndication: string | null;
+	facadeXCoordinate: number | null;
+	facadeYCoordinate: number | null;
+	facadeInstallationHeight: number | null;
+	facadeInstallationLength: number | null;
+	facadeRemarks: string | null;
+};
+
+export type DecompositionTensionWireData = {
+	tensionWireTypeDetailed: string | null;
+	tensionWireInstallationLength: number | null;
+	tensionWireLocation: string | null;
+	tensionWireRemarks: string | null;
+};
+
+export type DecompositionMastData = {
+	mastTypeDetailed: string | null;
+	mastLocation: string | null;
+	mastXCoordinate: number | null;
+	mastYCoordinate: number | null;
+	mastInstallationHeight: number | null;
+	mastRemarks: string | null;
+};
+
+export type DecompositionNodeData = {
+	nodeTypeDetailed: string | null;
+	nodeLocation: string | null;
+	nodeXCoordinate: number | null;
+	nodeYCoordinate: number | null;
+	nodeInstallationHeight: number | null;
+	nodeRemarks: string | null;
+};
+export type DecompositionLuminaireData = {
+	luminaireLocation: string | null;
+	luminaireHasLED: boolean | null;
+	luminaireXCoordinate: number | null;
+	luminaireYCoordinate: number | null;
+	luminaireRemarks: string | null;
+};
+
+export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
+// {
+// 	passportStreet: string;
+// 	passportNeighborhood: string;
+// 	passportDistrict: string;
+// 	passportCityArea: string;
+// 	passportSplits: string;
+// 	passportDoubleWired: string;
+// 	passportTramTracks: string;
+// 	passportNotes: string;
+
+// };
+
+// OVS Record describes a single row of data in the Excel export
+export interface OVSRow
+	extends OVSBaseData,
+		OVSBatchData,
+		OVSPassportData,
+		// OVSSupportSystemData,
+		DecompositionFacadeData,
+		DecompositionTensionWireData,
+		DecompositionLuminaireData,
+		DecompositionMastData,
+		DecompositionNodeData {}
+
+export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 
 export type OVSExportSpanInstallationBaseData = {
 	id: string;
@@ -25,7 +120,7 @@ export type OVSExportSpanInstallationBaseData = {
 	attributes: IPassport;
 };
 
-export type OVSExportSpanInstallationPasportData = {
+export type OVSExportSpanInstallationPassportData = {
 	id: string;
 	name: string;
 	code: string;
@@ -33,6 +128,18 @@ export type OVSExportSpanInstallationPasportData = {
 	latitude: Prisma.Decimal;
 	longitude: Prisma.Decimal;
 	attributes: IPassport;
+};
+
+export type OVSExportSpanInstallationDecompositionFacadeData = {
+	typeDetailed: string;
+	street: string;
+	houseNumber: string;
+	verdieping: string;
+	xCoordinate: string;
+	yCoordinate: string;
+	installationHeight: Prisma.Decimal;
+	installationLength: Prisma.Decimal;
+	remarks: string;
 };
 
 export type OVSExportSpanInstallationWithBatchDetails = OVSExportSpanInstallationBaseData & {
@@ -51,17 +158,19 @@ export interface OVSExportHeaderStyle {
 	strike?: boolean;
 }
 
+export type RenderCellFunction = (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
+
 export interface OVSExportColumn {
 	key: OVSColumnHeaderKeys;
-	header: string;
+	header: OVSColumnHeaderValues;
 	headerStyle: OVSExportHeaderStyle;
 	/**
 	 * Adds data to Cell
 	 * @param {Cell} cell Cell reference to exceljs data workbook > sheet > row > cell
 	 * @param {any} value Value from DB to fit into cell
 	 */
-	renderCell: (cell: Cell, value: any, rowIdx: number, columnIdx: string) => void;
+	renderCell?: RenderCellFunction;
 	width?: number;
 }
 
-export type OVSColumnHeaderKeys = UnionKeys<OVSRecord>;
+export type OVSColumnHeaderKeys = UnionKeys<OVSRow>;

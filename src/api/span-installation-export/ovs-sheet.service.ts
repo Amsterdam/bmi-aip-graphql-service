@@ -243,7 +243,7 @@ export class OVSSheetService {
 
 		// Add third row of headings (per category)
 
-		const getColumnLetter = (key: string) =>
+		const getColumnLetter = (key: keyof OVSRow) =>
 			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1).letter;
 
 		this.setEntityHeader(
@@ -280,7 +280,7 @@ export class OVSSheetService {
 
 		this.setEntityHeader(
 			worksheet,
-			`${getColumnLetter('luminaireTypeDetailed')}3`,
+			`${getColumnLetter('luminaireLocation')}3`,
 			`${getColumnLetter('luminaireRemarks')}3`,
 			'Armatuur',
 			'FFe2f0d9',

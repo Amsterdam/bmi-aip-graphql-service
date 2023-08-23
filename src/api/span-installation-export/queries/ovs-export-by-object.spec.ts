@@ -1,30 +1,8 @@
-import { MockedObjectDeep } from 'ts-jest';
-import { Logger } from '@nestjs/common';
-
 import { responseMock } from '../__mocks__/response';
-import { SpanInstallationExportService } from '../span-installation-export.service';
-import { OVSSheetService } from '../ovs-sheet.service';
-import { ovsAssetStub } from '../__stubs__/ovs-asset';
+import { mockExporterService, mockAddOvsSheetService, mockLogger } from '../__mocks__/span-installation-export.service';
 
 import { OVSExportByObjectHandler } from './ovs-export-by-object.handler';
 import { OVSExportByObjectQuery } from './ovs-export-by-object.query';
-
-const mockExporterService: MockedObjectDeep<SpanInstallationExportService> = {
-	getObjectById: jest.fn().mockResolvedValue([ovsAssetStub]),
-	...(<any>{}),
-};
-
-const mockAddOvsSheetService: MockedObjectDeep<OVSSheetService> = {
-	addOVSRows: jest.fn().mockResolvedValue({}),
-	...(<any>{}),
-};
-
-const mockLogger: MockedObjectDeep<Logger> = {
-	...(<any>{
-		log: jest.fn(),
-		error: jest.fn(),
-	}),
-};
 
 describe('OVSExportByObjectHandler', () => {
 	beforeEach(() => {

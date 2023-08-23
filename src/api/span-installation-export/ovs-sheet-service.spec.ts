@@ -100,13 +100,18 @@ describe('OVSSheetService', () => {
 			const worksheet = workbook.addWorksheet('');
 			await ovsSheetService.addOVSRows(worksheet, ovsAssetStub, true);
 
+			// Code below causes a bunch of memory errors?
+			//
 			// Get the column names (without empty string values) from the 4th row
-			const labels = [];
-			worksheet.getRow(4).eachCell((cell) => {
-				if (cell.text && cell.text.trim() !== '') {
-					labels.push(cell);
-				}
-			});
+			// const labels = [];
+			// worksheet.getRow(4).eachCell((cell) => {
+			// 	if (cell.text && cell.text.trim() !== '') {
+			// 		labels.push(cell);
+			// 	}
+			// });
+
+			const rowWithColumnNames = worksheet.getRow(4);
+			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
 			const fieldsToCheck = [
 				...baseDataColumns,

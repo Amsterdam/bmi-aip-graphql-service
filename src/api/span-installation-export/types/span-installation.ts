@@ -17,21 +17,6 @@ export type OVSBatchData = {
 	batchStatus: string;
 };
 
-/**
- * @deprecated
- */
-export type OVSSupportSystemData = {
-	supportSystemTypeDetailed: string;
-	supportSystemStreet: string;
-	supportSystemHouseNumber: string;
-	supportSystemLocationIndication: string;
-	supportSystemXCoordinate: string;
-	supportSystemYCoordinate: string;
-	supportSystemInstallationHeight: Prisma.Decimal;
-	supportSystemInstallationLength: Prisma.Decimal;
-	supportSystemRemarks: string;
-};
-
 export type GeoJSONPoint = {
 	type: 'Point';
 	coordinates: [number, number];

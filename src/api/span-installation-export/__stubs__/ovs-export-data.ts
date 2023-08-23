@@ -1,4 +1,10 @@
 import {
+	SupportSystemTypeDetailedFacade,
+	SupportSystemTypeDetailedMast,
+	SupportSystemTypeDetailedNode,
+	SupportSystemTypeDetailedTensionWire,
+} from '../../../types';
+import {
 	OVSRow,
 	DecompositionFacadeData,
 	DecompositionTensionWireData,
@@ -16,22 +22,21 @@ const assetBaseData: OVSBaseData = {
 };
 
 export const assetBatchData: OVSBatchData = {
-	batchNumbers: 'test',
-	batchStatus: 'test',
+	batchNumbers: '1',
+	batchStatus: 'active',
 };
 
-const passportData: OVSPassportData = {
-	passportIdentification: 'test',
-	passportCityArea: 'test',
-	passportDistrict: 'test',
-	passportNeighborhood: 'test',
+export const passportData: OVSPassportData = {
 	passportStreet: 'test',
-	passportYear: 1,
-	passportPowerSupplies: 1,
+	passportNeighborhood: 'test',
+	passportDistrict: 'test',
+	passportCityArea: 'test',
 	passportSplits: true,
 	passportDoubleWired: true,
 	passportTramTracks: true,
 	passportNotes: 'test',
+	// passportYear: 1,
+	// passportPowerSupplies: 1,
 };
 
 export type OVSSupportSystemData = {
@@ -46,47 +51,47 @@ export type OVSSupportSystemData = {
 	supportSystemRemarks: string;
 };
 
-const decompositionFacadeData: DecompositionFacadeData = {
-	facadeTypeDetailed: 'test',
+export const decompositionFacadeData: DecompositionFacadeData = {
+	facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	facadeLocation: 'test',
-	facadeHouseNumber: 'test',
 	facadeLocationIndication: 'test',
-	facadeXCoordinate: 1,
-	facadeYCoordinate: 1,
+	facadeHouseNumber: 'test',
+	facadeXCoordinate: 12.345,
+	facadeYCoordinate: 23.456,
 	facadeInstallationHeight: 1,
 	facadeInstallationLength: 1,
 	facadeRemarks: 'test',
 };
 
-const tensionWireData: DecompositionTensionWireData = {
-	tensionWireTypeDetailed: 'test',
+export const tensionWireData: DecompositionTensionWireData = {
+	tensionWireTypeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
 	tensionWireLocation: 'test',
 	tensionWireInstallationLength: 1,
 	tensionWireRemarks: 'test',
 };
 
-const luminaireData: DecompositionLuminaireData = {
+export const luminaireData: DecompositionLuminaireData = {
+	luminaireLocation: '__LOCATION__',
 	luminaireHasLED: true,
-	luminaireLocation: 'test',
-	luminaireXCoordinate: 1,
-	luminaireYCoordinate: 1,
-	luminaireRemarks: 'test',
+	luminaireXCoordinate: 116211.88,
+	luminaireYCoordinate: 487352.77,
+	luminaireRemarks: '__REMARKS__',
 };
 
-const mastData: DecompositionMastData = {
-	mastTypeDetailed: 'test',
+export const mastData: DecompositionMastData = {
+	mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
 	mastLocation: 'test',
-	mastXCoordinate: 1,
-	mastYCoordinate: 1,
+	mastXCoordinate: 12.345,
+	mastYCoordinate: 23.456,
 	mastInstallationHeight: 1,
 	mastRemarks: 'test',
 };
 
-const nodeData: DecompositionNodeData = {
-	nodeTypeDetailed: 'test',
+export const nodeData: DecompositionNodeData = {
+	nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
 	nodeLocation: 'test',
-	nodeXCoordinate: 1,
-	nodeYCoordinate: 1,
+	nodeXCoordinate: 12.345,
+	nodeYCoordinate: 23.456,
 	nodeInstallationHeight: 1,
 	nodeRemarks: 'test',
 };
@@ -108,9 +113,9 @@ export const ovsRecordMock: OVSRow = {
 	...assetBatchData,
 	...decompositionFacadeData,
 	...tensionWireData,
-	...luminaireData,
 	...mastData,
 	...nodeData,
+	...luminaireData,
 	...mastSurveyData,
 };
 

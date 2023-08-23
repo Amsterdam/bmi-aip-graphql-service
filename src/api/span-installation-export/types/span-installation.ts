@@ -4,6 +4,28 @@ import { Cell } from 'exceljs';
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
+export type OVSColumnHeaderValues =
+	| 'OVS nummer'
+	| 'Batch nummer(s)'
+	| 'Batch status'
+	| 'Straat'
+	| 'Buurt'
+	| 'Wijk'
+	| 'Stadsdeel'
+	| 'Splitsingen'
+	| 'Dubbeldraads'
+	| 'Boven trambaan'
+	| 'Opmerkingen'
+	| 'Type gedetailleerd'
+	| 'Huisnummer'
+	| 'Verdieping'
+	| 'X-coördinaat'
+	| 'Y-coördinaat'
+	| 'Aanleghoogte'
+	| 'Lengte spandraad'
+	| 'Reeds voorzien van LED'
+	| 'Opmerkingen';
+
 export type OVSBaseData = {
 	id: string;
 	name: string;
@@ -140,7 +162,7 @@ export type RenderCellFunction = (cell: Cell, value: any, rowIdx: number, column
 
 export interface OVSExportColumn {
 	key: OVSColumnHeaderKeys;
-	header: string;
+	header: OVSColumnHeaderValues;
 	headerStyle: OVSExportHeaderStyle;
 	/**
 	 * Adds data to Cell

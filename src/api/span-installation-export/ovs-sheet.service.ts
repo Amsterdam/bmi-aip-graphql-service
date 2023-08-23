@@ -356,13 +356,13 @@ export class OVSSheetService {
 				width: 16,
 			},
 			{
-				header: 'X coordinaat',
+				header: 'X-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'facadeXCoordinate',
 				width: 16,
 			},
 			{
-				header: 'Y coordinaat',
+				header: 'Y-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'facadeYCoordinate',
 				width: 16,
@@ -426,13 +426,13 @@ export class OVSSheetService {
 				width: 16,
 			},
 			{
-				header: 'X coördinaat',
+				header: 'X-coördinaat',
 				key: 'luminaireXCoordinate',
 				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
-				header: 'Y coördinaat',
+				header: 'Y-coördinaat',
 				key: 'luminaireYCoordinate',
 				headerStyle: this.headerStyle,
 				width: 16,
@@ -461,13 +461,13 @@ export class OVSSheetService {
 				width: 16,
 			},
 			{
-				header: 'X coordinaat',
+				header: 'X-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'mastXCoordinate',
 				width: 16,
 			},
 			{
-				header: 'Y coordinaat',
+				header: 'Y-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'mastYCoordinate',
 				width: 16,
@@ -502,13 +502,13 @@ export class OVSSheetService {
 				width: 16,
 			},
 			{
-				header: 'X coordinaat',
+				header: 'X-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'nodeXCoordinate',
 				width: 16,
 			},
 			{
-				header: 'Y coordinaat',
+				header: 'Y-coördinaat',
 				headerStyle: this.headerStyle,
 				key: 'nodeYCoordinate',
 				width: 16,

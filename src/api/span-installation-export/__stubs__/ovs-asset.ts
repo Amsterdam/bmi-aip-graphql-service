@@ -1,4 +1,5 @@
 import { IPassport } from '../../../schema/asset/models/passport.model';
+import { DBBatch } from '../../../schema/batch/types/batch.repository.interface';
 import { OVSBaseData, OVSExportSpanInstallationBaseData } from '../types/span-installation';
 
 const ovsAssetBaseDataStub: OVSBaseData = {
@@ -31,4 +32,20 @@ export const ovsAssetStub: OVSExportSpanInstallationBaseData = {
 	attributes: {
 		...ovsAssetPassportStub,
 	},
+};
+
+export const dbBatchStub: DBBatch = {
+	id: '',
+	name: 'OVS Batch 02',
+	status: 'active',
+	startDate: undefined,
+	endDate: undefined,
+	plannedStartDate: undefined,
+	plannedEndDate: undefined,
+	contractId: '',
+	tranchId: '',
+	remarks: '',
+	legacyFailureMode: false,
+	created_at: undefined,
+	updated_at: undefined,
 };

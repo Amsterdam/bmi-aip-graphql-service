@@ -38,8 +38,8 @@ export class OVSSheetService {
 			name,
 			code,
 			// OVSBatchData
-			batchNumbers: batches.map((batch) => batch.name).join(', '),
-			batchStatus: batches.map((batch) => batch.status).join(', '),
+			batchNumbers: batches.length > 1 ? batches.map((batch) => batch.name).join(', ') : batches[0].name,
+			batchStatus: batches.length > 1 ? batches.map((batch) => batch.status).join(', ') : batches[0].status,
 			// OVSPassportData
 			...passportData,
 		};

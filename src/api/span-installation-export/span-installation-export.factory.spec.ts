@@ -5,8 +5,6 @@ import {
 	SupportSystemTypeDetailedNode,
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
-import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
-import { SupportSystemFactory } from '../../schema/span-installation/support-system.factory';
 import { luminaire } from '../../schema/span-installation/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';

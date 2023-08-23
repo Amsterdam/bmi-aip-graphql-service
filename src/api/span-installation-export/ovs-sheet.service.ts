@@ -38,8 +38,8 @@ export class OVSSheetService {
 			name,
 			code,
 			// OVSBatchData
-			batchNumbers: batches.length > 1 ? batches.map((batch) => batch.name).join(', ') : batches[0].name,
-			batchStatus: batches.length > 1 ? batches.map((batch) => batch.status).join(', ') : batches[0].status,
+			batchNumbers: batches.map((batch) => batch.name).join(', '),
+			batchStatus: batches.map((batch) => batch.status).join(', '),
 			// OVSPassportData
 			...passportData,
 		};
@@ -72,26 +72,7 @@ export class OVSSheetService {
 			}
 		}
 
-		// Loop over support system types and per type loop over the support systems and add a row for each
-		// For each tensionWire, fetch the luminaires and add a row for each luminaire
-
 		return rows;
-	}
-
-	// For each row in the Excel sheet all fields for all types of SupportSystem should be present
-	private async fillSupportSystemFields(supportSystem: SupportSystem, typeToCheck: SupportSystemType) {
-		let data = this.formatFacadeSurveyData(supportSystem);
-
-		if (supportSystem.type !== typeToCheck) {
-			// Create an object with null values for all keys
-			const nullData = { ...data };
-			for (const key in nullData) {
-				nullData[key] = null;
-			}
-			data = nullData;
-		}
-
-		return data;
 	}
 
 	private formatFacadeSurveyData(supportSystem: SupportSystem): any {
@@ -290,10 +271,6 @@ export class OVSSheetService {
 			},
 		];
 	}
-
-	// public async getBatchDataColumns(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSExportColumn[]> {
-	// 	const batches = await this.batchService.findForAssetThroughSurveys(ovsAsset.id);
-	// }
 
 	public getBatchDataColumns(): OVSExportColumn[] {
 		return [

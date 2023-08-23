@@ -1,5 +1,4 @@
 import { SupportSystem } from '../../../schema/span-installation/models/support-system.model';
-import { SupportSystemType, SupportSystemTypeDetailedTensionWire } from '../../../types';
 
 import { decompositionFacadeData } from './ovs-export-data';
 

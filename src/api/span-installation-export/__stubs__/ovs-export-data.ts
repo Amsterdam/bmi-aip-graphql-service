@@ -1,4 +1,3 @@
-import { IPassport } from '../../../schema/asset/models/passport.model';
 import {
 	SupportSystemTypeDetailedFacade,
 	SupportSystemTypeDetailedMast,
@@ -13,7 +12,7 @@ import {
 	DecompositionNodeData,
 	OVSPassportData,
 	DecompositionLuminaireData,
-} from '../types/span-installation';
+} from '../types';
 
 const assetBaseData: OVSBaseData = {
 	id: '1',

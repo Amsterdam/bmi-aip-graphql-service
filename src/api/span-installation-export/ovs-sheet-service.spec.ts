@@ -1,9 +1,7 @@
 import * as ExcelJS from 'exceljs';
 import { MockedObjectDeep } from 'ts-jest';
-import { string } from 'zod';
 
-import { DBBatch } from '../../schema/batch/types/batch.repository.interface';
-import { supportSystem , luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
+import { supportSystem, luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import {
@@ -16,8 +14,7 @@ import {
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
-import { assetBatchData as batchStub, ovsRecordMock , decompositionFacadeData } from './__stubs__/ovs-export-data';
-import { OVSRow } from './types';
+import { ovsRecordMock } from './__stubs__/ovs-export-data';
 
 // The labels below are the labels that are expected to be present in the OVS export sheet
 // The order of the labels is important, as it is used to determine the column index of the label
@@ -26,19 +23,6 @@ import { OVSRow } from './types';
 const baseDataColumns = ['OVS nummer'];
 
 const batchDataColumns = ['Batch nummer(s)', 'Batch status'];
-
-const decompositionFacadeFields = [
-	'Type gedetailleerd',
-	'Straat',
-	'Huisnummer',
-	'Verdieping',
-	'X coordinaat',
-	'Y coordinaat',
-	'Aanleghoogte',
-	'Opmerkingen',
-];
-
-const decompositionTensionWireFields = ['Type gedetailleerd', 'Lengte spandraad', 'Straat', 'Opmerkingen'];
 
 const passportDataColumns = [
 	'Straat',

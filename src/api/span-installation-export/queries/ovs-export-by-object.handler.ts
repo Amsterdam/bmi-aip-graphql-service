@@ -3,7 +3,7 @@ import ExcelJS, { Worksheet } from 'exceljs';
 import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
-import { OVSExportSpanInstallationBaseData } from '../types/span-installation';
+import { OVSExportSpanInstallationBaseData } from '../types';
 import { OVSSheetService } from '../ovs-sheet.service';
 
 import { OVSExportByObjectQuery } from './ovs-export-by-object.query';

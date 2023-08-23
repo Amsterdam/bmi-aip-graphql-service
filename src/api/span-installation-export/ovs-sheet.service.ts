@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import * as ExcelJS from 'exceljs';
 import type { Cell } from 'exceljs';
+import * as ExcelJS from 'exceljs';
 
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
-import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { DocumentService } from '../../schema/document/document.service';
@@ -46,8 +45,7 @@ export class OVSSheetService {
 
 	private async getMastSurvey(supportSystemId: string): Promise<MastSurvey | undefined> {
 		try {
-			const mastSurvey = await this.mastSurveyService.getMastSurvey(supportSystemId);
-			return mastSurvey;
+			return await this.mastSurveyService.getMastSurvey(supportSystemId);
 		} catch (err) {
 			// No survey found but that's ok
 			return undefined;

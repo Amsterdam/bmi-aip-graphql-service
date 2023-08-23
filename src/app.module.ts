@@ -31,6 +31,7 @@ import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-mea
 import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
 import { SpanInstallationExportModule } from './api/span-installation-export/span-installation-export.module';
 import { DocumentModule } from './schema/document/document.module';
+import { DmsModule } from './dms/dms.module';
 
 @Module({
 	imports: [
@@ -68,6 +69,7 @@ import { DocumentModule } from './schema/document/document.module';
 		DefaultMaintenanceMeasureModule,
 		MJOPExportModule,
 		SpanInstallationExportModule,
+		DmsModule,
 	],
 	controllers: [HealthController],
 	providers: [

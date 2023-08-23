@@ -11,17 +11,14 @@ export class DocumentService {
 	public constructor(private readonly dmsRepository: DmsRepository) {}
 
 	/**
-	 * Token gets set from the initiator as access to the execution context is required to retrieve the token
-	 * @private
+	 * JWT token gets set from the initiator as access to the execution context is required to retrieve the token
 	 */
-	private _token = '';
-
 	set token(token: string) {
-		this._token = token;
+		this.dmsRepository.token = token;
 	}
 
 	get token() {
-		return this._token;
+		return this.dmsRepository.token;
 	}
 
 	async getDocumentUploadUrl(
@@ -31,7 +28,6 @@ export class DocumentService {
 	): Promise<DmsUploadUrlResponse> {
 		switch (provider) {
 			case 'dms':
-				this.dmsRepository.token = this.token;
 				return this.dmsRepository.getDmsUploadUrl(fileName, assetCode);
 			default:
 				throw new Error('Provider not supported');
@@ -46,7 +42,6 @@ export class DocumentService {
 	): Promise<DMSDocumentSpanInstallation[]> {
 		switch (provider) {
 			case 'dms':
-				this.dmsRepository.token = this.token;
 				return this.dmsRepository.findSpanInstallationDocumentsInDms(assetId, surveyId, entityId);
 			default:
 				throw new Error('Provider not supported');

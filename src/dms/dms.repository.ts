@@ -16,6 +16,7 @@ import {
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
 import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
+import { TokenNotSetException } from './exceptions/token-not-set.exception';
 
 @Injectable()
 export class DmsRepository {
@@ -42,6 +43,10 @@ export class DmsRepository {
 	}
 
 	private async request<T = any>(url: string): Promise<T[]> {
+		if (!this.token) {
+			throw new TokenNotSetException();
+		}
+
 		return new Promise((resolve) => {
 			this.httpService
 				.get<T[]>(url, {
@@ -59,6 +64,10 @@ export class DmsRepository {
 	}
 
 	private async post<T = any>(url: string, data: object): Promise<any> {
+		if (!this.token) {
+			throw new TokenNotSetException();
+		}
+
 		return new Promise((resolve) => {
 			this.httpService
 				.post<T[]>(url, data, {

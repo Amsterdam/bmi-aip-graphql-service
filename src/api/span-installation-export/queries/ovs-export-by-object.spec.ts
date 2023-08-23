@@ -27,6 +27,8 @@ const mockLogger: MockedObjectDeep<Logger> = {
 };
 
 describe('OVSExportByObjectHandler', () => {
+	const token = '__TOKEN__';
+
 	beforeEach(() => {
 		jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2000-01-01T00:00:00.000Z');
 	});
@@ -37,7 +39,7 @@ describe('OVSExportByObjectHandler', () => {
 
 	test('executes query', async () => {
 		const objectId = 'objectId';
-		const query = new OVSExportByObjectQuery(responseMock, objectId);
+		const query = new OVSExportByObjectQuery(responseMock, objectId, token);
 		await new OVSExportByObjectHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
 		expect(mockAddOvsSheetService.addOVSRows).toHaveBeenCalledTimes(1);
@@ -45,7 +47,7 @@ describe('OVSExportByObjectHandler', () => {
 
 	it('should return the correct headers for a spreadsheet', async () => {
 		const objectId = 'objectId';
-		const query = new OVSExportByObjectQuery(responseMock, objectId);
+		const query = new OVSExportByObjectQuery(responseMock, objectId, token);
 
 		await new OVSExportByObjectHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
@@ -58,7 +60,7 @@ describe('OVSExportByObjectHandler', () => {
 
 	it('should contain the correct fileName in the headers', async () => {
 		const objectId = 'objectId';
-		const query = new OVSExportByObjectQuery(responseMock, objectId);
+		const query = new OVSExportByObjectQuery(responseMock, objectId, token);
 
 		await new OVSExportByObjectHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 

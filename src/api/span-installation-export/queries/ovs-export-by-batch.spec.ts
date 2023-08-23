@@ -27,6 +27,8 @@ const mockLogger: MockedObjectDeep<Logger> = {
 };
 
 describe('OVSExportByBatchHandler', () => {
+	const token = '__TOKEN__';
+
 	beforeEach(() => {
 		jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2000-01-01T00:00:00.000Z');
 	});
@@ -37,7 +39,7 @@ describe('OVSExportByBatchHandler', () => {
 
 	test('executes query', async () => {
 		const batchId = 'batchId';
-		const query = new OVSExportByBatchQuery(responseMock, batchId);
+		const query = new OVSExportByBatchQuery(responseMock, batchId, token);
 		await new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
 		expect(mockAddOvsSheetService.addOVSRows).toHaveBeenCalledTimes(1);
@@ -45,7 +47,7 @@ describe('OVSExportByBatchHandler', () => {
 
 	it('should return the correct headers for a spreadsheet', async () => {
 		const batchId = 'batchId';
-		const query = new OVSExportByBatchQuery(responseMock, batchId);
+		const query = new OVSExportByBatchQuery(responseMock, batchId, token);
 
 		await new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
@@ -58,7 +60,7 @@ describe('OVSExportByBatchHandler', () => {
 
 	it('should contain the correct fileName in the headers', async () => {
 		const batchId = 'batchId';
-		const query = new OVSExportByBatchQuery(responseMock, batchId);
+		const query = new OVSExportByBatchQuery(responseMock, batchId, token);
 
 		await new OVSExportByBatchHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 

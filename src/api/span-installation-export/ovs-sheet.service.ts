@@ -7,17 +7,12 @@ import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
+import { DocumentService } from '../../schema/document/document.service';
+import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
-import {
-	OVSExportColumn,
-	OVSExportHeaderStyle,
-	OVSExportSpanInstallationBaseData,
-	OVSRow,
-	OVSRowBase,
-	DecompositionFacadeData,
-	DecompositionTensionWireData,
-} from './types';
+import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
 
 @Injectable()
 export class OVSSheetService {
@@ -25,7 +20,39 @@ export class OVSSheetService {
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
+		private readonly mastSurveyService: MastSurveyService,
+		private readonly documentService: DocumentService,
 	) {}
+
+	/**
+	 * JWT token gets set from the initiator as access to the execution context is required to retrieve the token
+	 */
+	set token(token: string) {
+		this.documentService.token = token;
+	}
+
+	get token() {
+		return this.documentService.token;
+	}
+
+	private async getSupportSystemUploadCount(
+		assetId: string,
+		surveyId: string,
+		entityId: string,
+	): Promise<number | null> {
+		const documents = await this.documentService.findSpanInstallationDocuments(assetId, surveyId, entityId, 'dms');
+		return documents.length ?? null;
+	}
+
+	private async getMastSurvey(supportSystemId: string): Promise<MastSurvey | undefined> {
+		try {
+			const mastSurvey = await this.mastSurveyService.getMastSurvey(supportSystemId);
+			return mastSurvey;
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
 
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
@@ -47,6 +74,10 @@ export class OVSSheetService {
 		const rows: OVSRow[] = [];
 
 		for (const supportSystem of supportSystems) {
+			const mastSurvey =
+				supportSystem.type === SupportSystemType.Mast ? await this.getMastSurvey(supportSystem.id) : undefined;
+			const uploadCount = await this.getSupportSystemUploadCount(id, supportSystem.surveyId, supportSystem.id);
+
 			rows.push({
 				...baseRow,
 				...SpanInstallationExportFactory.CreateDecompositionFacadeData(supportSystem),
@@ -54,6 +85,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
 			});
 
 			if (supportSystem.type === SupportSystemType.TensionWire) {
@@ -67,6 +99,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+						...SpanInstallationExportFactory.CreateSurveyMastData(),
 					});
 				}
 			}
@@ -127,6 +160,7 @@ export class OVSSheetService {
 			...this.getLuminaireColumns(),
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
+			...this.getMastSurveyColumns(),
 		];
 
 		const headers = columns.map((column) => column.header);
@@ -210,14 +244,14 @@ export class OVSSheetService {
 		// Add third row of headings (per category)
 
 		const getColumnLetter = (key: string) =>
-			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1).letter;
+			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1)?.letter;
 
 		this.setEntityHeader(
 			worksheet,
 			`${getColumnLetter('facadeTypeDetailed')}3`,
 			`${getColumnLetter('facadeRemarks')}3`,
 			'Gevel',
-			'FFc5e0b4',
+			'FFC5E0B4',
 		);
 
 		this.setEntityHeader(
@@ -225,7 +259,7 @@ export class OVSSheetService {
 			`${getColumnLetter('tensionWireTypeDetailed')}3`,
 			`${getColumnLetter('tensionWireRemarks')}3`,
 			'Spandraad',
-			'FFc5e0b4',
+			'FFC5E0B4',
 		);
 
 		this.setEntityHeader(
@@ -233,7 +267,7 @@ export class OVSSheetService {
 			`${getColumnLetter('mastTypeDetailed')}3`,
 			`${getColumnLetter('mastRemarks')}3`,
 			'Mast',
-			'FFe2f0d9',
+			'FFE2F0D9',
 		);
 
 		this.setEntityHeader(
@@ -241,7 +275,7 @@ export class OVSSheetService {
 			`${getColumnLetter('nodeTypeDetailed')}3`,
 			`${getColumnLetter('nodeRemarks')}3`,
 			'Node',
-			'FFc5e0b4',
+			'FFC5E0B4',
 		);
 
 		this.setEntityHeader(
@@ -250,6 +284,14 @@ export class OVSSheetService {
 			`${getColumnLetter('luminaireRemarks')}3`,
 			'Armatuur',
 			'FFe2f0d9',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('surveyMastDamage')}3`,
+			`${getColumnLetter('surveyMastRemarks')}3`,
+			'Mast',
+			'FFB4C7E7',
 		);
 
 		return worksheet;
@@ -562,6 +604,68 @@ export class OVSSheetService {
 				width: 16,
 			},
 		];
+	}
+
+	private getMastSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aan mast?',
+				key: 'surveyMastDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Ontbrekende onderdelen aan de mast?',
+				key: 'surveyMastMissingParts',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Hoek van de spanmast',
+				key: 'surveyTensionMastAngle',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan mastopzetstuk?',
+				key: 'surveyMastAttachmentDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Ontbrekende onderdelen aan mastbeugel?',
+				key: 'surveyMastBracketMissingParts',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan mastbeugel?',
+				headerStyle: this.headerStyle,
+				renderCell: this.renderBooleanCell,
+				key: 'surveyMastBracketDamage',
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyMastImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyMastRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private renderBooleanCell(cell: ExcelJS.Cell, value: unknown): void {
+		cell.value = value !== undefined ? (value ? 'Ja' : 'Nee') : null;
 	}
 
 	private renderCellDefault(cell: Cell, value: string | number | boolean | Date) {

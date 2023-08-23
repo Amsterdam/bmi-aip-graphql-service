@@ -4,6 +4,8 @@ import { Cell } from 'exceljs';
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
+import { SurveyMastData } from './survey';
+
 export type OVSBaseData = {
 	id: string;
 	name: string;
@@ -80,29 +82,18 @@ export type DecompositionLuminaireData = {
 };
 
 export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
-// {
-// 	passportStreet: string;
-// 	passportNeighborhood: string;
-// 	passportDistrict: string;
-// 	passportCityArea: string;
-// 	passportSplits: string;
-// 	passportDoubleWired: string;
-// 	passportTramTracks: string;
-// 	passportNotes: string;
-
-// };
 
 // OVS Record describes a single row of data in the Excel export
 export interface OVSRow
 	extends OVSBaseData,
 		OVSBatchData,
 		OVSPassportData,
-		// OVSSupportSystemData,
 		DecompositionFacadeData,
 		DecompositionTensionWireData,
 		DecompositionLuminaireData,
 		DecompositionMastData,
-		DecompositionNodeData {}
+		DecompositionNodeData,
+		SurveyMastData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 

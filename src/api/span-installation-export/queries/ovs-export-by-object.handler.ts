@@ -3,7 +3,7 @@ import ExcelJS, { Worksheet } from 'exceljs';
 import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';
-import { OVSExportSpanInstallationBaseData } from '../types/span-installation';
+import { OVSExportSpanInstallationBaseData } from '../types';
 import { OVSSheetService } from '../ovs-sheet.service';
 
 import { OVSExportByObjectQuery } from './ovs-export-by-object.query';
@@ -16,7 +16,7 @@ export class OVSExportByObjectHandler implements IQueryHandler<OVSExportByObject
 		private readonly logger: Logger,
 	) {}
 
-	async execute(query: OVSExportByObjectQuery) {
+	async execute({ response, objectId, jwtToken }: OVSExportByObjectQuery) {
 		const workbook = new Promise<ExcelJS.Workbook>((resolve) => {
 			const wb = new ExcelJS.Workbook();
 			resolve(wb);
@@ -27,28 +27,24 @@ export class OVSExportByObjectHandler implements IQueryHandler<OVSExportByObject
 			const worksheet: Worksheet = generatedWorkbook.addWorksheet('OVS', {
 				views: [{ state: 'frozen', ySplit: 1, xSplit: 1 }],
 			});
-			const objects: OVSExportSpanInstallationBaseData[] = await this.exporterService.getObjectById(
-				query.objectId,
-			);
+			const objects: OVSExportSpanInstallationBaseData[] = await this.exporterService.getObjectById(objectId);
 
 			let generateHeaders = true;
 			for (const object of objects) {
+				this.addOVSSheetService.token = jwtToken;
 				await this.addOVSSheetService.addOVSRows(worksheet, object, generateHeaders);
 				generateHeaders = false;
 			}
 
 			const fileName = `OVS-object-export-${new Date().toISOString()}`;
-			query.response.setHeader(
-				'Content-Type',
-				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-			);
-			query.response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
-			query.response.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-			await generatedWorkbook.xlsx.write(query.response);
-			return query.response.end();
+			response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+			response.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+			await generatedWorkbook.xlsx.write(response);
+			return response.end();
 		} catch (err) {
 			this.logger.error('Error:', err);
-			query.response.status(500).send({});
+			response.status(500).send({});
 		}
 	}
 }

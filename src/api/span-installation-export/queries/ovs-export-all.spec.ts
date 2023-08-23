@@ -27,6 +27,8 @@ const mockLogger: MockedObjectDeep<Logger> = {
 };
 
 describe('OVSExportAllHandler', () => {
+	const token = '__TOKEN__';
+
 	beforeEach(() => {
 		jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2000-01-01T00:00:00.000Z');
 	});
@@ -36,7 +38,7 @@ describe('OVSExportAllHandler', () => {
 	});
 
 	test('executes query', async () => {
-		const query = new OVSExportAllQuery(responseMock);
+		const query = new OVSExportAllQuery(responseMock, token);
 
 		await new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
@@ -44,7 +46,7 @@ describe('OVSExportAllHandler', () => {
 	});
 
 	it('should return the correct headers for a spreadsheet', async () => {
-		const query = new OVSExportAllQuery(responseMock);
+		const query = new OVSExportAllQuery(responseMock, token);
 
 		await new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 
@@ -56,7 +58,7 @@ describe('OVSExportAllHandler', () => {
 	});
 
 	it('should contain the correct fileName in the headers', async () => {
-		const query = new OVSExportAllQuery(responseMock);
+		const query = new OVSExportAllQuery(responseMock, token);
 
 		await new OVSExportAllHandler(mockExporterService, mockAddOvsSheetService, mockLogger).execute(query);
 

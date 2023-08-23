@@ -1,6 +1,7 @@
 import { Luminaire } from '../../schema/span-installation/models/luminaire.model';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
+import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -11,6 +12,7 @@ import type {
 	GeoJSONPoint,
 	OVSExportSpanInstallationBaseData,
 	OVSPassportData,
+	SurveyMastData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -68,8 +70,8 @@ export class SpanInstallationExportFactory {
 			facadeLocation: location,
 			facadeLocationIndication: locationIndication,
 			facadeHouseNumber: houseNumber,
-			facadeXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			facadeYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			facadeXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			facadeYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			facadeInstallationHeight: installationHeight,
 			facadeInstallationLength: installationLength,
 			facadeRemarks: remarks,
@@ -120,8 +122,8 @@ export class SpanInstallationExportFactory {
 		return {
 			mastTypeDetailed: typeDetailed,
 			mastLocation: location,
-			mastXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			mastYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			mastXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			mastYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			mastInstallationHeight: installationHeight,
 			mastRemarks: remarks,
 		};
@@ -151,8 +153,8 @@ export class SpanInstallationExportFactory {
 		return {
 			nodeTypeDetailed: typeDetailed,
 			nodeLocation: location,
-			nodeXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			nodeYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			nodeXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			nodeYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			nodeInstallationHeight: installationHeight,
 			nodeRemarks: remarks,
 		};
@@ -163,12 +165,25 @@ export class SpanInstallationExportFactory {
 			luminaireLocation: luminaire?.location ?? null,
 			luminaireHasLED: luminaire?.hasLED ?? null,
 			luminaireXCoordinate: luminaire?.geographyRD
-				? (luminaire?.geographyRD as GeoJSONPoint).coordinates[0]
+				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[0]
 				: null,
 			luminaireYCoordinate: luminaire?.geographyRD
-				? (luminaire?.geographyRD as GeoJSONPoint).coordinates[1]
+				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyMastData(survey?: MastSurvey & { uploadCount: number }): SurveyMastData {
+		return {
+			surveyMastDamage: survey?.mastDamage ?? null,
+			surveyMastMissingParts: survey?.mastMissingParts ?? null,
+			surveyTensionMastAngle: survey?.tensionMastAngle ?? null,
+			surveyMastAttachmentDamage: survey?.mastAttachmentDamage ?? null,
+			surveyMastBracketMissingParts: survey?.mastBracketMissingParts ?? null,
+			surveyMastBracketDamage: survey?.mastBracketDamage ?? null,
+			surveyMastImagery: survey?.uploadCount ?? null,
+			surveyMastRemarks: survey?.remarks ?? null,
 		};
 	}
 }

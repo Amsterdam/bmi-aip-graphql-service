@@ -1,4 +1,3 @@
-import { IPassport } from '../../../schema/asset/models/passport.model';
 import {
 	OVSRow,
 	DecompositionFacadeData,
@@ -7,7 +6,8 @@ import {
 	DecompositionNodeData,
 	OVSPassportData,
 	DecompositionLuminaireData,
-} from '../types/span-installation';
+	SurveyMastData,
+} from '../types';
 
 const assetBaseData: OVSBaseData = {
 	id: '1',
@@ -90,6 +90,16 @@ const nodeData: DecompositionNodeData = {
 	nodeInstallationHeight: 1,
 	nodeRemarks: 'test',
 };
+const mastSurveyData: SurveyMastData = {
+	surveyMastDamage: true,
+	surveyMastMissingParts: false,
+	surveyTensionMastAngle: 10,
+	surveyMastAttachmentDamage: true,
+	surveyMastBracketMissingParts: false,
+	surveyMastBracketDamage: true,
+	surveyMastImagery: 3,
+	surveyMastRemarks: 'test',
+};
 
 export const ovsRecordMock: OVSRow = {
 	...assetBaseData,
@@ -101,6 +111,7 @@ export const ovsRecordMock: OVSRow = {
 	...luminaireData,
 	...mastData,
 	...nodeData,
+	...mastSurveyData,
 };
 
 export type OVSBaseData = {

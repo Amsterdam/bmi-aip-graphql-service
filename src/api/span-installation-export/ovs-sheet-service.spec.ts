@@ -100,8 +100,13 @@ describe('OVSSheetService', () => {
 			const worksheet = workbook.addWorksheet('');
 			await ovsSheetService.addOVSRows(worksheet, ovsAssetStub, true);
 
-			const rowWithColumnNames = worksheet.getRow(4);
-			const labels = rowWithColumnNames.values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
+			// Get the column names (without empty string values) from the 4th row
+			const labels = [];
+			worksheet.getRow(4).eachCell((cell) => {
+				if (cell.text && cell.text.trim() !== '') {
+					labels.push(cell);
+				}
+			});
 
 			const fieldsToCheck = [
 				...baseDataColumns,

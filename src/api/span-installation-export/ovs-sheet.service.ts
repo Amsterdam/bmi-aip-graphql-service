@@ -75,19 +75,6 @@ export class OVSSheetService {
 		return rows;
 	}
 
-	private formatFacadeSurveyData(supportSystem: SupportSystem): any {
-		return {
-			facadeTypeDetailed: supportSystem.typeDetailed,
-			facadeStreet: supportSystem.location,
-			facadeHouseNumber: supportSystem.houseNumber,
-			facadeFloor: supportSystem.locationIndication,
-			facadeXCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[0] : '',
-			facadeYCoordinate: supportSystem.geographyRD ? supportSystem.geographyRD[1] : '',
-			facadeInstallationHeight: supportSystem.installationHeight,
-			facadeRemarks: supportSystem.remarks,
-		};
-	}
-
 	public async addOVSRows(
 		worksheet: ExcelJS.Worksheet,
 		ovsAsset: OVSExportSpanInstallationBaseData,

@@ -135,77 +135,102 @@ describe('OVSSheetService', () => {
 		it('should return the correct Paspoort data for all rows', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
+			// expect(row.techviewId).toEqual('__TECHVIEW_ID__');
+			// expect(row.idMast).toEqual('__ID_MAST__');
+			// expect(row.bol).toEqual(true);
+
 			data.map((row) => {
-				expect(row.code).toEqual(ovsAssetStub.code);
-				// expect(row.techviewId).toEqual('__TECHVIEW_ID__');
-				// expect(row.idMast).toEqual('__ID_MAST__');
-				// expect(row.bol).toEqual(true);
-				expect(row.batchNumbers).toEqual(dbBatchStub.name);
-				expect(row.batchStatus).toEqual(dbBatchStub.status);
-				expect(row.passportStreet).toEqual(ovsAssetStub.attributes.passportStreet);
-				expect(row.passportNeighborhood).toEqual(ovsAssetStub.attributes.passportNeighborhood);
-				expect(row.passportDistrict).toEqual(ovsAssetStub.attributes.passportDistrict);
-				expect(row.passportCityArea).toEqual(ovsAssetStub.attributes.passportCityArea);
-				expect(row.passportSplits).toEqual(ovsAssetStub.attributes.passportSplits);
-				expect(row.passportDoubleWired).toEqual(ovsAssetStub.attributes.passportDoubleWired);
-				expect(row.passportTramTracks).toEqual(ovsAssetStub.attributes.tramTracks);
-				expect(row.passportNotes).toEqual(ovsAssetStub.attributes.notes);
+				expect(row).toEqual(
+					expect.objectContaining({
+						code: ovsAssetStub.code,
+						batchNumbers: dbBatchStub.name,
+						batchStatus: dbBatchStub.status,
+						passportStreet: ovsAssetStub.attributes.passportStreet,
+						passportNeighborhood: ovsAssetStub.attributes.passportNeighborhood,
+						passportDistrict: ovsAssetStub.attributes.passportDistrict,
+						passportCityArea: ovsAssetStub.attributes.passportCityArea,
+						passportSplits: ovsAssetStub.attributes.passportSplits,
+						passportDoubleWired: ovsAssetStub.attributes.passportDoubleWired,
+						passportTramTracks: ovsAssetStub.attributes.tramTracks,
+						passportNotes: ovsAssetStub.attributes.notes,
+					}),
+				);
 			});
 		});
 
 		it('should fill the fields related to Decomposition - Gevel with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[0].facadeTypeDetailed).toEqual(SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs);
-			expect(data[0].facadeLocation).toEqual('__LOCATION__');
-			expect(data[0].facadeHouseNumber).toEqual('33');
-			expect(data[0].facadeLocationIndication).toEqual('__LOCATION_INDICATION__');
-			expect(data[0].facadeXCoordinate).toEqual(116211.88);
-			expect(data[0].facadeYCoordinate).toEqual(487352.77);
-			expect(data[0].facadeInstallationHeight).toEqual(10);
-			expect(data[0].facadeInstallationLength).toEqual(10); // Not present in example sheet
-			expect(data[0].facadeRemarks).toEqual('__REMARKS__');
+			expect(data[0]).toEqual(
+				expect.objectContaining({
+					facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+					facadeLocation: '__LOCATION__',
+					facadeHouseNumber: '33',
+					facadeLocationIndication: '__LOCATION_INDICATION__',
+					facadeXCoordinate: 116211.88,
+					facadeYCoordinate: 487352.77,
+					facadeInstallationHeight: 10,
+					facadeInstallationLength: 10, // Not present in example sheet
+					facadeRemarks: '__REMARKS__',
+				}),
+			);
 		});
 
 		it('should fill the fields related to Decomposition - Spandraad with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[1].tensionWireTypeDetailed).toEqual(SupportSystemTypeDetailedTensionWire.Denhalon);
-			expect(data[1].tensionWireLocation).toEqual('__LOCATION__');
-			expect(data[1].tensionWireInstallationLength).toEqual(10);
-			expect(data[1].tensionWireRemarks).toEqual('__REMARKS__');
+			expect(data[1]).toEqual(
+				expect.objectContaining({
+					tensionWireTypeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
+					tensionWireLocation: '__LOCATION__',
+					tensionWireInstallationLength: 10,
+					tensionWireRemarks: '__REMARKS__',
+				}),
+			);
 		});
 
 		it('should fill the fields related to Decomposition - Spandraad - Armatuur with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[2].luminaireHasLED).toEqual(true);
-			expect(data[2].luminaireLocation).toEqual('__LOCATION__');
-			expect(data[2].luminaireXCoordinate).toEqual(116211.88);
-			expect(data[2].luminaireYCoordinate).toEqual(487352.77);
-			expect(data[2].luminaireRemarks).toEqual('__REMARKS__');
+			expect(data[2]).toEqual(
+				expect.objectContaining({
+					luminaireHasLED: true,
+					luminaireLocation: '__LOCATION__',
+					luminaireXCoordinate: 116211.88,
+					luminaireYCoordinate: 487352.77,
+					luminaireRemarks: '__REMARKS__',
+				}),
+			);
 		});
 
 		it('should fill the fields related to Decomposition - Mast with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[3].mastTypeDetailed).toEqual(SupportSystemTypeDetailedMast.Gvb);
-			expect(data[3].mastLocation).toEqual('__LOCATION__');
-			expect(data[3].mastXCoordinate).toEqual(116211.88);
-			expect(data[3].mastYCoordinate).toEqual(487352.77);
-			expect(data[3].mastInstallationHeight).toEqual(10);
-			expect(data[3].mastRemarks).toEqual('__REMARKS__');
+			expect(data[3]).toEqual(
+				expect.objectContaining({
+					mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
+					mastLocation: '__LOCATION__',
+					mastXCoordinate: 116211.88,
+					mastYCoordinate: 487352.77,
+					mastInstallationHeight: 10,
+					mastRemarks: '__REMARKS__',
+				}),
+			);
 		});
 
 		it('should fill the fields related to Decomposition - Node with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[4].nodeTypeDetailed).toEqual(SupportSystemTypeDetailedNode.Ring);
-			expect(data[4].nodeLocation).toEqual('__LOCATION__');
-			expect(data[4].nodeXCoordinate).toEqual(116211.88);
-			expect(data[4].nodeYCoordinate).toEqual(487352.77);
-			expect(data[4].nodeInstallationHeight).toEqual(10);
-			expect(data[4].nodeRemarks).toEqual('__REMARKS__');
+			expect(data[4]).toEqual(
+				expect.objectContaining({
+					nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
+					nodeLocation: '__LOCATION__',
+					nodeXCoordinate: 116211.88,
+					nodeYCoordinate: 487352.77,
+					nodeInstallationHeight: 10,
+					nodeRemarks: '__REMARKS__',
+				}),
+			);
 		});
 	});
 });

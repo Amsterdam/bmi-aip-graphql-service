@@ -244,7 +244,7 @@ export class OVSSheetService {
 		// Add third row of headings (per category)
 
 		const getColumnLetter = (key: string) =>
-			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1)?.letter;
+			worksheet.getColumn(columns.findIndex((col) => col.key === key) + 1).letter;
 
 		this.setEntityHeader(
 			worksheet,

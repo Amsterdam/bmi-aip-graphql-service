@@ -46,10 +46,31 @@ describe('SpanInstallationExportFactory', () => {
 			const facadeSupportSystem = supportSystemStub;
 			facadeSupportSystem.type = SupportSystemType.Facade;
 			facadeSupportSystem.typeDetailed = SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs;
+			facadeSupportSystem.geographyRD = {
+				type: 'Point',
+				coordinates: [12.345, 23.456],
+			};
 
 			const result = SpanInstallationExportFactory.CreateDecompositionFacadeData(facadeSupportSystem);
 
 			expect(result).toEqual(facadeDataStub);
+		});
+
+		it('creates facade decomposition data correctly even if coordinates are null', () => {
+			const facadeSupportSystem = supportSystemStub;
+			facadeSupportSystem.type = SupportSystemType.Facade;
+			facadeSupportSystem.typeDetailed = SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs;
+			facadeSupportSystem.geographyRD = undefined;
+
+			const result = SpanInstallationExportFactory.CreateDecompositionFacadeData(facadeSupportSystem);
+
+			const expected = {
+				...facadeDataStub,
+				facadeXCoordinate: undefined,
+				facadeYCoordinate: undefined,
+			};
+
+			expect(result).toEqual(expected);
 		});
 
 		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
@@ -66,10 +87,33 @@ describe('SpanInstallationExportFactory', () => {
 			const tensionWireSupportSystem = supportSystemStub;
 			tensionWireSupportSystem.type = SupportSystemType.TensionWire;
 			tensionWireSupportSystem.typeDetailed = SupportSystemTypeDetailedTensionWire.Denhalon;
+			tensionWireSupportSystem.geographyRD = {
+				type: 'Point',
+				coordinates: [12.345, 23.456],
+			};
 
 			const result = SpanInstallationExportFactory.CreateDecompositionTensionWireData(tensionWireSupportSystem);
 
 			expect(result).toEqual(tensionWireStub);
+		});
+
+		it('creates TensionWire decomposition data correctly even if coordinates are null', () => {
+			const tensionWireSupportSystem = supportSystemStub;
+			tensionWireSupportSystem.type = SupportSystemType.TensionWire;
+			tensionWireSupportSystem.typeDetailed = SupportSystemTypeDetailedTensionWire.Denhalon;
+			tensionWireSupportSystem.geographyRD = undefined;
+
+			const result = SpanInstallationExportFactory.CreateDecompositionTensionWireData(tensionWireSupportSystem);
+
+			expect(result).toEqual(tensionWireStub);
+
+			const expected = {
+				...tensionWireStub,
+				tensionWireXCoordinate: undefined,
+				tensionWireYCoordinate: undefined,
+			};
+
+			expect(result).toEqual(expected);
 		});
 
 		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
@@ -86,10 +130,31 @@ describe('SpanInstallationExportFactory', () => {
 			const mastSupportSystem = supportSystemStub;
 			mastSupportSystem.type = SupportSystemType.Mast;
 			mastSupportSystem.typeDetailed = SupportSystemTypeDetailedMast.Gvb;
+			mastSupportSystem.geographyRD = {
+				type: 'Point',
+				coordinates: [12.345, 23.456],
+			};
 
 			const result = SpanInstallationExportFactory.CreateDecompositionMastData(mastSupportSystem);
 
 			expect(result).toEqual(mastDataStub);
+		});
+
+		it('creates Mast decomposition data correctly even if coordinates are null', () => {
+			const mastSupportSystem = supportSystemStub;
+			mastSupportSystem.type = SupportSystemType.Mast;
+			mastSupportSystem.typeDetailed = SupportSystemTypeDetailedMast.Gvb;
+			mastSupportSystem.geographyRD = undefined;
+
+			const result = SpanInstallationExportFactory.CreateDecompositionMastData(mastSupportSystem);
+
+			const expected = {
+				...mastDataStub,
+				mastXCoordinate: undefined,
+				mastYCoordinate: undefined,
+			};
+
+			expect(result).toEqual(expected);
 		});
 
 		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
@@ -106,10 +171,31 @@ describe('SpanInstallationExportFactory', () => {
 			const nodeSupportSystem = supportSystemStub;
 			nodeSupportSystem.type = SupportSystemType.Node;
 			nodeSupportSystem.typeDetailed = SupportSystemTypeDetailedNode.Ring;
+			nodeSupportSystem.geographyRD = {
+				type: 'Point',
+				coordinates: [12.345, 23.456],
+			};
 
 			const result = SpanInstallationExportFactory.CreateDecompositionNodeData(nodeSupportSystem);
 
 			expect(result).toEqual(nodeDataStub);
+		});
+
+		it('creates Node decomposition data correctly even if coordinates are null', () => {
+			const nodeSupportSystem = supportSystemStub;
+			nodeSupportSystem.type = SupportSystemType.Node;
+			nodeSupportSystem.typeDetailed = SupportSystemTypeDetailedNode.Ring;
+			nodeSupportSystem.geographyRD = undefined;
+
+			const result = SpanInstallationExportFactory.CreateDecompositionNodeData(nodeSupportSystem);
+
+			const expected = {
+				...nodeDataStub,
+				nodeXCoordinate: undefined,
+				nodeYCoordinate: undefined,
+			};
+
+			expect(result).toEqual(expected);
 		});
 
 		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
@@ -126,6 +212,19 @@ describe('SpanInstallationExportFactory', () => {
 			const result = SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire);
 
 			expect(result).toEqual(luminaireDataStub);
+		});
+
+		it('creates Luminaire decomposition data correctly even if coordinates are null', () => {
+			luminaire.geographyRD = null;
+			const result = SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire);
+
+			const expected = {
+				...luminaireDataStub,
+				luminaireXCoordinate: null,
+				luminaireYCoordinate: null,
+			};
+
+			expect(result).toEqual(expected);
 		});
 
 		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {

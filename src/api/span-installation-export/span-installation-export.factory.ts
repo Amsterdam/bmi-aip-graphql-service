@@ -68,8 +68,8 @@ export class SpanInstallationExportFactory {
 			facadeLocation: location,
 			facadeLocationIndication: locationIndication,
 			facadeHouseNumber: houseNumber,
-			facadeXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			facadeYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			facadeXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			facadeYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			facadeInstallationHeight: installationHeight,
 			facadeInstallationLength: installationLength,
 			facadeRemarks: remarks,
@@ -120,8 +120,8 @@ export class SpanInstallationExportFactory {
 		return {
 			mastTypeDetailed: typeDetailed,
 			mastLocation: location,
-			mastXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			mastYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			mastXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			mastYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			mastInstallationHeight: installationHeight,
 			mastRemarks: remarks,
 		};
@@ -151,8 +151,8 @@ export class SpanInstallationExportFactory {
 		return {
 			nodeTypeDetailed: typeDetailed,
 			nodeLocation: location,
-			nodeXCoordinate: (geographyRD as GeoJSONPoint).coordinates[0],
-			nodeYCoordinate: (geographyRD as GeoJSONPoint).coordinates[1],
+			nodeXCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[0],
+			nodeYCoordinate: (geographyRD as GeoJSONPoint)?.coordinates[1],
 			nodeInstallationHeight: installationHeight,
 			nodeRemarks: remarks,
 		};
@@ -163,10 +163,10 @@ export class SpanInstallationExportFactory {
 			luminaireLocation: luminaire?.location ?? null,
 			luminaireHasLED: luminaire?.hasLED ?? null,
 			luminaireXCoordinate: luminaire?.geographyRD
-				? (luminaire?.geographyRD as GeoJSONPoint).coordinates[0]
+				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[0]
 				: null,
 			luminaireYCoordinate: luminaire?.geographyRD
-				? (luminaire?.geographyRD as GeoJSONPoint).coordinates[1]
+				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
 		};

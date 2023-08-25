@@ -4,6 +4,7 @@ import { SupportSystemType } from '../../schema/span-installation/types';
 import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -17,6 +18,7 @@ import type {
 	SurveyMastData,
 	SurveyNodeData,
 	SurveyFacadeData,
+	SurveyTensionWireData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -205,6 +207,19 @@ export class SpanInstallationExportFactory {
 			surveyMastBracketDamage: survey?.mastBracketDamage ?? null,
 			surveyMastImagery: survey?.uploadCount ?? null,
 			surveyMastRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyTensionWireData(survey?: TensionWireSurvey & { uploadCount: number }): SurveyTensionWireData {
+		return {
+			surveyTensionWireDamage: survey?.tensionWireDamage ?? null,
+			surveyTensionWireThirdPartyObjectsAttached: survey?.thirdPartyObjectsAttached ?? null,
+			surveyTensionWireGaffTerminalDamage: survey?.gaffTerminalDamage ?? null,
+			surveyTensionWireGaffTerminalMissingParts: survey?.gaffTerminalMissingParts ?? null,
+			surveyTensionWireFaultyMontage: survey?.faultyMontage ?? null,
+			surveyTensionWireClampDamage: survey?.tensionWireClampDamage ?? null,
+			surveyTensionWireImagery: survey?.uploadCount ?? null,
+			surveyTensionWireRemarks: survey?.remarks ?? null,
 		};
 	}
 

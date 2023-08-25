@@ -6,7 +6,12 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
 import { luminaire } from '../../schema/span-installation/__stubs__';
-import { facadeSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import {
+	facadeSurvey,
+	mastSurvey,
+	nodeSurvey,
+	tensionWireSurvey,
+} from '../../schema/span-installation-survey/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -19,9 +24,10 @@ import {
 	facadeSurveyData,
 	mastSurveyData,
 	nodeSurveyData,
+	tensionWireSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
-import { SurveyFacadeData, SurveyMastData, SurveyNodeData } from './types';
+import { SurveyFacadeData, SurveyMastData, SurveyNodeData, SurveyTensionWireData } from './types';
 
 // Creating a new object with the same keys and null values
 function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
@@ -293,6 +299,32 @@ describe('SpanInstallationExportFactory', () => {
 		it('should return an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyMastData()).toEqual(
 				nullifyValuesForObject(mastSurveyData),
+			);
+		});
+	});
+
+	describe('CreateSurveyTensionWireData', () => {
+		it('should create TensionWire survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyTensionWireData({
+					...tensionWireSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyTensionWireDamage: true,
+				surveyTensionWireThirdPartyObjectsAttached: true,
+				surveyTensionWireGaffTerminalDamage: true,
+				surveyTensionWireGaffTerminalMissingParts: true,
+				surveyTensionWireFaultyMontage: true,
+				surveyTensionWireClampDamage: true,
+				surveyTensionWireImagery: 1,
+				surveyTensionWireRemarks: '__REMARKS__',
+			} as SurveyTensionWireData);
+		});
+
+		it('should return an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyTensionWireData()).toEqual(
+				nullifyValuesForObject(tensionWireSurveyData),
 			);
 		});
 	});

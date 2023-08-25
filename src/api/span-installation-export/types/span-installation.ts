@@ -4,7 +4,7 @@ import { Cell } from 'exceljs';
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
-import { SurveyFacadeData, SurveyMastData, SurveyNodeData } from './survey';
+import { SurveyFacadeData, SurveyMastData, SurveyNodeData, SurveyTensionWireData } from './survey';
 
 export type OVSColumnHeaderValues =
 	| 'OVS nummer'
@@ -43,7 +43,12 @@ export type OVSColumnHeaderValues =
 	| 'Gemeten voorspanning'
 	| 'Toegepaste additionele trekkracht'
 	| 'Gevelverbinding gefaald?'
-	| 'Additionele trekkracht waarbij gevelverbinding faalde';
+	| 'Additionele trekkracht waarbij gevelverbinding faalde'
+	| 'Schade aan spandraad?'
+	| 'Object van derden aan spandraad bevestigd?'
+	| 'Schade aan spandraadklem?'
+	| 'Schade aan gaffelterminal?'
+	| 'Ontbrekende onderdelen aan gaffelterminal?';
 
 export type OVSBaseData = {
 	id: string;
@@ -119,6 +124,7 @@ export interface OVSRow
 		DecompositionNodeData,
 		SurveyFacadeData,
 		SurveyMastData,
+		SurveyTensionWireData,
 		SurveyNodeData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}

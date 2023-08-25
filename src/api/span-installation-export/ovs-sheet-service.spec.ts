@@ -15,7 +15,13 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../types';
 import { DocumentService } from '../../schema/document/document.service';
-import { facadeSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import {
+	facadeSurvey,
+	mastSurvey,
+	nodeSurvey,
+	tensionWireSurvey,
+} from '../../schema/span-installation-survey/__stubs__';
+import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
@@ -110,6 +116,17 @@ const mastSurveyColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
+const tensionWireSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aan spandraad?',
+	'Object van derden aan spandraad bevestigd?',
+	'Onjuiste montage?',
+	'Schade aan spandraadklem?',
+	'Schade aan gaffelterminal?',
+	'Ontbrekende onderdelen aan gaffelterminal?',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
 const nodeSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan de knoop?', 'Beeldmateriaal', 'Opmerkingen'];
 
 describe('OVSSheetService', () => {
@@ -163,6 +180,11 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockTensionWireSurveyService: MockedObjectDeep<TensionWireSurveyService> = {
+		getTensionWireSurvey: jest.fn().mockResolvedValue(tensionWireSurvey),
+		...(<any>{}),
+	};
+
 	const mockNodeSurveyService: MockedObjectDeep<NodeSurveyService> = {
 		getNodeSurvey: jest.fn().mockResolvedValue(nodeSurvey),
 		...(<any>{}),
@@ -175,6 +197,7 @@ describe('OVSSheetService', () => {
 			mockLuminaireService,
 			mockFacadeSurveyService,
 			mockMastSurveyService,
+			mockTensionWireSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
 		);
@@ -201,6 +224,7 @@ describe('OVSSheetService', () => {
 				...nodeColumns,
 				...facadeSurveyColumns,
 				...mastSurveyColumns,
+				...tensionWireSurveyColumns,
 				...nodeSurveyColumns,
 			];
 
@@ -261,7 +285,7 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the fields related to Decomposition - Spandraad with the correct data', async () => {
+		it('should fill the fields related to Decomposition - TensionWire with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[1]).toEqual(
@@ -274,7 +298,7 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the fields related to Decomposition - Spandraad - Armatuur with the correct data', async () => {
+		it('should fill the fields related to Decomposition - TensionWire - Armatuur with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[2]).toEqual(
@@ -331,6 +355,18 @@ describe('OVSSheetService', () => {
 				expect(data[3]).toEqual(
 					expect.objectContaining(
 						SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
+					),
+				);
+			});
+
+			it('should fill the TensionWire survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[1]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyTensionWireData({
+							...tensionWireSurvey,
+							uploadCount: 1,
+						}),
 					),
 				);
 			});

@@ -10,8 +10,10 @@ import { DocumentService } from '../../schema/document/document.service';
 import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
 import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
+import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
@@ -25,6 +27,7 @@ export class OVSSheetService {
 		private readonly luminaireService: LuminaireService,
 		private readonly facadeSurveyService: FacadeSurveyService,
 		private readonly mastSurveyService: MastSurveyService,
+		private readonly tensionWireSurveyService: TensionWireSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
 	) {}
@@ -67,6 +70,15 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getTensionWireSurvey(supportSystemId: string): Promise<TensionWireSurvey | undefined> {
+		try {
+			return await this.tensionWireSurveyService.getTensionWireSurvey(supportSystemId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
+
 	private async getNodeSurvey(supportSystemId: string): Promise<NodeSurvey | undefined> {
 		try {
 			return await this.nodeSurveyService.getNodeSurvey(supportSystemId);
@@ -102,6 +114,10 @@ export class OVSSheetService {
 					: undefined;
 			const mastSurvey =
 				supportSystem.type === SupportSystemType.Mast ? await this.getMastSurvey(supportSystem.id) : undefined;
+			const tensionWireSurvey =
+				supportSystem.type === SupportSystemType.TensionWire
+					? await this.getTensionWireSurvey(supportSystem.id)
+					: undefined;
 			const nodeSurvey =
 				supportSystem.type === SupportSystemType.Node ? await this.getNodeSurvey(supportSystem.id) : undefined;
 			const uploadCount = await this.getSupportSystemUploadCount(id, supportSystem.surveyId, supportSystem.id);
@@ -115,6 +131,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
 				...SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
+				...SpanInstallationExportFactory.CreateSurveyTensionWireData({ ...tensionWireSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount }),
 			});
 
@@ -131,6 +148,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
 						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
+						...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
 						...SpanInstallationExportFactory.CreateSurveyNodeData(),
 					});
 				}
@@ -162,6 +180,7 @@ export class OVSSheetService {
 			...this.getNodeColumns(),
 			...this.getFacadeSurveyColumns(),
 			...this.getMastSurveyColumns(),
+			...this.getTensionWireSurveyColumns(),
 			...this.getNodeSurveyColumns(),
 		];
 
@@ -657,6 +676,65 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				headerStyle: this.headerStyle,
 				key: 'surveyMastRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getTensionWireSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aan spandraad?',
+				key: 'surveyTensionWireDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Object van derden aan spandraad bevestigd?',
+				key: 'surveyTensionWireThirdPartyObjectsAttached',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage?',
+				key: 'surveyTensionWireFaultyMontage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan spandraadklem?',
+				key: 'surveyTensionWireClampDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan gaffelterminal?',
+				key: 'surveyTensionWireGaffTerminalDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Ontbrekende onderdelen aan gaffelterminal?',
+				key: 'surveyTensionWireGaffTerminalMissingParts',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyTensionWireImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyTensionWireRemarks',
 				width: 16,
 			},
 		];

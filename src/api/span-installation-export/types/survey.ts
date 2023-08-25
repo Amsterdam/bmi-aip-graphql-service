@@ -24,6 +24,17 @@ export type SurveyMastData = {
 	surveyMastRemarks: string | null;
 };
 
+export type SurveyTensionWireData = {
+	surveyTensionWireDamage: boolean | null;
+	surveyTensionWireThirdPartyObjectsAttached: boolean | null;
+	surveyTensionWireGaffTerminalDamage: boolean | null;
+	surveyTensionWireGaffTerminalMissingParts: boolean | null;
+	surveyTensionWireFaultyMontage: boolean | null;
+	surveyTensionWireClampDamage: boolean | null;
+	surveyTensionWireImagery: number | null;
+	surveyTensionWireRemarks: string | null;
+};
+
 export type SurveyNodeData = {
 	surveyNodeDamage: boolean | null;
 	surveyNodeImagery: number | null;

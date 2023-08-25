@@ -15,16 +15,17 @@ import {
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
 import { ovsRecordMock } from './__stubs__/ovs-export-data';
+import { OVSColumnHeaderValues } from './types';
 
 // The labels below are the labels that are expected to be present in the OVS export sheet
 // The order of the labels is important, as it is used to determine the column index of the label
 // The labels are split into multiple groups for better readability
 
-const baseDataColumns = ['OVS nummer'];
+const baseDataColumns: OVSColumnHeaderValues[] = ['OVS nummer'];
 
-const batchDataColumns = ['Batch nummer(s)', 'Batch status'];
+const batchDataColumns: OVSColumnHeaderValues[] = ['Batch nummer(s)', 'Batch status'];
 
-const passportDataColumns = [
+const passportDataColumns: OVSColumnHeaderValues[] = [
 	'Straat',
 	'Buurt',
 	'Wijk',
@@ -35,24 +36,44 @@ const passportDataColumns = [
 	'Opmerkingen',
 ];
 
-const facadeColumns = [
+const facadeColumns: OVSColumnHeaderValues[] = [
 	'Type gedetailleerd',
 	'Straat',
 	'Huisnummer',
 	'Verdieping',
-	'X coordinaat',
-	'Y coordinaat',
+	'X-coördinaat',
+	'Y-coördinaat',
 	'Aanleghoogte',
 	'Opmerkingen',
 ];
 
-const tensionWireColumns = ['Type gedetailleerd', 'Lengte spandraad', 'Straat', 'Opmerkingen'];
+const tensionWireColumns: OVSColumnHeaderValues[] = ['Type gedetailleerd', 'Lengte spandraad', 'Straat', 'Opmerkingen'];
 
-const luminaireColumns = ['Straat', 'Reeds voorzien van LED', 'X coördinaat', 'Y coördinaat', 'Opmerkingen'];
+const luminaireColumns: OVSColumnHeaderValues[] = [
+	'Straat',
+	'Reeds voorzien van LED',
+	'X-coördinaat',
+	'Y-coördinaat',
+	'Opmerkingen',
+];
 
-const mastColumns = ['Type gedetailleerd', 'Straat', 'X coordinaat', 'Y coordinaat', 'Aanleghoogte', 'Opmerkingen'];
+const mastColumns: OVSColumnHeaderValues[] = [
+	'Type gedetailleerd',
+	'Straat',
+	'X-coördinaat',
+	'Y-coördinaat',
+	'Aanleghoogte',
+	'Opmerkingen',
+];
 
-const nodeColumns = ['Type gedetailleerd', 'Straat', 'X coordinaat', 'Y coordinaat', 'Aanleghoogte', 'Opmerkingen'];
+const nodeColumns: OVSColumnHeaderValues[] = [
+	'Type gedetailleerd',
+	'Straat',
+	'X-coördinaat',
+	'Y-coördinaat',
+	'Aanleghoogte',
+	'Opmerkingen',
+];
 
 let ovsSheetService: OVSSheetService;
 
@@ -100,13 +121,17 @@ describe('OVSSheetService', () => {
 			const worksheet = workbook.addWorksheet('');
 			await ovsSheetService.addOVSRows(worksheet, ovsAssetStub, true);
 
+			// Code below causes a bunch of memory errors?
+			//
 			// Get the column names (without empty string values) from the 4th row
-			const labels = [];
-			worksheet.getRow(4).eachCell((cell) => {
-				if (cell.text && cell.text.trim() !== '') {
-					labels.push(cell);
-				}
-			});
+			// const labels = [];
+			// worksheet.getRow(4).eachCell((cell) => {
+			// 	if (cell.text && cell.text.trim() !== '') {
+			// 		labels.push(cell);
+			// 	}
+			// });
+
+			const labels = worksheet.getRow(4).values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
 			const fieldsToCheck = [
 				...baseDataColumns,

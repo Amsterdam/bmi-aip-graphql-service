@@ -14,7 +14,8 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../types';
 import { DocumentService } from '../../schema/document/document.service';
-import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { junctionBoxSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
@@ -83,6 +84,16 @@ const nodeColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
+const junctionBoxSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aansluitkabel?',
+	'Onjuiste montage aan spandraad?',
+	'Onjuiste montage aan gevel?',
+	'Schade aan aansluitkast?',
+	'Sticker met ID onbruikbaar/onleesbaar?',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
 const mastSurveyColumns: OVSColumnHeaderValues[] = [
 	'Schade aan mast?',
 	'Ontbrekende onderdelen aan de mast?',
@@ -137,6 +148,11 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockJunctionBoxSurveyService: MockedObjectDeep<JunctionBoxSurveyService> = {
+		getJunctionBoxSurvey: jest.fn().mockResolvedValue(junctionBoxSurvey),
+		...(<any>{}),
+	};
+
 	const mockMastSurveyService: MockedObjectDeep<MastSurveyService> = {
 		getMastSurvey: jest.fn().mockResolvedValue(mastSurvey),
 		...(<any>{}),
@@ -152,6 +168,7 @@ describe('OVSSheetService', () => {
 			mockBatchService,
 			mockSupportSystemService,
 			mockLuminaireService,
+			mockJunctionBoxSurveyService,
 			mockMastSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
@@ -177,6 +194,7 @@ describe('OVSSheetService', () => {
 				...luminaireColumns,
 				...mastColumns,
 				...nodeColumns,
+				...junctionBoxSurveyColumns,
 				...mastSurveyColumns,
 				...nodeSurveyColumns,
 			];
@@ -294,6 +312,18 @@ describe('OVSSheetService', () => {
 		});
 
 		describe('survey data', () => {
+			it('should fill the Junction Box survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[3]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyJunctionBoxData({
+							...junctionBoxSurvey,
+							uploadCount: 1,
+						}),
+					),
+				);
+			});
+
 			it('should fill the Mast survey column fields with the correct data', async () => {
 				const data = await ovsSheetService.getData(ovsAssetStub);
 				expect(data[3]).toEqual(

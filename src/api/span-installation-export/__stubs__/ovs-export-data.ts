@@ -14,6 +14,7 @@ import {
 	DecompositionLuminaireData,
 	SurveyMastData,
 	SurveyNodeData,
+	SurveyJunctionBoxData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -97,6 +98,16 @@ export const nodeData: DecompositionNodeData = {
 	nodeRemarks: 'test',
 };
 
+export const junctionBoxSurveyData: SurveyJunctionBoxData = {
+	surveyJunctionBoxCableDamage: true,
+	surveyJunctionBoxFaultyMontageTensionWire: true,
+	surveyJunctionBoxFaultyMontageFacade: true,
+	surveyJunctionBoxDamage: true,
+	surveyJunctionBoxStickerNotReadable: true,
+	surveyJunctionBoxImagery: 1,
+	surveyJunctionBoxRemarks: '__REMARKS__',
+};
+
 export const mastSurveyData: SurveyMastData = {
 	surveyMastDamage: true,
 	surveyMastMissingParts: false,
@@ -124,6 +135,7 @@ export const ovsRecordMock: OVSRow = {
 	...mastData,
 	...nodeData,
 	...luminaireData,
+	...junctionBoxSurveyData,
 	...mastSurveyData,
 	...nodeSurveyData,
 };

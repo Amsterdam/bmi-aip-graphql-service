@@ -7,8 +7,10 @@ import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { DocumentService } from '../../schema/document/document.service';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 
@@ -21,6 +23,7 @@ export class OVSSheetService {
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
+		private readonly junctionBoxSurveyService: JunctionBoxSurveyService,
 		private readonly mastSurveyService: MastSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
@@ -44,6 +47,15 @@ export class OVSSheetService {
 	): Promise<number | null> {
 		const documents = await this.documentService.findSpanInstallationDocuments(assetId, surveyId, entityId, 'dms');
 		return documents.length ?? null;
+	}
+
+	private async getJunctionBoxSurvey(junctionBoxId: string): Promise<JunctionBoxSurvey | undefined> {
+		try {
+			return await this.junctionBoxSurveyService.getJunctionBoxSurvey(junctionBoxId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
 	}
 
 	private async getMastSurvey(supportSystemId: string): Promise<MastSurvey | undefined> {
@@ -97,6 +109,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(), // TODO add junction box survey data
 				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount }),
 			});
@@ -112,6 +125,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+						...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
 						...SpanInstallationExportFactory.CreateSurveyNodeData(),
 					});
@@ -142,6 +156,7 @@ export class OVSSheetService {
 			...this.getLuminaireColumns(),
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
+			...this.getJunctionBoxSurveyColumns(),
 			...this.getMastSurveyColumns(),
 			...this.getNodeSurveyColumns(),
 		];
@@ -560,26 +575,78 @@ export class OVSSheetService {
 			},
 			{
 				header: 'X-coördinaat',
-				headerStyle: this.headerStyle,
 				key: 'nodeXCoordinate',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Y-coördinaat',
-				headerStyle: this.headerStyle,
 				key: 'nodeYCoordinate',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Aanleghoogte',
-				headerStyle: this.headerStyle,
 				key: 'nodeInstallationHeight',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
-				headerStyle: this.headerStyle,
 				key: 'nodeRemarks',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private getJunctionBoxSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aansluitkabel?',
+				key: 'surveyJunctionBoxCableDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aan spandraad?',
+				key: 'surveyJunctionBoxFaultyMontageTensionWire',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aan gevel?',
+				key: 'surveyJunctionBoxFaultyMontageFacade',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan aansluitkast?',
+				key: 'surveyJunctionBoxDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Sticker met ID onbruikbaar/onleesbaar?',
+				key: 'surveyJunctionBoxStickerNotReadable',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				key: 'surveyJunctionBoxImagery',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				key: 'surveyJunctionBoxRemarks',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 		];
@@ -623,21 +690,21 @@ export class OVSSheetService {
 			},
 			{
 				header: 'Schade aan mastbeugel?',
+				key: 'surveyMastBracketDamage',
 				headerStyle: this.headerStyle,
 				renderCell: this.renderBooleanCell,
-				key: 'surveyMastBracketDamage',
 				width: 16,
 			},
 			{
 				header: 'Beeldmateriaal',
-				headerStyle: this.headerStyle,
 				key: 'surveyMastImagery',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
-				headerStyle: this.headerStyle,
 				key: 'surveyMastRemarks',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 		];
@@ -654,14 +721,14 @@ export class OVSSheetService {
 			},
 			{
 				header: 'Beeldmateriaal',
-				headerStyle: this.headerStyle,
 				key: 'surveyNodeImagery',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 			{
 				header: 'Opmerkingen',
-				headerStyle: this.headerStyle,
 				key: 'surveyNodeRemarks',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 		];

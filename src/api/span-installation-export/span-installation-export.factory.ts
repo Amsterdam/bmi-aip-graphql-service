@@ -3,6 +3,7 @@ import { SupportSystem } from '../../schema/span-installation/models/support-sys
 import { SupportSystemType } from '../../schema/span-installation/types';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -15,6 +16,7 @@ import type {
 	OVSPassportData,
 	SurveyMastData,
 	SurveyNodeData,
+	SurveyJunctionBoxData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -173,6 +175,18 @@ export class SpanInstallationExportFactory {
 				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyJunctionBoxData(survey?: JunctionBoxSurvey & { uploadCount: number }): SurveyJunctionBoxData {
+		return {
+			surveyJunctionBoxCableDamage: survey?.cableDamage ?? null,
+			surveyJunctionBoxFaultyMontageTensionWire: survey?.faultyMontageTensionWire ?? null,
+			surveyJunctionBoxFaultyMontageFacade: survey?.faultyMontageFacade ?? null,
+			surveyJunctionBoxDamage: survey?.junctionBoxDamage ?? null,
+			surveyJunctionBoxStickerNotReadable: survey?.stickerNotReadable ?? null,
+			surveyJunctionBoxImagery: survey?.uploadCount ?? null,
+			surveyJunctionBoxRemarks: survey?.remarks ?? null,
 		};
 	}
 

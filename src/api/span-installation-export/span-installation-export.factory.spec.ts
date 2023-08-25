@@ -6,7 +6,7 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
 import { luminaire } from '../../schema/span-installation/__stubs__';
-import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { junctionBoxSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -18,9 +18,10 @@ import {
 	luminaireData as luminaireDataStub,
 	mastSurveyData,
 	nodeSurveyData,
+	junctionBoxSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
-import { SurveyMastData, SurveyNodeData } from './types';
+import { SurveyJunctionBoxData, SurveyMastData, SurveyNodeData } from './types';
 
 // Creating a new object with the same keys and null values
 function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
@@ -237,6 +238,31 @@ describe('SpanInstallationExportFactory', () => {
 			const result = SpanInstallationExportFactory.CreateDecompositionLuminaireData();
 
 			expect(result).toEqual(objectWithNullValues);
+		});
+	});
+
+	describe('CreateSurveyJunctionBoxData', () => {
+		it('creates JunctionBox survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyJunctionBoxData({
+					...junctionBoxSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyJunctionBoxCableDamage: true,
+				surveyJunctionBoxFaultyMontageTensionWire: true,
+				surveyJunctionBoxFaultyMontageFacade: true,
+				surveyJunctionBoxDamage: true,
+				surveyJunctionBoxStickerNotReadable: true,
+				surveyJunctionBoxImagery: 1,
+				surveyJunctionBoxRemarks: '__REMARKS__',
+			} as SurveyJunctionBoxData);
+		});
+
+		it('returns an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyJunctionBoxData()).toEqual(
+				nullifyValuesForObject(junctionBoxSurveyData),
+			);
 		});
 	});
 

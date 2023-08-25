@@ -6,6 +6,7 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
 import { luminaire } from '../../schema/span-installation/__stubs__';
+import { mastSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -15,15 +16,17 @@ import {
 	mastData as mastDataStub,
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
+	mastSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
+import { SurveyMastData } from './types';
 
 // Creating a new object with the same keys and null values
-function nullifyValuesForObject(object) {
-	for (const key in object) {
-		object[key] = null;
-	}
-	return object;
+function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
+	return Object.keys(object).reduce((acc, key) => {
+		acc[key] = null;
+		return acc;
+	}, {});
 }
 
 describe('SpanInstallationExportFactory', () => {
@@ -233,6 +236,32 @@ describe('SpanInstallationExportFactory', () => {
 			const result = SpanInstallationExportFactory.CreateDecompositionLuminaireData();
 
 			expect(result).toEqual(objectWithNullValues);
+		});
+	});
+
+	describe('CreateSurveyMastData', () => {
+		it('creates Mast survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyMastData({
+					...mastSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyMastAttachmentDamage: true,
+				surveyMastBracketDamage: true,
+				surveyMastBracketMissingParts: true,
+				surveyMastDamage: true,
+				surveyMastImagery: 1,
+				surveyMastMissingParts: true,
+				surveyMastRemarks: '__REMARKS__',
+				surveyTensionMastAngle: 10,
+			} as SurveyMastData);
+		});
+
+		it('returns an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyMastData()).toEqual(
+				nullifyValuesForObject(mastSurveyData),
+			);
 		});
 	});
 });

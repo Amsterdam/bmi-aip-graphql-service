@@ -95,7 +95,8 @@ export const nodeData: DecompositionNodeData = {
 	nodeInstallationHeight: 1,
 	nodeRemarks: 'test',
 };
-const mastSurveyData: SurveyMastData = {
+
+export const mastSurveyData: SurveyMastData = {
 	surveyMastDamage: true,
 	surveyMastMissingParts: false,
 	surveyTensionMastAngle: 10,

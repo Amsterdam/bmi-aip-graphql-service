@@ -16,6 +16,7 @@ import {
 	SurveyNodeData,
 	SurveyFacadeData,
 	SurveyTensionWireData,
+	SurveyLuminaireSurveyData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -136,6 +137,12 @@ export const tensionWireSurveyData: SurveyTensionWireData = {
 	surveyTensionWireRemarks: '__REMARKS__',
 };
 
+export const luminaireSurveyData: SurveyLuminaireSurveyData = {
+	surveyLuminaireDamage: true,
+	surveyLuminaireImagery: 1,
+	surveyLuminaireRemarks: '__REMARKS__',
+};
+
 export const nodeSurveyData: SurveyNodeData = {
 	surveyNodeDamage: true,
 	surveyNodeImagery: 3,
@@ -155,6 +162,7 @@ export const ovsRecordMock: OVSRow = {
 	...facadeSurveyData,
 	...mastSurveyData,
 	...tensionWireSurveyData,
+	...luminaireSurveyData,
 	...nodeSurveyData,
 };
 

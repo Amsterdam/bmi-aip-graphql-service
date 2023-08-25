@@ -1,10 +1,15 @@
-import { Prisma } from '@prisma/client';
 import { Cell } from 'exceljs';
 
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
-import { SurveyFacadeData, SurveyMastData, SurveyNodeData, SurveyTensionWireData } from './survey';
+import {
+	SurveyFacadeData,
+	SurveyLuminaireSurveyData,
+	SurveyMastData,
+	SurveyNodeData,
+	SurveyTensionWireData,
+} from './survey';
 
 export type OVSColumnHeaderValues =
 	| 'OVS nummer'
@@ -48,7 +53,8 @@ export type OVSColumnHeaderValues =
 	| 'Object van derden aan spandraad bevestigd?'
 	| 'Schade aan spandraadklem?'
 	| 'Schade aan gaffelterminal?'
-	| 'Ontbrekende onderdelen aan gaffelterminal?';
+	| 'Ontbrekende onderdelen aan gaffelterminal?'
+	| 'Schade aan armatuur?';
 
 export type OVSBaseData = {
 	id: string;
@@ -125,6 +131,7 @@ export interface OVSRow
 		SurveyFacadeData,
 		SurveyMastData,
 		SurveyTensionWireData,
+		SurveyLuminaireSurveyData,
 		SurveyNodeData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}

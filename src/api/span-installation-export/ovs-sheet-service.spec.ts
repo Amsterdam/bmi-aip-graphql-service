@@ -17,11 +17,13 @@ import {
 import { DocumentService } from '../../schema/document/document.service';
 import {
 	facadeSurvey,
+	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
 	tensionWireSurvey,
 } from '../../schema/span-installation-survey/__stubs__';
 import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
+import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
@@ -127,6 +129,8 @@ const tensionWireSurveyColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
+const luminaireSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan armatuur?', 'Beeldmateriaal', 'Opmerkingen'];
+
 const nodeSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan de knoop?', 'Beeldmateriaal', 'Opmerkingen'];
 
 describe('OVSSheetService', () => {
@@ -185,6 +189,11 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockLuminaireSurveyService: MockedObjectDeep<LuminaireSurveyService> = {
+		getLuminaireSurvey: jest.fn().mockResolvedValue(luminaireSurvey),
+		...(<any>{}),
+	};
+
 	const mockNodeSurveyService: MockedObjectDeep<NodeSurveyService> = {
 		getNodeSurvey: jest.fn().mockResolvedValue(nodeSurvey),
 		...(<any>{}),
@@ -198,6 +207,7 @@ describe('OVSSheetService', () => {
 			mockFacadeSurveyService,
 			mockMastSurveyService,
 			mockTensionWireSurveyService,
+			mockLuminaireSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
 		);
@@ -225,6 +235,7 @@ describe('OVSSheetService', () => {
 				...facadeSurveyColumns,
 				...mastSurveyColumns,
 				...tensionWireSurveyColumns,
+				...luminaireSurveyColumns,
 				...nodeSurveyColumns,
 			];
 
@@ -365,6 +376,18 @@ describe('OVSSheetService', () => {
 					expect.objectContaining(
 						SpanInstallationExportFactory.CreateSurveyTensionWireData({
 							...tensionWireSurvey,
+							uploadCount: 1,
+						}),
+					),
+				);
+			});
+
+			it('should fill the Luminaire survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[2]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyLuminaireData({
+							...luminaireSurvey,
 							uploadCount: 1,
 						}),
 					),

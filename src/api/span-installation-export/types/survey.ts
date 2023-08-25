@@ -35,6 +35,12 @@ export type SurveyTensionWireData = {
 	surveyTensionWireRemarks: string | null;
 };
 
+export type SurveyLuminaireSurveyData = {
+	surveyLuminaireDamage: boolean | null;
+	surveyLuminaireImagery: number | null;
+	surveyLuminaireRemarks: string | null;
+};
+
 export type SurveyNodeData = {
 	surveyNodeDamage: boolean | null;
 	surveyNodeImagery: number | null;

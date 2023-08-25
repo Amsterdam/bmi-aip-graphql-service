@@ -8,6 +8,7 @@ import {
 import { luminaire } from '../../schema/span-installation/__stubs__';
 import {
 	facadeSurvey,
+	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
 	tensionWireSurvey,
@@ -27,7 +28,13 @@ import {
 	tensionWireSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
-import { SurveyFacadeData, SurveyMastData, SurveyNodeData, SurveyTensionWireData } from './types';
+import {
+	SurveyFacadeData,
+	SurveyLuminaireSurveyData,
+	SurveyMastData,
+	SurveyNodeData,
+	SurveyTensionWireData,
+} from './types';
 
 // Creating a new object with the same keys and null values
 function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
@@ -320,6 +327,27 @@ describe('SpanInstallationExportFactory', () => {
 				surveyTensionWireImagery: 1,
 				surveyTensionWireRemarks: '__REMARKS__',
 			} as SurveyTensionWireData);
+		});
+
+		it('should return an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyTensionWireData()).toEqual(
+				nullifyValuesForObject(tensionWireSurveyData),
+			);
+		});
+	});
+
+	describe('CreateSurveyLuminaireData', () => {
+		it('should create Luminaire survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyLuminaireData({
+					...luminaireSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyLuminaireDamage: true,
+				surveyLuminaireImagery: 1,
+				surveyLuminaireRemarks: '__REMARKS__',
+			} as SurveyLuminaireSurveyData);
 		});
 
 		it('should return an object with null values when survey argument is undefined', () => {

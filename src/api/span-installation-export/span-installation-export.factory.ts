@@ -5,6 +5,7 @@ import { FacadeSurvey } from '../../schema/span-installation-survey/models/facad
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
 import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
+import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -19,6 +20,7 @@ import type {
 	SurveyNodeData,
 	SurveyFacadeData,
 	SurveyTensionWireData,
+	SurveyLuminaireSurveyData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -220,6 +222,14 @@ export class SpanInstallationExportFactory {
 			surveyTensionWireClampDamage: survey?.tensionWireClampDamage ?? null,
 			surveyTensionWireImagery: survey?.uploadCount ?? null,
 			surveyTensionWireRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyLuminaireData(survey?: LuminaireSurvey & { uploadCount: number }): SurveyLuminaireSurveyData {
+		return {
+			surveyLuminaireDamage: survey?.luminaireDamage ?? null,
+			surveyLuminaireImagery: survey?.uploadCount ?? null,
+			surveyLuminaireRemarks: survey?.remarks ?? null,
 		};
 	}
 

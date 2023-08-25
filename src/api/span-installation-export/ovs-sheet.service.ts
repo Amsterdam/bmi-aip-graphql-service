@@ -14,7 +14,9 @@ import { TensionWireSurvey } from '../../schema/span-installation-survey/models/
 import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
+import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
+import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
@@ -28,6 +30,7 @@ export class OVSSheetService {
 		private readonly facadeSurveyService: FacadeSurveyService,
 		private readonly mastSurveyService: MastSurveyService,
 		private readonly tensionWireSurveyService: TensionWireSurveyService,
+		private readonly luminaireSurveyService: LuminaireSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
 	) {}
@@ -43,11 +46,7 @@ export class OVSSheetService {
 		return this.documentService.token;
 	}
 
-	private async getSupportSystemUploadCount(
-		assetId: string,
-		surveyId: string,
-		entityId: string,
-	): Promise<number | null> {
+	private async getEntityUploadCount(assetId: string, surveyId: string, entityId: string): Promise<number | null> {
 		const documents = await this.documentService.findSpanInstallationDocuments(assetId, surveyId, entityId, 'dms');
 		return documents.length ?? null;
 	}
@@ -88,6 +87,15 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getLuminaireSurvey(luminaireId: string): Promise<LuminaireSurvey | undefined> {
+		try {
+			return await this.luminaireSurveyService.getLuminaireSurvey(luminaireId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
+
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
@@ -120,7 +128,7 @@ export class OVSSheetService {
 					: undefined;
 			const nodeSurvey =
 				supportSystem.type === SupportSystemType.Node ? await this.getNodeSurvey(supportSystem.id) : undefined;
-			const uploadCount = await this.getSupportSystemUploadCount(id, supportSystem.surveyId, supportSystem.id);
+			const uploadCount = await this.getEntityUploadCount(id, supportSystem.surveyId, supportSystem.id);
 
 			rows.push({
 				...baseRow,
@@ -129,16 +137,36 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
-				...SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount }),
-				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
-				...SpanInstallationExportFactory.CreateSurveyTensionWireData({ ...tensionWireSurvey, uploadCount }),
-				...SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount }),
+				...SpanInstallationExportFactory.CreateSurveyFacadeData({
+					...facadeSurvey,
+					uploadCount: supportSystem.type === SupportSystemType.Facade ? uploadCount : null,
+				}),
+				...SpanInstallationExportFactory.CreateSurveyMastData({
+					...mastSurvey,
+					uploadCount: supportSystem.type === SupportSystemType.Mast ? uploadCount : null,
+				}),
+				...SpanInstallationExportFactory.CreateSurveyTensionWireData({
+					...tensionWireSurvey,
+					uploadCount: supportSystem.type === SupportSystemType.TensionWire ? uploadCount : null,
+				}),
+				...SpanInstallationExportFactory.CreateSurveyLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyNodeData({
+					...nodeSurvey,
+					uploadCount: supportSystem.type === SupportSystemType.Node ? uploadCount : null,
+				}),
 			});
 
 			if (supportSystem.type === SupportSystemType.TensionWire) {
 				const luminaires = await this.luminaireService.getLuminaires(supportSystem.id);
 
 				for (const luminaire of luminaires) {
+					const luminaireSurvey = await this.getLuminaireSurvey(luminaire.id);
+					const luminaireSurveyUploadCount = await this.getEntityUploadCount(
+						id,
+						supportSystem.surveyId,
+						luminaire.id,
+					);
+
 					rows.push({
 						...baseRow,
 						...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
@@ -149,6 +177,10 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
 						...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
+						...SpanInstallationExportFactory.CreateSurveyLuminaireData({
+							...luminaireSurvey,
+							uploadCount: luminaireSurveyUploadCount,
+						}),
 						...SpanInstallationExportFactory.CreateSurveyNodeData(),
 					});
 				}
@@ -181,6 +213,7 @@ export class OVSSheetService {
 			...this.getFacadeSurveyColumns(),
 			...this.getMastSurveyColumns(),
 			...this.getTensionWireSurveyColumns(),
+			...this.getLuminaireSurveyColumns(),
 			...this.getNodeSurveyColumns(),
 		];
 
@@ -309,10 +342,42 @@ export class OVSSheetService {
 
 		this.setEntityHeader(
 			worksheet,
+			`${getColumnLetter('surveyFacadeDamageWithin1m')}3`,
+			`${getColumnLetter('surveyFacadeRemarks')}3`,
+			'Gevel',
+			'FFDAE3F3',
+		);
+
+		this.setEntityHeader(
+			worksheet,
 			`${getColumnLetter('surveyMastDamage')}3`,
 			`${getColumnLetter('surveyMastRemarks')}3`,
 			'Mast',
 			'FFB4C7E7',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('surveyTensionWireDamage')}3`,
+			`${getColumnLetter('surveyTensionWireRemarks')}3`,
+			'Spandraad',
+			'FFDAE3F3',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('surveyLuminaireDamage')}3`,
+			`${getColumnLetter('surveyLuminaireRemarks')}3`,
+			'Armatuur',
+			'FFB4C7E7',
+		);
+
+		this.setEntityHeader(
+			worksheet,
+			`${getColumnLetter('surveyNodeDamage')}3`,
+			`${getColumnLetter('surveyNodeRemarks')}3`,
+			'Knoop',
+			'FFDAE3F3',
 		);
 
 		return worksheet;
@@ -735,6 +800,30 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				headerStyle: this.headerStyle,
 				key: 'surveyTensionWireRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getLuminaireSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aan armatuur?',
+				key: 'surveyLuminaireDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				key: 'surveyLuminaireImagery',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				key: 'surveyLuminaireRemarks',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 		];

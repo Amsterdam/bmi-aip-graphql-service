@@ -117,35 +117,6 @@ export type OVSExportSpanInstallationBaseData = {
 	attributes: IPassport;
 };
 
-export type OVSExportSpanInstallationPassportData = {
-	id: string;
-	name: string;
-	code: string;
-	location: string;
-	latitude: Prisma.Decimal;
-	longitude: Prisma.Decimal;
-	attributes: IPassport;
-};
-
-export type OVSExportSpanInstallationDecompositionFacadeData = {
-	typeDetailed: string;
-	street: string;
-	houseNumber: string;
-	verdieping: string;
-	xCoordinate: string;
-	yCoordinate: string;
-	installationHeight: Prisma.Decimal;
-	installationLength: Prisma.Decimal;
-	remarks: string;
-};
-
-export type OVSExportSpanInstallationWithBatchDetails = OVSExportSpanInstallationBaseData & {
-	batch: {
-		name: string;
-		status: string;
-	};
-};
-
 export interface OVSExportHeaderStyle {
 	bgColor: string;
 	textColor: string;

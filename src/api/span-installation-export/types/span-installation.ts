@@ -26,7 +26,13 @@ export type OVSColumnHeaderValues =
 	| 'Aanleghoogte'
 	| 'Lengte spandraad'
 	| 'Reeds voorzien van LED'
-	| 'Opmerkingen';
+	| 'Schade aan mast?'
+	| 'Ontbrekende onderdelen aan de mast?'
+	| 'Hoek van de spanmast'
+	| 'Schade aan mastopzetstuk?'
+	| 'Ontbrekende onderdelen aan mastbeugel?'
+	| 'Schade aan mastbeugel?'
+	| 'Beeldmateriaal';
 
 export type OVSBaseData = {
 	id: string;

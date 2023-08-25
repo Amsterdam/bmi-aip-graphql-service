@@ -6,7 +6,7 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
 import { luminaire } from '../../schema/span-installation/__stubs__';
-import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { facadeSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -16,11 +16,12 @@ import {
 	mastData as mastDataStub,
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
+	facadeSurveyData,
 	mastSurveyData,
 	nodeSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
-import { SurveyMastData, SurveyNodeData } from './types';
+import { SurveyFacadeData, SurveyMastData, SurveyNodeData } from './types';
 
 // Creating a new object with the same keys and null values
 function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
@@ -240,8 +241,38 @@ describe('SpanInstallationExportFactory', () => {
 		});
 	});
 
+	describe('CreateSurveyFacadeData', () => {
+		it('should create Facade survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyFacadeData({
+					...facadeSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyFacadeAppliedAdditionalTraction: 2,
+				surveyFacadeConnectionFailureAdditionalTraction: 3,
+				surveyFacadeDamageWithin1m: true,
+				surveyFacadeFaultyMontage: true,
+				surveyFacadeHinderingVegetation: true,
+				surveyFacadeImagery: 1,
+				surveyFacadeMeasuredPreload: 10,
+				surveyFacadeMissingFasteners: true,
+				surveyFacadeConnectionFailed: true,
+				surveyFacadeNutNotFullyOverThreadedRod: true,
+				surveyFacadeRemarks: '__REMARKS__',
+				surveyFacadeWallPlateDamage: true,
+			} as SurveyFacadeData);
+		});
+
+		it('should return an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyFacadeData()).toEqual(
+				nullifyValuesForObject(facadeSurveyData),
+			);
+		});
+	});
+
 	describe('CreateSurveyMastData', () => {
-		it('creates Mast survey data correctly', () => {
+		it('should create Mast survey data correctly', () => {
 			expect(
 				SpanInstallationExportFactory.CreateSurveyMastData({
 					...mastSurvey,
@@ -259,7 +290,7 @@ describe('SpanInstallationExportFactory', () => {
 			} as SurveyMastData);
 		});
 
-		it('returns an object with null values when survey argument is undefined', () => {
+		it('should return an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyMastData()).toEqual(
 				nullifyValuesForObject(mastSurveyData),
 			);
@@ -267,7 +298,7 @@ describe('SpanInstallationExportFactory', () => {
 	});
 
 	describe('CreateSurveyNodeData', () => {
-		it('creates Node survey data correctly', () => {
+		it('should create Node survey data correctly', () => {
 			expect(
 				SpanInstallationExportFactory.CreateSurveyNodeData({
 					...nodeSurvey,
@@ -280,7 +311,7 @@ describe('SpanInstallationExportFactory', () => {
 			} as SurveyNodeData);
 		});
 
-		it('returns an object with null values when survey argument is undefined', () => {
+		it('should return an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyNodeData()).toEqual(
 				nullifyValuesForObject(nodeSurveyData),
 			);

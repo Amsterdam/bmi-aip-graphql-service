@@ -1,6 +1,7 @@
 import { Luminaire } from '../../schema/span-installation/models/luminaire.model';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
+import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
 
@@ -15,6 +16,7 @@ import type {
 	OVSPassportData,
 	SurveyMastData,
 	SurveyNodeData,
+	SurveyFacadeData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -173,6 +175,23 @@ export class SpanInstallationExportFactory {
 				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyFacadeData(survey?: FacadeSurvey & { uploadCount: number }): SurveyFacadeData {
+		return {
+			surveyFacadeDamageWithin1m: survey?.facadeDamageWithin1m ?? null,
+			surveyFacadeHinderingVegetation: survey?.hinderingVegetation ?? null,
+			surveyFacadeWallPlateDamage: survey?.wallPlateDamage ?? null,
+			surveyFacadeFaultyMontage: survey?.faultyMontage ?? null,
+			surveyFacadeNutNotFullyOverThreadedRod: survey?.nutNotFullyOverThreadedRod ?? null,
+			surveyFacadeMissingFasteners: survey?.missingFasteners ?? null,
+			surveyFacadeMeasuredPreload: survey?.measuredPreload ?? null,
+			surveyFacadeAppliedAdditionalTraction: survey?.appliedAdditionalTraction ?? null,
+			surveyFacadeConnectionFailed: survey?.facadeConnectionFailed ?? null,
+			surveyFacadeConnectionFailureAdditionalTraction: survey?.facadeConnectionFailureAdditionalTraction ?? null,
+			surveyFacadeImagery: survey?.uploadCount ?? null,
+			surveyFacadeRemarks: survey?.remarks ?? null,
 		};
 	}
 

@@ -7,8 +7,10 @@ import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { DocumentService } from '../../schema/document/document.service';
+import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 
@@ -21,6 +23,7 @@ export class OVSSheetService {
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
+		private readonly facadeSurveyService: FacadeSurveyService,
 		private readonly mastSurveyService: MastSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
@@ -44,6 +47,15 @@ export class OVSSheetService {
 	): Promise<number | null> {
 		const documents = await this.documentService.findSpanInstallationDocuments(assetId, surveyId, entityId, 'dms');
 		return documents.length ?? null;
+	}
+
+	private async getFacadeSurvey(supportSystemId: string): Promise<FacadeSurvey | undefined> {
+		try {
+			return await this.facadeSurveyService.getFacadeSurvey(supportSystemId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
 	}
 
 	private async getMastSurvey(supportSystemId: string): Promise<MastSurvey | undefined> {
@@ -84,6 +96,10 @@ export class OVSSheetService {
 		const rows: OVSRow[] = [];
 
 		for (const supportSystem of supportSystems) {
+			const facadeSurvey =
+				supportSystem.type === SupportSystemType.Facade
+					? await this.getFacadeSurvey(supportSystem.id)
+					: undefined;
 			const mastSurvey =
 				supportSystem.type === SupportSystemType.Mast ? await this.getMastSurvey(supportSystem.id) : undefined;
 			const nodeSurvey =
@@ -97,6 +113,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount }),
 			});
@@ -112,6 +129,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
 						...SpanInstallationExportFactory.CreateSurveyNodeData(),
 					});
@@ -142,6 +160,7 @@ export class OVSSheetService {
 			...this.getLuminaireColumns(),
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
+			...this.getFacadeSurveyColumns(),
 			...this.getMastSurveyColumns(),
 			...this.getNodeSurveyColumns(),
 		];
@@ -638,6 +657,89 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				headerStyle: this.headerStyle,
 				key: 'surveyMastRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getFacadeSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade op gevel?',
+				key: 'surveyFacadeDamageWithin1m',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Begroeiing?',
+				key: 'surveyFacadeHinderingVegetation',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan muurplaat?',
+				key: 'surveyFacadeWallPlateDamage',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage?',
+				key: 'surveyFacadeFaultyMontage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Moer niet volledig over draadeind?',
+				key: 'surveyFacadeNutNotFullyOverThreadedRod',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Ontbrekende bevestigingsmaterialen?',
+				key: 'surveyFacadeMissingFasteners',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Gemeten voorspanning',
+				key: 'surveyFacadeMeasuredPreload',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Toegepaste additionele trekkracht',
+				key: 'surveyFacadeAppliedAdditionalTraction',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Gevelverbinding gefaald?',
+				key: 'surveyFacadeConnectionFailed',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Additionele trekkracht waarbij gevelverbinding faalde',
+				key: 'surveyFacadeConnectionFailureAdditionalTraction',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyFacadeImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyFacadeRemarks',
 				width: 16,
 			},
 		];

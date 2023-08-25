@@ -14,6 +14,7 @@ import {
 	DecompositionLuminaireData,
 	SurveyMastData,
 	SurveyNodeData,
+	SurveyFacadeData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -97,6 +98,21 @@ export const nodeData: DecompositionNodeData = {
 	nodeRemarks: 'test',
 };
 
+export const facadeSurveyData: SurveyFacadeData = {
+	surveyFacadeDamageWithin1m: false,
+	surveyFacadeHinderingVegetation: false,
+	surveyFacadeWallPlateDamage: false,
+	surveyFacadeFaultyMontage: false,
+	surveyFacadeNutNotFullyOverThreadedRod: false,
+	surveyFacadeMissingFasteners: false,
+	surveyFacadeMeasuredPreload: 0,
+	surveyFacadeAppliedAdditionalTraction: 0,
+	surveyFacadeConnectionFailed: true,
+	surveyFacadeConnectionFailureAdditionalTraction: 0,
+	surveyFacadeImagery: 1,
+	surveyFacadeRemarks: '__REMARKS__',
+};
+
 export const mastSurveyData: SurveyMastData = {
 	surveyMastDamage: true,
 	surveyMastMissingParts: false,
@@ -124,6 +140,7 @@ export const ovsRecordMock: OVSRow = {
 	...mastData,
 	...nodeData,
 	...luminaireData,
+	...facadeSurveyData,
 	...mastSurveyData,
 	...nodeSurveyData,
 };

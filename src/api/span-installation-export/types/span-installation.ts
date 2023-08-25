@@ -4,7 +4,7 @@ import { Cell } from 'exceljs';
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
-import { SurveyMastData, SurveyNodeData } from './survey';
+import { SurveyFacadeData, SurveyMastData, SurveyNodeData } from './survey';
 
 export type OVSColumnHeaderValues =
 	| 'OVS nummer'
@@ -33,7 +33,17 @@ export type OVSColumnHeaderValues =
 	| 'Ontbrekende onderdelen aan mastbeugel?'
 	| 'Schade aan mastbeugel?'
 	| 'Beeldmateriaal'
-	| 'Schade aan de knoop?';
+	| 'Schade aan de knoop?'
+	| 'Schade op gevel?'
+	| 'Begroeiing?'
+	| 'Schade aan muurplaat?'
+	| 'Onjuiste montage?'
+	| 'Moer niet volledig over draadeind?'
+	| 'Ontbrekende bevestigingsmaterialen?'
+	| 'Gemeten voorspanning'
+	| 'Toegepaste additionele trekkracht'
+	| 'Gevelverbinding gefaald?'
+	| 'Additionele trekkracht waarbij gevelverbinding faalde';
 
 export type OVSBaseData = {
 	id: string;
@@ -107,6 +117,7 @@ export interface OVSRow
 		DecompositionLuminaireData,
 		DecompositionMastData,
 		DecompositionNodeData,
+		SurveyFacadeData,
 		SurveyMastData,
 		SurveyNodeData {}
 

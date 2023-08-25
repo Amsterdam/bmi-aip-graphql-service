@@ -4,6 +4,7 @@ import { MockedObjectDeep } from 'ts-jest';
 import { supportSystem, luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 import {
@@ -14,7 +15,7 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../types';
 import { DocumentService } from '../../schema/document/document.service';
-import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { facadeSurvey, mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
@@ -83,6 +84,21 @@ const nodeColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
+const facadeSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade op gevel?',
+	'Begroeiing?',
+	'Schade aan muurplaat?',
+	'Onjuiste montage?',
+	'Moer niet volledig over draadeind?',
+	'Ontbrekende bevestigingsmaterialen?',
+	'Gemeten voorspanning',
+	'Toegepaste additionele trekkracht',
+	'Gevelverbinding gefaald?',
+	'Additionele trekkracht waarbij gevelverbinding faalde',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
 const mastSurveyColumns: OVSColumnHeaderValues[] = [
 	'Schade aan mast?',
 	'Ontbrekende onderdelen aan de mast?',
@@ -137,6 +153,11 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockFacadeSurveyService: MockedObjectDeep<FacadeSurveyService> = {
+		getFacadeSurvey: jest.fn().mockResolvedValue(facadeSurvey),
+		...(<any>{}),
+	};
+
 	const mockMastSurveyService: MockedObjectDeep<MastSurveyService> = {
 		getMastSurvey: jest.fn().mockResolvedValue(mastSurvey),
 		...(<any>{}),
@@ -152,6 +173,7 @@ describe('OVSSheetService', () => {
 			mockBatchService,
 			mockSupportSystemService,
 			mockLuminaireService,
+			mockFacadeSurveyService,
 			mockMastSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
@@ -177,6 +199,7 @@ describe('OVSSheetService', () => {
 				...luminaireColumns,
 				...mastColumns,
 				...nodeColumns,
+				...facadeSurveyColumns,
 				...mastSurveyColumns,
 				...nodeSurveyColumns,
 			];
@@ -294,6 +317,15 @@ describe('OVSSheetService', () => {
 		});
 
 		describe('survey data', () => {
+			it('should fill the Facade survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[0]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount: 1 }),
+					),
+				);
+			});
+
 			it('should fill the Mast survey column fields with the correct data', async () => {
 				const data = await ovsSheetService.getData(ovsAssetStub);
 				expect(data[3]).toEqual(

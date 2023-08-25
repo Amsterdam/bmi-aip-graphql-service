@@ -13,6 +13,7 @@ import {
 	OVSPassportData,
 	DecompositionLuminaireData,
 	SurveyMastData,
+	SurveyNodeData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -107,6 +108,12 @@ export const mastSurveyData: SurveyMastData = {
 	surveyMastRemarks: 'test',
 };
 
+export const nodeSurveyData: SurveyNodeData = {
+	surveyNodeDamage: true,
+	surveyNodeImagery: 3,
+	surveyNodeRemarks: 'test',
+};
+
 export const ovsRecordMock: OVSRow = {
 	...assetBaseData,
 	...assetBatchData,
@@ -118,6 +125,7 @@ export const ovsRecordMock: OVSRow = {
 	...nodeData,
 	...luminaireData,
 	...mastSurveyData,
+	...nodeSurveyData,
 };
 
 export type OVSBaseData = {

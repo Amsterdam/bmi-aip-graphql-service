@@ -8,3 +8,9 @@ export type SurveyMastData = {
 	surveyMastImagery: number | null;
 	surveyMastRemarks: string | null;
 };
+
+export type SurveyNodeData = {
+	surveyNodeDamage: boolean | null;
+	surveyNodeImagery: number | null;
+	surveyNodeRemarks: string | null;
+};

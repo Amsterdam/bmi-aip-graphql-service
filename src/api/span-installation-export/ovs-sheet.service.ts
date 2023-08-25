@@ -6,9 +6,11 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
-import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { DocumentService } from '../../schema/document/document.service';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
+import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
+import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
@@ -20,6 +22,7 @@ export class OVSSheetService {
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
 		private readonly mastSurveyService: MastSurveyService,
+		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
 	) {}
 
@@ -52,6 +55,15 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getNodeSurvey(supportSystemId: string): Promise<NodeSurvey | undefined> {
+		try {
+			return await this.nodeSurveyService.getNodeSurvey(supportSystemId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
+
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
@@ -74,6 +86,8 @@ export class OVSSheetService {
 		for (const supportSystem of supportSystems) {
 			const mastSurvey =
 				supportSystem.type === SupportSystemType.Mast ? await this.getMastSurvey(supportSystem.id) : undefined;
+			const nodeSurvey =
+				supportSystem.type === SupportSystemType.Node ? await this.getNodeSurvey(supportSystem.id) : undefined;
 			const uploadCount = await this.getSupportSystemUploadCount(id, supportSystem.surveyId, supportSystem.id);
 
 			rows.push({
@@ -84,6 +98,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
 				...SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount }),
+				...SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount }),
 			});
 
 			if (supportSystem.type === SupportSystemType.TensionWire) {
@@ -98,6 +113,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
+						...SpanInstallationExportFactory.CreateSurveyNodeData(),
 					});
 				}
 			}
@@ -127,6 +143,7 @@ export class OVSSheetService {
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
 			...this.getMastSurveyColumns(),
+			...this.getNodeSurveyColumns(),
 		];
 
 		const headers = columns.map((column) => column.header);
@@ -621,6 +638,30 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				headerStyle: this.headerStyle,
 				key: 'surveyMastRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getNodeSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aan de knoop?',
+				key: 'surveyNodeDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyNodeImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyNodeRemarks',
 				width: 16,
 			},
 		];

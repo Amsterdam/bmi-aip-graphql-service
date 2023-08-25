@@ -5,6 +5,7 @@ import { supportSystem, luminaire as luminaireStub } from '../../schema/span-ins
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
+import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 import {
 	SupportSystemType,
 	SupportSystemTypeDetailedFacade,
@@ -13,12 +14,12 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../types';
 import { DocumentService } from '../../schema/document/document.service';
-import { mastSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
 import { ovsRecordMock } from './__stubs__';
-import { OVSColumnHeaderValues, OVSRow } from './types';
+import { OVSColumnHeaderValues } from './types';
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 
 jest.mock('../../schema/span-installation-survey/mast-survey.service');
@@ -93,6 +94,8 @@ const mastSurveyColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
+const nodeSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan de knoop?', 'Beeldmateriaal', 'Opmerkingen'];
+
 describe('OVSSheetService', () => {
 	let ovsSheetService: OVSSheetService;
 
@@ -139,12 +142,18 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockNodeSurveyService: MockedObjectDeep<NodeSurveyService> = {
+		getNodeSurvey: jest.fn().mockResolvedValue(nodeSurvey),
+		...(<any>{}),
+	};
+
 	beforeEach(async () => {
 		ovsSheetService = new OVSSheetService(
 			mockBatchService,
 			mockSupportSystemService,
 			mockLuminaireService,
 			mockMastSurveyService,
+			mockNodeSurveyService,
 			mockDocumentService,
 		);
 	});
@@ -169,6 +178,7 @@ describe('OVSSheetService', () => {
 				...mastColumns,
 				...nodeColumns,
 				...mastSurveyColumns,
+				...nodeSurveyColumns,
 			];
 
 			expect(labels).toEqual(fieldsToCheck);
@@ -269,15 +279,6 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the Mast survey column fields with the correct data', async () => {
-			const data = await ovsSheetService.getData(ovsAssetStub);
-			expect(data[3]).toEqual(
-				expect.objectContaining(
-					SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
-				),
-			);
-		});
-
 		it('should fill the fields related to Decomposition - Node with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 			expect(data[4]).toEqual(
@@ -290,6 +291,26 @@ describe('OVSSheetService', () => {
 					nodeRemarks: '__REMARKS__',
 				}),
 			);
+		});
+
+		describe('survey data', () => {
+			it('should fill the Mast survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[3]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
+					),
+				);
+			});
+
+			it('should fill the Node survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[4]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount: 1 }),
+					),
+				);
+			});
 		});
 	});
 });

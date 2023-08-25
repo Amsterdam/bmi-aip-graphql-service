@@ -2,6 +2,7 @@ import { Luminaire } from '../../schema/span-installation/models/luminaire.model
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
+import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -13,6 +14,7 @@ import type {
 	OVSExportSpanInstallationBaseData,
 	OVSPassportData,
 	SurveyMastData,
+	SurveyNodeData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -184,6 +186,14 @@ export class SpanInstallationExportFactory {
 			surveyMastBracketDamage: survey?.mastBracketDamage ?? null,
 			surveyMastImagery: survey?.uploadCount ?? null,
 			surveyMastRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyNodeData(survey?: NodeSurvey & { uploadCount: number }): SurveyNodeData {
+		return {
+			surveyNodeDamage: survey?.nodeDamage ?? null,
+			surveyNodeImagery: survey?.uploadCount ?? null,
+			surveyNodeRemarks: survey?.remarks ?? null,
 		};
 	}
 }

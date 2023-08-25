@@ -6,7 +6,7 @@ import {
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
 import { luminaire } from '../../schema/span-installation/__stubs__';
-import { mastSurvey } from '../../schema/span-installation-survey/__stubs__';
+import { mastSurvey, nodeSurvey } from '../../schema/span-installation-survey/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -17,9 +17,10 @@ import {
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
 	mastSurveyData,
+	nodeSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
-import { SurveyMastData } from './types';
+import { SurveyMastData, SurveyNodeData } from './types';
 
 // Creating a new object with the same keys and null values
 function nullifyValuesForObject(object: Record<string, unknown>): Record<string, null> {
@@ -261,6 +262,27 @@ describe('SpanInstallationExportFactory', () => {
 		it('returns an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyMastData()).toEqual(
 				nullifyValuesForObject(mastSurveyData),
+			);
+		});
+	});
+
+	describe('CreateSurveyNodeData', () => {
+		it('creates Node survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyNodeData({
+					...nodeSurvey,
+					uploadCount: 1,
+				}),
+			).toEqual({
+				surveyNodeDamage: true,
+				surveyNodeImagery: 1,
+				surveyNodeRemarks: '__REMARKS__',
+			} as SurveyNodeData);
+		});
+
+		it('returns an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyNodeData()).toEqual(
+				nullifyValuesForObject(nodeSurveyData),
 			);
 		});
 	});

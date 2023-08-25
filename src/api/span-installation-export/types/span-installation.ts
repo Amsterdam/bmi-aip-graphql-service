@@ -4,7 +4,7 @@ import { Cell } from 'exceljs';
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
 
-import { SurveyMastData } from './survey';
+import { SurveyMastData, SurveyNodeData } from './survey';
 
 export type OVSColumnHeaderValues =
 	| 'OVS nummer'
@@ -32,7 +32,8 @@ export type OVSColumnHeaderValues =
 	| 'Schade aan mastopzetstuk?'
 	| 'Ontbrekende onderdelen aan mastbeugel?'
 	| 'Schade aan mastbeugel?'
-	| 'Beeldmateriaal';
+	| 'Beeldmateriaal'
+	| 'Schade aan de knoop?';
 
 export type OVSBaseData = {
 	id: string;
@@ -106,7 +107,8 @@ export interface OVSRow
 		DecompositionLuminaireData,
 		DecompositionMastData,
 		DecompositionNodeData,
-		SurveyMastData {}
+		SurveyMastData,
+		SurveyNodeData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 

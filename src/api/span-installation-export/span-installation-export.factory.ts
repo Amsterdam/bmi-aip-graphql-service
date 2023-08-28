@@ -185,7 +185,7 @@ export class SpanInstallationExportFactory {
 				: null,
 			junctionBoxInstallationHeight: junctionBox?.installationHeight ?? null,
 			junctionBoxRiserTubeVisible: junctionBox?.riserTubeVisible ?? null,
-			junctionBoxRemarks: junctionBox?.remarks ?? null,
+			junctionBoxLocation: junctionBox?.location ?? null,
 		};
 	}
 }

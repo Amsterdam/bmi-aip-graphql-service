@@ -9,6 +9,8 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { SupportSystemRepository } from '../../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../../schema/span-installation/luminaire.repository';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { JunctionBoxService } from '../../schema/span-installation/junction-box.service';
+import { JunctionBoxRepository } from '../../schema/span-installation/junction-box.repository';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { SpanInstallationExportService } from './span-installation-export.service';
@@ -31,6 +33,8 @@ import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler
 		SupportSystemRepository,
 		LuminaireRepository,
 		LuminaireService,
+		JunctionBoxService,
+		JunctionBoxRepository,
 		OVSExportByBatchHandler,
 		OVSExportByObjectHandler,
 		OVSExportAllHandler,

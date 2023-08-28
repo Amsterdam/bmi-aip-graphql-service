@@ -57,7 +57,7 @@ export const decompositionJunctionBoxData: DecompositionJunctionBoxData = {
 	junctionBoxYCoordinate: 23.456,
 	junctionBoxInstallationHeight: 1,
 	junctionBoxRiserTubeVisible: true,
-	junctionBoxRemarks: 'test',
+	junctionBoxLocation: '__LOCATION__',
 };
 
 export const decompositionFacadeData: DecompositionFacadeData = {
@@ -94,7 +94,7 @@ export const junctionBoxData: DecompositionJunctionBoxData = {
 	junctionBoxXCoordinate: 116211.88,
 	junctionBoxYCoordinate: 487352.77,
 	junctionBoxRiserTubeVisible: true,
-	junctionBoxRemarks: '__REMARKS__',
+	junctionBoxLocation: '__LOCATION__',
 };
 
 export const mastData: DecompositionMastData = {

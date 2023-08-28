@@ -8,11 +8,6 @@ const ovsAssetBaseDataStub: OVSBaseData = {
 	code: 'CODE1',
 };
 
-// const ovsAssetBatchDataStub: OVSBatchData = {
-// 	batchNumbers: 'batch1, batch2',
-// 	batchStatus: 'active',
-// };
-
 const ovsAssetPassportStub: IPassport = {
 	passportIdentification: 'test',
 	passportCityArea: 'test',

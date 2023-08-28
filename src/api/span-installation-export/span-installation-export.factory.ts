@@ -1,6 +1,11 @@
 import { Luminaire } from '../../schema/span-installation/models/luminaire.model';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
+import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
+import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
+import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
+import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
+import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -11,6 +16,11 @@ import type {
 	GeoJSONPoint,
 	OVSExportSpanInstallationBaseData,
 	OVSPassportData,
+	SurveyMastData,
+	SurveyNodeData,
+	SurveyFacadeData,
+	SurveyTensionWireData,
+	SurveyLuminaireSurveyData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -169,6 +179,65 @@ export class SpanInstallationExportFactory {
 				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyFacadeData(survey?: FacadeSurvey & { uploadCount: number }): SurveyFacadeData {
+		return {
+			surveyFacadeDamageWithin1m: survey?.facadeDamageWithin1m ?? null,
+			surveyFacadeHinderingVegetation: survey?.hinderingVegetation ?? null,
+			surveyFacadeWallPlateDamage: survey?.wallPlateDamage ?? null,
+			surveyFacadeFaultyMontage: survey?.faultyMontage ?? null,
+			surveyFacadeNutNotFullyOverThreadedRod: survey?.nutNotFullyOverThreadedRod ?? null,
+			surveyFacadeMissingFasteners: survey?.missingFasteners ?? null,
+			surveyFacadeMeasuredPreload: survey?.measuredPreload ?? null,
+			surveyFacadeAppliedAdditionalTraction: survey?.appliedAdditionalTraction ?? null,
+			surveyFacadeConnectionFailed: survey?.facadeConnectionFailed ?? null,
+			surveyFacadeConnectionFailureAdditionalTraction: survey?.facadeConnectionFailureAdditionalTraction ?? null,
+			surveyFacadeImagery: survey?.uploadCount ?? null,
+			surveyFacadeRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyMastData(survey?: MastSurvey & { uploadCount: number }): SurveyMastData {
+		return {
+			surveyMastDamage: survey?.mastDamage ?? null,
+			surveyMastMissingParts: survey?.mastMissingParts ?? null,
+			surveyTensionMastAngle: survey?.tensionMastAngle ?? null,
+			surveyMastAttachmentDamage: survey?.mastAttachmentDamage ?? null,
+			surveyMastBracketMissingParts: survey?.mastBracketMissingParts ?? null,
+			surveyMastBracketDamage: survey?.mastBracketDamage ?? null,
+			surveyMastImagery: survey?.uploadCount ?? null,
+			surveyMastRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyTensionWireData(survey?: TensionWireSurvey & { uploadCount: number }): SurveyTensionWireData {
+		return {
+			surveyTensionWireDamage: survey?.tensionWireDamage ?? null,
+			surveyTensionWireThirdPartyObjectsAttached: survey?.thirdPartyObjectsAttached ?? null,
+			surveyTensionWireGaffTerminalDamage: survey?.gaffTerminalDamage ?? null,
+			surveyTensionWireGaffTerminalMissingParts: survey?.gaffTerminalMissingParts ?? null,
+			surveyTensionWireFaultyMontage: survey?.faultyMontage ?? null,
+			surveyTensionWireClampDamage: survey?.tensionWireClampDamage ?? null,
+			surveyTensionWireImagery: survey?.uploadCount ?? null,
+			surveyTensionWireRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyLuminaireData(survey?: LuminaireSurvey & { uploadCount: number }): SurveyLuminaireSurveyData {
+		return {
+			surveyLuminaireDamage: survey?.luminaireDamage ?? null,
+			surveyLuminaireImagery: survey?.uploadCount ?? null,
+			surveyLuminaireRemarks: survey?.remarks ?? null,
+		};
+	}
+
+	static CreateSurveyNodeData(survey?: NodeSurvey & { uploadCount: number }): SurveyNodeData {
+		return {
+			surveyNodeDamage: survey?.nodeDamage ?? null,
+			surveyNodeImagery: survey?.uploadCount ?? null,
+			surveyNodeRemarks: survey?.remarks ?? null,
 		};
 	}
 }

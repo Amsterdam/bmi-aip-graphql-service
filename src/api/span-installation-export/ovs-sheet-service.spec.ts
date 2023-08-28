@@ -4,6 +4,9 @@ import { MockedObjectDeep } from 'ts-jest';
 import { supportSystem, luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
+import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
+import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 import {
 	SupportSystemType,
 	SupportSystemTypeDetailedFacade,
@@ -11,11 +14,25 @@ import {
 	SupportSystemTypeDetailedNode,
 	SupportSystemTypeDetailedTensionWire,
 } from '../../types';
+import { DocumentService } from '../../schema/document/document.service';
+import {
+	facadeSurvey,
+	luminaireSurvey,
+	mastSurvey,
+	nodeSurvey,
+	tensionWireSurvey,
+} from '../../schema/span-installation-survey/__stubs__';
+import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
+import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
 
 import { OVSSheetService } from './ovs-sheet.service';
 import { ovsAssetStub, dbBatchStub } from './__stubs__/ovs-asset';
-import { ovsRecordMock } from './__stubs__/ovs-export-data';
+import { ovsRecordMock } from './__stubs__';
 import { OVSColumnHeaderValues } from './types';
+import { SpanInstallationExportFactory } from './span-installation-export.factory';
+
+jest.mock('../../schema/span-installation-survey/mast-survey.service');
+jest.mock('../../schema/span-installation-survey/mast-survey.repository');
 
 // The labels below are the labels that are expected to be present in the OVS export sheet
 // The order of the labels is important, as it is used to determine the column index of the label
@@ -75,44 +92,125 @@ const nodeColumns: OVSColumnHeaderValues[] = [
 	'Opmerkingen',
 ];
 
-let ovsSheetService: OVSSheetService;
+const facadeSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade op gevel?',
+	'Begroeiing?',
+	'Schade aan muurplaat?',
+	'Onjuiste montage?',
+	'Moer niet volledig over draadeind?',
+	'Ontbrekende bevestigingsmaterialen?',
+	'Gemeten voorspanning',
+	'Toegepaste additionele trekkracht',
+	'Gevelverbinding gefaald?',
+	'Additionele trekkracht waarbij gevelverbinding faalde',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
+const mastSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aan mast?',
+	'Ontbrekende onderdelen aan de mast?',
+	'Hoek van de spanmast',
+	'Schade aan mastopzetstuk?',
+	'Ontbrekende onderdelen aan mastbeugel?',
+	'Schade aan mastbeugel?',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
+const tensionWireSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aan spandraad?',
+	'Object van derden aan spandraad bevestigd?',
+	'Onjuiste montage?',
+	'Schade aan spandraadklem?',
+	'Schade aan gaffelterminal?',
+	'Ontbrekende onderdelen aan gaffelterminal?',
+	'Beeldmateriaal',
+	'Opmerkingen',
+];
+
+const luminaireSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan armatuur?', 'Beeldmateriaal', 'Opmerkingen'];
+
+const nodeSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan de knoop?', 'Beeldmateriaal', 'Opmerkingen'];
 
 describe('OVSSheetService', () => {
+	let ovsSheetService: OVSSheetService;
+
+	const mockSupportSystemService: MockedObjectDeep<SupportSystemService> = {
+		findByObject: jest.fn().mockResolvedValue([
+			{
+				...supportSystem,
+				type: SupportSystemType.Facade,
+				typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
+			},
+			{
+				...supportSystem,
+				type: SupportSystemType.TensionWire,
+				typeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
+			},
+			{ ...supportSystem, type: SupportSystemType.Mast, typeDetailed: SupportSystemTypeDetailedMast.Gvb },
+			{ ...supportSystem, type: SupportSystemType.Node, typeDetailed: SupportSystemTypeDetailedNode.Ring },
+		]),
+		...(<any>{}),
+	};
+
+	const mockBatchService = {
+		findForAssetThroughSurveys: jest.fn().mockResolvedValue([
+			{
+				name: 'OVS Batch 02',
+				status: 'active',
+			},
+		]),
+		...(<any>{}),
+	};
+
+	const mockLuminaireService: MockedObjectDeep<LuminaireService> = {
+		getLuminaires: jest.fn().mockResolvedValue([luminaireStub]),
+		...(<any>{}),
+	};
+
+	const mockDocumentService: MockedObjectDeep<DocumentService> = {
+		findSpanInstallationDocuments: jest.fn().mockResolvedValue([{}]),
+		...(<any>{}),
+	};
+
+	const mockFacadeSurveyService: MockedObjectDeep<FacadeSurveyService> = {
+		getFacadeSurvey: jest.fn().mockResolvedValue(facadeSurvey),
+		...(<any>{}),
+	};
+
+	const mockMastSurveyService: MockedObjectDeep<MastSurveyService> = {
+		getMastSurvey: jest.fn().mockResolvedValue(mastSurvey),
+		...(<any>{}),
+	};
+
+	const mockTensionWireSurveyService: MockedObjectDeep<TensionWireSurveyService> = {
+		getTensionWireSurvey: jest.fn().mockResolvedValue(tensionWireSurvey),
+		...(<any>{}),
+	};
+
+	const mockLuminaireSurveyService: MockedObjectDeep<LuminaireSurveyService> = {
+		getLuminaireSurvey: jest.fn().mockResolvedValue(luminaireSurvey),
+		...(<any>{}),
+	};
+
+	const mockNodeSurveyService: MockedObjectDeep<NodeSurveyService> = {
+		getNodeSurvey: jest.fn().mockResolvedValue(nodeSurvey),
+		...(<any>{}),
+	};
+
 	beforeEach(async () => {
-		const mockSupportSystemService: MockedObjectDeep<SupportSystemService> = {
-			findByObject: jest.fn().mockResolvedValue([
-				{
-					...supportSystem,
-					type: SupportSystemType.Facade,
-					typeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
-				},
-				{
-					...supportSystem,
-					type: SupportSystemType.TensionWire,
-					typeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
-				},
-				{ ...supportSystem, type: SupportSystemType.Mast, typeDetailed: SupportSystemTypeDetailedMast.Gvb },
-				{ ...supportSystem, type: SupportSystemType.Node, typeDetailed: SupportSystemTypeDetailedNode.Ring },
-			]),
-			...(<any>{}),
-		};
-
-		const mockBatchService = {
-			findForAssetThroughSurveys: jest.fn().mockResolvedValue([
-				{
-					name: 'OVS Batch 02',
-					status: 'active',
-				},
-			]),
-			...(<any>{}),
-		};
-
-		const mockLuminaireService: MockedObjectDeep<LuminaireService> = {
-			getLuminaires: jest.fn().mockResolvedValue([luminaireStub]),
-			...(<any>{}),
-		};
-
-		ovsSheetService = new OVSSheetService(mockBatchService, mockSupportSystemService, mockLuminaireService);
+		ovsSheetService = new OVSSheetService(
+			mockBatchService,
+			mockSupportSystemService,
+			mockLuminaireService,
+			mockFacadeSurveyService,
+			mockMastSurveyService,
+			mockTensionWireSurveyService,
+			mockLuminaireSurveyService,
+			mockNodeSurveyService,
+			mockDocumentService,
+		);
 	});
 
 	describe('addOVSRows', () => {
@@ -121,17 +219,9 @@ describe('OVSSheetService', () => {
 			const worksheet = workbook.addWorksheet('');
 			await ovsSheetService.addOVSRows(worksheet, ovsAssetStub, true);
 
-			// Code below causes a bunch of memory errors?
-			//
-			// Get the column names (without empty string values) from the 4th row
-			// const labels = [];
-			// worksheet.getRow(4).eachCell((cell) => {
-			// 	if (cell.text && cell.text.trim() !== '') {
-			// 		labels.push(cell);
-			// 	}
-			// });
-
-			const labels = worksheet.getRow(4).values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
+			const labels = (worksheet.getRow(4).values as string[])
+				// Filter out empty/undefined cells
+				.filter((value) => typeof value === 'string');
 
 			const fieldsToCheck = [
 				...baseDataColumns,
@@ -142,6 +232,11 @@ describe('OVSSheetService', () => {
 				...luminaireColumns,
 				...mastColumns,
 				...nodeColumns,
+				...facadeSurveyColumns,
+				...mastSurveyColumns,
+				...tensionWireSurveyColumns,
+				...luminaireSurveyColumns,
+				...nodeSurveyColumns,
 			];
 
 			expect(labels).toEqual(fieldsToCheck);
@@ -201,7 +296,7 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the fields related to Decomposition - Spandraad with the correct data', async () => {
+		it('should fill the fields related to Decomposition - TensionWire with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[1]).toEqual(
@@ -214,7 +309,7 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the fields related to Decomposition - Spandraad - Armatuur with the correct data', async () => {
+		it('should fill the fields related to Decomposition - TensionWire - Armatuur with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[2]).toEqual(
@@ -228,9 +323,8 @@ describe('OVSSheetService', () => {
 			);
 		});
 
-		it('should fill the fields related to Decomposition - Mast with the correct data', async () => {
+		it('should fill the Mast entity column fields with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
-
 			expect(data[3]).toEqual(
 				expect.objectContaining({
 					mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
@@ -245,7 +339,6 @@ describe('OVSSheetService', () => {
 
 		it('should fill the fields related to Decomposition - Node with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
-
 			expect(data[4]).toEqual(
 				expect.objectContaining({
 					nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
@@ -256,6 +349,59 @@ describe('OVSSheetService', () => {
 					nodeRemarks: '__REMARKS__',
 				}),
 			);
+		});
+
+		describe('survey data', () => {
+			it('should fill the Facade survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[0]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount: 1 }),
+					),
+				);
+			});
+
+			it('should fill the Mast survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[3]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
+					),
+				);
+			});
+
+			it('should fill the TensionWire survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[1]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyTensionWireData({
+							...tensionWireSurvey,
+							uploadCount: 1,
+						}),
+					),
+				);
+			});
+
+			it('should fill the Luminaire survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[2]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyLuminaireData({
+							...luminaireSurvey,
+							uploadCount: 1,
+						}),
+					),
+				);
+			});
+
+			it('should fill the Node survey column fields with the correct data', async () => {
+				const data = await ovsSheetService.getData(ovsAssetStub);
+				expect(data[4]).toEqual(
+					expect.objectContaining(
+						SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount: 1 }),
+					),
+				);
+			});
 		});
 	});
 });

@@ -12,6 +12,11 @@ import {
 	DecompositionNodeData,
 	OVSPassportData,
 	DecompositionLuminaireData,
+	SurveyMastData,
+	SurveyNodeData,
+	SurveyFacadeData,
+	SurveyTensionWireData,
+	SurveyLuminaireSurveyData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -95,6 +100,55 @@ export const nodeData: DecompositionNodeData = {
 	nodeRemarks: 'test',
 };
 
+export const facadeSurveyData: SurveyFacadeData = {
+	surveyFacadeDamageWithin1m: false,
+	surveyFacadeHinderingVegetation: false,
+	surveyFacadeWallPlateDamage: false,
+	surveyFacadeFaultyMontage: false,
+	surveyFacadeNutNotFullyOverThreadedRod: false,
+	surveyFacadeMissingFasteners: false,
+	surveyFacadeMeasuredPreload: 0,
+	surveyFacadeAppliedAdditionalTraction: 0,
+	surveyFacadeConnectionFailed: true,
+	surveyFacadeConnectionFailureAdditionalTraction: 0,
+	surveyFacadeImagery: 1,
+	surveyFacadeRemarks: '__REMARKS__',
+};
+
+export const mastSurveyData: SurveyMastData = {
+	surveyMastDamage: true,
+	surveyMastMissingParts: false,
+	surveyTensionMastAngle: 10,
+	surveyMastAttachmentDamage: true,
+	surveyMastBracketMissingParts: false,
+	surveyMastBracketDamage: true,
+	surveyMastImagery: 3,
+	surveyMastRemarks: 'test',
+};
+
+export const tensionWireSurveyData: SurveyTensionWireData = {
+	surveyTensionWireDamage: true,
+	surveyTensionWireThirdPartyObjectsAttached: true,
+	surveyTensionWireGaffTerminalDamage: true,
+	surveyTensionWireGaffTerminalMissingParts: true,
+	surveyTensionWireFaultyMontage: true,
+	surveyTensionWireClampDamage: true,
+	surveyTensionWireImagery: 1,
+	surveyTensionWireRemarks: '__REMARKS__',
+};
+
+export const luminaireSurveyData: SurveyLuminaireSurveyData = {
+	surveyLuminaireDamage: true,
+	surveyLuminaireImagery: 1,
+	surveyLuminaireRemarks: '__REMARKS__',
+};
+
+export const nodeSurveyData: SurveyNodeData = {
+	surveyNodeDamage: true,
+	surveyNodeImagery: 3,
+	surveyNodeRemarks: 'test',
+};
+
 export const ovsRecordMock: OVSRow = {
 	...assetBaseData,
 	...assetBatchData,
@@ -105,6 +159,11 @@ export const ovsRecordMock: OVSRow = {
 	...mastData,
 	...nodeData,
 	...luminaireData,
+	...facadeSurveyData,
+	...mastSurveyData,
+	...tensionWireSurveyData,
+	...luminaireSurveyData,
+	...nodeSurveyData,
 };
 
 export type OVSBaseData = {

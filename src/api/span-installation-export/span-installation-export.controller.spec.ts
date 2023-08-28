@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
+import { Request } from 'express';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { OVSExportAllQuery } from './queries/ovs-export-all.query';

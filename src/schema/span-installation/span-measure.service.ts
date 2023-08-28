@@ -25,7 +25,7 @@ export class SpanMeasureService {
 		);
 	}
 
-	setStatusForItemsInMeasure(spanMeasureItems: SpanMeasureItem[]): SpanMeasureItem[] {
+	public setStatusForItemsInMeasure(spanMeasureItems: SpanMeasureItem[]): SpanMeasureItem[] {
 		spanMeasureItems.map(async (item: SpanMeasureItem) => {
 			item.status = this.spanMeasureItemService.determineSpanMeasureItemStatus(item);
 		});

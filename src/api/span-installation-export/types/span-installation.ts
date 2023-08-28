@@ -1,8 +1,15 @@
-import { Prisma } from '@prisma/client';
 import { Cell } from 'exceljs';
 
 import { IPassport } from '../../../services/types/excelRowObject';
 import { UnionKeys } from '../../../utils/utils';
+
+import {
+	SurveyFacadeData,
+	SurveyLuminaireSurveyData,
+	SurveyMastData,
+	SurveyNodeData,
+	SurveyTensionWireData,
+} from './survey';
 
 export type OVSColumnHeaderValues =
 	| 'OVS nummer'
@@ -27,7 +34,31 @@ export type OVSColumnHeaderValues =
 	| 'Reeds voorzien van LED'
 	| 'Lichtpuntnummer'
 	| 'Stijgbuis zichtbaar?'
-	| 'Opmerkingen';
+	| 'Opmerkingen'
+	| 'Schade aan mast?'
+	| 'Ontbrekende onderdelen aan de mast?'
+	| 'Hoek van de spanmast'
+	| 'Schade aan mastopzetstuk?'
+	| 'Ontbrekende onderdelen aan mastbeugel?'
+	| 'Schade aan mastbeugel?'
+	| 'Beeldmateriaal'
+	| 'Schade aan de knoop?'
+	| 'Schade op gevel?'
+	| 'Begroeiing?'
+	| 'Schade aan muurplaat?'
+	| 'Onjuiste montage?'
+	| 'Moer niet volledig over draadeind?'
+	| 'Ontbrekende bevestigingsmaterialen?'
+	| 'Gemeten voorspanning'
+	| 'Toegepaste additionele trekkracht'
+	| 'Gevelverbinding gefaald?'
+	| 'Additionele trekkracht waarbij gevelverbinding faalde'
+	| 'Schade aan spandraad?'
+	| 'Object van derden aan spandraad bevestigd?'
+	| 'Schade aan spandraadklem?'
+	| 'Schade aan gaffelterminal?'
+	| 'Ontbrekende onderdelen aan gaffelterminal?'
+	| 'Schade aan armatuur?';
 
 export type OVSBaseData = {
 	id: string;
@@ -104,17 +135,6 @@ export type DecompositionJunctionBoxData = {
 };
 
 export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
-// {
-// 	passportStreet: string;
-// 	passportNeighborhood: string;
-// 	passportDistrict: string;
-// 	passportCityArea: string;
-// 	passportSplits: string;
-// 	passportDoubleWired: string;
-// 	passportTramTracks: string;
-// 	passportNotes: string;
-
-// };
 
 // OVS Record describes a single row of data in the Excel export
 export interface OVSRow
@@ -127,7 +147,12 @@ export interface OVSRow
 		DecompositionTensionWireData,
 		DecompositionLuminaireData,
 		DecompositionMastData,
-		DecompositionNodeData {}
+		DecompositionNodeData,
+		SurveyFacadeData,
+		SurveyMastData,
+		SurveyTensionWireData,
+		SurveyLuminaireSurveyData,
+		SurveyNodeData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 
@@ -136,35 +161,6 @@ export type OVSExportSpanInstallationBaseData = {
 	name: string;
 	code: string;
 	attributes: IPassport;
-};
-
-export type OVSExportSpanInstallationPassportData = {
-	id: string;
-	name: string;
-	code: string;
-	location: string;
-	latitude: Prisma.Decimal;
-	longitude: Prisma.Decimal;
-	attributes: IPassport;
-};
-
-export type OVSExportSpanInstallationDecompositionFacadeData = {
-	typeDetailed: string;
-	street: string;
-	houseNumber: string;
-	verdieping: string;
-	xCoordinate: string;
-	yCoordinate: string;
-	installationHeight: Prisma.Decimal;
-	installationLength: Prisma.Decimal;
-	remarks: string;
-};
-
-export type OVSExportSpanInstallationWithBatchDetails = OVSExportSpanInstallationBaseData & {
-	batch: {
-		name: string;
-		status: string;
-	};
 };
 
 export interface OVSExportHeaderStyle {

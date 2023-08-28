@@ -5,7 +5,6 @@ import { Logger } from '@nestjs/common';
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { OVSExportAllQuery } from './queries/ovs-export-all.query';
 import { responseMock } from './__mocks__/response';
-// import { Request } from 'express';
 
 describe('SpanInstallationExporterController', () => {
 	const token = '__TOKEN__';

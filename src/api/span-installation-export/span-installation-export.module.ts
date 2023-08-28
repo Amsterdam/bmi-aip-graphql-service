@@ -11,6 +11,14 @@ import { LuminaireRepository } from '../../schema/span-installation/luminaire.re
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { MastSurveyRepository } from '../../schema/span-installation-survey/mast-survey.repository';
+import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
+import { FacadeSurveyRepository } from '../../schema/span-installation-survey/facade-survey.repository';
+import { TensionWireSurveyService } from '../../schema/span-installation-survey/tension-wire-survey.service';
+import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
+import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
+import { TensionWireSurveyRepository } from '../../schema/span-installation-survey/tension-wire-survey.repository';
+import { LuminaireSurveyRepository } from '../../schema/span-installation-survey/luminaire-survey.repository';
+import { NodeSurveyRepository } from '../../schema/span-installation-survey/node-survey.repository';
 import { DocumentModule } from '../../schema/document/document.module';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
@@ -38,6 +46,14 @@ import { OVSSheetService } from './ovs-sheet.service';
 		OVSSheetService,
 		MastSurveyService,
 		MastSurveyRepository,
+		FacadeSurveyService,
+		FacadeSurveyRepository,
+		TensionWireSurveyService,
+		TensionWireSurveyRepository,
+		LuminaireSurveyService,
+		LuminaireSurveyRepository,
+		NodeSurveyService,
+		NodeSurveyRepository,
 		Logger,
 	],
 })

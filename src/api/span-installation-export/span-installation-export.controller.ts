@@ -8,6 +8,7 @@ import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { OVSExportAllQuery } from './queries/ovs-export-all.query';
 import { OVSExportByBatchQuery } from './queries/ovs-export-by-batch.query';
 import { OVSExportByObjectQuery } from './queries/ovs-export-by-object.query';
+import { TokenNotSetException } from './exceptions/token-not-set.exception';
 
 @Controller('api/span-installation-export')
 export class SpanInstallationExportController {
@@ -16,15 +17,15 @@ export class SpanInstallationExportController {
 	private extractJwt(headers: IncomingHttpHeaders) {
 		if (headers && !headers?.authorization) {
 			this.logger.verbose('No authorization header');
-			return null;
+			throw new TokenNotSetException();
 		}
 
 		const auth: string[] = headers.authorization.split(' ');
 
 		// We only allow bearer
 		if (auth[0].toLowerCase() !== 'bearer') {
-			this.logger.verbose('No bearer header');
-			return null;
+			this.logger.verbose('No bearer token');
+			throw new TokenNotSetException();
 		}
 
 		return auth[1];

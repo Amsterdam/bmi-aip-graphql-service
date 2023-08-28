@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -6,11 +6,9 @@ import { SpanMeasureService } from './span-measure.service';
 import { SpanMeasure } from './models/span-measure.model';
 import { FindSpanMeasuresQuery } from './queries/find-span-measures.query';
 import { CreateSpanMeasureInput } from './dto/create-span-measure.input';
-import { SpanMeasureFactory } from './span-measure.factory';
 import { CreateSpanMeasureCommand } from './commands/create-span-measure.command';
 import { UpdateSpanMeasureInput } from './dto/update-span-measure-input';
 import { UpdateSpanMeasureCommand } from './commands/update-span-measure.command';
-import { SpanMeasure as DomainSpanMeasure } from './types/span-measure.repository.interface';
 import { DeleteSpanMeasureCommand } from './commands/delete-span-measure.command';
 import { FindSpanMeasureItemsQuery } from './queries/find-span-measure-items.query';
 import { SpanMeasureItem } from './models/span-measure-item.model';
@@ -84,9 +82,13 @@ export class SpanMeasureResolver {
 
 	@ResolveField()
 	async status(@Parent() { id }: SpanMeasure): Promise<SpanMeasureStatus> {
-		const itemsInMeasure = await this.spanMeasureService.setStatusForItemsInMeasure(
+		const itemsInMeasure = this.spanMeasureService.setStatusForItemsInMeasure(
 			await this.queryBus.execute<FindSpanMeasureItemsQuery>(new FindSpanMeasureItemsQuery(id)),
 		);
+
+		if (itemsInMeasure.length === 0) {
+			return SpanMeasureStatus.open;
+		}
 
 		const allItemsCompleted = itemsInMeasure.every((item) => item.status === SpanMeasureItemStatus.completed);
 

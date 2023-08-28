@@ -1,5 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import ExcelJS, { Worksheet } from 'exceljs';
+import * as ExcelJS from 'exceljs';
+import { Worksheet } from 'exceljs';
 import { Logger } from '@nestjs/common';
 
 import { SpanInstallationExportService } from '../span-installation-export.service';

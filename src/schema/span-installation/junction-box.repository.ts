@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, spanJunctionBoxes } from '@prisma/client';
 import { Point } from 'geojson';
 import PQueue from 'p-queue';
 
@@ -300,5 +300,13 @@ export class JunctionBoxRepository implements IJunctionBoxRepository {
 		await queue.onIdle();
 
 		return this.getJunctionBoxes(surveyId);
+	}
+
+	public async findByObject(objectId: string): Promise<JunctionBox[]> {
+		return this.prisma.spanJunctionBoxes.findMany({
+			where: {
+				objectId: objectId,
+			},
+		});
 	}
 }

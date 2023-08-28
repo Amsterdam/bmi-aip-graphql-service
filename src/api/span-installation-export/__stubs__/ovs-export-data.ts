@@ -12,6 +12,7 @@ import {
 	DecompositionNodeData,
 	OVSPassportData,
 	DecompositionLuminaireData,
+	DecompositionJunctionBoxData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -50,6 +51,15 @@ export type OVSSupportSystemData = {
 	supportSystemRemarks: string;
 };
 
+export const decompositionJunctionBoxData: DecompositionJunctionBoxData = {
+	junctionBoxMastNumber: 123.35,
+	junctionBoxXCoordinate: 12.345,
+	junctionBoxYCoordinate: 23.456,
+	junctionBoxInstallationHeight: 1,
+	junctionBoxRiserTubeVisible: true,
+	junctionBoxRemarks: 'test',
+};
+
 export const decompositionFacadeData: DecompositionFacadeData = {
 	facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 	facadeLocation: 'test',
@@ -77,6 +87,16 @@ export const luminaireData: DecompositionLuminaireData = {
 	luminaireRemarks: '__REMARKS__',
 };
 
+export const junctionBoxData: DecompositionJunctionBoxData = {
+	junctionBoxMastNumber: 33.33,
+	//junctionBoxMastNumberOriginal: '120.00',
+	junctionBoxInstallationHeight: 10,
+	junctionBoxXCoordinate: 116211.88,
+	junctionBoxYCoordinate: 487352.77,
+	junctionBoxRiserTubeVisible: true,
+	junctionBoxRemarks: '__REMARKS__',
+};
+
 export const mastData: DecompositionMastData = {
 	mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
 	mastLocation: 'test',
@@ -100,6 +120,8 @@ export const ovsRecordMock: OVSRow = {
 	...assetBatchData,
 	...passportData,
 	...assetBatchData,
+	entityName: '__ENTITY_NAME__',
+	...decompositionJunctionBoxData,
 	...decompositionFacadeData,
 	...tensionWireData,
 	...mastData,

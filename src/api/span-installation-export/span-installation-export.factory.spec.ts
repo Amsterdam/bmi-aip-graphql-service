@@ -5,7 +5,7 @@ import {
 	SupportSystemTypeDetailedNode,
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
-import { luminaire } from '../../schema/span-installation/__stubs__';
+import { domainJunctionBox, junctionBox, luminaire } from '../../schema/span-installation/__stubs__';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -15,6 +15,7 @@ import {
 	mastData as mastDataStub,
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
+	junctionBoxData as junctionBoxDataStub,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
 
@@ -231,6 +232,35 @@ describe('SpanInstallationExportFactory', () => {
 			const objectWithNullValues = nullifyValuesForObject(luminaireDataStub);
 
 			const result = SpanInstallationExportFactory.CreateDecompositionLuminaireData();
+
+			expect(result).toEqual(objectWithNullValues);
+		});
+	});
+
+	describe('CreateDecompositionJunctionBoxData', () => {
+		it('creates JunctionBox decomposition data correctly', () => {
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox);
+
+			expect(result).toEqual(junctionBoxDataStub);
+		});
+
+		it('creates JunctionBox decomposition data correctly even if coordinates are null', () => {
+			junctionBox.geographyRD = null;
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox);
+
+			const expected = {
+				...junctionBoxDataStub,
+				junctionBoxXCoordinate: null,
+				junctionBoxYCoordinate: null,
+			};
+
+			expect(result).toEqual(expected);
+		});
+
+		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
+			const objectWithNullValues = nullifyValuesForObject(junctionBoxDataStub);
+
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData();
 
 			expect(result).toEqual(objectWithNullValues);
 		});

@@ -1,3 +1,4 @@
+import { JunctionBox } from '../../schema/span-installation/models/junction-box.model';
 import { Luminaire } from '../../schema/span-installation/models/luminaire.model';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
@@ -11,6 +12,7 @@ import type {
 	GeoJSONPoint,
 	OVSExportSpanInstallationBaseData,
 	OVSPassportData,
+	DecompositionJunctionBoxData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -169,6 +171,21 @@ export class SpanInstallationExportFactory {
 				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateDecompositionJunctionBoxData(junctionBox?: JunctionBox | undefined): DecompositionJunctionBoxData {
+		return {
+			junctionBoxMastNumber: junctionBox?.mastNumber ?? null,
+			junctionBoxXCoordinate: junctionBox?.geographyRD
+				? (junctionBox?.geographyRD as GeoJSONPoint)?.coordinates[0]
+				: null,
+			junctionBoxYCoordinate: junctionBox?.geographyRD
+				? (junctionBox?.geographyRD as GeoJSONPoint)?.coordinates[1]
+				: null,
+			junctionBoxInstallationHeight: junctionBox?.installationHeight ?? null,
+			junctionBoxRiserTubeVisible: junctionBox?.riserTubeVisible ?? null,
+			junctionBoxRemarks: junctionBox?.remarks ?? null,
 		};
 	}
 }

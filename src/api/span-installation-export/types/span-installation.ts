@@ -16,6 +16,7 @@ export type OVSColumnHeaderValues =
 	| 'Dubbeldraads'
 	| 'Boven trambaan'
 	| 'Opmerkingen'
+	| 'Onderdeel'
 	| 'Type gedetailleerd'
 	| 'Huisnummer'
 	| 'Verdieping'
@@ -24,12 +25,18 @@ export type OVSColumnHeaderValues =
 	| 'Aanleghoogte'
 	| 'Lengte spandraad'
 	| 'Reeds voorzien van LED'
+	| 'Lichtpuntnummer'
+	| 'Stijgbuis zichtbaar?'
 	| 'Opmerkingen';
 
 export type OVSBaseData = {
 	id: string;
 	name: string;
 	code: string;
+};
+
+export type OVSEntityType = {
+	entityName: string;
 };
 
 export type OVSBatchData = {
@@ -86,6 +93,16 @@ export type DecompositionLuminaireData = {
 	luminaireRemarks: string | null;
 };
 
+export type DecompositionJunctionBoxData = {
+	junctionBoxMastNumber: number | null;
+	//junctionBoxMastNumberOriginal: string | null; // As imported from 'Moederbestand'
+	junctionBoxInstallationHeight: number | null;
+	junctionBoxXCoordinate: number | null;
+	junctionBoxYCoordinate: number | null;
+	junctionBoxRiserTubeVisible: boolean | null;
+	junctionBoxLocation: string | null;
+};
+
 export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
 // {
 // 	passportStreet: string;
@@ -102,9 +119,10 @@ export type OVSPassportData = IPassport & { passportTramTracks: boolean; passpor
 // OVS Record describes a single row of data in the Excel export
 export interface OVSRow
 	extends OVSBaseData,
+		OVSEntityType,
 		OVSBatchData,
 		OVSPassportData,
-		// OVSSupportSystemData,
+		DecompositionJunctionBoxData,
 		DecompositionFacadeData,
 		DecompositionTensionWireData,
 		DecompositionLuminaireData,

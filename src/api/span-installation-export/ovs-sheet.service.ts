@@ -7,6 +7,7 @@ import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { SupportSystem } from '../../schema/span-installation/types/support-system.repository.interface';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { JunctionBoxService } from '../../schema/span-installation/junction-box.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import {
@@ -25,12 +26,14 @@ export class OVSSheetService {
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
+		private readonly junctionBoxService: JunctionBoxService,
 	) {}
 
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
 		const supportSystems = await this.supportSystemService.findByObject(id);
+		const junctionBoxes = await this.junctionBoxService.findByObject(id);
 		const batches = await this.batchService.findForAssetThroughSurveys(id);
 		const baseRow: OVSRowBase = {
 			// OVSBaseData
@@ -46,9 +49,25 @@ export class OVSSheetService {
 
 		const rows: OVSRow[] = [];
 
+		// First add all junctionBoxes
+		for (const junctionBox of junctionBoxes) {
+			rows.push({
+				...baseRow,
+				entityName: junctionBox.name,
+				...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox),
+				...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
+				...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
+				...SpanInstallationExportFactory.CreateDecompositionMastData(),
+				...SpanInstallationExportFactory.CreateDecompositionNodeData(),
+				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+			});
+		}
+
 		for (const supportSystem of supportSystems) {
 			rows.push({
 				...baseRow,
+				entityName: supportSystem.name,
+				...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
 				...SpanInstallationExportFactory.CreateDecompositionFacadeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionTensionWireData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
@@ -62,6 +81,8 @@ export class OVSSheetService {
 				for (const luminaire of luminaires) {
 					rows.push({
 						...baseRow,
+						entityName: luminaire.name,
+						...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
 						...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
 						...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
@@ -90,6 +111,7 @@ export class OVSSheetService {
 			...baseDataColumns,
 			...batchDataColumns,
 			...passportDataColumns,
+			...this.getJunctionBoxColumns(),
 			...this.getFacadeColumns(),
 			...this.getTensionWireColumns(),
 			...this.getLuminaireColumns(),
@@ -324,6 +346,53 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				key: 'notes',
 				headerStyle: { ...this.headerStyle, italic: true },
+				width: 16,
+			},
+		];
+	}
+
+	private getJunctionBoxColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Onderdeel',
+				headerStyle: this.headerStyle,
+				key: 'entityName',
+				width: 16,
+			},
+			{
+				header: 'Lichtpuntnummer',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxMastNumber',
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxLocation',
+				width: 16,
+			},
+			{
+				header: 'Aanleghoogte',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxInstallationHeight',
+				width: 16,
+			},
+			{
+				header: 'X-coördinaat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxXCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Y-coördinaat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxYCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Stijgbuis zichtbaar?',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxRiserTubeVisible',
 				width: 16,
 			},
 		];

@@ -16,6 +16,7 @@ import { SpanInstallationExportRepository } from './span-installation-export.rep
 import { OVSExportByBatchHandler } from './queries/ovs-export-by-batch.handler';
 import { OVSExportAllHandler } from './queries/ovs-export-all.handler';
 import { OVSSheetService } from './ovs-sheet.service';
+import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler';
 
 @Module({
 	imports: [CqrsModule, AssetModule],
@@ -31,6 +32,7 @@ import { OVSSheetService } from './ovs-sheet.service';
 		LuminaireRepository,
 		LuminaireService,
 		OVSExportByBatchHandler,
+		OVSExportByObjectHandler,
 		OVSExportAllHandler,
 		OVSSheetService,
 		Logger,

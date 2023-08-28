@@ -1,7 +1,12 @@
 import * as ExcelJS from 'exceljs';
 import { MockedObjectDeep } from 'ts-jest';
 
-import { supportSystem, luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
+import {
+	supportSystem,
+	luminaire as luminaireStub,
+	junctionBox,
+	junctionBox2,
+} from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import {
@@ -34,6 +39,15 @@ const passportDataColumns: OVSColumnHeaderValues[] = [
 	'Dubbeldraads',
 	'Boven trambaan',
 	'Opmerkingen',
+];
+
+const junctionBoxColumns: OVSColumnHeaderValues[] = [
+	'Lichtpuntnummer', // TODO make a distinction between mastNumber edited and original
+	'Straat',
+	'Aanleghoogte',
+	'X-coördinaat',
+	'Y-coördinaat',
+	'Stijgbuis zichtbaar?',
 ];
 
 const facadeColumns: OVSColumnHeaderValues[] = [
@@ -112,7 +126,17 @@ describe('OVSSheetService', () => {
 			...(<any>{}),
 		};
 
-		ovsSheetService = new OVSSheetService(mockBatchService, mockSupportSystemService, mockLuminaireService);
+		const mockJunctionBoxService = {
+			findByObject: jest.fn().mockResolvedValue([junctionBox]),
+			...(<any>{}),
+		};
+
+		ovsSheetService = new OVSSheetService(
+			mockBatchService,
+			mockSupportSystemService,
+			mockLuminaireService,
+			mockJunctionBoxService,
+		);
 	});
 
 	describe('addOVSRows', () => {
@@ -133,10 +157,12 @@ describe('OVSSheetService', () => {
 
 			const labels = worksheet.getRow(4).values.filter((value) => typeof value === 'string'); // filter out empty/undefined cells
 
-			const fieldsToCheck = [
+			const fieldsToCheck: OVSColumnHeaderValues[] = [
 				...baseDataColumns,
 				...batchDataColumns,
 				...passportDataColumns,
+				'Onderdeel',
+				...junctionBoxColumns,
 				...facadeColumns,
 				...tensionWireColumns,
 				...luminaireColumns,
@@ -183,10 +209,24 @@ describe('OVSSheetService', () => {
 			});
 		});
 
-		it('should fill the fields related to Decomposition - Gevel with the correct data', async () => {
+		it('should fill the fields related to Decomposition - Aansluitkast with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[0]).toEqual(
+				expect.objectContaining({
+					junctionBoxInstallationHeight: 10,
+					junctionBoxMastNumber: 33.33,
+					junctionBoxXCoordinate: 116211.88,
+					junctionBoxYCoordinate: 487352.77,
+					junctionBoxRiserTubeVisible: true,
+				}),
+			);
+		});
+
+		it('should fill the fields related to Decomposition - Gevel with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+
+			expect(data[1]).toEqual(
 				expect.objectContaining({
 					facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 					facadeLocation: '__LOCATION__',
@@ -204,7 +244,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - Spandraad with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[1]).toEqual(
+			expect(data[2]).toEqual(
 				expect.objectContaining({
 					tensionWireTypeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
 					tensionWireLocation: '__LOCATION__',
@@ -217,7 +257,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - Spandraad - Armatuur with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[2]).toEqual(
+			expect(data[3]).toEqual(
 				expect.objectContaining({
 					luminaireHasLED: true,
 					luminaireLocation: '__LOCATION__',
@@ -231,7 +271,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - Mast with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[3]).toEqual(
+			expect(data[4]).toEqual(
 				expect.objectContaining({
 					mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
 					mastLocation: '__LOCATION__',
@@ -246,7 +286,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - Node with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[4]).toEqual(
+			expect(data[5]).toEqual(
 				expect.objectContaining({
 					nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
 					nodeLocation: '__LOCATION__',

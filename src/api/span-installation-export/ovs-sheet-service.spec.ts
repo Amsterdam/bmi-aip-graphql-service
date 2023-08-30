@@ -22,6 +22,7 @@ import {
 import { DocumentService } from '../../schema/document/document.service';
 import {
 	facadeSurvey,
+	junctionBoxSurvey,
 	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
@@ -103,6 +104,16 @@ const nodeColumns: OVSColumnHeaderValues[] = [
 	'X-coördinaat',
 	'Y-coördinaat',
 	'Aanleghoogte',
+	'Opmerkingen',
+];
+
+const junctionBoxSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aansluitkabel?',
+	'Onjuiste montage aan spandraad?',
+	'Onjuiste montage aangevel?',
+	'Schade aan aansluitkast?',
+	'Sticker met ID onbruikbaar/onleesbaar',
+	'Beeldmateriaal',
 	'Opmerkingen',
 ];
 
@@ -218,6 +229,11 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockJunctionBoxSurveyService = {
+		getJunctionBoxSurvey: jest.fn().mockResolvedValue(junctionBoxSurvey),
+		...(<any>{}),
+	};
+
 	beforeEach(async () => {
 		ovsSheetService = new OVSSheetService(
 			mockBatchService,
@@ -230,6 +246,7 @@ describe('OVSSheetService', () => {
 			mockLuminaireSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
+			mockJunctionBoxSurveyService,
 		);
 	});
 
@@ -254,6 +271,7 @@ describe('OVSSheetService', () => {
 				...luminaireColumns,
 				...mastColumns,
 				...nodeColumns,
+				...junctionBoxSurveyColumns,
 				...facadeSurveyColumns,
 				...mastSurveyColumns,
 				...tensionWireSurveyColumns,
@@ -271,7 +289,10 @@ describe('OVSSheetService', () => {
 
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(Object.keys(data[0])).toEqual(expectedFields);
+			// todo fix order of keys in data[0]
+			const actual = Object.keys(data[0]);
+
+			expect(actual).toEqual(expectedFields);
 		});
 
 		it('should return the correct Paspoort data for all rows', async () => {
@@ -391,6 +412,15 @@ describe('OVSSheetService', () => {
 	});
 
 	describe('survey data', () => {
+		it('should fill the JunctionBox survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[0]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyJunctionBoxData({ ...junctionBoxSurvey, uploadCount: 1 }),
+				),
+			);
+		});
+
 		it('should fill the Facade survey column fields with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 			expect(data[1]).toEqual(

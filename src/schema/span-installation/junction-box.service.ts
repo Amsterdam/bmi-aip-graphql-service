@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
+import { JunctionBoxSurveyRepository } from '../span-installation-survey/junction-box-survey.repository';
+import { JunctionBoxSurvey } from '../span-installation-survey/models/junction-box-survey.model';
+import { JunctionBoxSurveyFactory } from '../span-installation-survey/junction-box-survey.factory';
+
 import { JunctionBox } from './models/junction-box.model';
 import { JunctionBoxFactory } from './junction-box.factory';
 import { JunctionBoxRepository } from './junction-box.repository';

@@ -8,6 +8,7 @@ import {
 import { domainJunctionBox, junctionBox, luminaire } from '../../schema/span-installation/__stubs__';
 import {
 	facadeSurvey,
+	junctionBoxSurvey,
 	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
@@ -27,10 +28,12 @@ import {
 	mastSurveyData,
 	nodeSurveyData,
 	tensionWireSurveyData,
+	junctionBoxSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
 import {
 	SurveyFacadeData,
+	SurveyJunctionBoxData,
 	SurveyLuminaireSurveyData,
 	SurveyMastData,
 	SurveyNodeData,
@@ -404,6 +407,31 @@ describe('SpanInstallationExportFactory', () => {
 		it('should return an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyNodeData()).toEqual(
 				nullifyValuesForObject(nodeSurveyData),
+			);
+		});
+	});
+
+	describe('CreateSurveyJunctionBoxData', () => {
+		it('should create JunctionBox survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyJunctionBoxData({
+					...junctionBoxSurvey,
+					uploadCount: 2,
+				}),
+			).toEqual({
+				surveyJunctionBoxCableDamage: true,
+				surveyJunctionBoxDamage: true,
+				surveyJunctionBoxFaultyMontageFacade: true,
+				surveyJunctionBoxFaultyMontageTensionWire: true,
+				surveyJunctionBoxImagery: 2,
+				surveyJunctionBoxRemarks: '__REMARKS__',
+				surveyJunctionBoxStickerNotReadable: true,
+			} as SurveyJunctionBoxData);
+		});
+
+		it('should return an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyJunctionBoxData()).toEqual(
+				nullifyValuesForObject(junctionBoxSurveyData),
 			);
 		});
 	});

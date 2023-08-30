@@ -5,6 +5,7 @@ import { UnionKeys } from '../../../utils/utils';
 
 import {
 	SurveyFacadeData,
+	SurveyJunctionBoxData,
 	SurveyLuminaireSurveyData,
 	SurveyMastData,
 	SurveyNodeData,
@@ -58,7 +59,12 @@ export type OVSColumnHeaderValues =
 	| 'Schade aan spandraadklem?'
 	| 'Schade aan gaffelterminal?'
 	| 'Ontbrekende onderdelen aan gaffelterminal?'
-	| 'Schade aan armatuur?';
+	| 'Schade aan armatuur?'
+	| 'Schade aansluitkabel?'
+	| 'Onjuiste montage aan spandraad?'
+	| 'Onjuiste montage aangevel?'
+	| 'Schade aan aansluitkast?'
+	| 'Sticker met ID onbruikbaar/onleesbaar';
 
 export type OVSBaseData = {
 	id: string;
@@ -148,6 +154,7 @@ export interface OVSRow
 		DecompositionLuminaireData,
 		DecompositionMastData,
 		DecompositionNodeData,
+		SurveyJunctionBoxData,
 		SurveyFacadeData,
 		SurveyMastData,
 		SurveyTensionWireData,

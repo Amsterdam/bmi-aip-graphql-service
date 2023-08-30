@@ -7,6 +7,7 @@ import { MastSurvey } from '../../schema/span-installation-survey/models/mast-su
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
 import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
 import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -23,6 +24,7 @@ import type {
 	SurveyNodeData,
 	SurveyTensionWireData,
 	SurveyLuminaireSurveyData,
+	SurveyJunctionBoxData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -196,6 +198,18 @@ export class SpanInstallationExportFactory {
 			junctionBoxInstallationHeight: junctionBox?.installationHeight ?? null,
 			junctionBoxRiserTubeVisible: junctionBox?.riserTubeVisible ?? null,
 			junctionBoxLocation: junctionBox?.location ?? null,
+		};
+	}
+
+	static CreateSurveyJunctionBoxData(survey?: JunctionBoxSurvey & { uploadCount: number }): SurveyJunctionBoxData {
+		return {
+			surveyJunctionBoxCableDamage: survey?.cableDamage ?? null,
+			surveyJunctionBoxFaultyMontageTensionWire: survey?.faultyMontageTensionWire ?? null,
+			surveyJunctionBoxFaultyMontageFacade: survey?.faultyMontageFacade ?? null,
+			surveyJunctionBoxDamage: survey?.junctionBoxDamage ?? null,
+			surveyJunctionBoxStickerNotReadable: survey?.stickerNotReadable ?? null,
+			surveyJunctionBoxRemarks: survey?.remarks ?? null,
+			surveyJunctionBoxImagery: survey?.uploadCount ?? null,
 		};
 	}
 

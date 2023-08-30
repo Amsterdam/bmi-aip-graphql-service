@@ -18,6 +18,8 @@ import { TensionWireSurveyService } from '../../schema/span-installation-survey/
 import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
@@ -35,6 +37,7 @@ export class OVSSheetService {
 		private readonly luminaireSurveyService: LuminaireSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
+		private readonly junctionBoxSurveyService: JunctionBoxSurveyService,
 	) {}
 
 	/**
@@ -98,6 +101,15 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getJunctionBoxSurvey(junctionBoxId: string): Promise<JunctionBoxSurvey | undefined> {
+		try {
+			return await this.junctionBoxSurveyService.getJunctionBoxSurvey(junctionBoxId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
+
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
@@ -120,6 +132,9 @@ export class OVSSheetService {
 
 		// First add all junctionBoxes
 		for (const junctionBox of junctionBoxes) {
+			const junctionBoxSurvey = await this.getJunctionBoxSurvey(junctionBox.id);
+			const uploadCount = await this.getEntityUploadCount(id, junctionBox.surveyId, junctionBox.id);
+
 			rows.push({
 				...baseRow,
 				entityName: junctionBox.name,
@@ -129,6 +144,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyJunctionBoxData({ ...junctionBoxSurvey, uploadCount }),
 				...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 				...SpanInstallationExportFactory.CreateSurveyMastData(),
 				...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
@@ -161,6 +177,7 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 				...SpanInstallationExportFactory.CreateSurveyFacadeData({
 					...facadeSurvey,
 					uploadCount: supportSystem.type === SupportSystemType.Facade ? uploadCount : null,
@@ -200,6 +217,7 @@ export class OVSSheetService {
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+						...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
 						...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
@@ -237,6 +255,7 @@ export class OVSSheetService {
 			...this.getLuminaireColumns(),
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
+			...this.getJunctionBoxSurveyColumns(),
 			...this.getFacadeSurveyColumns(),
 			...this.getMastSurveyColumns(),
 			...this.getTensionWireSurveyColumns(),
@@ -898,6 +917,57 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				key: 'surveyLuminaireRemarks',
 				headerStyle: this.headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private getJunctionBoxSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aansluitkabel?',
+				key: 'surveyJunctionBoxCableDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aan spandraad?',
+				key: 'surveyJunctionBoxFaultyMontageTensionWire',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aangevel?',
+				key: 'surveyJunctionBoxFaultyMontageFacade',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan aansluitkast?',
+				key: 'surveyJunctionBoxDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Sticker met ID onbruikbaar/onleesbaar',
+				key: 'surveyJunctionBoxStickerNotReadable',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyJunctionBoxImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyJunctionBoxRemarks',
 				width: 16,
 			},
 		];

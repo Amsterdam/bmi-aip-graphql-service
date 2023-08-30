@@ -65,7 +65,7 @@ export class SpanInstallationExportController {
 		}
 	}
 
-	@Get('ovs-export-all')
+	@Get('export-all')
 	@Roles({ roles: ['realm:aip_owner', 'realm:aip_admin', 'realm:aip_survey'], mode: RoleMatchingMode.ANY })
 	public async exportToXLSX(@Req() request: Request, @Res() response: Response): Promise<void> {
 		try {

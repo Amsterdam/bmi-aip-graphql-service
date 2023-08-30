@@ -1,7 +1,9 @@
+import { UnionKeys } from 'src/utils/utils';
+
 import { IMJOPAsset } from './mjop-asset';
 import { IMJOPSurvey } from './mjop-survey';
 
-export interface MJOPRecord {
+export type MJOPRecord = {
 	asset: IMJOPAsset;
 	survey: IMJOPSurvey;
 	careScore: string;
@@ -68,11 +70,10 @@ export interface MJOPRecord {
 	totalCostWithSurcharge: string; // Totale kosten incl.toeslagen
 	maintenanceYear: string; // Planjaar
 	cyclicMaintenance: CyclicMaintenance;
-}
+};
 
 export interface CyclicMaintenance {
 	[year: string]: number;
 }
 
-type UnionKeys<T> = T extends any ? keyof T : never;
 export type MJOPColumnHeaderKeys = UnionKeys<MJOPRecord>;

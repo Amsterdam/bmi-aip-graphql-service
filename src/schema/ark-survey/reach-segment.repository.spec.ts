@@ -38,10 +38,6 @@ describe('ARK/ ReachSegment / Repository', () => {
 				},
 			}),
 		);
-		expect(returnValue).toEqual(
-			expect.objectContaining({
-				...createReachSegmentInput,
-			}),
-		);
+		expect(returnValue).toEqual(domainReachSegment);
 	});
 });

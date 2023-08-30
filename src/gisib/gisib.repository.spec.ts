@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
 import { HttpException, NotFoundException } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import { NENElement } from './types/NENElement';
 import { NENUnit } from './types/NENUnit';
@@ -70,7 +70,9 @@ describe('GisibRepository', () => {
 		const response: AxiosResponse<GisibResponse<GisibAsset>> = {
 			data: gisibAssetResponse,
 			headers: {},
-			config: { url: 'https://test.nl/api/api/Collections/Civiele constructie/WithFilter/items' },
+			config: {
+				url: 'https://test.nl/api/api/Collections/Civiele constructie/WithFilter/items',
+			} as InternalAxiosRequestConfig,
 			status: 200,
 			statusText: 'OK',
 		};

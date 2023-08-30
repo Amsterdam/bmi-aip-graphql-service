@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 import { JunctionBox } from '../models/junction-box.model';
 import { CreateJunctionBoxInput } from '../dto/create-junction-box.input';
@@ -50,10 +50,10 @@ const junctionBoxRaw: Omit<DomainJunctionBox, 'id' | 'permanentId' | 'techViewId
 	objectId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 	surveyId: '68a95a2c-b909-e77f-4d66-9fd5afef5afb',
 	remarks: '__REMARKS__',
-	mastNumber: new Decimal(33.33),
+	mastNumber: new Prisma.Decimal(33.33),
 	locationIndication: '__LOCATION_INDICATION__',
 	a11yDetails: JSON.parse(JSON.stringify(a11yDetails)),
-	installationHeight: new Decimal(10),
+	installationHeight: new Prisma.Decimal(10),
 	riserTubeVisible: true,
 	deleted_at: null,
 	created_at: undefined,
@@ -123,8 +123,8 @@ export const reviseJunctionBoxInput = Object.keys(reviseJunctionBoxRaw).reduce((
 export const domainJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
-	mastId: new Decimal(10),
-	techViewId: new Decimal(10),
+	mastId: new Prisma.Decimal(10),
+	techViewId: new Prisma.Decimal(10),
 	...junctionBoxRaw,
 	deleted_at: null,
 };
@@ -132,8 +132,8 @@ export const domainJunctionBox: DomainJunctionBox = {
 export const domainReviseJunctionBox: DomainJunctionBox = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
-	mastId: new Decimal(10),
-	techViewId: new Decimal(10),
+	mastId: new Prisma.Decimal(10),
+	techViewId: new Prisma.Decimal(10),
 	...reviseJunctionBoxRaw,
 	deleted_at: null,
 };

@@ -9,13 +9,14 @@ import { FindDocumentsSpanInstallationQuery } from './find-documents-span-instal
 export class FindDocumentsSpanInstallationHandler implements IQueryHandler<FindDocumentsSpanInstallationQuery> {
 	constructor(private service: DocumentService) {}
 
-	public async execute(query: FindDocumentsSpanInstallationQuery): Promise<DMSDocumentSpanInstallation[]> {
-		return this.service.findSpanInstallationDocuments(
-			query.assetId,
-			query.surveyId,
-			query.entityId,
-			query.provider,
-			query.ctx,
-		);
+	public async execute({
+		assetId,
+		surveyId,
+		entityId,
+		provider,
+		jwtToken,
+	}: FindDocumentsSpanInstallationQuery): Promise<DMSDocumentSpanInstallation[]> {
+		this.service.token = jwtToken;
+		return this.service.findSpanInstallationDocuments(assetId, surveyId, entityId, provider);
 	}
 }

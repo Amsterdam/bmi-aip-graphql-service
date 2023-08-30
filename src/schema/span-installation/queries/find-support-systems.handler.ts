@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
-import { SupportSystemService } from '../../span-installation/support-system.service';
-import { SupportSystem } from '../../span-installation/models/support-system.model';
+import { SupportSystemService } from '../support-system.service';
+import { SupportSystem } from '../models/support-system.model';
 
 import { FindSupportSystemsQuery } from './find-support-systems.query';
 

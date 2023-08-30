@@ -21,7 +21,6 @@ import { AssetModule } from './schema/asset/asset.module';
 import { CommandModule } from './command/command.module';
 import { SpanInstallationModule } from './schema/span-installation/span-installation.module';
 import { SpanInstallationSurveyModule } from './schema/span-installation-survey/span-installation-survey.module';
-import { ObjectModule } from './schema/object/object.module';
 import { HealthController } from './HealthController';
 import { SurveyModule } from './schema/survey/survey.module';
 import { ArkSurveyModule } from './schema/ark-survey/ark-survey.module';
@@ -32,6 +31,7 @@ import { SpanMeasuresSurveyModule } from './schema/span-measures-survey/span-mea
 import { MJOPExportModule } from './schema/mjop-export/mjop-export.module';
 import { SpanInstallationExportModule } from './api/span-installation-export/span-installation-export.module';
 import { DocumentModule } from './schema/document/document.module';
+import { DmsModule } from './dms/dms.module';
 
 @Module({
 	imports: [
@@ -53,14 +53,12 @@ import { DocumentModule } from './schema/document/document.module';
 		SpanInstallationModule,
 		SpanInstallationSurveyModule,
 		SpanMeasuresSurveyModule,
-		ObjectModule,
 		BatchModule,
 		CommandModule,
 		SurveyModule,
 		TiModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
-			debug: true,
 			playground: true,
 			sortSchema: true,
 			autoSchemaFile: true,
@@ -71,6 +69,7 @@ import { DocumentModule } from './schema/document/document.module';
 		DefaultMaintenanceMeasureModule,
 		MJOPExportModule,
 		SpanInstallationExportModule,
+		DmsModule,
 	],
 	controllers: [HealthController],
 	providers: [

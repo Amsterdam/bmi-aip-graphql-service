@@ -1,8 +1,8 @@
-import { SurveyRepository } from 'src/schema/survey/survey.repository';
 import { MockedObjectDeep } from 'ts-jest';
 
 import { DecompositionRepository } from '../decomposition.repository';
 import { domainElement } from '../__stubs__';
+import { SurveyRepository } from '../../survey/survey.repository';
 
 import { CloneDecompositionFromPreviousSurveyCommand } from './clone-decomposition-from-previous-survey.command';
 import { CloneDecompositionFromPreviousSurveyHandler } from './clone-decomposition-from-previous-survey.handler';

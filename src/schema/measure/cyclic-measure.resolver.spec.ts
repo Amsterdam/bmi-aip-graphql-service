@@ -2,8 +2,8 @@ import { MockedObjectDeep } from 'ts-jest';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../prisma.service';
-import { GenerateCyclicMeasuresCommand } from '../measure/commands/generate-cyclic-measures.command';
 
+import { GenerateCyclicMeasuresCommand } from './commands/generate-cyclic-measures.command';
 import { CyclicMeasureResolver } from './cyclic-measure.resolver';
 import { CyclicMeasureService } from './cyclic-measure.service';
 import { CyclicMeasureRepository } from './cyclic-measure.repository';

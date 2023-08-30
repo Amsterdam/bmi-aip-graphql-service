@@ -1,8 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma.service';
 import { catchError, map, single } from 'rxjs';
+
+import { PrismaService } from '../prisma.service';
+import { InspectionStandard } from '../schema/survey/types';
 
 import {
 	convertMetadataArrayToObject,
@@ -11,10 +13,10 @@ import {
 	DmsMetadataSpanInstallationTypes,
 	RawDMSDocument,
 } from './types/dms-document-span-installation';
-import { InspectionStandard } from './../schema/survey/types';
 import { mapMetadataSpanInstallation } from './types/map-metadata-span-installation';
 import { DmsResponse } from './types/dms-response';
 import { DmsUploadUrlResponse } from './types/dms-upload-upload-url-response';
+import { TokenNotSetException } from './exceptions/token-not-set.exception';
 
 @Injectable()
 export class DmsRepository {
@@ -26,23 +28,29 @@ export class DmsRepository {
 
 	private apiUrl = this.configService.get<string>('DMS_API_URL');
 
-	private token = '';
+	/**
+	 * Token gets set from the initiator as access to the execution context is required to retrieve the token
+	 * @private
+	 */
+	private _token = '';
 
-	public setToken(token: string) {
-		this.token = token;
+	set token(token: string) {
+		this._token = token;
 	}
 
-	private getToken() {
-		return this.token;
+	get token() {
+		return this._token;
 	}
 
 	private async request<T = any>(url: string): Promise<T[]> {
-		const token = this.getToken();
+		if (!this.token) {
+			throw new TokenNotSetException();
+		}
 
 		return new Promise((resolve) => {
 			this.httpService
 				.get<T[]>(url, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.pipe(
 					map((res) => res.data),
@@ -56,12 +64,14 @@ export class DmsRepository {
 	}
 
 	private async post<T = any>(url: string, data: object): Promise<any> {
-		const token = this.getToken();
+		if (!this.token) {
+			throw new TokenNotSetException();
+		}
 
 		return new Promise((resolve) => {
 			this.httpService
 				.post<T[]>(url, data, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.subscribe(function (response) {
 					resolve(response.data);
@@ -74,21 +84,17 @@ export class DmsRepository {
 		surveyId?: string,
 		entityId?: string,
 	): Promise<T[]> {
-		let object;
-		const token = this.getToken();
-
-		if (assetId) {
-			object = await this.prisma.objects.findUnique({
-				where: { id: assetId },
-			});
-		}
-
 		let url = this.apiUrl + 'documents?';
 
-		if (object.code && object.code !== '') {
-			url += 'code=' + object.code;
-		} else {
-			return [];
+		try {
+			const object = await this.prisma.objects.findUnique({
+				where: { id: assetId },
+			});
+			if (object.code && object.code !== '') {
+				url += 'code=' + object.code;
+			}
+		} catch (err) {
+			throw new NotFoundException('Unable to determine object code for assetId: ' + assetId);
 		}
 
 		if (surveyId || entityId) {
@@ -111,7 +117,7 @@ export class DmsRepository {
 		const response = new Promise<RawDMSDocument[]>((resolve) => {
 			this.httpService
 				.get<[]>(url, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: { Authorization: `Bearer ${this.token}` },
 				})
 				.pipe(
 					map((res) => res.data),
@@ -125,15 +131,13 @@ export class DmsRepository {
 
 		const data: RawDMSDocument[] = await response;
 
-		const resp = (data || [])
+		return (data || [])
 			.map(
 				function (doc: RawDMSDocument) {
 					return doc;
 				}.bind(this),
 			)
 			.sort((a: RawDMSDocument, b: RawDMSDocument) => (a.name < b.name ? -1 : 1)) as T[];
-
-		return resp;
 	}
 
 	/**
@@ -212,11 +216,8 @@ export class DmsRepository {
 			asset_code: assetCode,
 			file_name: filename,
 		};
-
 		const uploadUrl = this.apiUrl + 'documents/uploadurl';
 
-		const dmsResponse = await this.post<DmsUploadUrlResponse>(uploadUrl, data);
-
-		return dmsResponse;
+		return this.post<DmsUploadUrlResponse>(uploadUrl, data);
 	}
 }

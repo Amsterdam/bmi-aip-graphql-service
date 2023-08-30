@@ -1,23 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
-import { Response } from 'express';
+import { Logger } from '@nestjs/common';
+import { Request } from 'express';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
-import { ExportBatchDataQuery } from './queries/export-batch-data.query';
+import { OVSExportAllQuery } from './queries/ovs-export-all.query';
+import { responseMock } from './__mocks__/response';
 
 describe('SpanInstallationExporterController', () => {
+	const token = '__TOKEN__';
 	let controller: SpanInstallationExportController;
 	let queryBus: QueryBus;
-	let res: Response;
 
 	beforeEach(async () => {
 		// Mock the QueryBus and Response object
 		const queryBusMock = {
 			execute: jest.fn().mockResolvedValue({ xlsxBuffer: 'xlsx-buffer', fileName: 'xlsx-file-name' }),
-		};
-		const responseMock = {
-			set: jest.fn(),
-			send: jest.fn(),
 		};
 
 		const module: TestingModule = await Test.createTestingModule({
@@ -26,8 +24,8 @@ describe('SpanInstallationExporterController', () => {
 		}).compile();
 
 		queryBus = module.get<QueryBus>(QueryBus);
-		controller = new SpanInstallationExportController(queryBus);
-		res = responseMock as unknown as Response;
+		const logger = new Logger();
+		controller = new SpanInstallationExportController(queryBus, logger);
 	});
 
 	afterEach(() => {
@@ -35,20 +33,14 @@ describe('SpanInstallationExporterController', () => {
 	});
 
 	describe('exportToXLSX()', () => {
-		test('queryBus is called with the correct ExportBatchDataQuery', async () => {
-			await controller.exportToXLSX(res);
-			expect(queryBus.execute).toHaveBeenCalledWith(new ExportBatchDataQuery());
-		});
-		test('correct headers are being set', async () => {
-			await controller.exportToXLSX(res);
-			expect(res.set).toHaveBeenCalledWith({
-				'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-				'Content-Disposition': `attachment; filename="xlsx-file-name.xlsx"`,
-			});
-		});
-		test('XLSX buffer is being sent as response', async () => {
-			await controller.exportToXLSX(res);
-			expect(res.send).toHaveBeenCalledWith('xlsx-buffer');
+		test('queryBus is called with the correct OVSExportAllQuery', async () => {
+			const mockRequest = {
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			};
+			await controller.exportToXLSX(mockRequest as unknown as Request, responseMock);
+			expect(queryBus.execute).toHaveBeenCalledWith(new OVSExportAllQuery(responseMock, token));
 		});
 	});
 });

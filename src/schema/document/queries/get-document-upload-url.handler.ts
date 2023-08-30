@@ -9,7 +9,13 @@ import { GetDocumentUploadUrlQuery } from './get-document-upload-url.query';
 export class GetDocumentUploadUrlHandler implements IQueryHandler<GetDocumentUploadUrlQuery> {
 	constructor(private service: DocumentService) {}
 
-	public async execute(query: GetDocumentUploadUrlQuery): Promise<DmsUploadUrlResponse> {
-		return this.service.getDocumentUploadUrl(query.assetCode, query.fileName, query.provider, query.ctx);
+	public async execute({
+		assetCode,
+		fileName,
+		provider,
+		jwtToken,
+	}: GetDocumentUploadUrlQuery): Promise<DmsUploadUrlResponse> {
+		this.service.token = jwtToken;
+		return this.service.getDocumentUploadUrl(assetCode, fileName, provider);
 	}
 }

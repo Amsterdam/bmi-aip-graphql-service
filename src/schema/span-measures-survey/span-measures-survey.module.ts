@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { registerEnumType } from '@nestjs/graphql';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { PrismaService } from 'src/prisma.service';
 
 import { SurveyStates } from '../survey/types/surveyStates';
+import { PrismaService } from '../../prisma.service';
+import { AuthorizationModule } from '../../authorization/authorization.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
 
 import { CompleteSpanMeasuresSurveyCommand } from './commands/complete-span-measures-survey.command';
 import { CompleteSpanMeasuresSurveyHandler } from './commands/complete-span-measures-survey.handler';

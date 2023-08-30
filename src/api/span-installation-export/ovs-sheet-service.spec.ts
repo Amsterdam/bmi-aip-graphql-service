@@ -44,7 +44,7 @@ jest.mock('../../schema/span-installation-survey/mast-survey.repository');
 // The order of the labels is important, as it is used to determine the column index of the label
 // The labels are split into multiple groups for better readability
 
-const baseDataColumns: OVSColumnHeaderValues[] = ['OVS nummer'];
+const baseDataColumns: OVSColumnHeaderValues[] = ['OVS nummer', 'Techview Id', 'Id-mast', 'Aanp. K-Hang/Bol'];
 
 const batchDataColumns: OVSColumnHeaderValues[] = ['Batch nummer(s)', 'Batch status'];
 
@@ -298,8 +298,6 @@ describe('OVSSheetService', () => {
 		it('should return the correct Paspoort data for all rows', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			// expect(row.techviewId).toEqual('__TECHVIEW_ID__');
-			// expect(row.idMast).toEqual('__ID_MAST__');
 			// expect(row.bol).toEqual(true);
 
 			data.map((row) => {
@@ -326,6 +324,8 @@ describe('OVSSheetService', () => {
 
 			expect(data[0]).toEqual(
 				expect.objectContaining({
+					junctionBoxTechviewId: 10,
+					junctionBoxMastId: 10,
 					junctionBoxInstallationHeight: 10,
 					junctionBoxMastNumber: 33.33,
 					junctionBoxXCoordinate: 116211.88,
@@ -371,6 +371,7 @@ describe('OVSSheetService', () => {
 
 			expect(data[3]).toEqual(
 				expect.objectContaining({
+					luminaireSphere: '__AANPAK__',
 					luminaireHasLED: true,
 					luminaireLocation: '__LOCATION__',
 					luminaireXCoordinate: 116211.88,

@@ -64,6 +64,7 @@ const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
 	hasLED: true,
+	sphere: '__AANPAK__',
 	remarksRevision: null,
 };
 
@@ -105,6 +106,7 @@ export const reviseLuminaireInput = Object.keys(luminaireRaw).reduce((input, key
 export const domainLuminaire: DomainLuminaire = {
 	id: '1f728e79-1b89-4333-a309-ea93bf17667c',
 	permanentId: '1f728e79-1b89-4333-a309-ea93bf17667c',
+	sphere: '__AANPAK__',
 	...luminaireRaw,
 	deleted_at: null,
 };

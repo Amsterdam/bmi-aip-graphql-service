@@ -64,6 +64,10 @@ export type OVSColumnHeaderValues =
 	| 'Onjuiste montage aan spandraad?'
 	| 'Onjuiste montage aangevel?'
 	| 'Schade aan aansluitkast?'
+	| 'Sticker met ID onbruikbaar/onleesbaar'
+	| 'Techview Id'
+	| 'Id-mast'
+	| 'Aanp. K-Hang/Bol'
 	| 'Sticker met ID onbruikbaar/onleesbaar';
 
 export type OVSBaseData = {
@@ -123,6 +127,7 @@ export type DecompositionNodeData = {
 	nodeRemarks: string | null;
 };
 export type DecompositionLuminaireData = {
+	luminaireSphere: string | null; // Displayed as 'Aanp. K-Hang/Bol' in Excel (as part of the Paspoort section)
 	luminaireLocation: string | null;
 	luminaireHasLED: boolean | null;
 	luminaireXCoordinate: number | null;
@@ -131,8 +136,9 @@ export type DecompositionLuminaireData = {
 };
 
 export type DecompositionJunctionBoxData = {
+	junctionBoxTechviewId: number | null; // Displayed as 'Techview Id' in Excel (as part of the Paspoort section)
+	junctionBoxMastId: number | null; // Displayed as 'Id-mast' in Excel (as part of the Paspoort section)
 	junctionBoxMastNumber: number | null;
-	//junctionBoxMastNumberOriginal: string | null; // As imported from 'Moederbestand'
 	junctionBoxInstallationHeight: number | null;
 	junctionBoxXCoordinate: number | null;
 	junctionBoxYCoordinate: number | null;

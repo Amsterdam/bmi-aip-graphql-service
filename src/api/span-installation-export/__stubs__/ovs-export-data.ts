@@ -58,6 +58,8 @@ export type OVSSupportSystemData = {
 };
 
 export const decompositionJunctionBoxData: DecompositionJunctionBoxData = {
+	junctionBoxTechviewId: 567.89,
+	junctionBoxMastId: 678.9,
 	junctionBoxMastNumber: 123.35,
 	junctionBoxXCoordinate: 12.345,
 	junctionBoxYCoordinate: 23.456,
@@ -86,21 +88,12 @@ export const tensionWireData: DecompositionTensionWireData = {
 };
 
 export const luminaireData: DecompositionLuminaireData = {
+	luminaireSphere: '__AANPAK__', // Displayed as 'Aanp. K-Hang/Bol' in Excel (as part of the Paspoort section)
 	luminaireLocation: '__LOCATION__',
 	luminaireHasLED: true,
 	luminaireXCoordinate: 116211.88,
 	luminaireYCoordinate: 487352.77,
 	luminaireRemarks: '__REMARKS__',
-};
-
-export const junctionBoxData: DecompositionJunctionBoxData = {
-	junctionBoxMastNumber: 33.33,
-	//junctionBoxMastNumberOriginal: '120.00',
-	junctionBoxInstallationHeight: 10,
-	junctionBoxXCoordinate: 116211.88,
-	junctionBoxYCoordinate: 487352.77,
-	junctionBoxRiserTubeVisible: true,
-	junctionBoxLocation: '__LOCATION__',
 };
 
 export const mastData: DecompositionMastData = {

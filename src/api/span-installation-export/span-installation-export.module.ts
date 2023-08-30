@@ -22,6 +22,8 @@ import { TensionWireSurveyRepository } from '../../schema/span-installation-surv
 import { LuminaireSurveyRepository } from '../../schema/span-installation-survey/luminaire-survey.repository';
 import { NodeSurveyRepository } from '../../schema/span-installation-survey/node-survey.repository';
 import { DocumentModule } from '../../schema/document/document.module';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
+import { JunctionBoxSurveyRepository } from '../../schema/span-installation-survey/junction-box-survey.repository';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { SpanInstallationExportService } from './span-installation-export.service';
@@ -46,6 +48,8 @@ import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler
 		LuminaireService,
 		JunctionBoxService,
 		JunctionBoxRepository,
+		JunctionBoxSurveyService,
+		JunctionBoxSurveyRepository,
 		OVSExportByBatchHandler,
 		OVSExportByObjectHandler,
 		OVSExportAllHandler,

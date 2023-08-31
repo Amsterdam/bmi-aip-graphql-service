@@ -68,7 +68,14 @@ export type OVSColumnHeaderValues =
 	| 'Techview Id'
 	| 'Id-mast'
 	| 'Aanp. K-Hang/Bol'
-	| 'Sticker met ID onbruikbaar/onleesbaar';
+	| 'Sticker met ID onbruikbaar/onleesbaar'
+	| 'Maatregel'
+	| 'Bestekspost' 
+	| 'Aantal ingeschat'
+	| 'Aantal gebruikt'
+	| 'Eenheid'
+	| 'Status'
+	| 'Materiaal';
 
 export type OVSBaseData = {
 	id: string;
@@ -146,6 +153,23 @@ export type DecompositionJunctionBoxData = {
 	junctionBoxLocation: string | null;
 };
 
+export type MeasureLuminaireData = {
+	spanMeasureLuminaireDescription: string | null;
+}
+
+export type MeasureItemLuminaireData = {
+	spanMeasureItemSpecificationItemLuminaireDescription: string | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityEstimate: number | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityActual: number | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: string | null;
+	spanMeasureItemSpecificationItemLuminaireStatus: string | null;
+	spanMeasureItemMaterialLuminaireDescription: string | null;
+	spanMeasureItemMaterialLuminaireQuantityEstimate: number | null;
+	spanMeasureItemMaterialLuminaireQuantityActual: number | null;
+	spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: string | null;
+	spanMeasureItemMaterialLuminaireStatus: string | null;
+}
+
 export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
 
 // OVS Record describes a single row of data in the Excel export
@@ -165,7 +189,8 @@ export interface OVSRow
 		SurveyMastData,
 		SurveyTensionWireData,
 		SurveyLuminaireSurveyData,
-		SurveyNodeData {}
+		SurveyNodeData,
+		MeasureItemLuminaireData {}
 
 export interface OVSRowBase extends OVSBaseData, OVSBatchData, OVSPassportData {}
 

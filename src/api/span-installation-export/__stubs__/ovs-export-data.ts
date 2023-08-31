@@ -19,6 +19,7 @@ import {
 	SurveyTensionWireData,
 	SurveyLuminaireSurveyData,
 	SurveyJunctionBoxData,
+	SpanMeasureItemLuminaireData,
 } from '../types';
 
 const assetBaseData: OVSBaseData = {
@@ -157,6 +158,19 @@ export const luminaireSurveyData: SurveyLuminaireSurveyData = {
 	surveyLuminaireRemarks: '__REMARKS__',
 };
 
+export const luminaireMeasuresData: SpanMeasureItemLuminaireData = {
+	spanMeasureItemSpecificationItemLuminaireDescription: '__SPEC_ITEM_DESCRIPTION__',
+	spanMeasureItemSpecificationItemLuminaireQuantityEstimate: 1,
+	spanMeasureItemSpecificationItemLuminaireQuantityActual: 2,
+	spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: 'm2',
+	spanMeasureItemSpecificationItemLuminaireStatus: '__SPEC_ITEM_STATUS__',
+	spanMeasureItemMaterialLuminaireDescription: '__MATERIAL_DESCRIPTION__',
+	spanMeasureItemMaterialLuminaireQuantityEstimate: 3,
+	spanMeasureItemMaterialLuminaireQuantityActual: 4,
+	spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: 'm3',
+	spanMeasureItemMaterialLuminaireStatus: '__MATERIAL_STATUS__',
+}
+
 export const nodeSurveyData: SurveyNodeData = {
 	surveyNodeDamage: true,
 	surveyNodeImagery: 3,
@@ -191,6 +205,7 @@ export const ovsRecordMock: OVSRow = {
 	...tensionWireSurveyData,
 	...luminaireSurveyData,
 	...nodeSurveyData,
+	...luminaireMeasuresData
 };
 
 export type OVSBaseData = {

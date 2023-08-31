@@ -56,3 +56,22 @@ export type SurveyNodeData = {
 	surveyNodeImagery: number | null;
 	surveyNodeRemarks: string | null;
 };
+
+export type SpanMeasureLuminaireData = {
+	spanMeasureLuminaireDescription: string | null;
+	spanMeasureLuminaireStatus: string | null;
+}
+
+export type SpanMeasureItemLuminaireData = {
+	spanMeasureItemSpecificationItemLuminaireDescription: string | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityEstimate: number | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityActual: number | null;
+	spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: string | null;
+	spanMeasureItemSpecificationItemLuminaireStatus: string | null;
+	spanMeasureItemMaterialLuminaireDescription: string | null;
+	spanMeasureItemMaterialLuminaireQuantityEstimate: number | null;
+	spanMeasureItemMaterialLuminaireQuantityActual: number | null;
+	spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: string | null;
+	spanMeasureItemMaterialLuminaireStatus: string | null;
+}
+

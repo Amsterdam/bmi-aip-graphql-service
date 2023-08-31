@@ -23,6 +23,10 @@ import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
+import { SpanMeasureService } from '../../schema/span-installation/span-measure.service';
+import { SpanMeasure } from '../../schema/span-installation/models/span-measure.model';
+import { SpanMeasureItemService } from '../../schema/span-installation/span-measure-item.service';
+import { SpanMeasureItem } from '../../schema/span-installation/models/span-measure-item.model';
 
 @Injectable()
 export class OVSSheetService {
@@ -38,6 +42,8 @@ export class OVSSheetService {
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
 		private readonly junctionBoxSurveyService: JunctionBoxSurveyService,
+		private readonly spanMeasureService: SpanMeasureService,
+		private readonly spanMeasureItemService: SpanMeasureItemService
 	) {}
 
 	/**
@@ -49,6 +55,17 @@ export class OVSSheetService {
 
 	get token() {
 		return this.documentService.token;
+	}
+
+	private executeOnceOrTimes(array: [], callback: Function){
+		// Ensure x is at least 1
+		const x = Math.max(array.length, 1);
+
+		for (let i = 0; i < x; i++) {
+			// Your code block to execute goes here
+			callback();
+			console.log(`Executing iteration ${i + 1}`);
+		}
 	}
 
 	private async getEntityUploadCount(assetId: string, surveyId: string, entityId: string): Promise<number | null> {
@@ -110,6 +127,30 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getSpanMeasures(decompositionItemId: string): Promise<SpanMeasure[]> {
+		try {
+			return await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
+		} catch (err) {
+			return undefined;
+		}
+	}
+
+	private async getAllSpanMeasureItemsForEntity(decompositionItemId: string): Promise<SpanMeasureItem[]> {
+		let measures = [];
+		let measureItems = [];
+		try {
+			measures = await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
+			measures.map(async (measure) => {
+				const items = await this.spanMeasureItemService.findSpanMeasureItems(measure.id);
+				measureItems.push(...items);
+			});
+		} catch (err) {
+			return undefined;
+		}
+
+		return measureItems;
+	}
+
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
@@ -150,7 +191,14 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
 				...SpanInstallationExportFactory.CreateSurveyLuminaireData(),
 				...SpanInstallationExportFactory.CreateSurveyNodeData(),
+				// TODO Duplicate opmerkingen field 
+				// TODO Measure description
+				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData()
 			});
+
+			// TODO
+			// rows.push({})
+			// Add row for each measure
 		}
 
 		for (const supportSystem of supportSystems) {
@@ -195,12 +243,21 @@ export class OVSSheetService {
 					...nodeSurvey,
 					uploadCount: supportSystem.type === SupportSystemType.Node ? uploadCount : null,
 				}),
+				// TODO Duplicate opmerkingen field 
+				// TODO Measure description
+				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData()
 			});
+
+			// TODO
+			// rows.push({})
+			// Add row for each measure
 
 			if (supportSystem.type === SupportSystemType.TensionWire) {
 				const luminaires = await this.luminaireService.getLuminaires(supportSystem.id);
 
 				for (const luminaire of luminaires) {
+					const measures = await this.getSpanMeasures(luminaire.id);
+					const measureItems = await this.getAllSpanMeasureItemsForEntity(luminaire.id);
 					const luminaireSurvey = await this.getLuminaireSurvey(luminaire.id);
 					const luminaireSurveyUploadCount = await this.getEntityUploadCount(
 						id,
@@ -208,25 +265,33 @@ export class OVSSheetService {
 						luminaire.id,
 					);
 
-					rows.push({
-						...baseRow,
-						entityName: luminaire.name,
-						...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
-						...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
-						...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
-						...SpanInstallationExportFactory.CreateDecompositionMastData(),
-						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
-						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
-						...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
-						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
-						...SpanInstallationExportFactory.CreateSurveyMastData(),
-						...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
-						...SpanInstallationExportFactory.CreateSurveyLuminaireData({
-							...luminaireSurvey,
-							uploadCount: luminaireSurveyUploadCount,
-						}),
-						...SpanInstallationExportFactory.CreateSurveyNodeData(),
-					});
+					// Always print a row, multiply by amount of measureItems if they exist
+					let amountOfRows = (measureItems.length > 0) ? measureItems.length : 1;
+					for (let i = 0; i < amountOfRows; i++) {
+						rows.push({
+							...baseRow,
+							entityName: luminaire.name,
+							...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
+							...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
+							...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
+							...SpanInstallationExportFactory.CreateDecompositionMastData(),
+							...SpanInstallationExportFactory.CreateDecompositionNodeData(),
+							...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+							...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(), 
+							...SpanInstallationExportFactory.CreateSurveyFacadeData(),
+							...SpanInstallationExportFactory.CreateSurveyMastData(),
+							...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
+							...SpanInstallationExportFactory.CreateSurveyLuminaireData({
+								...luminaireSurvey,
+								uploadCount: luminaireSurveyUploadCount,
+							}),
+							...SpanInstallationExportFactory.CreateSurveyNodeData(),
+							// TODO Duplicate opmerkingen field 
+							// TODO Measure description
+							...SpanInstallationExportFactory.CreateMeasureItemLuminaireData(measureItems[i])
+						});
+	
+					}
 				}
 			}
 		}
@@ -261,6 +326,7 @@ export class OVSSheetService {
 			...this.getTensionWireSurveyColumns(),
 			...this.getLuminaireSurveyColumns(),
 			...this.getNodeSurveyColumns(),
+			...this.getSpanMeasuresLuminaireColumns()
 		];
 
 		const headers = columns.map((column) => column.header);
@@ -1093,6 +1159,78 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				headerStyle: this.headerStyle,
 				key: 'surveyNodeRemarks',
+				width: 16,
+			},
+		];
+	}
+
+	private getSpanMeasuresLuminaireColumns(): OVSExportColumn[] {
+		return [
+			// {
+			// 	header: 'Maatregel',
+			// 	key: 'spanMeasuresLuminaireDescription',
+			// 	renderCell: this.renderBooleanCell,
+			// 	headerStyle: this.headerStyle,
+			// 	width: 16,
+			// },
+			{
+				header: 'Bestekspost',
+				key: 'spanMeasureItemSpecificationItemLuminaireDescription',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Aantal ingeschat',
+				key: 'spanMeasureItemSpecificationItemLuminaireQuantityEstimate',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Aantal gebruikt',
+				key: 'spanMeasureItemSpecificationItemLuminaireQuantityActual',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Eenheid',
+				key: 'spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Status',
+				key: 'spanMeasureItemSpecificationItemLuminaireStatus',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Materiaal',
+				key: 'spanMeasureItemMaterialLuminaireDescription',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Aantal ingeschat',
+				key: 'spanMeasureItemMaterialLuminaireQuantityEstimate',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Aantal gebruikt',
+				key: 'spanMeasureItemMaterialLuminaireQuantityActual',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Eenheid',
+				key: 'spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Status',
+				key: 'spanMeasureItemMaterialLuminaireStatus',
+				headerStyle: this.headerStyle,
 				width: 16,
 			},
 		];

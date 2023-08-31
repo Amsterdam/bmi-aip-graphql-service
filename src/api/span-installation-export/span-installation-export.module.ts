@@ -32,6 +32,10 @@ import { OVSExportByBatchHandler } from './queries/ovs-export-by-batch.handler';
 import { OVSExportAllHandler } from './queries/ovs-export-all.handler';
 import { OVSSheetService } from './ovs-sheet.service';
 import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler';
+import { SpanMeasureService } from '../../schema/span-installation/span-measure.service';
+import { SpanMeasureItemService } from '../../schema/span-installation/span-measure-item.service';
+import { SpanMeasureRepository } from '../../schema/span-installation/span-measure.repository';
+import { SpanMeasureItemRepository } from '../../schema/span-installation/span-measure-item.repository';
 
 @Module({
 	imports: [CqrsModule, AssetModule, DocumentModule],
@@ -65,6 +69,10 @@ import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler
 		NodeSurveyService,
 		NodeSurveyRepository,
 		Logger,
+		SpanMeasureService,
+		SpanMeasureRepository,
+		SpanMeasureItemService,
+		SpanMeasureItemRepository,
 	],
 })
 export class SpanInstallationExportModule {}

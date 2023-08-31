@@ -25,7 +25,10 @@ import type {
 	SurveyTensionWireData,
 	SurveyLuminaireSurveyData,
 	SurveyJunctionBoxData,
+	SpanMeasureItemLuminaireData,
 } from './types';
+import { SpanMeasure } from '../../schema/span-installation/models/span-measure.model';
+import { SpanMeasureItem } from '../../schema/span-installation/models/span-measure-item.model';
 
 export class SpanInstallationExportFactory {
 	static CreatePassportData({
@@ -273,5 +276,52 @@ export class SpanInstallationExportFactory {
 			surveyNodeImagery: survey?.uploadCount ?? null,
 			surveyNodeRemarks: survey?.remarks ?? null,
 		};
+	}
+
+	static CreateMeasureItemLuminaireData(spanMeasureItem?: SpanMeasureItem): SpanMeasureItemLuminaireData {
+		if (spanMeasureItem) {
+			switch(spanMeasureItem.itemType){
+				case 'specificationItem':
+					return {
+						spanMeasureItemSpecificationItemLuminaireDescription: spanMeasureItem?.description ?? null,
+						spanMeasureItemSpecificationItemLuminaireQuantityEstimate: spanMeasureItem?.quantityEstimate ?? null,
+						spanMeasureItemSpecificationItemLuminaireQuantityActual: spanMeasureItem?.quantityActual ?? null,
+						spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: spanMeasureItem?.quantityUnitOfMeasurement ?? null,
+						spanMeasureItemSpecificationItemLuminaireStatus: null,
+						spanMeasureItemMaterialLuminaireDescription: null,
+						spanMeasureItemMaterialLuminaireQuantityEstimate: null,
+						spanMeasureItemMaterialLuminaireQuantityActual: null,
+						spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: null,
+						spanMeasureItemMaterialLuminaireStatus: null,
+					};
+				case 'material':
+					return {
+						spanMeasureItemSpecificationItemLuminaireDescription: null,
+						spanMeasureItemSpecificationItemLuminaireQuantityEstimate: null,
+						spanMeasureItemSpecificationItemLuminaireQuantityActual: null,
+						spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: null,
+						spanMeasureItemSpecificationItemLuminaireStatus: null,
+						spanMeasureItemMaterialLuminaireDescription: spanMeasureItem?.description,
+						spanMeasureItemMaterialLuminaireQuantityEstimate: spanMeasureItem?.quantityEstimate ?? null,
+						spanMeasureItemMaterialLuminaireQuantityActual: spanMeasureItem?.quantityActual ?? null,
+						spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: spanMeasureItem?.quantityUnitOfMeasurement ?? null,
+						spanMeasureItemMaterialLuminaireStatus: spanMeasureItem?.status ?? null,
+					};
+			}
+		}
+
+		return {
+			spanMeasureItemSpecificationItemLuminaireDescription: null,
+			spanMeasureItemSpecificationItemLuminaireQuantityEstimate: null,
+			spanMeasureItemSpecificationItemLuminaireQuantityActual: null,
+			spanMeasureItemSpecificationItemLuminaireQuantityUnitOfMeasurement: null,
+			spanMeasureItemSpecificationItemLuminaireStatus: null,
+			spanMeasureItemMaterialLuminaireDescription: null,
+			spanMeasureItemMaterialLuminaireQuantityEstimate: null,
+			spanMeasureItemMaterialLuminaireQuantityActual: null,
+			spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: null,
+			spanMeasureItemMaterialLuminaireStatus: null,
+		}
+
 	}
 }

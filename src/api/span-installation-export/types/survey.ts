@@ -13,6 +13,16 @@ export type SurveyFacadeData = {
 	surveyFacadeRemarks: string | null;
 };
 
+export type SurveyJunctionBoxData = {
+	surveyJunctionBoxCableDamage: boolean | null;
+	surveyJunctionBoxFaultyMontageTensionWire: boolean | null;
+	surveyJunctionBoxFaultyMontageFacade: boolean | null;
+	surveyJunctionBoxDamage: boolean | null;
+	surveyJunctionBoxStickerNotReadable: boolean | null;
+	surveyJunctionBoxImagery: number | null;
+	surveyJunctionBoxRemarks: string | null;
+};
+
 export type SurveyMastData = {
 	surveyMastDamage: boolean | null;
 	surveyMastMissingParts: boolean | null;

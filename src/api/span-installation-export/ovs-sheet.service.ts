@@ -6,6 +6,7 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { BatchService } from '../../schema/batch/batch.service';
 import { SupportSystemType } from '../../types';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { JunctionBoxService } from '../../schema/span-installation/junction-box.service';
 import { DocumentService } from '../../schema/document/document.service';
 import { FacadeSurvey } from '../../schema/span-installation-survey/models/facade-survey.model';
 import { MastSurvey } from '../../schema/span-installation-survey/models/mast-survey.model';
@@ -17,6 +18,8 @@ import { TensionWireSurveyService } from '../../schema/span-installation-survey/
 import { LuminaireSurveyService } from '../../schema/span-installation-survey/luminaire-survey.service';
 import { NodeSurveyService } from '../../schema/span-installation-survey/node-survey.service';
 import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
 
 import { SpanInstallationExportFactory } from './span-installation-export.factory';
 import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
@@ -27,12 +30,14 @@ export class OVSSheetService {
 		private readonly batchService: BatchService,
 		private readonly supportSystemService: SupportSystemService,
 		private readonly luminaireService: LuminaireService,
+		private readonly junctionBoxService: JunctionBoxService,
 		private readonly facadeSurveyService: FacadeSurveyService,
 		private readonly mastSurveyService: MastSurveyService,
 		private readonly tensionWireSurveyService: TensionWireSurveyService,
 		private readonly luminaireSurveyService: LuminaireSurveyService,
 		private readonly nodeSurveyService: NodeSurveyService,
 		private readonly documentService: DocumentService,
+		private readonly junctionBoxSurveyService: JunctionBoxSurveyService,
 	) {}
 
 	/**
@@ -96,10 +101,20 @@ export class OVSSheetService {
 		}
 	}
 
+	private async getJunctionBoxSurvey(junctionBoxId: string): Promise<JunctionBoxSurvey | undefined> {
+		try {
+			return await this.junctionBoxSurveyService.getJunctionBoxSurvey(junctionBoxId);
+		} catch (err) {
+			// No survey found but that's ok
+			return undefined;
+		}
+	}
+
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
 		const { id, name, code, attributes } = ovsAsset;
 		const passportData = SpanInstallationExportFactory.CreatePassportData(attributes);
 		const supportSystems = await this.supportSystemService.findByObject(id);
+		const junctionBoxes = await this.junctionBoxService.findByObject(id);
 		const batches = await this.batchService.findForAssetThroughSurveys(id);
 		const baseRow: OVSRowBase = {
 			// OVSBaseData
@@ -114,6 +129,29 @@ export class OVSSheetService {
 		};
 
 		const rows: OVSRow[] = [];
+
+		// First add all junctionBoxes
+		for (const junctionBox of junctionBoxes) {
+			const junctionBoxSurvey = await this.getJunctionBoxSurvey(junctionBox.id);
+			const uploadCount = await this.getEntityUploadCount(id, junctionBox.surveyId, junctionBox.id);
+
+			rows.push({
+				...baseRow,
+				entityName: junctionBox.name,
+				...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox),
+				...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
+				...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
+				...SpanInstallationExportFactory.CreateDecompositionMastData(),
+				...SpanInstallationExportFactory.CreateDecompositionNodeData(),
+				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyJunctionBoxData({ ...junctionBoxSurvey, uploadCount }),
+				...SpanInstallationExportFactory.CreateSurveyFacadeData(),
+				...SpanInstallationExportFactory.CreateSurveyMastData(),
+				...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
+				...SpanInstallationExportFactory.CreateSurveyLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyNodeData(),
+			});
+		}
 
 		for (const supportSystem of supportSystems) {
 			const facadeSurvey =
@@ -132,11 +170,14 @@ export class OVSSheetService {
 
 			rows.push({
 				...baseRow,
+				entityName: supportSystem.name,
+				...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
 				...SpanInstallationExportFactory.CreateDecompositionFacadeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionTensionWireData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionMastData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionNodeData(supportSystem),
 				...SpanInstallationExportFactory.CreateDecompositionLuminaireData(),
+				...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 				...SpanInstallationExportFactory.CreateSurveyFacadeData({
 					...facadeSurvey,
 					uploadCount: supportSystem.type === SupportSystemType.Facade ? uploadCount : null,
@@ -169,11 +210,14 @@ export class OVSSheetService {
 
 					rows.push({
 						...baseRow,
+						entityName: luminaire.name,
+						...SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(),
 						...SpanInstallationExportFactory.CreateDecompositionFacadeData(),
 						...SpanInstallationExportFactory.CreateDecompositionTensionWireData(),
 						...SpanInstallationExportFactory.CreateDecompositionMastData(),
 						...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 						...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
+						...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 						...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 						...SpanInstallationExportFactory.CreateSurveyMastData(),
 						...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
@@ -205,11 +249,13 @@ export class OVSSheetService {
 			...baseDataColumns,
 			...batchDataColumns,
 			...passportDataColumns,
+			...this.getJunctionBoxColumns(),
 			...this.getFacadeColumns(),
 			...this.getTensionWireColumns(),
 			...this.getLuminaireColumns(),
 			...this.getMastColumns(),
 			...this.getNodeColumns(),
+			...this.getJunctionBoxSurveyColumns(),
 			...this.getFacadeSurveyColumns(),
 			...this.getMastSurveyColumns(),
 			...this.getTensionWireSurveyColumns(),
@@ -484,6 +530,53 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				key: 'notes',
 				headerStyle: { ...this.headerStyle, italic: true },
+				width: 16,
+			},
+		];
+	}
+
+	private getJunctionBoxColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Onderdeel',
+				headerStyle: this.headerStyle,
+				key: 'entityName',
+				width: 16,
+			},
+			{
+				header: 'Lichtpuntnummer',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxMastNumber',
+				width: 16,
+			},
+			{
+				header: 'Straat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxLocation',
+				width: 16,
+			},
+			{
+				header: 'Aanleghoogte',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxInstallationHeight',
+				width: 16,
+			},
+			{
+				header: 'X-coördinaat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxXCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Y-coördinaat',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxYCoordinate',
+				width: 16,
+			},
+			{
+				header: 'Stijgbuis zichtbaar?',
+				headerStyle: this.headerStyle,
+				key: 'junctionBoxRiserTubeVisible',
 				width: 16,
 			},
 		];
@@ -824,6 +917,57 @@ export class OVSSheetService {
 				header: 'Opmerkingen',
 				key: 'surveyLuminaireRemarks',
 				headerStyle: this.headerStyle,
+				width: 16,
+			},
+		];
+	}
+
+	private getJunctionBoxSurveyColumns(): OVSExportColumn[] {
+		return [
+			{
+				header: 'Schade aansluitkabel?',
+				key: 'surveyJunctionBoxCableDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aan spandraad?',
+				key: 'surveyJunctionBoxFaultyMontageTensionWire',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Onjuiste montage aangevel?',
+				key: 'surveyJunctionBoxFaultyMontageFacade',
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Schade aan aansluitkast?',
+				key: 'surveyJunctionBoxDamage',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Sticker met ID onbruikbaar/onleesbaar',
+				key: 'surveyJunctionBoxStickerNotReadable',
+				renderCell: this.renderBooleanCell,
+				headerStyle: this.headerStyle,
+				width: 16,
+			},
+			{
+				header: 'Beeldmateriaal',
+				headerStyle: this.headerStyle,
+				key: 'surveyJunctionBoxImagery',
+				width: 16,
+			},
+			{
+				header: 'Opmerkingen',
+				headerStyle: this.headerStyle,
+				key: 'surveyJunctionBoxRemarks',
 				width: 16,
 			},
 		];

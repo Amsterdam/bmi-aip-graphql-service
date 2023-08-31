@@ -14,17 +14,17 @@ export class JunctionBoxSurveyFactory {
 		created_at: createdAt,
 		updated_at: updatedAt,
 	}: DomainJunctionBoxSurvey): JunctionBoxSurvey {
-		const mastSurvey = new JunctionBoxSurvey();
-		mastSurvey.id = id;
-		mastSurvey.junctionBoxId = junctionBoxId;
-		mastSurvey.cableDamage = cableDamage;
-		mastSurvey.faultyMontageTensionWire = faultyMontageTensionWire;
-		mastSurvey.faultyMontageFacade = faultyMontageFacade;
-		mastSurvey.junctionBoxDamage = junctionBoxDamage;
-		mastSurvey.stickerNotReadable = stickerNotReadable;
-		mastSurvey.remarks = remarks;
-		mastSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
-		mastSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
-		return mastSurvey;
+		const junctionBoxSurvey = new JunctionBoxSurvey();
+		junctionBoxSurvey.id = id;
+		junctionBoxSurvey.junctionBoxId = junctionBoxId;
+		junctionBoxSurvey.cableDamage = cableDamage;
+		junctionBoxSurvey.faultyMontageTensionWire = faultyMontageTensionWire;
+		junctionBoxSurvey.faultyMontageFacade = faultyMontageFacade;
+		junctionBoxSurvey.junctionBoxDamage = junctionBoxDamage;
+		junctionBoxSurvey.stickerNotReadable = stickerNotReadable;
+		junctionBoxSurvey.remarks = remarks;
+		junctionBoxSurvey.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
+		junctionBoxSurvey.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
+		return junctionBoxSurvey;
 	}
 }

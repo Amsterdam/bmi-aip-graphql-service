@@ -1,3 +1,4 @@
+import { JunctionBox } from '../../schema/span-installation/models/junction-box.model';
 import { Luminaire } from '../../schema/span-installation/models/luminaire.model';
 import { SupportSystem } from '../../schema/span-installation/models/support-system.model';
 import { SupportSystemType } from '../../schema/span-installation/types';
@@ -6,6 +7,7 @@ import { MastSurvey } from '../../schema/span-installation-survey/models/mast-su
 import { NodeSurvey } from '../../schema/span-installation-survey/models/node-survey.model';
 import { TensionWireSurvey } from '../../schema/span-installation-survey/models/tension-wire-survey.model';
 import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
+import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
 
 import type {
 	DecompositionFacadeData,
@@ -16,11 +18,13 @@ import type {
 	GeoJSONPoint,
 	OVSExportSpanInstallationBaseData,
 	OVSPassportData,
+	DecompositionJunctionBoxData,
+	SurveyFacadeData,
 	SurveyMastData,
 	SurveyNodeData,
-	SurveyFacadeData,
 	SurveyTensionWireData,
 	SurveyLuminaireSurveyData,
+	SurveyJunctionBoxData,
 } from './types';
 
 export class SpanInstallationExportFactory {
@@ -179,6 +183,33 @@ export class SpanInstallationExportFactory {
 				? (luminaire?.geographyRD as GeoJSONPoint)?.coordinates[1]
 				: null,
 			luminaireRemarks: luminaire?.remarks ?? null,
+		};
+	}
+
+	static CreateDecompositionJunctionBoxData(junctionBox?: JunctionBox | undefined): DecompositionJunctionBoxData {
+		return {
+			junctionBoxMastNumber: junctionBox?.mastNumber ?? null,
+			junctionBoxXCoordinate: junctionBox?.geographyRD
+				? (junctionBox?.geographyRD as GeoJSONPoint)?.coordinates[0]
+				: null,
+			junctionBoxYCoordinate: junctionBox?.geographyRD
+				? (junctionBox?.geographyRD as GeoJSONPoint)?.coordinates[1]
+				: null,
+			junctionBoxInstallationHeight: junctionBox?.installationHeight ?? null,
+			junctionBoxRiserTubeVisible: junctionBox?.riserTubeVisible ?? null,
+			junctionBoxLocation: junctionBox?.location ?? null,
+		};
+	}
+
+	static CreateSurveyJunctionBoxData(survey?: JunctionBoxSurvey & { uploadCount: number }): SurveyJunctionBoxData {
+		return {
+			surveyJunctionBoxCableDamage: survey?.cableDamage ?? null,
+			surveyJunctionBoxFaultyMontageTensionWire: survey?.faultyMontageTensionWire ?? null,
+			surveyJunctionBoxFaultyMontageFacade: survey?.faultyMontageFacade ?? null,
+			surveyJunctionBoxDamage: survey?.junctionBoxDamage ?? null,
+			surveyJunctionBoxStickerNotReadable: survey?.stickerNotReadable ?? null,
+			surveyJunctionBoxRemarks: survey?.remarks ?? null,
+			surveyJunctionBoxImagery: survey?.uploadCount ?? null,
 		};
 	}
 

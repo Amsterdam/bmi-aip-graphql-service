@@ -5,9 +5,10 @@ import {
 	SupportSystemTypeDetailedNode,
 	SupportSystemTypeDetailedTensionWire,
 } from '../../schema/span-installation/types';
-import { luminaire } from '../../schema/span-installation/__stubs__';
+import { domainJunctionBox, junctionBox, luminaire } from '../../schema/span-installation/__stubs__';
 import {
 	facadeSurvey,
+	junctionBoxSurvey,
 	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
@@ -22,14 +23,17 @@ import {
 	mastData as mastDataStub,
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
+	junctionBoxData as junctionBoxDataStub,
 	facadeSurveyData,
 	mastSurveyData,
 	nodeSurveyData,
 	tensionWireSurveyData,
+	junctionBoxSurveyData,
 } from './__stubs__/ovs-export-data';
 import { supportSystemStub } from './__stubs__/support-system';
 import {
 	SurveyFacadeData,
+	SurveyJunctionBoxData,
 	SurveyLuminaireSurveyData,
 	SurveyMastData,
 	SurveyNodeData,
@@ -254,6 +258,35 @@ describe('SpanInstallationExportFactory', () => {
 		});
 	});
 
+	describe('CreateDecompositionJunctionBoxData', () => {
+		it('creates JunctionBox decomposition data correctly', () => {
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox);
+
+			expect(result).toEqual(junctionBoxDataStub);
+		});
+
+		it('creates JunctionBox decomposition data correctly even if coordinates are null', () => {
+			junctionBox.geographyRD = null;
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData(junctionBox);
+
+			const expected = {
+				...junctionBoxDataStub,
+				junctionBoxXCoordinate: null,
+				junctionBoxYCoordinate: null,
+			};
+
+			expect(result).toEqual(expected);
+		});
+
+		it('returns an object with all keys present, but values set to null when support system is not of the relevant type', () => {
+			const objectWithNullValues = nullifyValuesForObject(junctionBoxDataStub);
+
+			const result = SpanInstallationExportFactory.CreateDecompositionJunctionBoxData();
+
+			expect(result).toEqual(objectWithNullValues);
+		});
+	});
+
 	describe('CreateSurveyFacadeData', () => {
 		it('should create Facade survey data correctly', () => {
 			expect(
@@ -374,6 +407,31 @@ describe('SpanInstallationExportFactory', () => {
 		it('should return an object with null values when survey argument is undefined', () => {
 			expect(SpanInstallationExportFactory.CreateSurveyNodeData()).toEqual(
 				nullifyValuesForObject(nodeSurveyData),
+			);
+		});
+	});
+
+	describe('CreateSurveyJunctionBoxData', () => {
+		it('should create JunctionBox survey data correctly', () => {
+			expect(
+				SpanInstallationExportFactory.CreateSurveyJunctionBoxData({
+					...junctionBoxSurvey,
+					uploadCount: 2,
+				}),
+			).toEqual({
+				surveyJunctionBoxCableDamage: true,
+				surveyJunctionBoxDamage: true,
+				surveyJunctionBoxFaultyMontageFacade: true,
+				surveyJunctionBoxFaultyMontageTensionWire: true,
+				surveyJunctionBoxImagery: 2,
+				surveyJunctionBoxRemarks: '__REMARKS__',
+				surveyJunctionBoxStickerNotReadable: true,
+			} as SurveyJunctionBoxData);
+		});
+
+		it('should return an object with null values when survey argument is undefined', () => {
+			expect(SpanInstallationExportFactory.CreateSurveyJunctionBoxData()).toEqual(
+				nullifyValuesForObject(junctionBoxSurveyData),
 			);
 		});
 	});

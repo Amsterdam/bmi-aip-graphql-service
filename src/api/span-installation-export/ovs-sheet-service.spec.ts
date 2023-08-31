@@ -1,7 +1,12 @@
 import * as ExcelJS from 'exceljs';
 import { MockedObjectDeep } from 'ts-jest';
 
-import { supportSystem, luminaire as luminaireStub } from '../../schema/span-installation/__stubs__';
+import {
+	supportSystem,
+	luminaire as luminaireStub,
+	junctionBox,
+	junctionBox2,
+} from '../../schema/span-installation/__stubs__';
 import { SupportSystemService } from '../../schema/span-installation/support-system.service';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
 import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
@@ -17,6 +22,7 @@ import {
 import { DocumentService } from '../../schema/document/document.service';
 import {
 	facadeSurvey,
+	junctionBoxSurvey,
 	luminaireSurvey,
 	mastSurvey,
 	nodeSurvey,
@@ -51,6 +57,15 @@ const passportDataColumns: OVSColumnHeaderValues[] = [
 	'Dubbeldraads',
 	'Boven trambaan',
 	'Opmerkingen',
+];
+
+const junctionBoxColumns: OVSColumnHeaderValues[] = [
+	'Lichtpuntnummer', // TODO make a distinction between mastNumber edited and original
+	'Straat',
+	'Aanleghoogte',
+	'X-coördinaat',
+	'Y-coördinaat',
+	'Stijgbuis zichtbaar?',
 ];
 
 const facadeColumns: OVSColumnHeaderValues[] = [
@@ -89,6 +104,16 @@ const nodeColumns: OVSColumnHeaderValues[] = [
 	'X-coördinaat',
 	'Y-coördinaat',
 	'Aanleghoogte',
+	'Opmerkingen',
+];
+
+const junctionBoxSurveyColumns: OVSColumnHeaderValues[] = [
+	'Schade aansluitkabel?',
+	'Onjuiste montage aan spandraad?',
+	'Onjuiste montage aangevel?',
+	'Schade aan aansluitkast?',
+	'Sticker met ID onbruikbaar/onleesbaar',
+	'Beeldmateriaal',
 	'Opmerkingen',
 ];
 
@@ -199,17 +224,29 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockJunctionBoxService = {
+		findByObject: jest.fn().mockResolvedValue([junctionBox]),
+		...(<any>{}),
+	};
+
+	const mockJunctionBoxSurveyService = {
+		getJunctionBoxSurvey: jest.fn().mockResolvedValue(junctionBoxSurvey),
+		...(<any>{}),
+	};
+
 	beforeEach(async () => {
 		ovsSheetService = new OVSSheetService(
 			mockBatchService,
 			mockSupportSystemService,
 			mockLuminaireService,
+			mockJunctionBoxService,
 			mockFacadeSurveyService,
 			mockMastSurveyService,
 			mockTensionWireSurveyService,
 			mockLuminaireSurveyService,
 			mockNodeSurveyService,
 			mockDocumentService,
+			mockJunctionBoxSurveyService,
 		);
 	});
 
@@ -223,15 +260,18 @@ describe('OVSSheetService', () => {
 				// Filter out empty/undefined cells
 				.filter((value) => typeof value === 'string');
 
-			const fieldsToCheck = [
+			const fieldsToCheck: OVSColumnHeaderValues[] = [
 				...baseDataColumns,
 				...batchDataColumns,
 				...passportDataColumns,
+				'Onderdeel',
+				...junctionBoxColumns,
 				...facadeColumns,
 				...tensionWireColumns,
 				...luminaireColumns,
 				...mastColumns,
 				...nodeColumns,
+				...junctionBoxSurveyColumns,
 				...facadeSurveyColumns,
 				...mastSurveyColumns,
 				...tensionWireSurveyColumns,
@@ -249,7 +289,10 @@ describe('OVSSheetService', () => {
 
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(Object.keys(data[0])).toEqual(expectedFields);
+			// todo fix order of keys in data[0]
+			const actual = Object.keys(data[0]);
+
+			expect(actual).toEqual(expectedFields);
 		});
 
 		it('should return the correct Paspoort data for all rows', async () => {
@@ -278,10 +321,24 @@ describe('OVSSheetService', () => {
 			});
 		});
 
-		it('should fill the fields related to Decomposition - Gevel with the correct data', async () => {
+		it('should fill the fields related to Decomposition - Aansluitkast with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
 			expect(data[0]).toEqual(
+				expect.objectContaining({
+					junctionBoxInstallationHeight: 10,
+					junctionBoxMastNumber: 33.33,
+					junctionBoxXCoordinate: 116211.88,
+					junctionBoxYCoordinate: 487352.77,
+					junctionBoxRiserTubeVisible: true,
+				}),
+			);
+		});
+
+		it('should fill the fields related to Decomposition - Gevel with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+
+			expect(data[1]).toEqual(
 				expect.objectContaining({
 					facadeTypeDetailed: SupportSystemTypeDetailedFacade.MuurplaatInbouwRvs,
 					facadeLocation: '__LOCATION__',
@@ -299,7 +356,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - TensionWire with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[1]).toEqual(
+			expect(data[2]).toEqual(
 				expect.objectContaining({
 					tensionWireTypeDetailed: SupportSystemTypeDetailedTensionWire.Denhalon,
 					tensionWireLocation: '__LOCATION__',
@@ -312,7 +369,7 @@ describe('OVSSheetService', () => {
 		it('should fill the fields related to Decomposition - TensionWire - Armatuur with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
 
-			expect(data[2]).toEqual(
+			expect(data[3]).toEqual(
 				expect.objectContaining({
 					luminaireHasLED: true,
 					luminaireLocation: '__LOCATION__',
@@ -325,7 +382,8 @@ describe('OVSSheetService', () => {
 
 		it('should fill the Mast entity column fields with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
-			expect(data[3]).toEqual(
+
+			expect(data[4]).toEqual(
 				expect.objectContaining({
 					mastTypeDetailed: SupportSystemTypeDetailedMast.Gvb,
 					mastLocation: '__LOCATION__',
@@ -339,7 +397,8 @@ describe('OVSSheetService', () => {
 
 		it('should fill the fields related to Decomposition - Node with the correct data', async () => {
 			const data = await ovsSheetService.getData(ovsAssetStub);
-			expect(data[4]).toEqual(
+
+			expect(data[5]).toEqual(
 				expect.objectContaining({
 					nodeTypeDetailed: SupportSystemTypeDetailedNode.Ring,
 					nodeLocation: '__LOCATION__',
@@ -350,58 +409,67 @@ describe('OVSSheetService', () => {
 				}),
 			);
 		});
+	});
 
-		describe('survey data', () => {
-			it('should fill the Facade survey column fields with the correct data', async () => {
-				const data = await ovsSheetService.getData(ovsAssetStub);
-				expect(data[0]).toEqual(
-					expect.objectContaining(
-						SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount: 1 }),
-					),
-				);
-			});
+	describe('survey data', () => {
+		it('should fill the JunctionBox survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[0]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyJunctionBoxData({ ...junctionBoxSurvey, uploadCount: 1 }),
+				),
+			);
+		});
 
-			it('should fill the Mast survey column fields with the correct data', async () => {
-				const data = await ovsSheetService.getData(ovsAssetStub);
-				expect(data[3]).toEqual(
-					expect.objectContaining(
-						SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
-					),
-				);
-			});
+		it('should fill the Facade survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[1]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyFacadeData({ ...facadeSurvey, uploadCount: 1 }),
+				),
+			);
+		});
 
-			it('should fill the TensionWire survey column fields with the correct data', async () => {
-				const data = await ovsSheetService.getData(ovsAssetStub);
-				expect(data[1]).toEqual(
-					expect.objectContaining(
-						SpanInstallationExportFactory.CreateSurveyTensionWireData({
-							...tensionWireSurvey,
-							uploadCount: 1,
-						}),
-					),
-				);
-			});
+		it('should fill the TensionWire survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[2]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyTensionWireData({
+						...tensionWireSurvey,
+						uploadCount: 1,
+					}),
+				),
+			);
+		});
 
-			it('should fill the Luminaire survey column fields with the correct data', async () => {
-				const data = await ovsSheetService.getData(ovsAssetStub);
-				expect(data[2]).toEqual(
-					expect.objectContaining(
-						SpanInstallationExportFactory.CreateSurveyLuminaireData({
-							...luminaireSurvey,
-							uploadCount: 1,
-						}),
-					),
-				);
-			});
+		it('should fill the Luminaire survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[3]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyLuminaireData({
+						...luminaireSurvey,
+						uploadCount: 1,
+					}),
+				),
+			);
+		});
 
-			it('should fill the Node survey column fields with the correct data', async () => {
-				const data = await ovsSheetService.getData(ovsAssetStub);
-				expect(data[4]).toEqual(
-					expect.objectContaining(
-						SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount: 1 }),
-					),
-				);
-			});
+		it('should fill the Mast survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[4]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyMastData({ ...mastSurvey, uploadCount: 1 }),
+				),
+			);
+		});
+
+		it('should fill the Node survey column fields with the correct data', async () => {
+			const data = await ovsSheetService.getData(ovsAssetStub);
+			expect(data[5]).toEqual(
+				expect.objectContaining(
+					SpanInstallationExportFactory.CreateSurveyNodeData({ ...nodeSurvey, uploadCount: 1 }),
+				),
+			);
 		});
 	});
 });

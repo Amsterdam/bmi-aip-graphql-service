@@ -9,6 +9,8 @@ import { SupportSystemService } from '../../schema/span-installation/support-sys
 import { SupportSystemRepository } from '../../schema/span-installation/support-system.repository';
 import { LuminaireRepository } from '../../schema/span-installation/luminaire.repository';
 import { LuminaireService } from '../../schema/span-installation/luminaire.service';
+import { JunctionBoxService } from '../../schema/span-installation/junction-box.service';
+import { JunctionBoxRepository } from '../../schema/span-installation/junction-box.repository';
 import { MastSurveyService } from '../../schema/span-installation-survey/mast-survey.service';
 import { MastSurveyRepository } from '../../schema/span-installation-survey/mast-survey.repository';
 import { FacadeSurveyService } from '../../schema/span-installation-survey/facade-survey.service';
@@ -20,6 +22,8 @@ import { TensionWireSurveyRepository } from '../../schema/span-installation-surv
 import { LuminaireSurveyRepository } from '../../schema/span-installation-survey/luminaire-survey.repository';
 import { NodeSurveyRepository } from '../../schema/span-installation-survey/node-survey.repository';
 import { DocumentModule } from '../../schema/document/document.module';
+import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
+import { JunctionBoxSurveyRepository } from '../../schema/span-installation-survey/junction-box-survey.repository';
 
 import { SpanInstallationExportController } from './span-installation-export.controller';
 import { SpanInstallationExportService } from './span-installation-export.service';
@@ -27,6 +31,7 @@ import { SpanInstallationExportRepository } from './span-installation-export.rep
 import { OVSExportByBatchHandler } from './queries/ovs-export-by-batch.handler';
 import { OVSExportAllHandler } from './queries/ovs-export-all.handler';
 import { OVSSheetService } from './ovs-sheet.service';
+import { OVSExportByObjectHandler } from './queries/ovs-export-by-object.handler';
 
 @Module({
 	imports: [CqrsModule, AssetModule, DocumentModule],
@@ -41,7 +46,12 @@ import { OVSSheetService } from './ovs-sheet.service';
 		SupportSystemRepository,
 		LuminaireRepository,
 		LuminaireService,
+		JunctionBoxService,
+		JunctionBoxRepository,
+		JunctionBoxSurveyService,
+		JunctionBoxSurveyRepository,
 		OVSExportByBatchHandler,
+		OVSExportByObjectHandler,
 		OVSExportAllHandler,
 		OVSSheetService,
 		MastSurveyService,

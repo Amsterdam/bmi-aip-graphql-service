@@ -1,12 +1,13 @@
-import { Controller, Get, Logger, Param, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Res, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { RoleMatchingMode, Roles } from 'nest-keycloak-connect';
+import { AuthGuard, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { Response } from 'express';
 
 import { MJOPExportBySurveyIdQuery } from './queries/mjop-export-by-survey-id.query';
 import { MJOPExportByBatchIdQuery } from './queries/mjop-export-by-batch-id.query';
 import { MJOPExportByObjectIdQuery } from './queries/mjop-export-by-object-id.query';
 
+@UseGuards(AuthGuard)
 @Controller('api/mjop-export')
 export class MJOPExportController {
 	constructor(private queryBus: QueryBus, private readonly logger: Logger) {}

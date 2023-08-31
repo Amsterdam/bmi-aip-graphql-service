@@ -174,6 +174,7 @@ export class SpanInstallationExportFactory {
 
 	static CreateDecompositionLuminaireData(luminaire?: Luminaire | undefined): DecompositionLuminaireData {
 		return {
+			luminaireSphere: luminaire?.sphere ?? null,
 			luminaireLocation: luminaire?.location ?? null,
 			luminaireHasLED: luminaire?.hasLED ?? null,
 			luminaireXCoordinate: luminaire?.geographyRD
@@ -188,6 +189,8 @@ export class SpanInstallationExportFactory {
 
 	static CreateDecompositionJunctionBoxData(junctionBox?: JunctionBox | undefined): DecompositionJunctionBoxData {
 		return {
+			junctionBoxTechviewId: junctionBox?.techViewId ?? null,
+			junctionBoxMastId: junctionBox?.mastId ?? null,
 			junctionBoxMastNumber: junctionBox?.mastNumber ?? null,
 			junctionBoxXCoordinate: junctionBox?.geographyRD
 				? (junctionBox?.geographyRD as GeoJSONPoint)?.coordinates[0]

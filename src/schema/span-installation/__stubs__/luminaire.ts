@@ -64,6 +64,7 @@ const luminaireRaw: Omit<DomainLuminaire, 'id' | 'permanentId'> = {
 	manufacturer: '__MANUFACTURER__',
 	supplierType: 'two',
 	hasLED: true,
+	sphere: '__AANPAK__',
 	remarksRevision: null,
 };
 

@@ -17,6 +17,8 @@ export class JunctionBoxFactory {
 		remarks,
 		geography,
 		geographyRD,
+		mastId,
+		techViewId,
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
@@ -35,6 +37,8 @@ export class JunctionBoxFactory {
 		jb.riserTubeVisible = riserTubeVisible;
 		jb.remarks = remarks;
 		jb.geography = geography;
+		jb.mastId = Number(mastId);
+		jb.techViewId = Number(techViewId);
 		jb.permanentId = permanentId;
 		jb.remarksRevision = remarksRevision;
 

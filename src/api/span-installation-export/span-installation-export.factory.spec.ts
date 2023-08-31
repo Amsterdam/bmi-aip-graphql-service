@@ -23,7 +23,7 @@ import {
 	mastData as mastDataStub,
 	nodeData as nodeDataStub,
 	luminaireData as luminaireDataStub,
-	junctionBoxData as junctionBoxDataStub,
+	decompositionJunctionBoxData as junctionBoxDataStub,
 	facadeSurveyData,
 	mastSurveyData,
 	nodeSurveyData,

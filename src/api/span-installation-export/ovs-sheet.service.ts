@@ -462,6 +462,24 @@ export class OVSSheetService {
 				headerStyle: { ...this.headerStyle, italic: true },
 				width: 16,
 			},
+			{
+				header: 'Techview Id',
+				key: 'junctionBoxTechviewId',
+				headerStyle: { ...this.headerStyle, italic: true },
+				width: 16,
+			},
+			{
+				header: 'Id-mast',
+				key: 'junctionBoxMastId',
+				headerStyle: { ...this.headerStyle, italic: true },
+				width: 16,
+			},
+			{
+				header: 'Aanp. K-Hang/Bol',
+				key: 'luminaireSphere',
+				headerStyle: { ...this.headerStyle, italic: true },
+				width: 16,
+			},
 		];
 	}
 

@@ -19,6 +19,7 @@ export class LuminaireFactory {
 		driverCommissioningDate,
 		lightSupplierType,
 		lightCommissioningDate,
+		sphere,
 		created_at: createdAt,
 		updated_at: updatedAt,
 		deleted_at: deletedAt,
@@ -51,6 +52,7 @@ export class LuminaireFactory {
 		luminaire.lightSupplierType = SupplierType[lightSupplierType];
 		luminaire.lightCommissioningDate =
 			lightCommissioningDate instanceof Date ? lightCommissioningDate.toUTCString() : null;
+		luminaire.sphere = sphere;
 		luminaire.createdAt = createdAt instanceof Date ? createdAt.toUTCString() : null;
 		luminaire.updatedAt = updatedAt instanceof Date ? updatedAt.toUTCString() : null;
 		luminaire.deletedAt = deletedAt instanceof Date ? deletedAt.toUTCString() : null;

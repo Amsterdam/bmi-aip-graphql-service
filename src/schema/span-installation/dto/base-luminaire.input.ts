@@ -44,6 +44,10 @@ export class BaseLuminaireInput {
 	@Field({ nullable: true })
 	public remarks?: string;
 
+	@IsOptional()
+	@Field({ nullable: true })
+	public sphere?: string;
+
 	// Driver
 
 	@IsEnum(SupplierType)

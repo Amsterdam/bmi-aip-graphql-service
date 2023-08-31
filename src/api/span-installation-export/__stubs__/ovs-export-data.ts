@@ -58,12 +58,12 @@ export type OVSSupportSystemData = {
 };
 
 export const decompositionJunctionBoxData: DecompositionJunctionBoxData = {
-	junctionBoxTechviewId: 567.89,
-	junctionBoxMastId: 678.9,
-	junctionBoxMastNumber: 123.35,
-	junctionBoxXCoordinate: 12.345,
-	junctionBoxYCoordinate: 23.456,
-	junctionBoxInstallationHeight: 1,
+	junctionBoxTechviewId: 10,
+	junctionBoxMastId: 10,
+	junctionBoxMastNumber: 33.33,
+	junctionBoxXCoordinate: 116211.88,
+	junctionBoxYCoordinate: 487352.77,
+	junctionBoxInstallationHeight: 10,
 	junctionBoxRiserTubeVisible: true,
 	junctionBoxLocation: '__LOCATION__',
 };

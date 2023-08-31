@@ -143,6 +143,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				lightSupplierType: 'two',
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
+				sphere: '__AANPAK__',
 				supplierType: 'two',
 				hasLED: true,
 				geographyRD: {
@@ -172,6 +173,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			lightSupplierType: 'two',
 			manufacturer: '__MANUFACTURER__',
 			remarks: '__REMARKS__',
+			sphere: '__AANPAK__',
 			supplierType: 'two',
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			hasLED: true,
@@ -201,6 +203,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 				lightSupplierType: 'two',
 				manufacturer: '__MANUFACTURER__',
 				remarks: '__REMARKS__',
+				sphere: '__AANPAK__',
 				supplierType: 'two',
 				hasLED: true,
 				geographyRD: {
@@ -231,6 +234,7 @@ describe('Span Installation / Luminaire / Repository', () => {
 			lightSupplierType: 'two',
 			manufacturer: '__MANUFACTURER__',
 			remarks: '__REMARKS__',
+			sphere: '__AANPAK__',
 			supplierType: 'two',
 			supportSystemId: 'f45c302c-6b18-85f6-bbe4-b3bf0a82d49a',
 			hasLED: true,

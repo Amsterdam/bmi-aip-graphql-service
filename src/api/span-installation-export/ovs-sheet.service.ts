@@ -20,13 +20,13 @@ import { NodeSurveyService } from '../../schema/span-installation-survey/node-su
 import { LuminaireSurvey } from '../../schema/span-installation-survey/models/luminaire-survey.model';
 import { JunctionBoxSurvey } from '../../schema/span-installation-survey/models/junction-box-survey.model';
 import { JunctionBoxSurveyService } from '../../schema/span-installation-survey/junction-box-survey.service';
-
-import { SpanInstallationExportFactory } from './span-installation-export.factory';
-import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
 import { SpanMeasureService } from '../../schema/span-installation/span-measure.service';
 import { SpanMeasure } from '../../schema/span-installation/models/span-measure.model';
 import { SpanMeasureItemService } from '../../schema/span-installation/span-measure-item.service';
 import { SpanMeasureItem } from '../../schema/span-installation/models/span-measure-item.model';
+
+import { OVSExportColumn, OVSExportSpanInstallationBaseData, OVSRow, OVSRowBase } from './types';
+import { SpanInstallationExportFactory } from './span-installation-export.factory';
 
 @Injectable()
 export class OVSSheetService {
@@ -43,7 +43,7 @@ export class OVSSheetService {
 		private readonly documentService: DocumentService,
 		private readonly junctionBoxSurveyService: JunctionBoxSurveyService,
 		private readonly spanMeasureService: SpanMeasureService,
-		private readonly spanMeasureItemService: SpanMeasureItemService
+		private readonly spanMeasureItemService: SpanMeasureItemService,
 	) {}
 
 	/**
@@ -57,16 +57,16 @@ export class OVSSheetService {
 		return this.documentService.token;
 	}
 
-	private executeOnceOrTimes(array: [], callback: Function){
-		// Ensure x is at least 1
-		const x = Math.max(array.length, 1);
+	// private executeOnceOrTimes(array: [], callback: Function){
+	// 	// Ensure x is at least 1
+	// 	const x = Math.max(array.length, 1);
 
-		for (let i = 0; i < x; i++) {
-			// Your code block to execute goes here
-			callback();
-			console.log(`Executing iteration ${i + 1}`);
-		}
-	}
+	// 	for (let i = 0; i < x; i++) {
+	// 		// Your code block to execute goes here
+	// 		callback();
+	// 		console.log(`Executing iteration ${i + 1}`);
+	// 	}
+	// }
 
 	private async getEntityUploadCount(assetId: string, surveyId: string, entityId: string): Promise<number | null> {
 		const documents = await this.documentService.findSpanInstallationDocuments(assetId, surveyId, entityId, 'dms');
@@ -137,7 +137,7 @@ export class OVSSheetService {
 
 	private async getAllSpanMeasureItemsForEntity(decompositionItemId: string): Promise<SpanMeasureItem[]> {
 		let measures = [];
-		let measureItems = [];
+		const measureItems = [];
 		try {
 			measures = await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
 			measures.map(async (measure) => {
@@ -191,9 +191,9 @@ export class OVSSheetService {
 				...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
 				...SpanInstallationExportFactory.CreateSurveyLuminaireData(),
 				...SpanInstallationExportFactory.CreateSurveyNodeData(),
-				// TODO Duplicate opmerkingen field 
+				// TODO Duplicate opmerkingen field
 				// TODO Measure description
-				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData()
+				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData(),
 			});
 
 			// TODO
@@ -243,9 +243,9 @@ export class OVSSheetService {
 					...nodeSurvey,
 					uploadCount: supportSystem.type === SupportSystemType.Node ? uploadCount : null,
 				}),
-				// TODO Duplicate opmerkingen field 
+				// TODO Duplicate opmerkingen field
 				// TODO Measure description
-				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData()
+				...SpanInstallationExportFactory.CreateMeasureItemLuminaireData(),
 			});
 
 			// TODO
@@ -266,7 +266,7 @@ export class OVSSheetService {
 					);
 
 					// Always print a row, multiply by amount of measureItems if they exist
-					let amountOfRows = (measureItems.length > 0) ? measureItems.length : 1;
+					const amountOfRows = measureItems.length > 0 ? measureItems.length : 1;
 					for (let i = 0; i < amountOfRows; i++) {
 						rows.push({
 							...baseRow,
@@ -277,7 +277,7 @@ export class OVSSheetService {
 							...SpanInstallationExportFactory.CreateDecompositionMastData(),
 							...SpanInstallationExportFactory.CreateDecompositionNodeData(),
 							...SpanInstallationExportFactory.CreateDecompositionLuminaireData(luminaire),
-							...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(), 
+							...SpanInstallationExportFactory.CreateSurveyJunctionBoxData(),
 							...SpanInstallationExportFactory.CreateSurveyFacadeData(),
 							...SpanInstallationExportFactory.CreateSurveyMastData(),
 							...SpanInstallationExportFactory.CreateSurveyTensionWireData(),
@@ -286,11 +286,10 @@ export class OVSSheetService {
 								uploadCount: luminaireSurveyUploadCount,
 							}),
 							...SpanInstallationExportFactory.CreateSurveyNodeData(),
-							// TODO Duplicate opmerkingen field 
+							// TODO Duplicate opmerkingen field
 							// TODO Measure description
-							...SpanInstallationExportFactory.CreateMeasureItemLuminaireData(measureItems[i])
+							...SpanInstallationExportFactory.CreateMeasureItemLuminaireData(measureItems[i]),
 						});
-	
 					}
 				}
 			}
@@ -326,7 +325,7 @@ export class OVSSheetService {
 			...this.getTensionWireSurveyColumns(),
 			...this.getLuminaireSurveyColumns(),
 			...this.getNodeSurveyColumns(),
-			...this.getSpanMeasuresLuminaireColumns()
+			...this.getSpanMeasuresLuminaireColumns(),
 		];
 
 		const headers = columns.map((column) => column.header);

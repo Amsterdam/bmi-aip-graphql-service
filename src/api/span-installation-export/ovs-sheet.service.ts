@@ -138,11 +138,10 @@ export class OVSSheetService {
 	private async getAllSpanMeasureItemsForEntity(decompositionItemId: string): Promise<SpanMeasureItem[] | undefined> {
 		try {
 			const measures = await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
-			const measureItems = await Promise.all(
-				measures.map(async (measure) => {
-					return this.spanMeasureItemService.findSpanMeasureItems(measure.id);
-				}),
-			);
+			const result = measures.map(async (measure) => {
+				return this.spanMeasureItemService.findSpanMeasureItems(measure.id);
+			});
+			const measureItems = await Promise.all(result);
 			return measureItems.flat();
 		} catch (err) {
 			return undefined;

@@ -158,6 +158,19 @@ const luminaireSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan armatuur?',
 
 const nodeSurveyColumns: OVSColumnHeaderValues[] = ['Schade aan de knoop?', 'Beeldmateriaal', 'Opmerkingen'];
 
+const measureLuminaireColumns: OVSColumnHeaderValues[] = [
+	'Bestekspost',
+	'Aantal ingeschat',
+	'Aantal gebruikt',
+	'Eenheid',
+	'Status',
+	'Materiaal',
+	'Aantal ingeschat',
+	'Aantal gebruikt',
+	'Eenheid',
+	'Status',
+];
+
 describe('OVSSheetService', () => {
 	let ovsSheetService: OVSSheetService;
 
@@ -234,6 +247,16 @@ describe('OVSSheetService', () => {
 		...(<any>{}),
 	};
 
+	const mockSpanMeasureService = {
+		findSpanMeasuresByDecompositionItemId: jest.fn().mockResolvedValue([]),
+		...(<any>{}),
+	};
+
+	const mockSpanMeasureItemService = {
+		findSpanMeasureItems: jest.fn().mockResolvedValue([]),
+		...(<any>{}),
+	};
+
 	beforeEach(async () => {
 		ovsSheetService = new OVSSheetService(
 			mockBatchService,
@@ -247,6 +270,8 @@ describe('OVSSheetService', () => {
 			mockNodeSurveyService,
 			mockDocumentService,
 			mockJunctionBoxSurveyService,
+			mockSpanMeasureService,
+			mockSpanMeasureItemService,
 		);
 	});
 
@@ -277,6 +302,7 @@ describe('OVSSheetService', () => {
 				...tensionWireSurveyColumns,
 				...luminaireSurveyColumns,
 				...nodeSurveyColumns,
+				...measureLuminaireColumns,
 			];
 
 			expect(labels).toEqual(fieldsToCheck);

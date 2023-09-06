@@ -70,12 +70,20 @@ export type OVSColumnHeaderValues =
 	| 'Aanp. K-Hang/Bol'
 	| 'Sticker met ID onbruikbaar/onleesbaar'
 	| 'Maatregel'
-	| 'Bestekspost' 
+	| 'Bestekspost'
 	| 'Aantal ingeschat'
 	| 'Aantal gebruikt'
 	| 'Eenheid'
 	| 'Status'
-	| 'Materiaal';
+	| 'Materiaal'
+	// Maatregelen
+	| 'Bestekspost'
+	| 'Aantal ingescht'
+	| 'Aantal gebruikt'
+	| 'Eenheid'
+	| 'Materiaal'
+	| 'Eenheid'
+	| 'Status';
 
 export type OVSBaseData = {
 	id: string;
@@ -155,7 +163,7 @@ export type DecompositionJunctionBoxData = {
 
 export type MeasureLuminaireData = {
 	spanMeasureLuminaireDescription: string | null;
-}
+};
 
 export type MeasureItemLuminaireData = {
 	spanMeasureItemSpecificationItemLuminaireDescription: string | null;
@@ -168,7 +176,7 @@ export type MeasureItemLuminaireData = {
 	spanMeasureItemMaterialLuminaireQuantityActual: number | null;
 	spanMeasureItemMaterialLuminaireQuantityUnitOfMeasurement: string | null;
 	spanMeasureItemMaterialLuminaireStatus: string | null;
-}
+};
 
 export type OVSPassportData = IPassport & { passportTramTracks: boolean; passportNotes: string };
 

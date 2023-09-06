@@ -127,7 +127,7 @@ export class OVSSheetService {
 		}
 	}
 
-	private async getSpanMeasures(decompositionItemId: string): Promise<SpanMeasure[]> {
+	private async getSpanMeasures(decompositionItemId: string): Promise<SpanMeasure[] | undefined> {
 		try {
 			return await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
 		} catch (err) {
@@ -135,20 +135,18 @@ export class OVSSheetService {
 		}
 	}
 
-	private async getAllSpanMeasureItemsForEntity(decompositionItemId: string): Promise<SpanMeasureItem[]> {
-		let measures = [];
-		const measureItems = [];
+	private async getAllSpanMeasureItemsForEntity(decompositionItemId: string): Promise<SpanMeasureItem[] | undefined> {
 		try {
-			measures = await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
-			measures.map(async (measure) => {
-				const items = await this.spanMeasureItemService.findSpanMeasureItems(measure.id);
-				measureItems.push(...items);
-			});
+			const measures = await this.spanMeasureService.findSpanMeasuresByDecompositionItemId(decompositionItemId);
+			const measureItems = await Promise.all(
+				measures.map(async (measure) => {
+					return this.spanMeasureItemService.findSpanMeasureItems(measure.id);
+				}),
+			);
+			return measureItems.flat();
 		} catch (err) {
 			return undefined;
 		}
-
-		return measureItems;
 	}
 
 	public async getData(ovsAsset: OVSExportSpanInstallationBaseData): Promise<OVSRow[]> {
